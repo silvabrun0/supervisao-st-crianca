@@ -8,9 +8,10 @@ Icon
 .Trashes
 __MACOSX/
 
-# Pastas vazias duplicadas
+# Pastas vazias ou backups aninhados
 assets 2/
 planos_de_implementacao 2/
+gestor supervisao_patos/
 
 # Python
 __pycache__/
