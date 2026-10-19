@@ -47,6 +47,10 @@ O plano gerado na Etapa 1 deve ser exato e à prova de falhas para que a Etapa 2
      - Atualizar o texto do botão de versão no topo (`.btn-changelog`), refletindo a nova versão oficial (ex: `📌 Versão 0.n`).
      - Inserir o novo bloco de versão no topo da lista dentro do modal `#modalChangelog`.
 - Valida o resultado contra o roteiro de teste do plano.
+- **Obrigatório - Checagem Prévia e Pré-Push no GitHub:**
+  1. No início da execução, rodar `git pull origin main` para garantir que o código base está atualizado com eventuais commits do colega.
+  2. Antes de subir as alterações, rodar `git fetch origin main` e verificar se há novos commits no remoto (`git log HEAD..origin/main --oneline`). Em caso positivo, integrar via `git pull --rebase origin main`.
+  3. Realizar o commit semântico (`git add .` e `git commit -m "feat/fix: ..."`) e enviar para o repositório remoto via `git push origin main`.
 - **Deploy Automático no macOS:** O assistente está **expressamente autorizado** a realizar o deploy no Firebase via terminal automaticamente, executando os comandos descritos na Seção 5, sem precisar pedir permissão adicional.
 
 ---
