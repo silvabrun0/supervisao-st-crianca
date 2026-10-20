@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.95** | 20/10/2026 17:55 | `intermediárias/aplicativo_v95_auditoria_interativa_comportamental_end_to_end.html` | Solicitação direta / Simulação Comportamental Real | Reestruturação completa do motor de testes com simulação interativa de ponta a ponta (login, modais, selects e botões) 🤖 |
+| **0.94** | 20/10/2026 17:45 | `intermediárias/aplicativo_v94_pilar_4_turmas_integrais_formulario_unico.html` | Deliberação SerTão Criança / Pilar 4 | Formulário único de Turma Integral em 2 Etapas (Manhã e Tarde), salvamento de etapa matutina, banner contextual na observação ativa, registro de período duplo na síntese com soma de carga horária e bloqueio de finalização prematura ☀️ |
 | **0.93** | 20/10/2026 17:35 | `intermediárias/aplicativo_v93_correcao_selecao_unidade_novo_profissional.html` | Solicitação direta / Correção Operacional | Preservação da seleção de Unidade Escolar / Polo no modal de cadastro de novo profissional 🏫 |
 | **0.92** | 20/10/2026 17:30 | `intermediárias/aplicativo_v92_pilar_3_benchmark_afunilamento_ue_vs_rede.html` | Deliberação SerTão Criança / Pilar 3 | Benchmark comparativo '% da UE vs. Rede' item a item no Afunilamento de Indicadores, régua dupla, categorização de deltas pedagógicos e agregação hierárquica canônica 📊 |
 | **0.91** | 20/10/2026 16:30 | `intermediárias/aplicativo_v91_pilar_2_triade_governanca_e_nucleo_ei.html` | Deliberação SerTão Criança / Pilar 2 | Tríade Canônica de Governança em 3 Níveis, transição institucional para Coordenadora do Núcleo de EI (Helena Martins), helper canônico `isNucleoEI()` e blindagem RBAC 🏛️ |
@@ -111,6 +113,43 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.95] - Auditoria Interativa Comportamental End-to-End (Simulação Real de Ações do Usuário)
+* **Data e Horário:** 20 de Outubro de 2026 – 17:55:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v95_auditoria_interativa_comportamental_end_to_end.html`
+* **Identificador no App:** 📌 Versão 0.95 (v7.74)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Funcionalidades
+- **Simulação Comportamental Real no DOM (UI Helper):**
+  - Implementação dos utilitários canônicos `UI.click`, `UI.type` e `UI.select` que despacham eventos reais do navegador (`input`, `change`, `click`).
+  - Asserção mandatória de retenção do valor selecionado em `<select>` após qualquer disparo de eventos reativos (`selectEl.value === value`), prevenindo regressões de reset silencioso de interface.
+- **Fluxo Completo de Login e Rejeição no DOM:**
+  - Simulação de tentativa de autenticação com credencial incorreta e verificação visual do alerta de erro (`#loginError`).
+  - Submissão com sucesso via credenciais de Coordenadora Pedagógica e validação da transição de estado da sessão.
+- **Ciclo de Vida Completo de Cadastro e Edição de Servidores:**
+  - Abertura de `#modalAddMember`, preenchimento de inputs, seleção e retenção de unidade escolar (`#newMemberSchool`), clique em salvar e posterior teste de edição em `#modalEditMember`.
+- **Interações Reais de Agenda, Setup e Ocorrências de Campo:**
+  - Criação de agendamentos e registros de observação via clique no botão primário `#btnStartObservation` e modal de ocorrências formativas.
+
+---
+
+### [Versão 0.94] - Pilar 4: Turmas em Tempo Integral em Formulário Único (2 Etapas: Manhã e Tarde)
+* **Data e Horário:** 20 de Outubro de 2026 – 17:45:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v94_pilar_4_turmas_integrais_formulario_unico.html`
+* **Identificador no App:** 📌 Versão 0.94 (v7.73)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Funcionalidades
+- **Formulário Único em Duas Etapas:** Preservação da unidade pedagógica da turma de tempo integral e do planejamento coletivo do quarteto de professores regentes titulares, com acompanhamento sequencial em dois turnos (Manhã e Tarde).
+- **Salvamento e Transição da Etapa Matutina (`saveMorningStageAndExit`):** Registro fidedigno dos horários matutinos, persistência como rascunho com avanço automático para a Etapa 2 (Vespertino) e feedback orientador para retorno no turno da tarde.
+- **Banner Contextual de Etapa Ativa (`#activeObsIntegralBanner`):** Sinalização em tempo real na tela de observação ativa da fase em andamento (Etapa 1/2: Turno Matutino vs. Etapa 2/2: Turno Vespertino).
+- **Registro de Período Duplo na Síntese Final:** Bloco dedicado de período com cálculo somado e consolidado da carga horária de ambos os turnos (`totalIntegralDurationMinutes`).
+- **Bloqueio Pedagógico de Finalização Prematura:** Validação mandatória impedindo o encerramento do formulário de turma integral antes do cumprimento dos dois períodos de observação.
+
+---
 
 ### [Versão 0.93] - Correção da Seleção de Unidade Escolar no Cadastro de Novo Profissional
 * **Data e Horário:** 20 de Outubro de 2026 – 17:35:00

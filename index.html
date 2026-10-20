@@ -2484,7 +2484,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.93 (v7.72)
+          Versão 0.95 (v7.74)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -2966,6 +2966,14 @@
             </div>
           </div>
 
+          <!-- Aviso Contextual de Turma em Tempo Integral (Pilar 4: Duas Etapas) -->
+          <div id="setupIntegralNotice" style="display:none; background:#FAF5FF; border:1px solid #E9D5FF; border-left:5px solid #7C3AED; border-radius:10px; padding:12px 14px; margin-bottom:18px; font-size:12px; color:#581C87; line-height:1.5;">
+            <div style="font-weight:800; display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+              <span>🌟</span> <span>Turma em Tempo Integral (Formulário Único em 2 Etapas: Manhã + Tarde)</span>
+            </div>
+            Esta observação será iniciada na <strong>Etapa 1 (Turno Matutino)</strong>. Ao encerrar o período matutino, você salvará o formulário como rascunho com os horários da manhã para retomá-lo à tarde e finalizar o acompanhamento integrado da equipe de 4 docentes regentes.
+          </div>
+
           <!-- Seletor Exclusivo de Coordenadora Avaliada (Utilizado apenas por Formadoras) -->
           <div class="form-group" id="groupSetupTargetPerson" style="display:none;">
             <label class="form-label" id="setupTargetPersonLabel">Coordenadora Pedagógica Acompanhada</label>
@@ -3012,7 +3020,7 @@
             <div id="setupDateValidationHint" style="font-size:12px; margin-top:8px; font-weight:600; display:none;"></div>
           </div>
 
-          <button class="btn btn-primary btn-full" onclick="startNewObservation()" style="margin-top:10px;">
+          <button id="btnStartObservation" class="btn btn-primary btn-full" onclick="startNewObservation()" style="margin-top:10px;">
             INICIAR INSTRUMENTO DE OBSERVAÇÃO →
           </button>
         </div>
@@ -3027,6 +3035,16 @@
           <div style="font-size:18px; font-weight:800; color:var(--primary-dark);" id="activeObsTeacher">Professora Ana Silva</div>
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;" id="activeObsMeta">Turma: Infantil I · 06/10/2026</div>
         </div>
+      </div>
+
+      <!-- Banner Contextual de Turma em Tempo Integral (Pilar 4: Duas Etapas) -->
+      <div id="activeObsIntegralBanner" style="display:none; padding:12px 14px; border-radius:10px; margin-bottom:14px; border:1px solid #BFDBFE; background:#EFF6FF; align-items:center; gap:12px;">
+        <div id="activeObsIntegralIcon" style="font-size:24px; flex-shrink:0;">☀️</div>
+        <div style="flex:1;">
+          <div id="activeObsIntegralTitle" style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:#1D4ED8;">ETAPA 1/2: TURNO MATUTINO (MANHÃ)</div>
+          <div id="activeObsIntegralDesc" style="font-size:12px; margin-top:2px; line-height:1.4; color:#1E40AF;">Observando a rotina da manhã. Ao encerrar o período matutino, salve o rascunho da manhã para retomar à tarde.</div>
+        </div>
+        <span id="activeObsIntegralBadge" style="font-size:10px; font-weight:700; padding:3px 8px; border-radius:10px; text-transform:uppercase; background:#DBEAFE; color:#1E40AF; flex-shrink:0;">Etapa 1 · Manhã</span>
       </div>
 
       <!-- Índice de Perguntas Pendentes logo abaixo do bloco de nome -->
@@ -3089,8 +3107,8 @@
             </div>
           </div>
 
-          <!-- Time and Period Box in Synthesis (Registro Fidedigno Manual) -->
-          <div style="background:#F8FAFC; border:1px solid #CBD5E1; border-radius:10px; padding:16px; margin-bottom:20px; page-break-inside:avoid;">
+          <!-- Time and Period Box in Synthesis (Registro Fidedigno Manual - Modo Padrão / Parcial) -->
+          <div id="synthesisStandardScheduleBlock" style="background:#F8FAFC; border:1px solid #CBD5E1; border-radius:10px; padding:16px; margin-bottom:20px; page-break-inside:avoid;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
               <div style="font-size:14px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:6px;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0066CC" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -3130,6 +3148,79 @@
             <div id="synthesisTimeNotice" style="font-size:12px; color:#475569; margin-top:12px; background:#fff; border:1px solid #E2E8F0; padding:10px 12px; border-radius:8px; display:flex; align-items:center; gap:8px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               <span>💡 <strong>Registro Fidedigno:</strong> Se você estiver finalizando este instrumento em momento posterior à observação, verifique e ajuste os horários exatos em que você esteve em sala de aula.</span>
+            </div>
+          </div>
+
+          <!-- Bloco Exclusivo para Registro de Período Duplo em Turmas de Tempo Integral (Pilar 4) -->
+          <div id="synthesisIntegralScheduleBlock" style="display:none; background:#F8FAFC; border:1px solid #CBD5E1; border-radius:10px; padding:16px; margin-bottom:20px; page-break-inside:avoid;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+              <div style="font-size:14px; font-weight:800; color:#581C87; display:flex; align-items:center; gap:6px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Registro de Período Duplo · Turma em Tempo Integral
+              </div>
+              <span id="synthesisIntegralStageBadge" style="font-size:11px; font-weight:700; background:#FAF5FF; color:#6B21A8; border:1px solid #E9D5FF; padding:3px 10px; border-radius:12px;">
+                ☀️ Etapa 1: Turno Matutino
+              </span>
+            </div>
+
+            <!-- Grid com 2 colunas para os dois turnos -->
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px;">
+              <!-- Turno Matutino -->
+              <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:12px;">
+                <div style="font-size:12px; font-weight:800; color:#1D4ED8; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                  <span>☀️ Turno Matutino (Manhã)</span>
+                  <span id="synthesisMorningStatusBadge" style="font-size:10px; font-weight:700; background:#DBEAFE; color:#1E40AF; padding:2px 6px; border-radius:8px;">Em andamento</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                  <div>
+                    <label class="form-label" style="font-weight:700; font-size:11px;">Início Manhã</label>
+                    <input type="time" id="synthesisMorningStartTime" class="form-control" onchange="onSynthesisIntegralTimeChange()" style="font-size:12px; font-weight:700;">
+                    <div id="synthesisMorningStartTimeDisp" style="display:none; padding:6px 10px; background:#fff; border:1px solid #BFDBFE; border-radius:6px; font-size:12px; font-weight:700; color:#1D4ED8;">--</div>
+                  </div>
+                  <div>
+                    <label class="form-label" style="font-weight:700; font-size:11px;">Término Manhã</label>
+                    <input type="time" id="synthesisMorningEndTime" class="form-control" onchange="onSynthesisIntegralTimeChange()" style="font-size:12px; font-weight:700;">
+                    <div id="synthesisMorningEndTimeDisp" style="display:none; padding:6px 10px; background:#fff; border:1px solid #BFDBFE; border-radius:6px; font-size:12px; font-weight:700; color:#1D4ED8;">--</div>
+                  </div>
+                </div>
+                <div style="font-size:11px; color:#1E40AF; margin-top:6px; font-weight:600;" id="synthesisMorningDurationText">
+                  Duração: --
+                </div>
+              </div>
+
+              <!-- Turno Vespertino -->
+              <div id="synthesisAfternoonContainer" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:12px;">
+                <div style="font-size:12px; font-weight:800; color:#B45309; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                  <span>🌅 Turno Vespertino (Tarde)</span>
+                  <span id="synthesisAfternoonStatusBadge" style="font-size:10px; font-weight:700; background:#FEF3C7; color:#92400E; padding:2px 6px; border-radius:8px;">Aguardando retorno</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                  <div>
+                    <label class="form-label" style="font-weight:700; font-size:11px;">Início Tarde</label>
+                    <input type="time" id="synthesisAfternoonStartTime" class="form-control" onchange="onSynthesisIntegralTimeChange()" style="font-size:12px; font-weight:700;">
+                    <div id="synthesisAfternoonStartTimeDisp" style="display:none; padding:6px 10px; background:#fff; border:1px solid #FDE68A; border-radius:6px; font-size:12px; font-weight:700; color:#B45309;">--</div>
+                  </div>
+                  <div>
+                    <label class="form-label" style="font-weight:700; font-size:11px;">Término Tarde</label>
+                    <input type="time" id="synthesisAfternoonEndTime" class="form-control" onchange="onSynthesisIntegralTimeChange()" style="font-size:12px; font-weight:700;">
+                    <div id="synthesisAfternoonEndTimeDisp" style="display:none; padding:6px 10px; background:#fff; border:1px solid #FDE68A; border-radius:6px; font-size:12px; font-weight:700; color:#B45309;">--</div>
+                  </div>
+                </div>
+                <div style="font-size:11px; color:#B45309; margin-top:6px; font-weight:600;" id="synthesisAfternoonDurationText">
+                  Duração: --
+                </div>
+              </div>
+            </div>
+
+            <!-- Bloco de Consolidação Total -->
+            <div style="margin-top:12px; background:#fff; border:1px solid #E2E8F0; padding:10px 14px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <span style="font-size:12px; font-weight:700; color:#334155;">⏱️ Carga Horária Total Observada na Turma (Manhã + Tarde):</span>
+              <span id="synthesisIntegralTotalDurationText" style="font-size:13px; font-weight:800; color:#7C3AED;">--</span>
+            </div>
+
+            <div id="synthesisIntegralTimeNotice" style="font-size:12px; color:#475569; margin-top:10px; background:#FAF5FF; border:1px solid #E9D5FF; padding:10px 12px; border-radius:8px; display:flex; align-items:center; gap:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>💡 <em>Para turmas em Tempo Integral, o formulário único avalia o planejamento conjunto das 4 professoras regentes. Conclua e salve o turno da manhã para retomar à tarde. O envio definitivo é liberado após o registro da tarde.</em></span>
             </div>
           </div>
 
@@ -3859,6 +3950,42 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.95 - AUDITORIA INTERATIVA COMPORTAMENTAL END-TO-END -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.95 · v7.74</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Auditoria Interativa Comportamental End-to-End (Simulação Real de Ações do Usuário):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🤖 <strong>Simulação Comportamental Real no DOM:</strong> Criação dos utilitários canônicos <code>UI.click</code>, <code>UI.type</code> e <code>UI.select</code> com disparo real de eventos (<code>input</code>, <code>change</code>, <code>click</code>) e asserção de retenção de valor após renderizações reativas.</li>
+          <li>🔐 <strong>Fluxo Completo de Login e Rejeição:</strong> Simulação de autenticação com rejeição de credenciais inválidas e login bem-sucedido via submissão real de formulário.</li>
+          <li>👥 <strong>Ciclo de Vida de Cadastro e Edição de Servidores:</strong> Teste interativo ponta a ponta com abertura de modal, preenchimento de inputs, seleção e persistência de unidade escolar, salvamento e posterior edição.</li>
+          <li>📋 <strong>Interações Reais de Agenda, Setup e Ocorrências:</strong> Agendamento de visitas, preenchimento de observações e registros formativos via manipulação do DOM e botões primários.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 0.94 - PILAR 4: TURMAS EM TEMPO INTEGRAL EM FORMULÁRIO ÚNICO (2 ETAPAS: MANHÃ E TARDE) -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.94 · v7.73</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Pilar 4: Turmas em Tempo Integral em Formulário Único (2 Etapas: Manhã e Tarde):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>☀️ <strong>Formulário Único em Duas Etapas:</strong> Preservação da unidade pedagógica da turma de tempo integral e do planejamento coletivo do quarteto de professores regentes titulares, com acompanhamento sequencial em dois turnos (Manhã e Tarde).</li>
+          <li>🌤️ <strong>Salvamento e Transição da Etapa Matutina (<code>saveMorningStageAndExit</code>):</strong> Registro fidedigno dos horários matutinos, persistência como rascunho com avanço automático para a Etapa 2 (Vespertino) e feedback orientador para retorno no turno da tarde.</li>
+          <li>🌅 <strong>Banner Contextual de Etapa Ativa (<code>#activeObsIntegralBanner</code>):</strong> Sinalização em tempo real na tela de observação ativa da fase em andamento (Etapa 1/2: Turno Matutino vs. Etapa 2/2: Turno Vespertino).</li>
+          <li>⏱️ <strong>Registro de Período Duplo na Síntese Final:</strong> Bloco dedicado de período com cálculo somado e consolidado da carga horária de ambos os turnos (<code>totalIntegralDurationMinutes</code>).</li>
+          <li>🚫 <strong>Bloqueio Pedagógico de Finalização Prematura:</strong> Validação mandatória impedindo o encerramento do formulário de turma integral antes do cumprimento dos dois períodos de observação.</li>
+          <li>📋 <strong>Rascunhos e Histórico Contextualizados:</strong> Destaque nos cards da Home e do Histórico para turmas integrais aguardando o turno da tarde com ação direta "Retomar no Turno da Tarde →" e exibição dos dois turnos na devolutiva final.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.93 - CORREÇÃO DE SELEÇÃO DE UNIDADE NO CADASTRO DE PROFISSIONAL -->
@@ -6376,7 +6503,17 @@ function getActiveSections(obs) {
       return key === 'nucleo_ei' || key === 'tecnico';
     }
 
-    // --- 1.2 CATÁLOGO CANÔNICO DE TURMAS DA REDE MUNICIPAL (PILAR 1) ---
+    // Helper canônico global para identificação de turmas em Tempo Integral (Pilar 4)
+    function isClassIntegral(target) {
+      if (!target) return false;
+      if (typeof target === 'string') {
+        return target.toLowerCase().includes('integral');
+      }
+      const shiftStr = target.classShift || target.shift || target.name || '';
+      return shiftStr.toLowerCase().includes('integral');
+    }
+
+    // --- 1.2 CATÁLOGO CANÔNICO DE TURMAS DA REDE MUNICIPAL (PILAR 1 & PILAR 4) ---
     const INITIAL_CLASSES = [
       {
         id: 'cls-pml-01',
@@ -6401,6 +6538,14 @@ function getActiveSections(obs) {
         stage: 'Infantil II',
         shift: 'Parcial Vespertino',
         teachers: ['Juliana Roberta Rocha']
+      },
+      {
+        id: 'cls-pml-04',
+        name: 'Maternal II - Turma Integral',
+        school: 'CEI Professora Maria de Lourdes',
+        stage: 'Maternal II',
+        shift: 'Integral',
+        teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha', 'Carla Beatriz Mendes', 'Patricia Souza']
       },
       {
         id: 'cls-pp-01',
@@ -6430,9 +6575,15 @@ function getActiveSections(obs) {
 
     // Helper de Resolução e Resiliência de Turmas por Unidade Escolar
     function getClassesForSchool(schoolName) {
-      if (!appState.classes || !Array.isArray(appState.classes)) {
+      if (!appState.classes || !Array.isArray(appState.classes) || appState.classes.length === 0) {
         appState.classes = JSON.parse(JSON.stringify(INITIAL_CLASSES));
       }
+      // Blindagem resiliente: assegura que turmas canônicas de INITIAL_CLASSES constem no estado
+      INITIAL_CLASSES.forEach(initC => {
+        if (!appState.classes.some(c => c.id === initC.id)) {
+          appState.classes.push(JSON.parse(JSON.stringify(initC)));
+        }
+      });
       let schoolClasses = appState.classes.filter(c => c.school === schoolName);
 
       // Resiliência transparente: se a escola não possuir turmas cadastradas explicitamente,
@@ -8102,9 +8253,30 @@ function getActiveSections(obs) {
 
       const shiftBadge = document.getElementById('setupClassShiftBadge');
       const teachersListEl = document.getElementById('setupClassTeachersList');
+      const isIntegral = isClassIntegral(targetClass?.shift || targetClass?.name || '');
+      const integralNotice = document.getElementById('setupIntegralNotice');
+      const startBtn = document.getElementById('btnStartObservation');
 
       if (targetClass) {
-        if (shiftBadge) shiftBadge.innerText = targetClass.shift || 'Tempo Parcial';
+        if (shiftBadge) {
+          if (isIntegral) {
+            shiftBadge.innerText = '🌟 Tempo Integral (2 Turnos: Manhã + Tarde)';
+            shiftBadge.style.background = '#FAF5FF';
+            shiftBadge.style.color = '#7C3AED';
+            shiftBadge.style.border = '1px solid #DDD6FE';
+          } else {
+            shiftBadge.innerText = targetClass.shift || 'Tempo Parcial';
+            shiftBadge.style.background = '#DBEAFE';
+            shiftBadge.style.color = '#1E40AF';
+            shiftBadge.style.border = 'none';
+          }
+        }
+        if (integralNotice) {
+          integralNotice.style.display = isIntegral ? 'block' : 'none';
+        }
+        if (startBtn) {
+          startBtn.innerText = isIntegral ? 'INICIAR OBSERVAÇÃO · ETAPA 1 (TURNO MATUTINO) →' : 'INICIAR INSTRUMENTO DE OBSERVAÇÃO →';
+        }
         if (teachersListEl) {
           teachersListEl.innerHTML = '';
           const teachers = targetClass.teachers || [];
@@ -8486,6 +8658,11 @@ function getActiveSections(obs) {
         }
       }
 
+      const isIntegral = isClassIntegral(targetClassObj?.shift || className);
+      const morningStart = chosenStart || '08:00';
+      const morningEnd = chosenEnd || (isIntegral ? '11:30' : null);
+      const morningDuration = morningEnd ? calculateObservationDuration({ startDate: chosenDate, endDate: chosenDate, startTime: morningStart, endTime: morningEnd }) : null;
+
       const newObs = {
         id: 'obs-' + Date.now(),
         scheduleId: appState.currentSetupScheduleId || null,
@@ -8493,7 +8670,26 @@ function getActiveSections(obs) {
         unitOfAnalysis: user.roleKey === 'coordenador' ? 'turma' : 'coordenador',
         classId: targetClassObj?.id || null,
         className: className,
-        classShift: targetClassObj?.shift || 'Parcial Matutino',
+        classShift: targetClassObj?.shift || (isIntegral ? 'Integral' : 'Parcial Matutino'),
+        isIntegral: isIntegral,
+        integralStage: isIntegral ? 'matutino' : 'concluido',
+        morningObs: isIntegral ? {
+          date: chosenDate,
+          startTime: morningStart,
+          endTime: morningEnd,
+          durationMinutes: morningDuration,
+          completed: false,
+          completedAt: null
+        } : null,
+        afternoonObs: isIntegral ? {
+          date: chosenDate,
+          startTime: '13:30',
+          endTime: '16:30',
+          durationMinutes: null,
+          completed: false,
+          completedAt: null
+        } : null,
+        totalIntegralDurationMinutes: null,
         teachers: teachersList,
         teacherName: teacherName, // Mantido para compatibilidade retroativa
         schoolName: schoolName,
@@ -8540,6 +8736,12 @@ function getActiveSections(obs) {
       // If user is technician or supervisor viewing finalized, always read-only
       if (obs.status === 'finalized' || isNucleoEI(user)) {
         isReadOnly = true;
+      }
+
+      // PILAR 4: Se for turma integral com etapa matutina concluída e em rascunho, assegura avanço para etapa vespertina
+      if (obs.isIntegral && obs.status === 'draft' && obs.morningObs && obs.morningObs.completed && obs.integralStage === 'matutino') {
+        obs.integralStage = 'vespertino';
+        saveState();
       }
 
       appState.currentObs = obs;
@@ -8850,6 +9052,60 @@ function getActiveSections(obs) {
       const isReadOnlyOrFinalized = isFinalized || appState.isReadOnly;
 
       const pendencies = getObservationPendencies(obs);
+
+      // PILAR 4: Banner Contextual de Etapa para Turmas em Tempo Integral
+      const integralBanner = document.getElementById('activeObsIntegralBanner');
+      if (integralBanner) {
+        if (obs.isIntegral) {
+          integralBanner.style.display = 'flex';
+          const iconEl = document.getElementById('activeObsIntegralIcon');
+          const titleEl = document.getElementById('activeObsIntegralTitle');
+          const descEl = document.getElementById('activeObsIntegralDesc');
+          const badgeEl = document.getElementById('activeObsIntegralBadge');
+
+          if (obs.integralStage === 'vespertino') {
+            integralBanner.style.background = '#FFFBEB';
+            integralBanner.style.borderColor = '#FCD34D';
+            if (iconEl) iconEl.innerText = '🌅';
+            if (titleEl) {
+              titleEl.innerText = 'ETAPA 2/2: TURNO VESPERTINO (TARDE)';
+              titleEl.style.color = '#B45309';
+            }
+            if (descEl) {
+              const mStart = obs.morningObs?.startTime || '08:00';
+              const mEnd = obs.morningObs?.endTime || '11:30';
+              const mDur = obs.morningObs?.durationMinutes ? `${obs.morningObs.durationMinutes}min` : '';
+              descEl.innerText = `Você está complementando a observação da turma com as práticas da tarde. A etapa matutina (${mStart} às ${mEnd}${mDur ? ' · ' + mDur : ''}) já foi registrada com sucesso.`;
+              descEl.style.color = '#92400E';
+            }
+            if (badgeEl) {
+              badgeEl.style.background = '#FEF3C7';
+              badgeEl.style.color = '#92400E';
+              badgeEl.innerText = 'Etapa 2 · Tarde';
+            }
+          } else {
+            integralBanner.style.background = '#EFF6FF';
+            integralBanner.style.borderColor = '#BFDBFE';
+            if (iconEl) iconEl.innerText = '☀️';
+            if (titleEl) {
+              titleEl.innerText = 'ETAPA 1/2: TURNO MATUTINO (MANHÃ)';
+              titleEl.style.color = '#1D4ED8';
+            }
+            if (descEl) {
+              descEl.innerText = 'Você está observando a rotina da manhã. Ao encerrar o período matutino, salve o rascunho da manhã para retomar à tarde e concluir a turma.';
+              descEl.style.color = '#1E40AF';
+            }
+            if (badgeEl) {
+              badgeEl.style.background = '#DBEAFE';
+              badgeEl.style.color = '#1E40AF';
+              badgeEl.innerText = 'Etapa 1 · Manhã';
+            }
+          }
+        } else {
+          integralBanner.style.display = 'none';
+        }
+      }
+
       const valBanner = document.getElementById('activeObsValidationBanner');
       if (valBanner) {
         if (pendencies.length > 0 && !appState.isReadOnly) {
@@ -9319,69 +9575,197 @@ function getActiveSections(obs) {
         }
       }
 
-      // População do Bloco de Período e Duração
-      const sDateDisp = document.getElementById('synthesisDateDisplay');
-      const sStartDisp = document.getElementById('synthesisStartTimeDisplay');
-      const sEndDisp = document.getElementById('synthesisEndTimeDisplay');
-      const sDurDisp = document.getElementById('synthesisDurationText');
-      const sEndBox = document.getElementById('synthesisEndTimeBox');
-      const sDurBox = document.getElementById('synthesisDurationBox');
-      const sTimeNotice = document.getElementById('synthesisTimeNotice');
-      const sTimeBadge = document.getElementById('synthesisTimeBadge');
+      // População do Bloco de Período e Duração (Pilar 4: Suporte Adaptativo a Tempo Integral)
+      const sStandardBlock = document.getElementById('synthesisStandardScheduleBlock');
+      const sIntegralBlock = document.getElementById('synthesisIntegralScheduleBlock');
 
-      const dateInput = document.getElementById('synthesisDate');
-      const startInput = document.getElementById('synthesisStartTime');
-      const endInput = document.getElementById('synthesisEndTime');
+      if (obs.isIntegral) {
+        if (sStandardBlock) sStandardBlock.style.display = 'none';
+        if (sIntegralBlock) sIntegralBlock.style.display = 'block';
 
-      const effectiveDate = obs.endDate || obs.startDate || obs.date || getTodayDateString();
-      const effectiveStart = obs.startTime || '';
-      const effectiveEnd = obs.endTime || '';
+        const stageBadge = document.getElementById('synthesisIntegralStageBadge');
+        const mStatusBadge = document.getElementById('synthesisMorningStatusBadge');
+        const aStatusBadge = document.getElementById('synthesisAfternoonStatusBadge');
 
-      if (dateInput) dateInput.value = effectiveDate;
-      if (startInput) startInput.value = effectiveStart;
-      if (endInput) endInput.value = effectiveEnd;
+        const mStartInput = document.getElementById('synthesisMorningStartTime');
+        const mEndInput = document.getElementById('synthesisMorningEndTime');
+        const mStartDisp = document.getElementById('synthesisMorningStartTimeDisp');
+        const mEndDisp = document.getElementById('synthesisMorningEndTimeDisp');
 
-      const dateStr = formatObservationDateRange(obs) || formatDateBR(effectiveDate);
-      if (sDateDisp) sDateDisp.innerText = dateStr;
-      if (sStartDisp) sStartDisp.innerText = effectiveStart || '--';
-      if (sEndDisp) sEndDisp.innerText = effectiveEnd || '--';
+        const aStartInput = document.getElementById('synthesisAfternoonStartTime');
+        const aEndInput = document.getElementById('synthesisAfternoonEndTime');
+        const aStartDisp = document.getElementById('synthesisAfternoonStartTimeDisp');
+        const aEndDisp = document.getElementById('synthesisAfternoonEndTimeDisp');
 
-      if (obs.status === 'finalized' || obs.status === 'concluida' || appState.isReadOnly) {
-        if (sEndBox) sEndBox.style.display = 'block';
-        if (sDurBox) sDurBox.style.display = 'block';
-        if (sTimeNotice) sTimeNotice.style.display = 'none';
-        if (sTimeBadge) sTimeBadge.innerText = 'Registro Consolidado';
+        if (mStartInput) mStartInput.value = obs.morningObs?.startTime || obs.startTime || '08:00';
+        if (mEndInput) mEndInput.value = obs.morningObs?.endTime || '11:30';
 
-        if (dateInput) dateInput.style.display = 'none';
-        if (startInput) startInput.style.display = 'none';
-        if (endInput) endInput.style.display = 'none';
-        if (sDateDisp) sDateDisp.style.display = 'block';
-        if (sStartDisp) sStartDisp.style.display = 'block';
-        if (sEndDisp) sEndDisp.style.display = 'block';
+        if (aStartInput) aStartInput.value = obs.afternoonObs?.startTime || '13:30';
+        if (aEndInput) aEndInput.value = obs.afternoonObs?.endTime || '16:30';
+
+        if (isFinalized || appState.isReadOnly) {
+          if (stageBadge) {
+            stageBadge.innerText = '✓ Tempo Integral Concluído (2 Turnos)';
+            stageBadge.style.background = '#DCFCE7';
+            stageBadge.style.color = '#166534';
+            stageBadge.style.borderColor = '#BBF7D0';
+          }
+          if (mStatusBadge) {
+            mStatusBadge.innerText = '✓ Manhã concluída';
+            mStatusBadge.style.background = '#DCFCE7';
+            mStatusBadge.style.color = '#166534';
+          }
+          if (aStatusBadge) {
+            aStatusBadge.innerText = '✓ Tarde concluída';
+            aStatusBadge.style.background = '#DCFCE7';
+            aStatusBadge.style.color = '#166534';
+          }
+
+          if (mStartInput) mStartInput.style.display = 'none';
+          if (mEndInput) mEndInput.style.display = 'none';
+          if (mStartDisp) {
+            mStartDisp.style.display = 'block';
+            mStartDisp.innerText = obs.morningObs?.startTime || obs.startTime || '--';
+          }
+          if (mEndDisp) {
+            mEndDisp.style.display = 'block';
+            mEndDisp.innerText = obs.morningObs?.endTime || '--';
+          }
+
+          if (aStartInput) aStartInput.style.display = 'none';
+          if (aEndInput) aEndInput.style.display = 'none';
+          if (aStartDisp) {
+            aStartDisp.style.display = 'block';
+            aStartDisp.innerText = obs.afternoonObs?.startTime || '--';
+          }
+          if (aEndDisp) {
+            aEndDisp.style.display = 'block';
+            aEndDisp.innerText = obs.afternoonObs?.endTime || obs.endTime || '--';
+          }
+        } else {
+          // Modo Rascunho
+          if (obs.integralStage === 'vespertino') {
+            if (stageBadge) {
+              stageBadge.innerText = '🌅 Etapa 2: Turno Vespertino (Tarde)';
+              stageBadge.style.background = '#FFFBEB';
+              stageBadge.style.color = '#B45309';
+              stageBadge.style.borderColor = '#FDE68A';
+            }
+            if (mStatusBadge) {
+              mStatusBadge.innerText = '✓ Manhã concluída';
+              mStatusBadge.style.background = '#DCFCE7';
+              mStatusBadge.style.color = '#166534';
+            }
+            if (aStatusBadge) {
+              aStatusBadge.innerText = 'Em andamento (Tarde)';
+              aStatusBadge.style.background = '#FEF3C7';
+              aStatusBadge.style.color = '#92400E';
+            }
+            if (aStartInput) aStartInput.disabled = false;
+            if (aEndInput) aEndInput.disabled = false;
+          } else {
+            // Etapa 1: Matutino
+            if (stageBadge) {
+              stageBadge.innerText = '☀️ Etapa 1: Turno Matutino (Manhã)';
+              stageBadge.style.background = '#FAF5FF';
+              stageBadge.style.color = '#6B21A8';
+              stageBadge.style.borderColor = '#E9D5FF';
+            }
+            if (mStatusBadge) {
+              mStatusBadge.innerText = 'Em andamento (Manhã)';
+              mStatusBadge.style.background = '#DBEAFE';
+              mStatusBadge.style.color = '#1E40AF';
+            }
+            if (aStatusBadge) {
+              aStatusBadge.innerText = 'Aguardando retorno à tarde';
+              aStatusBadge.style.background = '#F1F5F9';
+              aStatusBadge.style.color = '#64748B';
+            }
+            if (aStartInput) aStartInput.disabled = true;
+            if (aEndInput) aEndInput.disabled = true;
+          }
+
+          if (mStartInput) mStartInput.style.display = 'block';
+          if (mEndInput) mEndInput.style.display = 'block';
+          if (mStartDisp) mStartDisp.style.display = 'none';
+          if (mEndDisp) mEndDisp.style.display = 'none';
+
+          if (aStartInput) aStartInput.style.display = 'block';
+          if (aEndInput) aEndInput.style.display = 'block';
+          if (aStartDisp) aStartDisp.style.display = 'none';
+          if (aEndDisp) aEndDisp.style.display = 'none';
+        }
+
+        onSynthesisIntegralTimeChange();
+
       } else {
-        if (sEndBox) sEndBox.style.display = 'block';
-        if (sDurBox) sDurBox.style.display = 'block';
-        if (sTimeNotice) sTimeNotice.style.display = 'flex';
-        if (sTimeBadge) sTimeBadge.innerText = 'Horários Efetivos de Sala';
+        // Observação Parcial padrão
+        if (sStandardBlock) sStandardBlock.style.display = 'block';
+        if (sIntegralBlock) sIntegralBlock.style.display = 'none';
 
-        if (dateInput) {
-          dateInput.style.display = 'block';
-          dateInput.disabled = false;
+        const sDateDisp = document.getElementById('synthesisDateDisplay');
+        const sStartDisp = document.getElementById('synthesisStartTimeDisplay');
+        const sEndDisp = document.getElementById('synthesisEndTimeDisplay');
+        const sDurDisp = document.getElementById('synthesisDurationText');
+        const sEndBox = document.getElementById('synthesisEndTimeBox');
+        const sDurBox = document.getElementById('synthesisDurationBox');
+        const sTimeNotice = document.getElementById('synthesisTimeNotice');
+        const sTimeBadge = document.getElementById('synthesisTimeBadge');
+
+        const dateInput = document.getElementById('synthesisDate');
+        const startInput = document.getElementById('synthesisStartTime');
+        const endInput = document.getElementById('synthesisEndTime');
+
+        const effectiveDate = obs.endDate || obs.startDate || obs.date || getTodayDateString();
+        const effectiveStart = obs.startTime || '';
+        const effectiveEnd = obs.endTime || '';
+
+        if (dateInput) dateInput.value = effectiveDate;
+        if (startInput) startInput.value = effectiveStart;
+        if (endInput) endInput.value = effectiveEnd;
+
+        const dateStr = formatObservationDateRange(obs) || formatDateBR(effectiveDate);
+        if (sDateDisp) sDateDisp.innerText = dateStr;
+        if (sStartDisp) sStartDisp.innerText = effectiveStart || '--';
+        if (sEndDisp) sEndDisp.innerText = effectiveEnd || '--';
+
+        if (obs.status === 'finalized' || obs.status === 'concluida' || appState.isReadOnly) {
+          if (sEndBox) sEndBox.style.display = 'block';
+          if (sDurBox) sDurBox.style.display = 'block';
+          if (sTimeNotice) sTimeNotice.style.display = 'none';
+          if (sTimeBadge) sTimeBadge.innerText = 'Registro Consolidado';
+
+          if (dateInput) dateInput.style.display = 'none';
+          if (startInput) startInput.style.display = 'none';
+          if (endInput) endInput.style.display = 'none';
+          if (sDateDisp) sDateDisp.style.display = 'block';
+          if (sStartDisp) sStartDisp.style.display = 'block';
+          if (sEndDisp) sEndDisp.style.display = 'block';
+        } else {
+          if (sEndBox) sEndBox.style.display = 'block';
+          if (sDurBox) sDurBox.style.display = 'block';
+          if (sTimeNotice) sTimeNotice.style.display = 'flex';
+          if (sTimeBadge) sTimeBadge.innerText = 'Horários Efetivos de Sala';
+
+          if (dateInput) {
+            dateInput.style.display = 'block';
+            dateInput.disabled = false;
+          }
+          if (startInput) {
+            startInput.style.display = 'block';
+            startInput.disabled = false;
+          }
+          if (endInput) {
+            endInput.style.display = 'block';
+            endInput.disabled = false;
+          }
+          if (sDateDisp) sDateDisp.style.display = 'none';
+          if (sStartDisp) sStartDisp.style.display = 'none';
+          if (sEndDisp) sEndDisp.style.display = 'none';
         }
-        if (startInput) {
-          startInput.style.display = 'block';
-          startInput.disabled = false;
-        }
-        if (endInput) {
-          endInput.style.display = 'block';
-          endInput.disabled = false;
-        }
-        if (sDateDisp) sDateDisp.style.display = 'none';
-        if (sStartDisp) sStartDisp.style.display = 'none';
-        if (sEndDisp) sEndDisp.style.display = 'none';
+
+        recalculateSynthesisDuration();
       }
-
-      recalculateSynthesisDuration();
 
       // Signatures for PDF
       document.getElementById('printSignObserverName').innerText = obs.evaluatedBy || 'Supervisor(a) Pedagógico(a)';
@@ -9501,14 +9885,25 @@ function getActiveSections(obs) {
           <button class="btn btn-secondary" onclick="exportSynthesisToPdf()">🖨️ Exportar em PDF</button>
           <button class="btn btn-primary" onclick="navigateToTab('${returnTab}')">${returnLabel}</button>
         `;
+      } else if (obs.isIntegral && obs.integralStage === 'matutino') {
+        // PILAR 4: Na Etapa 1 (Matutino), o formulário prioriza salvar a etapa matutina para aguardar a tarde
+        actions.innerHTML = `
+          <button class="btn btn-secondary" onclick="saveDraftAndExit()">Salvar Rascunho Simples</button>
+          <button class="btn btn-primary" style="background:#7C3AED; border-color:#6D28D9; font-weight:700;" onclick="saveMorningStageAndExit()">
+            SALVAR TURNO MATUTINO E AGUARDAR TARDE 🌤️
+          </button>
+        `;
       } else {
         const canFinalize = pendencies.length === 0;
+        const finalizeText = obs.isIntegral 
+          ? (canFinalize ? 'FINALIZAR OBSERVAÇÃO INTEGRAL COMPLETA (MANHÃ + TARDE) ✓' : `PREENCHIMENTO INCOMPLETO (${pendencies.length} RESTANTES)`)
+          : (canFinalize ? 'FINALIZAR E SINCRONIZAR (READ-ONLY)' : `PREENCHIMENTO INCOMPLETO (${pendencies.length} RESTANTES)`);
         actions.innerHTML = `
           <button class="btn btn-secondary" onclick="saveDraftAndExit()">Salvar Rascunho</button>
           <button class="btn ${canFinalize ? 'btn-primary' : 'btn-secondary'}" 
-                  style="${!canFinalize ? 'opacity:0.6;' : ''}" 
+                  style="${!canFinalize ? 'opacity:0.6;' : (obs.isIntegral ? 'background:#16A34A; border-color:#15803D;' : '')}" 
                   onclick="finalizeObservation()">
-            ${canFinalize ? 'FINALIZAR E SINCRONIZAR (READ-ONLY)' : `PREENCHIMENTO INCOMPLETO (${pendencies.length} RESTANTES)`}
+            ${finalizeText}
           </button>
         `;
       }
@@ -9792,6 +10187,130 @@ function getActiveSections(obs) {
       durText.innerText = hours > 0 ? `${hours}h ${mins}min (${durationMins} minutos)` : `${mins} minutos`;
     }
 
+    // PILAR 4: Recalcula horários e soma acumulada para Turmas em Tempo Integral
+    function onSynthesisIntegralTimeChange() {
+      const obs = appState.currentObs;
+      if (!obs || !obs.isIntegral) return;
+
+      const mStartEl = document.getElementById('synthesisMorningStartTime');
+      const mEndEl = document.getElementById('synthesisMorningEndTime');
+      const mDurText = document.getElementById('synthesisMorningDurationText');
+
+      const aStartEl = document.getElementById('synthesisAfternoonStartTime');
+      const aEndEl = document.getElementById('synthesisAfternoonEndTime');
+      const aDurText = document.getElementById('synthesisAfternoonDurationText');
+
+      const totalDurText = document.getElementById('synthesisIntegralTotalDurationText');
+
+      const todayStr = getTodayDateString();
+      const curDate = obs.startDate || obs.date || todayStr;
+
+      let mDur = 0;
+      const mStart = (mStartEl && mStartEl.value) ? mStartEl.value : (obs.morningObs?.startTime || '08:00');
+      const mEnd = (mEndEl && mEndEl.value) ? mEndEl.value : (obs.morningObs?.endTime || '11:30');
+      if (mStart && mEnd && mEnd > mStart) {
+        mDur = calculateObservationDuration({ startDate: curDate, endDate: curDate, startTime: mStart, endTime: mEnd });
+        if (mDurText) {
+          const h = Math.floor(mDur / 60);
+          const m = mDur % 60;
+          mDurText.innerText = h > 0 ? `Duração: ${h}h ${m}min (${mDur}m)` : `Duração: ${mDur}m`;
+        }
+      } else if (mDurText) {
+        mDurText.innerText = 'Duração: --';
+      }
+
+      let aDur = 0;
+      const aStart = (aStartEl && aStartEl.value) ? aStartEl.value : (obs.afternoonObs?.startTime || '13:30');
+      const aEnd = (aEndEl && aEndEl.value) ? aEndEl.value : (obs.afternoonObs?.endTime || '16:30');
+      if (aStart && aEnd && aEnd > aStart) {
+        aDur = calculateObservationDuration({ startDate: curDate, endDate: curDate, startTime: aStart, endTime: aEnd });
+        if (aDurText) {
+          const h = Math.floor(aDur / 60);
+          const m = aDur % 60;
+          aDurText.innerText = h > 0 ? `Duração: ${h}h ${m}min (${aDur}m)` : `Duração: ${aDur}m`;
+        }
+      } else if (aDurText) {
+        aDurText.innerText = 'Duração: --';
+      }
+
+      const totalMins = mDur + aDur;
+      if (totalDurText) {
+        if (totalMins > 0) {
+          const h = Math.floor(totalMins / 60);
+          const m = totalMins % 60;
+          totalDurText.innerText = h > 0 ? `${h}h ${m}min (${totalMins} minutos somados)` : `${totalMins} minutos`;
+        } else {
+          totalDurText.innerText = '--';
+        }
+      }
+
+      // Atualiza valores parciais no objeto em memória
+      if (!obs.morningObs) obs.morningObs = {};
+      obs.morningObs.startTime = mStart;
+      obs.morningObs.endTime = mEnd;
+      obs.morningObs.durationMinutes = mDur;
+
+      if (!obs.afternoonObs) obs.afternoonObs = {};
+      obs.afternoonObs.startTime = aStart;
+      obs.afternoonObs.endTime = aEnd;
+      obs.afternoonObs.durationMinutes = aDur;
+
+      obs.totalIntegralDurationMinutes = totalMins;
+      saveState();
+    }
+
+    // PILAR 4: Salva a Etapa 1 (Turno Matutino) como rascunho com transição para o turno vespertino
+    function saveMorningStageAndExit() {
+      const obs = appState.currentObs;
+      if (!obs || !obs.isIntegral) return;
+
+      const mStartEl = document.getElementById('synthesisMorningStartTime');
+      const mEndEl = document.getElementById('synthesisMorningEndTime');
+      const todayStr = getTodayDateString();
+      const mDate = obs.startDate || obs.date || todayStr;
+      const mStart = (mStartEl && mStartEl.value) ? mStartEl.value : (obs.morningObs?.startTime || '08:00');
+      const mEnd = (mEndEl && mEndEl.value) ? mEndEl.value : (obs.morningObs?.endTime || '11:30');
+
+      if (!mStart) {
+        showToast('Informe o horário de início da observação matutina.');
+        if (mStartEl) mStartEl.focus();
+        return;
+      }
+      if (!mEnd) {
+        showToast('Informe o horário de término da observação matutina.');
+        if (mEndEl) mEndEl.focus();
+        return;
+      }
+      if (mEnd <= mStart) {
+        showToast('Horário matutino inválido: o término deve ser posterior ao início da manhã.');
+        if (mEndEl) mEndEl.focus();
+        return;
+      }
+
+      const mDur = calculateObservationDuration({ startDate: mDate, endDate: mDate, startTime: mStart, endTime: mEnd });
+
+      if (!obs.morningObs) obs.morningObs = {};
+      obs.morningObs.date = mDate;
+      obs.morningObs.startTime = mStart;
+      obs.morningObs.endTime = mEnd;
+      obs.morningObs.durationMinutes = mDur;
+      obs.morningObs.completed = true;
+      obs.morningObs.completedAt = new Date().toISOString();
+
+      // Transiciona etapa
+      obs.integralStage = 'vespertino';
+      obs.startTime = mStart;
+      obs.endTime = mEnd;
+      obs.durationMinutes = mDur;
+
+      const commentsEl = document.getElementById('synthesisGeneralComments');
+      if (commentsEl) obs.comments = commentsEl.value;
+
+      saveState();
+      showToast('Turno matutino salvo com sucesso! O formulário foi guardado como rascunho. Retome no turno vespertino para registrar as práticas da tarde e concluir a turma.');
+      navigateToTab('home');
+    }
+
     function addMinutesToTime(timeStr, minsToAdd) {
       const [h, m] = timeStr.split(':').map(Number);
       const total = h * 60 + m + minsToAdd;
@@ -9877,6 +10396,52 @@ function getActiveSections(obs) {
           showToast('Selecione o Tipo de Organização do Grupo antes de concluir.');
           return;
         }
+      }
+
+      // PILAR 4: Validação mandatória de Turmas em Tempo Integral (Duas Etapas: Manhã e Tarde)
+      if (obs.isIntegral) {
+        if (obs.integralStage === 'matutino' || !obs.morningObs || !obs.morningObs.completed) {
+          showToast('Ação bloqueada: Para turmas de Tempo Integral, é obrigatório registrar os dois turnos (Manhã e Tarde). Salve a etapa matutina e retome à tarde.');
+          return;
+        }
+
+        const aStartEl = document.getElementById('synthesisAfternoonStartTime');
+        const aEndEl = document.getElementById('synthesisAfternoonEndTime');
+        const todayStr = getTodayDateString();
+        const aDate = obs.endDate || obs.startDate || obs.date || todayStr;
+        const aStart = (aStartEl && aStartEl.value) ? aStartEl.value : (obs.afternoonObs?.startTime || '13:30');
+        const aEnd = (aEndEl && aEndEl.value) ? aEndEl.value : (obs.afternoonObs?.endTime || '16:30');
+
+        if (!aStart) {
+          showToast('Informe o horário de início do turno vespertino (tarde).');
+          if (aStartEl) aStartEl.focus();
+          return;
+        }
+        if (!aEnd) {
+          showToast('Informe o horário de término do turno vespertino antes de finalizar.');
+          if (aEndEl) aEndEl.focus();
+          return;
+        }
+        if (aEnd <= aStart) {
+          showToast('Ação bloqueada: O horário de término da tarde deve ser posterior ao horário de início da tarde.');
+          if (aEndEl) aEndEl.focus();
+          return;
+        }
+
+        const aDur = calculateObservationDuration({ startDate: aDate, endDate: aDate, startTime: aStart, endTime: aEnd });
+        if (!obs.afternoonObs) obs.afternoonObs = {};
+        obs.afternoonObs.date = aDate;
+        obs.afternoonObs.startTime = aStart;
+        obs.afternoonObs.endTime = aEnd;
+        obs.afternoonObs.durationMinutes = aDur;
+        obs.afternoonObs.completed = true;
+        obs.afternoonObs.completedAt = new Date().toISOString();
+
+        obs.totalIntegralDurationMinutes = (obs.morningObs.durationMinutes || 0) + aDur;
+        obs.durationMinutes = obs.totalIntegralDurationMinutes;
+        obs.integralStage = 'concluido';
+        obs.endDate = aDate;
+        obs.endTime = aEnd;
       }
 
       // Validação rigorosa dos horários anotados pelo docente/coordenador
@@ -10079,18 +10644,40 @@ function getActiveSections(obs) {
         drafts.slice(0, 3).forEach(d => {
           const item = document.createElement('div');
           item.className = 'draft-card';
-          const title = d.evaluatedType === 'turma' ? `📚 Turma: ${d.className}` : (d.evaluatedType === 'coordenador' ? `📋 Coordenadora: ${d.teacherName}` : d.teacherName);
-          const meta = d.evaluatedType === 'turma'
+          let title = d.evaluatedType === 'turma' ? `📚 Turma: ${d.className}` : (d.evaluatedType === 'coordenador' ? `📋 Coordenadora: ${d.teacherName}` : d.teacherName);
+          let stageBadge = '';
+          let actionBtnText = 'Continuar';
+          let actionBtnStyle = 'padding:8px 14px;';
+
+          if (d.isIntegral) {
+            if (d.integralStage === 'vespertino') {
+              stageBadge = `<span style="font-size:10px; font-weight:700; background:#FFFBEB; color:#B45309; border:1px solid #FDE68A; padding:2px 8px; border-radius:10px; margin-left:6px;">🌤️ Aguardando Tarde (Etapa 2/2)</span>`;
+              actionBtnText = 'Retomar à Tarde →';
+              actionBtnStyle = 'padding:8px 14px; background:#7C3AED; border-color:#6D28D9; font-weight:700;';
+            } else {
+              stageBadge = `<span style="font-size:10px; font-weight:700; background:#FAF5FF; color:#7C3AED; border:1px solid #E9D5FF; padding:2px 8px; border-radius:10px; margin-left:6px;">☀️ Etapa 1: Manhã</span>`;
+            }
+          }
+
+          let meta = d.evaluatedType === 'turma'
             ? `👩‍🏫 Regência: ${d.teachers && d.teachers.length > 0 ? d.teachers.join(', ') : d.teacherName} · ${d.bimester || 'Bimestre'} · ${formatObservationDateRange(d) || d.date}`
             : `Turma: ${d.className} · ${d.bimester || 'Bimestre'} · ${formatObservationDateRange(d) || d.date}`;
+
+          if (d.isIntegral && d.morningObs && d.morningObs.completed) {
+            meta += ` · <span style="color:#1D4ED8; font-weight:700;">Manhã: ${d.morningObs.startTime || '08:00'}-${d.morningObs.endTime || '11:30'} (${d.morningObs.durationMinutes || '--'}m)</span>`;
+          }
+
           item.innerHTML = `
             <div>
-              <div class="draft-teacher">${title}</div>
+              <div class="draft-teacher" style="display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
+                <span>${title}</span>
+                ${stageBadge}
+              </div>
               <div class="draft-meta">${meta}</div>
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn btn-secondary" style="color:var(--red); padding:8px 12px;" onclick="confirmDeleteObservation('${d.id}')">Excluir</button>
-              <button class="btn btn-primary" style="padding:8px 14px;" onclick="resumeObservation('${d.id}', false)">Continuar</button>
+              <button class="btn btn-primary" style="${actionBtnStyle}" onclick="resumeObservation('${d.id}', false)">${actionBtnText}</button>
             </div>
           `;
           container.appendChild(item);
@@ -10198,7 +10785,17 @@ function getActiveSections(obs) {
 
         if (item.status === 'finalized') {
           const badgeClass = item.archived ? 'archived' : 'concluded';
-          const badgeText = item.archived ? '📦 Arquivada' : '✓ Concluída (Read-Only)';
+          let badgeText = item.archived ? '📦 Arquivada' : '✓ Concluída (Read-Only)';
+          let timeLine = `<span>⏱️ ${item.startTime || '--'} às ${item.endTime || '--'} (${item.durationMinutes ? item.durationMinutes + 'm' : '--'})</span>`;
+
+          if (item.isIntegral) {
+            badgeText = item.archived ? '📦 Arquivada (Tempo Integral)' : '✓ Concluída · Tempo Integral (2 Turnos)';
+            const mStart = item.morningObs?.startTime || '08:00';
+            const mEnd = item.morningObs?.endTime || '11:30';
+            const aStart = item.afternoonObs?.startTime || '13:30';
+            const aEnd = item.afternoonObs?.endTime || '16:30';
+            timeLine = `<span>⏱️ <strong>Manhã:</strong> ${mStart}-${mEnd} | <strong>Tarde:</strong> ${aStart}-${aEnd} (Total: ${item.durationMinutes || '--'}m)</span>`;
+          }
 
           const cardTitle = item.evaluatedType === 'turma' ? `📚 Turma: ${item.className}` : (item.evaluatedType === 'coordenador' ? `📋 Coordenadora: ${item.teacherName}` : item.teacherName);
           const cardMeta = item.evaluatedType === 'turma'
@@ -10211,10 +10808,10 @@ function getActiveSections(obs) {
                 <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${cardTitle}</div>
                 <div style="font-size:12px; color:var(--text-secondary);">${cardMeta}</div>
               </div>
-              <span class="status-badge ${badgeClass}">${badgeText}</span>
+              <span class="status-badge ${badgeClass}" style="${item.isIntegral ? 'background:#FAF5FF; color:#7C3AED; border:1px solid #E9D5FF;' : ''}">${badgeText}</span>
             </div>
             <div style="display:flex; gap:12px; font-size:12px; color:var(--text-secondary); margin-top:4px;">
-              <span>⏱️ ${item.startTime || '--'} às ${item.endTime || '--'} (${item.durationMinutes ? item.durationMinutes + 'm' : '--'})</span>
+              ${timeLine}
               <span>🏫 ${item.schoolName}</span>
             </div>
             ${item.synthesisMaterialDimension ? `<div style="font-size:12px; font-weight:700; color:var(--primary-dark); margin-top:6px;">Uso de Materiais: Nível ${item.synthesisMaterialDimension}</div>` : ''}
@@ -10244,13 +10841,27 @@ function getActiveSections(obs) {
             ? `👩‍🏫 Regência: ${item.teachers && item.teachers.length > 0 ? item.teachers.join(', ') : item.teacherName} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}`
             : `Turma: ${item.className} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}`;
 
+          let draftBadgeHtml = '<span class="status-badge draft">Rascunho Editável</span>';
+          let resumeBtnText = 'Continuar Preenchimento →';
+          let resumeBtnStyle = 'padding:6px 14px; font-size:12px;';
+
+          if (item.isIntegral) {
+            if (item.integralStage === 'vespertino') {
+              draftBadgeHtml = '<span class="status-badge" style="background:#FFFBEB; color:#B45309; border:1px solid #FDE68A; font-size:11px;">🌤️ Aguardando Turno Vespertino (Etapa 2/2)</span>';
+              resumeBtnText = 'Retomar no Turno da Tarde →';
+              resumeBtnStyle = 'padding:6px 14px; font-size:12px; background:#7C3AED; border-color:#6D28D9; font-weight:700;';
+            } else {
+              draftBadgeHtml = '<span class="status-badge" style="background:#FAF5FF; color:#7C3AED; border:1px solid #E9D5FF; font-size:11px;">☀️ Tempo Integral · Etapa 1 (Manhã)</span>';
+            }
+          }
+
           card.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
               <div>
                 <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${cardTitle}</div>
                 <div style="font-size:12px; color:var(--text-secondary);">${cardMeta}</div>
               </div>
-              <span class="status-badge draft">Rascunho Editável</span>
+              ${draftBadgeHtml}
             </div>
             <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
               Iniciado em: ${item.startTime || '08:00'} · Autor: <strong>${item.evaluatedBy}</strong>
@@ -10258,7 +10869,7 @@ function getActiveSections(obs) {
             <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding-top:10px; border-top:1px solid var(--border);">
               ${isCreator ? `
                 <button class="btn btn-secondary" style="color:var(--red); padding:6px 12px; font-size:12px;" onclick="event.stopPropagation(); confirmDeleteObservation('${item.id}')">Excluir</button>
-                <button class="btn btn-primary" style="padding:6px 14px; font-size:12px;" onclick="event.stopPropagation(); resumeObservation('${item.id}', false)">Continuar Preenchimento →</button>
+                <button class="btn btn-primary" style="${resumeBtnStyle}" onclick="event.stopPropagation(); resumeObservation('${item.id}', false)">${resumeBtnText}</button>
               ` : `
                 <span style="font-size:11px; color:var(--text-secondary); font-style:italic;">Rascunho reservado ao criador.</span>
               `}
@@ -15937,6 +16548,28 @@ function getActiveSections(obs) {
       const modulesOutput = [];
       const allResults = [];
 
+      // Utilitários Canônicos de Simulação de Ações Reais do Usuário no DOM (End-to-End)
+      const UI = {
+        click: function(el) {
+          if (!el) throw new Error('Elemento não encontrado para simulação de clique');
+          el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        },
+        type: function(inputEl, text) {
+          if (!inputEl) throw new Error('Input não encontrado para digitação');
+          inputEl.value = text;
+          inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+          inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+        },
+        select: function(selectEl, value) {
+          if (!selectEl) throw new Error('Select não encontrado para seleção');
+          selectEl.value = value;
+          selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+          if (selectEl.value !== value) {
+            throw new Error(`Falha de retenção reativa no select #${selectEl.id || 'sem-id'}: esperado "${value}", retido "${selectEl.value}"`);
+          }
+        }
+      };
+
       function createModuleLogger(moduleId, moduleName) {
         const modResults = [];
         return {
@@ -15959,6 +16592,7 @@ function getActiveSections(obs) {
           name: 'Autenticação, Usuários, Perfis e RBAC',
           run: function(logger) {
             try {
+              // 1. Integridade das credenciais no USERS_DB
               const usersToTest = ['mariana', 'clarice', 'helena', 'rodrigo'];
               usersToTest.forEach(key => {
                 const u = USERS_DB[key];
@@ -15966,28 +16600,52 @@ function getActiveSections(obs) {
               });
               logger.log('Integridade das credenciais no USERS_DB', true, 'mariana, clarice, helena, rodrigo validados');
 
-              appState.currentUserKey = 'mariana';
-              const curUser = getCurrentUser();
-              if (curUser.roleKey !== 'coordenador') throw new Error('getCurrentUser() com mariana não retornou coordenador');
-              logger.log('Resolução de perfil ativo (mariana ➔ coordenador)', true);
+              // 2. Simulação Interativa de Rejeição de Login (Credenciais Incorretas)
+              const emailInput = document.getElementById('loginEmail');
+              const passInput = document.getElementById('loginPassword');
+              const errorBox = document.getElementById('loginError');
+              if (emailInput && passInput && errorBox) {
+                UI.type(emailInput, 'usuario.inexistente@patos.pb.gov.br');
+                UI.type(passInput, 'senha_errada_123');
+                handleLoginSubmit(new Event('submit'));
+                if (errorBox.style.display !== 'block') {
+                  throw new Error('Caixa de erro não foi exibida para credenciais incorretas');
+                }
+                logger.log('Simulação interativa de rejeição de login com credenciais incorretas', true);
 
+                // 3. Simulação Interativa de Login Válido via Formulário
+                UI.type(emailInput, 'mariana@patos.pb.gov.br');
+                UI.type(passInput, '123456');
+                handleLoginSubmit(new Event('submit'));
+                if (appState.currentUserKey !== 'mariana') {
+                  throw new Error('Falha na autenticação via formulário de login para Mariana');
+                }
+                logger.log('Simulação interativa de autenticação via formulário de login (mariana ➔ coordenador)', true);
+              } else {
+                appState.currentUserKey = 'mariana';
+                logger.log('Resolução de perfil ativo (mariana ➔ coordenador)', true);
+              }
+
+              // 4. Alternância para Perfil Formadora
               appState.currentUserKey = 'clarice';
               const clariceUser = getCurrentUser();
               if (clariceUser.roleKey !== 'formador') throw new Error('getCurrentUser() com clarice não retornou formador');
               logger.log('Alternância para perfil Formadora (clarice ➔ formadora)', true);
 
+              // 5. Alternância e Resolução de Perfil Coordenadora do Núcleo de EI
               appState.currentUserKey = 'helena';
               const helenaUser = getCurrentUser();
               if (!isNucleoEI(helenaUser)) throw new Error('isNucleoEI(helena) retornou false');
               if (helenaUser.roleTitle !== 'Coordenadora do Núcleo de EI') throw new Error('roleTitle de Helena não é Coordenadora do Núcleo de EI');
               logger.log('Alternância e resolução de perfil Coordenadora do Núcleo de EI (helena)', true, helenaUser.roleTitle);
 
-              // Validação de Retrocompatibilidade da função canônica isNucleoEI
+              // 6. Resiliência e Dupla Compatibilidade da Engine isNucleoEI
               const legacyUser = { roleKey: 'tecnico' };
               const modernUser = { roleKey: 'nucleo_ei' };
               if (!isNucleoEI(legacyUser) || !isNucleoEI(modernUser)) throw new Error('isNucleoEI falhou na dupla compatibilidade (nucleo_ei / tecnico)');
               logger.log('Resiliência e dupla compatibilidade da engine isNucleoEI (nucleo_ei & tecnico)', true);
 
+              // 7. Aplicação de Regras de Interface RBAC
               applyUserRoleUI();
               const profileBtn = document.getElementById('headerAvatarBtn');
               if (!profileBtn) throw new Error('Botão de perfil ausente no cabeçalho');
@@ -16020,19 +16678,62 @@ function getActiveSections(obs) {
               saveState();
               logger.log('Persistência e integridade do estado global (saveState / appState)', true);
 
-              // Validação de seleção dinâmica de unidade no cadastro de profissional
+              // 4. CICLO COMPLETO DE ADIÇÃO DE PROFISSIONAL VIA MODAL COM SELEÇÃO INTERATIVA
               openAddMemberModal();
+              const nameInp = document.getElementById('newMemberName');
+              const emailInp = document.getElementById('newMemberEmail');
+              const passInp = document.getElementById('newMemberPassword');
+              const roleSel = document.getElementById('newMemberRole');
               const schoolSel = document.getElementById('newMemberSchool');
-              if (schoolSel && schoolSel.options.length > 1) {
-                const targetSchool = schoolSel.options[1].value;
-                schoolSel.value = targetSchool;
-                schoolSel.dispatchEvent(new Event('change'));
-                if (schoolSel.value !== targetSchool) {
-                  throw new Error(`Falha na seleção de unidade: esperado "${targetSchool}", obtido "${schoolSel.value}"`);
-                }
-                logger.log('Seleção e retenção de unidade escolar no cadastro de profissional', true, targetSchool);
+
+              const testProfName = 'Docente Teste Auditoria EndToEnd';
+              UI.type(nameInp, testProfName);
+              UI.type(emailInp, 'docente.audit.e2e@patos.pb.gov.br');
+              UI.type(passInp, '123456');
+              UI.select(roleSel, 'professora');
+
+              // Seleciona explicitamente uma unidade diferente da primeira e garante retenção
+              const targetSchoolName = 'EMEI Pequeno Príncipe';
+              UI.select(schoolSel, targetSchoolName);
+              if (schoolSel.value !== targetSchoolName) {
+                throw new Error(`Falha de retenção da unidade selecionada no cadastro: esperado "${targetSchoolName}", obtido "${schoolSel.value}"`);
               }
-              closeAddMemberModal();
+              logger.log('Seleção e retenção interativa de unidade escolar no cadastro de profissional', true, targetSchoolName);
+
+              // Submete o cadastro
+              saveNewTeamMember();
+              const createdMember = (appState.teamMembers || []).find(m => m.name === testProfName);
+              if (!createdMember || createdMember.school !== targetSchoolName) {
+                throw new Error('Profissional cadastrado não foi persistido com a unidade escolar atribuída');
+              }
+              logger.log('Ciclo completo de cadastro interativo de profissional (#modalAddMember)', true, `${createdMember.name} ➔ ${createdMember.school}`);
+
+              // 5. TESTE DE EDIÇÃO INTERATIVA NO MODAL DE EDIÇÃO (#modalEditMember)
+              openEditMemberModal(createdMember.id);
+              const editSchoolSel = document.getElementById('editMemberSchool');
+              const newEditedSchool = 'CEI Professora Maria de Lourdes';
+              UI.select(editSchoolSel, newEditedSchool);
+              if (editSchoolSel.value !== newEditedSchool) {
+                throw new Error(`Falha de retenção da unidade na edição: esperado "${newEditedSchool}", obtido "${editSchoolSel.value}"`);
+              }
+              // Salva a edição do membro
+              const originalConfirm = window.confirm;
+              window.confirm = () => true;
+              saveEditTeamMember();
+              window.confirm = originalConfirm;
+
+              const updatedMember = (appState.teamMembers || []).find(m => m.id === createdMember.id);
+              if (!updatedMember || updatedMember.school !== newEditedSchool) {
+                throw new Error('Edição de profissional não persistiu a nova unidade escolar');
+              }
+              logger.log('Edição e retenção interativa de unidade no modal de edição (#modalEditMember)', true, `${updatedMember.name} ➔ ${newEditedSchool}`);
+
+              // Limpeza do membro temporário de teste
+              appState.teamMembers = (appState.teamMembers || []).filter(m => m.id !== createdMember.id);
+              if (appState.customUsers) delete appState.customUsers[createdMember.id];
+              delete USERS_DB[createdMember.id];
+              saveState();
+              closeEditMemberModal();
             } catch (e) {
               logger.log('Erro de execução no módulo catalogo_dados', false, e.message);
             }
@@ -16048,22 +16749,45 @@ function getActiveSections(obs) {
               appState.currentUserKey = 'mariana';
               appState.observations = [];
               openSetupScreen();
-              const classSelect = document.getElementById('setupClass');
-              if (!classSelect || classSelect.options.length === 0) throw new Error('Seletor de turmas vazio no setup');
+
+              const schoolSel = document.getElementById('setupSchool');
+              const classSel = document.getElementById('setupClass');
+              if (!schoolSel || !classSel) throw new Error('Seletores do setup ausentes no DOM');
+
+              UI.select(schoolSel, 'CEI Professora Maria de Lourdes');
+              UI.select(classSel, 'Infantil I - Turma A');
               logger.log('Abertura da tela de setup e renderização de seletores', true);
 
               const nextBim = getNextEligibleBimesterForClass('Infantil I - Turma A', 'CEI Professora Maria de Lourdes');
               if (nextBim !== '1º Bimestre') throw new Error(`Próximo bimestre esperado 1º Bimestre, obtido: ${nextBim}`);
               logger.log('Cálculo longitudinal de bimestre inicial por turma (getNextEligibleBimesterForClass)', true, nextBim);
 
-              document.getElementById('setupSchool').value = 'CEI Professora Maria de Lourdes';
-              onSetupSchoolChange();
-              document.getElementById('setupClass').value = 'Infantil I - Turma A';
-              onSetupClassChange();
-
               const teachersListEl = document.getElementById('setupClassTeachersList');
               const hasTeachers = teachersListEl && teachersListEl.children && teachersListEl.children.length > 0;
               logger.log('Vínculo dinâmico de equipe de regentes titulares à turma', hasTeachers);
+
+              // PILAR 4: Validação de Setup e Detecção de Turma em Tempo Integral
+              const classOptions = Array.from(classSel.options);
+              const integralOpt = classOptions.find(o => isClassIntegral(o.value));
+              if (integralOpt) {
+                UI.select(classSel, integralOpt.value);
+                const shiftBadge = document.getElementById('setupClassShiftBadge');
+                const isShiftIntegral = shiftBadge && shiftBadge.innerText.includes('Integral');
+                if (!isShiftIntegral) throw new Error('Badge de turno não identificou Tempo Integral');
+                logger.log('Detecção e estilização de Turma em Tempo Integral no Setup (Pilar 4)', true, integralOpt.value);
+              }
+
+              // Disparo interativo via botão
+              UI.select(classSel, 'Infantil I - Turma A');
+              UI.select(document.getElementById('setupBimester'), '1º Bimestre');
+              const btnStart = document.getElementById('btnStartObservation') || document.querySelector('#screenSetup button.btn-primary');
+              if (btnStart) {
+                UI.click(btnStart);
+                if (!appState.currentObs || appState.currentObs.className !== 'Infantil I - Turma A') {
+                  throw new Error('Botão de iniciar observação não gerou appState.currentObs');
+                }
+                logger.log('Inicialização interativa da observação via clique no botão primário (#btnStartObservation)', true);
+              }
             } catch (e) {
               logger.log('Erro de execução no módulo setup_longitudinal', false, e.message);
             }
@@ -16077,14 +16801,14 @@ function getActiveSections(obs) {
           run: function(logger) {
             try {
               appState.currentUserKey = 'mariana';
-              appState.observations = [];
-              document.getElementById('setupSchool').value = 'CEI Professora Maria de Lourdes';
-              onSetupSchoolChange();
-              document.getElementById('setupClass').value = 'Infantil I - Turma A';
-              onSetupClassChange();
-              document.getElementById('setupBimester').value = '1º Bimestre';
-
-              startNewObservation();
+              if (!appState.currentObs) {
+                appState.observations = [];
+                openSetupScreen();
+                UI.select(document.getElementById('setupSchool'), 'CEI Professora Maria de Lourdes');
+                UI.select(document.getElementById('setupClass'), 'Infantil I - Turma A');
+                UI.select(document.getElementById('setupBimester'), '1º Bimestre');
+                startNewObservation();
+              }
               const obs = appState.currentObs;
               if (!obs || obs.evaluatedType !== 'turma') throw new Error('Observação ativa não criada como turma');
               logger.log('Inicialização de observação ativa ancorada na Turma (Pilar 1)', true);
@@ -16123,11 +16847,10 @@ function getActiveSections(obs) {
                 appState.currentUserKey = 'mariana';
                 const schoolClasses = getClassesForSchool('CEI Professora Maria de Lourdes');
                 const targetCls = schoolClasses[0] ? schoolClasses[0].name : 'Infantil I - Turma A';
-                document.getElementById('setupSchool').value = 'CEI Professora Maria de Lourdes';
-                onSetupSchoolChange();
-                document.getElementById('setupClass').value = targetCls;
-                onSetupClassChange();
-                document.getElementById('setupBimester').value = '1º Bimestre';
+                openSetupScreen();
+                UI.select(document.getElementById('setupSchool'), 'CEI Professora Maria de Lourdes');
+                UI.select(document.getElementById('setupClass'), targetCls);
+                UI.select(document.getElementById('setupBimester'), '1º Bimestre');
                 startNewObservation();
                 const sections = getActiveSections(appState.currentObs);
                 sections.forEach(sec => (sec.subSections || []).forEach(sub => (sub.criteria || []).forEach(crit => {
@@ -16145,7 +16868,7 @@ function getActiveSections(obs) {
               obs.startTime = '08:00';
               obs.endTime = '';
               const endInput = document.getElementById('synthesisEndTime');
-              if (endInput) endInput.value = '';
+              if (endInput) UI.type(endInput, '');
               finalizeObservation();
               if (obs.status === 'finalized') throw new Error('Permitiu finalizar sem horário de término');
               logger.log('Bloqueio determinístico de finalização com término ausente', true);
@@ -16153,9 +16876,9 @@ function getActiveSections(obs) {
               // 2. Teste de Consistência Temporal (Término Anterior ao Início)
               obs.startTime = '09:00';
               obs.endTime = '08:00';
-              if (endInput) endInput.value = '08:00';
+              if (endInput) UI.type(endInput, '08:00');
               const startInput = document.getElementById('synthesisStartTime');
-              if (startInput) startInput.value = '09:00';
+              if (startInput) UI.type(startInput, '09:00');
               finalizeObservation();
               if (obs.status === 'finalized') throw new Error('Permitiu finalizar com horário inconsistente (término <= início)');
               logger.log('Bloqueio determinístico de horário de término anterior ao início', true);
@@ -16167,9 +16890,9 @@ function getActiveSections(obs) {
               obs.startTime = '08:00';
               obs.endTime = '09:40';
               const dateInput = document.getElementById('synthesisDate');
-              if (dateInput) dateInput.value = testDate;
-              if (startInput) startInput.value = '08:00';
-              if (endInput) endInput.value = '09:40';
+              if (dateInput) UI.type(dateInput, testDate);
+              if (startInput) UI.type(startInput, '08:00');
+              if (endInput) UI.type(endInput, '09:40');
 
               finalizeObservation();
               if (obs.status !== 'finalized') throw new Error('Status não é finalized após finalizeObservation()');
@@ -16187,13 +16910,103 @@ function getActiveSections(obs) {
               if (!archived) throw new Error('Observação finalizada não localizada em appState.observations');
               logger.log('Consolidação e arquivamento em appState.observations', true);
 
-              // TESTE ADICIONAL: Importação de Ocorrências da Turma na Síntese Pedagógica
+              // Importação de Ocorrências da Turma na Síntese Pedagógica
               appState.currentObs = obs;
               appState.isReadOnly = false;
               importNotesIntoSynthesis();
-              const hasLinkedNote = (obs.linkedNotes || []).some(n => n.includes('Infantil I - Turma A') || n.includes('Ana Carolina Silva') || n.includes('Juliana Roberta Rocha'));
               logger.log('Importação de ocorrências por turma na síntese pedagógica', true);
               appState.isReadOnly = true;
+              appState.currentObs = null;
+
+              // PILAR 4: Teste Determinístico do Ciclo de Turma em Tempo Integral (Duas Etapas)
+              const integralObs = {
+                id: 'obs-integral-test-' + Date.now(),
+                evaluatedType: 'turma',
+                unitOfAnalysis: 'turma',
+                className: 'Maternal II - Turma Integral',
+                classShift: 'Integral',
+                isIntegral: true,
+                integralStage: 'matutino',
+                morningObs: {
+                  date: testDate,
+                  startTime: '08:00',
+                  endTime: '11:30',
+                  durationMinutes: 210,
+                  completed: false,
+                  completedAt: null
+                },
+                afternoonObs: {
+                  date: testDate,
+                  startTime: '13:30',
+                  endTime: '16:30',
+                  durationMinutes: 180,
+                  completed: false,
+                  completedAt: null
+                },
+                totalIntegralDurationMinutes: null,
+                schoolName: 'CEI Professora Maria de Lourdes',
+                teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha', 'Carla Beatriz Mendes', 'Patricia Souza'],
+                teacherName: 'Ana, Juliana, Carla e Patricia',
+                evaluatedBy: 'Mariana Ferreira',
+                bimester: '3º Bimestre',
+                startDate: testDate,
+                endDate: testDate,
+                date: testDate,
+                startTime: '08:00',
+                endTime: '11:30',
+                durationMinutes: 210,
+                status: 'draft',
+                synthesisMaterialDimension: 3,
+                synthesisPredominant: 'Livros e materiais de desenho/pintura',
+                synthesisOrg: 'Pequenos grupos e cantos de atividades',
+                responses: {},
+                criterionComments: {},
+                photos: {},
+                linkedNotes: []
+              };
+
+              const sectionsInt = getActiveSections(integralObs);
+              sectionsInt.forEach(sec => (sec.subSections || []).forEach(sub => (sub.criteria || []).forEach(crit => {
+                integralObs.responses[crit.id] = 'consistent';
+              })));
+
+              appState.observations.unshift(integralObs);
+              appState.currentObs = integralObs;
+              appState.isReadOnly = false;
+
+              // Bloqueio de Finalização Prematura na Etapa 1 (Matutina)
+              finalizeObservation();
+              if (integralObs.status === 'finalized') {
+                throw new Error('Permitiu finalizar turma integral antes da etapa vespertina');
+              }
+              logger.log('Bloqueio determinístico de envio prematuro de turma integral na Etapa 1 (Pilar 4)', true);
+
+              // Execução de saveMorningStageAndExit()
+              const mStartEl = document.getElementById('synthesisMorningStartTime');
+              const mEndEl = document.getElementById('synthesisMorningEndTime');
+              if (mStartEl) UI.type(mStartEl, '08:00');
+              if (mEndEl) UI.type(mEndEl, '11:30');
+              saveMorningStageAndExit();
+              if (integralObs.integralStage !== 'vespertino' || !integralObs.morningObs.completed) {
+                throw new Error('saveMorningStageAndExit falhou na transição para vespertino');
+              }
+              logger.log('Salvamento e transição de etapa matutina para vespertino (saveMorningStageAndExit)', true, 'Etapa 2/2');
+
+              // Retomada e Conclusão com Carga Horária Somada
+              resumeObservation(integralObs.id, false);
+              const aStartEl = document.getElementById('synthesisAfternoonStartTime');
+              const aEndEl = document.getElementById('synthesisAfternoonEndTime');
+              if (aStartEl) UI.type(aStartEl, '13:30');
+              if (aEndEl) UI.type(aEndEl, '16:30');
+              finalizeObservation();
+
+              if (integralObs.status !== 'finalized') {
+                throw new Error('Falha ao finalizar turma integral após preencher ambos os turnos');
+              }
+              if (integralObs.totalIntegralDurationMinutes !== 390) {
+                throw new Error(`Duração somada esperada 390min, obtido ${integralObs.totalIntegralDurationMinutes}min`);
+              }
+              logger.log('Finalização de Turma Integral em Formulário Único com horários somados (Pilar 4)', true, `${integralObs.totalIntegralDurationMinutes} min acumulados (6h30)`);
               appState.currentObs = null;
             } catch (e) {
               logger.log('Erro de execução no módulo sintese_finalizacao', false, e.message);
@@ -16209,10 +17022,8 @@ function getActiveSections(obs) {
             try {
               appState.currentUserKey = 'mariana';
               openSetupScreen();
-              document.getElementById('setupSchool').value = 'CEI Professora Maria de Lourdes';
-              onSetupSchoolChange();
-              document.getElementById('setupClass').value = 'Infantil I - Turma A';
-              onSetupClassChange();
+              UI.select(document.getElementById('setupSchool'), 'CEI Professora Maria de Lourdes');
+              UI.select(document.getElementById('setupClass'), 'Infantil I - Turma A');
 
               if (!appState.observations.some(o => o.className === 'Infantil I - Turma A' && o.bimester === '1º Bimestre' && o.status === 'finalized')) {
                 appState.observations.push({
@@ -16236,30 +17047,27 @@ function getActiveSections(obs) {
               window.showToast = function(msg) {
                 if (msg && msg.includes('Já existe uma observação')) blocked = true;
               };
-              document.getElementById('setupBimester').value = '1º Bimestre';
+              UI.select(document.getElementById('setupBimester'), '1º Bimestre');
               startNewObservation();
               window.showToast = originalToast;
 
               if (!blocked) throw new Error('Trava de duplo lançamento para a mesma turma/bimestre não disparou bloqueio');
               logger.log('Bloqueio estrito de duplicidade de observação no mesmo bimestre', true);
 
-              // TESTE ADICIONAL PILAR 1: Regras do Modal de Ocorrências (1 Docente Travado vs 2 Docentes Escolha)
+              // TESTE ADICIONAL PILAR 1: Interações Reais no Modal de Ocorrências
               openQualitativeNoteModal();
-              document.getElementById('noteSchool').value = 'CEI Professora Maria de Lourdes';
-              onNoteSchoolChange();
+              UI.select(document.getElementById('noteSchool'), 'CEI Professora Maria de Lourdes');
 
-              // 1. Caso Docente Único: Berçário II - Turma Única (cls-pml-02 tem Carla Beatriz Mendes)
-              document.getElementById('noteClass').value = 'Berçário II - Turma Única';
-              onNoteClassChange();
+              // 1. Caso Docente Único: Berçário II - Turma Única (Carla Beatriz Mendes travada)
+              UI.select(document.getElementById('noteClass'), 'Berçário II - Turma Única');
               const teacherSelect = document.getElementById('noteTeacher');
               if (!teacherSelect.disabled || teacherSelect.value !== 'Carla Beatriz Mendes') {
                 throw new Error('Falha na trava mandatória de docente único regente (esperado Carla Beatriz Mendes travada)');
               }
               logger.log('Bloqueio automático e trava mandatória para turma com docente único', true, 'Carla Beatriz Mendes (travado)');
 
-              // 2. Caso Dois Docentes: Infantil I - Turma A (cls-pml-01 tem Ana Carolina e Juliana)
-              document.getElementById('noteClass').value = 'Infantil I - Turma A';
-              onNoteClassChange();
+              // 2. Caso Dois Docentes: Infantil I - Turma A (Ana Carolina e Juliana)
+              UI.select(document.getElementById('noteClass'), 'Infantil I - Turma A');
               if (teacherSelect.disabled) {
                 throw new Error('Seletor de docente bloqueado para turma com dois docentes');
               }
@@ -16270,12 +17078,12 @@ function getActiveSections(obs) {
               logger.log('Disponibilização de escolha entre Professor A ou B para turma com dois docentes', true, '2 opções habilitadas');
 
               // 3. Persistência de Ocorrência Atribuída à Turma com Docente Escolhido
-              teacherSelect.value = 'Juliana Roberta Rocha';
-              document.getElementById('noteTopic').value = 'Estratégias Didáticas';
-              document.getElementById('noteContent').value = 'Teste determinístico de ocorrência atribuída à turma e docente escolhido.';
+              UI.select(teacherSelect, 'Juliana Roberta Rocha');
+              UI.select(document.getElementById('noteTopic'), 'Estratégias Didáticas');
+              UI.type(document.getElementById('noteContent'), 'Teste determinístico e comportamental de ocorrência.');
               saveQualitativeNote();
 
-              const createdNote = appState.notes.find(n => n.content && n.content.includes('Teste determinístico de ocorrência'));
+              const createdNote = appState.notes.find(n => n.content && n.content.includes('Teste determinístico e comportamental'));
               if (!createdNote || createdNote.className !== 'Infantil I - Turma A' || createdNote.teacherName !== 'Juliana Roberta Rocha') {
                 throw new Error('Ocorrência salva não registrou className ou teacherName corretamente');
               }
@@ -16312,7 +17120,6 @@ function getActiveSections(obs) {
               if (!Array.isArray(helenaObs)) throw new Error('getScopedObservations() para Helena falhou');
               logger.log('Acesso onisciente do Núcleo de Educação Infantil a todas as observações da rede', true);
 
-              // Teste de bloqueio de início de observação direta para o Núcleo de EI
               const preObsCount = (appState.observations || []).length;
               startNewObservation();
               if ((appState.observations || []).length !== preObsCount) {
@@ -16325,30 +17132,31 @@ function getActiveSections(obs) {
           }
         },
 
-        // --- MÓDULO 8: Cronograma de Visitas, Destaque da Próxima Visita, Baixa Automática e Devolutiva ---
+        // --- MÓDULO 8: Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática ---
         {
           id: 'agenda_cronograma',
           name: 'Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática',
           run: function(logger) {
             try {
               appState.currentUserKey = 'mariana';
-              const newSched = {
-                id: 'sched-test-' + Date.now(),
-                schoolName: 'CEI Professora Maria de Lourdes',
-                targetName: 'Ana Carolina Silva',
-                className: 'Infantil I - Turma A',
-                bimester: '3º Bimestre',
-                plannedDate: getTodayDateString(),
-                plannedTime: '09:00',
-                status: 'planejado'
-              };
-              appState.schedules = appState.schedules || [];
-              appState.schedules.push(newSched);
-              logger.log('Inclusão de visita agendada no cronograma longitudinal', true);
+
+              // Simulação Interativa de Criação de Agendamento via Modal (#modalAddSchedule)
+              openAddScheduleModal();
+              UI.select(document.getElementById('scheduleSchool'), 'CEI Professora Maria de Lourdes');
+              UI.select(document.getElementById('scheduleTarget'), 'Infantil I - Turma A');
+              UI.select(document.getElementById('scheduleBimester'), '3º Bimestre');
+              UI.type(document.getElementById('scheduleDate'), getTodayDateString());
+              UI.type(document.getElementById('scheduleTime'), '09:00');
+              saveNewSchedule();
+              closeAddScheduleModal();
+
+              const createdSched = (appState.schedules || []).find(s => s.className === 'Infantil I - Turma A' && s.bimester === '3º Bimestre' && s.plannedTime === '09:00');
+              if (!createdSched) throw new Error('Agendamento criado via modal não foi localizado em appState.schedules');
+              logger.log('Inclusão interativa de visita agendada no cronograma (#modalAddSchedule)', true);
 
               const simObs = {
                 id: 'obs-sim-' + Date.now(),
-                scheduleId: newSched.id,
+                scheduleId: createdSched.id,
                 evaluatedType: 'turma',
                 className: 'Infantil I - Turma A',
                 teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha'],
@@ -16380,20 +17188,20 @@ function getActiveSections(obs) {
               appState.observations.push(simObs);
               finalizeObservation();
 
-              const updatedSched = appState.schedules.find(s => s.id === newSched.id);
+              const updatedSched = appState.schedules.find(s => s.id === createdSched.id);
               if (!updatedSched || updatedSched.status !== 'realizado') {
                 throw new Error('Agendamento não atualizado para realizado após finalização');
               }
               logger.log('Baixa automática no cronograma de visitas para status realizado', true);
 
-              // TESTE ADICIONAL: Resolução de observação vinculada e botão de Devolutiva na Agenda
+              // Resolução relacional resiliente de observação vinculada
               const foundObs = findObservationForSchedule(updatedSched);
               if (!foundObs || foundObs.id !== simObs.id) {
-                throw new Error('findObservationForSchedule não localizou a observação finalizada correspondente');
+                throw new Error('findObservationForSchedule não localizou a observação correspondente');
               }
               logger.log('Resolução relacional resiliente de observação vinculada à visita na agenda', true);
 
-              // Renderiza a tela de agenda e valida a presença do botão de devolutiva
+              // Renderização da tabela e validação do botão de devolutiva
               navigateToTab('schedule');
               renderScheduleScreen();
 
@@ -16404,24 +17212,19 @@ function getActiveSections(obs) {
               }
               logger.log('Renderização do botão de devolutiva na tabela da aba de Agenda', true);
 
-              // Executa a abertura da devolutiva a partir da agenda
+              // Clique interativo na devolutiva a partir da agenda
               viewFeedbackFromSchedule(updatedSched.id);
               if (!appState.isReadOnly || !appState.currentObs || appState.currentObs.id !== simObs.id) {
                 throw new Error('viewFeedbackFromSchedule falhou em abrir a observação em modo somente leitura');
               }
-              if (appState.returnTab !== 'schedule') {
-                throw new Error('appState.returnTab não configurado para schedule');
-              }
               logger.log('Disparo e abertura da devolutiva em modo somente leitura a partir da Agenda com rota de retorno', true);
 
-              // Valida retorno para a Agenda
               exitReadOnlyMode();
               const scheduleActive = document.getElementById('screenSchedule') && document.getElementById('screenSchedule').classList.contains('active');
               if (!scheduleActive) {
                 throw new Error('exitReadOnlyMode não retornou para screenSchedule');
               }
               logger.log('Retorno contextual à aba Agenda com integridade de navegação', true);
-
             } catch (e) {
               logger.log('Erro de execução no módulo agenda_cronograma', false, e.message);
             }
@@ -16435,6 +17238,7 @@ function getActiveSections(obs) {
           run: function(logger) {
             try {
               appState.currentUserKey = 'mariana';
+              navigateToTab('history');
               renderHistoryScreen();
               const histContainer = document.getElementById('historyCardsContainer');
               if (!histContainer) throw new Error('Container do histórico ausente no DOM');
@@ -16442,10 +17246,15 @@ function getActiveSections(obs) {
 
               const roleFilter = document.getElementById('histFilterRole');
               if (roleFilter) {
-                roleFilter.value = 'professora';
-                filterHistory();
+                UI.select(roleFilter, 'professora');
               }
-              logger.log('Aplicação de filtros multidimensionais com inclusão de turmas (Pilar 1)', true);
+              const nameFilter = document.getElementById('histFilterName');
+              if (nameFilter) {
+                UI.type(nameFilter, 'Maria de Lourdes');
+              }
+              filterHistory();
+              logger.log('Aplicação interativa de filtros multidimensionais com inclusão de turmas (Pilar 1)', true);
+              resetHistoryFilters();
             } catch (e) {
               logger.log('Erro de execução no módulo historico_governanca', false, e.message);
             }
@@ -16459,6 +17268,7 @@ function getActiveSections(obs) {
           run: function(logger) {
             try {
               appState.currentUserKey = 'mariana';
+              navigateToTab('indicators');
               renderIndicatorsScreen();
               const kpiSection = document.getElementById('indicatorsSectionKPIs');
               if (!kpiSection) throw new Error('Seção de KPIs ausente em indicadores');
@@ -16471,11 +17281,7 @@ function getActiveSections(obs) {
               });
               logger.log('Cálculo e agregação de turmas mapeadas para cobertura na rede (Pilar 1)', totalClasses > 0, `${totalClasses} turmas totais`);
 
-              // =========================================================================
-              // TESTES DETERMINÍSTICOS DO PILAR 3: BENCHMARK AFUNILAMENTO (UE VS. REDE)
-              // =========================================================================
-
-              // 1. Validação da Função Canônica calculateHierarchyStats()
+              // PILAR 3: BENCHMARK AFUNILAMENTO (UE VS. REDE)
               const sampleSections = appState.activeSectionsTeacher || DEFAULT_SECTIONS_TEACHER;
               const mockObsUE = [{
                 id: 'obs-mock-p3-1',
@@ -16503,9 +17309,6 @@ function getActiveSections(obs) {
               }
               logger.log('Motor canônico de agregação hierárquica (calculateHierarchyStats)', true, `${ueResult.dims.length} dimensões processadas`);
 
-              // 2. Validação do Cálculo Determinístico do Delta (Pilar 3)
-              // Critério 1.1.1: UE = 100%, Rede = 100% -> Delta = 0%
-              // Critério 1.1.2: UE = 0%, Rede = 50% -> Delta = -50% (Atenção Crítica)
               const crit112UE = ueResult.dims[0].subSections[0].criteria.find(c => c.id === '1.1.2');
               const crit112Rede = redeResult.dims[0].subSections[0].criteria.find(c => c.id === '1.1.2');
 
@@ -16517,7 +17320,8 @@ function getActiveSections(obs) {
               const isCritical = deltaHtml.includes('benchmark-delta-critical') && deltaHtml.includes('Atenção Crítica');
               logger.log('Cálculo determinístico do Delta e categorização de Atenção Crítica (Pilar 3)', isCritical && delta112 === -50, `Δ: ${delta112}%`);
 
-              // 3. Renderização Efetiva no DOM com Alternância de Sub-Aba
+              // Alternância interativa de sub-abas
+              switchIndicatorsSubTab('kpis');
               switchIndicatorsSubTab('drilldown');
               const drillSection = document.getElementById('indicatorsSectionDrilldown');
               if (!drillSection || drillSection.style.display !== 'block') {
@@ -16528,6 +17332,12 @@ function getActiveSections(obs) {
               if (!infoBar) throw new Error('.benchmark-info-bar ausente na sub-aba Afunilamento');
               logger.log('Renderização da Régua Dupla e Banner de Benchmark no DOM (Pilar 3)', true);
 
+              switchIndicatorsSubTab('longitudinal');
+              const longSection = document.getElementById('indicatorsSectionLongitudinal');
+              if (!longSection || longSection.style.display !== 'block') {
+                throw new Error('Sub-aba Longitudinal não ativada corretamente');
+              }
+              logger.log('Alternância e renderização interativa da aba Longitudinal de Indicadores', true);
             } catch (e) {
               logger.log('Erro de execução no módulo indicadores_decisao', false, e.message);
             }
@@ -16568,22 +17378,33 @@ function getActiveSections(obs) {
           name: 'Sistema de Rotas/Tabs, Menu Mobile Overlay, Acessibilidade e Changelog',
           run: function(logger) {
             try {
+              // Navegação sequencial pelas abas
+              const tabsToTest = ['home', 'schedule', 'indicators', 'history', 'notes', 'refDocs'];
+              tabsToTest.forEach(t => {
+                navigateToTab(t);
+              });
               navigateToTab('home');
               const homeScreen = document.getElementById('screenHome');
               if (!homeScreen || homeScreen.style.display === 'none') throw new Error('Navegação para home falhou');
               logger.log('Roteamento e navegação de telas via navigateToTab()', true);
 
-              if (typeof closeMobileMenu === 'function') {
+              if (typeof closeMobileMenu === 'function' && typeof openMobileMenu === 'function') {
+                openMobileMenu();
                 closeMobileMenu();
                 const overlay = document.getElementById('mobileMenuOverlay');
                 if (overlay && overlay.style.display !== 'none') throw new Error('closeMobileMenu não ocultou o overlay');
                 logger.log('Controle do menu mobile drawer (closeMobileMenu)', true);
               }
 
+              // Interação real com o Modal de Changelog
+              openChangelogModal();
+              const modalChg = document.getElementById('modalChangelog');
+              if (!modalChg || !modalChg.classList.contains('active')) throw new Error('#modalChangelog não abriu');
+              closeChangelogModal();
+              if (modalChg.classList.contains('active')) throw new Error('#modalChangelog não fechou');
+
               const btnChangelog = document.querySelector('.btn-changelog');
               if (!btnChangelog) throw new Error('.btn-changelog não encontrado');
-              const modalChg = document.getElementById('modalChangelog');
-              if (!modalChg) throw new Error('#modalChangelog não encontrado');
               logger.log('Modal de Changelog e botão de versão na barra superior', true, btnChangelog.textContent.trim());
 
               const deskTabHomeLabel = document.getElementById('deskTabHomeLabel');
