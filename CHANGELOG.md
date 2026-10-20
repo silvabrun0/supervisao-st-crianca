@@ -1718,6 +1718,29 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 ---
 
+### [Versão 0.88] - Registro Manual e Fidedigno de Horários da Observação Pedagógica
+* **Data e Horário:** 20 de Outubro de 2026 — 15:15:00
+* **Arquivo em Produção:** [`firebase_deploy/public/index.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/gestor%20supervisao_patos/firebase_deploy/public/index.html)
+* **Arquivo Intermediário:** [`intermediárias/aplicativo_v88_registro_manual_horarios_observacao.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/gestor%20supervisao_patos/intermediárias/aplicativo_v88_registro_manual_horarios_observacao.html)
+* **Base / Insumos:** Deliberação oficial da equipe técnica SerTão Criança e plano executivo [`planos_de_implementacao/plano_registro_manual_horarios_observacao.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_registro_manual_horarios_observacao.md).
+* **Identificador no App:** `📌 Versão 0.88 (v7.67)`
+* **Hosting Oficial:** [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)
+* **Contexto:** Eliminação definitiva do mecanismo de gravação compulsória de horários com base no relógio do sistema no momento da finalização (`finalizeObservation()`). O acompanhamento pedagógico na Educação Infantil de Patos/PB muitas vezes é registrado ou concluído em momento posterior ao término da aula (tarde, noite ou dia subsequente). O sistema agora preserva fielmente os horários reais em que o docente esteve em sala, garantindo dados fidedignos para apoio à decisão.
+
+#### 🚀 Inclusões e Funcionalidades
+- **Eliminação da Sobrescrita Forçada de Horários:** A finalização de observações pedagógicas não substitui mais `endDate` e `endTime` com o horário do clique no botão. Os horários e datas informados pelo avaliador são preservados integralmente.
+- **Formulário de Configuração com Horários Visíveis (`#screenSetupObs`):** Campos editáveis para Data da Observação, Horário de Início e Horário Previsto de Término no setup inicial, com defaults inteligentes de horário atual ou do cronograma vinculado.
+- **Painel Fidedigno na Síntese Final (`#screenSynthesis`):** Inputs interativos de Data, Horário de Início e Horário de Término visíveis durante todo o preenchimento, com recálculo em tempo real da duração (`recalculateSynthesisDuration`) e instruções claras para envio pós-visita.
+- **Validações Temporais Robustas:** Bloqueio obrigatório de finalização sem horário de término, bloqueio de datas futuras e validação de término estritamente posterior ao horário de início.
+- **Crachá de Consolidação e Modo Leitura:** Bloqueio automático de edição dos campos com visualização consolidada em crachá tipográfico após a finalização da observação.
+
+#### 🛠️ Modificações e Governança
+- **Auditoria Modular Expandida (100% de Cobertura):** Módulo `sintese_finalizacao` atualizado com asserções determinísticas de bloqueio por término ausente, consistência temporal e validação da preservação exata dos horários informados manualmente (100 minutos de duração calculada).
+- **Sincronização Integral de Builds:** Atualização uniforme de todos os pontos de entrada (`index.html`, `gestor supervisao_patos/index.html` e `firebase_deploy/public/index.html`).
+- **Atualização da Identificação de Versão:** Elevação oficial para `📌 Versão 0.88 (v7.67)` no cabeçalho superior, modal `#modalChangelog` e `CHANGELOG.md`.
+
+---
+
 ### [Versão 0.87] - Arquitetura Modular de Auditoria Integral e Atualização Normativa dos Workflows
 * **Data e Horário:** 20 de Outubro de 2026 — 15:10:00
 * **Arquivo em Produção:** [`index.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/index.html)
