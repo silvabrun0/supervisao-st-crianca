@@ -3,37 +3,43 @@
 
 > **Documento Oficial de Referência de Produto, Governança e Arquitetura**  
 > **Data de Atualização:** 20 de Outubro de 2026  
-> **Base Documental:** Transcrição na íntegra da Reunião ST Criança de 19 de Outubro de 2026 cruzada com as novas deliberações de governança de perfis e benchmark comparativo no afunilamento.
+> **Base Documental:** Transcrição na íntegra da Reunião ST Criança de 19 de Outubro de 2026 cruzada com as novas deliberações de governança operacional descentralizada, autonomia cadastral em cascata e integridade da SSOT (Single Source of Truth).
 
 ---
 
 ## 1. Sumário Executivo e Governança de Perfis
 
-A evolução do instrumento de supervisão pedagógica do programa **SerTão Criança** consolida uma separação nítida de papéis, permissões de visualização e ferramentas de tomada de decisão. 
+A evolução do instrumento de supervisão pedagógica do programa **SerTão Criança** consolida uma separação nítida de papéis, permissões de visualização, autonomia cadastral em cascata e ferramentas de tomada de decisão, preservando rigidamente a integridade de uma **Single Source of Truth (SSOT)**.
 
-### A Tríade Canônica de Governança e Escopos de Visualização:
+### A Tríade Canônica de Governança e Escopos Operacionais:
 1. **Coordenador(a) Pedagógico(a) da Unidade Escolar (UE):**
-   * **Escopo:** Estrito à sua Unidade Escolar (`user.school`).
-   * **Ferramenta Decisória Principal:** Na sub-aba de **"Afunilamento por Dimensão"**, obtém o **comparativo `% da UE vs. Rede`**, visualizando a discrepância item a item em relação à média geral municipal de Patos.
+   * **Escopo de Visualização e Ação:** Circunscrito estritamente à sua própria Unidade Escolar (`user.school`).
+   * **Autonomia de Gestão Cadastral:** Capacidade total de adicionar, editar e remover professoras e turmas da sua escola. Define características da unidade (quantidade de turmas, alunos matriculados, número de crianças público-alvo da educação inclusiva/diversidade), jornadas (*Tempo Parcial* vs. *Tempo Integral*), turnos (*Matutino* e *Vespertino*) e vinculação nominal de quais docentes regentes titulares atuam em cada turma e período.
+   * **Ferramenta Decisória Principal:** Na sub-aba de **"Afunilamento por Dimensão"**, obtém o **comparativo `% da UE vs. Rede`**, identificando a discrepância item a item em relação à média geral municipal de Patos.
 2. **Formador(a) Pedagógico(a):**
-   * **Escopo:** Tem acesso às avaliações de **cada coordenador pedagógico atribuído à sua supervisão/polo** (não a coordenadores de outros polos).
-   * **Ferramenta Decisória:** Pode comparar o desempenho agregado das escolas sob sua responsabilidade e de cada coordenador com o **`% de toda a rede`**.
+   * **Escopo de Visualização e Ação:** Restrito aos coordenadores pedagógicos e unidades escolares atribuídos à sua supervisão/polo regional.
+   * **Autonomia de Gestão Cadastral:** Pode editar, vincular e gerenciar os coordenadores pedagógicos de cada unidade, **mas exclusivamente das escolas vinculadas ao seu polo atribuído**.
+   * **Ferramenta Decisória:** Tem acesso às avaliações de cada coordenador atribuído, podendo comparar o desempenho do seu polo com o **`% de toda a rede municipal`**.
 3. **Coordenadora do Núcleo de Educação Infantil (EI) [Renomeação da antiga "Equipe Técnica"]:**
-   * **Escopo Total:** É o **único perfil com visualização onisciente/global** de todo o ecossistema. Visualiza todas as 32 UEs, todos os polos, todos os formadores e todos os coordenadores sem restrições de filtro.
+   * **Escopo Total e Governança Central:** É a **autoridade central com acesso total e irrestrito a todo o ecossistema**. 
+   * **Atribuição de Acessos:** É a responsável por cadastrar os formadores, definir a alocação de polos, delegar acessos e supervisionar a totalidade das 32 UEs, coordenadores e docentes da rede de Patos.
+   * **Visão Macro:** Acesso onisciente a todos os relatórios, matrizes, afunilamentos e séries históricas municipais.
+4. **Blindagem e Integridade da Base Única (SSOT):**
+   * Toda e qualquer modificação cadastral ou pedagógica realizada por uma coordenadora (em sua escola) ou por um formador (em seu polo) grava e consome diretamente a **Single Source of Truth** (`appState` / base única consolidada), impedindo fragmentação de dados, bancos paralelos ou registros órfãos.
 
 ---
 
 ## 2. Tabela Oficial de Matriz de Governança e Permissões
 
-| Papel / Perfil no Sistema | Identificador Técnico (`roleKey`) | Escopo de Unidades / Avaliados | Acesso na Aba "Afunilamento por Dimensão" | Visualização de Benchmark (% da Rede) |
-| :--- | :---: | :--- | :--- | :---: |
-| **Coordenador(a) da UE** | `coordenador` | Apenas a sua própria Unidade Escolar e suas turmas/docentes | Compara a **sua UE vs. Rede** em cada Dimensão, Subdimensão e Critério | ✅ Sim (UE vs. Rede) |
-| **Formador(a) Pedagógico(a)** | `formador` | Coordenadores e UEs que lhe forem atribuídos (seu Polo) | Visualiza o afunilamento dos coordenadores do seu escopo vs. Rede | ✅ Sim (Polo/Escopo vs. Rede) |
-| **Coordenadora do Núcleo de EI** *(Antiga Equipe Técnica)* | `tecnico` ➔ `nucleo_ei` | **Acesso Total e Global** (Todas as 32 UEs, Polos e Profissionais da Rede) | Visualiza o afunilamento de qualquer unidade, de qualquer polo ou da rede inteira | ✅ Sim (Visão Macrorregional Total) |
+| Papel / Perfil no Sistema | Identificador Técnico (`roleKey`) | Escopo de Visualização | Poder de Edição / Gestão Cadastral | Acesso na Aba "Afunilamento por Dimensão" | Governança da Base (SSOT) |
+| :--- | :---: | :--- | :--- | :--- | :---: |
+| **Coordenador(a) da UE** | `coordenador` | Apenas a sua própria Unidade Escolar (`user.school`) | **Autonomia na sua UE:** Adiciona/remove professoras e turmas, define jornada (parcial/integral), turnos e vincula docentes | Compara a **sua UE vs. Rede** em cada Dimensão, Subdimensão e Critério | Grava diretamente na SSOT no escopo da sua UE |
+| **Formador(a) Pedagógico(a)** | `formador` | Coordenadores e UEs atribuídos ao seu Polo Regional | **Autonomia no seu Polo:** Edita e aloca os coordenadores das escolas do seu polo | Visualiza o afunilamento de cada coordenador do seu polo vs. Rede | Grava diretamente na SSOT no escopo do seu Polo |
+| **Coordenadora do Núcleo de EI** *(Antiga Equipe Técnica)* | `tecnico` ➔ `nucleo_ei` | **Acesso Global e Total** (Todas as 32 UEs, Polos e Servidores) | **Governança Global Plena:** Cadastra formadores, atribui polos/escolas, gerencia a rede inteira | Visualiza o afunilamento de qualquer unidade, de qualquer polo ou da rede inteira | Custodiante Central da SSOT Unificada |
 
 ---
 
-## 3. Matriz Consolidada dos 13 Pilares Técnico-Pedagógicos
+## 3. Matriz Consolidada dos 14 Pilares Técnico-Pedagógicos
 
 ```mermaid
 flowchart TD
@@ -43,10 +49,11 @@ flowchart TD
         P5["PILAR 5: Fechamento Nominal com Parecer\n(inclusive em Práticas Consistentes)"]
     end
 
-    subgraph Governanca["2. Governança e Acessos Hierárquicos"]
+    subgraph Governanca["2. Governança, Acessos e SSOT"]
         P2["PILAR 2: Tríade de Governança & Papéis\n(Coordenador UE · Formador · Coordenadora Núcleo EI)"]
         P3["PILAR 3: Benchmark na Aba Afunilamento\n(Comparativo % UE vs. % Rede item a item)"]
         P12["PILAR 12: Painel 100% Exclusivo para Prática Docente"]
+        P14["PILAR 14: Gestão Descentralizada sob SSOT Única\n(Edição Autônoma por Nível sem Fragmentação)"]
     end
 
     subgraph Ergonomia["3. Usabilidade, Prazos & Interface Mobile"]
@@ -74,17 +81,83 @@ flowchart TD
 ---
 
 ### PILAR 2: Governança em 3 Níveis & Renomeação da "Equipe Técnica" para "Coordenadora do Núcleo de EI"
-* **Diretriz de Produto e Perfis:**
-  - **Renomeação Obrigatória:** O perfil até então denominado *"Equipe Técnica"* (`user.roleKey === 'tecnico'`) passa a ser oficialmente rotulado como **"Coordenadora do Núcleo de Educação Infantil"** (ou *Núcleo de EI*).
-  - **Permissão de Visualização Global:** A Coordenadora do Núcleo de EI é a única autoridade com direito de visualização irrestrita de todas as unidades, relatórios e consolidados da rede.
-  - **Escopo do Formador:** O formador visualiza unicamente os coordenadores pedagógicos atribuídos a ele (vinculados ao seu polo de supervisão). Não há visualização cruzada de outros polos sem autorização central.
-  - **Escopo do Coordenador:** Acesso circunscrito e protegido aos docentes e turmas da sua própria Unidade Escolar.
+> **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
+> **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_2_triade_governanca_e_nucleo_ei.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_2_triade_governanca_e_nucleo_ei.md)  
+> **Versão Alvo de Entrega:** `0.91` | **Backup Intermediário:** `intermediárias/aplicativo_v91_pilar_2_triade_governanca_e_nucleo_ei.html`
+
+* **Contexto e Fundamentação:**
+  O instrumento de supervisão pedagógica do programa **SerTão Criança** consolida a separação canônica de três níveis operacionais com autonomia em cascata, preservando a **Single Source of Truth (SSOT)** e formalizando a liderança pedagógica máxima da rede sob o título oficial de **Coordenadora do Núcleo de Educação Infantil** (eliminando terminologias burocráticas legadas como *"Equipe Técnica"*).
+
+* **As 4 Dimensões Estruturantes do Plano de Implementação do Pilar 2:**
+
+  #### 1. Renomeação Institucional e Semântica Visual:
+  - **Eliminação Definitiva de "Equipe Técnica":** Substituição do termo em 100% das telas, modais de troca de perfil, cadastros de equipe e mensagens do sistema pelo título oficial: **"Coordenadora do Núcleo de Educação Infantil"** (ou forma abreviada **"Núcleo de EI"**).
+  - **Revisão do Modal `#modalRole`:** No bloco `#roleBoxTecnico`, atualizar o título para *"Coordenadora do Núcleo de Educação Infantil (Helena Martins / Rodrigo)"*, direcionando o acionamento para a titular pedagógica central (`selectUserAccount('helena')`).
+  - **Atualização na Base de Usuários (`USERS_DB`):**
+    - `helena`: `roleKey: 'nucleo_ei'`, `roleTitle: 'Coordenadora do Núcleo de EI'`, `avatarText: 'NE'`.
+    - `rodrigo`: `roleKey: 'nucleo_ei'`, `roleTitle: 'Núcleo de EI (Governança & Dados)'`, `avatarText: 'NE'`.
+    - `bruno`: `roleKey: 'nucleo_ei'`, `roleTitle: 'Administrador do Sistema (Núcleo de EI)'`, `avatarText: 'BS'`.
+
+  #### 2. Arquitetura dos 3 Níveis Canônicos de Governança e Escopos Operacionais:
+  ```mermaid
+  flowchart TD
+      subgraph Nivel3["NÍVEL 3 · NÚCLEO DE EDUCAÇÃO INFANTIL (CENTRAL)"]
+          NEI["👑 Coordenadora do Núcleo de EI (Helena Martins)\n• Acesso Global Onisciente (Todas as 32 UEs e Polos)\n• Gestão de Polos, Formadores e Matrizes de Rubricas\n• Sem aplicação de avaliações diretas em sala"]
+      end
+
+      subgraph Nivel2["NÍVEL 2 · POLO REGIONAL (TUTORIA E FORMAÇÃO)"]
+          FP["🎓 Formadora Pedagógica (Clarice Barbosa)\n• Escopo: UEs e Coordenadores do seu Polo Regional\n• Tutoria e Avaliação Formativa das Coordenadoras\n• Sem visualização ou interferência em outros polos"]
+      end
+
+      subgraph Nivel1["NÍVEL 1 · UNIDADE ESCOLAR (CHÃO DA ESCOLA)"]
+          CP["🏫 Coordenadora Pedagógica da UE (Mariana Ferreira)\n• Escopo Estrito: Sua Própria Unidade Escolar (user.school)\n• Gestão e Observação das Turmas e Docentes da sua UE\n• Rascunhos de observação estritamente privados"]
+      end
+
+      NEI -->|Cadastra e atribui Polos| FP
+      FP -->|Acompanha e avalia Coordenadoras| CP
+  ```
+
+  #### 3. Regras Rigorosas de Blindagem Multitenant & Retrocompatibilidade:
+  - **Função Canônica Global `isNucleoEI(user)`:**
+    ```javascript
+    function isNucleoEI(user) {
+      if (!user) return false;
+      const key = typeof user === 'string' ? user : (user.roleKey || '');
+      return key === 'nucleo_ei' || key === 'tecnico';
+    }
+    ```
+    Garante **dupla compatibilidade resiliente (zero breaking changes)**: tanto registros novos com `'nucleo_ei'` quanto históricos persistidos em `localStorage` com `'tecnico'` continuam funcionando sem perda de sessão ou corrupção de estado.
+  - **Escopos Restritos:**
+    - `getScopedObservations()`: Retorna todas as observações municipais para `isNucleoEI(user)`, apenas as do polo para `user.roleKey === 'formador'`, e estritamente as da UE para `user.roleKey === 'coordenador'`.
+    - `getScopedAvaliandos()`: Coordenadora acessa apenas docentes da sua UE; Formadora acessa coordenadoras do seu polo; Núcleo de EI acessa toda a rede.
+    - `getScopedNotes()` e `getScopedSchedules()`: Isolados na mesma lógica determinística.
+    - Travamento de avaliação direta: `startNewObservation()` emite toast específico: *"A Coordenadora do Núcleo de EI não aplica avaliações diretas."*
+
+  #### 4. Cascata Cadastral sob Single Source of Truth (SSOT):
+  - A Coordenadora do Núcleo de EI cadastra e aloca os Formadores por Polo Regional.
+  - O Formador gerencia e aloca as Coordenadoras Pedagógicas das UEs do seu polo atribuído.
+  - A Coordenadora Pedagógica gerencia as turmas e professoras da sua escola.
+  - Toda mutação grava diretamente no `appState` compartilhado, garantindo reatividade instantânea sem bancos paralelos ou registros órfãos.
+
+* **Roteiro de Implementação Passo a Passo (Etapa 2):**
+  1. **Interface HTML (`index.html`):** Atualizar `#roleBoxTecnico` no `#modalRole`, seletor `#teamRoleFilter`, seletores `#newMemberRole` / `#editMemberRole` e dicas de login em `#screenLogin`.
+  2. **Estrutura Canônica:** Atualizar `USERS_DB`, `INITIAL_TEAM` e criar helper `isNucleoEI(user)`.
+  3. **Blindagem de Funções:** Atualizar `getScopedAvaliandos()`, `getScopedObservations()`, `getScopedNotes()`, `getScopedSchedules()`, `applyUserRoleUI()`, `navigateToTab()`, `startNewObservation()`, `normalizeRoleData()` e `renderIndicatorsScreen()`.
+  4. **Gestão de Changelog Duplo:** Atualizar `CHANGELOG.md` e modal `#modalChangelog` para a Versão `0.91`.
+  5. **Sincronização de Espelhos:** Replicar as alterações em `gestor supervisao_patos/index.html` e `firebase_deploy/public/index.html`.
+  6. **Backup Intermediário:** Salvar cópia funcional em `intermediárias/aplicativo_v91_pilar_2_triade_governanca_e_nucleo_ei.html`.
+  7. **Deploy Automático e Auditoria:** Push para `main` (deploy GitHub Pages) e execução de `python3 audit_platform.py --silent-on-success`.
+
+* **Auditoria Automatizada Obrigatória (Cobertura de 100%):**
+  - Módulo 1 (`auth_rbac`): Teste de resolução de Mariana (Coordenador), Clarice (Formador), Helena (Coordenadora do Núcleo de EI) e Rodrigo (Núcleo de EI - Dados), validando a dupla compatibilidade de `isNucleoEI()` (`nucleo_ei` & `tecnico`).
+  - Módulo 7 (`formadora_coordenacao`): Validação de isolamento do Polo Regional da formadora e acesso global irrestrito do Núcleo de EI.
+  - Preservação da integridade de 100% dos testes determinísticos da suíte.
 
 ---
 
 ### PILAR 3: Comparativo "% da UE vs. Rede" na Aba de "Afunilamento por Dimensão"
 * **Diagnóstico e Solução:**  
-  A visualização comparativa com a rede não deve ser restrita apenas a um card genérico no topo. Ela atinge sua máxima potência pedagógica dentro da sub-aba de **"Afunilamento por Dimensão"** (`currentSubTab === 'drilldown'`).
+  A visualização comparativa com a rede atinge sua máxima potência pedagógica dentro da sub-aba de **"Afunilamento por Dimensão"** (`currentSubTab === 'drilldown'`).
 * **Comportamento na Interface:**
   - Ao abrir o Afunilamento, o Coordenador da UE visualiza para cada **Grande Dimensão**, **Subdimensão** e **Item/Critério Individual**:
     1. **O percentual da sua UE:** `% Consistência na Escola`.
@@ -168,7 +241,24 @@ flowchart TD
 * **Diretriz Aprovada (00:56:18 e 02:40:57):**  
   - **Ocorrências Críticas:** Bloco com marcação de status **"Conversado"** e arquivamento com rastreabilidade da observação.
   - **Padronização MEC:** Uso rigoroso de **"Turma em Tempo Parcial"** (Matutino/Vespertino) e **"Turma em Tempo Integral"**, abolindo o termo ambíguo "regular".
-  - **Cadastro em Lote:** O Núcleo Central de EI cadastra as turmas e a contagem de crianças público-alvo da educação inclusiva/diversidade via planilha central.
+
+---
+
+### PILAR 14: Governança Operacional Descentralizada & Gestão Autônoma sob SSOT Única
+* **Diretriz de Arquitetura e Engenharia de Dados:**
+  - **Autonomia da Coordenadora Pedagógica (Escopo UE):**
+    - A coordenadora pode adicionar, editar e remover turmas e professoras da sua escola.
+    - Pode caracterizar a unidade: cadastrar/atualizar o número de turmas, o total de alunos e a contagem de crianças público-alvo da educação inclusiva/diversidade.
+    - Pode configurar as turmas: definir a jornada (*Tempo Parcial* ou *Tempo Integral*), selecionar turnos (*Matutino* e *Vespertino*) e alocar nominalmente os docentes regentes titulares em seus respectivos turnos.
+    - **Restrição Estrita:** A coordenadora atua única e exclusivamente sobre os dados da sua própria Unidade Escolar (`user.school`). Os controles de interface não exibem nem permitem manipulação de outras UEs.
+  - **Autonomia do Formador(a) Pedagógico(a) (Escopo Polo):**
+    - O formador tem permissão para editar os coordenadores de cada unidade, atribuir e reatribuir coordenadores a escolas, **mas somente das unidades escolares vinculadas ao seu polo regional**.
+    - Não tem acesso de alteração em escolas fora do seu polo.
+  - **Autoridade Central da Coordenadora do Núcleo de EI (Gestão Central):**
+    - A Coordenadora do Núcleo de EI tem **acesso total**: é quem cria e cadastra formadores, define a vinculação de polos e unidades aos formadores e mantém a governança global da rede.
+  - **Princípio Rígido da Single Source of Truth (SSOT):**
+    - Toda e qualquer edição cadastral (seja de turmas, docentes ou coordenações) é gravada diretamente na base única compartilhada (`appState` e repositório central), sincronizando instantaneamente referências relacionais.
+    - Nenhuma alteração gera bases paralelas ou desconectadas: a integridade de turmas, séries históricas e relatórios permanece unificada e reativa em tempo real.
 
 ---
 
@@ -199,7 +289,7 @@ Na sub-aba **"Afunilamento por Dimensão"**, cada nível hierárquico apresenta 
 ### 🔹 FRENTE 1: Painel de Indicadores, Governança & Afunilamento Comparativo (Imediata)
 * **Escopo da Entrega:**
   1. Implementação do comparativo **`% da UE vs. % da Rede`** dentro da aba de **"Afunilamento por Dimensão"**.
-  2. Implementação das regras de escopo:
+  2. Implementação das regras de escopo de visualização:
      - Coordenador visualiza sua UE comparada à Rede.
      - Formador visualiza os coordenadores atribuídos comparados à Rede.
      - Coordenadora do Núcleo de EI visualiza toda a rede e pode alternar qualquer UE/Polo.
@@ -208,10 +298,14 @@ Na sub-aba **"Afunilamento por Dimensão"**, cada nível hierárquico apresenta 
   5. Remoção dos cards de *Visitas Auditadas* e *Itens Válidos/NA*, substituindo pelos novos KPIs decisórios.
   6. Travamento CSS `position: sticky` na barra de filtros.
 
-### 🔹 FRENTE 2: Coleta por Turma em 2 Etapas e Semáforo (Estrutural)
+### 🔹 FRENTE 2: Coleta por Turma em 2 Etapas e Gestão Descentralizada (Estrutural)
 * **Escopo da Entrega:**
-  1. Formulário único de Turma Integral em 2 etapas (salvamento manhã / conclusão tarde).
-  2. Blocos nominais de avaliação docente ao término da turma com parecer aberto para práticas consistentes.
-  3. Quadro Semáforo Bimestral (Verde/Cinza/Vermelho).
-  4. Pop-ups informativos `ℹ️` nas rubricas no mobile.
-  5. Adequação da nomenclatura MEC (Tempo Parcial vs. Tempo Integral) e coleta de diversidade.
+  1. **Gestão Descentralizada sob SSOT (Pilar 14):**
+     - Interface para a Coordenadora da UE gerenciar turmas, docentes regentes, turnos, jornadas e caracterização da sua escola.
+     - Interface para o Formador gerenciar os coordenadores das escolas do seu polo atribuído.
+     - Interface de Gestão Central para a Coordenadora do Núcleo de EI atribuir acessos e polos aos formadores.
+  2. Formulário único de Turma Integral em 2 etapas (salvamento manhã / conclusão tarde).
+  3. Blocos nominais de avaliação docente ao término da turma com parecer aberto para práticas consistentes.
+  4. Quadro Semáforo Bimestral (Verde/Cinza/Vermelho).
+  5. Pop-ups informativos `ℹ️` nas rubricas no mobile.
+  6. Adequação formal da nomenclatura MEC (Tempo Parcial vs. Tempo Integral) e coleta de diversidade.

@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.91** | 20/10/2026 16:30 | `intermediárias/aplicativo_v91_pilar_2_triade_governanca_e_nucleo_ei.html` | Deliberação SerTão Criança / Pilar 2 | Tríade Canônica de Governança em 3 Níveis, transição institucional para Coordenadora do Núcleo de EI (Helena Martins), helper canônico `isNucleoEI()` e blindagem RBAC 🏛️ |
 | **0.90** | 20/10/2026 16:00 | `intermediárias/aplicativo_v90_ocorrencias_campo_turma_docente.html` | Deliberação SerTão Criança / Pilar 1 | Atribuição primária das ocorrências de campo à Turma da Educação Infantil, trava automática para docente único regente e escolha ativa para duplas 📚 |
 | **0.89** | 20/10/2026 15:30 | `intermediárias/aplicativo_v89_visualizar_devolutiva_agenda.html` | Solicitação direta / Melhoria de Acesso Pedagógico na Agenda | Botão para visualização direta da devolutiva de observação a partir da aba de Agenda (desktop e mobile), vínculo resiliente findObservationForSchedule e retorno contextual 📋 |
 | **0.1** | 06/10/2026 14:05 | `lepes-prototype.html` | Matriz conceitual LEPES | Protótipo conceitual inicial e escala de observação tripartite❌ |
@@ -108,6 +109,27 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.91] - Pilar 2: Tríade Canônica de Governança em 3 Níveis & Coordenadora do Núcleo de EI
+* **Data e Horário:** 20 de Outubro de 2026 – 16:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v91_pilar_2_triade_governanca_e_nucleo_ei.html`
+* **Identificador no App:** 📌 Versão 0.91 (v7.70)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Funcionalidades
+- **Consolidação da Tríade Canônica de Governança (3 Níveis):** Alinhamento conceitual e operacional estrito dos três níveis de autoridade pedagógica do SerTão Criança:
+  1. *Nível 1 - Coordenadora Pedagógica da UE:* Atuação restrita à sua própria escola (`user.school`), cadastrando turmas, acompanhando professoras e realizando observações formativas de campo.
+  2. *Nível 2 - Formadora Pedagógica:* Atuação circunscrita às unidades e coordenadoras do seu Polo Regional atribuído, realizando a tutoria e acompanhamento formativo da gestão escolar.
+  3. *Nível 3 - Coordenadora do Núcleo de Educação Infantil:* Autoridade pedagógica máxima e gestora central da rede, com acesso irrestrito e onisciente às 32 UEs, consolidados e gestão de formadores, sem aplicação de avaliações diretas em sala de aula.
+- **Transição Terminológica e Institucional:** Extinção do termo burocrático e genérico "Equipe Técnica" na interface, sendo 100% substituído por "Coordenadora do Núcleo de Educação Infantil" (ou "Núcleo de EI"), fixando Helena Martins como titular central no modal de troca de perfil (`#modalRole` / `#roleBoxTecnico`).
+- **Camada de Compatibilidade Canônica `isNucleoEI(user)`:** Criação de função utilitária global e resiliente que processa objetos de usuário ou strings de perfil, validando tanto o novo identificador canônico `'nucleo_ei'` quanto a chave legada `'tecnico'`, assegurando zero breaking changes para sessões e registros preexistentes em `localStorage`.
+- **Blindagem RBAC e Visão Onisciente:** Parametrização em `getScopedAvaliandos()`, `getScopedObservations()`, `getScopedNotes()`, `getScopedSchedules()` e `renderIndicatorsScreen()` garantindo escopo total e irrestrito da rede (todas as 32 UEs) para o Núcleo de EI.
+- **Trava Mandatória contra Avaliações Diretas:** Bloqueio explícito em `handleNewObsButtonClick()` e `startNewObservation()` com emissão de toast orientador (*"A Coordenadora do Núcleo de EI não aplica avaliações diretas."*), preservando o foco na formulação de políticas formativas e governança macro.
+- **Gestão de Servidores e Normalização Inteligente:** Atualização dos modais de cadastro e edição de servidores com opção `"Coordenadora do Núcleo de EI (Acesso Global)"`, supervisão de Formadoras vinculada a Helena Martins e inteligência em `normalizeRoleData()` para converter termos como "núcleo", "secretaria", "gestão" e "ei" em `nucleo_ei`.
+- **Auditoria Modular Integral (100% Cobertura):** Módulos `auth_rbac` e `formadora_coordenacao` enriquecidos com validações de integridade dos 4 perfis centrais (`mariana`, `clarice`, `helena`, `rodrigo`), dupla compatibilidade de `isNucleoEI()`, escopo onisciente de observações e trava de início de avaliação direta.
+
+---
 
 ### [Versão 0.90] - Pilar 1: Ocorrências de Campo Atribuídas à Turma da Educação Infantil e Seleção de Docente
 * **Data e Horário:** 20 de Outubro de 2026 – 16:00:00

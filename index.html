@@ -2394,7 +2394,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.90 (v7.69)
+          Versão 0.91 (v7.70)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -2617,7 +2617,7 @@
                 <option value="professora">Professoras</option>
                 <option value="coordenador">Coordenadores Pedagógicos</option>
                 <option value="formador">Formadores</option>
-                <option value="tecnico">Equipe Técnica</option>
+                <option value="nucleo_ei">Coordenadora do Núcleo de EI</option>
                 <option value="pendente">Acesso Pendente</option>
               </select>
               <select id="teamFilterSupervisor" class="form-select" style="width:auto; padding:6px 12px; font-size:12px;" onchange="renderTeamScreen()">
@@ -3651,9 +3651,9 @@
         <div class="level-box-desc">Acompanhamento e avaliação das Coordenadoras sob sua supervisão. Visualiza avaliações das docentes das escolas vinculadas.</div>
       </div>
 
-      <div id="roleBoxTecnico" class="level-box" onclick="selectUserAccount('rodrigo')">
-        <div class="level-box-title">Equipe Técnica & Coordenação da EI (Rodrigo / Helena)</div>
-        <div class="level-box-desc">Acompanhamento global da rede, indicadores consolidados, gestão de UEs, polos, equipe e rubricas (perfil sem aplicação de avaliações diretas).</div>
+      <div id="roleBoxTecnico" class="level-box" onclick="selectUserAccount('helena')">
+        <div class="level-box-title">Coordenadora do Núcleo de Educação Infantil (Helena Martins / Rodrigo)</div>
+        <div class="level-box-desc">Governança central e acesso irrestrito a toda a rede municipal (32 UEs e Polos), consolidados, gestão de formadores, alocação de polos e rubricas.</div>
       </div>
     </div>
   </div>
@@ -3769,6 +3769,25 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.91 - PILAR 2: TRÍADE DE GOVERNANÇA EM 3 NÍVEIS & NÚCLEO DE EDUCAÇÃO INFANTIL -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.91 · v7.70</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Pilar 2: Tríade Canônica de Governança em 3 Níveis e Coordenadora do Núcleo de EI:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🏛️ <strong>Transição Terminológica e Institucional:</strong> Substituição integral da denominação "Equipe Técnica" por "Coordenadora do Núcleo de Educação Infantil", com titularidade central de Helena Martins.</li>
+          <li>🛡️ <strong>Helper Canônico <code>isNucleoEI(user)</code>:</strong> Implementação de camada de compatibilidade transparente reconhecendo tanto <code>nucleo_ei</code> quanto legados <code>tecnico</code> sem breaking changes.</li>
+          <li>🔍 <strong>Visão Onisciente da Rede:</strong> Acesso irrestrito a todas as 32 UEs, polos, docentes e consolidados para o Núcleo de EI, com trava mandatória contra avaliações diretas em sala.</li>
+          <li>🔒 <strong>Blindagem dos 3 Níveis (RBAC):</strong> Isolamento rígido de Coordenadoras em suas UEs, Formadoras em seus Polos Regionais e Coordenadora do Núcleo com governança global.</li>
+          <li>📋 <strong>Gestão de Servidores e Normalização:</strong> Atribuição de supervisão institucional das Formadoras para Helena Martins e normalização inteligente de cargos em <code>normalizeRoleData()</code>.</li>
+          <li>🔬 <strong>Auditoria Modular Integral:</strong> Módulos <code>auth_rbac</code> e <code>formadora_coordenacao</code> atualizados com 100% de sucesso e cobertura determinística.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.90 - OCORRÊNCIAS DE CAMPO ATRIBUÍDAS À TURMA E SELEÇÃO DE DOCENTE (PILAR 1) -->
@@ -5640,7 +5659,7 @@
           <option value="professora">Professora de Educação Infantil</option>
           <option value="coordenador">Coordenador(a) Pedagógico(a)</option>
           <option value="formador">Formador(a) Pedagógico(a)</option>
-          <option value="tecnico">Equipe Técnica (Acesso Total)</option>
+          <option value="nucleo_ei">Coordenadora do Núcleo de EI (Acesso Global)</option>
         </select>
       </div>
 
@@ -5695,7 +5714,7 @@
           <option value="professora">Professora de Educação Infantil</option>
           <option value="coordenador">Coordenador(a) Pedagógico(a)</option>
           <option value="formador">Formador(a) Pedagógico(a)</option>
-          <option value="tecnico">Equipe Técnica (Acesso Total)</option>
+          <option value="nucleo_ei">Coordenadora do Núcleo de EI (Acesso Global)</option>
         </select>
       </div>
 
@@ -5802,7 +5821,7 @@
         <strong style="color:var(--text-primary);">Dica de Acesso (Ambiente de Teste):</strong><br>
         <span style="display:inline-block; margin-top:6px;">• mariana@teste.com (Coordenação)</span><br>
         <span style="display:inline-block; margin-top:4px;">• clarice@teste.com (Formadora)</span><br>
-        <span style="display:inline-block; margin-top:4px;">• rodrigo@teste.com (Equipe Técnica)</span><br>
+        <span style="display:inline-block; margin-top:4px;">• helena@teste.com (Coordenadora do Núcleo de EI) / rodrigo@teste.com</span><br>
         <em style="display:inline-block; margin-top:8px; color:var(--primary-dark);">Senha universal: 123456</em>
       </div>
     </div>
@@ -6177,8 +6196,8 @@ function getActiveSections(obs) {
         email: 'bruno.silva@lepes.org',
         password: '123456',
         name: 'Bruno Silva',
-        roleKey: 'tecnico',
-        roleTitle: 'Administrador do Sistema',
+        roleKey: 'nucleo_ei',
+        roleTitle: 'Administrador do Sistema (Núcleo de EI)',
         avatarText: 'BS',
         school: 'Geral',
         supervisor: 'Nenhum'
@@ -6210,9 +6229,9 @@ function getActiveSections(obs) {
         email: 'helena@teste.com',
         password: '123456',
         name: 'Helena Martins',
-        roleKey: 'tecnico',
-        roleTitle: 'Equipe Técnica (Coordenação da EI)',
-        avatarText: 'ET',
+        roleKey: 'nucleo_ei',
+        roleTitle: 'Coordenadora do Núcleo de EI',
+        avatarText: 'NE',
         school: 'Secretaria Municipal de Educação',
         supervisor: 'Secretário de Educação'
       },
@@ -6221,13 +6240,20 @@ function getActiveSections(obs) {
         email: 'rodrigo@teste.com',
         password: '123456',
         name: 'Rodrigo Toledo',
-        roleKey: 'tecnico',
-        roleTitle: 'Equipe Técnica',
-        avatarText: 'ET',
-        school: 'Núcleo de Governança e Dados',
-        supervisor: 'Coordenação de TI & Métricas'
+        roleKey: 'nucleo_ei',
+        roleTitle: 'Núcleo de EI (Governança & Dados)',
+        avatarText: 'NE',
+        school: 'Núcleo de Educação Infantil',
+        supervisor: 'Helena Martins'
       }
     };
+
+    // Helper canônico global de resolução de perfil do Núcleo de Educação Infantil (Retrocompatível com 'tecnico')
+    function isNucleoEI(user) {
+      if (!user) return false;
+      const key = typeof user === 'string' ? user : (user.roleKey || '');
+      return key === 'nucleo_ei' || key === 'tecnico';
+    }
 
     // --- 1.2 CATÁLOGO CANÔNICO DE TURMAS DA REDE MUNICIPAL (PILAR 1) ---
     const INITIAL_CLASSES = [
@@ -6908,7 +6934,7 @@ function getActiveSections(obs) {
       }
       if (!appState.teamMembers) return [];
 
-      if (user.roleKey === 'tecnico') {
+      if (isNucleoEI(user)) {
         return appState.teamMembers.filter(m => m.roleKey === type);
       } else if (user.roleKey === 'formador') {
         // Unidades vinculadas ao Polo Regional da Formadora ou às Coordenadoras sob sua supervisão
@@ -6966,7 +6992,7 @@ function getActiveSections(obs) {
           if (obs.status === 'draft') {
             return obs.evaluatedBy === user.name;
           }
-          if (user.roleKey === 'tecnico') {
+          if (isNucleoEI(user)) {
             return true;
           } else if (user.roleKey === 'formador') {
             const userPolo = (user.school || '').trim().toLowerCase();
@@ -6990,7 +7016,7 @@ function getActiveSections(obs) {
           return obs.evaluatedBy === user.name;
         }
 
-        if (user.roleKey === 'tecnico') {
+        if (isNucleoEI(user)) {
           return true;
         } else if (user.roleKey === 'formador') {
           const userPolo = (user.school || '').trim().toLowerCase();
@@ -7024,7 +7050,7 @@ function getActiveSections(obs) {
     // Formative Notes Scope: Only from direct subordinate level
     function getScopedNotes() {
       const user = getCurrentUser();
-      if (user.roleKey === 'tecnico') {
+      if (isNucleoEI(user)) {
         return appState.notes;
       } else if (user.roleKey === 'formador') {
         const userPolo = (user.school || '').trim().toLowerCase();
@@ -7047,7 +7073,7 @@ function getActiveSections(obs) {
 
     function getScopedSchedules() {
       const user = getCurrentUser();
-      if (user.roleKey === 'tecnico') {
+      if (isNucleoEI(user)) {
         return appState.schedules;
       } else if (user.roleKey === 'formador') {
         // Extrai todas as escolas que pertencem ao polo da formadora
@@ -7086,7 +7112,7 @@ function getActiveSections(obs) {
       const u = getCurrentUser();
       if (u.roleKey === 'coordenador') document.getElementById('roleBoxCoord').classList.add('selected');
       if (u.roleKey === 'formador') document.getElementById('roleBoxFormador').classList.add('selected');
-      if (u.roleKey === 'tecnico') document.getElementById('roleBoxTecnico').classList.add('selected');
+      if (isNucleoEI(u)) document.getElementById('roleBoxTecnico').classList.add('selected');
     }
     function closeRoleModal() {
       document.getElementById('modalRole').classList.remove('active');
@@ -7413,9 +7439,9 @@ function getActiveSections(obs) {
         if (deskTabHomeLabel) deskTabHomeLabel.innerText = "Início";
         heroBtn.style.display = 'inline-flex';
         heroBtnText.innerText = 'AVALIAR COORDENAÇÃO';
-      } else if (user.roleKey === 'tecnico') {
-        if (scopeTitle) scopeTitle.innerText = 'Equipe Técnica:';
-        if (scopeDesc) scopeDesc.innerText = `Governança do sistema. Visualiza todas as observações concluídas da rede, gerencia UEs, membros e rubricas (sem aplicar avaliações ou editar rascunhos de terceiros).`;
+      } else if (isNucleoEI(user)) {
+        if (scopeTitle) scopeTitle.innerText = 'Coordenadora do Núcleo de EI:';
+        if (scopeDesc) scopeDesc.innerText = `Governança global da rede municipal SerTão Criança. Acesso onisciente a todas as 32 UEs, consolidados municipais, gestão de polos, atribuição de formadores e rubricas.`;
         if (deskTabHomeLabel) deskTabHomeLabel.innerText = "Gestão Pedagógica";
         if (unitsNavTab) unitsNavTab.style.display = 'none';
         if (teamNavTab) teamNavTab.style.display = 'none';
@@ -7433,7 +7459,7 @@ function getActiveSections(obs) {
         if (btnNewQualitativeNote) btnNewQualitativeNote.style.display = 'none';
       } else if (user.roleKey === 'pendente') {
         if (scopeTitle) scopeTitle.innerText = 'Acesso Pendente:';
-        if (scopeDesc) scopeDesc.innerText = 'Sua conta foi criada e está aguardando liberação de acesso pela Equipe Técnica.';
+        if (scopeDesc) scopeDesc.innerText = 'Sua conta foi criada e está aguardando liberação de acesso pela Coordenadora do Núcleo de EI.';
         if (deskTabHomeLabel) deskTabHomeLabel.innerText = "Início";
         if (unitsNavTab) unitsNavTab.style.display = 'none';
         if (teamNavTab) teamNavTab.style.display = 'none';
@@ -7475,11 +7501,11 @@ function getActiveSections(obs) {
       }
 
       const mobRubricsBtn = document.getElementById('mobMenuRubricsBtn');
-      if (mobRubricsBtn) mobRubricsBtn.style.display = (user.roleKey === 'tecnico') ? 'flex' : 'none';
+      if (mobRubricsBtn) mobRubricsBtn.style.display = isNucleoEI(user) ? 'flex' : 'none';
 
       const mobTabSchedule = document.getElementById('mobTabSchedule');
       if (mobTabSchedule) {
-        mobTabSchedule.style.display = (user.roleKey === 'tecnico' || user.roleKey === 'pendente' || user.roleKey === 'professora') ? 'none' : 'flex';
+        mobTabSchedule.style.display = (isNucleoEI(user) || user.roleKey === 'pendente' || user.roleKey === 'professora') ? 'none' : 'flex';
       }
 
       const notes = getScopedNotes();
@@ -7487,8 +7513,8 @@ function getActiveSections(obs) {
       const navNotesEl = document.getElementById('navNotesCount');
       if (navNotesEl) navNotesEl.innerText = activeNotes.length;
 
-      // Gestão de Matrizes: botões de upload e restauração restritos estritamente à Equipe Técnica
-      const isTecnico = user.roleKey === 'tecnico';
+      // Gestão de Matrizes: botões de upload e restauração restritos estritamente à Coordenadora do Núcleo de EI
+      const isTecnico = isNucleoEI(user);
       const adminTeacher = document.getElementById('adminRefDocsTeacher');
       const adminCoord = document.getElementById('adminRefDocsCoordinator');
       if (adminTeacher) adminTeacher.style.display = isTecnico ? 'flex' : 'none';
@@ -7503,7 +7529,7 @@ function getActiveSections(obs) {
     function navigateToTab(tabName, subFilter = null) {
       const user = getCurrentUser();
 
-      if (tabName === 'schedule' && (user.roleKey === 'tecnico' || user.roleKey === 'pendente' || user.roleKey === 'professora')) {
+      if (tabName === 'schedule' && (isNucleoEI(user) || user.roleKey === 'pendente' || user.roleKey === 'professora')) {
         showToast('Acesso ao cronograma restrito.');
         return;
       }
@@ -7610,8 +7636,8 @@ function getActiveSections(obs) {
 
     function handleNewObsButtonClick() {
       const user = getCurrentUser();
-      if (user.roleKey === 'tecnico') {
-        showToast('A Equipe Técnica não aplica avaliações diretas.');
+      if (isNucleoEI(user)) {
+        showToast('A Coordenadora do Núcleo de EI não aplica avaliações diretas.');
         return;
       }
 
@@ -8203,6 +8229,10 @@ function getActiveSections(obs) {
     // --- 6. INSTRUMENT & OBSERVATION EXECUTION ---
     function startNewObservation() {
       const user = getCurrentUser();
+      if (isNucleoEI(user)) {
+        showToast('A Coordenadora do Núcleo de EI não aplica avaliações diretas.');
+        return;
+      }
       const schoolSelect = document.getElementById('setupSchool');
       const schoolName = schoolSelect.value;
       const bimester = document.getElementById('setupBimester').value;
@@ -8387,7 +8417,7 @@ function getActiveSections(obs) {
       }
 
       // If user is technician or supervisor viewing finalized, always read-only
-      if (obs.status === 'finalized' || user.roleKey === 'tecnico') {
+      if (obs.status === 'finalized' || isNucleoEI(user)) {
         isReadOnly = true;
       }
 
@@ -9845,7 +9875,7 @@ function getActiveSections(obs) {
       if (notesCount) notesCount.innerText = `${activeNotes.length} Ocorrências Ativas`;
 
       
-      const isGestao = user.roleKey === 'tecnico';
+      const isGestao = isNucleoEI(user);
       
       const homeStandardView = document.getElementById('homeStandardView');
       const homeGestaoView = document.getElementById('homeGestaoView');
@@ -10408,7 +10438,7 @@ function getActiveSections(obs) {
 
           const canEditSchedule = (user.roleKey === 'coordenador' && isTargetTeacher && nextVisit.schoolName === user.school) ||
                                   (user.roleKey === 'formador' && !isTargetTeacher) ||
-                                  (user.roleKey === 'tecnico');
+                                  isNucleoEI(user);
 
           highlightContainer.innerHTML = `
             <div class="next-visit-hero-card">
@@ -10573,7 +10603,7 @@ function getActiveSections(obs) {
 
           const canEditSchedule = (user.roleKey === 'coordenador' && isTargetTeacher && s.schoolName === user.school) ||
                                   (user.roleKey === 'formador' && !isTargetTeacher) ||
-                                  (user.roleKey === 'tecnico');
+                                  isNucleoEI(user);
 
           if (canStartVisit) {
             actionHtml = `
@@ -11089,8 +11119,8 @@ function getActiveSections(obs) {
 
     function openQualitativeNoteModal() {
       const user = getCurrentUser();
-      if (user.roleKey === 'tecnico') {
-        showToast('A equipe técnica não realiza lançamento de ocorrências de campo.');
+      if (isNucleoEI(user)) {
+        showToast('A Coordenadora do Núcleo de EI não realiza lançamento de ocorrências de campo.');
         return;
       }
       const schoolSelect = document.getElementById('noteSchool');
@@ -11761,7 +11791,11 @@ function getActiveSections(obs) {
       let members = appState.teamMembers;
 
       if (roleFilter !== 'ALL') {
-        members = members.filter(m => m.roleKey === roleFilter);
+        if (roleFilter === 'nucleo_ei' || roleFilter === 'tecnico') {
+          members = members.filter(m => isNucleoEI(m));
+        } else {
+          members = members.filter(m => m.roleKey === roleFilter);
+        }
       }
 
       if (supervisorFilter !== 'ALL') {
@@ -11913,9 +11947,9 @@ function getActiveSections(obs) {
         supSelect.disabled = false;
         if (ruleNote) ruleNote.style.display = 'none';
         supSelect.innerHTML = `
-          <option value="Helena Martins">Helena Martins (Equipe Técnica / Secretaria)</option>
+          <option value="Helena Martins">Helena Martins (Coordenadora do Núcleo de EI / Secretaria)</option>
         `;
-      } else if (role === 'tecnico') {
+      } else if (isNucleoEI(role)) {
         schoolGroup.style.display = 'none';
         supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
@@ -11950,7 +11984,7 @@ function getActiveSections(obs) {
       let roleTitle = 'Professora';
       if (roleKey === 'coordenador') roleTitle = 'Coordenadora Pedagógica';
       if (roleKey === 'formador') roleTitle = 'Formadora Pedagógica';
-      if (roleKey === 'tecnico') roleTitle = 'Equipe Técnica';
+      if (isNucleoEI(roleKey)) roleTitle = 'Coordenadora do Núcleo de EI';
       if (roleKey === 'pendente') roleTitle = 'Acesso Pendente';
 
       if (roleKey === 'professora') {
@@ -11958,7 +11992,7 @@ function getActiveSections(obs) {
         supervisor = cp ? cp.name : 'Coordenação Pedagógica da Unidade';
       }
 
-      const schoolVal = ((roleKey === 'tecnico') ? 'Sede / Gestão Geral' : ((roleKey === 'pendente') ? 'Aguardando Definição' : school));
+      const schoolVal = ((isNucleoEI(roleKey)) ? 'Sede / Gestão Geral' : ((roleKey === 'pendente') ? 'Aguardando Definição' : school));
       const supVal = (roleKey === 'pendente') ? 'Aguardando Definição' : (supervisor || 'Helena Martins');
 
       const newId = 'usr-' + Date.now();
@@ -12015,7 +12049,7 @@ function getActiveSections(obs) {
       
       const schoolSelect = document.getElementById('editMemberSchool');
       // Setamos um option temporario para o onRoleChange preservar
-      if (member.roleKey !== 'tecnico' && member.roleKey !== 'pendente') {
+      if (!isNucleoEI(member.roleKey) && member.roleKey !== 'pendente') {
         schoolSelect.innerHTML = `<option value="${member.school}">${member.school}</option>`;
         schoolSelect.value = member.school;
       }
@@ -12102,10 +12136,10 @@ function getActiveSections(obs) {
         supSelect.disabled = false;
         if (ruleNote) ruleNote.style.display = 'none';
         supSelect.innerHTML = `
-          <option value="Helena Martins">Helena Martins (Equipe Técnica / Secretaria)</option>
+          <option value="Helena Martins">Helena Martins (Coordenadora do Núcleo de EI / Secretaria)</option>
         `;
         if (typeof currentSupervisor === 'string' && currentSupervisor) supSelect.value = currentSupervisor;
-      } else if (role === 'tecnico') {
+      } else if (isNucleoEI(role)) {
         schoolGroup.style.display = 'none';
         supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
@@ -12147,7 +12181,7 @@ function getActiveSections(obs) {
       let roleTitle = 'Professora';
       if (roleKey === 'coordenador') roleTitle = 'Coordenadora Pedagógica';
       if (roleKey === 'formador') roleTitle = 'Formadora Pedagógica';
-      if (roleKey === 'tecnico') roleTitle = 'Equipe Técnica';
+      if (isNucleoEI(roleKey)) roleTitle = 'Coordenadora do Núcleo de EI';
       if (roleKey === 'pendente') roleTitle = 'Acesso Pendente';
 
       const memberIndex = appState.teamMembers.findIndex(m => m.id === id);
@@ -12176,7 +12210,7 @@ function getActiveSections(obs) {
         }
       }
 
-      const schoolVal = ((roleKey === 'tecnico') ? 'Sede / Gestão Geral' : ((roleKey === 'pendente') ? 'Aguardando Definição' : school));
+      const schoolVal = ((isNucleoEI(roleKey)) ? 'Sede / Gestão Geral' : ((roleKey === 'pendente') ? 'Aguardando Definição' : school));
       const supVal = (roleKey === 'pendente') ? 'Aguardando Definição' : (supervisor || 'Helena Martins');
 
       // Proteção defensiva: se o campo de e-mail foi deixado em branco no formulário, preserva o e-mail previamente existente no registro ou na base de login
@@ -12399,7 +12433,7 @@ function getActiveSections(obs) {
         ["Maria Aparecida dos Santos", "Professora", "CEI Professora Maria de Lourdes", "Mariana Ferreira", "Infantil I", "maria.santos@escola.gov.br"],
         ["Sônia Regina Alcantara", "Coordenadora Pedagógica", "EMEI Pequeno Príncipe", "Clarice Barbosa", "", "sonia.alcantara@escola.gov.br"],
         ["Clarice Barbosa", "Formadora Pedagógica", "Polo Regional 1 (Norte)", "Helena Martins", "", "clarice.barbosa@escola.gov.br"],
-        ["Rodrigo Toledo", "Equipe Técnica", "Secretaria Municipal de Educação", "Sede / Gestão Geral", "", "rodrigo.toledo@escola.gov.br"]
+        ["Rodrigo Toledo", "Núcleo de EI (Governança & Dados)", "Secretaria Municipal de Educação", "Helena Martins", "", "rodrigo.toledo@escola.gov.br"]
       ];
       const csvContent = [headers.join(','), ...sampleRows.map(r => r.map(v => `"${v}"`).join(','))].join('\n');
       downloadFile(csvContent, 'modelo_servidores_sertao_crianca.csv', 'text/csv');
@@ -12441,8 +12475,8 @@ function getActiveSections(obs) {
         return { roleKey: 'coordenador', roleTitle: 'Coordenadora Pedagógica' };
       } else if (r.includes('formad')) {
         return { roleKey: 'formador', roleTitle: 'Formadora Pedagógica' };
-      } else if (r.includes('tecnic') || r.includes('admin') || r.includes('gestao')) {
-        return { roleKey: 'tecnico', roleTitle: 'Equipe Técnica' };
+      } else if (r.includes('nucleo') || r.includes('tecnic') || r.includes('admin') || r.includes('gestao') || r.includes('secretaria') || r.includes('ei')) {
+        return { roleKey: 'nucleo_ei', roleTitle: 'Coordenadora do Núcleo de EI' };
       } else if (r.includes('pendent') || r.includes('aguard')) {
         return { roleKey: 'pendente', roleTitle: 'Acesso Pendente' };
       } else {
@@ -12762,7 +12796,7 @@ function getActiveSections(obs) {
         const currentSelectedUnit = unitSelect.value || 'ALL';
         let availableUnits = [];
 
-        if (user.roleKey === 'tecnico') {
+        if (isNucleoEI(user)) {
           availableUnits = (appState.units || []).map(u => u.name);
         } else if (user.roleKey === 'formador') {
           const userPolo = (user.school || '').trim().toLowerCase();
@@ -15630,12 +15664,12 @@ function getActiveSections(obs) {
           name: 'Autenticação, Usuários, Perfis e RBAC',
           run: function(logger) {
             try {
-              const usersToTest = ['mariana', 'clarice', 'rodrigo'];
+              const usersToTest = ['mariana', 'clarice', 'helena', 'rodrigo'];
               usersToTest.forEach(key => {
                 const u = USERS_DB[key];
                 if (!u || !u.email || !u.roleKey) throw new Error(`Usuário ${key} ausente ou incompleto no USERS_DB`);
               });
-              logger.log('Integridade das credenciais no USERS_DB', true, 'mariana, clarice, rodrigo validados');
+              logger.log('Integridade das credenciais no USERS_DB', true, 'mariana, clarice, helena, rodrigo validados');
 
               appState.currentUserKey = 'mariana';
               const curUser = getCurrentUser();
@@ -15646,6 +15680,18 @@ function getActiveSections(obs) {
               const clariceUser = getCurrentUser();
               if (clariceUser.roleKey !== 'formador') throw new Error('getCurrentUser() com clarice não retornou formador');
               logger.log('Alternância para perfil Formadora (clarice ➔ formadora)', true);
+
+              appState.currentUserKey = 'helena';
+              const helenaUser = getCurrentUser();
+              if (!isNucleoEI(helenaUser)) throw new Error('isNucleoEI(helena) retornou false');
+              if (helenaUser.roleTitle !== 'Coordenadora do Núcleo de EI') throw new Error('roleTitle de Helena não é Coordenadora do Núcleo de EI');
+              logger.log('Alternância e resolução de perfil Coordenadora do Núcleo de EI (helena)', true, helenaUser.roleTitle);
+
+              // Validação de Retrocompatibilidade da função canônica isNucleoEI
+              const legacyUser = { roleKey: 'tecnico' };
+              const modernUser = { roleKey: 'nucleo_ei' };
+              if (!isNucleoEI(legacyUser) || !isNucleoEI(modernUser)) throw new Error('isNucleoEI falhou na dupla compatibilidade (nucleo_ei / tecnico)');
+              logger.log('Resiliência e dupla compatibilidade da engine isNucleoEI (nucleo_ei & tecnico)', true);
 
               applyUserRoleUI();
               const profileBtn = document.getElementById('headerAvatarBtn');
@@ -15950,6 +15996,20 @@ function getActiveSections(obs) {
               const coordSections = getActiveSections(mockCoordObs);
               if (!Array.isArray(coordSections) || coordSections.length === 0) throw new Error('Matriz da coordenação vazia');
               logger.log('Carregamento da Matriz de Acompanhamento da Coordenação Pedagógica', true, `${coordSections.length} dimensões`);
+
+              // Validação de Escopo Onisciente e Bloqueio de Avaliação Direta para o Núcleo de EI
+              appState.currentUserKey = 'helena';
+              const helenaObs = getScopedObservations();
+              if (!Array.isArray(helenaObs)) throw new Error('getScopedObservations() para Helena falhou');
+              logger.log('Acesso onisciente do Núcleo de Educação Infantil a todas as observações da rede', true);
+
+              // Teste de bloqueio de início de observação direta para o Núcleo de EI
+              const preObsCount = (appState.observations || []).length;
+              startNewObservation();
+              if ((appState.observations || []).length !== preObsCount) {
+                throw new Error('Núcleo de EI conseguiu criar observação direta');
+              }
+              logger.log('Bloqueio mandatória de avaliação direta para perfil do Núcleo de EI', true);
             } catch (e) {
               logger.log('Erro de execução no módulo formadora_coordenacao', false, e.message);
             }
