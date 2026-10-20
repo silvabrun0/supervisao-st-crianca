@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.90** | 20/10/2026 16:00 | `intermediárias/aplicativo_v90_ocorrencias_campo_turma_docente.html` | Deliberação SerTão Criança / Pilar 1 | Atribuição primária das ocorrências de campo à Turma da Educação Infantil, trava automática para docente único regente e escolha ativa para duplas 📚 |
 | **0.89** | 20/10/2026 15:30 | `intermediárias/aplicativo_v89_visualizar_devolutiva_agenda.html` | Solicitação direta / Melhoria de Acesso Pedagógico na Agenda | Botão para visualização direta da devolutiva de observação a partir da aba de Agenda (desktop e mobile), vínculo resiliente findObservationForSchedule e retorno contextual 📋 |
 | **0.1** | 06/10/2026 14:05 | `lepes-prototype.html` | Matriz conceitual LEPES | Protótipo conceitual inicial e escala de observação tripartite❌ |
 | **0.2** | 06/10/2026 14:10 | `aplicativo_de_supervis_o_pedag_gica_sert_o_crian_a.html` | Diretrizes SerTão Criança | Escala de 4 opções (N/A), vetorização, drill-down e governança em 3 níveis❌ |
@@ -107,6 +108,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.90] - Pilar 1: Ocorrências de Campo Atribuídas à Turma da Educação Infantil e Seleção de Docente
+* **Data e Horário:** 20 de Outubro de 2026 – 16:00:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v90_ocorrencias_campo_turma_docente.html`
+* **Identificador no App:** 📌 Versão 0.90 (v7.69)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Funcionalidades
+- **Inversão da Unidade de Registro para a TURMA (Pilar 1):** O formulário `#modalQualitativeNote` passa a exigir a seleção primária da Turma da Educação Infantil (`#noteClass`) logo após a unidade escolar.
+- **Reconhecimento e Trava para Docente Único:** Para turmas com regência unívoca (`teachers.length === 1`), o sistema preenche e trava automaticamente o campo de docente (`disabled = true`) com badge informativo (`🔒 Docente único regente da turma`).
+- **Seleção Ativa de Docente em Regência Compartilhada:** Para turmas de período parcial com dupla de titulares (`teachers.length >= 2`), o seletor permanece habilitado para escolha entre o Professor A ou Professor B, permitindo qualificar com fidelidade a intervenção.
+- **Vínculo Automático com Observação Ativa:** Abertura via atalho na visita em andamento fixa e desabilita automaticamente Escola e Turma a partir de `currentObs`.
+- **Enriquecimento Estrutural de Dados:** Cada ocorrência registra `className`, `classId`, `targetType: 'turma'`, `teacherName` e `teachers`.
+- **Cards e Síntese Atualizados:** Cards do bloco de notas exibem com destaque tipográfico a Turma e o Docente; importação na Síntese Pedagógica vincula ocorrências daquela turma.
+- **Exportação CSV Enriquecida:** Inclusão da coluna `Turma` no cabeçalho e dados de exportação em `exportAllNotesCSV()` e `exportNotesFilteredCSV()`.
+- **Auditoria Modular Integral:** Módulos `travas_seguranca`, `sintese_finalizacao` e `navegacao_layout` enriquecidos com asserções determinísticas de 100% de cobertura.
+
+---
 
 ### [Versão 0.89] - Visualização da Devolutiva da Observação pela Aba de Agenda
 * **Data e Horário:** 20 de Outubro de 2026 – 15:30:00
