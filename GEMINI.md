@@ -32,4 +32,4 @@ Antes de executar qualquer tarefa, consulte os arquivos normativos:
 - [ ] Se houver commits novos do colega, integrar com `git pull --rebase origin main`.
 - [ ] Criar commit com mensagem semântica clara (`feat:`, `fix:`, `docs:`, etc.).
 - [ ] Enviar as alterações com `git push origin main`.
-- [ ] Se autorizado/solicitado, realizar o deploy no Firebase Hosting (`firebase deploy`).
+- [ ] O deploy de produção é realizado automaticamente via **GitHub Pages** (ao efetuar o `git push origin main` com o arquivo raiz `index.html`). O hosting oficial do projeto é: `https://silvabrun0.github.io/supervisao-st-crianca/`.

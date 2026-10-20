@@ -5,9 +5,9 @@ Este documento define as diretrizes obrigatórias de desenvolvimento e entrega p
 ---
 
 ## 1. Dados do Projeto e URLs Oficiais
-- **Firebase Project ID:** `supervisao-st-crianca`
-- **Project Console:** [https://console.firebase.google.com/project/supervisao-st-crianca/overview](https://console.firebase.google.com/project/supervisao-st-crianca/overview)
-- **Hosting URL (Ambiente Online/Produção):** [https://supervisao-st-crianca.web.app](https://supervisao-st-crianca.web.app)
+- **Repositório GitHub:** [https://github.com/silvabrun0/supervisao-st-crianca](https://github.com/silvabrun0/supervisao-st-crianca)
+- **Hosting URL Oficial (GitHub Pages):** [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)
+- **Deploy Automático:** O deploy de produção é acionado automaticamente a cada `git push origin main`, servindo o arquivo `index.html` da raiz.
 
 ---
 
@@ -76,22 +76,21 @@ O assistente deve **sempre trabalhar na lógica de dados e indicadores como apoi
 
 ---
 
-## 5. Comandos de Deploy (macOS / Terminal Unix)
+## 5. Fluxo de Deploy e Publicação (GitHub Pages)
 
-Após a conclusão da Etapa 2 (execução, validação, backup em `intermediárias/` e atualização do changelog), o assistente executa a publicação diretamente pelo terminal:
+Após a conclusão da Etapa 2 (execução, validação, backup em `intermediárias/` e atualização do changelog duplo), o deploy em produção é realizado de forma automática através do envio dos commits para o repositório no GitHub:
 
 ```bash
-cd "firebase_deploy"
-firebase deploy
+# 1. Checagem pré-push de concorrência
+git fetch origin main
+git log HEAD..origin/main --oneline
+
+# 2. Commit e envio das alterações
+git add index.html CHANGELOG.md "intermediárias/..."
+git commit -m "feat: sua mensagem semantica"
+git push origin main
 ```
 
-> **Nota para o Assistente (Fallback / Resolução de PATH no macOS):**
-> Caso o comando `firebase` direto informe `command not found`, utilize o caminho absoluto do binário instalado no sistema ou execute via `npx`:
-> ```bash
-> # Se instalado globalmente via npm:
-> /usr/local/bin/firebase deploy
-> # Ou via Homebrew (Apple Silicon / Intel):
-> /opt/homebrew/bin/firebase deploy
-> # Ou diretamente via npx (sem necessidade de CLI global instalada):
-> npx firebase-tools deploy
-> ```
+> **Hosting Oficial Ativo:**
+> Ao enviar as alterações para a branch `main`, o **GitHub Pages** atualiza automaticamente a aplicação em produção no endereço:
+> [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)

@@ -99,12 +99,8 @@ Para tarefas que demorem mais de 1 dia ou sejam reformas pesadas na interface:
 
 ---
 
-## 6. Publicação em Produção (Firebase Hosting)
+## 6. Publicação em Produção (GitHub Pages)
 
-Quando a versão na branch `main` estiver pronta para uso real pela equipe de supervisão:
-```bash
-firebase deploy
-# Ou caso o binário não esteja no PATH:
-npx firebase-tools deploy
-```
-URL oficial atualizada: [https://supervisao-st-crianca.web.app](https://supervisao-st-crianca.web.app)
+O deploy da aplicação em produção é realizado de forma automática e integrada pelo GitHub Pages:
+- Cada envio para a branch `main` (`git push origin main`) com o arquivo `index.html` na raiz atualiza o site de produção.
+- URL oficial atualizada: [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)
