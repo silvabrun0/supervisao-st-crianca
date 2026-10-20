@@ -2394,7 +2394,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.84 (v7.63)
+          Versão 0.85 (v7.64)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -2843,22 +2843,39 @@
             </select>
           </div>
 
-          <div class="form-group" id="groupSetupTargetPerson">
-            <label class="form-label" id="setupTargetPersonLabel">Professora Observada</label>
-            <select id="setupTargetPerson" class="form-select" onchange="onSetupTeacherChange()">
-              <!-- Dynamic options -->
+          <!-- Bloco do Alvo da Observação Pedagógica (Turma vs Coordenadora) -->
+          <div class="form-group" id="groupSetupClass">
+            <label class="form-label" style="font-weight:700; color:var(--primary-dark);">
+              Turma / Agrupamento de Educação Infantil Observada
+            </label>
+            <select id="setupClass" class="form-select" onchange="onSetupClassChange()" style="font-weight:600; font-size:14px; border-color:var(--primary);">
+              <!-- Preenchido dinamicamente com as turmas da Unidade Escolar -->
             </select>
           </div>
 
-          <div class="form-group" id="groupSetupClass">
-            <label class="form-label">Turma / Agrupamento de Educação Infantil</label>
-            <select id="setupClass" class="form-select">
-              <option value="Berçário I">Berçário I (0 a 1 ano)</option>
-              <option value="Berçário II">Berçário II (1 a 2 anos)</option>
-              <option value="Maternal I">Maternal I (2 a 3 anos)</option>
-              <option value="Maternal II">Maternal II (3 a 4 anos)</option>
-              <option value="Infantil I" selected>Infantil I / Pré I (4 a 5 anos)</option>
-              <option value="Infantil II">Infantil II / Pré II (5 a 6 anos)</option>
+          <!-- Card Dinâmico com a Equipe de Docentes Regentes Titulares da Turma (Pilar 1) -->
+          <div id="groupSetupTeachersCard" style="display:none; background:#F0F7FF; border:1px solid #BFDBFE; border-left:5px solid #2563EB; border-radius:10px; padding:14px; margin-bottom:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:#1D4ED8; letter-spacing:0.5px;">
+                👩‍🏫 Equipe de Regência Titular da Turma
+              </span>
+              <span id="setupClassShiftBadge" style="font-size:10px; font-weight:700; background:#DBEAFE; color:#1E40AF; padding:2px 8px; border-radius:12px;">
+                Parcial Matutino
+              </span>
+            </div>
+            <div id="setupClassTeachersList" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+              <!-- Badges dinâmicos das docentes -->
+            </div>
+            <div style="font-size:11px; color:#475569; margin-top:10px; line-height:1.4;">
+              💡 <em>Em Patos, as turmas contam com duplas ou quartetos de professoras regentes titulares. A supervisão pedagógica analisa a rotina, o ambiente educativo e as oportunidades de aprendizagem recebidas pelas crianças na turma.</em>
+            </div>
+          </div>
+
+          <!-- Seletor Exclusivo de Coordenadora Avaliada (Utilizado apenas por Formadoras) -->
+          <div class="form-group" id="groupSetupTargetPerson" style="display:none;">
+            <label class="form-label" id="setupTargetPersonLabel">Coordenadora Pedagógica Acompanhada</label>
+            <select id="setupTargetPerson" class="form-select" onchange="onSetupTeacherChange()">
+              <!-- Dynamic options -->
             </select>
           </div>
 
@@ -3733,6 +3750,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.85 - PILAR 1: INVERSÃO DA UNIDADE DE ANÁLISE PARA A TURMA -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.85 · v7.64</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Pilar 1: Inversão da Unidade de Análise da Docente Individual para a Turma:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🏫 <strong>Turma como Unidade Primária de Observação:</strong> Inversão do foco da supervisão pedagógica para a rotina da turma, integrando o catálogo canônico de turmas da rede municipal (<code>INITIAL_CLASSES</code>).</li>
+          <li>👩‍🏫 <strong>Painel Dinâmico de Regência Titular:</strong> Exibição detalhada da equipe de professoras regentes titulares vinculadas à turma na tela de configuração (#screenSetup), valorizando o trabalho coletivo docente.</li>
+          <li>🛡️ <strong>Travas de Negócio por Turma:</strong> Bloqueio rigoroso de duplo lançamento para a mesma turma no mesmo bimestre e controle da sequência longitudinal (1º ➔ 2º ➔ 3º ➔ 4º Bimestre) centrado na turma.</li>
+          <li>📊 <strong>Cobertura de Turmas na Aba de Indicadores:</strong> Atualização dos KPIs superiores para exibir a porcentagem e total de turmas da escola atendidas no ciclo bimestral.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.84 - CORREÇÃO CRÍTICA DO HELPER GETNOWTIMESTRING E PARÂMETROS TEMPORAIS -->
@@ -6042,6 +6076,115 @@ function getActiveSections(obs) {
       }
     };
 
+    // --- 1.2 CATÁLOGO CANÔNICO DE TURMAS DA REDE MUNICIPAL (PILAR 1) ---
+    const INITIAL_CLASSES = [
+      {
+        id: 'cls-pml-01',
+        name: 'Infantil I - Turma A',
+        school: 'CEI Professora Maria de Lourdes',
+        stage: 'Infantil I',
+        shift: 'Parcial Matutino',
+        teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha']
+      },
+      {
+        id: 'cls-pml-02',
+        name: 'Berçário II - Turma Única',
+        school: 'CEI Professora Maria de Lourdes',
+        stage: 'Berçário II',
+        shift: 'Parcial Matutino',
+        teachers: ['Carla Beatriz Mendes']
+      },
+      {
+        id: 'cls-pml-03',
+        name: 'Infantil II - Turma B',
+        school: 'CEI Professora Maria de Lourdes',
+        stage: 'Infantil II',
+        shift: 'Parcial Vespertino',
+        teachers: ['Juliana Roberta Rocha']
+      },
+      {
+        id: 'cls-pp-01',
+        name: 'Maternal I - Turma A',
+        school: 'EMEI Pequeno Príncipe',
+        stage: 'Maternal I',
+        shift: 'Parcial Matutino',
+        teachers: ['Fernanda Lima']
+      },
+      {
+        id: 'cls-pp-02',
+        name: 'Infantil I - Turma B',
+        school: 'EMEI Pequeno Príncipe',
+        stage: 'Infantil I',
+        shift: 'Parcial Vespertino',
+        teachers: ['Fernanda Lima']
+      },
+      {
+        id: 'cls-vz-01',
+        name: 'Maternal II - Turma Única',
+        school: 'CEI Vovó Zezé',
+        stage: 'Maternal II',
+        shift: 'Integral',
+        teachers: []
+      }
+    ];
+
+    // Helper de Resolução e Resiliência de Turmas por Unidade Escolar
+    function getClassesForSchool(schoolName) {
+      if (!appState.classes || !Array.isArray(appState.classes)) {
+        appState.classes = JSON.parse(JSON.stringify(INITIAL_CLASSES));
+      }
+      let schoolClasses = appState.classes.filter(c => c.school === schoolName);
+
+      // Resiliência transparente: se a escola não possuir turmas cadastradas explicitamente,
+      // gera agrupamentos a partir das professoras vinculadas à unidade em teamMembers
+      if (schoolClasses.length === 0) {
+        const teachersInSchool = (appState.teamMembers || []).filter(m => m.school === schoolName && m.roleKey === 'professora');
+        const groups = {};
+        teachersInSchool.forEach(t => {
+          const groupName = t.classAssigned || 'Infantil I - Turma A';
+          if (!groups[groupName]) groups[groupName] = [];
+          groups[groupName].push(t.name);
+        });
+
+        Object.keys(groups).forEach((grpName, idx) => {
+          const autoCls = {
+            id: 'cls-auto-' + Date.now() + '-' + idx,
+            name: grpName,
+            school: schoolName,
+            stage: grpName.includes('Berçário') ? 'Berçário' : grpName.includes('Maternal') ? 'Maternal' : 'Infantil I',
+            shift: 'Parcial Matutino',
+            teachers: groups[grpName]
+          };
+          appState.classes.push(autoCls);
+          schoolClasses.push(autoCls);
+        });
+      }
+
+      // Se ainda assim não houver turmas (escola vazia), fornece agrupamentos padrão da Educação Infantil
+      if (schoolClasses.length === 0) {
+        const defaultStages = [
+          { name: 'Infantil I - Turma A', stage: 'Infantil I' },
+          { name: 'Infantil II - Turma A', stage: 'Infantil II' },
+          { name: 'Maternal I - Turma A', stage: 'Maternal I' },
+          { name: 'Berçário II - Turma Única', stage: 'Berçário II' }
+        ];
+        defaultStages.forEach((st, idx) => {
+          const autoCls = {
+            id: 'cls-def-' + Date.now() + '-' + idx,
+            name: st.name,
+            school: schoolName,
+            stage: st.stage,
+            shift: 'Parcial Matutino',
+            teachers: []
+          };
+          appState.classes.push(autoCls);
+          schoolClasses.push(autoCls);
+        });
+      }
+
+      return schoolClasses;
+    }
+
     // Initial School Units (UEs) & Polos
     const INITIAL_UNITS = [
       { id: 'ue-1', name: 'CEI Professora Maria de Lourdes', polo: 'Polo Regional 1 (Norte)', address: 'Bairro Alto das Flores' },
@@ -6156,6 +6299,7 @@ function getActiveSections(obs) {
       currentUserKey: 'mariana',
       activeSectionsTeacher: JSON.parse(JSON.stringify(DEFAULT_SECTIONS_TEACHER)), activeSectionsCoordinator: JSON.parse(JSON.stringify(DEFAULT_SECTIONS_COORDINATOR)),
       units: JSON.parse(JSON.stringify(INITIAL_UNITS)),
+      classes: JSON.parse(JSON.stringify(INITIAL_CLASSES)), // <-- PILAR 1: CATÁLOGO DE TURMAS
       teamMembers: JSON.parse(JSON.stringify(INITIAL_TEAM)),
       notes: JSON.parse(JSON.stringify(INITIAL_NOTES)),
       schedules: JSON.parse(JSON.stringify(INITIAL_SCHEDULES)),
@@ -6175,6 +6319,9 @@ function getActiveSections(obs) {
           const parsed = JSON.parse(saved);
           appState = { ...appState, ...parsed };
           if (!appState.units || appState.units.length === 0) appState.units = JSON.parse(JSON.stringify(INITIAL_UNITS));
+          if (!appState.classes || appState.classes.length === 0) {
+            appState.classes = JSON.parse(JSON.stringify(INITIAL_CLASSES));
+          }
           if (!appState.teamMembers || appState.teamMembers.length === 0) appState.teamMembers = JSON.parse(JSON.stringify(INITIAL_TEAM));
           if (!appState.notes) appState.notes = JSON.parse(JSON.stringify(INITIAL_NOTES));
           if (!appState.schedules) appState.schedules = JSON.parse(JSON.stringify(INITIAL_SCHEDULES));
@@ -6596,7 +6743,24 @@ function getActiveSections(obs) {
       if (!appState.observations) return [];
 
       return appState.observations.filter(obs => {
-        // Valida se o docente avaliado ainda existe como membro ativo da rede
+        // Se a observação for da TURMA (Pilar 1), valida se a escola e turma pertencem ao escopo
+        if (obs.evaluatedType === 'turma') {
+          if (obs.status === 'draft') {
+            return obs.evaluatedBy === user.name;
+          }
+          if (user.roleKey === 'tecnico') {
+            return true;
+          } else if (user.roleKey === 'formador') {
+            const userPolo = (user.school || '').trim().toLowerCase();
+            const poloUnits = (appState.units || []).filter(u => u.polo && u.polo.trim().toLowerCase() === userPolo).map(u => u.name);
+            return poloUnits.includes(obs.schoolName);
+          } else if (user.roleKey === 'coordenador') {
+            return obs.schoolName === user.school;
+          }
+          return false;
+        }
+
+        // Para observações nominais legadas ou de coordenação pedagógica:
         const targetMemberExists = (appState.teamMembers || []).some(m => m.name === obs.teacherName);
         if (!targetMemberExists) return false;
 
@@ -7325,7 +7489,7 @@ function getActiveSections(obs) {
     function openSetupScreen(prefilledSchedule = null) {
       const user = getCurrentUser();
 
-      // BLINDAGEM CANÔNICA DE CARGO: Formadora não pode carregar visita de professora
+      // BLINDAGEM CANÔNICA DE CARGO
       if (prefilledSchedule) {
         const targetMember = (appState.teamMembers || []).find(m => m.name === prefilledSchedule.targetName);
         if (user.roleKey === 'formador' && targetMember && targetMember.roleKey === 'professora') {
@@ -7334,7 +7498,7 @@ function getActiveSections(obs) {
           return;
         }
         if (user.roleKey === 'coordenador' && targetMember && targetMember.roleKey !== 'professora') {
-          showToast('Ação bloqueada: Coordenadoras avaliam exclusivamente professoras da unidade escolar.');
+          showToast('Ação bloqueada: Coordenadoras avaliam exclusivamente turmas e professoras da unidade escolar.');
           navigateToTab('home');
           return;
         }
@@ -7343,30 +7507,31 @@ function getActiveSections(obs) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
       document.getElementById('screenSetup').classList.add('active');
 
-      // Garante que a tarja de somente leitura esteja oculta ao configurar nova visita
       const roWarning = document.getElementById('readOnlyWarning');
       if (roWarning) roWarning.style.display = 'none';
       appState.isReadOnly = false;
 
-      // Guarda em memória a visita agendada vinculada para persistência na observação
       appState.currentSetupScheduleId = prefilledSchedule ? prefilledSchedule.id : null;
 
       const titleEl = document.getElementById('setupScreenTitle');
       const hintEl = document.getElementById('setupRoleHint');
       const schoolSelect = document.getElementById('setupSchool');
-      const targetLabel = document.getElementById('setupTargetPersonLabel');
       const classGroup = document.getElementById('groupSetupClass');
+      const teachersCard = document.getElementById('groupSetupTeachersCard');
+      const targetGroup = document.getElementById('groupSetupTargetPerson');
+      const targetLabel = document.getElementById('setupTargetPersonLabel');
 
       schoolSelect.innerHTML = '';
 
       if (user.roleKey === 'coordenador') {
-        titleEl.innerText = 'Nova Observação Pedagógica Docente';
+        titleEl.innerText = 'Nova Observação Pedagógica da Turma';
         if (hintEl) {
           hintEl.style.display = 'block';
-          hintEl.innerText = `Você está avaliando professoras da sua Unidade Escolar (${user.school}). Rascunho visível apenas para você.`;
+          hintEl.innerHTML = `<strong>Unidade de Análise: TURMA</strong> · Você está avaliando a rotina pedagógica na unidade <strong>${user.school}</strong>. O instrumento analisa as experiências das crianças e a atuação articulada das professoras regentes.`;
         }
-        targetLabel.innerText = 'Professora Observada';
         classGroup.style.display = 'block';
+        teachersCard.style.display = 'block';
+        targetGroup.style.display = 'none';
 
         const opt = document.createElement('option');
         opt.value = user.school;
@@ -7380,11 +7545,12 @@ function getActiveSections(obs) {
           hintEl.innerText = '';
           hintEl.style.display = 'none';
         }
-        targetLabel.innerText = 'Coordenadora Avaliada';
         classGroup.style.display = 'none';
+        teachersCard.style.display = 'none';
+        targetGroup.style.display = 'block';
+        targetLabel.innerText = 'Coordenadora Pedagógica Avaliada';
         schoolSelect.disabled = false;
 
-        // Extrai dinamicamente as UEs do polo ou sob supervisão
         const poloUnits = (appState.units || []).filter(u => u.polo === user.school).map(u => u.name);
         const supervisedCoords = (appState.teamMembers || []).filter(m => m.roleKey === 'coordenador' && (m.supervisor === user.name || poloUnits.includes(m.school)));
         const availableSchools = Array.from(new Set([...poloUnits, ...supervisedCoords.map(c => c.school)])).filter(Boolean);
@@ -7399,7 +7565,6 @@ function getActiveSections(obs) {
           opt.text = s;
           schoolSelect.appendChild(opt);
         });
-
       }
 
       onSetupSchoolChange();
@@ -7432,16 +7597,30 @@ function getActiveSections(obs) {
         }
       }
 
+      // Se houver visita do cronograma vinculada
       if (prefilledSchedule) {
         if (prefilledSchedule.schoolName) schoolSelect.value = prefilledSchedule.schoolName;
         onSetupSchoolChange();
-        const targetSelect = document.getElementById('setupTargetPerson');
-        if (targetSelect && prefilledSchedule.targetName) targetSelect.value = prefilledSchedule.targetName;
-        
-        // Sempre seleciona automaticamente o próximo bimestre necessário
-        const targetPersonName = targetSelect ? targetSelect.value : (prefilledSchedule.targetName || '');
-        autoSelectNextEligibleBimester(targetPersonName);
-        
+
+        if (user.roleKey === 'coordenador') {
+          const classSelect = document.getElementById('setupClass');
+          if (classSelect && prefilledSchedule.className) {
+            classSelect.value = prefilledSchedule.className;
+            onSetupClassChange();
+          }
+        } else {
+          const targetSelect = document.getElementById('setupTargetPerson');
+          if (targetSelect && prefilledSchedule.targetName) {
+            targetSelect.value = prefilledSchedule.targetName;
+            onSetupTeacherChange();
+          }
+        }
+
+        if (prefilledSchedule.bimester) {
+          const bimSelect = document.getElementById('setupBimester');
+          if (bimSelect) bimSelect.value = prefilledSchedule.bimester;
+        }
+
         // Bloqueio de data futura vinda de agendamento do cronograma:
         if (prefilledSchedule.plannedDate) {
           if (prefilledSchedule.plannedDate > todayStr) {
@@ -7452,10 +7631,8 @@ function getActiveSections(obs) {
           }
         }
         if (prefilledSchedule.plannedTime) document.getElementById('setupStartTime').value = prefilledSchedule.plannedTime;
-      } else {
-        const targetSelect = document.getElementById('setupTargetPerson');
-        autoSelectNextEligibleBimester(targetSelect ? targetSelect.value : '');
       }
+
       validateSetupDateUI();
       updateSetupBimesterValidationUI();
     }
@@ -7477,48 +7654,127 @@ function getActiveSections(obs) {
     function onSetupSchoolChange() {
       const user = getCurrentUser();
       const schoolName = document.getElementById('setupSchool').value;
-      const targetSelect = document.getElementById('setupTargetPerson');
-      targetSelect.innerHTML = '';
 
-      let candidates = [];
       if (user.roleKey === 'coordenador') {
-        candidates = appState.teamMembers.filter(m => m.roleKey === 'professora' && m.school === schoolName);
+        // Popula o seletor de TURMAS da Unidade Escolar
+        const classSelect = document.getElementById('setupClass');
+        classSelect.innerHTML = '';
+
+        const schoolClasses = getClassesForSchool(schoolName);
+        schoolClasses.forEach(cls => {
+          const opt = document.createElement('option');
+          opt.value = cls.name;
+          const teacherCount = cls.teachers ? cls.teachers.length : 0;
+          const teacherText = teacherCount > 0 ? ` (${teacherCount} regente${teacherCount > 1 ? 's' : ''})` : ' (Sem regente atribuída)';
+          opt.text = `${cls.name} · ${cls.shift || 'Parcial'}${teacherText}`;
+          classSelect.appendChild(opt);
+        });
+
+        onSetupClassChange();
+
       } else if (user.roleKey === 'formador') {
-        candidates = appState.teamMembers.filter(m => m.roleKey === 'coordenador' && m.school === schoolName);
+        const targetSelect = document.getElementById('setupTargetPerson');
+        targetSelect.innerHTML = '';
+
+        let candidates = appState.teamMembers.filter(m => m.roleKey === 'coordenador' && m.school === schoolName);
+        candidates = candidates.filter(m => m.name !== user.name);
+
+        if (candidates.length === 0) {
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.text = 'Nenhuma coordenadora disponível nesta unidade';
+          targetSelect.appendChild(opt);
+          return;
+        }
+
+        candidates.forEach(t => {
+          const opt = document.createElement('option');
+          opt.value = t.name;
+          opt.text = `${t.name} (${t.roleTitle || 'Coordenadora Pedagógica'})`;
+          targetSelect.appendChild(opt);
+        });
+
+        onSetupTeacherChange();
+      }
+    }
+
+    function onSetupClassChange() {
+      const user = getCurrentUser();
+      const schoolName = document.getElementById('setupSchool').value;
+      const classSelect = document.getElementById('setupClass');
+      if (!classSelect) return;
+      const className = classSelect.value;
+
+      const schoolClasses = getClassesForSchool(schoolName);
+      const targetClass = schoolClasses.find(c => c.name === className);
+
+      const shiftBadge = document.getElementById('setupClassShiftBadge');
+      const teachersListEl = document.getElementById('setupClassTeachersList');
+
+      if (targetClass) {
+        if (shiftBadge) shiftBadge.innerText = targetClass.shift || 'Tempo Parcial';
+        if (teachersListEl) {
+          teachersListEl.innerHTML = '';
+          const teachers = targetClass.teachers || [];
+          if (teachers.length === 0) {
+            teachersListEl.innerHTML = '<span style="font-size:12px; color:#DC2626; font-style:italic;">⚠️ Nenhuma professora regente vinculada no cadastro desta turma.</span>';
+          } else {
+            teachers.forEach(tName => {
+              const pill = document.createElement('div');
+              pill.style.cssText = 'background:#FFFFFF; border:1px solid #BFDBFE; border-radius:20px; padding:4px 12px; font-size:12px; font-weight:700; color:#1E40AF; display:inline-flex; align-items:center; gap:6px; box-shadow:0 1px 2px rgba(0,0,0,0.05);';
+              pill.innerHTML = `<span>👩‍🏫</span> <span>${tName}</span> <span style="font-size:10px; background:#EFF6FF; color:#2563EB; padding:1px 6px; border-radius:10px;">Regente Titular</span>`;
+              teachersListEl.appendChild(pill);
+            });
+          }
+        }
       }
 
-      // REGRA: O usuário não pode autoavaliar-se
-      candidates = candidates.filter(m => m.name !== user.name);
-
-      if (candidates.length === 0) {
-        const opt = document.createElement('option');
-        opt.value = '';
-        opt.text = 'Nenhum profissional disponível para avaliação neste escopo';
-        targetSelect.appendChild(opt);
-        return;
-      }
-
-      candidates.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t.name;
-        opt.text = `${t.name} (${t.classAssigned || t.roleTitle || 'Educação Infantil'})`;
-        targetSelect.appendChild(opt);
-      });
-      onSetupTeacherChange();
+      // Sugere automaticamente o próximo bimestre longitudinal da TURMA
+      autoSelectNextEligibleBimesterForClass(className, schoolName);
+      updateSetupBimesterValidationUI();
     }
 
     function onSetupTeacherChange() {
       const teacherName = document.getElementById('setupTargetPerson').value;
-      const member = appState.teamMembers.find(m => m.name === teacherName);
-      if (member && member.classAssigned) {
-        const classSelect = document.getElementById('setupClass');
-        if (classSelect) classSelect.value = member.classAssigned;
-      }
       autoSelectNextEligibleBimester(teacherName);
       updateSetupBimesterValidationUI();
     }
 
-    // Retorna o próximo bimestre necessário no ciclo longitudinal para o profissional
+    // PILAR 1: Retorna o próximo bimestre necessário no ciclo longitudinal da TURMA
+    function getNextEligibleBimesterForClass(className, schoolName) {
+      const BIMESTERS = ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'];
+      if (!className) return '1º Bimestre';
+      const cleanClass = className.trim().toLowerCase();
+      const cleanSchool = (schoolName || '').trim().toLowerCase();
+
+      for (let i = 0; i < BIMESTERS.length; i++) {
+        const bim = BIMESTERS[i];
+        const bimNum = bim.match(/([1-4])/)[1];
+
+        // Verifica se a TURMA já possui observação avaliada (finalizada) neste bimestre
+        const hasFinalized = (appState.observations || []).some(o => {
+          if (!o.className || o.className.trim().toLowerCase() !== cleanClass) return false;
+          if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+          const obsBimNum = (o.bimester || '').match(/([1-4])/);
+          if (!obsBimNum || obsBimNum[1] !== bimNum) return false;
+          return o.status === 'finalized' || o.status === 'concluida';
+        });
+
+        // Se este bimestre ainda não foi concluído para esta turma, ele é o próximo necessário!
+        if (!hasFinalized) {
+          return bim;
+        }
+      }
+      return '4º Bimestre';
+    }
+
+    function autoSelectNextEligibleBimesterForClass(className, schoolName, selectId = 'setupBimester') {
+      const bimesterSelect = document.getElementById(selectId);
+      if (!bimesterSelect) return;
+      bimesterSelect.value = getNextEligibleBimesterForClass(className, schoolName);
+    }
+
+    // Retorna o próximo bimestre necessário no ciclo longitudinal para o profissional (Formadoras)
     function getNextEligibleBimester(targetName) {
       const BIMESTERS = ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'];
       if (!targetName) return '1º Bimestre';
@@ -7528,7 +7784,6 @@ function getActiveSections(obs) {
         const bim = BIMESTERS[i];
         const bimNum = bim.match(/([1-4])/)[1];
 
-        // Verifica se o profissional já possui observação avaliada (finalizada) neste bimestre
         const hasFinalized = (appState.observations || []).some(o => {
           if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanTarget) return false;
           const obsBimNum = (o.bimester || '').match(/([1-4])/);
@@ -7536,7 +7791,6 @@ function getActiveSections(obs) {
           return o.status === 'finalized' || o.status === 'concluida';
         });
 
-        // Se este bimestre ainda não foi concluído, ele é o atual necessário!
         if (!hasFinalized) {
           return bim;
         }
@@ -7544,87 +7798,160 @@ function getActiveSections(obs) {
       return '4º Bimestre';
     }
 
-    // Sugere automaticamente o próximo bimestre elegível no ciclo longitudinal
     function autoSelectNextEligibleBimester(targetName, selectId = 'setupBimester') {
       const bimesterSelect = document.getElementById(selectId);
       if (!bimesterSelect) return;
       bimesterSelect.value = getNextEligibleBimester(targetName);
     }
 
-    // Atualiza feedback visual de elegibilidade do bimestre selecionado
+    // Atualiza feedback visual de elegibilidade do bimestre selecionado (Suporta Turma e Profissional)
     function updateSetupBimesterValidationUI() {
-      const targetNameEl = document.getElementById('setupTargetPerson');
+      const user = getCurrentUser();
       const bimesterEl = document.getElementById('setupBimester');
       const hintEl = document.getElementById('setupBimesterValidationHint');
-      if (!hintEl || !targetNameEl || !bimesterEl) return;
+      if (!hintEl || !bimesterEl) return;
 
-      const targetName = targetNameEl.value;
       const bimester = bimesterEl.value;
-
-      if (!targetName) {
-        hintEl.style.display = 'none';
-        return;
-      }
-
-      const cleanTarget = targetName.trim().toLowerCase();
       const bimNumMatch = bimester.match(/([1-4])/);
       const curBimNum = bimNumMatch ? bimNumMatch[1] : '1';
-
-      // 1. Verificação de duplicidade de observação no mesmo bimestre
-      const duplicateObs = (appState.observations || []).find(o => {
-        if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanTarget) return false;
-        const obsBimNum = (o.bimester || '').match(/([1-4])/);
-        if (!obsBimNum || obsBimNum[1] !== curBimNum) return false;
-        return o.status !== 'archived';
-      });
-      if (duplicateObs) {
-        hintEl.style.display = 'block';
-        hintEl.style.color = '#dc2626';
-        hintEl.innerHTML = `⚠️ Já existe uma observação (${duplicateObs.status === 'draft' ? 'rascunho em andamento' : 'concluída'}) para este profissional no ${bimester}.`;
-        return;
-      }
-
-      // 2. Verificação de pré-requisito do bimestre anterior
       const BIMESTERS = ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'];
       const curIdx = BIMESTERS.findIndex(b => (b.match(/([1-4])/) || [])[1] === curBimNum);
 
-      if (curIdx > 0) {
-        const prevBimester = BIMESTERS[curIdx - 1];
-        const prevBimNum = prevBimester.match(/([1-4])/)[1];
-        const prevFinalized = (appState.observations || []).some(o => {
+      if (user.roleKey === 'coordenador') {
+        const classSelect = document.getElementById('setupClass');
+        const schoolSelect = document.getElementById('setupSchool');
+        const className = classSelect ? classSelect.value : '';
+        const schoolName = schoolSelect ? schoolSelect.value : '';
+
+        if (!className) {
+          hintEl.style.display = 'none';
+          return;
+        }
+
+        const cleanClass = className.trim().toLowerCase();
+        const cleanSchool = (schoolName || '').trim().toLowerCase();
+
+        // 1. Verificação de duplicidade de observação no mesmo bimestre para a TURMA
+        const duplicateObs = (appState.observations || []).find(o => {
+          if (!o.className || o.className.trim().toLowerCase() !== cleanClass) return false;
+          if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+          const obsBimNum = (o.bimester || '').match(/([1-4])/);
+          if (!obsBimNum || obsBimNum[1] !== curBimNum) return false;
+          return o.status !== 'archived';
+        });
+        if (duplicateObs) {
+          hintEl.style.display = 'block';
+          hintEl.style.color = '#dc2626';
+          hintEl.innerHTML = `⚠️ Já existe uma observação (${duplicateObs.status === 'draft' ? 'rascunho em andamento' : 'concluída'}) para a turma ${className} no ${bimester}.`;
+          return;
+        }
+
+        // 2. Verificação de pré-requisito do bimestre anterior para a TURMA
+        if (curIdx > 0) {
+          const prevBimester = BIMESTERS[curIdx - 1];
+          const prevBimNum = prevBimester.match(/([1-4])/)[1];
+          const prevFinalized = (appState.observations || []).some(o => {
+            if (!o.className || o.className.trim().toLowerCase() !== cleanClass) return false;
+            if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+            const obsBimNum = (o.bimester || '').match(/([1-4])/);
+            if (!obsBimNum || obsBimNum[1] !== prevBimNum) return false;
+            return o.status === 'finalized' || o.status === 'concluida';
+          });
+
+          if (!prevFinalized) {
+            const prevDraft = (appState.observations || []).some(o => {
+              if (!o.className || o.className.trim().toLowerCase() !== cleanClass) return false;
+              if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+              const obsBimNum = (o.bimester || '').match(/([1-4])/);
+              if (!obsBimNum || obsBimNum[1] !== prevBimNum) return false;
+              return o.status === 'draft';
+            });
+
+            hintEl.style.display = 'block';
+            hintEl.style.color = '#dc2626';
+            if (prevDraft) {
+              hintEl.innerHTML = `🚫 Bloqueado: A observação da turma ${className} no <strong>${prevBimester}</strong> está em rascunho. Finalize-a antes de iniciar o ${bimester}.`;
+            } else {
+              hintEl.innerHTML = `🚫 Bloqueado: Necessário observar a turma ${className} no <strong>${prevBimester}</strong> antes de lançar o ${bimester}.`;
+            }
+            return;
+          }
+        }
+
+        // 3. Pré-requisito atendido para a TURMA
+        hintEl.style.display = 'block';
+        hintEl.style.color = '#16a34a';
+        if (curIdx <= 0) {
+          hintEl.innerHTML = `✅ Apto para o 1º Bimestre da turma (Diagnóstico Inicial).`;
+        } else {
+          const prevBimester = BIMESTERS[curIdx - 1];
+          hintEl.innerHTML = `✅ Pré-requisito atendido: Observação da turma no ${prevBimester} concluída.`;
+        }
+
+      } else {
+        // FLUXO FORMADORA (COORDENADORA ACOMPANHADA)
+        const targetNameEl = document.getElementById('setupTargetPerson');
+        const targetName = targetNameEl ? targetNameEl.value : '';
+
+        if (!targetName) {
+          hintEl.style.display = 'none';
+          return;
+        }
+
+        const cleanTarget = targetName.trim().toLowerCase();
+
+        // 1. Verificação de duplicidade de observação no mesmo bimestre
+        const duplicateObs = (appState.observations || []).find(o => {
           if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanTarget) return false;
           const obsBimNum = (o.bimester || '').match(/([1-4])/);
-          if (!obsBimNum || obsBimNum[1] !== prevBimNum) return false;
-          return o.status === 'finalized' || o.status === 'concluida';
+          if (!obsBimNum || obsBimNum[1] !== curBimNum) return false;
+          return o.status !== 'archived';
         });
+        if (duplicateObs) {
+          hintEl.style.display = 'block';
+          hintEl.style.color = '#dc2626';
+          hintEl.innerHTML = `⚠️ Já existe um acompanhamento (${duplicateObs.status === 'draft' ? 'rascunho em andamento' : 'concluído'}) para ${targetName} no ${bimester}.`;
+          return;
+        }
 
-        if (!prevFinalized) {
-          const prevDraft = (appState.observations || []).some(o => {
+        // 2. Verificação de pré-requisito do bimestre anterior
+        if (curIdx > 0) {
+          const prevBimester = BIMESTERS[curIdx - 1];
+          const prevBimNum = prevBimester.match(/([1-4])/)[1];
+          const prevFinalized = (appState.observations || []).some(o => {
             if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanTarget) return false;
             const obsBimNum = (o.bimester || '').match(/([1-4])/);
             if (!obsBimNum || obsBimNum[1] !== prevBimNum) return false;
-            return o.status === 'draft';
+            return o.status === 'finalized' || o.status === 'concluida';
           });
 
-          hintEl.style.display = 'block';
-          hintEl.style.color = '#dc2626';
-          if (prevDraft) {
-            hintEl.innerHTML = `🚫 Bloqueado: A observação do <strong>${prevBimester}</strong> está em rascunho pendente. Finalize-a antes de iniciar o ${bimester}.`;
-          } else {
-            hintEl.innerHTML = `🚫 Bloqueado: Necessário observar no <strong>${prevBimester}</strong> antes de lançar o ${bimester}.`;
-          }
-          return;
-        }
-      }
+          if (!prevFinalized) {
+            const prevDraft = (appState.observations || []).some(o => {
+              if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanTarget) return false;
+              const obsBimNum = (o.bimester || '').match(/([1-4])/);
+              if (!obsBimNum || obsBimNum[1] !== prevBimNum) return false;
+              return o.status === 'draft';
+            });
 
-      // 3. Pré-requisito atendido
-      hintEl.style.display = 'block';
-      hintEl.style.color = '#16a34a';
-      if (curIdx <= 0) {
-        hintEl.innerHTML = `✅ Apto para o 1º Bimestre (Diagnóstico Inicial).`;
-      } else {
-        const prevBimester = BIMESTERS[curIdx - 1];
-        hintEl.innerHTML = `✅ Pré-requisito atendido: Observação do ${prevBimester} concluída.`;
+            hintEl.style.display = 'block';
+            hintEl.style.color = '#dc2626';
+            if (prevDraft) {
+              hintEl.innerHTML = `🚫 Bloqueado: O acompanhamento de ${targetName} no <strong>${prevBimester}</strong> está em rascunho pendente. Finalize-o antes de iniciar o ${bimester}.`;
+            } else {
+              hintEl.innerHTML = `🚫 Bloqueado: Necessário acompanhar no <strong>${prevBimester}</strong> antes de lançar o ${bimester}.`;
+            }
+            return;
+          }
+        }
+
+        hintEl.style.display = 'block';
+        hintEl.style.color = '#16a34a';
+        if (curIdx <= 0) {
+          hintEl.innerHTML = `✅ Apto para o 1º Bimestre (Diagnóstico Inicial).`;
+        } else {
+          const prevBimester = BIMESTERS[curIdx - 1];
+          hintEl.innerHTML = `✅ Pré-requisito atendido: Acompanhamento do ${prevBimester} concluído.`;
+        }
       }
     }
 
@@ -7633,9 +7960,6 @@ function getActiveSections(obs) {
       const user = getCurrentUser();
       const schoolSelect = document.getElementById('setupSchool');
       const schoolName = schoolSelect.value;
-      const teacherName = document.getElementById('setupTargetPerson').value;
-      const classSelect = document.getElementById('setupClass');
-      const className = (user.roleKey === 'coordenador') ? classSelect.value : 'Acompanhamento Formativo';
       const bimester = document.getElementById('setupBimester').value;
       const todayStr = getTodayDateString();
       const currentNowTime = getNowTimeString();
@@ -7648,86 +7972,131 @@ function getActiveSections(obs) {
       if (startEl) startEl.value = currentNowTime;
       if (endEl) endEl.value = '';
 
-      if (!teacherName) {
-        showToast('Nenhum profissional disponível para avaliação neste escopo.');
-        return;
-      }
+      let className = '';
+      let targetClassObj = null;
+      let teachersList = [];
+      let teacherName = '';
 
-      // BLINDAGEM ESTRITA DA HIERARQUIA CANÔNICA DE AVALIAÇÃO:
-      const targetMember = appState.teamMembers.find(m => m.name === teacherName);
-      if (user.roleKey === 'formador') {
-        if (!targetMember || targetMember.roleKey !== 'coordenador') {
-          showToast('Ação bloqueada: Formadoras realizam acompanhamento exclusivo de Coordenadoras Pedagógicas.');
-          return;
-        }
-      } else if (user.roleKey === 'coordenador') {
-        if (!targetMember || targetMember.roleKey !== 'professora') {
-          showToast('Ação bloqueada: Coordenadoras realizam observação exclusiva de Professoras.');
-          return;
-        }
-      }
-
-      // Bloqueio rigoroso de autoavaliação
-      if (teacherName === user.name) {
-        showToast('Não é permitido realizar autoavaliação.');
-        return;
-      }
-
-      // Bloqueio rigoroso de duplo lançamento para o mesmo alvo e mesmo bimestre
-      const cleanTarget = teacherName.trim().toLowerCase();
       const bimNumMatch = bimester.match(/([1-4])/);
       const curBimNum = bimNumMatch ? bimNumMatch[1] : '1';
-
-      const existingObs = (appState.observations || []).find(o => {
-        if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanTarget) return false;
-        const obsBimNum = (o.bimester || '').match(/([1-4])/);
-        if (!obsBimNum || obsBimNum[1] !== curBimNum) return false;
-        return o.status !== 'archived';
-      });
-      if (existingObs) {
-        showToast(`Ação bloqueada: Já existe uma observação (rascunho ou finalizada) para este profissional no ${bimester}.`);
-        return;
-      }
-
-      // Bloqueio rigoroso de sequência longitudinal dos bimestres (impede pular bimestres)
       const BIMESTERS_SEQUENCE = ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'];
       const bimIndex = BIMESTERS_SEQUENCE.findIndex(b => (b.match(/([1-4])/) || [])[1] === curBimNum);
-      if (bimIndex > 0) {
-        const prevBim = BIMESTERS_SEQUENCE[bimIndex - 1];
-        const prevBimNum = prevBim.match(/([1-4])/)[1];
-        const hasPrevFinalized = (appState.observations || []).some(o => {
-          if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanTarget) return false;
+
+      if (user.roleKey === 'coordenador') {
+        const classSelect = document.getElementById('setupClass');
+        className = classSelect ? classSelect.value : '';
+        if (!className) {
+          showToast('Selecione a turma da Educação Infantil a ser observada.');
+          return;
+        }
+
+        const schoolClasses = getClassesForSchool(schoolName);
+        targetClassObj = schoolClasses.find(c => c.name === className);
+        teachersList = targetClassObj?.teachers || [];
+        teacherName = teachersList.length > 0 ? teachersList.join(', ') : 'Professoras da Turma';
+
+        // 1. Bloqueio rigoroso de duplo lançamento para a MESMA TURMA no mesmo bimestre
+        const cleanClass = className.trim().toLowerCase();
+        const existingObs = (appState.observations || []).find(o => {
+          if (!o.className || o.className.trim().toLowerCase() !== cleanClass) return false;
+          if (o.schoolName && o.schoolName.trim().toLowerCase() !== schoolName.trim().toLowerCase()) return false;
           const obsBimNum = (o.bimester || '').match(/([1-4])/);
-          if (!obsBimNum || obsBimNum[1] !== prevBimNum) return false;
-          return o.status === 'finalized' || o.status === 'concluida';
+          if (!obsBimNum || obsBimNum[1] !== curBimNum) return false;
+          return o.status !== 'archived';
         });
 
-        if (!hasPrevFinalized) {
-          const hasPrevDraft = (appState.observations || []).some(o => {
+        if (existingObs) {
+          showToast(`Ação bloqueada: Já existe uma observação (rascunho ou finalizada) para a turma ${className} no ${bimester}.`);
+          return;
+        }
+
+        // 2. Bloqueio rigoroso de sequência longitudinal dos bimestres para a TURMA
+        if (bimIndex > 0) {
+          const prevBim = BIMESTERS_SEQUENCE[bimIndex - 1];
+          const prevBimNum = prevBim.match(/([1-4])/)[1];
+
+          const hasPrevFinalized = (appState.observations || []).some(o => {
+            if (!o.className || o.className.trim().toLowerCase() !== cleanClass) return false;
+            if (o.schoolName && o.schoolName.trim().toLowerCase() !== schoolName.trim().toLowerCase()) return false;
+            const obsBimNum = (o.bimester || '').match(/([1-4])/);
+            if (!obsBimNum || obsBimNum[1] !== prevBimNum) return false;
+            return o.status === 'finalized' || o.status === 'concluida';
+          });
+
+          if (!hasPrevFinalized) {
+            const hasPrevDraft = (appState.observations || []).some(o => {
+              if (!o.className || o.className.trim().toLowerCase() !== cleanClass) return false;
+              if (o.schoolName && o.schoolName.trim().toLowerCase() !== schoolName.trim().toLowerCase()) return false;
+              const obsBimNum = (o.bimester || '').match(/([1-4])/);
+              if (!obsBimNum || obsBimNum[1] !== prevBimNum) return false;
+              return o.status === 'draft';
+            });
+
+            if (hasPrevDraft) {
+              showToast(`Ação bloqueada: A observação da turma ${className} no ${prevBim} ainda está em rascunho. Conclua-a antes de iniciar o ${bimester}.`);
+            } else {
+              showToast(`Ação bloqueada: A turma ${className} não possui observação concluída no ${prevBim}. O ciclo longitudinal exige que os bimestres ocorram em sequência.`);
+            }
+            return;
+          }
+        }
+
+      } else {
+        // FLUXO DE FORMADORA ACOMPANHANDO COORDENADORA
+        teacherName = document.getElementById('setupTargetPerson').value;
+        className = 'Coordenação Pedagógica';
+
+        if (!teacherName) {
+          showToast('Nenhuma coordenadora disponível para avaliação neste escopo.');
+          return;
+        }
+        if (teacherName === user.name) {
+          showToast('Não é permitido realizar autoavaliação.');
+          return;
+        }
+
+        const cleanTarget = teacherName.trim().toLowerCase();
+        const existingObs = (appState.observations || []).find(o => {
+          if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanTarget) return false;
+          const obsBimNum = (o.bimester || '').match(/([1-4])/);
+          if (!obsBimNum || obsBimNum[1] !== curBimNum) return false;
+          return o.status !== 'archived';
+        });
+        if (existingObs) {
+          showToast(`Ação bloqueada: Já existe um acompanhamento para ${teacherName} no ${bimester}.`);
+          return;
+        }
+
+        // Sequência longitudinal para coordenadora
+        if (bimIndex > 0) {
+          const prevBim = BIMESTERS_SEQUENCE[bimIndex - 1];
+          const prevBimNum = prevBim.match(/([1-4])/)[1];
+          const hasPrevFinalized = (appState.observations || []).some(o => {
             if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanTarget) return false;
             const obsBimNum = (o.bimester || '').match(/([1-4])/);
             if (!obsBimNum || obsBimNum[1] !== prevBimNum) return false;
-            return o.status === 'draft';
+            return o.status === 'finalized' || o.status === 'concluida';
           });
-
-          if (hasPrevDraft) {
-            showToast(`Ação bloqueada: A observação de ${teacherName} no ${prevBim} ainda está em rascunho. Conclua-a antes de iniciar o ${bimester}.`);
-          } else {
-            showToast(`Ação bloqueada: ${teacherName} não possui observação concluída no ${prevBim}. O ciclo longitudinal exige que os bimestres ocorram em sequência.`);
+          if (!hasPrevFinalized) {
+            showToast(`Ação bloqueada: ${teacherName} não possui acompanhamento concluído no ${prevBim}.`);
+            return;
           }
-          return;
         }
       }
 
       const newObs = {
         id: 'obs-' + Date.now(),
         scheduleId: appState.currentSetupScheduleId || null,
-        evaluatedType: user.roleKey === 'coordenador' ? 'professora' : 'coordenador',
-        teacherName,
-        schoolName,
-        className,
+        evaluatedType: user.roleKey === 'coordenador' ? 'turma' : 'coordenador',
+        unitOfAnalysis: user.roleKey === 'coordenador' ? 'turma' : 'coordenador',
+        classId: targetClassObj?.id || null,
+        className: className,
+        classShift: targetClassObj?.shift || 'Parcial Matutino',
+        teachers: teachersList,
+        teacherName: teacherName, // Mantido para compatibilidade retroativa
+        schoolName: schoolName,
         evaluatedBy: user.name,
-        bimester,
+        bimester: bimester,
         startDate: todayStr,
         endDate: null,
         date: todayStr,
@@ -8041,8 +8410,14 @@ function getActiveSections(obs) {
       document.getElementById('screenActiveObs').classList.add('active');
 
       const dateDisplay = formatObservationDateRange(obs) || formatDateBR(obs.startDate || obs.date || getTodayDateString());
-      document.getElementById('activeObsTeacher').innerText = `${obs.teacherName} (${obs.bimester || 'Acompanhamento'})`;
-      document.getElementById('activeObsMeta').innerText = `Agrupamento: ${obs.className} · Escola: ${obs.schoolName} · Supervisor(a): ${obs.evaluatedBy} · Data: ${dateDisplay} · Início: ${obs.startTime || '08:00'}`;
+      if (obs.evaluatedType === 'turma') {
+        document.getElementById('activeObsTeacher').innerText = `Turma: ${obs.className} (${obs.bimester || 'Acompanhamento'})`;
+        const teachersDisplay = obs.teachers && obs.teachers.length > 0 ? obs.teachers.join(', ') : obs.teacherName;
+        document.getElementById('activeObsMeta').innerText = `Docentes Regentes: ${teachersDisplay} · Escola: ${obs.schoolName} · Supervisor(a): ${obs.evaluatedBy} · Data: ${dateDisplay} · Início: ${obs.startTime || '08:00'}`;
+      } else {
+        document.getElementById('activeObsTeacher').innerText = `${obs.teacherName} (${obs.bimester || 'Acompanhamento'})`;
+        document.getElementById('activeObsMeta').innerText = `Agrupamento: ${obs.className} · Escola: ${obs.schoolName} · Supervisor(a): ${obs.evaluatedBy} · Data: ${dateDisplay} · Início: ${obs.startTime || '08:00'}`;
+      }
       
       // Oculta barra de abas inferior principal e exibe barra de dimensões
       const mainTabbar = document.getElementById('mainMobileTabbar') || document.querySelector('.mobile-tabbar');
@@ -8514,6 +8889,7 @@ function getActiveSections(obs) {
       if (metaDate) metaDate.innerText = formatObservationDateRange(obs) || formatDateBR(obs.date || getTodayDateString());
 
       if (obs.evaluatedType === 'coordenador') {
+        if (metaTarget) metaTarget.innerText = obs.teacherName || '--';
         if (roleBadge) {
           roleBadge.innerText = 'Coordenação Pedagógica';
           roleBadge.style.background = '#FEF3C7';
@@ -8522,15 +8898,18 @@ function getActiveSections(obs) {
         }
         if (metaClassBox) metaClassBox.style.display = 'none';
       } else {
+        // PILAR 1: Síntese focada na TURMA e sua equipe de regência
+        const regentsText = obs.teachers && obs.teachers.length > 0 ? obs.teachers.join(', ') : obs.teacherName;
+        if (metaTarget) metaTarget.innerHTML = `<strong>Turma:</strong> ${obs.className} <br><span style="font-size:12px; font-weight:600; color:var(--text-secondary);">Regência Titular: ${regentsText}</span>`;
         if (roleBadge) {
-          roleBadge.innerText = 'Docente / Professor(a)';
+          roleBadge.innerText = 'Observação da Turma (Educação Infantil)';
           roleBadge.style.background = '#EFF6FF';
           roleBadge.style.color = '#1E40AF';
           roleBadge.style.borderColor = '#BFDBFE';
         }
         if (metaClassBox) {
           metaClassBox.style.display = 'block';
-          if (metaClass) metaClass.innerText = obs.className || '--';
+          if (metaClass) metaClass.innerText = `${obs.className} (${obs.classShift || 'Parcial'})`;
         }
       }
 
@@ -9146,10 +9525,14 @@ function getActiveSections(obs) {
         drafts.slice(0, 3).forEach(d => {
           const item = document.createElement('div');
           item.className = 'draft-card';
+          const title = d.evaluatedType === 'turma' ? `📚 Turma: ${d.className}` : (d.evaluatedType === 'coordenador' ? `📋 Coordenadora: ${d.teacherName}` : d.teacherName);
+          const meta = d.evaluatedType === 'turma'
+            ? `👩‍🏫 Regência: ${d.teachers && d.teachers.length > 0 ? d.teachers.join(', ') : d.teacherName} · ${d.bimester || 'Bimestre'} · ${formatObservationDateRange(d) || d.date}`
+            : `Turma: ${d.className} · ${d.bimester || 'Bimestre'} · ${formatObservationDateRange(d) || d.date}`;
           item.innerHTML = `
             <div>
-              <div class="draft-teacher">${d.teacherName}</div>
-              <div class="draft-meta">Turma: ${d.className} · ${d.bimester || 'Bimestre'} · ${formatObservationDateRange(d) || d.date}</div>
+              <div class="draft-teacher">${title}</div>
+              <div class="draft-meta">${meta}</div>
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn btn-secondary" style="color:var(--red); padding:8px 12px;" onclick="confirmDeleteObservation('${d.id}')">Excluir</button>
@@ -9258,11 +9641,16 @@ function getActiveSections(obs) {
           const badgeClass = item.archived ? 'archived' : 'concluded';
           const badgeText = item.archived ? '📦 Arquivada' : '✓ Concluída (Read-Only)';
 
+          const cardTitle = item.evaluatedType === 'turma' ? `📚 Turma: ${item.className}` : (item.evaluatedType === 'coordenador' ? `📋 Coordenadora: ${item.teacherName}` : item.teacherName);
+          const cardMeta = item.evaluatedType === 'turma'
+            ? `👩‍🏫 Regência: ${item.teachers && item.teachers.length > 0 ? item.teachers.join(', ') : item.teacherName} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}`
+            : `Turma: ${item.className} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}`;
+
           card.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
               <div>
-                <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${item.teacherName}</div>
-                <div style="font-size:12px; color:var(--text-secondary);">Turma: ${item.className} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}</div>
+                <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${cardTitle}</div>
+                <div style="font-size:12px; color:var(--text-secondary);">${cardMeta}</div>
               </div>
               <span class="status-badge ${badgeClass}">${badgeText}</span>
             </div>
@@ -9292,11 +9680,16 @@ function getActiveSections(obs) {
         } else {
           // Draft: ONLY the creator can edit!
           const isCreator = item.evaluatedBy === user.name;
+          const cardTitle = item.evaluatedType === 'turma' ? `📚 Turma: ${item.className}` : (item.evaluatedType === 'coordenador' ? `📋 Coordenadora: ${item.teacherName}` : item.teacherName);
+          const cardMeta = item.evaluatedType === 'turma'
+            ? `👩‍🏫 Regência: ${item.teachers && item.teachers.length > 0 ? item.teachers.join(', ') : item.teacherName} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}`
+            : `Turma: ${item.className} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}`;
+
           card.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
               <div>
-                <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${item.teacherName}</div>
-                <div style="font-size:12px; color:var(--text-secondary);">Turma: ${item.className} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}</div>
+                <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${cardTitle}</div>
+                <div style="font-size:12px; color:var(--text-secondary);">${cardMeta}</div>
               </div>
               <span class="status-badge draft">Rascunho Editável</span>
             </div>
@@ -12510,12 +12903,33 @@ function getActiveSections(obs) {
         });
       });
 
-      // Cálculo de Cobertura de Avaliandos
-      const totalAvaliandos = scopedAvaliandos.length;
-      const evaluatedMembersCount = scopedAvaliandos.filter(av => 
-        scopedObs.some(o => o.teacherName === av.name)
-      ).length;
-      const coveragePct = totalAvaliandos > 0 ? Math.round((evaluatedMembersCount / totalAvaliandos) * 100) : 0;
+      // CÁLCULO DE COBERTURA DE TURMAS (PILAR 1 & PILAR 7)
+      let coverageLabel = 'Avaliandos / Cobertura';
+      let evaluatedCount = 0;
+      let totalCount = 0;
+      let coveragePct = 0;
+
+      if (targetType === 'professora') {
+        coverageLabel = 'Cobertura de Turmas';
+        // Coleta todas as turmas das escolas do escopo
+        let scopedClasses = [];
+        let indSchools = (activeUnitFilter !== 'ALL') ? [activeUnitFilter] : ((appState.units || []).map(u => u.name));
+        indSchools.forEach(uName => {
+          scopedClasses = scopedClasses.concat(getClassesForSchool(uName));
+        });
+        totalCount = scopedClasses.length;
+        evaluatedCount = scopedClasses.filter(cls => 
+          scopedObs.some(o => o.className === cls.name && (o.status === 'finalized' || o.status === 'concluida'))
+        ).length;
+        coveragePct = totalCount > 0 ? Math.round((evaluatedCount / totalCount) * 100) : 0;
+      } else {
+        coverageLabel = 'Coordenadoras / Cobertura';
+        totalCount = scopedAvaliandos.length;
+        evaluatedCount = scopedAvaliandos.filter(av => 
+          scopedObs.some(o => o.teacherName === av.name && (o.status === 'finalized' || o.status === 'concluida'))
+        ).length;
+        coveragePct = totalCount > 0 ? Math.round((evaluatedCount / totalCount) * 100) : 0;
+      }
 
       const overallPercent = totalValidResp > 0 ? Math.round((totalPts / totalValidResp) * 100) : null;
       const overallColor = overallPercent === null ? 'var(--text-secondary)' : (overallPercent >= 80 ? 'var(--green)' : overallPercent >= 60 ? 'var(--yellow)' : 'var(--red)');
@@ -12537,11 +12951,11 @@ function getActiveSections(obs) {
               <div style="font-size:12px; color:var(--text-secondary);">Observações finalizadas no escopo</div>
             </div>
             <div class="card" style="margin:0; border-left:4px solid var(--primary);">
-              <div style="font-size:11px; font-weight:700; color:var(--primary); text-transform:uppercase;">Avaliandos / Cobertura</div>
+              <div style="font-size:11px; font-weight:700; color:var(--primary); text-transform:uppercase;">${coverageLabel}</div>
               <div style="font-size:28px; font-weight:800; color:var(--primary-dark); margin:4px 0;">
-                ${evaluatedMembersCount} <span style="font-size:16px; color:var(--text-secondary); font-weight:600;">de ${totalAvaliandos}</span>
+                ${evaluatedCount} <span style="font-size:16px; color:var(--text-secondary); font-weight:600;">de ${totalCount}</span>
               </div>
-              <div style="font-size:12px; color:var(--text-secondary);">● ${coveragePct}% com visita realizada</div>
+              <div style="font-size:12px; color:var(--text-secondary);">● ${coveragePct}% de turmas observadas</div>
             </div>
             <div class="card" style="margin:0;">
               <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Itens Válidos / N.A.</div>
