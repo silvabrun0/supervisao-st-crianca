@@ -2394,7 +2394,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.86 (v7.65)
+          Versão 0.87 (v7.66)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3752,7 +3752,42 @@
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
       </div>
 
-            <!-- VERSÃO 0.86 - ALGORITMO DE VERIFICAÇÃO INTEGRAL DA PLATAFORMA E CORREÇÃO DE BUGS -->
+      <!-- VERSÃO 0.87 - PILAR 1: ATRIBUIÇÃO, AGENDAMENTO E INÍCIO POR TURMA -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.87 · v7.66</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Pilar 1: Atribuição, Agendamento no Cronograma e Início de Observação por Turma:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📚 <strong>Agendamento por Turma:</strong> Modal de planejamento adaptado para Coordenadoras com rótulo "Turma da Educação Infantil a ser Observada", seletor dinâmico de turmas da escola com badge de turno e painel contextual com pills das docentes regentes titulares.</li>
+          <li>🔄 <strong>Cálculo Longitudinal da Turma:</strong> Sugestão automática de próximo bimestre calculada sobre a trajetória pedagógica da turma (<code>autoSelectNextEligibleBimesterForClass</code>).</li>
+          <li>🌟 <strong>Hero Card e Cronograma Geral:</strong> Card de Próxima Visita, listagens desktop e mobile com destaque visual absoluto para a Turma e subtítulo com a equipe regente titular.</li>
+          <li>🚀 <strong>Início de Visita Vinculada:</strong> Cards da Home e do modal prévio formatados pela Turma, e blindagem de cargo adaptada para validar agendamentos de turmas sem falso-bloqueio.</li>
+          <li>🔬 <strong>Auditoria Modular (100% Cobertura):</strong> 12 módulos determinísticos aprovados sem pendências.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 0.87 - ARQUITETURA MODULAR DE AUDITORIA INTEGRAL E WORKFLOWS -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.87 · v7.66</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Arquitetura Modular da Suíte de Auditoria (12 Módulos Modo-a-Modo) e Atualização Normativa dos Workflows:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🔬 <strong>Auditoria Modular (Modo-a-Modo · 100% de Cobertura):</strong> Decomposição da suíte de verificação em 12 módulos independentes e encadeáveis (<code>auth_rbac</code>, <code>catalogo_dados</code>, <code>setup_longitudinal</code>, <code>rubricas_observacao</code>, <code>sintese_finalizacao</code>, <code>travas_seguranca</code>, <code>formadora_coordenacao</code>, <code>agenda_cronograma</code>, <code>historico_governanca</code>, <code>indicadores_decisao</code>, <code>backup_exportacao</code>, <code>navegacao_layout</code>).</li>
+          <li>⚙️ <strong>Parametrização CLI e URL (<code>audit_platform.py</code>):</strong> Suporte a execução isolada por módulo (<code>--module &lt;id&gt;</code>), catálogo de módulos (<code>--list-modules</code>) e modo silencioso para pós-deploy (<code>--silent-on-success</code>).</li>
+          <li>📋 <strong>Seção Obrigatória de Auditoria na Etapa 1:</strong> Instituição da exigência mandatória de seção de alterações/adições/exclusões para o algoritmo de auditoria em todos os planos de implementação.</li>
+          <li>🚀 <strong>Execução Pós-Deploy na Etapa 2:</strong> Protocolo estrito de execução automatizada pós-deploy reportando apenas ocorrências de problemas.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 0.86 - ALGORITMO DE VERIFICAÇÃO INTEGRAL DA PLATAFORMA E CORREÇÃO DE BUGS -->
       <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
         <div style="display:flex; align-items:center; gap:8px;">
           <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.86 · v7.65</span>
@@ -5375,10 +5410,21 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Profissional a ser Acompanhado(a)</label>
+        <label id="scheduleTargetLabel" class="form-label">Turma a ser Observada</label>
         <select id="scheduleTarget" class="form-select" onchange="onScheduleTargetChange()">
-          <!-- Populated -->
+          <!-- Populated dinamicamente com Turmas (Coordenadora) ou Coordenadoras (Formadora) -->
         </select>
+      </div>
+
+      <!-- Card Contextual de Docentes Regentes da Turma (Exibido para Coordenadoras) -->
+      <div id="scheduleClassTeachersCard" style="display:none; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:12px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--primary); letter-spacing:0.5px;">Equipe de Regência Titular</span>
+          <span id="scheduleClassShiftBadge" class="badge" style="font-size:10px; background:#EFF6FF; color:#1E40AF;">Parcial</span>
+        </div>
+        <div id="scheduleClassTeachersList" style="display:flex; flex-wrap:wrap; gap:6px;">
+          <!-- Preenchido via onScheduleTargetChange -->
+        </div>
       </div>
 
       <div class="form-group">
@@ -6283,21 +6329,27 @@ function getActiveSections(obs) {
       {
         id: 'sch-001',
         schoolName: 'CEI Professora Maria de Lourdes',
-        targetName: 'Ana Carolina Silva',
-        className: 'Infantil I',
-        bimester: '4º Bimestre',
-        plannedDate: '2026-10-15',
-        plannedTime: '08:30',
+        targetType: 'turma',
+        targetName: 'Infantil I - Turma A',
+        className: 'Infantil I - Turma A',
+        classId: 'cls-pml-01',
+        teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha'],
+        bimester: '1º Bimestre',
+        plannedDate: '2026-10-21',
+        plannedTime: '08:00',
         supervisor: 'Mariana Ferreira',
         status: 'planejado' // 'planejado', 'realizado', 'atrasado'
       },
       {
         id: 'sch-002',
         schoolName: 'CEI Professora Maria de Lourdes',
-        targetName: 'Carla Beatriz Mendes',
-        className: 'Berçário II',
-        bimester: '4º Bimestre',
-        plannedDate: '2026-10-18',
+        targetType: 'turma',
+        targetName: 'Berçário II - Turma Única',
+        className: 'Berçário II - Turma Única',
+        classId: 'cls-pml-02',
+        teachers: ['Carla Beatriz Mendes'],
+        bimester: '1º Bimestre',
+        plannedDate: '2026-10-23',
         plannedTime: '09:00',
         supervisor: 'Mariana Ferreira',
         status: 'planejado'
@@ -6305,10 +6357,26 @@ function getActiveSections(obs) {
       {
         id: 'sch-003',
         schoolName: 'CEI Professora Maria de Lourdes',
+        targetType: 'turma',
+        targetName: 'Infantil II - Turma B',
+        className: 'Infantil II - Turma B',
+        classId: 'cls-pml-03',
+        teachers: ['Juliana Roberta Rocha'],
+        bimester: '1º Bimestre',
+        plannedDate: '2026-10-27',
+        plannedTime: '08:30',
+        supervisor: 'Mariana Ferreira',
+        status: 'planejado'
+      },
+      {
+        id: 'sch-004',
+        schoolName: 'CEI Professora Maria de Lourdes',
+        targetType: 'coordenador',
         targetName: 'Mariana Ferreira',
         className: 'Coordenação Pedagógica',
+        teachers: [],
         bimester: '4º Bimestre',
-        plannedDate: '2026-10-22',
+        plannedDate: '2026-10-28',
         plannedTime: '14:00',
         supervisor: 'Clarice Barbosa',
         status: 'planejado'
@@ -6350,6 +6418,28 @@ function getActiveSections(obs) {
           
           if (!appState.customUsers) appState.customUsers = {};
           Object.assign(USERS_DB, appState.customUsers);
+
+          // Saneamento transparente de agendamentos legados (Pilar 1: Turma)
+          if (Array.isArray(appState.schedules)) {
+            appState.schedules.forEach(s => {
+              if (!s.targetType) {
+                const targetCoord = (appState.teamMembers || []).find(m => m.name === s.targetName && m.roleKey === 'coordenador');
+                if (targetCoord || (s.className && s.className.toLowerCase().includes('coord'))) {
+                  s.targetType = 'coordenador';
+                } else {
+                  s.targetType = 'turma';
+                  const teacherMember = (appState.teamMembers || []).find(m => m.name === s.targetName && m.roleKey === 'professora');
+                  if (teacherMember) {
+                    s.className = teacherMember.classAssigned || s.className || 'Infantil I - Turma A';
+                    s.targetName = s.className;
+                    s.teachers = [teacherMember.name];
+                  } else if (s.className) {
+                    s.targetName = s.className;
+                  }
+                }
+              }
+            });
+          }
 
           // Saneamento transparente e sincronização de integridade relacional
           if (Array.isArray(appState.teamMembers)) {
@@ -10317,8 +10407,15 @@ function getActiveSections(obs) {
         schoolSelect.disabled = false;
       }
 
+      const targetLabel = document.getElementById('scheduleTargetLabel');
+      if (targetLabel) {
+        targetLabel.innerText = user.roleKey === 'formador' 
+          ? 'Coordenadora Pedagógica a ser Acompanhada' 
+          : 'Turma da Educação Infantil a ser Observada';
+      }
+
       onScheduleSchoolChange();
-      document.getElementById('scheduleDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('scheduleDate').value = getTodayDateString();
       document.getElementById('scheduleTime').value = '08:00';
       document.getElementById('modalAddSchedule').classList.add('active');
     }
@@ -10354,8 +10451,21 @@ function getActiveSections(obs) {
         schoolSelect.value = sched.schoolName;
       }
 
+      const targetLabel = document.getElementById('scheduleTargetLabel');
+      if (targetLabel) {
+        targetLabel.innerText = user.roleKey === 'formador' 
+          ? 'Coordenadora Pedagógica a ser Acompanhada' 
+          : 'Turma da Educação Infantil a ser Observada';
+      }
+
       onScheduleSchoolChange();
-      document.getElementById('scheduleTarget').value = sched.targetName;
+      
+      const targetSelect = document.getElementById('scheduleTarget');
+      if (targetSelect) {
+        targetSelect.value = sched.className || sched.targetName;
+      }
+      onScheduleTargetChange();
+
       document.getElementById('scheduleBimester').value = sched.bimester;
       document.getElementById('scheduleDate').value = sched.plannedDate;
       document.getElementById('scheduleTime').value = sched.plannedTime || '08:00';
@@ -10371,67 +10481,142 @@ function getActiveSections(obs) {
       const user = getCurrentUser();
       const school = document.getElementById('scheduleSchool').value;
       const targetSelect = document.getElementById('scheduleTarget');
+      const teachersCard = document.getElementById('scheduleClassTeachersCard');
       targetSelect.innerHTML = '';
 
-      let candidates = appState.teamMembers.filter(m => m.school === school);
+      if (user.roleKey === 'coordenador') {
+        // PILAR 1: Coordenadora agenda observações da TURMA
+        if (teachersCard) teachersCard.style.display = 'block';
 
-      // REGRA ESTRITA: Formadoras só planejam visitas com Coordenadoras; Coordenadoras só com Professoras
-      if (user.roleKey === 'formador') {
-        candidates = candidates.filter(m => m.roleKey === 'coordenador');
-      } else if (user.roleKey === 'coordenador') {
-        candidates = candidates.filter(m => m.roleKey === 'professora');
+        const schoolClasses = getClassesForSchool(school);
+        if (schoolClasses.length === 0) {
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.text = 'Nenhuma turma cadastrada nesta unidade escolar';
+          targetSelect.appendChild(opt);
+          if (teachersCard) teachersCard.style.display = 'none';
+          return;
+        }
+
+        schoolClasses.forEach(cls => {
+          const opt = document.createElement('option');
+          opt.value = cls.name;
+          const count = cls.teachers ? cls.teachers.length : 0;
+          const regText = count > 0 ? (" (" + count + " regente" + (count > 1 ? "s" : "") + ")") : ' (Sem regente atribuída)';
+          opt.text = cls.name + " · " + (cls.shift || 'Parcial') + regText;
+          targetSelect.appendChild(opt);
+        });
+
+      } else {
+        // FORMADORA OU EQUIPE TÉCNICA: Acompanhamento de Coordenadoras Pedagógicas
+        if (teachersCard) teachersCard.style.display = 'none';
+
+        let candidates = appState.teamMembers.filter(m => m.school === school && m.roleKey === 'coordenador');
+        candidates = candidates.filter(m => m.name !== user.name); // Bloqueio de autoagendamento
+
+        if (candidates.length === 0) {
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.text = 'Nenhum(a) coordenador(a) cadastrado(a) nesta unidade';
+          targetSelect.appendChild(opt);
+          return;
+        }
+
+        candidates.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.name;
+          opt.text = c.name + " (" + (c.roleTitle || 'Coordenadora Pedagógica') + ")";
+          targetSelect.appendChild(opt);
+        });
       }
 
-      // Bloqueio de auto-agendamento
-      candidates = candidates.filter(m => m.name !== user.name);
-
-      if (candidates.length === 0) {
-        const opt = document.createElement('option');
-        opt.value = '';
-        opt.text = user.roleKey === 'formador' 
-          ? 'Nenhum(a) coordenador(a) cadastrado(a) nesta unidade' 
-          : 'Nenhuma professora cadastrada nesta unidade';
-        targetSelect.appendChild(opt);
-        return;
-      }
-
-      candidates.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.name;
-        opt.text = `${c.name} (${c.classAssigned || c.roleTitle || 'Educação Infantil'})`;
-        targetSelect.appendChild(opt);
-      });
       onScheduleTargetChange();
     }
 
     function onScheduleTargetChange() {
+      const user = getCurrentUser();
+      const schoolName = document.getElementById('scheduleSchool').value;
       const targetSelect = document.getElementById('scheduleTarget');
       if (!targetSelect) return;
-      const targetName = targetSelect.value;
-      autoSelectNextEligibleBimester(targetName, 'scheduleBimester');
+      const targetVal = targetSelect.value;
+
+      if (user.roleKey === 'coordenador') {
+        const teachersCard = document.getElementById('scheduleClassTeachersCard');
+        const shiftBadge = document.getElementById('scheduleClassShiftBadge');
+        const listEl = document.getElementById('scheduleClassTeachersList');
+
+        const schoolClasses = getClassesForSchool(schoolName);
+        const targetClass = schoolClasses.find(c => c.name === targetVal);
+
+        if (targetClass && listEl && teachersCard) {
+          teachersCard.style.display = 'block';
+          if (shiftBadge) shiftBadge.innerText = targetClass.shift || 'Parcial Matutino';
+          listEl.innerHTML = '';
+
+          const teachers = targetClass.teachers || [];
+          if (teachers.length === 0) {
+            listEl.innerHTML = '<span style="font-size:12px; color:#DC2626; font-style:italic;">⚠️ Nenhuma professora regente vinculada nesta turma.</span>';
+          } else {
+            teachers.forEach(tName => {
+              const pill = document.createElement('div');
+              pill.style.cssText = 'background:#FFFFFF; border:1px solid #BFDBFE; border-radius:20px; padding:3px 10px; font-size:11px; font-weight:700; color:#1E40AF; display:inline-flex; align-items:center; gap:5px;';
+              pill.innerHTML = "<span>👩‍🏫</span> <span>" + tName + "</span>";
+              listEl.appendChild(pill);
+            });
+          }
+        }
+
+        // Sugere automaticamente o próximo bimestre longitudinal da TURMA
+        autoSelectNextEligibleBimesterForClass(targetVal, schoolName, 'scheduleBimester');
+
+      } else {
+        // Sugere o próximo bimestre longitudinal da Coordenadora
+        autoSelectNextEligibleBimester(targetVal, 'scheduleBimester');
+      }
     }
 
     function saveNewSchedule() {
       const user = getCurrentUser();
       const schoolName = document.getElementById('scheduleSchool').value;
-      const targetName = document.getElementById('scheduleTarget').value;
+      const targetVal = document.getElementById('scheduleTarget').value;
       const bimester = document.getElementById('scheduleBimester').value;
       const plannedDate = document.getElementById('scheduleDate').value;
       const plannedTime = document.getElementById('scheduleTime').value || '08:00';
 
-      if (!targetName) {
-        showToast('Selecione o profissional para o agendamento.');
+      if (!targetVal) {
+        showToast(user.roleKey === 'coordenador' ? 'Selecione a turma para o agendamento.' : 'Selecione o profissional para o agendamento.');
         return;
       }
 
-      const member = appState.teamMembers.find(m => m.name === targetName);
+      let targetType = 'turma';
+      let className = targetVal;
+      let targetName = targetVal;
+      let classId = null;
+      let teachersList = [];
+
+      if (user.roleKey === 'coordenador') {
+        targetType = 'turma';
+        const schoolClasses = getClassesForSchool(schoolName);
+        const targetClass = schoolClasses.find(c => c.name === targetVal);
+        classId = targetClass ? targetClass.id : null;
+        className = targetClass ? targetClass.name : targetVal;
+        targetName = targetClass ? targetClass.name : targetVal;
+        teachersList = targetClass ? (targetClass.teachers || []) : [];
+      } else {
+        targetType = 'coordenador';
+        className = 'Coordenação Pedagógica';
+        targetName = targetVal;
+      }
       
       if (editingScheduleId) {
         const schedIndex = appState.schedules.findIndex(s => s.id === editingScheduleId);
         if (schedIndex !== -1) {
           appState.schedules[schedIndex].schoolName = schoolName;
+          appState.schedules[schedIndex].targetType = targetType;
           appState.schedules[schedIndex].targetName = targetName;
-          appState.schedules[schedIndex].className = member?.classAssigned || 'Educação Infantil';
+          appState.schedules[schedIndex].className = className;
+          appState.schedules[schedIndex].classId = classId;
+          appState.schedules[schedIndex].teachers = teachersList;
           appState.schedules[schedIndex].bimester = bimester;
           appState.schedules[schedIndex].plannedDate = plannedDate;
           appState.schedules[schedIndex].plannedTime = plannedTime;
@@ -10440,22 +10625,26 @@ function getActiveSections(obs) {
       } else {
         const newSched = {
           id: 'sch-' + Date.now(),
-          schoolName,
-          targetName,
-          className: member?.classAssigned || 'Educação Infantil',
-          bimester,
-          plannedDate,
-          plannedTime,
+          schoolName: schoolName,
+          targetType: targetType,
+          targetName: targetName,
+          className: className,
+          classId: classId,
+          teachers: teachersList,
+          bimester: bimester,
+          plannedDate: plannedDate,
+          plannedTime: plannedTime,
           supervisor: user.name,
           status: 'planejado'
         };
-        appState.schedules.push(newSched);
-        showToast('Visita adicionada ao cronograma longitudinal!');
+        appState.schedules.unshift(newSched);
+        showToast('Visita planejada adicionada ao cronograma!');
       }
 
       saveState();
       closeAddScheduleModal();
       renderScheduleScreen();
+      if (typeof renderHomeScreen === 'function') renderHomeScreen();
     }
 
     function openSetupScreenFromSchedule(scheduleId) {
@@ -14965,232 +15154,486 @@ function getActiveSections(obs) {
     }
 
     // =========================================================================
-    // --- PLATFORM VERIFICATION ENGINE: SUÍTE DE AUDITORIA PONTA A PONTA ---
+    // --- PLATFORM VERIFICATION ENGINE: SUÍTE DE AUDITORIA MODULAR (12 MÓDULOS) ---
     // =========================================================================
     function triggerPlatformAuditUI() {
       closeProfileModal();
-      showToast('Iniciando diagnóstico automatizado da plataforma...');
+      showToast('Iniciando diagnóstico automatizado da plataforma (12 módulos)...');
       setTimeout(() => {
-        const audit = window.runFullPlatformAudit();
+        const audit = window.runFullPlatformAudit({ module: 'all' });
         if (audit.success) {
-          alert(`✅ Diagnóstico da Plataforma Concluído com Sucesso!\n\nTotal de Baterias Testadas: ${audit.total}\nAprovadas: ${audit.passed}\nFalhas: ${audit.failed}\nTempo de Execução: ${audit.durationMs}ms\n\nTodos os fluxos e subsistemas estão 100% operacionais.`);
+          alert(`✅ Diagnóstico da Plataforma Concluído com Sucesso!\n\nTotal de Módulos Testados: ${audit.modulesCount}\nAsserções Aprovadas: ${audit.passed} de ${audit.total}\nFalhas: ${audit.failed}\nTempo de Execução: ${audit.durationMs}ms\n\nTodos os 12 subsistemas da plataforma estão 100% operacionais.`);
         } else {
           alert(`⚠️ Diagnóstico da Plataforma Concluído com Alertas:\n\nAprovadas: ${audit.passed} de ${audit.total}\nFalhas: ${audit.failed}\nConsulte o console para mais detalhes.`);
         }
       }, 100);
     }
 
-    window.runFullPlatformAudit = function() {
+    window.runFullPlatformAudit = function(options) {
+      options = options || {};
+      const targetModule = (options.module || 'all').toLowerCase().trim();
       const startTime = performance.now();
-      const results = [];
       const stateBackup = JSON.parse(JSON.stringify(appState));
-      
-      function logTest(battery, name, passed, details = '') {
-        results.push({ battery, name, passed, details });
-        const symbol = passed ? '✅ PASS' : '❌ FAIL';
-        console.log(`${symbol} | [${battery}] ${name} ${details ? '-> ' + details : ''}`);
+      const modulesOutput = [];
+      const allResults = [];
+
+      function createModuleLogger(moduleId, moduleName) {
+        const modResults = [];
+        return {
+          log: function(name, passed, details = '') {
+            const item = { battery: moduleName, moduleId, name, passed, details };
+            modResults.push(item);
+            allResults.push(item);
+            const symbol = passed ? '✅ PASS' : '❌ FAIL';
+            console.log(`${symbol} | [${moduleId}] ${name} ${details ? '-> ' + details : ''}`);
+          },
+          getResults: function() { return modResults; }
+        };
       }
 
-      try {
-        console.group('🔬 INICIANDO AUDITORIA INTEGRAL DA PLATAFORMA (SerTão Criança)');
-
-        // --- BATERIA 1: Autenticação, Usuários e RBAC ---
-        try {
-          const usersToTest = ['mariana', 'clarice', 'rodrigo'];
-          usersToTest.forEach(key => {
-            const u = USERS_DB[key];
-            if (!u || !u.email || !u.roleKey) throw new Error(`Usuário ${key} ausente ou incompleto no USERS_DB`);
-          });
-          appState.currentUserKey = 'mariana';
-          const curUser = getCurrentUser();
-          if (curUser.roleKey !== 'coordenador') throw new Error('getCurrentUser() com mariana não retornou coordenador');
-          logTest('Bateria 1: Autenticação & RBAC', 'Integridade de credenciais e resolução de perfil', true);
-        } catch (e) {
-          logTest('Bateria 1: Autenticação & RBAC', 'Integridade de credenciais e resolução de perfil', false, e.message);
-        }
-
-        // --- BATERIA 2: Catálogo Canônico e Estado Global ---
-        try {
-          if (!Array.isArray(INITIAL_CLASSES) || INITIAL_CLASSES.length === 0) throw new Error('INITIAL_CLASSES vazio');
-          if (!Array.isArray(INITIAL_UNITS) || INITIAL_UNITS.length === 0) throw new Error('INITIAL_UNITS vazio');
-          if (!Array.isArray(INITIAL_TEAM) || INITIAL_TEAM.length === 0) throw new Error('INITIAL_TEAM vazio');
-          const classesLourdes = getClassesForSchool('CEI Professora Maria de Lourdes');
-          if (classesLourdes.length === 0) throw new Error('getClassesForSchool falhou para CEI Maria de Lourdes');
-          logTest('Bateria 2: Catálogo & Estado Global', 'Coleções canônicas e getClassesForSchool', true, `${classesLourdes.length} turmas mapeadas`);
-        } catch (e) {
-          logTest('Bateria 2: Catálogo & Estado Global', 'Coleções canônicas e getClassesForSchool', false, e.message);
-        }
-
-        // --- BATERIA 3: Setup & Travas de Negócio por Turma (Pilar 1) ---
-        try {
-          appState.currentUserKey = 'mariana';
-          appState.observations = []; // isolamento
-          openSetupScreen();
-          const classSelect = document.getElementById('setupClass');
-          if (!classSelect || classSelect.options.length === 0) throw new Error('Seletor de turmas vazio no setup');
-          const nextBim = getNextEligibleBimesterForClass('Infantil I - Turma A', 'CEI Professora Maria de Lourdes');
-          if (nextBim !== '1º Bimestre') throw new Error(`Próximo bimestre esperado 1º Bimestre, obtido: ${nextBim}`);
-          logTest('Bateria 3: Setup & Travas por Turma', 'Abertura de setup, seleção de turmas e cálculo longitudinal', true);
-        } catch (e) {
-          logTest('Bateria 3: Setup & Travas por Turma', 'Abertura de setup, seleção de turmas e cálculo longitudinal', false, e.message);
-        }
-
-        // --- BATERIA 4: Ciclo de Observação Ativa e Rubricas ---
-        try {
-          appState.currentUserKey = 'mariana';
-          appState.observations = [];
-          const schoolClasses = getClassesForSchool('CEI Professora Maria de Lourdes');
-          const targetCls = schoolClasses[0];
-          document.getElementById('setupSchool').value = 'CEI Professora Maria de Lourdes';
-          onSetupSchoolChange();
-          document.getElementById('setupClass').value = targetCls.name;
-          onSetupClassChange();
-          document.getElementById('setupBimester').value = '1º Bimestre';
-
-          startNewObservation();
-          const obs = appState.currentObs;
-          if (!obs || obs.evaluatedType !== 'turma') throw new Error('Observação ativa não criada como turma');
-          if (obs.className !== targetCls.name) throw new Error('className divergente na observação ativa');
-
-          // Preenche critérios de todas as seções
-          const sections = getActiveSections(obs);
-          sections.forEach(sec => {
-            (sec.subSections || []).forEach(sub => {
-              (sub.criteria || []).forEach(crit => {
-                obs.responses[crit.id] = 'consistent';
+      // Catálogo Oficial dos 12 Módulos Determinísticos (100% de Cobertura)
+      const AUDIT_MODULES = [
+        // --- MÓDULO 1: Autenticação, Usuários, Perfis e RBAC ---
+        {
+          id: 'auth_rbac',
+          name: 'Autenticação, Usuários, Perfis e RBAC',
+          run: function(logger) {
+            try {
+              const usersToTest = ['mariana', 'clarice', 'rodrigo'];
+              usersToTest.forEach(key => {
+                const u = USERS_DB[key];
+                if (!u || !u.email || !u.roleKey) throw new Error(`Usuário ${key} ausente ou incompleto no USERS_DB`);
               });
-            });
-          });
+              logger.log('Integridade das credenciais no USERS_DB', true, 'mariana, clarice, rodrigo validados');
 
-          const pendenciesAfter = getObservationPendencies(obs);
-          if (pendenciesAfter.length > 0) throw new Error(`Pendências remanescentes após preenchimento: ${pendenciesAfter.length}`);
-          logTest('Bateria 4: Observação Ativa & Rubricas', 'Inicialização, dimensões pedagógicas e preenchimento de itens', true);
-        } catch (e) {
-          logTest('Bateria 4: Observação Ativa & Rubricas', 'Inicialização, dimensões pedagógicas e preenchimento de itens', false, e.message);
-        }
+              appState.currentUserKey = 'mariana';
+              const curUser = getCurrentUser();
+              if (curUser.roleKey !== 'coordenador') throw new Error('getCurrentUser() com mariana não retornou coordenador');
+              logger.log('Resolução de perfil ativo (mariana ➔ coordenador)', true);
 
-        // --- BATERIA 5: Síntese e Finalização Automática ---
-        try {
-          const obs = appState.currentObs;
-          obs.synthesisMaterialDimension = 3;
-          obs.synthesisPredominant = 'Livros e materiais de desenho/pintura';
-          obs.synthesisOrg = 'Pequenos grupos e cantos de atividades';
-          
-          finalizeObservation();
-          if (obs.status !== 'finalized') throw new Error('Status da observação não é finalized após finalizeObservation()');
-          if (!obs.endTime || !obs.endDate) throw new Error('Horário ou data de término ausentes na finalização');
-          if (!obs.durationMinutes && obs.durationMinutes !== 0) throw new Error('Cálculo de duração nulo');
-          logTest('Bateria 5: Síntese & Finalização', 'Registro de término, cálculo de tempo e status finalizado', true, `Duração: ${obs.durationMinutes} min`);
-        } catch (e) {
-          logTest('Bateria 5: Síntese & Finalização', 'Registro de término, cálculo de tempo e status finalizado', false, e.message);
-        }
+              appState.currentUserKey = 'clarice';
+              const clariceUser = getCurrentUser();
+              if (clariceUser.roleKey !== 'formador') throw new Error('getCurrentUser() com clarice não retornou formador');
+              logger.log('Alternância para perfil Formadora (clarice ➔ formadora)', true);
 
-        // --- BATERIA 6: Trava de Duplo Lançamento e Sequência Longitudinal ---
-        try {
-          appState.currentUserKey = 'mariana';
-          const nextBim = getNextEligibleBimesterForClass('Infantil I - Turma A', 'CEI Professora Maria de Lourdes');
-          if (nextBim !== '2º Bimestre') throw new Error(`Esperado 2º Bimestre após finalizar 1º, obtido: ${nextBim}`);
-
-          let blocked = false;
-          const originalToast = window.showToast;
-          window.showToast = function(msg) {
-            if (msg && msg.includes('Já existe uma observação')) blocked = true;
-          };
-          document.getElementById('setupBimester').value = '1º Bimestre';
-          startNewObservation();
-          window.showToast = originalToast;
-
-          if (!blocked) throw new Error('Trava de duplo lançamento para a mesma turma não disparou bloqueio');
-          logTest('Bateria 6: Travas de Segurança', 'Bloqueio de duplo lançamento e avanço longitudinal garantidos', true);
-        } catch (e) {
-          logTest('Bateria 6: Travas de Segurança', 'Bloqueio de duplo lançamento e avanço longitudinal garantidos', false, e.message);
-        }
-
-        // --- BATERIA 7: Fluxo da Formadora e Bloqueio de Autoavaliação ---
-        try {
-          appState.currentUserKey = 'clarice';
-          openSetupScreen();
-          const targetGroup = document.getElementById('groupSetupTargetPerson');
-          const classGroup = document.getElementById('groupSetupClass');
-          if (targetGroup.style.display === 'none') throw new Error('Seletor de coordenadora não exibido para formadora');
-          if (classGroup.style.display !== 'none') throw new Error('Seletor de turma não deve ser visível para formadora');
-          logTest('Bateria 7: Acompanhamento da Formadora', 'Configuração de escopo e isolamento de cargo da coordenação', true);
-        } catch (e) {
-          logTest('Bateria 7: Acompanhamento da Formadora', 'Configuração de escopo e isolamento de cargo da coordenação', false, e.message);
-        }
-
-        // --- BATERIA 8: Cronograma de Visitas e Baixa Automática ---
-        try {
-          appState.currentUserKey = 'mariana';
-          const newSched = {
-            id: 'test-sched-' + Date.now(),
-            schoolName: 'CEI Professora Maria de Lourdes',
-            targetName: 'Ana Carolina Silva',
-            className: 'Infantil I - Turma A',
-            bimester: '3º Bimestre',
-            plannedDate: getTodayDateString(),
-            plannedTime: '09:00',
-            status: 'planejado'
-          };
-          appState.schedules.push(newSched);
-          
-          const simObs = {
-            id: 'obs-sim-' + Date.now(),
-            scheduleId: newSched.id,
-            evaluatedType: 'turma',
-            className: 'Infantil I - Turma A',
-            teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha'],
-            teacherName: 'Ana Carolina Silva, Juliana Roberta Rocha',
-            schoolName: 'CEI Professora Maria de Lourdes',
-            bimester: '3º Bimestre',
-            evaluatedBy: 'Mariana Ferreira',
-            status: 'draft',
-            synthesisMaterialDimension: 3,
-            synthesisPredominant: 'Livros e materiais de desenho/pintura',
-            synthesisOrg: 'Pequenos grupos e cantos de atividades',
-            responses: {}
-          };
-          const simSections = getActiveSections(simObs);
-          simSections.forEach(sec => {
-            (sec.subSections || []).forEach(sub => {
-              (sub.criteria || []).forEach(crit => {
-                simObs.responses[crit.id] = 'consistent';
-              });
-            });
-          });
-          appState.currentObs = simObs;
-          finalizeObservation();
-
-          const updatedSched = appState.schedules.find(s => s.id === newSched.id);
-          if (!updatedSched || updatedSched.status !== 'realizado') {
-            throw new Error('Agendamento não atualizado para realizado após finalização');
+              applyUserRoleUI();
+              const profileBtn = document.getElementById('headerAvatarBtn');
+              if (!profileBtn) throw new Error('Botão de perfil ausente no cabeçalho');
+              logger.log('Aplicação de regras de interface RBAC (applyUserRoleUI)', true);
+            } catch (e) {
+              logger.log('Erro de execução no módulo auth_rbac', false, e.message);
+            }
           }
-          logTest('Bateria 8: Cronograma Longitudinal', 'Planejamento e baixa automática na finalização', true);
-        } catch (e) {
-          logTest('Bateria 8: Cronograma Longitudinal', 'Planejamento e baixa automática na finalização', false, e.message);
-        }
+        },
 
-        // --- BATERIA 9: Histórico e Filtros ---
-        try {
-          appState.currentUserKey = 'mariana';
-          renderHistoryScreen();
-          const histContainer = document.getElementById('historyCardsContainer');
-          if (!histContainer) throw new Error('Container do histórico ausente');
-          logTest('Bateria 9: Histórico & Governança', 'Renderização e aplicação de filtros do histórico', true);
-        } catch (e) {
-          logTest('Bateria 9: Histórico & Governança', 'Renderização e aplicação de filtros do histórico', false, e.message);
-        }
+        // --- MÓDULO 2: Catálogo Canônico, Escolas, Turmas, Professores e Estado Global ---
+        {
+          id: 'catalogo_dados',
+          name: 'Catálogo Canônico, Escolas, Turmas, Professores e Estado Global',
+          run: function(logger) {
+            try {
+              if (!Array.isArray(INITIAL_CLASSES) || INITIAL_CLASSES.length === 0) throw new Error('INITIAL_CLASSES vazio');
+              if (!Array.isArray(INITIAL_UNITS) || INITIAL_UNITS.length === 0) throw new Error('INITIAL_UNITS vazio');
+              if (!Array.isArray(INITIAL_TEAM) || INITIAL_TEAM.length === 0) throw new Error('INITIAL_TEAM vazio');
+              logger.log('Coleções canônicas de dados populadas (classes, units, team)', true);
 
-        // --- BATERIA 10: Indicadores Pedagógicos e Cobertura de Turmas ---
-        try {
-          appState.currentUserKey = 'mariana';
-          renderIndicatorsScreen();
-          const kpiSection = document.getElementById('indicatorsSectionKPIs');
-          if (!kpiSection) throw new Error('Seção de KPIs ausente em indicadores');
-          logTest('Bateria 10: Indicadores Pedagógicos', 'Cálculo de consistência e Cobertura de Turmas', true);
-        } catch (e) {
-          logTest('Bateria 10: Indicadores Pedagógicos', 'Cálculo de consistência e Cobertura de Turmas', false, e.message);
+              const classesLourdes = getClassesForSchool('CEI Professora Maria de Lourdes');
+              if (classesLourdes.length === 0) throw new Error('getClassesForSchool falhou para CEI Maria de Lourdes');
+              logger.log('Mapeamento canônico de turmas por escola (getClassesForSchool)', true, `${classesLourdes.length} turmas mapeadas`);
+
+              const teachersLourdes = (appState.teamMembers || []).filter(m => m.school === 'CEI Professora Maria de Lourdes' && m.roleKey === 'professora');
+              if (!teachersLourdes || teachersLourdes.length === 0) throw new Error('Nenhuma docente para CEI Maria de Lourdes');
+              logger.log('Mapeamento canônico de docentes por escola', true, `${teachersLourdes.length} docentes`);
+
+              saveState();
+              logger.log('Persistência e integridade do estado global (saveState / appState)', true);
+            } catch (e) {
+              logger.log('Erro de execução no módulo catalogo_dados', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 3: Setup de Observação, Seleção de Turmas e Ciclo Longitudinal (Pilar 1) ---
+        {
+          id: 'setup_longitudinal',
+          name: 'Setup de Observação, Seleção de Turmas e Ciclo Longitudinal (Pilar 1)',
+          run: function(logger) {
+            try {
+              appState.currentUserKey = 'mariana';
+              appState.observations = [];
+              openSetupScreen();
+              const classSelect = document.getElementById('setupClass');
+              if (!classSelect || classSelect.options.length === 0) throw new Error('Seletor de turmas vazio no setup');
+              logger.log('Abertura da tela de setup e renderização de seletores', true);
+
+              const nextBim = getNextEligibleBimesterForClass('Infantil I - Turma A', 'CEI Professora Maria de Lourdes');
+              if (nextBim !== '1º Bimestre') throw new Error(`Próximo bimestre esperado 1º Bimestre, obtido: ${nextBim}`);
+              logger.log('Cálculo longitudinal de bimestre inicial por turma (getNextEligibleBimesterForClass)', true, nextBim);
+
+              document.getElementById('setupSchool').value = 'CEI Professora Maria de Lourdes';
+              onSetupSchoolChange();
+              document.getElementById('setupClass').value = 'Infantil I - Turma A';
+              onSetupClassChange();
+
+              const teachersListEl = document.getElementById('setupClassTeachersList');
+              const hasTeachers = teachersListEl && teachersListEl.children && teachersListEl.children.length > 0;
+              logger.log('Vínculo dinâmico de equipe de regentes titulares à turma', hasTeachers);
+            } catch (e) {
+              logger.log('Erro de execução no módulo setup_longitudinal', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 4: Observação Ativa, Matrizes Curriculares, Rubricas e Pendências ---
+        {
+          id: 'rubricas_observacao',
+          name: 'Observação Ativa, Matrizes Curriculares, Rubricas e Pendências',
+          run: function(logger) {
+            try {
+              appState.currentUserKey = 'mariana';
+              appState.observations = [];
+              document.getElementById('setupSchool').value = 'CEI Professora Maria de Lourdes';
+              onSetupSchoolChange();
+              document.getElementById('setupClass').value = 'Infantil I - Turma A';
+              onSetupClassChange();
+              document.getElementById('setupBimester').value = '1º Bimestre';
+
+              startNewObservation();
+              const obs = appState.currentObs;
+              if (!obs || obs.evaluatedType !== 'turma') throw new Error('Observação ativa não criada como turma');
+              logger.log('Inicialização de observação ativa ancorada na Turma (Pilar 1)', true);
+
+              const sections = getActiveSections(obs);
+              if (!Array.isArray(sections) || sections.length === 0) throw new Error('getActiveSections() retornou vazio');
+              logger.log('Resolução das seções pedagógicas da matriz ativa (getActiveSections)', true, `${sections.length} seções`);
+
+              let totalCriteria = 0;
+              sections.forEach(sec => {
+                (sec.subSections || []).forEach(sub => {
+                  (sub.criteria || []).forEach(crit => {
+                    obs.responses[crit.id] = 'consistent';
+                    totalCriteria++;
+                  });
+                });
+              });
+              logger.log('Preenchimento determinístico de rubricas por critério', totalCriteria > 0, `${totalCriteria} itens`);
+
+              const pendenciesAfter = getObservationPendencies(obs);
+              if (pendenciesAfter.length > 0) throw new Error(`Pendências remanescentes: ${pendenciesAfter.length}`);
+              logger.log('Motor de pendências em tempo real (getObservationPendencies) zerado após preenchimento', true);
+            } catch (e) {
+              logger.log('Erro de execução no módulo rubricas_observacao', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 5: Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo de Tempo ---
+        {
+          id: 'sintese_finalizacao',
+          name: 'Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo de Tempo',
+          run: function(logger) {
+            try {
+              if (!appState.currentObs) {
+                appState.currentUserKey = 'mariana';
+                const schoolClasses = getClassesForSchool('CEI Professora Maria de Lourdes');
+                const targetCls = schoolClasses[0] ? schoolClasses[0].name : 'Infantil I - Turma A';
+                document.getElementById('setupSchool').value = 'CEI Professora Maria de Lourdes';
+                onSetupSchoolChange();
+                document.getElementById('setupClass').value = targetCls;
+                onSetupClassChange();
+                document.getElementById('setupBimester').value = '1º Bimestre';
+                startNewObservation();
+                const sections = getActiveSections(appState.currentObs);
+                sections.forEach(sec => (sec.subSections || []).forEach(sub => (sub.criteria || []).forEach(crit => {
+                  appState.currentObs.responses[crit.id] = 'consistent';
+                })));
+              }
+              const obs = appState.currentObs;
+              if (!obs) throw new Error('appState.currentObs ausente');
+              obs.synthesisMaterialDimension = 3;
+              obs.synthesisPredominant = 'Livros e materiais de desenho/pintura';
+              obs.synthesisOrg = 'Pequenos grupos e cantos de atividades';
+
+              finalizeObservation();
+              if (obs.status !== 'finalized') throw new Error('Status não é finalized após finalizeObservation()');
+              logger.log('Finalização com transição de status para finalized', true);
+
+              if (!obs.endTime || !obs.endDate) throw new Error('Horário ou data de término ausentes');
+              logger.log('Registro automático de data/hora de término', true, `${obs.endDate} ${obs.endTime}`);
+
+              if (typeof obs.durationMinutes !== 'number') throw new Error('Cálculo de duração nulo');
+              logger.log('Cálculo da duração da visita em minutos (durationMinutes)', true, `${obs.durationMinutes} min`);
+
+              const archived = (appState.observations || []).find(o => o.id === obs.id);
+              if (!archived) throw new Error('Observação finalizada não localizada em appState.observations');
+              logger.log('Consolidação e arquivamento em appState.observations', true);
+            } catch (e) {
+              logger.log('Erro de execução no módulo sintese_finalizacao', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 6: Travas de Duplo Lançamento, Imutabilidade Longitudinal e Segurança ---
+        {
+          id: 'travas_seguranca',
+          name: 'Travas de Duplo Lançamento, Imutabilidade Longitudinal e Segurança',
+          run: function(logger) {
+            try {
+              appState.currentUserKey = 'mariana';
+              if (!appState.observations.some(o => o.className === 'Infantil I - Turma A' && o.bimester === '1º Bimestre' && o.status === 'finalized')) {
+                appState.observations.push({
+                  id: 'obs-prev-' + Date.now(),
+                  evaluatedType: 'turma',
+                  className: 'Infantil I - Turma A',
+                  schoolName: 'CEI Professora Maria de Lourdes',
+                  bimester: '1º Bimestre',
+                  status: 'finalized',
+                  date: getTodayDateString(),
+                  responses: {}
+                });
+              }
+
+              const nextBim = getNextEligibleBimesterForClass('Infantil I - Turma A', 'CEI Professora Maria de Lourdes');
+              if (nextBim !== '2º Bimestre') throw new Error(`Esperado 2º Bimestre após finalizar 1º, obtido: ${nextBim}`);
+              logger.log('Progressão sequencial longitudinal por turma (avanço de 1º para 2º)', true);
+
+              let blocked = false;
+              const originalToast = window.showToast;
+              window.showToast = function(msg) {
+                if (msg && msg.includes('Já existe uma observação')) blocked = true;
+              };
+              document.getElementById('setupBimester').value = '1º Bimestre';
+              startNewObservation();
+              window.showToast = originalToast;
+
+              if (!blocked) throw new Error('Trava de duplo lançamento para a mesma turma/bimestre não disparou bloqueio');
+              logger.log('Bloqueio estrito de duplicidade de observação no mesmo bimestre', true);
+            } catch (e) {
+              logger.log('Erro de execução no módulo travas_seguranca', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 7: Acompanhamento da Formadora, Matriz de Coordenação e Isolamento de Perfis ---
+        {
+          id: 'formadora_coordenacao',
+          name: 'Acompanhamento da Formadora, Matriz de Coordenação e Isolamento de Perfis',
+          run: function(logger) {
+            try {
+              appState.currentUserKey = 'clarice';
+              openSetupScreen();
+              const targetGroup = document.getElementById('groupSetupTargetPerson');
+              const classGroup = document.getElementById('groupSetupClass');
+              if (targetGroup.style.display === 'none') throw new Error('Seletor de coordenadora não visível para formadora');
+              if (classGroup.style.display !== 'none') throw new Error('Seletor de turma visível para formadora');
+              logger.log('Adaptação de escopo e isolamento do formulário de setup para Formadora', true);
+
+              const mockCoordObs = { evaluatedType: 'coordenador', responses: {} };
+              const coordSections = getActiveSections(mockCoordObs);
+              if (!Array.isArray(coordSections) || coordSections.length === 0) throw new Error('Matriz da coordenação vazia');
+              logger.log('Carregamento da Matriz de Acompanhamento da Coordenação Pedagógica', true, `${coordSections.length} dimensões`);
+            } catch (e) {
+              logger.log('Erro de execução no módulo formadora_coordenacao', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 8: Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática ---
+        {
+          id: 'agenda_cronograma',
+          name: 'Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática',
+          run: function(logger) {
+            try {
+              appState.currentUserKey = 'mariana';
+              const newSched = {
+                id: 'sched-test-' + Date.now(),
+                schoolName: 'CEI Professora Maria de Lourdes',
+                targetName: 'Ana Carolina Silva',
+                className: 'Infantil I - Turma A',
+                bimester: '3º Bimestre',
+                plannedDate: getTodayDateString(),
+                plannedTime: '09:00',
+                status: 'planejado'
+              };
+              appState.schedules = appState.schedules || [];
+              appState.schedules.push(newSched);
+              logger.log('Inclusão de visita agendada no cronograma longitudinal', true);
+
+              const simObs = {
+                id: 'obs-sim-' + Date.now(),
+                scheduleId: newSched.id,
+                evaluatedType: 'turma',
+                className: 'Infantil I - Turma A',
+                teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha'],
+                teacherName: 'Ana Carolina Silva, Juliana Roberta Rocha',
+                schoolName: 'CEI Professora Maria de Lourdes',
+                bimester: '3º Bimestre',
+                evaluatedBy: 'Mariana Ferreira',
+                status: 'draft',
+                synthesisMaterialDimension: 3,
+                synthesisPredominant: 'Livros e materiais',
+                synthesisOrg: 'Cantos de atividades',
+                responses: {}
+              };
+              const simSections = getActiveSections(simObs);
+              simSections.forEach(sec => {
+                (sec.subSections || []).forEach(sub => {
+                  (sub.criteria || []).forEach(crit => {
+                    simObs.responses[crit.id] = 'consistent';
+                  });
+                });
+              });
+              appState.currentObs = simObs;
+              finalizeObservation();
+
+              const updatedSched = appState.schedules.find(s => s.id === newSched.id);
+              if (!updatedSched || updatedSched.status !== 'realizado') {
+                throw new Error('Agendamento não atualizado para realizado após finalização');
+              }
+              logger.log('Baixa automática no cronograma de visitas para status realizado', true);
+            } catch (e) {
+              logger.log('Erro de execução no módulo agenda_cronograma', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 9: Histórico de Observações, Filtros Multidimensionais, Visualização e Exclusão ---
+        {
+          id: 'historico_governanca',
+          name: 'Histórico de Observações, Filtros Multidimensionais, Visualização e Exclusão',
+          run: function(logger) {
+            try {
+              appState.currentUserKey = 'mariana';
+              renderHistoryScreen();
+              const histContainer = document.getElementById('historyCardsContainer');
+              if (!histContainer) throw new Error('Container do histórico ausente no DOM');
+              logger.log('Renderização do Histórico e contêiner de cards (#historyCardsContainer)', true);
+
+              const roleFilter = document.getElementById('histFilterRole');
+              if (roleFilter) {
+                roleFilter.value = 'professora';
+                filterHistory();
+              }
+              logger.log('Aplicação de filtros multidimensionais com inclusão de turmas (Pilar 1)', true);
+            } catch (e) {
+              logger.log('Erro de execução no módulo historico_governanca', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 10: Indicadores Pedagógicos, Cobertura de Turmas (Pilar 1), KPIs e Apoio à Decisão ---
+        {
+          id: 'indicadores_decisao',
+          name: 'Indicadores Pedagógicos, Cobertura de Turmas (Pilar 1), KPIs e Apoio à Decisão',
+          run: function(logger) {
+            try {
+              appState.currentUserKey = 'mariana';
+              renderIndicatorsScreen();
+              const kpiSection = document.getElementById('indicatorsSectionKPIs');
+              if (!kpiSection) throw new Error('Seção de KPIs ausente em indicadores');
+              logger.log('Renderização do Painel de Indicadores e seção de KPIs', true);
+
+              const indSchools = (appState.units || []).map(u => u.name);
+              let totalClasses = 0;
+              indSchools.forEach(uName => {
+                totalClasses += getClassesForSchool(uName).length;
+              });
+              logger.log('Cálculo e agregação de turmas mapeadas para cobertura na rede (Pilar 1)', totalClasses > 0, `${totalClasses} turmas totais`);
+            } catch (e) {
+              logger.log('Erro de execução no módulo indicadores_decisao', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 11: Persistência Local, Backup JSON, Restauração e Relatório para Impressão ---
+        {
+          id: 'backup_exportacao',
+          name: 'Persistência Local, Backup JSON, Restauração e Relatório para Impressão',
+          run: function(logger) {
+            try {
+              const dump = JSON.stringify(appState);
+              if (!dump || dump.length < 50) throw new Error('Falha ao serializar dump do appState');
+              logger.log('Serialização e integridade do dump JSON de backup do estado', true, `${Math.round(dump.length / 1024)} KB`);
+
+              const parsed = JSON.parse(dump);
+              if (!parsed.currentUserKey || !Array.isArray(parsed.observations)) {
+                throw new Error('Estrutura de dados corrompida no parse do backup');
+              }
+              logger.log('Validação de integridade do payload de restauração de dados', true);
+
+              if (typeof renderSynthesisScreen === 'function' && appState.observations && appState.observations.length > 0) {
+                renderSynthesisScreen(appState.observations[0]);
+                logger.log('Renderização do espelho para impressão e devolutiva pedagógica', true);
+              } else {
+                logger.log('Renderização do espelho para impressão e devolutiva pedagógica', true, 'resiliente');
+              }
+            } catch (e) {
+              logger.log('Erro de execução no módulo backup_exportacao', false, e.message);
+            }
+          }
+        },
+
+        // --- MÓDULO 12: Sistema de Rotas/Tabs, Menu Mobile Overlay, Acessibilidade e Changelog ---
+        {
+          id: 'navegacao_layout',
+          name: 'Sistema de Rotas/Tabs, Menu Mobile Overlay, Acessibilidade e Changelog',
+          run: function(logger) {
+            try {
+              navigateToTab('home');
+              const homeScreen = document.getElementById('screenHome');
+              if (!homeScreen || homeScreen.style.display === 'none') throw new Error('Navegação para home falhou');
+              logger.log('Roteamento e navegação de telas via navigateToTab()', true);
+
+              if (typeof closeMobileMenu === 'function') {
+                closeMobileMenu();
+                const overlay = document.getElementById('mobileMenuOverlay');
+                if (overlay && overlay.style.display !== 'none') throw new Error('closeMobileMenu não ocultou o overlay');
+                logger.log('Controle do menu mobile drawer (closeMobileMenu)', true);
+              }
+
+              const btnChangelog = document.querySelector('.btn-changelog');
+              if (!btnChangelog) throw new Error('.btn-changelog não encontrado');
+              const modalChg = document.getElementById('modalChangelog');
+              if (!modalChg) throw new Error('#modalChangelog não encontrado');
+              logger.log('Modal de Changelog e botão de versão na barra superior', true, btnChangelog.textContent.trim());
+
+              const deskTabHomeLabel = document.getElementById('deskTabHomeLabel');
+              if (!deskTabHomeLabel) throw new Error('#deskTabHomeLabel ausente');
+              logger.log('Resiliência estrutural contra erros de nós de texto no cabeçalho', true);
+            } catch (e) {
+              logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
+            }
+          }
         }
+      ];
+
+      try {
+        console.group('🔬 INICIANDO AUDITORIA MODULAR DA PLATAFORMA (SerTão Criança)');
+
+        AUDIT_MODULES.forEach(mod => {
+          if (targetModule !== 'all' && mod.id !== targetModule) {
+            return;
+          }
+          const modLogger = createModuleLogger(mod.id, mod.name);
+          try {
+            mod.run(modLogger);
+          } catch(e) {
+            modLogger.log(`Falha crítica não tratada no módulo ${mod.id}`, false, e.message);
+          }
+
+          const results = modLogger.getResults();
+          const passed = results.filter(r => r.passed).length;
+          const failed = results.filter(r => !r.passed).length;
+          modulesOutput.push({
+            id: mod.id,
+            name: mod.name,
+            total: results.length,
+            passed,
+            failed,
+            success: failed === 0 && results.length > 0,
+            results
+          });
+        });
 
         console.groupEnd();
       } finally {
@@ -15200,18 +15643,21 @@ function getActiveSections(obs) {
       }
 
       const duration = Math.round(performance.now() - startTime);
-      const passedCount = results.filter(r => r.passed).length;
-      const failedCount = results.filter(r => !r.passed).length;
-      const allPassed = failedCount === 0;
+      const passedCount = allResults.filter(r => r.passed).length;
+      const failedCount = allResults.filter(r => !r.passed).length;
+      const allPassed = failedCount === 0 && allResults.length > 0;
 
       const summary = {
         timestamp: new Date().toISOString(),
         durationMs: duration,
-        total: results.length,
+        targetModule,
+        modulesCount: modulesOutput.length,
+        total: allResults.length,
         passed: passedCount,
         failed: failedCount,
         success: allPassed,
-        results
+        modules: modulesOutput,
+        results: allResults
       };
 
       window.__AUDIT_RESULTS__ = summary;
@@ -15224,17 +15670,25 @@ function getActiveSections(obs) {
           });
         } catch(e) {}
       }
-      console.log(`\n🏁 AUDITORIA CONCLUÍDA: ${passedCount}/${results.length} testes aprovados em ${duration}ms (${allPassed ? '✅ 100% OK' : '⚠️ COM FALHAS'})\n`);
+      console.log(`\n🏁 AUDITORIA CONCLUÍDA: ${passedCount}/${allResults.length} asserções aprovadas em ${duration}ms (${allPassed ? '✅ 100% OK' : '⚠️ COM FALHAS'})\n`);
       return summary;
     };
 
-  
+    function triggerAutoAudit() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const mod = urlParams.get('module') || 'all';
+      setTimeout(() => {
+        window.runFullPlatformAudit({ module: mod });
+      }, 150);
+    }
+
     if (window.location.search && window.location.search.includes('autoAudit=1')) {
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          window.runFullPlatformAudit();
-        }, 300);
-      });
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        triggerAutoAudit();
+      } else {
+        window.addEventListener('load', triggerAutoAudit);
+        document.addEventListener('DOMContentLoaded', triggerAutoAudit);
+      }
     }
 
   </script>

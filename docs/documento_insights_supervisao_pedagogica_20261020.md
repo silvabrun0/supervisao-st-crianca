@@ -1,237 +1,217 @@
 # CONSOLIDAÇÃO DE INSIGHTS E DIRETRIZES TÉCNICO-PEDAGÓGICAS
 ## Sistema de Supervisão Pedagógica · SerTão Criança (Patos/PB)
 
-> **Documento Oficial de Referência de Produto e Arquitetura**  
+> **Documento Oficial de Referência de Produto, Governança e Arquitetura**  
 > **Data de Atualização:** 20 de Outubro de 2026  
-> **Base Documental Integral:** Transcrição na íntegra da Reunião ST Criança de 19 de Outubro de 2026 (Participantes: Diogo Dias Furtado, Bruno Pereira da Silva, Julia Elena Cordoba Vieira, Carolina Machado).
+> **Base Documental:** Transcrição na íntegra da Reunião ST Criança de 19 de Outubro de 2026 cruzada com as novas deliberações de governança de perfis e benchmark comparativo no afunilamento.
 
 ---
 
-## 1. Sumário Executivo e Virada de Chave Metodológica
+## 1. Sumário Executivo e Governança de Perfis
 
-A análise da transcrição literal da reunião de 19 de outubro de 2026 consolidou uma **virada estrutural de engenharia e pedagogia** no Sistema de Supervisão Pedagógica. O instrumento afasta-se em definitivo de uma lógica burocrática e fiscalizatória de "auditoria individual" e assume a missão central de diagnosticar e qualificar as oportunidades de aprendizagem no chão da creche e da pré-escola municipal.
+A evolução do instrumento de supervisão pedagógica do programa **SerTão Criança** consolida uma separação nítida de papéis, permissões de visualização e ferramentas de tomada de decisão. 
 
-### As Quatro Diretrizes Nucleares Alinhadas pela Equipe:
-1. **O Centro do Instrumento é a Experiência e Aprendizagem da Criança:**  
-   *(Carolina Machado, 00:41:45)*: O objetivo primordial é aferir o que a criança está de fato recebendo na rotina escolar (mediação da leitura de histórias, autonomia, interações afetivas, brincadeiras estruturadas). A supervisão avalia como o ambiente educativo se organiza para garantir esses direitos.
-2. **Inversão da Unidade de Análise: da "Docência Isolada" para a "TURMA":**  
-   *(Carolina Machado e Julia Cordoba, 00:31:35 - 00:39:39)*: Unidades de grande porte (como a Creche Cremilde/Rossvânia, com 38 professores) inviabilizam a aplicação de formulários individuais completos por professor. Em Patos, **não existe professor auxiliar**: as turmas contam com duplas de professores regentes titulares no período parcial e quartetos no período integral. A observação passa a focar na rotina da turma, reservando o fechamento para avaliações nominais específicas.
-3. **Preservação da Articulação do Planejamento Coletivo:**  
-   *(Bruno Pereira da Silva, 01:21:35)*: Em turmas integrais, a divisão mecânica em dois formulários desvinculados destruiria a avaliação da condução articulada entre os 4 professores. Optou-se pelo modelo híbrido de **Formulário Único em 2 Etapas (Manhã e Tarde)**, garantindo que o planejamento coletivo com início, meio e fim seja valorizado.
-4. **Padronização Terminológica e Higienização Formativa:**  
-   *(Carolina Machado e Diogo Furtado, 00:19:27)*: O termo policialesco *"visita"* e o indicador *"visitas auditadas"* são **definitivamente banidos** de toda a plataforma, substituídos pelo conceito didático e formativo de **"observação pedagógica"**.
+### A Tríade Canônica de Governança e Escopos de Visualização:
+1. **Coordenador(a) Pedagógico(a) da Unidade Escolar (UE):**
+   * **Escopo:** Estrito à sua Unidade Escolar (`user.school`).
+   * **Ferramenta Decisória Principal:** Na sub-aba de **"Afunilamento por Dimensão"**, obtém o **comparativo `% da UE vs. Rede`**, visualizando a discrepância item a item em relação à média geral municipal de Patos.
+2. **Formador(a) Pedagógico(a):**
+   * **Escopo:** Tem acesso às avaliações de **cada coordenador pedagógico atribuído à sua supervisão/polo** (não a coordenadores de outros polos).
+   * **Ferramenta Decisória:** Pode comparar o desempenho agregado das escolas sob sua responsabilidade e de cada coordenador com o **`% de toda a rede`**.
+3. **Coordenadora do Núcleo de Educação Infantil (EI) [Renomeação da antiga "Equipe Técnica"]:**
+   * **Escopo Total:** É o **único perfil com visualização onisciente/global** de todo o ecossistema. Visualiza todas as 32 UEs, todos os polos, todos os formadores e todos os coordenadores sem restrições de filtro.
 
 ---
 
-## 2. Matriz Consolidada dos 13 Pilares Técnico-Pedagógicos
+## 2. Tabela Oficial de Matriz de Governança e Permissões
+
+| Papel / Perfil no Sistema | Identificador Técnico (`roleKey`) | Escopo de Unidades / Avaliados | Acesso na Aba "Afunilamento por Dimensão" | Visualização de Benchmark (% da Rede) |
+| :--- | :---: | :--- | :--- | :---: |
+| **Coordenador(a) da UE** | `coordenador` | Apenas a sua própria Unidade Escolar e suas turmas/docentes | Compara a **sua UE vs. Rede** em cada Dimensão, Subdimensão e Critério | ✅ Sim (UE vs. Rede) |
+| **Formador(a) Pedagógico(a)** | `formador` | Coordenadores e UEs que lhe forem atribuídos (seu Polo) | Visualiza o afunilamento dos coordenadores do seu escopo vs. Rede | ✅ Sim (Polo/Escopo vs. Rede) |
+| **Coordenadora do Núcleo de EI** *(Antiga Equipe Técnica)* | `tecnico` ➔ `nucleo_ei` | **Acesso Total e Global** (Todas as 32 UEs, Polos e Profissionais da Rede) | Visualiza o afunilamento de qualquer unidade, de qualquer polo ou da rede inteira | ✅ Sim (Visão Macrorregional Total) |
+
+---
+
+## 3. Matriz Consolidada dos 13 Pilares Técnico-Pedagógicos
 
 ```mermaid
 flowchart TD
-    subgraph Coleta["1. Coleta Formativa no Chão da Escola"]
-        A["Unidade de Análise: TURMA\n(Titulares Regentes)"] --> B["Turma em Tempo Parcial\n(2 Docentes Titulares)"]
-        A --> C["Turma em Tempo Integral\n(4 Docentes Titulares em 2 Turnos)"]
-        B --> D["Formulário Único Direto"]
-        C --> E["Formulário Único em 2 Etapas\n(Rascunho Manhã ➔ Conclusão Tarde)"]
-        D --> F["Bloco Final: Avaliação Nominal\n(5 Dimensões + Parecer de Boas Práticas)"]
-        E --> F
+    subgraph StatusColeta["1. Coleta Pedagógica no Chão da Escola"]
+        P1["PILAR 1: Unidade de Análise por TURMA\n(✅ STATUS: IMPLEMENTADO)"]
+        P4["PILAR 4: Turmas Integrais em Formulário Único\n(2 Etapas: Manhã e Tarde)"]
+        P5["PILAR 5: Fechamento Nominal com Parecer\n(inclusive em Práticas Consistentes)"]
     end
 
-    subgraph Ergonomia["2. Ergonomia e Usabilidade Mobile"]
-        G["Pop-ups / Tooltips de Rubricas ℹ️\n(Fim da poluição de textos longos)"]
-        H["Barra de Filtros Fixa Sticky\n(Navegação ágil sem perda de contexto)"]
-        I["Quadro Semáforo Bimestral\n(🟢 Concluída / ⚪ No Prazo / 🔴 Atraso)"]
-        J["Gestão de Ocorrências Críticas\n(Status Conversado e Arquivamento)"]
+    subgraph Governanca["2. Governança e Acessos Hierárquicos"]
+        P2["PILAR 2: Tríade de Governança & Papéis\n(Coordenador UE · Formador · Coordenadora Núcleo EI)"]
+        P3["PILAR 3: Benchmark na Aba Afunilamento\n(Comparativo % UE vs. % Rede item a item)"]
+        P12["PILAR 12: Painel 100% Exclusivo para Prática Docente"]
     end
 
-    subgraph Diagnostico["3. Painel de Indicadores & Tomada de Decisão"]
-        K["Benchmark Municipal: Meu Escopo vs. Rede Patos (±%)"]
-        L["Foco nos Menores: Ranqueamento de Gargalos Prioritários"]
-        M["Extinção de Visitas Auditadas e Contagem de N/A"]
-        N["Painel 100% Exclusivo para Prática Docente nas Turmas"]
+    subgraph Ergonomia["3. Usabilidade, Prazos & Interface Mobile"]
+        P6["PILAR 6: Higienização 'Visita' ➔ 'Observação'"]
+        P7["PILAR 7: Extinção de Visitas Auditadas e N/A"]
+        P8["PILAR 8: Foco nos Menores Índices (Gargalos)"]
+        P9["PILAR 9: Barra de Filtros Fixa (Sticky)"]
+        P10["PILAR 10: Semáforo Bimestral (Verde/Cinza/Vermelho)"]
+        P11["PILAR 11: Pop-ups ℹ️ de Rubricas no Mobile"]
+        P13["PILAR 13: Gestão de Ocorrências e Padrão MEC"]
     end
 ```
 
 ---
 
 ### PILAR 1: Inversão da Unidade de Análise para a TURMA
-* **Fundamentação na Transcrição (00:31:35 - 00:44:00):**  
-  Carolina Machado demonstrou a inviabilidade operacional do modelo anterior: *"Se eu tenho Rossvânia, que tem 38 professores, vai fazer 38 observações completas? (...) Em Patos não tem professor auxiliar. Os dois professores são professores titulares da turma, independente de serem concursados ou contratados (...) Essa observação tem que ser por turma e não por professor."*
-* **Definição de Arquitetura:**
-  - O formulário de observação passa a ser aberto para a **TURMA**.
-  - O sistema puxa o pré-cadastro da turma com a equipe de professores regentes titulares vinculados.
-  - A série histórica principal é construída sobre a **TURMA**, pois ela representa a continuidade da experiência pedagógica recebida pelas crianças, mesmo em eventuais faltas ou trocas pontuais de docentes no dia da visita.
+> **STATUS DO PILAR: ✅ IMPLEMENTADO / EM PRODUÇÃO**
+* **Contexto e Aplicação:**  
+  A mudança estrutural que substituiu o formulário individual por professor pela observação da **TURMA** já se encontra construída e validada no código.
+* **Regra Operacional Consolidada:**
+  - A turma é a unidade de observação (parcial ou integral).
+  - Em Patos, não existe professor auxiliar: todos os docentes são regentes titulares (duplas no parcial e quartetos no integral).
+  - A rotina observada reflete o acesso da criança às experiências pedagógicas, assegurando a série histórica da turma.
 
 ---
 
-### PILAR 2: Turmas em Tempo Integral em Formulário Único (2 Etapas: Manhã e Tarde)
-* **Fundamentação na Transcrição (00:58:33 - 01:22:46):**  
-  A discussão inicial considerou dividir a turma integral em dois formulários isolados. Bruno Pereira da Silva interveio pontuando a perda metodológica dessa divisão: *"Se a gente coloca dois formulários distintos, a gente vai perder a avaliação da condução entre os professores, porque são quatro professores... o direito dos alunos passaria por ser uma aula planejada entre eles, no conjunto... perder o espírito de que os professores têm que estar sempre em contato para planejarem ter início, meio e fim."*
-* **Definição de Arquitetura:**
-  - **Formulário Único e Integrado:** A coordenadora realiza a observação no turno matutino (ex: acolhida, leitura, higiene), preenche as seções observadas e **salva como rascunho**.
-  - No turno vespertino (mesmo que em dia subsequente acordado), ela retoma o mesmo rascunho e complementa com as práticas da equipe da tarde.
-  - O sistema calcula o balanço geral da turma e exige o preenchimento do bloco final nominal antes do envio definitivo.
+### PILAR 2: Governança em 3 Níveis & Renomeação da "Equipe Técnica" para "Coordenadora do Núcleo de EI"
+* **Diretriz de Produto e Perfis:**
+  - **Renomeação Obrigatória:** O perfil até então denominado *"Equipe Técnica"* (`user.roleKey === 'tecnico'`) passa a ser oficialmente rotulado como **"Coordenadora do Núcleo de Educação Infantil"** (ou *Núcleo de EI*).
+  - **Permissão de Visualização Global:** A Coordenadora do Núcleo de EI é a única autoridade com direito de visualização irrestrita de todas as unidades, relatórios e consolidados da rede.
+  - **Escopo do Formador:** O formador visualiza unicamente os coordenadores pedagógicos atribuídos a ele (vinculados ao seu polo de supervisão). Não há visualização cruzada de outros polos sem autorização central.
+  - **Escopo do Coordenador:** Acesso circunscrito e protegido aos docentes e turmas da sua própria Unidade Escolar.
 
 ---
 
-### PILAR 3: Fechamento Nominal com Parecer Qualitativo Obrigatório para Práticas Consistentes
-* **Fundamentação na Transcrição (01:07:34 - 01:16:03):**  
-  Para evitar o "desincentivo do bom professor que carrega a turma nas costas enquanto outro profissional não faz nada" (Julia Cordoba, 01:05:38), Diogo estruturou a avaliação docente nominal ao final.  
-  Carolina Machado insistiu que **mesmo as práticas consistentes devem conter anotação descritiva**: *"O consistente também tem que ter observação, porque aí é a replicação da boa prática... isso aqui também traz um dado sobre o coordenador pra gente do Núcleo: o que para aquele coordenador está sendo a visão de uma prática consistente."* Diogo concordou (01:14:09), validando que o bloco é enxuto e rápido de preencher.
-* **Definição de Arquitetura:**
-  - Ao final do formulário da turma, são exibidos os **blocos nominais dos professores regentes da turma** (1 a 4 docentes).
-  - Cada docente é avaliado nas **5 Dimensões da Matriz** sob três níveis objetivos: `Consistente`, `Parcial`, `Não Realizado` (sem opção de N/A).
-  - **Campo de Parecer Descritivo Aberto:** Disponível e encorajado em todos os níveis, permitindo registrar orientações formativas nos casos parciais/negativos e evidências de boas práticas nos casos consistentes.
-  - **Geração de PDF Segregado:** O aplicativo permite exportar o relatório consolidado da turma e **fichas individuais em PDF por professor**, preservando o sigilo formativo na devolutiva.
+### PILAR 3: Comparativo "% da UE vs. Rede" na Aba de "Afunilamento por Dimensão"
+* **Diagnóstico e Solução:**  
+  A visualização comparativa com a rede não deve ser restrita apenas a um card genérico no topo. Ela atinge sua máxima potência pedagógica dentro da sub-aba de **"Afunilamento por Dimensão"** (`currentSubTab === 'drilldown'`).
+* **Comportamento na Interface:**
+  - Ao abrir o Afunilamento, o Coordenador da UE visualiza para cada **Grande Dimensão**, **Subdimensão** e **Item/Critério Individual**:
+    1. **O percentual da sua UE:** `% Consistência na Escola`.
+    2. **O percentual de toda a rede:** `% Médio da Rede Municipal de Patos`.
+    3. **O Delta Comparativo ($\Delta \pm\%$):** Indicação visual imediata se a sua escola está acima ou abaixo da média municipal naquele indicador específico.
+  - O Formador acessa essa mesma tela para cada um dos coordenadores atribuídos ao seu polo, podendo cruzar o afunilamento individual daquele coordenador/unidade contra o `% de toda a rede`.
 
 ---
 
-### PILAR 4: Higienização Terminológica Mandatória ("Visita" ➔ "Observação")
-* **Fundamentação na Transcrição (00:19:27):**  
-  Carolina Machado: *"Diogo, volta por favor no início... tem 'iniciar visita', esse nome visita nem é bom... Nova observação."* Diogo Furtado: *"OK, certo."*
+### PILAR 4: Turmas em Tempo Integral em Formulário Único (2 Etapas: Manhã e Tarde)
+* **Fundamentação Pedagógica (Bruno Pereira da Silva, 01:21:35):**  
+  A divisão em formulários isolados prejudicaria a avaliação do **planejamento conjunto** dos 4 professores regentes. A escola integral precisa manter unidade pedagógica.
 * **Definição de Arquitetura:**
-  - Varredura e substituição em 100% da interface:
-    - `"Iniciar Visita"` ➔ `"Iniciar Observação"`
-    - `"Próximas Visitas"` ➔ `"Próximas Observações"`
-    - `"Visitas Concluídas / Auditadas"` ➔ `"Observações Realizadas"`
-    - `"Histórico de Visitas"` ➔ `"Histórico de Observações"`
+  - Formulário único com salvamento como rascunho após a observação do turno matutino.
+  - Retomada do mesmo rascunho no turno vespertino para complementação das práticas da tarde.
+  - Envio definitivo apenas após a conclusão dos dois turnos, permitindo que a coordenação pondere o balanço global da experiência da criança naquele bimestre.
 
 ---
 
-### PILAR 5: Benchmark Comparativo em Tempo Real: Meu Escopo vs. Toda a Rede (Lado a Lado)
-* **Fundamentação na Transcrição (01:27:24):**  
-  Diogo Dias Furtado: *"Agora a gente vai mudar inclusive isso, para ser comparativo do que eu tô observando com a rede... Pensem assim que nesse de consistência, esse bloco vai ter do lado esquerdo como tá a porcentagem de consistência naquela dimensão na minha unidade escolar e do lado direito o índice da rede de professoras, para ter essa comparação."*
+### PILAR 5: Fechamento Nominal com Parecer Obrigatório em Práticas Consistentes
+* **Fundamentação Pedagógica (Carolina Machado, 01:13:16):**  
+  Para garantir que os professores recebam feedback individualizado e evitar o desincentivo de quem conduz bem a sala, o formulário da turma fecha com blocos nominais.  
+  Carolina Machado enfatizou que **o nível Consistente também deve ter campo de anotação descritiva**, documentando a boa prática pedagógica para fins de replicação e fornecendo dados ao Núcleo de EI sobre o padrão avaliativo da coordenação.
 * **Definição de Arquitetura:**
-  - Substituição da métrica isolada local por uma visualização em **Benchmark**:
-    - **Lado Esquerdo:** Índice de Consistência do Escopo Atual (Unidade / Polo).
-    - **Lado Direito:** Média Geral Consolidada da Rede Municipal de Patos.
-    - **Badge Dinâmico de Variação ($\Delta \pm\%$):** Sinaliza visualmente se a unidade está operando acima (`+X% ▲` em verde) ou abaixo da média municipal (`-X% ▼` em vermelho).
+  - Blocos finais nominais dos professores daquela turma.
+  - Pontuação simplificada nas 5 Dimensões (`Consistente`, `Parcial`, `Não Realizado`).
+  - Campo de parecer descritivo aberto em todos os níveis.
+  - Exportação de relatório em PDF segregado por professor.
 
 ---
 
-### PILAR 6: Diagnóstico de Prioridades: Bloco "Foco nos Menores Índices" (Gargalos)
-* **Fundamentação na Transcrição (01:16:03 - 01:27:24):**  
-  Julia Cordoba: *"Como a preocupação primária é a criança, se a leitura de livros de história tá consistente, por mais que um professor faça de maneira ruim, não vai ser a primeira fonte de intervenção; vai ser naquilo que as crianças não têm acesso de maneira inconsistente."*
-* **Definição de Arquitetura:**
-  - Criação de um card/seção de triagem imediata: **"Pontos Prioritários de Intervenção"**.
-  - O algoritmo filtra e ranqueia os **3 critérios com menor pontuação** no escopo selecionado, orientando as pautas imediatas de HTPC e formação interna da coordenação.
+### PILAR 6: Higienização Terminológica Mandatória ("Visita" ➔ "Observação")
+* **Diretriz Aprovada (00:19:27):**  
+  Substituição completa do vocábulo policialesco *"visita"* por **"observação"** em 100% dos textos, botões, rotas e relatórios.
 
 ---
 
 ### PILAR 7: Extinção de Métricas Burocráticas ("Visitas Auditadas" e "Itens Válidos / N.A.")
-* **Definição de Arquitetura:**
-  - O card `Visitas Auditadas` é removido (a contagem fria não gera ação).
-  - O card `Itens Válidos / N.A.` é removido (metadados operacionais não agregam valor pedagógico).
-  - A linha superior de KPIs é remodelada com 4 cards 100% voltados à decisão:
-    1. **Consistência Local** (com barra visual de meta em 80%).
-    2. **Benchmark da Rede Municipal** (Média de Patos com delta $\pm\%$).
-    3. **Cobertura de Turmas** (% de turmas observadas no bimestre).
-    4. **Gargalo Prioritário** (Menor dimensão/critério registrado).
+* **Diretriz Aprovada:**  
+  - O card `Visitas Auditadas` é removido.
+  - O card `Itens Válidos / N.A.` é removido.
+  - O grid superior de 4 colunas é reorganizado com métricas 100% orientadas à ação e intervenção.
 
 ---
 
-### PILAR 8: Usabilidade e Ergonomia: Barra de Filtros Fixa (`position: sticky`)
-* **Definição de Arquitetura:**
-  - Fixação da barra de filtros superiores e do controle segmentado de sub-abas durante a rolagem vertical (`position: sticky; top: 60px; z-index: 90; backdrop-filter: blur(8px)`).
-  - A coordenadora pode descer por dezenas de itens de critérios no afunilamento sem perder o controle dos seletores de escola, turma e bimestre.
+### PILAR 8: Diagnóstico de Prioridades: Bloco "Foco nos Menores Índices" (Gargalos)
+* **Diretriz Aprovada:**  
+  - Apresentação automática dos **3 menores critérios da unidade ou polo** (os pontos mais frágeis ou com maior desvio negativo em relação à rede).
+  - Serve como pauta prioritária imediata para as reuniões de alinhamento e formação interna na escola.
 
 ---
 
-### PILAR 9: Quadro de Controle Bimestral (Semáforo de Prazos Verde / Cinza / Vermelho)
-* **Fundamentação na Transcrição (00:28:59 - 00:30:04):**  
-  Julia Cordoba e Diogo Furtado debateram como a coordenadora saberá quem falta observar: Diogo propôs: *"Eu tenho quatro blocos aqui... um bloco do primeiro bimestre e quem tá verde, quem tá cinza e quem tá vermelho que talvez seja atrasado... e aí no segundo bimestre a mesma coisa."*
-* **Definição de Arquitetura:**
-  - Quadro matricial no início do painel de acompanhamento:
-    - 🟢 **Verde:** Observação do bimestre finalizada.
-    - ⚪ **Cinza:** Bimestre em curso (dentro do prazo regulamentar de 2 meses).
-    - 🔴 **Vermelho:** Bimestre expirado sem envio de observação para a turma (alerta de atraso).
+### PILAR 9: Usabilidade e Ergonomia: Barra de Filtros Fixa (`position: sticky`)
+* **Diretriz Aprovada:**  
+  Fixação da barra de filtros e sub-abas durante a rolagem vertical (`position: sticky; top: 60px; z-index: 90`), mantendo a seleção de UE, turma e bimestre sempre acessível na navegação longa do afunilamento.
 
 ---
 
-### PILAR 10: Enxugamento Visual no Mobile: Pop-ups / Tooltips de Apoio (`ℹ️`)
-* **Fundamentação na Transcrição (00:24:26 - 00:25:19):**  
-  Diogo alertou sobre o excesso de texto no celular: *"Aqui tem muito texto. Eu não gosto muito de texto."* Carolina sugeriu o formato pop-up/ícone: *"Sabe aquele que quando passa assim aparece? O texto fica escondido aí quando você clica no 'izinho' abre um pop-up."*
-* **Definição de Arquitetura:**
-  - No celular, títulos extensos e textos explicativos de rubricas são ocultados por padrão.
-  - Ao lado de cada item, insere-se um botão discreto de informação (`ℹ️`). Ao ser tocado, exibe um modal ou tooltip explicativo com as orientações pedagógicas, despoluindo a tela de avaliação.
+### PILAR 10: Quadro de Controle Bimestral (Semáforo de Prazos Verde / Cinza / Vermelho)
+* **Diretriz Aprovada (00:28:59):**  
+  Painel visual para o acompanhamento do ciclo das 4 observações:
+  - 🟢 **Verde:** Observação realizada e concluída.
+  - ⚪ **Cinza:** Bimestre em andamento (dentro do prazo regulamentar).
+  - 🔴 **Vermelho:** Bimestre expirado sem envio de observação para a turma (alerta de atraso).
 
 ---
 
-### PILAR 11: Padronização Terminológica MEC para Jornadas
-* **Fundamentação na Transcrição (02:40:57 - 02:42:49):**  
-  Carolina Machado corrigiu a terminologia: *"Não é jornada regular... a nomenclatura que o MEC usa é meio período/parcial e integral... regular é se ela é multisseriada ou regular."* Julia concordou: *"Vou colocar parcial... turma em tempo integral e turma em tempo parcial."*
-* **Definição de Arquitetura:**
-  - Substituição formal em cadastros, seletores e relatórios:
-    - `"Turma em Tempo Parcial"` (com subtipos *Parcial Matutino* e *Parcial Vespertino*).
-    - `"Turma em Tempo Integral"`.
-  - Banimento do termo ambíguo "jornada regular".
+### PILAR 11: Enxugamento Visual no Mobile: Pop-ups / Tooltips de Apoio (`ℹ️`)
+* **Diretriz Aprovada (00:24:26):**  
+  Ocultação de textos extensos de orientações das rubricas no celular. Inserção de ícone informativo discreto (`ℹ️`) que abre modal/tooltip sob demanda.
 
 ---
 
 ### PILAR 12: Painel de Indicadores 100% Exclusivo para a Prática Docente Infantil
-* **Fundamentação na Transcrição (01:29:36 - 01:30:42):**  
-  Diogo Furtado pontuou que o instrumento de avaliação de coordenadoras segue fluxo próprio de tutoria, e não deve poluir a aba de índices: *"não vai ter mais esses índices desse instrumento específico... o que vai estar aqui são as professoras."*
-* **Definição de Arquitetura:**
-  - A tela de Indicadores (`#screenIndicators`) passa a operar incondicionalmente com `targetType = 'professora'`.
-  - O dropdown de alternância para coordenadores é suprimido para Formadores e Equipe Técnica nesta aba, garantindo um painel unificado e focado na sala de aula da infância.
+* **Diretriz Aprovada (01:30:42):**  
+  A avaliação de coordenadores realizada pelos formadores é um processo de tutoria de gestão e segue fluxo próprio no histórico/agenda. A tela de Indicadores é 100% dedicada aos **Indicadores da Prática Docente nas Turmas**, eliminando matrizes de coordenação deste painel.
 
 ---
 
-### PILAR 13: Gestão de Ocorrências Críticas e Cadastro Centralizado de Turmas
-* **Fundamentação na Transcrição (00:56:18, 01:19:45 e 01:28:29):**
-  - **Ocorrências de Campo (Diogo):** As ocorrências geradas em sala de aula alimentam um painel de pendências críticas. A coordenadora pode acessar a ocorrência, dar a devolutiva pedagógica ao docente, marcar como **"Conversado"** e arquivar o registro, preservando o histórico vinculado à observação.
-  - **Fluxo de Cadastro (Carolina e Julia):** O cadastro de turmas, contagem de alunos e registro de crianças público-alvo da educação inclusiva/diversidade é gerido centralmente pelo **Núcleo Central (Milena/Stênio)** via planilha padronizada, sendo importado em lote para o sistema sem onerar a rotina da coordenadora.
+### PILAR 13: Gestão de Ocorrências Críticas e Padrão MEC de Nomenclatura
+* **Diretriz Aprovada (00:56:18 e 02:40:57):**  
+  - **Ocorrências Críticas:** Bloco com marcação de status **"Conversado"** e arquivamento com rastreabilidade da observação.
+  - **Padronização MEC:** Uso rigoroso de **"Turma em Tempo Parcial"** (Matutino/Vespertino) e **"Turma em Tempo Integral"**, abolindo o termo ambíguo "regular".
+  - **Cadastro em Lote:** O Núcleo Central de EI cadastra as turmas e a contagem de crianças público-alvo da educação inclusiva/diversidade via planilha central.
 
 ---
 
-## 3. Matriz Antes vs. Depois da Linha de KPIs Superiores
+## 4. O Afunilamento com Benchmark: Como Fica na Interface
 
-| Posição | Configuração Atual | Nova Configuração Estratégica | Justificativa na Reunião |
-| :---: | :--- | :--- | :--- |
-| **Card 1** | **Índice de Consistência** (número estático sem régua) | **Consistência Local + Barra Visual de Meta** | Visualização instantânea da proximidade do patamar de 80% (Nível 4 da EAP). |
-| **Card 2** | **Visitas Auditadas** (contagem quantitativa fria) | **Benchmark da Rede Municipal** (Média de Patos com delta dinâmico $\pm\%$) | Decisão de Diogo (01:27:24) de colocar o comparativo lado a lado com a rede. |
-| **Card 3** | **Avaliandos / Cobertura** (proporção individual de docentes) | **Cobertura de Turmas** (% de turmas com observação concluída no bimestre) | Adequação à nova unidade de análise (Turma). |
-| **Card 4** | **Itens Válidos / N.A.** (metadado técnico de respostas) | **Ponto de Atenção Prioritária** (Menor índice registrado no escopo) | Foco na intervenção pedagógica prioritária sobre as maiores fragilidades. |
+Na sub-aba **"Afunilamento por Dimensão"**, cada nível hierárquico apresenta a régua dupla:
 
----
-
-## 4. Cronograma e Estratégia de Implementação em 2 Frentes
-
-```mermaid
-flowchart LR
-    subgraph F1["FRENTE 1: Painel & Terminologia (Imediata)"]
-        direction TB
-        f1["Higienização: 'Visita' ➔ 'Observação'"]
-        f2["Novos KPIs: Benchmark Rede (±%) e Foco nos Menores"]
-        f3["Derrubada de 'Visitas Auditadas' e 'N/A'"]
-        f4["Barra de Filtros Fixa (Sticky)"]
-        f5["Ocultação de Coordenadores em Indicadores"]
-    end
-
-    subgraph F2["FRENTE 2: Arquitetura de Turmas (Estrutural)"]
-        direction TB
-        f6["Migração do formulário para a unidade TURMA"]
-        f7["Motor de 2 Etapas para Turmas Integrais"]
-        f8["Blocos Nominais Finais de Avaliação Docente"]
-        f9["Quadro Semáforo Bimestral (Verde/Cinza/Vermelho)"]
-        f10["Pop-ups ℹ️ de Rubricas no Mobile"]
-        f11["Cadastro em Lote com Diversidade e Padrão MEC"]
-    end
-
-    F1 --> F2
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. PLANEJAMENTO DIDÁTICO PEDAGÓGICO                                        │
+│ Minha UE: [██████████████░░░░] 72%   |   Rede: [████████████████░░] 81%     │
+│ Variação: 🔻 -9% abaixo da média municipal                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│   ▼ 1.1 Organização dos Espaços e Rotina                                    │
+│   Minha UE: 68%   |   Rede: 76%   |   Δ: 🔻 -8%                             │
+│   ───────────────────────────────────────────────────────────────────────   │
+│     • [1.1.1] Materiais ao alcance das crianças                             │
+│       Minha UE: 60%   |   Rede Patos: 75%   |   Δ: 🔻 -15% [Atenção Crítica]│
+│     • [1.1.2] Cantos temáticos diversificados                               │
+│       Minha UE: 85%   |   Rede Patos: 78%   |   Δ: 🟢 +7% [Destaque Positivo]│
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 🔹 FRENTE 1: Painel de Indicadores, Usabilidade & Higienização (Execução Imediata)
-* **Objetivo:** Entregar imediatamente os ganhos visuais e decisórios discutidos na reunião, sem alterar a estrutura do banco ou invalidar observações existentes:
-  1. Atualização dos 4 Cards Superiores com o Benchmark da Rede Municipal e Foco nos Menores.
-  2. Higienização terminológica completa: substituição de *"visita"* por *"observação"* em botões, títulos e modais.
-  3. Travamento CSS `position: sticky` na barra de filtros.
-  4. Bloqueio incondicional de indicadores para matriz docente (`targetType = 'professora'`).
+---
 
-### 🔹 FRENTE 2: Nova Arquitetura de Coleta por Turma (Próxima Sprint Estrutural)
-* **Objetivo:** Reformular o motor de aplicação e cadastro para o ano letivo de 2027:
-  1. Reestruturação do formulário de observação centrado na Turma (Tempo Parcial vs. Tempo Integral).
-  2. Implementação do fluxo de salvamento matutino e conclusão vespertina para turmas integrais.
-  3. Inclusão dos 4 blocos de avaliação individual docente no encerramento da observação com exportação PDF individualizada.
-  4. Implementação do Quadro Semáforo Bimestral de Acompanhamento.
-  5. Componentização dos pop-ups/tooltips informativos `ℹ️` para enxugamento da interface mobile.
-  6. Padronização MEC das jornadas e importação em lote das turmas com contagem de diversidade pelo Núcleo Central.
+## 5. Cronograma e Estratégia de Implementação em 2 Frentes
+
+### 🔹 FRENTE 1: Painel de Indicadores, Governança & Afunilamento Comparativo (Imediata)
+* **Escopo da Entrega:**
+  1. Implementação do comparativo **`% da UE vs. % da Rede`** dentro da aba de **"Afunilamento por Dimensão"**.
+  2. Implementação das regras de escopo:
+     - Coordenador visualiza sua UE comparada à Rede.
+     - Formador visualiza os coordenadores atribuídos comparados à Rede.
+     - Coordenadora do Núcleo de EI visualiza toda a rede e pode alternar qualquer UE/Polo.
+  3. Renomeação do rótulo institucional de *"Equipe Técnica"* para **"Coordenadora do Núcleo de EI"** (`#roleBoxTecnico`, cadastros e cabeçalhos).
+  4. Higienização terminológica completa de *"visita"* para *"observação"*.
+  5. Remoção dos cards de *Visitas Auditadas* e *Itens Válidos/NA*, substituindo pelos novos KPIs decisórios.
+  6. Travamento CSS `position: sticky` na barra de filtros.
+
+### 🔹 FRENTE 2: Coleta por Turma em 2 Etapas e Semáforo (Estrutural)
+* **Escopo da Entrega:**
+  1. Formulário único de Turma Integral em 2 etapas (salvamento manhã / conclusão tarde).
+  2. Blocos nominais de avaliação docente ao término da turma com parecer aberto para práticas consistentes.
+  3. Quadro Semáforo Bimestral (Verde/Cinza/Vermelho).
+  4. Pop-ups informativos `ℹ️` nas rubricas no mobile.
+  5. Adequação da nomenclatura MEC (Tempo Parcial vs. Tempo Integral) e coleta de diversidade.

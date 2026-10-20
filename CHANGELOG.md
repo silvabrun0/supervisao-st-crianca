@@ -75,6 +75,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 | **0.60** | 14/10/2026 19:00 | `intermediárias/aplicativo_v60_numeracao_dinamica_itens_rubricas.html` | Solicitação direta / Workflow macOS | Numeração dinâmica e reindexação sequencial contínua da matriz de rubricas (deslocamento harmônico de itens na adição e exclusão, integridade relacional de rascunhos) e exibição condicional da tarja de somente leitura✅ |
 | **0.62** | 14/10/2026 20:00 | `intermediárias/aplicativo_v62_ocultacao_botao_salvar_rascunho_devolutiva.html` | Solicitação direta / Workflow macOS | Ocultação estrita do botão "Salvar Rascunho" na visualização de devolutivas (observações finalizadas), adição de botão contextual de retorno ao histórico e blindagem defensiva✅ |
 | **0.63** | 14/10/2026 22:10 | `intermediárias/aplicativo_v63_limpeza_visual_tela_inicial.html` | `planos_de_implementacao/plano_limpeza_visual_tela_inicial.md` | Limpeza visual e minimalismo da tela inicial (coordenação e formadora): exibição exclusiva do usuário com botão nova observação, rascunhos full-width e próximas visitas agendadas, suprimindo avisos, botões redundantes e coluna secundária✅ |
+| **0.87** | 20/10/2026 15:10 | `intermediárias/aplicativo_v87_pilar_1_atribuicao_e_agendamento_por_turma.html` | Deliberação Equipe SerTão Criança / `planos_de_implementacao/plano_pilar_1_atribuicao_e_agendamento_por_turma.md` | Pilar 1: Migração de Atribuição e Agendamento para TURMA, cards contextuais de regência titular, cálculo longitudinal da turma no cronograma e asserções modulares ✅ |
 | **0.86** | 20/10/2026 14:30 | `intermediárias/aplicativo_v86_algoritmo_verificacao_integral_e_correcao_bugs.html` | Solicitação direta / `plano_algoritmo_verificacao_integral_e_correcao_bugs.md` | Algoritmo de auditoria e verificação ponta a ponta (10 baterias determinísticas), script CLI `audit_platform.py` com headless Chrome, correção global de 8 bugs em Indicadores, Histórico, Cronograma, RBAC e resiliência DOM 🔬 |
 | **0.85** | 20/10/2026 13:50 | `intermediárias/aplicativo_v85_pilar_1_inversao_unidade_analise_turma.html` | Deliberação Equipe SerTão Criança / `plano_pilar_1_inversao_unidade_analise_turma.md` | Inversão da unidade de análise para a TURMA (Educação Infantil), catálogo canônico `INITIAL_CLASSES`, exibição da equipe regente titular, reestruturação das travas de duplo lançamento e avanço longitudinal por turma, e cobertura de turmas em Indicadores 🏫 |
 | **0.84** | 16/10/2026 13:55 | `intermediárias/aplicativo_v84_correcao_reference_error_getnowtimestring.html` | Solicitação direta / Correção de bug crítico | Correção do ReferenceError getNowTimeString, implementação do helper HH:mm, leitura resiliente de campos de formulário (#setupDate, #setupStartTime, #setupEndTime) e restauração da trava temporal em startNewObservation() ⚡ |
@@ -1711,6 +1712,36 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 - **Formatação Uniforme de Datas:** Datas exibidas de forma padronizada em DD/MM/AAAA em todas as visualizações (desktop e mobile).
 - **Ocultação em Arquivadas:** Ao selecionar o filtro de visitas arquivadas, o destaque de próxima visita é automaticamente ocultado para priorizar a consulta histórica.
 - **Atualização da Identificação de Versão:** Elevação oficial para `Versão 0.81 (v7.60)` no cabeçalho, modal de histórico e changelog.
+
+---
+
+### [Versão 0.87] - Pilar 1: Atribuição, Agendamento e Início de Observação por Turma
+* **Data e Horário:** 20 de Outubro de 2026 — 15:10:00
+* **Arquivo em Produção:** [`index.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/index.html)
+* **Arquivo Intermediário:** [`intermediárias/aplicativo_v87_pilar_1_atribuicao_e_agendamento_por_turma.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/intermediárias/aplicativo_v87_pilar_1_atribuicao_e_agendamento_por_turma.html)
+* **Base / Insumos:** Deliberação oficial da Equipe SerTão Criança e plano executivo [`planos_de_implementacao/plano_pilar_1_atribuicao_e_agendamento_por_turma.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_1_atribuicao_e_agendamento_por_turma.md).
+* **Identificador no App:** `📌 Versão 0.87 (v7.66)`
+* **Hosting Oficial:** [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)
+* **Contexto:** Conclusão da migração sistêmica do Pilar 1 para a unidade de análise TURMA na Educação Infantil, reformulando os fluxos de Atribuição, Agendamento no Cronograma e Início de Visita. As visitas passam a ser agendadas e atribuídas diretamente para a Turma (com exibição da equipe docente titular em co-responsabilidade), calculando a elegibilidade de bimestre sobre o ciclo longitudinal da turma e mantendo intacto o fluxo de acompanhamento formativo da coordenação (Pilar 2).
+
+#### 🚀 Inclusões e Funcionalidades
+- **Reestruturação do Modal de Agendamento (`#modalAddSchedule`):**
+  - Rótulo dinâmico contextualizado: 'Turma da Educação Infantil a ser Observada' para Coordenadoras Pedagógicas e 'Coordenadora Pedagógica a ser Acompanhada' para Formadoras.
+  - Seletor de turmas alimentado via `getClassesForSchool(school)` com badge de turno e contagem de regentes.
+  - Card contextual dinâmico (`#scheduleClassTeachersCard`) listando pills com ícones e nomes de todas as professoras titulares da turma.
+  - Sugestão automática do próximo bimestre longitudinal da **TURMA** via `autoSelectNextEligibleBimesterForClass()`.
+- **Persistência do Agendamento Ancorada na Turma:**
+  - Gravação de agendamentos com `targetType: 'turma'`, `className`, `targetName`, `classId` e array `teachers`.
+  - Saneador automático em `loadState()` migrando transparentemente agendamentos legados no `localStorage`.
+- **Hero Card de Próxima Visita e Cronograma Geral:**
+  - Hero Card no topo do cronograma destacando a **TURMA** em tipografia proeminente (`📚 Turma: Infantil I - Turma A`) e subtítulo `👩‍🏫 Regência Titular: Docentes... · Bimestre · Escola`.
+  - Tabela desktop e cards mobile exibindo a turma em primeiro plano visual.
+- **Início de Visita Vinculada ao Cronograma:**
+  - Cards de agendamento na tela inicial (`#homeScheduledCardsList`) e no modal de seleção prévia (`#modalSelectScheduledObs`) destacando a Turma e as docentes titulares.
+  - Seletor rápido no topo do Setup (`#setupLinkedSchedule`) formatado com a identificação da Turma.
+  - Adaptação da blindagem de cargo em `openSetupScreen()` para aceitar agendamentos do tipo turma sem falso-positivo de bloqueio.
+- **Auditoria Modular de 100% de Cobertura:**
+  - Ajuste nas asserções do Módulo 8 (`agenda_cronograma`) para testar o agendamento de Turma e a baixa automática de status `realizado`.
 
 ---
 

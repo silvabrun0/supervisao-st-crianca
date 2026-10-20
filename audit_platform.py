@@ -1,21 +1,38 @@
 #!/usr/bin/env python3
 """
-SerTão Criança · Motor Automatizado de Auditoria da Plataforma
-Executa a suíte de testes determinísticos ponta a ponta (10 baterias)
-via Chrome Headless e valida a integridade funcional de todos os módulos.
+SerTão Criança · Motor Automatizado de Auditoria Modular da Plataforma
+Executa a suíte determinística de testes ponta a ponta (12 Módulos Canônicos)
+via Google Chrome Headless, permitindo execução modo-a-modo ou integral de 100% do sistema.
 """
 
 import http.server
 import socketserver
 import threading
 import subprocess
+import argparse
+import tempfile
 import json
 import time
 import sys
 import os
 
-PORT = 8089
+DEFAULT_PORT = 8092
 CHROME_PATH = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+MODULE_CATALOG = {
+    'auth_rbac': 'Autenticação, Usuários, Perfis e RBAC',
+    'catalogo_dados': 'Catálogo Canônico, Escolas, Turmas, Professores e Estado Global',
+    'setup_longitudinal': 'Setup de Observação, Seleção de Turmas e Ciclo Longitudinal (Pilar 1)',
+    'rubricas_observacao': 'Observação Ativa, Matrizes Curriculares, Rubricas e Pendências',
+    'sintese_finalizacao': 'Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo de Tempo',
+    'travas_seguranca': 'Travas de Duplo Lançamento, Imutabilidade Longitudinal e Segurança',
+    'formadora_coordenacao': 'Acompanhamento da Formadora, Matriz de Coordenação e Isolamento de Perfis',
+    'agenda_cronograma': 'Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática',
+    'historico_governanca': 'Histórico de Observações, Filtros Multidimensionais, Visualização e Exclusão',
+    'indicadores_decisao': 'Indicadores Pedagógicos, Cobertura de Turmas (Pilar 1), KPIs e Apoio à Decisão',
+    'backup_exportacao': 'Persistência Local, Backup JSON, Restauração e Relatório para Impressão',
+    'navegacao_layout': 'Sistema de Rotas/Tabs, Menu Mobile Overlay, Acessibilidade e Changelog'
+}
 
 test_result = None
 server_running = True
@@ -42,53 +59,133 @@ class AuditHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
 
     def log_message(self, format, *args):
-        # Silencia logs normais de requests para saída limpa
+        # Silencia logs comuns do servidor para manter a saída limpa
         pass
 
-def run_server():
+def find_available_port(preferred_port):
+    import socket
+    for p in range(preferred_port, preferred_port + 50):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                s.bind(('127.0.0.1', p))
+                return p
+            except OSError:
+                continue
+    return preferred_port
+
+httpd_instance = None
+
+def run_server(port):
+    global httpd_instance
     socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(('127.0.0.1', PORT), AuditHandler) as httpd:
-        while server_running:
-            httpd.handle_request()
+    try:
+        httpd_instance = socketserver.TCPServer(('127.0.0.1', port), AuditHandler)
+        httpd_instance.serve_forever()
+    except Exception as e:
+        if server_running:
+            print(f"❌ Erro no servidor HTTP: {e}")
 
 def main():
-    global server_running
-    print("=" * 75)
-    print("🔬 ALGORITMO DE AUDITORIA E VERIFICAÇÃO INTEGRAL DA PLATAFORMA")
-    print("   Projeto: SerTão Criança · Gestor Supervisão Patos (PB)")
-    print("   Alvo: index.html (Versão 0.86 · v7.65)")
-    print("=" * 75)
+    global server_running, test_result
+
+    parser = argparse.ArgumentParser(
+        description="SerTão Criança · Motor de Auditoria Modular da Plataforma (100% de Cobertura)"
+    )
+    parser.add_argument(
+        '-m', '--module',
+        default='all',
+        help="Chave do módulo específico para execução modo-a-modo (ou 'all' para integral)"
+    )
+    parser.add_argument(
+        '-l', '--list-modules',
+        action='store_true',
+        help="Lista todos os 12 módulos disponíveis com suas descrições e encerra"
+    )
+    parser.add_argument(
+        '-s', '--silent-on-success',
+        action='store_true',
+        help="Execução silenciosa para pós-deploy: emite saída e falha SOMENTE se houver problemas"
+    )
+    parser.add_argument(
+        '-p', '--port',
+        type=int,
+        default=DEFAULT_PORT,
+        help=f"Porta HTTP local para o servidor de testes (padrão: {DEFAULT_PORT})"
+    )
+    parser.add_argument(
+        '--timeout',
+        type=int,
+        default=35,
+        help="Tempo limite em segundos para execução e resposta dos testes (padrão: 35s)"
+    )
+
+    args = parser.parse_args()
+
+    if args.list_modules:
+        print("=" * 80)
+        print("📚 CATÁLOGO DE MÓDULOS DA SUÍTE DE AUDITORIA (SerTão Criança)")
+        print("=" * 80)
+        for idx, (m_id, m_desc) in enumerate(MODULE_CATALOG.items(), start=1):
+            print(f"  {idx:02d}. [{m_id}] ➔ {m_desc}")
+        print("=" * 80)
+        print("💡 Para rodar um módulo isoladamente:")
+        print("   python3 audit_platform.py --module <nome_do_modulo>")
+        print("   Exemplo: python3 audit_platform.py --module auth_rbac\n")
+        sys.exit(0)
+
+    target_module = args.module.strip()
+    if target_module != 'all' and target_module not in MODULE_CATALOG:
+        print(f"❌ Módulo inválido: '{target_module}'.")
+        print(f"   Use 'python3 audit_platform.py --list-modules' para ver os módulos disponíveis.")
+        sys.exit(1)
 
     if not os.path.exists(CHROME_PATH):
         print(f"❌ Google Chrome não encontrado em {CHROME_PATH}")
         sys.exit(1)
 
-    # Inicia servidor HTTP em background
-    server_thread = threading.Thread(target=run_server, daemon=True)
-    server_thread.start()
-    time.sleep(0.5)
+    # Determina porta livre dinamicamente
+    actual_port = find_available_port(args.port)
 
-    target_url = f"http://127.0.0.1:{PORT}/index.html?autoAudit=1"
-    print(f"\n🚀 Inicializando motor headless do Google Chrome...")
-    print(f"   URL de teste: {target_url}\n")
+    # Inicia servidor HTTP em background
+    server_thread = threading.Thread(target=run_server, args=(actual_port,), daemon=True)
+    server_thread.start()
+    time.sleep(0.4)
+
+    target_url = f"http://127.0.0.1:{actual_port}/index.html?autoAudit=1&module={target_module}"
+
+    if not args.silent_on_success:
+        print("=" * 80)
+        print("🔬 ALGORITMO DE AUDITORIA MODULAR DA PLATAFORMA (SerTão Criança)")
+        print(f"   Modo de Execução: {'Integral (12 Módulos modo-a-modo)' if target_module == 'all' else f'Módulo Isolado [{target_module}]'}")
+        print(f"   Alvo: index.html (Versão 0.87)")
+        print("=" * 80)
+        print(f"🚀 Inicializando motor headless do Google Chrome...")
+        print(f"   URL de teste: {target_url}\n")
+
+    temp_profile = tempfile.mkdtemp(prefix='chrome_audit_')
 
     cmd = [
         CHROME_PATH,
         "--headless=new",
         "--disable-gpu",
         "--no-sandbox",
+        f"--user-data-dir={temp_profile}",
         target_url
     ]
 
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    # Aguarda relatório com timeout de 20 segundos
-    timeout = 20
     start = time.time()
-    while test_result is None and (time.time() - start) < timeout:
-        time.sleep(0.3)
+    while test_result is None and (time.time() - start) < args.timeout:
+        time.sleep(0.2)
 
     server_running = False
+    if httpd_instance:
+        try:
+            httpd_instance.shutdown()
+        except Exception:
+            pass
     try:
         proc.terminate()
         proc.wait(timeout=2)
@@ -96,39 +193,65 @@ def main():
         proc.kill()
 
     if test_result is None:
-        print("❌ TIMEOUT: O relatório de testes não foi recebido dentro de 20 segundos.")
+        print("❌ TIMEOUT: O relatório de testes não foi recebido dentro do tempo limite.")
         sys.exit(1)
 
-    print("-" * 75)
-    print("📋 RELATÓRIO DETALHADO POR BATERIA:")
-    print("-" * 75)
-
-    for item in test_result.get('results', []):
-        bat = item.get('battery', '')
-        name = item.get('name', '')
-        passed = item.get('passed', False)
-        details = item.get('details', '')
-
-        status_tag = "\033[92m[PASS]\033[0m" if passed else "\033[91m[FAIL]\033[0m"
-        detail_str = f" ({details})" if details else ""
-        print(f" {status_tag} {bat} ➔ {name}{detail_str}")
-
-    print("-" * 75)
     total = test_result.get('total', 0)
     passed = test_result.get('passed', 0)
     failed = test_result.get('failed', 0)
     duration = test_result.get('durationMs', 0)
     success = test_result.get('success', False)
+    modules_report = test_result.get('modules', [])
 
+    # Se --silent-on-success e obteve sucesso integral:
+    if args.silent_on_success and success:
+        print(f"✅ Auditoria pós-deploy 100% aprovada ({passed}/{total} testes em {duration}ms) sem nenhum problema.")
+        sys.exit(0)
+
+    # Caso falhe OU não seja modo silencioso, imprime relatório completo estruturado:
+    print("-" * 80)
+    print("📋 RELATÓRIO DE AUDITORIA MODULAR (MODO-A-MODO):")
+    print("-" * 80)
+
+    if modules_report:
+        for mod in modules_report:
+            m_id = mod.get('id', '')
+            m_title = mod.get('name', m_id)
+            m_passed = mod.get('passed', 0)
+            m_total = mod.get('total', 0)
+            m_success = mod.get('success', False)
+
+            header_status = "\033[92m[OK]\033[0m" if m_success else "\033[91m[FALHA]\033[0m"
+            print(f"\n📦 {header_status} MÓDULO: {m_title} ({m_passed}/{m_total} aprovados)")
+
+            for t in mod.get('results', []):
+                t_name = t.get('name', '')
+                t_pass = t.get('passed', False)
+                t_det = t.get('details', '')
+                status_tag = "  \033[92m✔ PASS\033[0m" if t_pass else "  \033[91m✖ FAIL\033[0m"
+                det_str = f" ➔ {t_det}" if t_det else ""
+                print(f"{status_tag} | {t_name}{det_str}")
+    else:
+        # Fallback para resultados planos
+        for item in test_result.get('results', []):
+            bat = item.get('battery', '')
+            name = item.get('name', '')
+            t_pass = item.get('passed', False)
+            details = item.get('details', '')
+            status_tag = "\033[92m[PASS]\033[0m" if t_pass else "\033[91m[FAIL]\033[0m"
+            detail_str = f" ({details})" if details else ""
+            print(f" {status_tag} {bat} ➔ {name}{detail_str}")
+
+    print("\n" + "=" * 80)
     if success:
-        print(f"\033[92m🎉 RESULTADO FINAL: 100% DE SUCESSO! ({passed}/{total} baterias aprovadas em {duration}ms)\033[0m")
-        print("   Todas as regras de negócio, fluxos de login, observações de turmas,")
-        print("   travas longitudinais e indicadores operam sem nenhuma falha.")
-        print("=" * 75)
+        print(f"\033[92m🎉 RESULTADO FINAL: 100% DE SUCESSO! ({passed}/{total} asserções em {duration}ms)\033[0m")
+        print("   Todos os 12 subsistemas da plataforma SerTão Criança operam em perfeita integridade.")
+        print("=" * 80)
         sys.exit(0)
     else:
-        print(f"\033[91m⚠️ RESULTADO FINAL: {failed} FALHA(S) ENCONTRADA(S) ({passed}/{total} aprovadas)\033[0m")
-        print("=" * 75)
+        print(f"\033[91m⚠️ RESULTADO FINAL: {failed} FALHA(S) ENCONTRADA(S) ({passed}/{total} aprovadas em {duration}ms)\033[0m")
+        print("   Existem problemas que requerem intervenção do engenheiro.")
+        print("=" * 80)
         sys.exit(1)
 
 if __name__ == '__main__':
