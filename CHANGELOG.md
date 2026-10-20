@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.93** | 20/10/2026 17:35 | `intermediárias/aplicativo_v93_correcao_selecao_unidade_novo_profissional.html` | Solicitação direta / Correção Operacional | Preservação da seleção de Unidade Escolar / Polo no modal de cadastro de novo profissional 🏫 |
 | **0.92** | 20/10/2026 17:30 | `intermediárias/aplicativo_v92_pilar_3_benchmark_afunilamento_ue_vs_rede.html` | Deliberação SerTão Criança / Pilar 3 | Benchmark comparativo '% da UE vs. Rede' item a item no Afunilamento de Indicadores, régua dupla, categorização de deltas pedagógicos e agregação hierárquica canônica 📊 |
 | **0.91** | 20/10/2026 16:30 | `intermediárias/aplicativo_v91_pilar_2_triade_governanca_e_nucleo_ei.html` | Deliberação SerTão Criança / Pilar 2 | Tríade Canônica de Governança em 3 Níveis, transição institucional para Coordenadora do Núcleo de EI (Helena Martins), helper canônico `isNucleoEI()` e blindagem RBAC 🏛️ |
 | **0.90** | 20/10/2026 16:00 | `intermediárias/aplicativo_v90_ocorrencias_campo_turma_docente.html` | Deliberação SerTão Criança / Pilar 1 | Atribuição primária das ocorrências de campo à Turma da Educação Infantil, trava automática para docente único regente e escolha ativa para duplas 📚 |
@@ -110,6 +111,20 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.93] - Correção da Seleção de Unidade Escolar no Cadastro de Novo Profissional
+* **Data e Horário:** 20 de Outubro de 2026 – 17:35:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v93_correcao_selecao_unidade_novo_profissional.html`
+* **Identificador no App:** 📌 Versão 0.93 (v7.72)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🛠️ Correções e Estabilidade
+- **Preservação de Seleção de Unidade Escolar / Polo no Modal de Novo Profissional:**
+  - Correção de bug no fluxo reativo de `onNewMemberRoleChange()`: ao trocar a opção no seletor `#newMemberSchool`, o evento `onchange` reconstruía as opções do `<select>` sem preservar o valor recém-selecionado, fazendo o dropdown reverter compulsoriamente para o primeiro item da lista.
+  - Implementação de retenção segura do valor ativo através da checagem e atribuição condicional (`schoolSelect.value = currentSchoolVal`), permitindo a livre atribuição de qualquer unidade da rede municipal ao novo membro.
+
+---
 
 ### [Versão 0.92] - Pilar 3: Benchmark Comparativo '% da UE vs. Rede' no Afunilamento de Indicadores
 * **Data e Horário:** 20 de Outubro de 2026 – 17:30:00

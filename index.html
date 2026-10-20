@@ -2484,7 +2484,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.92 (v7.71)
+          Versão 0.93 (v7.72)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3859,6 +3859,20 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.93 - CORREÇÃO DE SELEÇÃO DE UNIDADE NO CADASTRO DE PROFISSIONAL -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.93 · v7.72</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Correção de Seleção de Unidade Escolar no Cadastro de Novos Profissionais:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🏫 <strong>Preservação da Seleção de Unidade / Polo:</strong> Correção do fluxo reativo em <code>onNewMemberRoleChange()</code> para reter o valor selecionado no seletor de unidade/polo, impedindo que a lista fosse resetada para a primeira opção ao tentar atribuir outra escola.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.92 - PILAR 3: BENCHMARK NA ABA AFUNILAMENTO (UE VS. REDE) -->
@@ -11997,6 +12011,7 @@ function getActiveSections(obs) {
       const ruleNote = document.getElementById('newMemberTeacherRuleNote');
       
       supSelect.innerHTML = '';
+      const currentSchoolVal = schoolSelect.value;
       schoolSelect.innerHTML = '';
 
       // Popula Polos se for formador, senão popula Unidades
@@ -12013,6 +12028,11 @@ function getActiveSections(obs) {
           opt.value = u.name; opt.text = u.name;
           schoolSelect.appendChild(opt);
         });
+      }
+
+      // Preserva a seleção se o valor continuar válido
+      if (Array.from(schoolSelect.options).some(o => o.value === currentSchoolVal)) {
+        schoolSelect.value = currentSchoolVal;
       }
 
       if (role === 'professora') {
@@ -15999,6 +16019,20 @@ function getActiveSections(obs) {
 
               saveState();
               logger.log('Persistência e integridade do estado global (saveState / appState)', true);
+
+              // Validação de seleção dinâmica de unidade no cadastro de profissional
+              openAddMemberModal();
+              const schoolSel = document.getElementById('newMemberSchool');
+              if (schoolSel && schoolSel.options.length > 1) {
+                const targetSchool = schoolSel.options[1].value;
+                schoolSel.value = targetSchool;
+                schoolSel.dispatchEvent(new Event('change'));
+                if (schoolSel.value !== targetSchool) {
+                  throw new Error(`Falha na seleção de unidade: esperado "${targetSchool}", obtido "${schoolSel.value}"`);
+                }
+                logger.log('Seleção e retenção de unidade escolar no cadastro de profissional', true, targetSchool);
+              }
+              closeAddMemberModal();
             } catch (e) {
               logger.log('Erro de execução no módulo catalogo_dados', false, e.message);
             }
