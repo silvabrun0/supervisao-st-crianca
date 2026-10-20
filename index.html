@@ -733,6 +733,96 @@
       flex-shrink: 0;
     }
 
+    /* =========================================================================
+       PILAR 3: BENCHMARK AFUNILAMENTO (UE VS. REDE MUNICIPAL)
+       ========================================================================= */
+    .benchmark-info-bar {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #166534;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .benchmark-ruler-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .benchmark-item-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .benchmark-bar-track {
+      width: 75px;
+      height: 7px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .benchmark-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+    .benchmark-delta-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .benchmark-delta-critical {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #FCA5A5;
+    }
+    .benchmark-delta-warning {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+    }
+    .benchmark-delta-neutral {
+      background: #F1F5F9;
+      color: #475569;
+      border: 1px solid #E2E8F0;
+    }
+    .benchmark-delta-success {
+      background: #DCFCE7;
+      color: #166534;
+      border: 1px solid #86EFAC;
+    }
+    .benchmark-delta-highlight {
+      background: #D1FAE5;
+      color: #065F46;
+      border: 1px solid #6EE7B7;
+      box-shadow: 0 1px 2px rgba(6, 95, 70, 0.1);
+    }
+    .benchmark-item-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
     /* Tables */
     .data-table {
       width: 100%;
@@ -2394,7 +2484,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.91 (v7.70)
+          Versão 0.92 (v7.71)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3769,6 +3859,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.92 - PILAR 3: BENCHMARK NA ABA AFUNILAMENTO (UE VS. REDE) -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.92 · v7.71</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Pilar 3: Benchmark Comparativo '% da UE vs. Rede' na Aba de Afunilamento por Dimensão:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📊 <strong>Régua Dupla de Benchmark (UE vs. Rede):</strong> Visualização simultânea em 3 níveis (Grande Dimensão, Subdimensão e Critério) da consistência da Unidade Escolar frente à Média Geral da Rede Municipal de Patos.</li>
+          <li>🎯 <strong>Cálculo Automático de Delta ($\Delta \pm\%$):</strong> Identificação visual imediata de discrepâncias pedagógicas, com categorização semântica automática para <em>Atenção Crítica</em> ($\Delta \le -10\%$), <em>Abaixo da Média</em>, <em>Na Média</em>, <em>Acima da Média</em> e <em>Destaque Positivo</em> ($\Delta \ge +10\%$).</li>
+          <li>🏛️ <strong>Banner Contextual e Governança Multinível:</strong> Adaptação dinâmica para Coordenadores (Minha UE vs. Rede), Formadores (Polo/UEs vs. Rede) e Coordenadora do Núcleo de EI (Rede Consolidada com benchmark sob demanda por UE).</li>
+          <li>⚡ <strong>Motor Canônico de Agregação Hierárquica:</strong> Criação das funções <code>calculateHierarchyStats()</code> e <code>formatBenchmarkDelta()</code>, assegurando precisão determinística e proteção contra divisão por zero.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.91 - PILAR 2: TRÍADE DE GOVERNANÇA EM 3 NÍVEIS & NÚCLEO DE EDUCAÇÃO INFANTIL -->
@@ -12753,6 +12860,119 @@ function getActiveSections(obs) {
       }
     }
 
+    // =========================================================================
+    // PILAR 3: FUNÇÕES AUXILIARES DE BENCHMARK E AFUNILAMENTO (UE VS. REDE)
+    // =========================================================================
+
+    /**
+     * Calcula as métricas consolidadas em 3 níveis (Dimensão, Subdimensão e Critério)
+     * a partir de um conjunto de observações e da matriz curricular ativa.
+     */
+    function calculateHierarchyStats(observations, activeSections) {
+      let totalValid = 0;
+      let totalPts = 0;
+      let totalNA = 0;
+
+      const dims = (activeSections || []).map(sec => ({
+        key: sec.key,
+        title: sec.title,
+        consistent: 0,
+        partial: 0,
+        notDone: 0,
+        na: 0,
+        validTotal: 0,
+        subSections: (sec.subSections || []).map(sub => ({
+          id: sub.id,
+          title: sub.title,
+          consistent: 0,
+          partial: 0,
+          notDone: 0,
+          na: 0,
+          validTotal: 0,
+          criteria: (sub.criteria || []).map(crit => ({
+            id: crit.id,
+            text: crit.text,
+            consistent: 0,
+            partial: 0,
+            notDone: 0,
+            na: 0,
+            validTotal: 0
+          }))
+        }))
+      }));
+
+      (observations || []).forEach(obs => {
+        (activeSections || []).forEach((sec, sIdx) => {
+          (sec.subSections || []).forEach((sub, subIdx) => {
+            (sub.criteria || []).forEach((crit, cIdx) => {
+              const r = obs.responses ? obs.responses[crit.id] : null;
+              if (!r) return;
+
+              const dStat = dims[sIdx];
+              const sStat = dStat.subSections[subIdx];
+              const cStat = sStat.criteria[cIdx];
+
+              if (r === 'na') {
+                dStat.na++;
+                sStat.na++;
+                cStat.na++;
+                totalNA++;
+              } else {
+                dStat.validTotal++;
+                sStat.validTotal++;
+                cStat.validTotal++;
+                totalValid++;
+
+                if (r === 'consistent') {
+                  dStat.consistent++;
+                  sStat.consistent++;
+                  cStat.consistent++;
+                  totalPts += 1.0;
+                } else if (r === 'partial') {
+                  dStat.partial++;
+                  sStat.partial++;
+                  cStat.partial++;
+                  totalPts += 0.5;
+                } else if (r === 'not_done') {
+                  dStat.notDone++;
+                  sStat.notDone++;
+                  cStat.notDone++;
+                }
+              }
+            });
+          });
+        });
+      });
+
+      return { dims, totalValid, totalPts, totalNA };
+    }
+
+    /**
+     * Formata visualmente o Delta percentual comparativo entre o Escopo e a Rede.
+     */
+    function formatBenchmarkDelta(delta, isCompact) {
+      if (delta === null || delta === undefined) {
+        return `<span class="benchmark-delta-tag benchmark-delta-neutral">— Sem dados</span>`;
+      }
+
+      if (delta <= -10) {
+        const text = isCompact ? `🔻 ${delta}%` : `🔻 ${delta}% · Atenção Crítica`;
+        return `<span class="benchmark-delta-tag benchmark-delta-critical">${text}</span>`;
+      } else if (delta < 0) {
+        const text = isCompact ? `🔻 ${delta}%` : `🔻 ${delta}% · Abaixo da Média`;
+        return `<span class="benchmark-delta-tag benchmark-delta-warning">${text}</span>`;
+      } else if (delta === 0) {
+        const text = isCompact ? `⚪ 0%` : `⚪ 0% · Na Média`;
+        return `<span class="benchmark-delta-tag benchmark-delta-neutral">${text}</span>`;
+      } else if (delta < 10) {
+        const text = isCompact ? `🟢 +${delta}%` : `🟢 +${delta}% · Acima da Média`;
+        return `<span class="benchmark-delta-tag benchmark-delta-success">${text}</span>`;
+      } else {
+        const text = isCompact ? `🟢 +${delta}%` : `🟢 +${delta}% · Destaque Positivo`;
+        return `<span class="benchmark-delta-tag benchmark-delta-highlight">${text}</span>`;
+      }
+    }
+
     function renderIndicatorsScreen() {
       const container = document.getElementById('indicatorsBodyContainer');
       if (!container) return;
@@ -13528,72 +13748,26 @@ function getActiveSections(obs) {
       }
 
       // =========================================================================
-      // CASO A: VISÃO GERAL PANORÂMICA (TODOS OS AVALIANDOS)
+      // CASO A: VISÃO GERAL PANORÂMICA (PILAR 3: BENCHMARK UE VS. REDE)
       // =========================================================================
 
-      // Totalizadores de Respostas para o Afunilamento e Índice de Consistência
-      let totalValidResp = 0;
-      let totalPts = 0;
-      let totalNA = 0;
-
-      const dimStats = activeSections.map(sec => ({
-        key: sec.key,
-        title: sec.title,
-        consistent: 0,
-        partial: 0,
-        notDone: 0,
-        na: 0,
-        validTotal: 0,
-        subSections: sec.subSections.map(sub => ({
-          id: sub.id,
-          title: sub.title,
-          criteria: sub.criteria.map(crit => ({
-            id: crit.id,
-            text: crit.text,
-            consistent: 0,
-            partial: 0,
-            notDone: 0,
-            na: 0,
-            validTotal: 0
-          }))
-        }))
-      }));
-
-      scopedObs.forEach(obs => {
-        activeSections.forEach((sec, sIdx) => {
-          sec.subSections.forEach((sub, subIdx) => {
-            sub.criteria.forEach((crit, cIdx) => {
-              const r = obs.responses ? obs.responses[crit.id] : null;
-              if (!r) return;
-
-              const cStat = dimStats[sIdx].subSections[subIdx].criteria[cIdx];
-
-              if (r === 'na') {
-                dimStats[sIdx].na++;
-                cStat.na++;
-                totalNA++;
-              } else {
-                dimStats[sIdx].validTotal++;
-                cStat.validTotal++;
-                totalValidResp++;
-
-                if (r === 'consistent') {
-                  dimStats[sIdx].consistent++;
-                  cStat.consistent++;
-                  totalPts += 1.0;
-                } else if (r === 'partial') {
-                  dimStats[sIdx].partial++;
-                  cStat.partial++;
-                  totalPts += 0.5;
-                } else if (r === 'not_done') {
-                  dimStats[sIdx].notDone++;
-                  cStat.notDone++;
-                }
-              }
-            });
-          });
-        });
+      // 1. Resolução das Observações Consolidadas de toda a Rede Municipal de Patos
+      const redeObs = (appState.observations || []).filter(o => {
+        if (o.status !== 'finalized' && o.status !== 'concluida') return false;
+        if (targetType === 'coordenador') {
+          return o.evaluatedType === 'coordenador';
+        } else {
+          return o.evaluatedType === 'professora' || o.evaluatedType === 'turma';
+        }
       });
+
+      // 2. Computação Hierárquica Dupla: Escopo Selecionado vs. Rede Municipal de Patos
+      const scopeHierarchy = calculateHierarchyStats(scopedObs, activeSections);
+      const redeHierarchy = calculateHierarchyStats(redeObs, activeSections);
+
+      const totalValidResp = scopeHierarchy.totalValid;
+      const totalPts = scopeHierarchy.totalPts;
+      const totalNA = scopeHierarchy.totalNA;
 
       // CÁLCULO DE COBERTURA DE TURMAS (PILAR 1 & PILAR 7)
       const totalAvaliandos = scopedAvaliandos.length;
@@ -13604,7 +13778,6 @@ function getActiveSections(obs) {
 
       if (targetType === 'professora') {
         coverageLabel = 'Cobertura de Turmas';
-        // Coleta todas as turmas das escolas do escopo
         let scopedClasses = [];
         let indSchools = (activeUnitFilter !== 'ALL') ? [activeUnitFilter] : ((appState.units || []).map(u => u.name));
         indSchools.forEach(uName => {
@@ -13626,10 +13799,10 @@ function getActiveSections(obs) {
 
       const overallPercent = totalValidResp > 0 ? Math.round((totalPts / totalValidResp) * 100) : null;
       const overallColor = overallPercent === null ? 'var(--text-secondary)' : (overallPercent >= 80 ? 'var(--green)' : overallPercent >= 60 ? 'var(--yellow)' : 'var(--red)');
-      const overallLabel = overallPercent === null ? 'Sem Visitas Finalizadas' : (overallPercent >= 80 ? 'Consistência Forte' : overallPercent >= 60 ? 'Atenção Necessária' : 'Alerta de Fragilidade');
+      const overallLabel = overallPercent === null ? 'Sem Observações Finalizadas' : (overallPercent >= 80 ? 'Consistência Forte' : overallPercent >= 60 ? 'Atenção Necessária' : 'Alerta de Fragilidade');
       const overallDisplay = overallPercent !== null ? `${overallPercent}%` : '—';
 
-      // 1. Linha de KPIs Superiores com Cobertura Dinâmica
+      // 1. Linha de KPIs Superiores
       let html = `
         <div id="indicatorsSectionKPIs" style="display:${currentSubTab === 'kpis' ? 'block' : 'none'};">
           <div class="kpi-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-bottom:20px;">
@@ -13639,9 +13812,9 @@ function getActiveSections(obs) {
               <div style="font-size:12px; color:var(--text-secondary);">● ${overallLabel}</div>
             </div>
             <div class="card" style="margin:0;">
-              <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Visitas Auditadas</div>
+              <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Observações Auditadas</div>
               <div style="font-size:28px; font-weight:800; color:var(--primary-dark); margin:4px 0;">${scopedObs.length}</div>
-              <div style="font-size:12px; color:var(--text-secondary);">Observações finalizadas no escopo</div>
+              <div style="font-size:12px; color:var(--text-secondary);">Finalizadas no escopo selecionado</div>
             </div>
             <div class="card" style="margin:0; border-left:4px solid var(--primary);">
               <div style="font-size:11px; font-weight:700; color:var(--primary); text-transform:uppercase;">${coverageLabel}</div>
@@ -13659,7 +13832,16 @@ function getActiveSections(obs) {
         </div>
       `;
 
-      // 2. Afunilamento de Rubricas
+      // 2. Afunilamento de Rubricas com Benchmark (Pilar 3)
+      let scopeLabelText = 'Minha UE';
+      if (user.roleKey === 'coordenador') {
+        scopeLabelText = 'Minha UE';
+      } else if (user.roleKey === 'formador') {
+        scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Meu Polo';
+      } else {
+        scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Rede Consolidada';
+      }
+
       html += `
         <div id="indicatorsSectionDrilldown" style="display:${currentSubTab === 'drilldown' ? 'block' : 'none'};">
           <div class="page-title-row" style="margin-top:4px; margin-bottom:12px;">
@@ -13668,46 +13850,92 @@ function getActiveSections(obs) {
                 Afunilamento de Indicadores Pedagógicos (${targetType === 'coordenador' ? 'Coordenação' : 'Docência'})
               </h3>
               <p style="font-size:12px; color:var(--text-secondary);">
-                Navegação detalhada da Grande Dimensão até cada Item Individual
+                Benchmark comparativo item a item entre a sua Unidade Escolar e a Média da Rede Municipal de Patos
               </p>
             </div>
           </div>
+
+          <!-- Banner Informativo de Contexto do Benchmark -->
+          <div class="benchmark-info-bar">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:16px;">🏛️</span>
+              <span>
+                <strong>Benchmark Ativo:</strong> Comparando <strong>${scopeLabelText}</strong> contra a <strong>Média Geral da Rede Municipal (${redeObs.length} observação(ões) na base)</strong>.
+              </span>
+            </div>
+            ${isNucleoEI(user) && activeUnitFilter === 'ALL' ? `
+              <span style="font-size:11px; background:#DCFCE7; color:#166534; padding:3px 8px; border-radius:4px; font-weight:700;">
+                💡 Selecione uma UE no filtro para comparar diretamente
+              </span>
+            ` : ''}
+          </div>
       `;
 
-      if (scopedObs.length === 0) {
+      if (scopedObs.length === 0 && redeObs.length === 0) {
         html += `
           <div class="card" style="text-align:center; padding:32px 20px; margin-bottom:24px; background:#F8FAFC;">
-            <div style="font-size:15px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Nenhuma Observação Finalizada no Escopo para este Público</div>
+            <div style="font-size:15px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Nenhuma Observação Finalizada na Rede</div>
             <p style="font-size:12px; color:var(--text-secondary); max-width:440px; margin:0 auto 16px auto;">
-              Finalize visitas formativas para alimentar a árvore de afunilamento de critérios e o diagnóstico qualitativo.
+              Finalize observações formativas para alimentar a árvore de afunilamento de critérios e o comparativo com a rede municipal.
             </p>
             <button class="btn btn-primary" style="font-size:12px;" onclick="handleNewObsButtonClick()">INICIAR NOVA OBSERVAÇÃO</button>
           </div>
         `;
       } else {
-        dimStats.forEach((dim, sIdx) => {
+        scopeHierarchy.dims.forEach((dim, sIdx) => {
+          const redeDim = redeHierarchy.dims[sIdx] || { validTotal: 0, consistent: 0, partial: 0 };
+
+          // Nível 1: Dimensão
           const dimPts = dim.consistent * 1.0 + dim.partial * 0.5;
-          const dimPct = dim.validTotal > 0 ? Math.round((dimPts / dim.validTotal) * 100) : 100;
-          const dimCol = dimPct >= 80 ? 'var(--green)' : dimPct >= 60 ? 'var(--yellow)' : 'var(--red)';
+          const dimPct = dim.validTotal > 0 ? Math.round((dimPts / dim.validTotal) * 100) : null;
+          const dimCol = dimPct === null ? 'var(--text-secondary)' : (dimPct >= 80 ? 'var(--green)' : dimPct >= 60 ? 'var(--yellow)' : 'var(--red)');
+
+          const redeDimPts = redeDim.consistent * 1.0 + redeDim.partial * 0.5;
+          const redeDimPct = redeDim.validTotal > 0 ? Math.round((redeDimPts / redeDim.validTotal) * 100) : null;
+          const redeDimCol = 'var(--primary)';
+
+          const dimDelta = (dimPct !== null && redeDimPct !== null) ? (dimPct - redeDimPct) : null;
           const isDimOpen = Boolean(appState.expandedDrilldowns[`dim_${sIdx}`]);
 
           html += `
             <div class="drilldown-group">
               <div class="drilldown-header ${isDimOpen ? 'expanded' : ''}" onclick="toggleDrilldown('dim_${sIdx}')">
-                <div style="display:flex; align-items:center; gap:12px;">
+                <div style="display:flex; align-items:center; gap:12px; flex:1; min-width:0;">
                   <span style="font-size:18px;">${isDimOpen ? '▼' : '►'}</span>
-                  <div>
-                    <div style="font-size:15px; font-weight:800; color:var(--text-primary);">${sIdx + 1}. ${(dim.title || '').replace(/^Dimens[aã]o\s*\d*\s*[:\.\-]?\s*/i, '').trim()}</div>
-                    <div style="font-size:12px; color:var(--text-secondary);">
-                      ${dim.validTotal} respostas válidas · ${dim.na} N/A · Consistência: <strong style="color:${dimCol}">${dimPct}%</strong>
+                  <div style="min-width:0;">
+                    <div style="font-size:15px; font-weight:800; color:var(--text-primary); line-height:1.3;">
+                      ${sIdx + 1}. ${(dim.title || '').replace(/^Dimens[aã]o\s*\d*\s*[:\.\-]?\s*/i, '').trim()}
+                    </div>
+                    <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
+                      ${dim.validTotal} resp. na UE · Consistência: <strong style="color:${dimCol}">${dimPct !== null ? dimPct + '%' : '—'}</strong>
+                      ${dimDelta !== null ? `· Variação: ${dimDelta > 0 ? '+' : ''}${dimDelta}%` : ''}
                     </div>
                   </div>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <div style="width:100px; height:8px; background:#E2E8F0; border-radius:4px; overflow:hidden;">
-                    <div style="width:${dimPct}%; height:100%; background:${dimCol};"></div>
+
+                <!-- RÉGUA DUPLA: GRANDE DIMENSÃO -->
+                <div class="benchmark-ruler-row">
+                  <div class="benchmark-item-box" title="Consistência na Unidade Escolar">
+                    <span style="color:var(--text-secondary);">${scopeLabelText}:</span>
+                    <div class="benchmark-bar-track">
+                      <div class="benchmark-bar-fill" style="width:${dimPct || 0}%; background:${dimCol};"></div>
+                    </div>
+                    <span style="color:${dimCol}; min-width:32px; text-align:right;">${dimPct !== null ? dimPct + '%' : '—'}</span>
                   </div>
-                  <span style="font-size:14px; font-weight:800; color:${dimCol}; width:40px; text-align:right;">${dimPct}%</span>
+
+                  <span style="color:var(--border); font-size:12px;">|</span>
+
+                  <div class="benchmark-item-box" title="Consistência Média de toda a Rede Municipal de Patos">
+                    <span style="color:var(--text-secondary);">Rede:</span>
+                    <div class="benchmark-bar-track">
+                      <div class="benchmark-bar-fill" style="width:${redeDimPct || 0}%; background:${redeDimCol};"></div>
+                    </div>
+                    <span style="color:${redeDimCol}; min-width:32px; text-align:right;">${redeDimPct !== null ? redeDimPct + '%' : '—'}</span>
+                  </div>
+
+                  <div style="min-width:85px; text-align:right;">
+                    ${formatBenchmarkDelta(dimDelta, true)}
+                  </div>
                 </div>
               </div>
 
@@ -13715,60 +13943,107 @@ function getActiveSections(obs) {
           `;
 
           dim.subSections.forEach((sub, subIdx) => {
+            const redeSub = (redeDim.subSections && redeDim.subSections[subIdx]) ? redeDim.subSections[subIdx] : { criteria: [] };
             const subKey = `sub_${sIdx}_${subIdx}`;
             const isSubOpen = Boolean(appState.expandedDrilldowns[subKey]);
 
-            // Cálculo das métricas da Subdimensão (Nível 2)
+            // Nível 2: Subdimensão
             const subPts = sub.criteria.reduce((acc, c) => acc + (c.consistent * 1.0 + c.partial * 0.5), 0);
             const subValid = sub.criteria.reduce((acc, c) => acc + c.validTotal, 0);
-            const subPct = subValid > 0 ? Math.round((subPts / subValid) * 100) : 100;
-            const subCol = subPct >= 80 ? 'var(--green)' : subPct >= 60 ? 'var(--yellow)' : 'var(--red)';
+            const subPct = subValid > 0 ? Math.round((subPts / subValid) * 100) : null;
+            const subCol = subPct === null ? 'var(--text-secondary)' : (subPct >= 80 ? 'var(--green)' : subPct >= 60 ? 'var(--yellow)' : 'var(--red)');
+
+            const redeSubPts = redeSub.criteria.reduce((acc, c) => acc + (c.consistent * 1.0 + c.partial * 0.5), 0);
+            const redeSubValid = redeSub.criteria.reduce((acc, c) => acc + c.validTotal, 0);
+            const redeSubPct = redeSubValid > 0 ? Math.round((redeSubPts / redeSubValid) * 100) : null;
+
+            const subDelta = (subPct !== null && redeSubPct !== null) ? (subPct - redeSubPct) : null;
 
             html += `
               <div class="drilldown-subgroup">
                 <!-- NÍVEL 2: SUBDIMENSÃO (Clicável para expandir as variáveis) -->
                 <div class="drilldown-subheader ${isSubOpen ? 'expanded' : ''}" onclick="toggleDrilldown('${subKey}')">
-                  <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:0;">
                     <span style="font-size:13px; color:var(--text-secondary);">${isSubOpen ? '▼' : '►'}</span>
-                    <div>
-                      <div style="font-size:13px; font-weight:800; color:var(--primary-dark);">
+                    <div style="min-width:0;">
+                      <div style="font-size:13px; font-weight:800; color:var(--primary-dark); line-height:1.3;">
                         ${sub.id} ${(sub.title || '').replace(/^Subdimens[aã]o\s*[\d\.]*\s*[:\.\-]?\s*/i, '').trim()}
                       </div>
                       <div style="font-size:11px; color:var(--text-secondary);">
-                        ${sub.criteria.length} variáveis · ${subValid} respostas válidas · Consistência: <strong style="color:${subCol}">${subPct}%</strong>
+                        ${sub.criteria.length} variáveis · ${subValid} respostas válidas na UE
                       </div>
                     </div>
                   </div>
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <div style="width:70px; height:6px; background:#E2E8F0; border-radius:3px; overflow:hidden;">
-                      <div style="width:${subPct}%; height:100%; background:${subCol};"></div>
+
+                  <!-- RÉGUA COMPARATIVA DA SUBDIMENSÃO -->
+                  <div class="benchmark-ruler-row" style="font-size:11px;">
+                    <div class="benchmark-item-box">
+                      <span style="color:var(--text-secondary);">UE:</span>
+                      <span style="color:${subCol}; font-weight:800;">${subPct !== null ? subPct + '%' : '—'}</span>
                     </div>
-                    <span style="font-size:12px; font-weight:800; color:${subCol}; width:35px; text-align:right;">${subPct}%</span>
+
+                    <span style="color:var(--border);">|</span>
+
+                    <div class="benchmark-item-box">
+                      <span style="color:var(--text-secondary);">Rede:</span>
+                      <span style="color:var(--primary); font-weight:800;">${redeSubPct !== null ? redeSubPct + '%' : '—'}</span>
+                    </div>
+
+                    <div style="min-width:65px; text-align:right;">
+                      ${formatBenchmarkDelta(subDelta, true)}
+                    </div>
                   </div>
                 </div>
 
-                <!-- NÍVEL 3: VARIÁVEIS / ITENS INDIVIDUAIS (Exibidos ao clicar na subdimensão) -->
+                <!-- NÍVEL 3: VARIÁVEIS / ITENS INDIVIDUAIS -->
                 <div class="drilldown-subcontent ${isSubOpen ? 'show' : ''}">
             `;
 
-            sub.criteria.forEach(crit => {
+            sub.criteria.forEach((crit, cIdx) => {
+              const redeCrit = (redeSub.criteria && redeSub.criteria[cIdx]) ? redeSub.criteria[cIdx] : { validTotal: 0, consistent: 0, partial: 0 };
+
               const critPts = crit.consistent * 1.0 + crit.partial * 0.5;
-              const critPct = crit.validTotal > 0 ? Math.round((critPts / crit.validTotal) * 100) : 100;
-              const critCol = critPct >= 80 ? 'var(--green)' : critPct >= 60 ? 'var(--yellow)' : 'var(--red)';
+              const critPct = crit.validTotal > 0 ? Math.round((critPts / crit.validTotal) * 100) : null;
+              const critCol = critPct === null ? 'var(--text-secondary)' : (critPct >= 80 ? 'var(--green)' : critPct >= 60 ? 'var(--yellow)' : 'var(--red)');
+
+              const redeCritPts = redeCrit.consistent * 1.0 + redeCrit.partial * 0.5;
+              const redeCritPct = redeCrit.validTotal > 0 ? Math.round((redeCritPts / redeCrit.validTotal) * 100) : null;
+
+              const critDelta = (critPct !== null && redeCritPct !== null) ? (critPct - redeCritPct) : null;
 
               html += `
                 <div class="drilldown-sub-item">
                   <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
-                    <div style="font-size:13px; color:var(--text-primary); flex:1;">
+                    <div style="font-size:13px; color:var(--text-primary); flex:1; line-height:1.4;">
                       <strong>[${crit.id}]</strong> ${crit.text}
                     </div>
-                    <span style="font-size:12px; font-weight:800; color:${critCol};">${critPct}%</span>
                   </div>
-                  <div style="display:flex; gap:6px; margin-top:6px; font-size:11px; flex-wrap:wrap;">
-                    <span style="background:#DCFCE7; color:#166534; padding:2px 6px; border-radius:4px;">Consistente: ${crit.consistent}</span>
-                    <span style="background:#FEF3C7; color:#92400E; padding:2px 6px; border-radius:4px;">Parcial: ${crit.partial}</span>
-                    <span style="background:#FEE2E2; color:#991B1B; padding:2px 6px; border-radius:4px;">Não Realizado: ${crit.notDone}</span>
-                    <span style="background:#F1F5F9; color:#475569; padding:2px 6px; border-radius:4px;">Não se Aplica: ${crit.na}</span>
+
+                  <!-- CARD DE BENCHMARK DO CRITÉRIO INDIVIDUAL -->
+                  <div class="benchmark-item-card">
+                    <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                      <div style="font-size:11px;">
+                        <span style="color:var(--text-secondary);">Minha UE:</span>
+                        <strong style="color:${critCol}; margin-left:3px; font-size:12px;">${critPct !== null ? critPct + '%' : '—'}</strong>
+                      </div>
+                      <span style="color:var(--border);">•</span>
+                      <div style="font-size:11px;">
+                        <span style="color:var(--text-secondary);">Rede Patos:</span>
+                        <strong style="color:var(--primary); margin-left:3px; font-size:12px;">${redeCritPct !== null ? redeCritPct + '%' : '—'}</strong>
+                      </div>
+                      <span style="color:var(--border);">•</span>
+                      <div>
+                        ${formatBenchmarkDelta(critDelta, false)}
+                      </div>
+                    </div>
+
+                    <!-- Distribuição de Respostas na UE -->
+                    <div style="display:flex; gap:5px; font-size:10px; flex-wrap:wrap;">
+                      <span style="background:#DCFCE7; color:#166534; padding:2px 5px; border-radius:4px;">C: ${crit.consistent}</span>
+                      <span style="background:#FEF3C7; color:#92400E; padding:2px 5px; border-radius:4px;">P: ${crit.partial}</span>
+                      <span style="background:#FEE2E2; color:#991B1B; padding:2px 5px; border-radius:4px;">NR: ${crit.notDone}</span>
+                      <span style="background:#F1F5F9; color:#475569; padding:2px 5px; border-radius:4px;">NA: ${crit.na}</span>
+                    </div>
                   </div>
                 </div>
               `;
@@ -16161,6 +16436,64 @@ function getActiveSections(obs) {
                 totalClasses += getClassesForSchool(uName).length;
               });
               logger.log('Cálculo e agregação de turmas mapeadas para cobertura na rede (Pilar 1)', totalClasses > 0, `${totalClasses} turmas totais`);
+
+              // =========================================================================
+              // TESTES DETERMINÍSTICOS DO PILAR 3: BENCHMARK AFUNILAMENTO (UE VS. REDE)
+              // =========================================================================
+
+              // 1. Validação da Função Canônica calculateHierarchyStats()
+              const sampleSections = appState.activeSectionsTeacher || DEFAULT_SECTIONS_TEACHER;
+              const mockObsUE = [{
+                id: 'obs-mock-p3-1',
+                status: 'finalized',
+                evaluatedType: 'turma',
+                schoolName: 'CEI Professora Maria de Lourdes',
+                responses: { '1.1.1': 'consistent', '1.1.2': 'not_done' }
+              }];
+              const mockObsRede = [
+                mockObsUE[0],
+                {
+                  id: 'obs-mock-p3-2',
+                  status: 'finalized',
+                  evaluatedType: 'turma',
+                  schoolName: 'EMEI Pequeno Príncipe',
+                  responses: { '1.1.1': 'consistent', '1.1.2': 'consistent' }
+                }
+              ];
+
+              const ueResult = calculateHierarchyStats(mockObsUE, sampleSections);
+              const redeResult = calculateHierarchyStats(mockObsRede, sampleSections);
+
+              if (!ueResult || !ueResult.dims || !redeResult || !redeResult.dims) {
+                throw new Error('calculateHierarchyStats retornou estrutura inválida');
+              }
+              logger.log('Motor canônico de agregação hierárquica (calculateHierarchyStats)', true, `${ueResult.dims.length} dimensões processadas`);
+
+              // 2. Validação do Cálculo Determinístico do Delta (Pilar 3)
+              // Critério 1.1.1: UE = 100%, Rede = 100% -> Delta = 0%
+              // Critério 1.1.2: UE = 0%, Rede = 50% -> Delta = -50% (Atenção Crítica)
+              const crit112UE = ueResult.dims[0].subSections[0].criteria.find(c => c.id === '1.1.2');
+              const crit112Rede = redeResult.dims[0].subSections[0].criteria.find(c => c.id === '1.1.2');
+
+              const pctUE112 = crit112UE.validTotal > 0 ? Math.round((crit112UE.consistent / crit112UE.validTotal) * 100) : 0;
+              const pctRede112 = crit112Rede.validTotal > 0 ? Math.round((crit112Rede.consistent / crit112Rede.validTotal) * 100) : 0;
+              const delta112 = pctUE112 - pctRede112;
+
+              const deltaHtml = formatBenchmarkDelta(delta112, false);
+              const isCritical = deltaHtml.includes('benchmark-delta-critical') && deltaHtml.includes('Atenção Crítica');
+              logger.log('Cálculo determinístico do Delta e categorização de Atenção Crítica (Pilar 3)', isCritical && delta112 === -50, `Δ: ${delta112}%`);
+
+              // 3. Renderização Efetiva no DOM com Alternância de Sub-Aba
+              switchIndicatorsSubTab('drilldown');
+              const drillSection = document.getElementById('indicatorsSectionDrilldown');
+              if (!drillSection || drillSection.style.display !== 'block') {
+                throw new Error('Sub-aba de Afunilamento não ativada corretamente');
+              }
+
+              const infoBar = drillSection.querySelector('.benchmark-info-bar');
+              if (!infoBar) throw new Error('.benchmark-info-bar ausente na sub-aba Afunilamento');
+              logger.log('Renderização da Régua Dupla e Banner de Benchmark no DOM (Pilar 3)', true);
+
             } catch (e) {
               logger.log('Erro de execução no módulo indicadores_decisao', false, e.message);
             }

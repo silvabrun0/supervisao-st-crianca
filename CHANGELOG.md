@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.92** | 20/10/2026 17:30 | `intermediárias/aplicativo_v92_pilar_3_benchmark_afunilamento_ue_vs_rede.html` | Deliberação SerTão Criança / Pilar 3 | Benchmark comparativo '% da UE vs. Rede' item a item no Afunilamento de Indicadores, régua dupla, categorização de deltas pedagógicos e agregação hierárquica canônica 📊 |
 | **0.91** | 20/10/2026 16:30 | `intermediárias/aplicativo_v91_pilar_2_triade_governanca_e_nucleo_ei.html` | Deliberação SerTão Criança / Pilar 2 | Tríade Canônica de Governança em 3 Níveis, transição institucional para Coordenadora do Núcleo de EI (Helena Martins), helper canônico `isNucleoEI()` e blindagem RBAC 🏛️ |
 | **0.90** | 20/10/2026 16:00 | `intermediárias/aplicativo_v90_ocorrencias_campo_turma_docente.html` | Deliberação SerTão Criança / Pilar 1 | Atribuição primária das ocorrências de campo à Turma da Educação Infantil, trava automática para docente único regente e escolha ativa para duplas 📚 |
 | **0.89** | 20/10/2026 15:30 | `intermediárias/aplicativo_v89_visualizar_devolutiva_agenda.html` | Solicitação direta / Melhoria de Acesso Pedagógico na Agenda | Botão para visualização direta da devolutiva de observação a partir da aba de Agenda (desktop e mobile), vínculo resiliente findObservationForSchedule e retorno contextual 📋 |
@@ -109,6 +110,31 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.92] - Pilar 3: Benchmark Comparativo '% da UE vs. Rede' no Afunilamento de Indicadores
+* **Data e Horário:** 20 de Outubro de 2026 – 17:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v92_pilar_3_benchmark_afunilamento_ue_vs_rede.html`
+* **Identificador no App:** 📌 Versão 0.92 (v7.71)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Funcionalidades
+- **Régua Dupla de Benchmark (Dual-Progress Ruler) no Afunilamento:**
+  1. *Nível 1 (Grande Dimensão):* Header do accordion exibindo simultaneamente a consistência da UE (`Minha UE: [barra] XX%`) e a Média Geral da Rede Municipal (`Rede: [barra] YY%`), complementada pelo badge e resumo de variação percentual.
+  2. *Nível 2 (Subdimensão):* Subheader exibindo a comparação das duas métricas com barras compactas e o delta (`UE: XX% | Rede: YY% | Δ: ±Z%`).
+  3. *Nível 3 (Critério / Item Individual):* Card de critério com faixa de benchmark dedicada destacando `% Minha UE`, `% Rede Patos` e a categorização semântica automática.
+- **Categorização Semântica Automática de Deltas ($\Delta \pm\%$):**
+  - `🔻 Atenção Crítica` ($\Delta \le -10\%$): Alerta prioritário para planos de formação e intervenção pedagógica focalizada.
+  - `🔻 Abaixo da Média` ($-10\% < \Delta < 0\%$): Indicador de atenção e acompanhamento contínuo.
+  - `⚪ Na Média` ($\Delta = 0\%$): Alinhamento com a realidade consolidada do município.
+  - `🟢 Acima da Média` ($0\% < \Delta < +10\%$): Desempenho pedagógico favorável.
+  - `🟢 Destaque Positivo` ($\Delta \ge +10\%$): Boas práticas e evidências consolidadas na unidade escolar.
+- **Motor Canônico de Agregação Hierárquica (`calculateHierarchyStats`):** Função utilitária centralizada e determinística que calcula a árvore de dimensões, subdimensões e critérios para qualquer lista de observações, com tratamento defensivo contra divisão por zero (`totalValid === 0 ➔ null / "— Sem dados"`).
+- **Banner Informativo de Contexto do Benchmark:** Faixa informativa no topo do Afunilamento exibindo dinamicamente o escopo em comparação (`Minha UE`, `Meu Polo` ou `Rede Consolidada`) e a base total de observações consolidadas na rede de Patos.
+- **Adaptação à Tríade de Governança (Pilar 2):** Resolução contextualizada e instantânea para Coordenadoras de UE, Formadoras Pedagógicas por Polo e Coordenadora do Núcleo de EI.
+- **Auditoria Modular Integral (100% de Cobertura):** Módulo 10 (`indicadores_decisao`) expandido com validação determinística de cálculo do motor canônico, conferência exata de deltas percentuais com categorização de Atenção Crítica e teste de renderização da sub-aba no DOM.
+
+---
 
 ### [Versão 0.91] - Pilar 2: Tríade Canônica de Governança em 3 Níveis & Coordenadora do Núcleo de EI
 * **Data e Horário:** 20 de Outubro de 2026 – 16:30:00
