@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.89** | 20/10/2026 15:30 | `intermediárias/aplicativo_v89_visualizar_devolutiva_agenda.html` | Solicitação direta / Melhoria de Acesso Pedagógico na Agenda | Botão para visualização direta da devolutiva de observação a partir da aba de Agenda (desktop e mobile), vínculo resiliente findObservationForSchedule e retorno contextual 📋 |
 | **0.1** | 06/10/2026 14:05 | `lepes-prototype.html` | Matriz conceitual LEPES | Protótipo conceitual inicial e escala de observação tripartite❌ |
 | **0.2** | 06/10/2026 14:10 | `aplicativo_de_supervis_o_pedag_gica_sert_o_crian_a.html` | Diretrizes SerTão Criança | Escala de 4 opções (N/A), vetorização, drill-down e governança em 3 níveis❌ |
 | **0.3** | 06/10/2026 14:37 | `aplicativo_de_supervis_o_pedag_gica_sert_o_crian_a (1).html` | `inputs/inputs_v3.txt` | Governança em 4 níveis, autenticação real, logout e turmas em lista❌ |
@@ -106,6 +107,67 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.89] - Visualização da Devolutiva da Observação pela Aba de Agenda
+* **Data e Horário:** 20 de Outubro de 2026 – 15:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v89_visualizar_devolutiva_agenda.html`
+* **Identificador no App:** 📌 Versão 0.89 (v7.68)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Funcionalidades
+- **Botão de Visualização de Devolutiva na Agenda:** Introdução do botão "📋 Devolutiva" na tabela desktop e "📋 Ver Devolutiva" nos cards mobile para visitas com status realizado ou com observação finalizada vinculada.
+- **Função Relacional `findObservationForSchedule()`:** Resolução determinística e tolerante a falhas que localiza a observação pelo `observationId`, `scheduleId` ou por metadados equivalentes (escola, bimestre, turma/docente).
+- **Vínculo Imediato em `finalizeObservation()`:** Registro explícito de `sched.observationId = obs.id` na finalização de novas observações.
+- **Retorno Contextual Dinâmico:** Botão "← Voltar" na barra `#readOnlyWarning` e botão dinâmico "Voltar à Agenda" no rodapé da Síntese Final (`#screenSynthesis`).
+- **Suporte a Visitas Arquivadas:** Exibição do botão de devolutiva mesmo para visitas concluídas que estejam arquivadas.
+- **Auditoria Modular Aprimorada:** Módulo `agenda_cronograma` expandido com testes determinísticos de identificação de devolutiva e navegação contextual segura.
+
+---
+
+### [Versão 0.88] - Registro Manual e Fidedigno de Horários da Visita Pedagógica
+* **Data e Horário:** 20 de Outubro de 2026 – 15:15:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v88_registro_manual_horarios_observacao.html`
+* **Identificador no App:** 📌 Versão 0.88 (v7.67)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Funcionalidades
+- **Eliminação da Sobrescrita Automática de Horários:** Remoção definitiva da imposição do relógio em `finalizeObservation()`, garantindo que os horários anotados representem o momento real da visita pedagógica.
+- **Campos Editáveis no Setup e Síntese:** Entradas interativas de Data, Horário de Início e Horário Previsto de Término com validação temporal.
+- **Recálculo Dinâmico de Duração:** Atualização automática e em tempo real da duração ao alterar os horários na Síntese Final.
+- **Imutabilidade Pós-Finalização:** Bloqueio de edição e crachá consolidado após finalização da observação.
+- **Auditoria Modular Aprimorada:** Módulo `sintese_finalizacao` com testes determinísticos de consistência temporal e preservação exata dos horários.
+
+---
+
+### [Versão 0.87] - Atribuição, Agendamento e Início de Observação por Turma (Pilar 1)
+* **Data e Horário:** 20 de Outubro de 2026 – 14:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v87_atribuicao_agendamento_turma.html`
+* **Identificador no App:** 📌 Versão 0.87 (v7.66)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Funcionalidades
+- **Agendamento por Turma:** Modal de planejamento adaptado para Coordenadoras com rótulo "Turma da Educação Infantil a ser Observada" e seleção prioritária da turma com painel de docentes titulares.
+- **Cálculo Longitudinal da Turma:** Sugestão automática de próximo bimestre baseada no histórico da turma.
+- **Hero Card e Cronograma Geral:** Identificação clara da turma e equipe regente titular nos cards e listagens.
+- **Auditoria Modular Expandida:** Módulo `agenda_cronograma` validando criação e avanço de agendamentos centrados na turma.
+
+---
+
+### [Versão 0.86] - Arquitetura Modular da Suíte de Auditoria (12 Módulos Modo-a-Modo)
+* **Data e Horário:** 20 de Outubro de 2026 – 14:10:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v86_auditoria_modular.html`
+* **Identificador no App:** 📌 Versão 0.86 (v7.65)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Funcionalidades
+- **Arquitetura Modular da Suíte de Auditoria:** Implementação dos 12 módulos determinísticos modo-a-modo com cobertura 100% da plataforma.
+- **Sincronização Normativa de Workflows:** Atualização dos arquivos `WORKFLOW_MACOS.md`, `AGENTS.md` e `GEMINI.md` com protocolo de comunicação restrita a problemas.
+
+---
 
 ### [Versão 0.83] - Remoção do Bloco Indicadores Docentes na Coordenação e Restauração de Professoras na Formadora
 * **Data e Horário:** 15 de Outubro de 2026 – 17:45:00

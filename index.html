@@ -2394,7 +2394,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.88 (v7.67)
+          Versão 0.89 (v7.68)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -2407,10 +2407,15 @@
     </div>
   </header>
 
-  <!-- Read-Only Banner -->
-  <div id="readOnlyWarning" class="readonly-bar">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg>
-    Instrumento Finalizado · Modo Somente Leitura (Integridade de Dados Assegurada)
+  <!-- Read-Only Banner com Ação de Retorno Contextual -->
+  <div id="readOnlyWarning" class="readonly-bar" style="display:none; justify-content:space-between; align-items:center; padding:8px 16px;">
+    <div style="display:flex; align-items:center; gap:8px; font-weight:600;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg>
+      <span>Instrumento Finalizado · Modo Somente Leitura (Integridade de Dados Assegurada)</span>
+    </div>
+    <button class="btn btn-secondary" style="padding:4px 10px; font-size:11px; font-weight:700; background:#FFFFFF; color:var(--text-primary); border:1px solid #CBD5E1; border-radius:6px;" onclick="exitReadOnlyMode()">
+      ← Voltar
+    </button>
   </div>
 
   <!-- Print Official Letterhead for PDF Export -->
@@ -3764,6 +3769,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.89 - VISUALIZAÇÃO DE DEVOLUTIVA DA OBSERVAÇÃO PELA ABA DE AGENDA -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.89 · v7.68</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Visualização Direta da Devolutiva de Observação a Partir da Aba de Agenda:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📋 <strong>Botão de Devolutiva na Agenda:</strong> Disponibilização do botão "📋 Devolutiva" na tabela desktop e "📋 Ver Devolutiva" nos cards mobile para visitas com observação realizada/concluída.</li>
+          <li>🔗 <strong>Vínculo Relacional Resiliente:</strong> Resolução precisa da observação vinculada através da função canônica <code>findObservationForSchedule()</code> (por observationId, scheduleId e metadados contextuais).</li>
+          <li>🔄 <strong>Navegação e Retorno Contextual:</strong> Abertura imediata do instrumento em modo somente leitura (<code>resumeObservation</code>) e memorização da rota de origem, com botões dedicados de retorno à Agenda no cabeçalho e na Síntese Final.</li>
+          <li>📦 <strong>Cobertura em Visitas Arquivadas:</strong> Acesso à devolutiva também para visitas realizadas que foram posteriormente arquivadas.</li>
+          <li>🔬 <strong>Auditoria Modular Aprimorada:</strong> Módulo <code>agenda_cronograma</code> expandido com testes automatizados de identificação de devolutiva e navegação segura.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.88 - REGISTRO MANUAL E FIDEDIGNO DE HORÁRIOS DA OBSERVAÇÃO -->
@@ -8699,8 +8722,8 @@ function getActiveSections(obs) {
 
       // Helper para renderizar os cards individuais de critérios
       function renderCriterionCard(crit, obsInstance) {
-        const resp = obsInstance.responses[crit.id] || null;
-        const comm = obsInstance.criterionComments[crit.id] || '';
+        const resp = (obsInstance.responses && obsInstance.responses[crit.id]) || null;
+        const comm = (obsInstance.criterionComments && obsInstance.criterionComments[crit.id]) || '';
         const photos = (obsInstance.photos && obsInstance.photos[crit.id]) ? obsInstance.photos[crit.id] : [];
 
         const card = document.createElement('div');
@@ -9282,9 +9305,11 @@ function getActiveSections(obs) {
       const actions = document.getElementById('synthesisActionButtons');
       const isReadOnlyOrFinalized = !!(obs && (obs.status === 'finalized' || obs.status === 'concluida')) || appState.isReadOnly;
       if (isReadOnlyOrFinalized) {
+        const returnTab = appState.returnTab || 'history';
+        const returnLabel = returnTab === 'schedule' ? 'Voltar à Agenda' : 'Voltar ao Histórico';
         actions.innerHTML = `
           <button class="btn btn-secondary" onclick="exportSynthesisToPdf()">🖨️ Exportar em PDF</button>
-          <button class="btn btn-primary" onclick="navigateToTab('history')">Voltar ao Histórico</button>
+          <button class="btn btn-primary" onclick="navigateToTab('${returnTab}')">${returnLabel}</button>
         `;
       } else {
         const canFinalize = pendencies.length === 0;
@@ -9704,7 +9729,7 @@ function getActiveSections(obs) {
 
       appState.isReadOnly = true;
 
-      // Atualiza o status do agendamento correspondente para 'realizado' (Pilar 1 e individual)
+      // Atualiza o status do agendamento correspondente para 'realizado' (Pilar 1 e individual) e vincula observationId
       let sched = null;
       if (obs.scheduleId) {
         sched = appState.schedules.find(s => s.id === obs.scheduleId);
@@ -9719,6 +9744,7 @@ function getActiveSections(obs) {
       }
       if (sched) {
         sched.status = 'realizado';
+        sched.observationId = obs.id;
       }
 
       saveState();
@@ -10246,6 +10272,68 @@ function getActiveSections(obs) {
       return sorted[0];
     }
 
+    // --- HELPER: LOCALIZAÇÃO DETERMINÍSTICA E RESILIENTE DA OBSERVAÇÃO DE UM AGENDAMENTO ---
+    function findObservationForSchedule(sched) {
+      if (!sched || !appState.observations || appState.observations.length === 0) return null;
+
+      // 1. Busca direta por observationId gravado no próprio agendamento
+      if (sched.observationId) {
+        const obsDirect = appState.observations.find(o => o.id === sched.observationId);
+        if (obsDirect) return obsDirect;
+      }
+
+      // 2. Busca direta por scheduleId gravado na observação (priorizando finalizadas)
+      const obsBySchedId = appState.observations.find(o => o.scheduleId === sched.id && (o.status === 'finalized' || o.status === 'concluida'));
+      if (obsBySchedId) return obsBySchedId;
+
+      // 3. Busca heurística resiliente por metadados da visita em observações finalizadas
+      const obsByMeta = appState.observations.find(o => {
+        if (o.status !== 'finalized' && o.status !== 'concluida') return false;
+        if (sched.schoolName && o.schoolName !== sched.schoolName) return false;
+        if (sched.bimester && o.bimester !== sched.bimester) return false;
+
+        const classMatch = !!(sched.className && o.className && sched.className === o.className);
+        const targetMatch = !!(sched.targetName && (
+          o.teacherName === sched.targetName ||
+          (Array.isArray(o.teachers) && o.teachers.includes(sched.targetName)) ||
+          (typeof resolveCanonicalUserName === 'function' && resolveCanonicalUserName(o.teacherName) === resolveCanonicalUserName(sched.targetName))
+        ));
+
+        return classMatch || targetMatch;
+      });
+      if (obsByMeta) return obsByMeta;
+
+      // 4. Fallback final: qualquer observação vinculada ao scheduleId (mesmo rascunho)
+      return appState.observations.find(o => o.scheduleId === sched.id) || null;
+    }
+
+    // --- AÇÃO: VISUALIZAR DEVOLUTIVA DA OBSERVAÇÃO A PARTIR DA AGENDA ---
+    function viewFeedbackFromSchedule(scheduleId) {
+      const sched = (appState.schedules || []).find(s => s.id === scheduleId);
+      if (!sched) {
+        showToast('Agendamento não localizado.');
+        return;
+      }
+
+      const obs = findObservationForSchedule(sched);
+      if (!obs) {
+        showToast('Nenhuma observação finalizada foi localizada para esta visita.');
+        return;
+      }
+
+      // Registra a tela de origem para retorno contextual
+      appState.returnTab = 'schedule';
+
+      // Abre a observação finalizada em modo somente leitura (Devolutiva Oficial)
+      resumeObservation(obs.id, true);
+    }
+
+    // --- AÇÃO: RETORNO CONTEXTUAL DO MODO SOMENTE LEITURA ---
+    function exitReadOnlyMode() {
+      const targetTab = appState.returnTab || 'schedule';
+      navigateToTab(targetTab);
+    }
+
     function renderScheduleScreen() {
       const user = getCurrentUser();
       const tbody = document.getElementById('scheduleTableBody');
@@ -10380,35 +10468,55 @@ function getActiveSections(obs) {
         let actionHtml = '';
         let cardActionHtml = '';
 
+        const linkedObs = findObservationForSchedule(s);
+        const hasFeedback = !!linkedObs;
+
         if (s.archived) {
           actionHtml = `
-            <div style="display:flex; gap:6px; justify-content:center; align-items:center;">
-              <span style="font-size:11px; color:var(--text-secondary); font-weight:600;">Arquivada</span>
+            <div style="display:flex; gap:6px; justify-content:center; align-items:center; flex-wrap:wrap;">
+              ${hasFeedback ? `
+                <button class="btn btn-primary" style="padding:4px 8px; font-size:11px; display:inline-flex; align-items:center; gap:4px;" onclick="viewFeedbackFromSchedule('${s.id}')" title="Visualizar Devolutiva Pedagógica da Observação">
+                  📋 Devolutiva
+                </button>
+              ` : ''}
               <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="unarchiveSchedule('${s.id}')" title="Desarquivar visita">
                 Desarquivar
               </button>
             </div>
           `;
           cardActionHtml = `
-            <span style="font-size:11px; color:var(--text-secondary); font-weight:600; margin-right:auto;">Visita Arquivada</span>
-            <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;" onclick="unarchiveSchedule('${s.id}')">
-              Desarquivar
-            </button>
+            <div style="display:flex; gap:8px; width:100%; align-items:center; flex-wrap:wrap;">
+              <span style="font-size:11px; color:var(--text-secondary); font-weight:600; margin-right:auto;">Visita Arquivada</span>
+              <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; flex:1;" onclick="unarchiveSchedule('${s.id}')">
+                Desarquivar
+              </button>
+              ${hasFeedback ? `
+                <button class="btn btn-primary" style="padding:7px 12px; font-size:12px; font-weight:700; flex:1.4; display:inline-flex; align-items:center; justify-content:center; gap:5px;" onclick="viewFeedbackFromSchedule('${s.id}')">
+                  📋 Ver Devolutiva
+                </button>
+              ` : ''}
+            </div>
           `;
         } else if (s.status === 'realizado') {
           actionHtml = `
-            <div style="display:flex; gap:6px; justify-content:center; align-items:center;">
-              <span style="font-size:11px; color:var(--green); font-weight:700;">Concluída</span>
+            <div style="display:flex; gap:6px; justify-content:center; align-items:center; flex-wrap:wrap;">
+              <button class="btn btn-primary" style="padding:4px 8px; font-size:11px; display:inline-flex; align-items:center; gap:4px;" onclick="viewFeedbackFromSchedule('${s.id}')" title="Visualizar Devolutiva Pedagógica da Observação">
+                📋 Devolutiva
+              </button>
               <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="archiveSchedule('${s.id}')" title="Arquivar esta visita realizada">
                 Arquivar
               </button>
             </div>
           `;
           cardActionHtml = `
-            <span style="font-size:11px; color:var(--green); font-weight:700; margin-right:auto;">Concluída</span>
-            <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;" onclick="archiveSchedule('${s.id}')">
-              Arquivar
-            </button>
+            <div style="display:flex; gap:8px; width:100%; align-items:center; flex-wrap:wrap;">
+              <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; flex:1;" onclick="archiveSchedule('${s.id}')">
+                Arquivar
+              </button>
+              <button class="btn btn-primary" style="padding:7px 12px; font-size:12px; font-weight:700; flex:1.4; display:inline-flex; align-items:center; justify-content:center; gap:5px;" onclick="viewFeedbackFromSchedule('${s.id}')">
+                📋 Ver Devolutiva
+              </button>
+            </div>
           `;
         } else {
           const targetMember = (appState.teamMembers || []).find(m => m.name === s.targetName || resolveCanonicalUserName(m.name) === resolveCanonicalUserName(s.targetName));
@@ -15666,7 +15774,7 @@ function getActiveSections(obs) {
           }
         },
 
-        // --- MÓDULO 8: Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática ---
+        // --- MÓDULO 8: Cronograma de Visitas, Destaque da Próxima Visita, Baixa Automática e Devolutiva ---
         {
           id: 'agenda_cronograma',
           name: 'Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática',
@@ -15712,6 +15820,8 @@ function getActiveSections(obs) {
                 });
               });
               appState.currentObs = simObs;
+              appState.observations = appState.observations || [];
+              appState.observations.push(simObs);
               finalizeObservation();
 
               const updatedSched = appState.schedules.find(s => s.id === newSched.id);
@@ -15719,6 +15829,43 @@ function getActiveSections(obs) {
                 throw new Error('Agendamento não atualizado para realizado após finalização');
               }
               logger.log('Baixa automática no cronograma de visitas para status realizado', true);
+
+              // TESTE ADICIONAL: Resolução de observação vinculada e botão de Devolutiva na Agenda
+              const foundObs = findObservationForSchedule(updatedSched);
+              if (!foundObs || foundObs.id !== simObs.id) {
+                throw new Error('findObservationForSchedule não localizou a observação finalizada correspondente');
+              }
+              logger.log('Resolução relacional resiliente de observação vinculada à visita na agenda', true);
+
+              // Renderiza a tela de agenda e valida a presença do botão de devolutiva
+              navigateToTab('schedule');
+              renderScheduleScreen();
+
+              const tbody = document.getElementById('scheduleTableBody');
+              const hasFeedbackBtn = tbody && (tbody.innerHTML.includes('viewFeedbackFromSchedule') || tbody.innerHTML.includes('Devolutiva'));
+              if (!hasFeedbackBtn) {
+                throw new Error('Botão de Devolutiva não foi renderizado na tabela da Agenda para visita realizada');
+              }
+              logger.log('Renderização do botão de devolutiva na tabela da aba de Agenda', true);
+
+              // Executa a abertura da devolutiva a partir da agenda
+              viewFeedbackFromSchedule(updatedSched.id);
+              if (!appState.isReadOnly || !appState.currentObs || appState.currentObs.id !== simObs.id) {
+                throw new Error('viewFeedbackFromSchedule falhou em abrir a observação em modo somente leitura');
+              }
+              if (appState.returnTab !== 'schedule') {
+                throw new Error('appState.returnTab não configurado para schedule');
+              }
+              logger.log('Disparo e abertura da devolutiva em modo somente leitura a partir da Agenda com rota de retorno', true);
+
+              // Valida retorno para a Agenda
+              exitReadOnlyMode();
+              const scheduleActive = document.getElementById('screenSchedule') && document.getElementById('screenSchedule').classList.contains('active');
+              if (!scheduleActive) {
+                throw new Error('exitReadOnlyMode não retornou para screenSchedule');
+              }
+              logger.log('Retorno contextual à aba Agenda com integridade de navegação', true);
+
             } catch (e) {
               logger.log('Erro de execução no módulo agenda_cronograma', false, e.message);
             }
