@@ -2394,7 +2394,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.87 (v7.66)
+          Versão 0.88 (v7.67)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -2890,20 +2890,31 @@
             <div id="setupBimesterValidationHint" style="font-size:12px; margin-top:6px; font-weight:600; display:none;"></div>
           </div>
 
-          <!-- Hidden inputs para compatibilidade com rotinas legadas -->
-          <input type="hidden" id="setupDate">
-          <input type="hidden" id="setupStartTime">
-          <input type="hidden" id="setupEndTime">
-          <div id="setupDateValidationHint" style="display:none;"></div>
-
-          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:14px; margin-bottom:18px;">
+          <!-- Bloco de Registro Temporal Real da Visita Pedagógica -->
+          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:16px; margin-bottom:18px;">
             <div style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:var(--primary-dark); margin-bottom:4px;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Registro Temporal Automático
+              Data e Horários da Visita Pedagógica
             </div>
-            <div style="font-size:12px; color:#475569; line-height:1.5;">
-              A <strong>data e horário de início</strong> são registrados no exato momento em que você iniciar a observação. O <strong>horário e data de término</strong> serão gravados automaticamente na finalização.
+            <div style="font-size:12px; color:#475569; line-height:1.4; margin-bottom:12px;">
+              Informe os horários reais em que o acompanhamento ocorreu ou está ocorrendo. Se for enviar o formulário depois, seus horários anotados serão mantidos.
             </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px;">
+              <div>
+                <label class="form-label" style="font-weight:600; font-size:11px;">Data da Observação</label>
+                <input type="date" id="setupDate" class="form-control" onchange="validateSetupDateUI()" style="font-size:12px; font-weight:600; padding:8px 10px;">
+              </div>
+              <div>
+                <label class="form-label" style="font-weight:600; font-size:11px;">Horário de Início</label>
+                <input type="time" id="setupStartTime" class="form-control" onchange="validateSetupDateUI()" style="font-size:12px; font-weight:600; padding:8px 10px;">
+              </div>
+              <div>
+                <label class="form-label" style="font-weight:600; font-size:11px;">Horário de Término (Real ou Previsto)</label>
+                <input type="time" id="setupEndTime" class="form-control" onchange="validateSetupDateUI()" style="font-size:12px; font-weight:600; padding:8px 10px;">
+              </div>
+            </div>
+            <div id="setupDateValidationHint" style="font-size:12px; margin-top:8px; font-weight:600; display:none;"></div>
           </div>
 
           <button class="btn btn-primary btn-full" onclick="startNewObservation()" style="margin-top:10px;">
@@ -2983,44 +2994,47 @@
             </div>
           </div>
 
-          <!-- Time and Period Box in Synthesis -->
-          <div style="background:#F1F5F9; border:1px solid #CBD5E1; border-radius:10px; padding:16px; margin-bottom:20px; page-break-inside:avoid;">
-            <div style="font-size:14px; font-weight:800; color:var(--primary-dark); margin-bottom:10px;">
-              ⏱️ Registro de Período e Duração da Observação
+          <!-- Time and Period Box in Synthesis (Registro Fidedigno Manual) -->
+          <div style="background:#F8FAFC; border:1px solid #CBD5E1; border-radius:10px; padding:16px; margin-bottom:20px; page-break-inside:avoid;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <div style="font-size:14px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:6px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0066CC" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Registro de Período e Duração da Visita
+              </div>
+              <span id="synthesisTimeBadge" style="font-size:11px; font-weight:700; background:#E0F2FE; color:#0369A1; padding:3px 10px; border-radius:12px;">
+                Horários Efetivos de Sala
+              </span>
             </div>
-            <!-- Hidden inputs para retrocompatibilidade -->
-            <input type="hidden" id="synthesisDate">
-            <input type="hidden" id="synthesisStartTime">
-            <input type="hidden" id="synthesisEndTime">
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:12px;">
               <div>
-                <label class="form-label">Data da Observação</label>
-                <div style="padding:9px 12px; background:#fff; border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; color:var(--primary-dark);" id="synthesisDateDisplay">
-                  --
-                </div>
+                <label class="form-label" style="font-weight:700; font-size:12px;">Data da Observação</label>
+                <input type="date" id="synthesisDate" class="form-control" onchange="onSynthesisTimeChange()" style="font-weight:700; font-size:13px; color:var(--primary-dark);">
+                <div id="synthesisDateDisplay" style="display:none; padding:9px 12px; background:#fff; border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; color:var(--primary-dark);">--</div>
               </div>
               <div>
-                <label class="form-label">Horário de Início</label>
-                <div style="padding:9px 12px; background:#fff; border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; color:var(--primary-dark);" id="synthesisStartTimeDisplay">
-                  --
-                </div>
+                <label class="form-label" style="font-weight:700; font-size:12px;">Horário de Início</label>
+                <input type="time" id="synthesisStartTime" class="form-control" onchange="onSynthesisTimeChange()" style="font-weight:700; font-size:13px; color:var(--primary-dark);">
+                <div id="synthesisStartTimeDisplay" style="display:none; padding:9px 12px; background:#fff; border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; color:var(--primary-dark);">--</div>
               </div>
-              <div id="synthesisEndTimeBox" style="display:none;">
-                <label class="form-label">Horário de Término</label>
-                <div style="padding:9px 12px; background:#fff; border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; color:var(--primary-dark);" id="synthesisEndTimeDisplay">
-                  --
-                </div>
+              <div id="synthesisEndTimeBox">
+                <label class="form-label" style="font-weight:700; font-size:12px;">Horário de Término</label>
+                <input type="time" id="synthesisEndTime" class="form-control" onchange="onSynthesisTimeChange()" style="font-weight:700; font-size:13px; color:var(--primary-dark);">
+                <div id="synthesisEndTimeDisplay" style="display:none; padding:9px 12px; background:#fff; border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; color:var(--primary-dark);">--</div>
               </div>
-              <div id="synthesisDurationBox" style="display:none;">
-                <label class="form-label">Tempo Total Observado</label>
+              <div id="synthesisDurationBox">
+                <label class="form-label" style="font-weight:700; font-size:12px;">Tempo Total Observado</label>
                 <div style="padding:9px 12px; background:#fff; border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; color:var(--primary-dark);" id="synthesisDurationText">
                   --
                 </div>
               </div>
             </div>
-            <div id="synthesisAutoTimeNotice" style="font-size:12px; color:#475569; margin-top:10px; background:#fff; border:1px solid #E2E8F0; padding:10px 12px; border-radius:8px; display:flex; align-items:center; gap:8px;">
+
+            <div id="synthesisTimeValidationHint" style="font-size:12px; margin-top:8px; font-weight:600; display:none;"></div>
+
+            <div id="synthesisTimeNotice" style="font-size:12px; color:#475569; margin-top:12px; background:#fff; border:1px solid #E2E8F0; padding:10px 12px; border-radius:8px; display:flex; align-items:center; gap:8px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span>O horário e data de término são gravados automaticamente na finalização da observação.</span>
+              <span>💡 <strong>Registro Fidedigno:</strong> Se você estiver finalizando este instrumento em momento posterior à observação, verifique e ajuste os horários exatos em que você esteve em sala de aula.</span>
             </div>
           </div>
 
@@ -3750,6 +3764,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.88 - REGISTRO MANUAL E FIDEDIGNO DE HORÁRIOS DA OBSERVAÇÃO -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.88 · v7.67</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">20/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Registro Manual e Fidedigno de Horários da Visita Pedagógica (Eliminação de Gravação Automática Compulsória):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>⏱️ <strong>Eliminação da Sobrescrita Forçada de Horários:</strong> Extinção da gravação compulsória do relógio em <code>finalizeObservation()</code>. Os horários e datas registrados refletem com precisão e fidelidade o período real da visita pedagógica anotado pelo docente.</li>
+          <li>📝 <strong>Campos Visíveis e Interativos no Setup:</strong> Entradas de Data da Observação, Horário de Início e Horário Previsto de Término no formulário inicial com valores padrão inteligentes e validação temporal (bloqueio de data futura e término posterior ao início).</li>
+          <li>📊 <strong>Painel Fidedigno de Horários na Síntese Final:</strong> Inputs editáveis de Data, Início e Término em <code>#screenSynthesis</code> com recalculador em tempo real da duração (<code>recalculateSynthesisDuration</code>), validação preventiva contra durações inconsistentes e instruções claras para envio pós-aula.</li>
+          <li>🔒 <strong>Imutabilidade Pós-Finalização:</strong> Bloqueio automático de edição dos campos e exibição em formato de crachá consolidado após a finalização da observação.</li>
+          <li>🔬 <strong>Auditoria Modular Aprimorada:</strong> Módulo <code>sintese_finalizacao</code> expandido com testes determinísticos de bloqueio por término ausente, consistência temporal e preservação exata dos horários informados.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.87 - PILAR 1: ATRIBUIÇÃO, AGENDAMENTO E INÍCIO POR TURMA -->
@@ -6651,9 +6683,11 @@ function getActiveSections(obs) {
       }
     }
 
-    // Validação visual reativa do campo de data na tela de configuração de observação
+    // Validação visual reativa dos campos de data e horários na tela de configuração de observação
     function validateSetupDateUI() {
       const dateEl = document.getElementById('setupDate');
+      const startEl = document.getElementById('setupStartTime');
+      const endEl = document.getElementById('setupEndTime');
       const hintEl = document.getElementById('setupDateValidationHint');
       if (!dateEl) return true;
       const todayStr = getTodayDateString();
@@ -6666,12 +6700,23 @@ function getActiveSections(obs) {
           hintEl.innerHTML = `🚫 Bloqueado: A data da observação não pode ser futura (data máxima permitida: ${formatDateBR(todayStr)}).`;
         }
         return false;
-      } else {
-        if (hintEl) {
-          hintEl.style.display = 'none';
-        }
-        return true;
       }
+
+      if (startEl && startEl.value && endEl && endEl.value) {
+        if (endEl.value <= startEl.value) {
+          if (hintEl) {
+            hintEl.style.display = 'block';
+            hintEl.style.color = '#dc2626';
+            hintEl.innerHTML = `⚠️ Atenção aos Horários: O horário de término deve ser posterior ao horário de início.`;
+          }
+          return false;
+        }
+      }
+
+      if (hintEl) {
+        hintEl.style.display = 'none';
+      }
+      return true;
     }
 
     // --- 3. SEED SAMPLE OBSERVATION DATA ---
@@ -7686,9 +7731,18 @@ function getActiveSections(obs) {
 
       const todayStr = getTodayDateString();
       const setupDateEl = document.getElementById('setupDate');
+      const setupStartEl = document.getElementById('setupStartTime');
+      const setupEndEl = document.getElementById('setupEndTime');
+
       if (setupDateEl) {
         setupDateEl.max = todayStr;
         setupDateEl.value = todayStr;
+      }
+      if (setupStartEl) {
+        setupStartEl.value = getNowTimeString();
+      }
+      if (setupEndEl) {
+        setupEndEl.value = addMinutesToTime(setupStartEl ? setupStartEl.value : getNowTimeString(), 90);
       }
 
       // Atualiza o seletor rápido de agendamento pendente no topo do setup (APENAS VISITAS ACIONÁVEIS)
@@ -7754,7 +7808,12 @@ function getActiveSections(obs) {
             setupDateEl.value = prefilledSchedule.plannedDate;
           }
         }
-        if (prefilledSchedule.plannedTime) document.getElementById('setupStartTime').value = prefilledSchedule.plannedTime;
+        if (prefilledSchedule.plannedTime) {
+          const startInput = document.getElementById('setupStartTime');
+          if (startInput) startInput.value = prefilledSchedule.plannedTime;
+          const endInput = document.getElementById('setupEndTime');
+          if (endInput) endInput.value = addMinutesToTime(prefilledSchedule.plannedTime, 90);
+        }
       }
 
       validateSetupDateUI();
@@ -8092,9 +8151,15 @@ function getActiveSections(obs) {
       const startEl = document.getElementById('setupStartTime');
       const endEl = document.getElementById('setupEndTime');
 
-      if (dateEl) dateEl.value = todayStr;
-      if (startEl) startEl.value = currentNowTime;
-      if (endEl) endEl.value = '';
+      const chosenDate = (dateEl && dateEl.value) ? dateEl.value : todayStr;
+      const chosenStart = (startEl && startEl.value) ? startEl.value : currentNowTime;
+      const chosenEnd = (endEl && endEl.value) ? endEl.value : null;
+
+      // Se término for informado, valida se é posterior ao início
+      if (chosenEnd && chosenEnd <= chosenStart) {
+        showToast('Atenção: O horário de término deve ser posterior ao horário de início.');
+        return;
+      }
 
       let className = '';
       let targetClassObj = null;
@@ -8221,12 +8286,12 @@ function getActiveSections(obs) {
         schoolName: schoolName,
         evaluatedBy: user.name,
         bimester: bimester,
-        startDate: todayStr,
-        endDate: null,
-        date: todayStr,
-        startTime: currentNowTime,
-        endTime: null,
-        durationMinutes: null,
+        startDate: chosenDate,
+        endDate: chosenEnd ? chosenDate : null,
+        date: chosenDate,
+        startTime: chosenStart,
+        endTime: chosenEnd,
+        durationMinutes: chosenEnd ? calculateObservationDuration({ startDate: chosenDate, endDate: chosenDate, startTime: chosenStart, endTime: chosenEnd }) : null,
         status: 'draft',
         synthesisMaterialDimension: null,
         synthesisPredominant: null,
@@ -9048,39 +9113,62 @@ function getActiveSections(obs) {
       const sDurDisp = document.getElementById('synthesisDurationText');
       const sEndBox = document.getElementById('synthesisEndTimeBox');
       const sDurBox = document.getElementById('synthesisDurationBox');
-      const sAutoNotice = document.getElementById('synthesisAutoTimeNotice');
-
-      const dateStr = formatObservationDateRange(obs) || formatDateBR(obs.date || getTodayDateString());
-      if (sDateDisp) sDateDisp.innerText = dateStr;
-      if (sStartDisp) sStartDisp.innerText = obs.startTime ? `${obs.startTime}` : '--';
-
-      if (obs.status === 'finalized' || obs.status === 'concluida') {
-        if (sEndBox) sEndBox.style.display = 'block';
-        if (sDurBox) sDurBox.style.display = 'block';
-        if (sAutoNotice) sAutoNotice.style.display = 'none';
-        if (sEndDisp) {
-          sEndDisp.innerText = obs.endTime ? `${obs.endTime}` : '--';
-          sEndDisp.style.color = 'var(--primary-dark)';
-        }
-        const durationMins = obs.durationMinutes || calculateObservationDuration(obs);
-        const hours = Math.floor(durationMins / 60);
-        const mins = durationMins % 60;
-        if (sDurDisp) {
-          sDurDisp.innerText = hours > 0 ? `${hours}h ${mins}min (${durationMins} minutos)` : `${mins} minutos`;
-        }
-      } else {
-        // Na hora de finalizar (enquanto rascunho), retira o campo de término da visualização
-        if (sEndBox) sEndBox.style.display = 'none';
-        if (sDurBox) sDurBox.style.display = 'none';
-        if (sAutoNotice) sAutoNotice.style.display = 'flex';
-      }
+      const sTimeNotice = document.getElementById('synthesisTimeNotice');
+      const sTimeBadge = document.getElementById('synthesisTimeBadge');
 
       const dateInput = document.getElementById('synthesisDate');
       const startInput = document.getElementById('synthesisStartTime');
       const endInput = document.getElementById('synthesisEndTime');
-      if (dateInput) dateInput.value = obs.endDate || obs.startDate || obs.date || getTodayDateString();
-      if (startInput) startInput.value = obs.startTime || '';
-      if (endInput) endInput.value = obs.endTime || '';
+
+      const effectiveDate = obs.endDate || obs.startDate || obs.date || getTodayDateString();
+      const effectiveStart = obs.startTime || '';
+      const effectiveEnd = obs.endTime || '';
+
+      if (dateInput) dateInput.value = effectiveDate;
+      if (startInput) startInput.value = effectiveStart;
+      if (endInput) endInput.value = effectiveEnd;
+
+      const dateStr = formatObservationDateRange(obs) || formatDateBR(effectiveDate);
+      if (sDateDisp) sDateDisp.innerText = dateStr;
+      if (sStartDisp) sStartDisp.innerText = effectiveStart || '--';
+      if (sEndDisp) sEndDisp.innerText = effectiveEnd || '--';
+
+      if (obs.status === 'finalized' || obs.status === 'concluida' || appState.isReadOnly) {
+        if (sEndBox) sEndBox.style.display = 'block';
+        if (sDurBox) sDurBox.style.display = 'block';
+        if (sTimeNotice) sTimeNotice.style.display = 'none';
+        if (sTimeBadge) sTimeBadge.innerText = 'Registro Consolidado';
+
+        if (dateInput) dateInput.style.display = 'none';
+        if (startInput) startInput.style.display = 'none';
+        if (endInput) endInput.style.display = 'none';
+        if (sDateDisp) sDateDisp.style.display = 'block';
+        if (sStartDisp) sStartDisp.style.display = 'block';
+        if (sEndDisp) sEndDisp.style.display = 'block';
+      } else {
+        if (sEndBox) sEndBox.style.display = 'block';
+        if (sDurBox) sDurBox.style.display = 'block';
+        if (sTimeNotice) sTimeNotice.style.display = 'flex';
+        if (sTimeBadge) sTimeBadge.innerText = 'Horários Efetivos de Sala';
+
+        if (dateInput) {
+          dateInput.style.display = 'block';
+          dateInput.disabled = false;
+        }
+        if (startInput) {
+          startInput.style.display = 'block';
+          startInput.disabled = false;
+        }
+        if (endInput) {
+          endInput.style.display = 'block';
+          endInput.disabled = false;
+        }
+        if (sDateDisp) sDateDisp.style.display = 'none';
+        if (sStartDisp) sStartDisp.style.display = 'none';
+        if (sEndDisp) sEndDisp.style.display = 'none';
+      }
+
+      recalculateSynthesisDuration();
 
       // Signatures for PDF
       document.getElementById('printSignObserverName').innerText = obs.evaluatedBy || 'Supervisor(a) Pedagógico(a)';
@@ -9360,15 +9448,52 @@ function getActiveSections(obs) {
     }
 
     function onSynthesisTimeChange() {
+      const obs = appState.currentObs;
+      if (!obs || appState.isReadOnly) return;
+
       const dateEl = document.getElementById('synthesisDate');
+      const startEl = document.getElementById('synthesisStartTime');
+      const endEl = document.getElementById('synthesisEndTime');
+      const hintEl = document.getElementById('synthesisTimeValidationHint');
       const todayStr = getTodayDateString();
+
       if (dateEl && dateEl.value && dateEl.value > todayStr) {
         showToast(`Ação bloqueada: A data da observação não pode ser futura. Ajustada para ${formatDateBR(todayStr)}.`);
         dateEl.value = todayStr;
       }
-      if (appState.currentObs && dateEl && dateEl.value) {
-        appState.currentObs.date = dateEl.value;
+
+      const dateVal = dateEl ? dateEl.value : (obs.date || todayStr);
+      const startVal = startEl ? startEl.value : obs.startTime;
+      const endVal = endEl ? endEl.value : obs.endTime;
+
+      let hasError = false;
+      if (startVal && endVal) {
+        if (endVal <= startVal) {
+          hasError = true;
+          if (hintEl) {
+            hintEl.style.display = 'block';
+            hintEl.style.color = '#DC2626';
+            hintEl.innerHTML = '🚫 <strong>Horário Inconsistente:</strong> O horário de término deve ser posterior ao horário de início.';
+          }
+        }
       }
+
+      if (!hasError && hintEl) {
+        hintEl.style.display = 'none';
+      }
+
+      obs.date = dateVal;
+      obs.startDate = dateVal;
+      obs.endDate = dateVal;
+      obs.startTime = startVal;
+      obs.endTime = endVal;
+
+      if (!hasError && startVal && endVal) {
+        obs.durationMinutes = calculateObservationDuration(obs);
+      } else {
+        obs.durationMinutes = null;
+      }
+
       recalculateSynthesisDuration();
       saveState();
     }
@@ -9382,13 +9507,33 @@ function getActiveSections(obs) {
 
       if (appState.currentObs) {
         const todayStr = getTodayDateString();
-        if (!appState.currentObs.startDate) {
+        const dateEl = document.getElementById('synthesisDate');
+        const startEl = document.getElementById('synthesisStartTime');
+        const endEl = document.getElementById('synthesisEndTime');
+
+        if (dateEl && dateEl.value) {
+          appState.currentObs.startDate = dateEl.value;
+          appState.currentObs.endDate = dateEl.value;
+          appState.currentObs.date = dateEl.value;
+        } else if (!appState.currentObs.startDate) {
           appState.currentObs.startDate = appState.currentObs.date || todayStr;
+          appState.currentObs.date = appState.currentObs.startDate;
         }
-        appState.currentObs.date = appState.currentObs.startDate;
-        if (!appState.currentObs.startTime) {
+
+        if (startEl && startEl.value) {
+          appState.currentObs.startTime = startEl.value;
+        } else if (!appState.currentObs.startTime) {
           appState.currentObs.startTime = getNowTimeString();
         }
+
+        if (endEl && endEl.value) {
+          appState.currentObs.endTime = endEl.value;
+        }
+
+        if (appState.currentObs.startTime && appState.currentObs.endTime && appState.currentObs.endTime > appState.currentObs.startTime) {
+          appState.currentObs.durationMinutes = calculateObservationDuration(appState.currentObs);
+        }
+
         recalculateSynthesisDuration();
       }
       saveState();
@@ -9402,12 +9547,31 @@ function getActiveSections(obs) {
       const durText = document.getElementById('synthesisDurationText');
       if (!durText) return;
 
-      if (obs.status !== 'finalized' && obs.status !== 'concluida') {
-        durText.innerText = 'Calculado na finalização';
+      const dateEl = document.getElementById('synthesisDate');
+      const startEl = document.getElementById('synthesisStartTime');
+      const endEl = document.getElementById('synthesisEndTime');
+
+      const sTime = (startEl && startEl.value) ? startEl.value : obs.startTime;
+      const eTime = (endEl && endEl.value) ? endEl.value : obs.endTime;
+
+      if (!sTime || !eTime) {
+        durText.innerText = 'Aguardando horário de término';
         return;
       }
 
-      const durationMins = obs.durationMinutes || calculateObservationDuration(obs);
+      if (eTime <= sTime) {
+        durText.innerText = 'Horário inválido';
+        return;
+      }
+
+      const tempObs = {
+        startDate: (dateEl && dateEl.value) ? dateEl.value : (obs.startDate || obs.date || getTodayDateString()),
+        endDate: (dateEl && dateEl.value) ? dateEl.value : (obs.endDate || obs.date || getTodayDateString()),
+        startTime: sTime,
+        endTime: eTime
+      };
+
+      const durationMins = calculateObservationDuration(tempObs);
       const hours = Math.floor(durationMins / 60);
       const mins = durationMins % 60;
       durText.innerText = hours > 0 ? `${hours}h ${mins}min (${durationMins} minutos)` : `${mins} minutos`;
@@ -9493,17 +9657,48 @@ function getActiveSections(obs) {
         }
       }
 
+      // Validação rigorosa dos horários anotados pelo docente/coordenador
+      const dateEl = document.getElementById('synthesisDate');
+      const startEl = document.getElementById('synthesisStartTime');
+      const endEl = document.getElementById('synthesisEndTime');
       const todayStr = getTodayDateString();
-      const nowTimeStr = getNowTimeString();
 
+      const finalDate = (dateEl && dateEl.value) ? dateEl.value : (obs.startDate || obs.date || todayStr);
+      const finalStart = (startEl && startEl.value) ? startEl.value : obs.startTime;
+      const finalEnd = (endEl && endEl.value) ? endEl.value : obs.endTime;
+
+      if (!finalDate) {
+        showToast('Informe a data da observação antes de finalizar.');
+        return;
+      }
+      if (finalDate > todayStr) {
+        showToast('Ação bloqueada: A data da observação não pode ser futura.');
+        return;
+      }
+      if (!finalStart) {
+        showToast('Informe o horário de início da observação.');
+        return;
+      }
+      if (!finalEnd) {
+        showToast('Informe o horário de término da observação antes de concluir.');
+        if (endEl) endEl.focus();
+        return;
+      }
+      if (finalEnd <= finalStart) {
+        showToast('Ação bloqueada: O horário de término deve ser posterior ao horário de início.');
+        if (endEl) endEl.focus();
+        return;
+      }
+
+      // Atribuição fidedigna dos dados manuais (SEM sobrescrever com hora do relógio)
       obs.status = 'finalized';
-      obs.startDate = obs.startDate || obs.date || todayStr;
-      obs.startTime = obs.startTime || nowTimeStr;
-      obs.endDate = todayStr;
-      obs.endTime = nowTimeStr;
-      obs.date = obs.startDate;
+      obs.startDate = finalDate;
+      obs.endDate = finalDate;
+      obs.date = finalDate;
+      obs.startTime = finalStart;
+      obs.endTime = finalEnd;
       obs.durationMinutes = calculateObservationDuration(obs);
-      
+
       const commentsEl = document.getElementById('synthesisGeneralComments');
       if (commentsEl) obs.comments = commentsEl.value;
 
@@ -9527,7 +9722,7 @@ function getActiveSections(obs) {
       }
 
       saveState();
-      showToast('Observação finalizada com sucesso! Horário e data de término gravados automaticamente.');
+      showToast('Observação finalizada com sucesso!');
       navigateToTab('history', 'finalized');
     }
 
@@ -15354,15 +15549,48 @@ function getActiveSections(obs) {
               obs.synthesisPredominant = 'Livros e materiais de desenho/pintura';
               obs.synthesisOrg = 'Pequenos grupos e cantos de atividades';
 
+              // 1. Teste de Bloqueio por Horário de Término Ausente
+              obs.status = 'draft';
+              obs.startTime = '08:00';
+              obs.endTime = '';
+              const endInput = document.getElementById('synthesisEndTime');
+              if (endInput) endInput.value = '';
+              finalizeObservation();
+              if (obs.status === 'finalized') throw new Error('Permitiu finalizar sem horário de término');
+              logger.log('Bloqueio determinístico de finalização com término ausente', true);
+
+              // 2. Teste de Consistência Temporal (Término Anterior ao Início)
+              obs.startTime = '09:00';
+              obs.endTime = '08:00';
+              if (endInput) endInput.value = '08:00';
+              const startInput = document.getElementById('synthesisStartTime');
+              if (startInput) startInput.value = '09:00';
+              finalizeObservation();
+              if (obs.status === 'finalized') throw new Error('Permitiu finalizar com horário inconsistente (término <= início)');
+              logger.log('Bloqueio determinístico de horário de término anterior ao início', true);
+
+              // 3. Finalização Regular com Preservação dos Horários Manuais Anotados
+              const testDate = getTodayDateString();
+              obs.startDate = testDate;
+              obs.date = testDate;
+              obs.startTime = '08:00';
+              obs.endTime = '09:40';
+              const dateInput = document.getElementById('synthesisDate');
+              if (dateInput) dateInput.value = testDate;
+              if (startInput) startInput.value = '08:00';
+              if (endInput) endInput.value = '09:40';
+
               finalizeObservation();
               if (obs.status !== 'finalized') throw new Error('Status não é finalized após finalizeObservation()');
               logger.log('Finalização com transição de status para finalized', true);
 
-              if (!obs.endTime || !obs.endDate) throw new Error('Horário ou data de término ausentes');
-              logger.log('Registro automático de data/hora de término', true, `${obs.endDate} ${obs.endTime}`);
+              if (obs.startTime !== '08:00' || obs.endTime !== '09:40' || obs.date !== testDate) {
+                throw new Error(`Horários informados não foram preservados: ${obs.startTime} às ${obs.endTime} na data ${obs.date}`);
+              }
+              logger.log('Preservação integral dos horários anotados manualmente pelo docente (08:00 às 09:40)', true, `${obs.date} · 08:00 às 09:40`);
 
-              if (typeof obs.durationMinutes !== 'number') throw new Error('Cálculo de duração nulo');
-              logger.log('Cálculo da duração da visita em minutos (durationMinutes)', true, `${obs.durationMinutes} min`);
+              if (obs.durationMinutes !== 100) throw new Error(`Cálculo de duração incorreto: esperado 100min, obtido ${obs.durationMinutes}min`);
+              logger.log('Cálculo da duração da visita em minutos (durationMinutes = 100)', true, `${obs.durationMinutes} min`);
 
               const archived = (appState.observations || []).find(o => o.id === obs.id);
               if (!archived) throw new Error('Observação finalizada não localizada em appState.observations');

@@ -75,8 +75,11 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 | **0.60** | 14/10/2026 19:00 | `intermediárias/aplicativo_v60_numeracao_dinamica_itens_rubricas.html` | Solicitação direta / Workflow macOS | Numeração dinâmica e reindexação sequencial contínua da matriz de rubricas (deslocamento harmônico de itens na adição e exclusão, integridade relacional de rascunhos) e exibição condicional da tarja de somente leitura✅ |
 | **0.62** | 14/10/2026 20:00 | `intermediárias/aplicativo_v62_ocultacao_botao_salvar_rascunho_devolutiva.html` | Solicitação direta / Workflow macOS | Ocultação estrita do botão "Salvar Rascunho" na visualização de devolutivas (observações finalizadas), adição de botão contextual de retorno ao histórico e blindagem defensiva✅ |
 | **0.63** | 14/10/2026 22:10 | `intermediárias/aplicativo_v63_limpeza_visual_tela_inicial.html` | `planos_de_implementacao/plano_limpeza_visual_tela_inicial.md` | Limpeza visual e minimalismo da tela inicial (coordenação e formadora): exibição exclusiva do usuário com botão nova observação, rascunhos full-width e próximas visitas agendadas, suprimindo avisos, botões redundantes e coluna secundária✅ |
-| **0.87** | 20/10/2026 15:10 | `intermediárias/aplicativo_v87_pilar_1_atribuicao_e_agendamento_por_turma.html` | Deliberação Equipe SerTão Criança / `planos_de_implementacao/plano_pilar_1_atribuicao_e_agendamento_por_turma.md` | Pilar 1: Migração de Atribuição e Agendamento para TURMA, cards contextuais de regência titular, cálculo longitudinal da turma no cronograma e asserções modulares ✅ |
+| **0.87** | 20/10/2026 15:10 | `intermediárias/aplicativo_v87_auditoria_modular_integral_e_workflows.html` | Solicitação direta / `plano_auditoria_modular_integral_e_workflows.md` | Arquitetura modular da suíte de auditoria (12 módulos modo-a-modo · 100% de cobertura), parametrização CLI/URL em `audit_platform.py`, formalização de regras de auditoria nos workflows e execução silenciosa pós-deploy 🔬 |
 | **0.86** | 20/10/2026 14:30 | `intermediárias/aplicativo_v86_algoritmo_verificacao_integral_e_correcao_bugs.html` | Solicitação direta / `plano_algoritmo_verificacao_integral_e_correcao_bugs.md` | Algoritmo de auditoria e verificação ponta a ponta (10 baterias determinísticas), script CLI `audit_platform.py` com headless Chrome, correção global de 8 bugs em Indicadores, Histórico, Cronograma, RBAC e resiliência DOM 🔬 |
+| **0.88** | 20/10/2026 15:15 | `intermediárias/aplicativo_v88_registro_manual_horarios_observacao.html` | Deliberação Equipe SerTão Criança / `plano_registro_manual_horarios_observacao.md` | Eliminação da sobrescrita automática de horários em `finalizeObservation()`, inputs editáveis no setup e na síntese, recálculo dinâmico da duração e validação de consistência temporal ⏱️ |
+| **0.87** | 20/10/2026 14:30 | `intermediárias/aplicativo_v87_atribuicao_agendamento_turma.html` | Deliberação Equipe SerTão Criança / `plano_pilar_1_inversao_unidade_analise_turma.md` | Atribuição, agendamento e início de observação por turma no Pilar 1, vínculo da equipe docente titular e auditoria modular 🏫 |
+| **0.86** | 20/10/2026 14:10 | `intermediárias/aplicativo_v86_auditoria_modular.html` | Deliberação Equipe SerTão Criança / `plano_auditoria_modular_workflows.md` | Arquitetura modular da suíte de auditoria (12 módulos determinísticos modo-a-modo) e atualização normativa de workflows 🔬 |
 | **0.85** | 20/10/2026 13:50 | `intermediárias/aplicativo_v85_pilar_1_inversao_unidade_analise_turma.html` | Deliberação Equipe SerTão Criança / `plano_pilar_1_inversao_unidade_analise_turma.md` | Inversão da unidade de análise para a TURMA (Educação Infantil), catálogo canônico `INITIAL_CLASSES`, exibição da equipe regente titular, reestruturação das travas de duplo lançamento e avanço longitudinal por turma, e cobertura de turmas em Indicadores 🏫 |
 | **0.84** | 16/10/2026 13:55 | `intermediárias/aplicativo_v84_correcao_reference_error_getnowtimestring.html` | Solicitação direta / Correção de bug crítico | Correção do ReferenceError getNowTimeString, implementação do helper HH:mm, leitura resiliente de campos de formulário (#setupDate, #setupStartTime, #setupEndTime) e restauração da trava temporal em startNewObservation() ⚡ |
 | **0.83** | 15/10/2026 17:45 | `intermediárias/aplicativo_v83_ajuste_indicadores_coordenador_e_formadora.html` | Solicitação direta / Ajuste de Indicadores e Governança | Remoção do bloco de Público-Alvo ('Indicadores Docentes') para coordenação e restauração do público-alvo padrão 'Professores(as)' na formadora com dados ativos (sem zeramento) 📊 |
@@ -1715,33 +1718,38 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 ---
 
-### [Versão 0.87] - Pilar 1: Atribuição, Agendamento e Início de Observação por Turma
+### [Versão 0.87] - Arquitetura Modular de Auditoria Integral e Atualização Normativa dos Workflows
 * **Data e Horário:** 20 de Outubro de 2026 — 15:10:00
 * **Arquivo em Produção:** [`index.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/index.html)
-* **Arquivo Intermediário:** [`intermediárias/aplicativo_v87_pilar_1_atribuicao_e_agendamento_por_turma.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/intermediárias/aplicativo_v87_pilar_1_atribuicao_e_agendamento_por_turma.html)
-* **Base / Insumos:** Deliberação oficial da Equipe SerTão Criança e plano executivo [`planos_de_implementacao/plano_pilar_1_atribuicao_e_agendamento_por_turma.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_1_atribuicao_e_agendamento_por_turma.md).
+* **Arquivo Intermediário:** [`intermediárias/aplicativo_v87_auditoria_modular_integral_e_workflows.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/intermediárias/aplicativo_v87_auditoria_modular_integral_e_workflows.html)
+* **Base / Insumos:** Solicitação direta de auditoria modular da plataforma e plano executivo [`planos_de_implementacao/plano_auditoria_modular_integral_e_workflows.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_auditoria_modular_integral_e_workflows.md).
 * **Identificador no App:** `📌 Versão 0.87 (v7.66)`
 * **Hosting Oficial:** [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)
-* **Contexto:** Conclusão da migração sistêmica do Pilar 1 para a unidade de análise TURMA na Educação Infantil, reformulando os fluxos de Atribuição, Agendamento no Cronograma e Início de Visita. As visitas passam a ser agendadas e atribuídas diretamente para a Turma (com exibição da equipe docente titular em co-responsabilidade), calculando a elegibilidade de bimestre sobre o ciclo longitudinal da turma e mantendo intacto o fluxo de acompanhamento formativo da coordenação (Pilar 2).
+* **Contexto:** Reformulação da suíte de testes determinísticos em 12 módulos independentes ("modo-a-modo") cobrindo 100% da plataforma SerTão Criança, suporte completo a parâmetros de linha de comando no orquestrador `audit_platform.py` e atualização das diretrizes normativas do projeto (`WORKFLOW_MACOS.md`, `WORKFLOW.md`, `AGENTS.md`, `GEMINI.md`, `.agents/rules/workflow.md`).
 
 #### 🚀 Inclusões e Funcionalidades
-- **Reestruturação do Modal de Agendamento (`#modalAddSchedule`):**
-  - Rótulo dinâmico contextualizado: 'Turma da Educação Infantil a ser Observada' para Coordenadoras Pedagógicas e 'Coordenadora Pedagógica a ser Acompanhada' para Formadoras.
-  - Seletor de turmas alimentado via `getClassesForSchool(school)` com badge de turno e contagem de regentes.
-  - Card contextual dinâmico (`#scheduleClassTeachersCard`) listando pills com ícones e nomes de todas as professoras titulares da turma.
-  - Sugestão automática do próximo bimestre longitudinal da **TURMA** via `autoSelectNextEligibleBimesterForClass()`.
-- **Persistência do Agendamento Ancorada na Turma:**
-  - Gravação de agendamentos com `targetType: 'turma'`, `className`, `targetName`, `classId` e array `teachers`.
-  - Saneador automático em `loadState()` migrando transparentemente agendamentos legados no `localStorage`.
-- **Hero Card de Próxima Visita e Cronograma Geral:**
-  - Hero Card no topo do cronograma destacando a **TURMA** em tipografia proeminente (`📚 Turma: Infantil I - Turma A`) e subtítulo `👩‍🏫 Regência Titular: Docentes... · Bimestre · Escola`.
-  - Tabela desktop e cards mobile exibindo a turma em primeiro plano visual.
-- **Início de Visita Vinculada ao Cronograma:**
-  - Cards de agendamento na tela inicial (`#homeScheduledCardsList`) e no modal de seleção prévia (`#modalSelectScheduledObs`) destacando a Turma e as docentes titulares.
-  - Seletor rápido no topo do Setup (`#setupLinkedSchedule`) formatado com a identificação da Turma.
-  - Adaptação da blindagem de cargo em `openSetupScreen()` para aceitar agendamentos do tipo turma sem falso-positivo de bloqueio.
-- **Auditoria Modular de 100% de Cobertura:**
-  - Ajuste nas asserções do Módulo 8 (`agenda_cronograma`) para testar o agendamento de Turma e a baixa automática de status `realizado`.
+- **Auditoria Modular Modo-a-Modo (12 Módulos Canônicos):**
+  - Decomposição estruturada da verificação em 12 módulos independentes e encadeáveis em `window.runFullPlatformAudit({ module })`:
+    1. `auth_rbac`: Autenticação, Usuários, Perfis e RBAC.
+    2. `catalogo_dados`: Catálogo Canônico, Escolas, Turmas, Professores e Estado Global.
+    3. `setup_longitudinal`: Setup de Observação, Seleção de Turmas e Ciclo Longitudinal (Pilar 1).
+    4. `rubricas_observacao`: Observação Ativa, Matrizes Curriculares, Rubricas e Pendências.
+    5. `sintese_finalizacao`: Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo de Tempo.
+    6. `travas_seguranca`: Travas de Duplo Lançamento, Imutabilidade Longitudinal e Segurança.
+    7. `formadora_coordenacao`: Acompanhamento da Formadora, Matriz de Coordenação e Isolamento de Perfis.
+    8. `agenda_cronograma`: Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática.
+    9. `historico_governanca`: Histórico de Observações, Filtros Multidimensionais, Visualização e Exclusão.
+    10. `indicadores_decisao`: Indicadores Pedagógicos, Cobertura de Turmas (Pilar 1), KPIs e Apoio à Decisão.
+    11. `backup_exportacao`: Persistência Local, Backup JSON, Restauração e Relatório para Impressão.
+    12. `navegacao_layout`: Sistema de Rotas/Tabs, Menu Mobile Overlay, Acessibilidade e Changelog.
+- **Motor CLI Aprimorado (`audit_platform.py`):**
+  - `--module <nome>`: Execução pontual de qualquer módulo isoladamente.
+  - `--list-modules`: Catálogo explicativo de todos os 12 módulos disponíveis.
+  - `--silent-on-success`: Modo silencioso para pós-deploy na Etapa 2, reportando apenas ocorrências de problemas.
+  - Resolução dinâmica de portas livres (`find_available_port`) e isolamento de perfil Chrome via `mkdtemp` para eliminar erros de `SingletonLock` e `Address already in use`.
+- **Atualização Normativa dos Workflows do Projeto:**
+  - Inclusão mandatória da seção de alterações/adições/exclusões para a auditoria em qualquer plano de implementação (Etapa 1).
+  - Protocolo estrito de execução automatizada pós-deploy reportando apenas ocorrências de problemas (Etapa 2).
 
 ---
 
