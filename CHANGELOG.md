@@ -75,6 +75,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 | **0.60** | 14/10/2026 19:00 | `intermediárias/aplicativo_v60_numeracao_dinamica_itens_rubricas.html` | Solicitação direta / Workflow macOS | Numeração dinâmica e reindexação sequencial contínua da matriz de rubricas (deslocamento harmônico de itens na adição e exclusão, integridade relacional de rascunhos) e exibição condicional da tarja de somente leitura✅ |
 | **0.62** | 14/10/2026 20:00 | `intermediárias/aplicativo_v62_ocultacao_botao_salvar_rascunho_devolutiva.html` | Solicitação direta / Workflow macOS | Ocultação estrita do botão "Salvar Rascunho" na visualização de devolutivas (observações finalizadas), adição de botão contextual de retorno ao histórico e blindagem defensiva✅ |
 | **0.63** | 14/10/2026 22:10 | `intermediárias/aplicativo_v63_limpeza_visual_tela_inicial.html` | `planos_de_implementacao/plano_limpeza_visual_tela_inicial.md` | Limpeza visual e minimalismo da tela inicial (coordenação e formadora): exibição exclusiva do usuário com botão nova observação, rascunhos full-width e próximas visitas agendadas, suprimindo avisos, botões redundantes e coluna secundária✅ |
+| **0.86** | 20/10/2026 14:30 | `intermediárias/aplicativo_v86_algoritmo_verificacao_integral_e_correcao_bugs.html` | Solicitação direta / `plano_algoritmo_verificacao_integral_e_correcao_bugs.md` | Algoritmo de auditoria e verificação ponta a ponta (10 baterias determinísticas), script CLI `audit_platform.py` com headless Chrome, correção global de 8 bugs em Indicadores, Histórico, Cronograma, RBAC e resiliência DOM 🔬 |
 | **0.85** | 20/10/2026 13:50 | `intermediárias/aplicativo_v85_pilar_1_inversao_unidade_analise_turma.html` | Deliberação Equipe SerTão Criança / `plano_pilar_1_inversao_unidade_analise_turma.md` | Inversão da unidade de análise para a TURMA (Educação Infantil), catálogo canônico `INITIAL_CLASSES`, exibição da equipe regente titular, reestruturação das travas de duplo lançamento e avanço longitudinal por turma, e cobertura de turmas em Indicadores 🏫 |
 | **0.84** | 16/10/2026 13:55 | `intermediárias/aplicativo_v84_correcao_reference_error_getnowtimestring.html` | Solicitação direta / Correção de bug crítico | Correção do ReferenceError getNowTimeString, implementação do helper HH:mm, leitura resiliente de campos de formulário (#setupDate, #setupStartTime, #setupEndTime) e restauração da trava temporal em startNewObservation() ⚡ |
 | **0.83** | 15/10/2026 17:45 | `intermediárias/aplicativo_v83_ajuste_indicadores_coordenador_e_formadora.html` | Solicitação direta / Ajuste de Indicadores e Governança | Remoção do bloco de Público-Alvo ('Indicadores Docentes') para coordenação e restauração do público-alvo padrão 'Professores(as)' na formadora com dados ativos (sem zeramento) 📊 |
@@ -1710,6 +1711,46 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 - **Formatação Uniforme de Datas:** Datas exibidas de forma padronizada em DD/MM/AAAA em todas as visualizações (desktop e mobile).
 - **Ocultação em Arquivadas:** Ao selecionar o filtro de visitas arquivadas, o destaque de próxima visita é automaticamente ocultado para priorizar a consulta histórica.
 - **Atualização da Identificação de Versão:** Elevação oficial para `Versão 0.81 (v7.60)` no cabeçalho, modal de histórico e changelog.
+
+---
+
+### [Versão 0.86] - Algoritmo de Verificação Integral da Plataforma e Correção Global de Bugs
+* **Data e Horário:** 20 de Outubro de 2026 — 14:30:00
+* **Arquivo em Produção:** [`index.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/index.html)
+* **Arquivo Intermediário:** [`intermediárias/aplicativo_v86_algoritmo_verificacao_integral_e_correcao_bugs.html`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/intermediárias/aplicativo_v86_algoritmo_verificacao_integral_e_correcao_bugs.html)
+* **Base / Insumos:** Solicitação de auditoria ponta a ponta da plataforma e plano executivo [`planos_de_implementacao/plano_algoritmo_verificacao_integral_e_correcao_bugs.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_algoritmo_verificacao_integral_e_correcao_bugs.md).
+* **Identificador no App:** `📌 Versão 0.86 (v7.65)`
+* **Hosting Oficial:** [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)
+* **Contexto:** Criação de um motor determinístico de verificação ponta a ponta para toda a plataforma SerTão Criança, integrando script executável via terminal (`audit_platform.py`) e acionamento programático no navegador (`window.runFullPlatformAudit()`). Diagnóstico minucioso e correção imediata de 8 inconsistências e bugs reais em Indicadores Pedagógicos, Histórico, Cronograma e manipulação DOM.
+
+#### 🚀 Inclusões e Funcionalidades
+- **Motor Automatizado de Auditoria (`PlatformVerificationEngine`):**
+  - Implementação da função global `window.runFullPlatformAudit()` com 10 baterias de testes automatizados determinísticos cobrindo:
+    1. Autenticação, Usuários e RBAC (Mariana, Clarice, Rodrigo, Usuário Pendente e recuperação).
+    2. Catálogo Canônico e Estado Global (`INITIAL_CLASSES`, resiliência e `getClassesForSchool`).
+    3. Setup & Travas de Negócio por Turma (seleção, turmas da UE, equipes de regência e cálculo longitudinal).
+    4. Observação Ativa & Rubricas (inicialização de turma, navegação de dimensões, escala Likert e pendências).
+    5. Síntese & Finalização Automática (gravação de término, duração, síntese e status `finalized`).
+    6. Travas de Segurança (bloqueio de duplo lançamento e avanço longitudinal garantidos).
+    7. Acompanhamento da Formadora (isolamento de cargo e escopo da coordenação).
+    8. Cronograma Longitudinal (planejamento, edição e baixa automática na conclusão da visita).
+    9. Histórico & Governança (aplicação de filtros e preservação de rascunhos).
+    10. Indicadores Pedagógicos (cálculo de consistência, visitas auditadas e Cobertura de Turmas).
+  - Isolamento de execução com snapshot e restauração transparente de `appState` para não poluir os dados reais do usuário.
+- **Script Executável CLI Headless (`audit_platform.py`):**
+  - Execução automatizada via terminal que inicializa o Google Chrome em modo headless, roda a auditoria e reporta o status colorido e tempo de cada bateria, saindo com código 0 apenas se 100% dos testes forem aprovados.
+- **Atalho de Diagnóstico no Perfil:**
+  - Inclusão do botão "🔬 Executar Diagnóstico da Plataforma" no modal de perfil do usuário.
+
+#### 🛠️ Correções e Melhorias de Estabilidade (Bugs Resolvidos)
+- **Bug 1 (Indicadores Pedagógicos com Turmas):** Correção do filtro de `scopedObs` em `renderIndicatorsScreen()` para incluir observações com `evaluatedType === 'turma'` quando o público-alvo for 'professora', restaurando o índice de consistência geral e drilldowns.
+- **Bug 2 (Acompanhamento Longitudinal Individual de Docentes):** O filtro de visitas individuais em `renderTeacherLongitudinalDetail()` e `exportTeacherLongitudinalCSV()` agora pesquisa a docente na array `teachers` de turmas com regência coletiva.
+- **Bug 3 (Filtro por Função no Histórico):** A opção "Professoras" no `#histFilterRole` agora engloba tanto `evaluatedType === 'professora'` quanto `'turma'`.
+- **Bug 4 (Visibilidade para Perfil Professora):** Ajuste em `getScopedObservations()` permitindo que professoras visualizem as devolutivas finalizadas de suas respectivas turmas e escolas.
+- **Bug 5 (Baixa no Cronograma por Turma):** Resolução de vínculo na finalização (`finalizeObservation()`), sincronizando visitas agendadas para 'realizado' mesmo quando o agendamento tiver sido realizado para a turma ou por docente regente.
+- **Bug 6 (Resiliência DOM no Menu Desktop):** Substituição da manipulação insegura por índice de nós (`childNodes[2]`) por um elemento dedicado `<span id="deskTabHomeLabel">Início</span>`.
+- **Bug 7 (Setup de Visita Agendada Flexível):** Correspondência resiliente de turmas em `openSetupScreen(prefilledSchedule)` quando o agendamento contiver etapa abreviada.
+- **Bug 8 (Identificação em Impressão de Síntese):** Bloco de assinaturas agora identifica explicitamente o nome da Turma e da equipe regente titular nas observações de Educação Infantil.
 
 ---
 
