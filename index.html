@@ -2484,7 +2484,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.96 (v7.75)
+          Versão 0.97 (v7.76)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3948,6 +3948,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.97 - SIMPLIFICAÇÃO DO MODAL DE OCORRÊNCIAS DE CAMPO E VINCULAÇÃO ESTRITA -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.97 · v7.76</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Simplificação do Modal de Ocorrências de Campo e Vinculação Estrita à Observação Ativa (Pilar 1):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🔒 <strong>Vinculação Estrita à Observação em Andamento:</strong> Ocorrências de campo passam a ser obrigatoriamente vinculadas à observação pedagógica ativa (<code>appState.currentObs</code>). Tentativas de abertura sem observação em andamento recebem aviso orientador imediato.</li>
+          <li>⚡ <strong>Agilidade e Redução de Atrito Cognitivo:</strong> Abertura do modal prepara instantaneamente o seletor de docentes da turma avaliada, mantendo a trava inteligente para turmas de docente único titular e a escolha simples para duplas regentes.</li>
+          <li>🎯 <strong>Padronização do Tópico Formativo:</strong> O campo <code>topic</code> passa a adotar o valor unificado <code>'Ocorrência de Campo'</code>, preservando a compatibilidade integral com a exportação CSV, Síntese Final e histórico.</li>
+          <li>🗑️ <strong>Supressão de Elementos Redundantes:</strong> Remoção definitiva do alerta contextual azul (#noteObsContextAlert), dos seletores de Unidade (#noteSchool), Turma (#noteClass) e Dimensão/Tópico (#noteTopic), despoluindo a tela de registro de campo.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.96 - PILAR 4: REMOÇÃO DE TEXTOS E ORIENTAÇÕES NO SETUP -->
@@ -5624,31 +5641,6 @@
         Utilize para registrar aspectos qualitativos pontuais observados na rotina pedagógica que necessitem de diálogo formativo e encaminhamentos.
       </p>
 
-      <!-- Alerta Contextual de Observação Ativa -->
-      <div id="noteObsContextAlert" style="display:none; background:#EFF6FF; border:1px solid #BFDBFE; color:#1E40AF; padding:10px 12px; border-radius:8px; font-size:12px; margin-bottom:14px; line-height:1.4;">
-        🔒 <strong>Observação em andamento:</strong> Este registro será vinculado exclusivamente à visita da turma <strong id="noteObsContextClassName"></strong> na unidade <strong id="noteObsContextSchoolName"></strong>.
-      </div>
-
-      <div id="noteNoEvaluatedAlert" style="display:none; background:#FEF2F2; border:1px solid #FECACA; color:#991B1B; padding:10px 12px; border-radius:8px; font-size:12px; margin-bottom:14px; line-height:1.4;">
-        🚫 <strong>Sem turmas avaliadas:</strong> Ocorrências avulsas exigem ao menos uma observação pedagógica finalizada na unidade ou visita ativa em andamento.
-      </div>
-
-      <!-- Unidade Escolar -->
-      <div class="form-group">
-        <label class="form-label">Unidade Escolar / Polo</label>
-        <select id="noteSchool" class="form-select" onchange="onNoteSchoolChange()">
-          <!-- Populated -->
-        </select>
-      </div>
-
-      <!-- TURMA DA EDUCAÇÃO INFANTIL (PILAR 1) -->
-      <div class="form-group" id="groupNoteClass">
-        <label class="form-label">Turma da Educação Infantil <span style="color:var(--red);">*</span></label>
-        <select id="noteClass" class="form-select" onchange="onNoteClassChange()">
-          <!-- Populated dinamicamente via getClassesForSchool -->
-        </select>
-      </div>
-
       <!-- PROFISSIONAL / DOCENTE EM FOCO -->
       <div class="form-group" id="groupNoteTeacher">
         <label class="form-label" id="labelNoteTeacher">
@@ -5656,25 +5648,14 @@
           <span style="font-size:11px; font-weight:normal; color:var(--text-secondary); margin-left:4px;" id="subLabelNoteTeacher"></span>
         </label>
         <select id="noteTeacher" class="form-select">
-          <!-- Populated conforme docentes da turma selecionada -->
+          <!-- Populated dinamicamente com base na turma da observação ativa -->
         </select>
         <div id="noteTeacherHint" style="font-size:11px; margin-top:4px; line-height:1.3;"></div>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Dimensão / Tópico Observado</label>
-        <select id="noteTopic" class="form-select">
-          <option value="Estratégias Didáticas">Estratégias Didáticas e Ampliação de Repertório</option>
-          <option value="Gestão do Espaço e Materiais">Gestão do Espaço e Acesso a Materiais</option>
-          <option value="Interações e Clima Relacional">Interações, Escuta e Clima Relacional</option>
-          <option value="Organização da Rotina">Organização da Rotina e Tempos de Espera</option>
-          <option value="Outro Ponto Formativo">Outro Ponto Específico para Devolutiva</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Descrição Circunstanciada dos Fatos</label>
-        <textarea id="noteContent" class="form-textarea" style="height:90px;" placeholder="Descreva os fatos observados e pontos para a conversa formativa..."></textarea>
+        <label class="form-label">Descrição Circunstanciada dos Fatos <span style="color:var(--red);">*</span></label>
+        <textarea id="noteContent" class="form-textarea" style="height:110px;" placeholder="Descreva os fatos observados e pontos para a conversa formativa..."></textarea>
       </div>
 
       <div style="display:flex; gap:10px; justify-content:flex-end;">
@@ -11869,123 +11850,36 @@ function getActiveSections(obs) {
         showToast('A Coordenadora do Núcleo de EI não realiza lançamento de ocorrências de campo.');
         return;
       }
-      const schoolSelect = document.getElementById('noteSchool');
-      schoolSelect.innerHTML = '';
 
-      appState.units.forEach(u => {
-        const opt = document.createElement('option');
-        opt.value = u.name;
-        opt.text = u.name;
-        schoolSelect.appendChild(opt);
-      });
-
-      const isObsActive = !!appState.currentObs;
-      const alertEl = document.getElementById('noteObsContextAlert');
-
-      if (isObsActive) {
-        schoolSelect.value = appState.currentObs.schoolName;
-        schoolSelect.disabled = true;
-
-        if (alertEl) {
-          alertEl.style.display = 'block';
-          const cName = document.getElementById('noteObsContextClassName');
-          const sName = document.getElementById('noteObsContextSchoolName');
-          if (cName) cName.textContent = appState.currentObs.className || appState.currentObs.teacherName;
-          if (sName) sName.textContent = appState.currentObs.schoolName;
-        }
-      } else {
-        if (alertEl) alertEl.style.display = 'none';
-        if (user.roleKey === 'coordenador') {
-          schoolSelect.value = user.school;
-          schoolSelect.disabled = true;
-        } else {
-          schoolSelect.disabled = false;
-        }
+      // VINCULAÇÃO ESTRITA: Ocorrências exigem observação pedagógica em andamento
+      if (!appState.currentObs) {
+        showToast('Para registrar uma ocorrência de campo, inicie ou continue uma observação pedagógica.');
+        return;
       }
 
-      onNoteSchoolChange();
-
-      document.getElementById('noteContent').value = '';
-      document.getElementById('modalQualitativeNote').classList.add('active');
-    }
-
-    function closeQualitativeNoteModal() {
-      document.getElementById('modalQualitativeNote').classList.remove('active');
-    }
-
-    function onNoteSchoolChange() {
-      const school = document.getElementById('noteSchool').value;
-      const classSelect = document.getElementById('noteClass');
-      const isObsActive = !!appState.currentObs;
-
-      classSelect.innerHTML = '';
-
-      // Se houver visita ativa vinculada à mesma escola, fixa a turma da observação ativa
-      if (isObsActive && appState.currentObs.schoolName === school && appState.currentObs.className) {
-        const opt = document.createElement('option');
-        opt.value = appState.currentObs.className;
-        opt.text = `📚 ${appState.currentObs.className}`;
-        classSelect.appendChild(opt);
-        classSelect.disabled = true;
-      } else {
-        classSelect.disabled = false;
-        const schoolClasses = getClassesForSchool(school);
-        if (schoolClasses.length === 0) {
-          const opt = document.createElement('option');
-          opt.value = '';
-          opt.text = 'Nenhuma turma cadastrada nesta unidade';
-          classSelect.appendChild(opt);
-        } else {
-          schoolClasses.forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c.name;
-            opt.text = `${c.name} (${c.shift || 'Parcial'})`;
-            classSelect.appendChild(opt);
-          });
-        }
-      }
-
-      onNoteClassChange();
-    }
-
-    function onNoteClassChange() {
-      const schoolName = document.getElementById('noteSchool').value;
-      const className = document.getElementById('noteClass').value;
+      const obs = appState.currentObs;
+      const schoolName = obs.schoolName;
+      const className = obs.className;
       const teacherSelect = document.getElementById('noteTeacher');
       const teacherHint = document.getElementById('noteTeacherHint');
       const subLabel = document.getElementById('subLabelNoteTeacher');
       const btnSave = document.getElementById('btnSaveQualitativeNote');
-      
+
       teacherSelect.innerHTML = '';
       if (teacherHint) {
         teacherHint.innerHTML = '';
         teacherHint.style.display = 'none';
       }
 
-      if (!className) {
-        const opt = document.createElement('option');
-        opt.value = '';
-        opt.text = 'Selecione uma turma primeiro';
-        teacherSelect.appendChild(opt);
-        teacherSelect.disabled = true;
-        if (btnSave) btnSave.disabled = true;
-        return;
-      }
-
-      // 1. Localiza a turma no catálogo canônico da escola
-      const schoolClasses = getClassesForSchool(schoolName);
-      const targetClass = schoolClasses.find(c => c.name === className);
-      let teachers = (targetClass && Array.isArray(targetClass.teachers)) ? [...targetClass.teachers] : [];
-
-      // Fallback caso a turma não possua docentes explicitamente no array
+      // 1. Identifica os docentes da turma sendo avaliada
+      let teachers = (Array.isArray(obs.teachers) && obs.teachers.length > 0) ? [...obs.teachers] : [];
       if (teachers.length === 0) {
-        if (appState.currentObs && appState.currentObs.className === className && Array.isArray(appState.currentObs.teachers) && appState.currentObs.teachers.length > 0) {
-          teachers = [...appState.currentObs.teachers];
-        } else {
-          const fallbackTeachers = (appState.teamMembers || [])
-            .filter(m => m.school === schoolName && m.roleKey === 'professora')
-            .map(m => m.name);
-          teachers = fallbackTeachers;
+        const schoolClasses = getClassesForSchool(schoolName);
+        const targetClass = schoolClasses.find(c => c.name === className);
+        if (targetClass && Array.isArray(targetClass.teachers) && targetClass.teachers.length > 0) {
+          teachers = [...targetClass.teachers];
+        } else if (obs.teacherName) {
+          teachers = [obs.teacherName];
         }
       }
 
@@ -12054,21 +11948,31 @@ function getActiveSections(obs) {
           btnSave.style.cursor = 'not-allowed';
         }
       }
+
+      document.getElementById('noteContent').value = '';
+      document.getElementById('modalQualitativeNote').classList.add('active');
+    }
+
+    function closeQualitativeNoteModal() {
+      document.getElementById('modalQualitativeNote').classList.remove('active');
     }
 
     function saveQualitativeNote() {
       const user = getCurrentUser();
-      const schoolName = document.getElementById('noteSchool').value;
-      const className = document.getElementById('noteClass').value;
-      const teacherSelect = document.getElementById('noteTeacher');
-      const teacherName = teacherSelect ? teacherSelect.value : '';
-      const topic = document.getElementById('noteTopic').value;
-      const content = document.getElementById('noteContent').value.trim();
 
-      if (!className) {
-        showToast('Por favor, selecione a turma da Educação Infantil.');
+      if (!appState.currentObs) {
+        showToast('Nenhuma observação pedagógica em andamento para vincular a ocorrência.');
         return;
       }
+
+      const obs = appState.currentObs;
+      const schoolName = obs.schoolName;
+      const className = obs.className;
+      const classId = obs.classId || null;
+
+      const teacherSelect = document.getElementById('noteTeacher');
+      const teacherName = teacherSelect ? teacherSelect.value : (obs.teacherName || '');
+      const content = document.getElementById('noteContent').value.trim();
 
       if (!teacherName) {
         showToast('Por favor, indique o docente referente à ocorrência.');
@@ -12080,10 +11984,6 @@ function getActiveSections(obs) {
         return;
       }
 
-      const isObsLinked = !!(appState.currentObs && 
-                             appState.currentObs.schoolName === schoolName && 
-                             (appState.currentObs.className === className || (appState.currentObs.teachers && appState.currentObs.teachers.includes(teacherName))));
-
       const targetClassObj = getClassesForSchool(schoolName).find(c => c.name === className);
 
       const newNote = {
@@ -12091,34 +11991,36 @@ function getActiveSections(obs) {
         date: new Date().toISOString().split('T')[0],
         schoolName: schoolName,
         className: className,
-        classId: targetClassObj?.id || null,
+        classId: classId || targetClassObj?.id || null,
         targetType: 'turma',
         teacherName: teacherName,
-        teachers: (targetClassObj && targetClassObj.teachers) ? targetClassObj.teachers : [teacherName],
+        teachers: (Array.isArray(obs.teachers) && obs.teachers.length > 0)
+          ? obs.teachers
+          : ((targetClassObj && targetClassObj.teachers) ? targetClassObj.teachers : [teacherName]),
         reportedBy: user.name,
-        topic: topic,
+        topic: 'Ocorrência de Campo',
         content: content,
         resolved: false,
         archived: false,
-        obsId: isObsLinked ? appState.currentObs.id : null,
+        obsId: obs.id,
         isSample: false
       };
 
       appState.notes.unshift(newNote);
 
-      if (isObsLinked && appState.currentObs) {
-        if (!appState.currentObs.linkedNotes) {
-          appState.currentObs.linkedNotes = [];
-        }
-        const textToLink = `[${newNote.topic} · ${newNote.teacherName}] ${newNote.content}`;
-        if (!appState.currentObs.linkedNotes.includes(textToLink)) {
-          appState.currentObs.linkedNotes.push(textToLink);
-        }
+      // Vinculação mandatória e imediata à observação ativa
+      if (!obs.linkedNotes) {
+        obs.linkedNotes = [];
+      }
+      const textToLink = `[${newNote.teacherName}] ${newNote.content}`;
+      if (!obs.linkedNotes.includes(textToLink)) {
+        obs.linkedNotes.push(textToLink);
       }
 
       saveState();
       closeQualitativeNoteModal();
       applyUserRoleUI();
+
       if (document.getElementById('screenNotes').classList.contains('active')) {
         renderNotesScreen();
       }
@@ -12127,7 +12029,7 @@ function getActiveSections(obs) {
         renderSynthesisScreen();
       }
       
-      showToast('Anotação formativa registrada com sucesso!');
+      showToast('Ocorrência de campo registrada com sucesso!');
     }
 
     function resolveNote(id) {
@@ -17082,20 +16984,58 @@ function getActiveSections(obs) {
               if (!blocked) throw new Error('Trava de duplo lançamento para a mesma turma/bimestre não disparou bloqueio');
               logger.log('Bloqueio estrito de duplicidade de observação no mesmo bimestre', true);
 
-              // TESTE ADICIONAL PILAR 1: Interações Reais no Modal de Ocorrências
-              openQualitativeNoteModal();
-              UI.select(document.getElementById('noteSchool'), 'CEI Professora Maria de Lourdes');
+              // TESTE PILAR 1 REESTRUTURADO (VERSÃO 0.97): Validação Estrita do Modal de Ocorrências
+              // 1. Teste de Ausência Física dos Elementos Removidos no DOM
+              if (document.getElementById('noteSchool') !== null ||
+                  document.getElementById('noteClass') !== null ||
+                  document.getElementById('noteTopic') !== null ||
+                  document.getElementById('noteObsContextAlert') !== null) {
+                throw new Error('Elementos suprimidos do modal de ocorrência continuam presentes no DOM');
+              }
+              logger.log('Supressão confirmada de campos redundantes no modal de ocorrência', true, 'noteSchool, noteClass, noteTopic e noteObsContextAlert removidos');
 
-              // 1. Caso Docente Único: Berçário II - Turma Única (Carla Beatriz Mendes travada)
-              UI.select(document.getElementById('noteClass'), 'Berçário II - Turma Única');
+              // 2. Teste do Guardião: Bloqueio sem Observação Ativa
+              appState.currentObs = null;
+              let blockedWithoutObs = false;
+              const prevToast = window.showToast;
+              window.showToast = function(msg) {
+                if (msg && msg.includes('observação pedagógica')) blockedWithoutObs = true;
+              };
+              openQualitativeNoteModal();
+              window.showToast = prevToast;
+
+              if (!blockedWithoutObs || document.getElementById('modalQualitativeNote').classList.contains('active')) {
+                throw new Error('Abertura do modal de ocorrência permitida sem observação em andamento');
+              }
+              logger.log('Guardião estrito: bloqueio de ocorrência sem observação pedagógica ativa', true);
+
+              // 3. Caso Docente Único com Observação Ativa: Berçário II - Turma Única
+              appState.currentObs = {
+                id: 'obs-test-audit-single',
+                schoolName: 'CEI Professora Maria de Lourdes',
+                className: 'Berçário II - Turma Única',
+                teachers: ['Carla Beatriz Mendes'],
+                teacherName: 'Carla Beatriz Mendes',
+                linkedNotes: []
+              };
+              openQualitativeNoteModal();
               const teacherSelect = document.getElementById('noteTeacher');
               if (!teacherSelect.disabled || teacherSelect.value !== 'Carla Beatriz Mendes') {
                 throw new Error('Falha na trava mandatória de docente único regente (esperado Carla Beatriz Mendes travada)');
               }
               logger.log('Bloqueio automático e trava mandatória para turma com docente único', true, 'Carla Beatriz Mendes (travado)');
+              closeQualitativeNoteModal();
 
-              // 2. Caso Dois Docentes: Infantil I - Turma A (Ana Carolina e Juliana)
-              UI.select(document.getElementById('noteClass'), 'Infantil I - Turma A');
+              // 4. Caso Dois Docentes com Observação Ativa: Infantil I - Turma A
+              appState.currentObs = {
+                id: 'obs-test-audit-pair',
+                schoolName: 'CEI Professora Maria de Lourdes',
+                className: 'Infantil I - Turma A',
+                teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha'],
+                teacherName: 'Ana Carolina Silva',
+                linkedNotes: []
+              };
+              openQualitativeNoteModal();
               if (teacherSelect.disabled) {
                 throw new Error('Seletor de docente bloqueado para turma com dois docentes');
               }
@@ -17105,18 +17045,25 @@ function getActiveSections(obs) {
               }
               logger.log('Disponibilização de escolha entre Professor A ou B para turma com dois docentes', true, '2 opções habilitadas');
 
-              // 3. Persistência de Ocorrência Atribuída à Turma com Docente Escolhido
+              // 5. Persistência de Ocorrência com Docente Escolhido e Vinculação Direta
               UI.select(teacherSelect, 'Juliana Roberta Rocha');
-              UI.select(document.getElementById('noteTopic'), 'Estratégias Didáticas');
-              UI.type(document.getElementById('noteContent'), 'Teste determinístico e comportamental de ocorrência.');
+              UI.type(document.getElementById('noteContent'), 'Teste determinístico e comportamental v0.97.');
               saveQualitativeNote();
 
-              const createdNote = appState.notes.find(n => n.content && n.content.includes('Teste determinístico e comportamental'));
-              if (!createdNote || createdNote.className !== 'Infantil I - Turma A' || createdNote.teacherName !== 'Juliana Roberta Rocha') {
-                throw new Error('Ocorrência salva não registrou className ou teacherName corretamente');
+              const createdNote = appState.notes.find(n => n.content && n.content.includes('Teste determinístico e comportamental v0.97'));
+              if (!createdNote || 
+                  createdNote.schoolName !== 'CEI Professora Maria de Lourdes' || 
+                  createdNote.className !== 'Infantil I - Turma A' || 
+                  createdNote.teacherName !== 'Juliana Roberta Rocha' ||
+                  createdNote.obsId !== 'obs-test-audit-pair') {
+                throw new Error('Ocorrência salva não vinculou corretamente à observação ativa ou ao docente');
               }
-              logger.log('Persistência de ocorrência vinculada à turma e ao docente escolhido', true, 'Infantil I - Turma A / Juliana');
+              if (!appState.currentObs.linkedNotes || appState.currentObs.linkedNotes.length === 0) {
+                throw new Error('Ocorrência não foi anexada aos linkedNotes da observação ativa');
+              }
+              logger.log('Persistência e vinculação estrita de ocorrência à turma e docente', true, 'CEI Maria de Lourdes / Infantil I - Turma A');
               closeQualitativeNoteModal();
+              appState.currentObs = null;
             } catch (e) {
               logger.log('Erro de execução no módulo travas_seguranca', false, e.message);
             }

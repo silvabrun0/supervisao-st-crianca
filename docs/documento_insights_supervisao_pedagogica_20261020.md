@@ -46,7 +46,7 @@ flowchart TD
     subgraph StatusColeta["1. Coleta Pedagógica no Chão da Escola"]
         P1["PILAR 1: Unidade de Análise por TURMA\n(✅ STATUS: IMPLEMENTADO)"]
         P4["PILAR 4: Turmas Integrais em Formulário Único\n(2 Etapas: Manhã e Tarde)"]
-        P5["PILAR 5: Fechamento Nominal com Parecer\n(inclusive em Práticas Consistentes)"]
+        P5["PILAR 5: Fechamento Nominal & Atribuição de Itens Parciais\n(Atribuição Docente Obrigatória + Parecer de Boas Práticas)"]
     end
 
     subgraph Governanca["2. Governança, Acessos e SSOT"]
@@ -177,15 +177,21 @@ flowchart TD
 
 ---
 
-### PILAR 5: Fechamento Nominal com Parecer Obrigatório em Práticas Consistentes
-* **Fundamentação Pedagógica (Carolina Machado, 01:13:16):**  
-  Para garantir que os professores recebam feedback individualizado e evitar o desincentivo de quem conduz bem a sala, o formulário da turma fecha com blocos nominais.  
+### PILAR 5: Fechamento Nominal com Parecer em Práticas Consistentes e Atribuição Mandatória em Itens Parciais
+* **Fundamentação Pedagógica (Carolina Machado, 01:13:16) & Alinhamento Operacional:**  
+  Para garantir que os professores recebam feedback individualizado e evitar o desincentivo de quem conduz bem a sala, o formulário da turma fecha com blocos nominais e traz rastreabilidade direta no preenchimento dos critérios da matriz.  
   Carolina Machado enfatizou que **o nível Consistente também deve ter campo de anotação descritiva**, documentando a boa prática pedagógica para fins de replicação e fornecendo dados ao Núcleo de EI sobre o padrão avaliativo da coordenação.
-* **Definição de Arquitetura:**
-  - Blocos finais nominais dos professores daquela turma.
-  - Pontuação simplificada nas 5 Dimensões (`Consistente`, `Parcial`, `Não Realizado`).
-  - Campo de parecer descritivo aberto em todos os níveis.
-  - Exportação de relatório em PDF segregado por professor.
+* **Nova Lógica de Atribuição em Itens "Parcial" (Substituição da Dimensão/Tópico da Ocorrência):**
+  Como a seleção de dimensão/tópico foi retirada do modal de ocorrência avulsa, estabelece-se a seguinte regra estrita para **qualquer observação (turmas de tempo parcial ou integral)**:
+  - **Gatilho de Atribuição Mandatória:** Sempre que, dentro da escala de rubricas, o avaliador pontuar qualquer item como **`"Parcial"`**, o sistema exigirá **obrigatoriamente**:
+    1. **Atribuição a Docente(s):** Vincular a nota a um (ou mais) professor(a)(es) regente(s) daquela turma responsável(is) pela prática naquele momento.
+    2. **Descrição / Justificativa da Nota:** Campo de texto obrigatório para que o avaliador descreva o porquê da atribuição da nota parcial (evidências concretas da prática, fragilidades na mediação ou aspectos parciais observados).
+  - Isso garante que a nota parcial não fique abstrata ou anônima, gerando subsídio claro e rastreável para a devolutiva formativa individual e coletiva.
+* **Definição de Arquitetura no Fechamento da Observação:**
+  - **Blocos Finais Nominais:** Ao término do instrumento, são exibidos os blocos dos professores regentes da turma (duplas no parcial e quartetos no integral).
+  - **Avaliação Geral nas 5 Dimensões:** Pontuação simplificada (`Consistente`, `Parcial`, `Não Realizado`).
+  - **Parecer Descritivo Aberto:** Habilitado em todos os níveis — com destaque para o preenchimento de evidências nas práticas *Consistentes*.
+  - **Exportação de PDF Segregado:** O aplicativo permite exportar o relatório integrado da turma e fichas individuais por professor (agregando as notas das dimensões, pareceres e os critérios específicos onde houve atribuição de nota parcial).
 
 ---
 
@@ -305,7 +311,7 @@ Na sub-aba **"Afunilamento por Dimensão"**, cada nível hierárquico apresenta 
      - Interface para o Formador gerenciar os coordenadores das escolas do seu polo atribuído.
      - Interface de Gestão Central para a Coordenadora do Núcleo de EI atribuir acessos e polos aos formadores.
   2. Formulário único de Turma Integral em 2 etapas (salvamento manhã / conclusão tarde).
-  3. Blocos nominais de avaliação docente ao término da turma com parecer aberto para práticas consistentes.
+  3. Blocos nominais de avaliação docente ao término da turma com parecer aberto para práticas consistentes e mecanismo de atribuição docente obrigatória com justificativa em itens pontuados como "Parcial".
   4. Quadro Semáforo Bimestral (Verde/Cinza/Vermelho).
   5. Pop-ups informativos `ℹ️` nas rubricas no mobile.
   6. Adequação formal da nomenclatura MEC (Tempo Parcial vs. Tempo Integral) e coleta de diversidade.

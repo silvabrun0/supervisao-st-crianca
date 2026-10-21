@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.97** | 21/10/2026 14:30 | `intermediárias/aplicativo_v97_simplificacao_modal_ocorrencias.html` | Solicitação direta / Pilar 1 | Simplificação radical do modal de ocorrências: eliminação de UE/Polo, Turma, Dimensão/Tópico e alerta azul redundante, com vinculação estrita à observação ativa 📝 |
 | **0.96** | 21/10/2026 14:00 | `intermediárias/aplicativo_v96_remocao_avisos_orientacao_setup_pilar4.html` | Solicitação direta / Ajuste Fino Pilar 4 | Otimização visual da tela de setup: remoção da caixa informativa de unidade de análise e supressão de aviso textual no card de docentes regentes 🧹 |
 | **0.95** | 20/10/2026 17:55 | `intermediárias/aplicativo_v95_auditoria_interativa_comportamental_end_to_end.html` | Solicitação direta / Simulação Comportamental Real | Reestruturação completa do motor de testes com simulação interativa de ponta a ponta (login, modais, selects e botões) 🤖 |
 | **0.94** | 20/10/2026 17:45 | `intermediárias/aplicativo_v94_pilar_4_turmas_integrais_formulario_unico.html` | Deliberação SerTão Criança / Pilar 4 | Formulário único de Turma Integral em 2 Etapas (Manhã e Tarde), salvamento de etapa matutina, banner contextual na observação ativa, registro de período duplo na síntese com soma de carga horária e bloqueio de finalização prematura ☀️ |
@@ -114,6 +115,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.97] - Simplificação do Modal de Ocorrências de Campo e Vinculação Estrita à Observação Ativa (Pilar 1)
+* **Data e Horário:** 21 de Outubro de 2026 – 14:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v97_simplificacao_modal_ocorrencias.html`
+* **Identificador no App:** 📌 Versão 0.97 (v7.76)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Vinculação Estrita à Observação em Andamento:** Ocorrências de campo passam a ser obrigatoriamente vinculadas à observação pedagógica ativa (`appState.currentObs`). Tentativas de abertura sem observação em andamento recebem aviso orientador imediato via Toast.
+- **Agilidade e Redução de Atrito Cognitivo:** Abertura do modal prepara instantaneamente o seletor de docentes da turma avaliada, mantendo a trava inteligente para turmas de docente único titular e a escolha simples para duplas regentes.
+- **Padronização do Tópico Formativo:** O campo `topic` passa a adotar o valor unificado `'Ocorrência de Campo'`, preservando a compatibilidade integral com a exportação CSV, Síntese Final e histórico.
+
+#### 🗑️ Exclusões
+- **Supressão do Alerta Azul Redundante:** Remoção completa do elemento `#noteObsContextAlert` (*"🔒 Observação em andamento: Este registro será vinculado exclusivamente à visita da turma..."*).
+- **Remoção de UE/Polo e Turma no Formulário:** Exclusão dos seletores `#noteSchool` e `#noteClass` e seus contêineres, pois a unidade e a turma são herdadas estritamente da avaliação ativa.
+- **Remoção de Dimensão/Tópico:** Supressão do dropdown `#noteTopic`, eliminando a necessidade de categorização burocrática prematura.
+
+---
 
 ### [Versão 0.96] - Otimização de UX no Setup da Observação (Pilar 4: Remoção de Textos de Orientação)
 * **Data e Horário:** 21 de Outubro de 2026 – 14:00:00
