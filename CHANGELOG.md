@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.02** | 21/10/2026 18:00 | `intermediárias/aplicativo_v102_pilar_8_foco_menores_indices_gargalos.html` | Deliberação SerTão Criança / Pilar 8 | Pilar 8: Diagnóstico de Prioridades Formativas, Bloco "Foco nos Menores Índices" (Gargalos), identificação automática dos 3 pontos críticos, alternador de ordenação (Consistência vs. Desvio Rede), pautas sugeridas, deep-linking para Afunilamento e cópia de pauta 🎯 |
 | **1.01** | 21/10/2026 16:35 | `intermediárias/aplicativo_v101_pilar_7_extincao_metricas_burocraticas_kpis_decisorios.html` | Deliberação SerTão Criança / Pilar 7 | Pilar 7: Extinção dos cards burocráticos ("Observações Auditadas" e "Itens Válidos / N.A."), novo KPI em destaque de Cobertura no Bimestre Corrente, Meta do Ciclo Anual e Dimensão Prioritária (Gargalo) 🎯 |
 | **1.00** | 21/10/2026 16:30 | `intermediárias/aplicativo_v100_pilar_6_higienizacao_terminologica_observacao.html` | Deliberação SerTão Criança / Pilar 6 | Pilar 6: Higienização terminológica mandatória, erradicação completa do vocábulo policialesco "visita" em 100% dos botões, rotas, relatórios e telas, padronização de "observação", renomeação de exportações e teste de conformidade no DOM 🧹 |
 | **0.99** | 21/10/2026 15:45 | `intermediárias/aplicativo_v99_remocao_avisos_vinculacao_automatica_pessoal.html` | Deliberação SerTão Criança / UX Pessoal | Remoção de badges ("Auto via UE") e alertas informativos de vinculação automática na gestão de equipe & profissionais, com preservação funcional estrita da regra de negócio 🧹 |
@@ -119,6 +120,32 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.02] - Pilar 8: Diagnóstico de Prioridades Formativas (Bloco "Foco nos Menores Índices")
+* **Data e Horário:** 21 de Outubro de 2026 – 18:00:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v102_pilar_8_foco_menores_indices_gargalos.html`
+* **Identificador no App:** 📌 Versão 1.02 (v7.81)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Apresentação Automática dos 3 Menores Critérios Pedagógicos (Gargalos):**
+  Implementação do bloco `#indicatorsSectionBottlenecks` logo abaixo dos 4 cards de KPIs da sub-aba de Índices Gerais, destacando os 3 pontos mais frágeis da unidade ou polo para servir de pauta imediata e concreta para as reuniões de alinhamento formativo e planejamento coletivo.
+- **Dupla Perspectiva Algorítmica com Alternador Instantâneo:**
+  1. *📉 Menor Consistência Absoluta (Padrão):* Prioriza os critérios com menor percentual de consistência na UE, aplicando como critério de desempate o maior desvio negativo ($\Delta$) frente à Rede de Patos.
+  2. *🔻 Maior Desvio vs. Rede Municipal:* Prioriza os critérios com a maior defasagem negativa relativa ($\Delta \pm\%$) em relação à média geral municipal.
+- **Card Pedagógico Rico por Gargalo:**
+  Exibição do código oficial (`[1.1.2]`), texto descritivo da matriz, dimensão/subdimensão, mini grid comparativo (`Consistência na UE`, `Rede Patos` e `Variação Δ`), contadores de respostas (`C`, `P`, `NR`) e badge de gravidade contextual.
+- **Pauta Formativa de Alinhamento e Exportação Rápida:**
+  Geração contextualizada de diretrizes formativas práticas para reflexão com as professoras e recurso de cópia da pauta estruturada em texto/Markdown para a área de transferência (`📋 Copiar Pauta`).
+- **Deep-Linking e Rastreabilidade no Afunilamento (`🔍 Ver no Afunilamento`):**
+  Navegação direta para a sub-aba de Afunilamento com expansão programática da dimensão e subdimensão, rolagem suave até o critério e animação visual de pulso (`highlight-bottleneck-pulse`).
+- **Atalho Interativo no Card 4 (Dimensão Prioritária):**
+  Inclusão do link `🎯 Ver os 3 Critérios Críticos ↓` no Card 4 do Grid Superior de KPIs com scroll suave até o bloco de gargalos.
+- **Auditoria Automatizada Modular (100% de Cobertura):**
+  Atualização do Módulo 10 (`indicadores_decisao`) em `audit_platform.py` e na engine do browser validando a extração dos 3 gargalos, alternância de ordenação e deep-linking.
+
+---
 
 ### [Versão 1.01] - Pilar 7: Extinção de Métricas Burocráticas e Reorganização Decisória de KPIs
 * **Data e Horário:** 21 de Outubro de 2026 – 16:35:00

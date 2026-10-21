@@ -223,14 +223,14 @@ flowchart TD
 ---
 
 ### PILAR 8: Diagnóstico de Prioridades: Bloco "Foco nos Menores Índices" (Gargalos)
-> **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
+> **STATUS DO PILAR: ✅ IMPLEMENTADO / EM PRODUÇÃO (VERSÃO 1.02)**  
 > **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_8_foco_menores_indices_gargalos.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_8_foco_menores_indices_gargalos.md)  
-> **Versão Alvo de Entrega:** `1.02` | **Backup Intermediário:** `intermediárias/aplicativo_v102_pilar_8_foco_menores_indices_gargalos.html`
+> **Versão Homologada:** `1.02` | **Backup Intermediário:** `intermediárias/aplicativo_v102_pilar_8_foco_menores_indices_gargalos.html`
 
 * **Diretriz Aprovada:**  
   - Apresentação automática dos **3 menores critérios da unidade ou polo** (os pontos mais frágeis ou com maior desvio negativo em relação à rede).
   - Serve como pauta prioritária imediata para as reuniões de alinhamento e formação interna na escola.
-  - Dupla perspectiva algorítmica: Menor Consistência Absoluta e Maior Defasagem em Relação à Média da Rede Municipal de Patos.
+  - Dupla perspectiva algorítmica: Menor Consistência Absoluta e Maior Desvio em Relação à Média da Rede Municipal de Patos.
   - Conexão direta com a sub-aba de Afunilamento por Dimensão (deep-linking com destaque visual).
   - Geração e cópia de pauta executiva estruturada para reuniões formativas.
 

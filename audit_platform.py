@@ -29,7 +29,7 @@ MODULE_CATALOG = {
     'formadora_coordenacao': 'Acompanhamento da Formadora, Matriz de Coordenação e Isolamento de Perfis',
     'agenda_cronograma': 'Cronograma de Observações, Destaque da Próxima Observação e Baixa Automática',
     'historico_governanca': 'Histórico de Observações, Filtros Multidimensionais, Visualização e Exclusão',
-    'indicadores_decisao': 'Indicadores Pedagógicos, Cobertura no Bimestre Corrente (Pilar 7), KPIs Decisórios e Apoio à Decisão',
+    'indicadores_decisao': 'Indicadores Pedagógicos, Cobertura no Bimestre (Pilar 7), Foco nos Menores Índices (Pilar 8) e Decisão',
     'backup_exportacao': 'Persistência Local, Backup JSON, Restauração e Relatório para Impressão',
     'navegacao_layout': 'Sistema de Rotas/Tabs, Menu Mobile Overlay, Acessibilidade e Changelog'
 }
