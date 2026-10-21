@@ -2484,7 +2484,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.95 (v7.74)
+          Versão 0.96 (v7.75)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -2915,7 +2915,8 @@
         </div>
 
         <div class="card">
-          <div id="setupRoleHint" style="display:none; background:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:8px; margin-bottom:16px; font-size:12px; color:#1E3A8A; font-weight:600;"></div>
+          <!-- setupRoleHint removido para maior clareza visual (Pilar 4 / Versão 0.96) -->
+          <div id="setupRoleHint" style="display:none !important;"></div>
 
           <!-- Seletor Rápido de Agendamento do Cronograma -->
           <div id="setupScheduleSelectorGroup" class="form-group" style="display:none; background:#F0FDF4; border:1px solid #BBF7D0; padding:14px; border-radius:10px; margin-bottom:18px;">
@@ -2960,9 +2961,6 @@
             </div>
             <div id="setupClassTeachersList" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
               <!-- Badges dinâmicos das docentes -->
-            </div>
-            <div style="font-size:11px; color:#475569; margin-top:10px; line-height:1.4;">
-              💡 <em>Em Patos, as turmas contam com duplas ou quartetos de professoras regentes titulares. A supervisão pedagógica analisa a rotina, o ambiente educativo e as oportunidades de aprendizagem recebidas pelas crianças na turma.</em>
             </div>
           </div>
 
@@ -3950,6 +3948,22 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.96 - PILAR 4: REMOÇÃO DE TEXTOS E ORIENTAÇÕES NO SETUP -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.96 · v7.75</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Otimização de UX no Setup da Observação (Pilar 4):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🧹 <strong>Remoção da Caixa de Unidade de Análise:</strong> Ocultação definitiva da caixa informativa estática (#setupRoleHint) no topo do formulário de setup, reduzindo ruído visual e proporcionando entrada direta aos campos essenciais.</li>
+          <li>👩‍🏫 <strong>Supressão de Aviso Textual no Card de Docentes:</strong> Remoção da mensagem orientadora sobre duplas e quartetos no card de regência titular (#groupSetupTeachersCard), preservando apenas o cabeçalho, o badge de turno e os badges dinâmicos das docentes titulares da turma.</li>
+          <li>✨ <strong>Interface Limpa e Fluida:</strong> Experiência de preenchimento focada na operação da Coordenadora Pedagógica, sem redundâncias didáticas.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.95 - AUDITORIA INTERATIVA COMPORTAMENTAL END-TO-END -->
@@ -8046,8 +8060,8 @@ function getActiveSections(obs) {
       if (user.roleKey === 'coordenador') {
         titleEl.innerText = 'Nova Observação Pedagógica da Turma';
         if (hintEl) {
-          hintEl.style.display = 'block';
-          hintEl.innerHTML = `<strong>Unidade de Análise: TURMA</strong> · Você está avaliando a rotina pedagógica na unidade <strong>${user.school}</strong>. O instrumento analisa as experiências das crianças e a atuação articulada das professoras regentes.`;
+          hintEl.innerText = '';
+          hintEl.style.display = 'none';
         }
         classGroup.style.display = 'block';
         teachersCard.style.display = 'block';
@@ -16765,6 +16779,20 @@ function getActiveSections(obs) {
               const teachersListEl = document.getElementById('setupClassTeachersList');
               const hasTeachers = teachersListEl && teachersListEl.children && teachersListEl.children.length > 0;
               logger.log('Vínculo dinâmico de equipe de regentes titulares à turma', hasTeachers);
+
+              // PILAR 4: Validação de Remoção e Ocultação Estrita da Caixa de Aviso #setupRoleHint
+              const hintEl = document.getElementById('setupRoleHint');
+              const isHintClean = !hintEl || hintEl.style.display === 'none' || hintEl.innerHTML.trim() === '';
+              if (!isHintClean) throw new Error('Caixa de aviso #setupRoleHint ainda está visível no setup');
+              logger.log('Remoção e ocultação estrita da caixa informativa #setupRoleHint no Setup', true);
+
+              // PILAR 4: Validação de Supressão de Texto de Orientação no Card de Regentes Titulares
+              const teachersCard = document.getElementById('groupSetupTeachersCard');
+              const cardText = teachersCard ? teachersCard.innerText : '';
+              if (cardText.includes('duplas ou quartetos')) {
+                throw new Error('Mensagem textual sobre duplas/quartetos ainda presente no card de regência');
+              }
+              logger.log('Supressão da mensagem textual de orientação no card de regentes titulares', true);
 
               // PILAR 4: Validação de Setup e Detecção de Turma em Tempo Integral
               const classOptions = Array.from(classSel.options);

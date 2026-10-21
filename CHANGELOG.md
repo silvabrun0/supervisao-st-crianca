@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.96** | 21/10/2026 14:00 | `intermediárias/aplicativo_v96_remocao_avisos_orientacao_setup_pilar4.html` | Solicitação direta / Ajuste Fino Pilar 4 | Otimização visual da tela de setup: remoção da caixa informativa de unidade de análise e supressão de aviso textual no card de docentes regentes 🧹 |
 | **0.95** | 20/10/2026 17:55 | `intermediárias/aplicativo_v95_auditoria_interativa_comportamental_end_to_end.html` | Solicitação direta / Simulação Comportamental Real | Reestruturação completa do motor de testes com simulação interativa de ponta a ponta (login, modais, selects e botões) 🤖 |
 | **0.94** | 20/10/2026 17:45 | `intermediárias/aplicativo_v94_pilar_4_turmas_integrais_formulario_unico.html` | Deliberação SerTão Criança / Pilar 4 | Formulário único de Turma Integral em 2 Etapas (Manhã e Tarde), salvamento de etapa matutina, banner contextual na observação ativa, registro de período duplo na síntese com soma de carga horária e bloqueio de finalização prematura ☀️ |
 | **0.93** | 20/10/2026 17:35 | `intermediárias/aplicativo_v93_correcao_selecao_unidade_novo_profissional.html` | Solicitação direta / Correção Operacional | Preservação da seleção de Unidade Escolar / Polo no modal de cadastro de novo profissional 🏫 |
@@ -113,6 +114,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.96] - Otimização de UX no Setup da Observação (Pilar 4: Remoção de Textos de Orientação)
+* **Data e Horário:** 21 de Outubro de 2026 – 14:00:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v96_remocao_avisos_orientacao_setup_pilar4.html`
+* **Identificador no App:** 📌 Versão 0.96 (v7.75)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Otimizações
+- **Remoção da Caixa Explicativa de Unidade de Análise (`#setupRoleHint`):**
+  - Ocultação definitiva do bloco informativo de topo do formulário na abertura com perfil de Coordenador.
+  - Eliminação de ruído cognitivo e textos estáticos redundantes, direcionando imediatamente a coordenadora aos seletores operacionais.
+- **Supressão de Orientação Pedagógica no Card de Docentes Regentes (`#groupSetupTeachersCard`):**
+  - Exclusão do aviso textual em itálico sobre a composição de duplas e quartetos no município de Patos.
+  - Preservação estrita dos elementos funcionais: cabeçalho com ícone, badge do turno da turma (`#setupClassShiftBadge`) e listagem dinâmica dos badges das docentes regentes titulares (`#setupClassTeachersList`).
+- **Expansão da Bateria de Testes Automatizados (Módulo 3 - `setup_longitudinal`):**
+  - Adição de asserções que verificam se `#setupRoleHint` está oculto/limpo e se a mensagem sobre "duplas ou quartetos" não consta no card de professores regentes.
+
+---
 
 ### [Versão 0.95] - Auditoria Interativa Comportamental End-to-End (Simulação Real de Ações do Usuário)
 * **Data e Horário:** 20 de Outubro de 2026 – 17:55:00
