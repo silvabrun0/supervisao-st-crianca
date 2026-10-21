@@ -125,6 +125,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 ## Detalhamento Integral das Versões
 
+### [Versão 1.06] - Pilar 9: Botão Flutuante Circular com Lupinha no Canto Inferior Direito e Ocultação da Barra de Filtros no Mobile
+* **Data e Horário:** 21 de Outubro de 2026 – 20:00:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v106_pilar_9_mobile_fab_lupinha_filtros.html`
+* **Identificador no App:** 📌 Versão 1.06 (v7.85)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Botão Flutuante Circular com Lupinha (Canto Inferior Direito):**
+  Substituição da barra horizontal de rodapé por um botão flutuante circular (52px) no canto inferior direito (`position: fixed; right: 18px; bottom: calc(var(--tabbar-height) + 16px)`), harmonizado no mesmo padrão ergonômico do FAB de ações da observação (`#fabActiveObs`), apresentando ícone nítido de lupa (`<svg>`) e ponto indicador luminoso quando filtros estão ativos.
+- **Ocultação da Barra Desktop de Filtros no Celular:**
+  A barra de filtros que ficava abaixo de "Índices para Diagnóstico" (`#indicatorsFilterToolbar`) agora é ocultada em smartphones (`@media (max-width: 768px)` com `display: none !important`), liberando 100% da área útil superior da tela e posicionando as sub-abas imediatamente após o título da tela.
+- **Acesso Rápido e Focado via Bottom Sheet:**
+  Ao tocar no botão circular da lupa, abre-se a gaveta deslizante inferior (`#modalIndicatorsFiltersMobile`) com os seletores verticais de Unidade Escolar, Turma/Docente e Bimestre de Referência, com botões para restaurar padrão ou aplicar instantaneamente.
+- **Auditoria Modular Expandida (Módulo 10 e Módulo 12):**
+  Validação determinística da presença do botão circular com lupinha (`#btnMobileIndicatorsFilters`), da presença de `#indicatorsFilterToolbar` para controle responsivo e do isolamento estrito de rotas.
+
+---
+
 ### [Versão 1.05] - Remoção de Pautas Pré-fabricadas no Diagnóstico de Gargalos (Autonomia Formativa da Rede)
 * **Data e Horário:** 21 de Outubro de 2026 – 19:30:00
 * **Arquivo em Produção:** `index.html`
