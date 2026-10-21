@@ -201,6 +201,10 @@ flowchart TD
 ---
 
 ### PILAR 6: Higienização Terminológica Mandatória ("Visita" ➔ "Observação")
+> **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
+> **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_6_higienizacao_terminologica_observacao.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_6_higienizacao_terminologica_observacao.md)  
+> **Versão Alvo de Entrega:** `1.00` | **Backup Intermediário:** `intermediárias/aplicativo_v100_pilar_6_higienizacao_terminologica_observacao.html`
+
 * **Diretriz Aprovada (00:19:27):**  
   Substituição completa do vocábulo policialesco *"visita"* por **"observação"** em 100% dos textos, botões, rotas e relatórios.
 
