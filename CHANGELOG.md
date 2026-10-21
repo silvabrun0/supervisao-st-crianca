@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.99** | 21/10/2026 15:45 | `intermediárias/aplicativo_v99_remocao_avisos_vinculacao_automatica_pessoal.html` | Deliberação SerTão Criança / UX Pessoal | Remoção de badges ("Auto via UE") e alertas informativos de vinculação automática na gestão de equipe & profissionais, com preservação funcional estrita da regra de negócio 🧹 |
 | **0.98** | 21/10/2026 15:30 | `intermediárias/aplicativo_v98_pilar_5_fechamento_nominal_atribuicao_parcial.html` | Deliberação SerTão Criança / Pilar 5 | Pilar 5: Fechamento nominal por professor(a) regente, avaliação nas 5 dimensões estruturantes, atribuição mandatória com justificativa em itens parciais, destaque de boas práticas consistentes e exportação segregada de PDF 👥 |
 | **0.97** | 21/10/2026 14:30 | `intermediárias/aplicativo_v97_simplificacao_modal_ocorrencias.html` | Solicitação direta / Pilar 1 | Simplificação radical do modal de ocorrências: eliminação de UE/Polo, Turma, Dimensão/Tópico e alerta azul redundante, com vinculação estrita à observação ativa 📝 |
 | **0.96** | 21/10/2026 14:00 | `intermediárias/aplicativo_v96_remocao_avisos_orientacao_setup_pilar4.html` | Solicitação direta / Ajuste Fino Pilar 4 | Otimização visual da tela de setup: remoção da caixa informativa de unidade de análise e supressão de aviso textual no card de docentes regentes 🧹 |
@@ -116,6 +117,27 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.99] - Remoção de Badges e Avisos de Vinculação Automática na Gestão de Pessoal
+* **Data e Horário:** 21 de Outubro de 2026 – 15:45:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v99_remocao_avisos_vinculacao_automatica_pessoal.html`
+* **Identificador no App:** 📌 Versão 0.99 (v7.78)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Remoção do Badge "Auto via UE" na Listagem de Equipe:**
+  Na tabela da aba de Equipe & Profissionais da Rede (`#teamTableBody`), foi suprimido o badge textual e estilizado `"Auto via UE"` que acompanhava o superior imediato de docentes. A coluna de vinculação exibe puramente o nome da Coordenadora Pedagógica da unidade (ou superior direto), mantendo o layout limpo e consistente com os demais cargos da rede.
+- **Remoção do Alerta Informativo no Modal de Novo Profissional:**
+  Eliminação do elemento `<div id="newMemberTeacherRuleNote">` e das chamadas que manipulavam sua visibilidade em `onNewMemberRoleChange()`, removendo o card azul com o texto de aviso de vinculação automática ao selecionar a função de professora.
+- **Remoção do Alerta Informativo no Modal de Edição de Profissional:**
+  Eliminação do elemento `<div id="editMemberTeacherRuleNote">` e das manipulações de estilo associadas em `onEditMemberRoleChange()`, retirando a mensagem repetitiva de vinculação automática durante a edição de registros de docentes.
+- **Preservação Integral da Regra de Negócio de Apoio à Decisão:**
+  A vinculação automática hierárquica e funcional permanece 100% ativa no motor JavaScript. Ao atribuir uma docente à Unidade Escolar, o sistema resolve a Coordenadora Pedagógica correspondente, preservando os fluxos avaliativos, a árvore de permissões RBAC, o histórico longitudinal e o Painel de Indicadores.
+- **Auditoria Modular Contínua (100% de Cobertura):**
+  Adição de asserções estritas no módulo `catalogo_dados` validando que a tabela de profissionais não contém o badge `"Auto via UE"` e que os contêineres informativos de vinculação automática foram integralmente expurgados do DOM.
+
+---
 
 ### [Versão 0.98] - Pilar 5: Fechamento Nominal com Parecer em Práticas Consistentes, Atribuição Mandatória Parcial e Devolutiva Individual Segregada
 * **Data e Horário:** 21 de Outubro de 2026 – 15:30:00

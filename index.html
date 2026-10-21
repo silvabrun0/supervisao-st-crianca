@@ -2575,7 +2575,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.98 (v7.77)
+          Versão 0.99 (v7.78)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4051,6 +4051,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.99 - REMOÇÃO DE BADGES E AVISOS DE VINCULAÇÃO AUTOMÁTICA NA ABA DE PESSOAL -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.99 · v7.78</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Despoluição Visual e Remoção de Avisos de Vinculação Automática na Gestão de Equipe & Pessoal:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🧹 <strong>Remoção do Badge 'Auto via UE':</strong> Limpeza visual na tabela de profissionais da rede (#teamTableBody), renderizando puramente o nome da coordenadora pedagógica responsável ou superior imediato, sem tags redundantes.</li>
+          <li>🚫 <strong>Remoção da Caixa de Aviso em Novo Cadastro:</strong> Supressão do alerta informativo azul (#newMemberTeacherRuleNote) no modal de cadastro manual de profissionais (#modalAddMember).</li>
+          <li>🚫 <strong>Remoção da Caixa de Aviso na Edição:</strong> Supressão do alerta informativo azul (#editMemberTeacherRuleNote) no modal de edição de membros da rede (#modalEditMember).</li>
+          <li>🏛️ <strong>Preservação Integral da Regra de Negócio:</strong> Vinculação funcional hierárquica automática 100% preservada entre docentes e a coordenadora da unidade escolar selecionada.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.98 - PILAR 5: FECHAMENTO NOMINAL, PARECER EM PRÁTICAS CONSISTENTES E ATRIBUIÇÃO MANDATÓRIA PARCIAL -->
@@ -6092,9 +6109,6 @@
         <select id="newMemberSupervisor" class="form-select">
           <!-- Populated dynamically -->
         </select>
-        <div id="newMemberTeacherRuleNote" style="display:none; font-size:11px; color:#1E40AF; background:#EFF6FF; border:1px solid #BFDBFE; padding:8px 10px; border-radius:6px; margin-top:6px;">
-          ℹ️ <strong>Vinculação Automática:</strong> Conforme a regra de negócio da rede, docentes são vinculadas automaticamente à Coordenadora Pedagógica da Unidade Escolar selecionada.
-        </div>
       </div>
 
       <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:18px;">
@@ -6147,9 +6161,6 @@
         <select id="editMemberSupervisor" class="form-select">
           <!-- Populated dynamically -->
         </select>
-        <div id="editMemberTeacherRuleNote" style="display:none; font-size:11px; color:#1E40AF; background:#EFF6FF; border:1px solid #BFDBFE; padding:8px 10px; border-radius:6px; margin-top:6px;">
-          ℹ️ <strong>Vinculação Automática:</strong> Conforme a regra de negócio da rede, docentes são vinculadas automaticamente à Coordenadora Pedagógica da Unidade Escolar selecionada.
-        </div>
       </div>
 
       <div style="display:flex; gap:10px; justify-content:space-between; margin-top:18px;">
@@ -13337,12 +13348,10 @@ function getActiveSections(obs) {
         const poloName = ue ? ue.polo : (m.roleKey === 'formador' ? m.school : 'Polo Municipal');
 
         let supervisorDisplay = m.supervisor || 'Gestão Geral';
-        let autoBadge = '';
         if (m.roleKey === 'professora') {
           const cp = appState.teamMembers.find(c => c.roleKey === 'coordenador' && c.school === m.school);
           if (cp) {
             supervisorDisplay = cp.name;
-            autoBadge = ' <span style="font-size:10px; background:#EFF6FF; color:#1E40AF; padding:2px 6px; border-radius:10px; font-weight:700;">Auto via UE</span>';
           }
         }
 
@@ -13365,7 +13374,7 @@ function getActiveSections(obs) {
           <td><span style="font-size:12px; font-weight:700; color:var(--primary);">${m.roleTitle}</span></td>
           <td>${m.school || 'Rede Municipal'}</td>
           <td><span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:11px;">📍 ${poloName}</span></td>
-          <td>${supervisorDisplay}${autoBadge}</td>
+          <td>${supervisorDisplay}</td>
           <td style="text-align:center;">
             <button class="btn btn-secondary" style="color:var(--primary); padding:4px 8px; font-size:11px;" onclick="openEditMemberModal('${m.id}')">
               Editar
@@ -13392,7 +13401,6 @@ function getActiveSections(obs) {
       const schoolLabel = document.querySelector('#groupNewMemberSchool .form-label');
       const supLabel = document.getElementById('newMemberSupervisorLabel');
       const supSelect = document.getElementById('newMemberSupervisor');
-      const ruleNote = document.getElementById('newMemberTeacherRuleNote');
       
       supSelect.innerHTML = '';
       const currentSchoolVal = schoolSelect.value;
@@ -13424,7 +13432,6 @@ function getActiveSections(obs) {
         if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
         supLabel.innerText = 'Coordenadora Pedagógica Vinculada (Automática)';
         supSelect.disabled = true;
-        if (ruleNote) ruleNote.style.display = 'block';
         
         const selSchool = schoolSelect.value;
         const cp = appState.teamMembers.find(m => m.roleKey === 'coordenador' && m.school === selSchool);
@@ -13438,7 +13445,6 @@ function getActiveSections(obs) {
         if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
         supLabel.innerText = 'Formadora Responsável';
         supSelect.disabled = false;
-        if (ruleNote) ruleNote.style.display = 'none';
         
         const formadores = appState.teamMembers.filter(m => m.roleKey === 'formador');
         if (formadores.length > 0) {
@@ -13456,7 +13462,6 @@ function getActiveSections(obs) {
         if(schoolLabel) schoolLabel.innerText = 'Polo Regional / Vinculação';
         supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = false;
-        if (ruleNote) ruleNote.style.display = 'none';
         supSelect.innerHTML = `
           <option value="Helena Martins">Helena Martins (Coordenadora do Núcleo de EI / Secretaria)</option>
         `;
@@ -13464,7 +13469,6 @@ function getActiveSections(obs) {
         schoolGroup.style.display = 'none';
         supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
-        if (ruleNote) ruleNote.style.display = 'none';
         supSelect.innerHTML = `
           <option value="Sede / Gestão Geral">Sede / Gestão Geral</option>
         `;
@@ -13472,7 +13476,6 @@ function getActiveSections(obs) {
         schoolGroup.style.display = 'none';
         supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
-        if (ruleNote) ruleNote.style.display = 'none';
         supSelect.innerHTML = `
           <option value="Aguardando Definição">Aguardando Definição</option>
         `;
@@ -13581,7 +13584,6 @@ function getActiveSections(obs) {
       const schoolLabel = document.querySelector('#groupEditMemberSchool .form-label');
       const supLabel = document.getElementById('editMemberSupervisorLabel');
       const supSelect = document.getElementById('editMemberSupervisor');
-      const ruleNote = document.getElementById('editMemberTeacherRuleNote');
       
       supSelect.innerHTML = '';
       
@@ -13612,7 +13614,6 @@ function getActiveSections(obs) {
         if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
         supLabel.innerText = 'Coordenadora Pedagógica Vinculada (Automática)';
         supSelect.disabled = true;
-        if (ruleNote) ruleNote.style.display = 'block';
         
         const selSchool = schoolSelect.value;
         const cp = appState.teamMembers.find(m => m.roleKey === 'coordenador' && m.school === selSchool);
@@ -13626,7 +13627,6 @@ function getActiveSections(obs) {
         if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
         supLabel.innerText = 'Formadora Responsável';
         supSelect.disabled = false;
-        if (ruleNote) ruleNote.style.display = 'none';
         
         const formadores = appState.teamMembers.filter(m => m.roleKey === 'formador');
         if (formadores.length > 0) {
@@ -13645,7 +13645,6 @@ function getActiveSections(obs) {
         if(schoolLabel) schoolLabel.innerText = 'Polo Regional / Vinculação';
         supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = false;
-        if (ruleNote) ruleNote.style.display = 'none';
         supSelect.innerHTML = `
           <option value="Helena Martins">Helena Martins (Coordenadora do Núcleo de EI / Secretaria)</option>
         `;
@@ -13654,7 +13653,6 @@ function getActiveSections(obs) {
         schoolGroup.style.display = 'none';
         supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
-        if (ruleNote) ruleNote.style.display = 'none';
         supSelect.innerHTML = `
           <option value="Sede / Gestão Geral">Sede / Gestão Geral</option>
         `;
@@ -17501,6 +17499,19 @@ function getActiveSections(obs) {
               }
               logger.log('Edição e retenção interativa de unidade no modal de edição (#modalEditMember)', true, `${updatedMember.name} ➔ ${newEditedSchool}`);
 
+              // 6. VALIDAÇÃO DE SUPRESSÃO DE AVISOS E BADGES DE VINCULAÇÃO AUTOMÁTICA
+              renderTeamScreen();
+              const teamTableBody = document.getElementById('teamTableBody');
+              if (teamTableBody && teamTableBody.innerHTML.includes('Auto via UE')) {
+                throw new Error('Badge "Auto via UE" ainda está presente na tabela de profissionais');
+              }
+              const newMemberNote = document.getElementById('newMemberTeacherRuleNote');
+              const editMemberNote = document.getElementById('editMemberTeacherRuleNote');
+              if (newMemberNote || editMemberNote) {
+                throw new Error('Elementos informativos de vinculação automática (#newMemberTeacherRuleNote / #editMemberTeacherRuleNote) ainda existem no DOM');
+              }
+              logger.log('Supressão de badges e avisos informativos de vinculação automática na gestão de pessoal', true);
+
               // Limpeza do membro temporário de teste
               appState.teamMembers = (appState.teamMembers || []).filter(m => m.id !== createdMember.id);
               if (appState.customUsers) delete appState.customUsers[createdMember.id];
@@ -17709,6 +17720,7 @@ function getActiveSections(obs) {
               obs.date = testDate;
               obs.startTime = '08:00';
               obs.endTime = '09:40';
+              // Sincroniza e reseta os inputs de horário no formulário para a observação sob teste
               const dateInput = document.getElementById('synthesisDate');
               if (dateInput) UI.type(dateInput, testDate);
               if (startInput) UI.type(startInput, '08:00');
@@ -18167,6 +18179,10 @@ function getActiveSections(obs) {
               appState.currentObs = simObs;
               appState.observations = appState.observations || [];
               appState.observations.push(simObs);
+              const schedStartInp = document.getElementById('synthesisStartTime');
+              const schedEndInp = document.getElementById('synthesisEndTime');
+              if (schedStartInp) UI.type(schedStartInp, '08:00');
+              if (schedEndInp) UI.type(schedEndInp, '09:40');
               finalizeObservation();
 
               const updatedSched = appState.schedules.find(s => s.id === createdSched.id);
