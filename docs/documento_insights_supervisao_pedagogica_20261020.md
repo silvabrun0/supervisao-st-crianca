@@ -259,6 +259,10 @@ flowchart TD
 ---
 
 ### PILAR 10: Quadro de Controle Bimestral (Semáforo de Prazos Verde / Cinza / Vermelho)
+> **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
+> **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_10_semaforo_bimestral_turmas.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_10_semaforo_bimestral_turmas.md)  
+> **Versão Alvo de Entrega:** `1.05` | **Backup Intermediário:** `intermediárias/aplicativo_v105_pilar_10_semaforo_bimestral_turmas.html`
+
 * **Diretriz Aprovada (00:28:59):**  
   Painel visual matricial para o acompanhamento do ciclo das 4 observações anuais **organizado por TURMA**:
   - 🟢 **Verde:** Observação da turma realizada e concluída no bimestre.

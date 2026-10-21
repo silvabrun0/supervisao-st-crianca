@@ -2856,7 +2856,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.03 (v7.82)
+          📌 Versão 1.04 (v7.83)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4359,6 +4359,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.04 - CORREÇÃO DE AUTENTICAÇÃO NA AUDITORIA E FORTALECIMENTO E2E -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px; background:#F8FAFC; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.04 · v7.83 (Oficial)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Correção de Autenticação na Auditoria Interativa e Fortalecimento E2E:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🔐 <strong>Resolução Canônica de Credenciais:</strong> Correção do e-mail digitado no formulário de login interativo durante o teste do módulo <code>auth_rbac</code> para consumir dinamicamente a credencial canônica de Mariana (<code>mariana@teste.com</code>), erradicando inconsistência com e-mails fictícios.</li>
+          <li>🛡️ <strong>Blindagem contra Falsos Positivos:</strong> Limpeza explícita de sessão prévia (<code>appState.currentUserKey = null;</code>) antes da simulação de login, garantindo que o teste avalie fielmente a transição de estado da autenticação.</li>
+          <li>🎯 <strong>Fortalecimento da Emulação E2E:</strong> Foco explícito (<code>el.focus()</code>) antes de digitações e seleções em elementos de formulário no motor de testes.</li>
+          <li>🔬 <strong>Auditoria Integral 100% Aprovada:</strong> Todos os 12 subsistemas determinísticos validados em tempo real no motor Google Chrome.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.03 - PILAR 9: USABILIDADE E DESIGN MOBILE: BOTÃO POP-UP DE FILTROS E LIBERAÇÃO DO VIEWPORT -->

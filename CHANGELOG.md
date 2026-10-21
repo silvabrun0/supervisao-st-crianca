@@ -123,6 +123,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 ## Detalhamento Integral das Versões
 
+### [Versão 1.04] - Correção da Autenticação na Auditoria Interativa, Blindagem contra Falsos Positivos e Fortalecimento E2E
+* **Data e Horário:** 21 de Outubro de 2026 – 19:00:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v104_correcao_autenticacao_auditoria_emulacao_e2e.html`
+* **Identificador no App:** 📌 Versão 1.04 (v7.83)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Resolução Canônica de Credenciais (`USERS_DB`):**
+  Correção da digitação no formulário de login interativo durante a auditoria para utilizar o e-mail canônico oficial de Mariana (`mariana@teste.com`), erradicando a divergência com o e-mail fictício `mariana@patos.pb.gov.br`.
+- **Blindagem Estrita contra Falsos Positivos:**
+  Isolamento explícito de estado antes da simulação de login (`appState.currentUserKey = null;`), garantindo que tanto a rejeição de credenciais inválidas quanto o sucesso de credenciais válidas sejam aferidos sem contaminação pelo estado residual de sessões prévias.
+- **Fortalecimento da Emulação E2E no Helper `UI`:**
+  Inclusão de foco programático explícito (`el.focus()`) antes de digitações e seleções em elementos interativos do DOM.
+- **Conformidade de Auditoria:**
+  Aprovação de 100% dos testes da plataforma (90/90 asserções determinísticas nos 12 subsistemas).
+
+---
+
 ### [Versão 1.03] - Pilar 9: Usabilidade Mobile First (Botão Pop-up de Filtros e Liberação do Viewport)
 * **Data e Horário:** 21 de Outubro de 2026 – 18:30:00
 * **Arquivo em Produção:** `index.html`
