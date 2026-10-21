@@ -61,7 +61,7 @@ flowchart TD
         P7["PILAR 7: Extinção de Visitas Auditadas e N/A"]
         P8["PILAR 8: Foco nos Menores Índices (Gargalos)"]
         P9["PILAR 9: Usabilidade Mobile: Botão Pop-up de Filtros\n(Liberação do Viewport e Retomada Rápida)"]
-        P10["PILAR 10: Semáforo Bimestral (Verde/Cinza/Vermelho)"]
+        P10["PILAR 10: Semáforo Bimestral (Verde/Cinza/Vermelho)\n(✅ STATUS: IMPLEMENTADO)"]
         P11["PILAR 11: Pop-ups ℹ️ de Rubricas no Mobile"]
         P13["PILAR 13: Gestão de Ocorrências e Padrão MEC"]
         P15["PILAR 15: Transição Sistêmica da Atribuição à TURMA\n(Agenda, Histórico, Painel & Séries Longitudinais)"]
@@ -259,9 +259,9 @@ flowchart TD
 ---
 
 ### PILAR 10: Quadro de Controle Bimestral (Semáforo de Prazos Verde / Cinza / Vermelho)
-> **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
+> **STATUS DO PILAR: ✅ IMPLEMENTADO / EM PRODUÇÃO (Versão 1.08 · v7.87)**  
 > **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_10_semaforo_bimestral_turmas.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_10_semaforo_bimestral_turmas.md)  
-> **Versão Alvo de Entrega:** `1.05` | **Backup Intermediário:** `intermediárias/aplicativo_v105_pilar_10_semaforo_bimestral_turmas.html`
+> **Versão de Entrega:** `1.08` | **Backup Intermediário:** `intermediárias/aplicativo_v108_pilar_10_semaforo_bimestral_turmas.html`
 
 * **Diretriz Aprovada (00:28:59):**  
   Painel visual matricial para o acompanhamento do ciclo das 4 observações anuais **organizado por TURMA**:

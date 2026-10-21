@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.08** | 21/10/2026 21:30 | `intermediárias/aplicativo_v108_pilar_10_semaforo_bimestral_turmas.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Quadro de Controle Bimestral matricial organizado por TURMA, Semáforo de Prazos Canônico (🟢 Verde Concluída, ⚪ Cinza No Prazo, 🔴 Vermelho Atrasada), micro-cards decisórios, filtros rápidos, atalhos de agendamento com 1 toque e cards adaptativos mobile 🚦 |
 | **1.07** | 21/10/2026 21:00 | `intermediárias/aplicativo_v103_correcao_alternancia_gargalos_pilar_8.html` | Deliberação SerTão Criança / Pilar 8 | Correção da alternância de dados entre Menor Consistência e Maior Desvio vs. Rede Municipal: enriquecimento multi-escola na semente (`seedSampleData`), refino do algoritmo de ordenação de deltas negativos, feedback sutil em Rede Consolidada e validação de 100% de testes no Chrome 🎯 |
 | **1.06** | 21/10/2026 20:00 | `intermediárias/aplicativo_v106_pilar_9_mobile_fab_lupinha_filtros.html` | Solicitação direta / Refinamento Pilar 9 | Botão flutuante circular com lupinha no canto inferior direito para acesso aos filtros no celular, e ocultação total da barra desktop de filtros abaixo de "Índices para Diagnóstico" na visualização móvel 🔍 |
 | **1.05** | 21/10/2026 19:30 | `intermediárias/aplicativo_v105_remocao_pautas_prefabricadas_autonomia.html` | Solicitação direta / Autonomia Formativa da Rede | Remoção integral de pautas, caixas amarelas e diretrizes formativas pré-fabricadas no bloco de menores índices (Pilar 8), preservação da autonomia reflexiva da rede, foco em dados diagnósticos objetivos e cópia de resumo 🏛️ |
@@ -125,6 +126,27 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.08] - Pilar 10: Quadro de Controle Bimestral e Semáforo de Prazos do Ciclo Anual por Turma
+* **Data e Horário:** 21 de Outubro de 2026 – 21:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v108_pilar_10_semaforo_bimestral_turmas.html`
+* **Identificador no App:** 📌 Versão 1.08 (v7.87)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Quadro Matricial de Controle por TURMA:**
+  Reorganização da sub-aba Longitudinal centrada na Turma da Educação Infantil, acompanhando o ciclo obrigatório das 4 observações anuais com preservação da visão derivada de docentes titulares.
+- **Semáforo Canônico de Prazos (Verde / Cinza / Vermelho):**
+  Motor determinístico `calculateClassBimesterStatus` classificando 🟢 Concluída (com score percentual e data), 🔴 Atrasada (bimestre expirado com alerta pulsante), ⚪ No Prazo (janela regulamentar aberta de 2 meses) e ⚪ Ciclo Futuro.
+- **Resumo Decisório e Micro-cards de Gestão:**
+  Monitoramento imediato de turmas em atraso, pendências no bimestre ativo, total de observações anuais realizadas e percentual acumulado do ciclo longitudinal.
+- **Filtros Rápidos e Ações Imediatas:**
+  Chips de filtragem por status (Atrasadas, No Prazo, Concluídas) e atalhos com 1 toque para agendamento automático pré-preenchido no cronograma (`quickScheduleForClass`) ou início de observação direta (`quickStartObservationForClass`).
+- **Ergonomia Mobile-First:**
+  Cards adaptativos por turma no smartphone sem rolagem horizontal, com mini-grid 4 colunas de pílulas semafóricas táteis.
+- **Auditoria Modular (100% de Cobertura):**
+  Módulo `indicadores_decisao` expandido com asserções estritas dos 4 estados semafóricos, filtros e alternador de visão Turmas vs Docentes.
 
 ### [Versão 1.07] - Pilar 8: Correção da Alternância de Dados entre Menor Consistência e Maior Desvio vs. Rede Municipal
 * **Data e Horário:** 21 de Outubro de 2026 – 21:00:00

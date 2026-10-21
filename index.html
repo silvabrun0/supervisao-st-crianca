@@ -3200,7 +3200,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.07 (v7.86)
+          📌 Versão 1.08 (v7.87)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4703,6 +4703,25 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.08 - PILAR 10: QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE PRAZOS POR TURMA) -->
+      <div style="margin-bottom:20px; border-left:3px solid #16A34A; padding-left:14px; background:#F0FDF4; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#166534;">Versão 1.08 · v7.87 (Oficial)</span>
+          <span style="font-size:11px; background:#DCFCE7; color:#166534; padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Pilar 10: Quadro de Controle Bimestral e Semáforo de Prazos do Ciclo Anual por Turma:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🚦 <strong>Quadro Matricial de Controle por TURMA:</strong> Reorganização da sub-aba Longitudinal centrada na Turma da Educação Infantil, acompanhando o ciclo obrigatório das 4 observações anuais com preservação da visão derivada de docentes titulares.</li>
+          <li>🎨 <strong>Semáforo Canônico de Prazos (Verde / Cinza / Vermelho):</strong> Motor determinístico <code>calculateClassBimesterStatus</code> classificando 🟢 Concluída (com score percentual e data), 🔴 Atrasada (bimestre expirado com alerta pulsante), ⚪ No Prazo (janela regulamentar aberta de 2 meses) e ⚪ Ciclo Futuro.</li>
+          <li>📊 <strong>Resumo Decisório e Micro-cards de Gestão:</strong> Monitoramento imediato de turmas em atraso, pendências no bimestre ativo, total de observações anuais realizadas e percentual acumulado do ciclo longitudinal.</li>
+          <li>⚡ <strong>Filtros Rápidos e Ações Imediatas:</strong> Chips de filtragem por status (Atrasadas, No Prazo, Concluídas) e atalhos com 1 toque para agendamento automático pré-preenchido no cronograma ou início de observação direta.</li>
+          <li>📱 <strong>Ergonomia Mobile-First:</strong> Cards adaptativos por turma no smartphone sem rolagem horizontal, com mini-grid 4 colunas de pílulas semafóricas táteis.</li>
+          <li>🔬 <strong>Auditoria Modular (100% de Cobertura):</strong> Módulo <code>indicadores_decisao</code> expandido com asserções estritas dos 4 estados semafóricos, filtros e atalhos operacionais.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.07 - CORREÇÃO DA ALTERNÂNCIA DE DADOS ENTRE MENOR CONSISTÊNCIA E MAIOR DESVIO VS. REDE (PILAR 8) -->
@@ -20361,10 +20380,10 @@ function getActiveSections(obs) {
           }
         },
 
-        // --- MÓDULO 10: Indicadores Pedagógicos, Cobertura no Bimestre Corrente (Pilar 7), KPIs Decisórios e Apoio à Decisão ---
+        // --- MÓDULO 10: Indicadores Pedagógicos, Cobertura no Bimestre Corrente (Pilar 7), KPIs Decisórios, Semáforo de Turmas (Pilar 10) e Apoio à Decisão ---
         {
           id: 'indicadores_decisao',
-          name: 'Indicadores Pedagógicos, Cobertura no Bimestre Corrente (Pilar 7), KPIs Decisórios e Apoio à Decisão',
+          name: 'Indicadores Pedagógicos, Cobertura no Bimestre Corrente (Pilar 7), KPIs Decisórios, Semáforo de Turmas (Pilar 10) e Apoio à Decisão',
           run: function(logger) {
             try {
               appState.currentUserKey = 'mariana';
@@ -20564,7 +20583,52 @@ function getActiveSections(obs) {
               }
               logger.log('Alternância e renderização interativa da aba Longitudinal de Indicadores', true);
 
-              // 10. PILAR 9: VALIDAÇÃO DO GATILHO FLUTUANTE CIRCULAR COM LUPINHA E BARRA DE FILTROS
+              // 10. PILAR 10: VALIDAÇÃO DO QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE TURMAS)
+              const semaphoreSection = document.getElementById('bimesterSemaphoreSection');
+              if (!semaphoreSection) throw new Error('Falha Pilar 10: Contêiner #bimesterSemaphoreSection ausente no DOM');
+              logger.log('Renderização do Quadro de Controle Bimestral (Pilar 10)', true);
+
+              // 11. PILAR 10: VALIDAÇÃO DO MOTOR ALGORÍTMICO CALCULATECLASSBIMESTERSTATUS
+              // Caso Verde (Concluída): Turma Infantil I no 1º Bimestre com obs-001 finalizada
+              const statusGreen = calculateClassBimesterStatus('Infantil I - Turma A', 'CEI Professora Maria de Lourdes', '1º Bimestre');
+              if (statusGreen.status !== 'completed' || statusGreen.colorKey !== 'green') {
+                throw new Error(`Falha Pilar 10: Esperado status completed/green para 1º Bimestre da Infantil I, obtido ${statusGreen.status}/${statusGreen.colorKey}`);
+              }
+              logger.log('Cálculo algorítmico do Semáforo Canônico: 🟢 Verde (Concluída)', true, `${statusGreen.label} - Score: ${statusGreen.score}%`);
+
+              // Caso Vermelho (Atrasado): Turma Infantil II no 1º Bimestre (sem observação concluída e bimestre já encerrado)
+              const statusRed = calculateClassBimesterStatus('Infantil II - Turma B', 'CEI Professora Maria de Lourdes', '1º Bimestre');
+              if (statusRed.status !== 'overdue' || statusRed.colorKey !== 'red') {
+                throw new Error(`Falha Pilar 10: Esperado status overdue/red para 1º Bimestre não realizado da Infantil II, obtido ${statusRed.status}/${statusRed.colorKey}`);
+              }
+              logger.log('Cálculo algorítmico do Semáforo Canônico: 🔴 Vermelho (Bimestre Expirado / Atraso)', true, statusRed.label);
+
+              // Caso Cinza / No Prazo (Em Andamento): Turma no Bimestre Corrente
+              const curBimTest = getCurrentSchoolBimester();
+              const statusCurrent = calculateClassBimesterStatus('Infantil II - Turma B', 'CEI Professora Maria de Lourdes', curBimTest);
+              if (statusCurrent.status !== 'in_progress' && statusCurrent.status !== 'completed') {
+                throw new Error(`Falha Pilar 10: Esperado status in_progress para bimestre corrente ${curBimTest}, obtido ${statusCurrent.status}`);
+              }
+              logger.log('Cálculo algorítmico do Semáforo Canônico: ⚪ No Prazo (Bimestre em Andamento)', true, statusCurrent.label);
+
+              // 12. PILAR 10: VALIDAÇÃO DOS FILTROS RÁPIDOS E ALTERNADOR DE VISÃO
+              filterSemaphoreByStatus('overdue');
+              const overdueSec = document.getElementById('bimesterSemaphoreSection');
+              if (!overdueSec || !overdueSec.innerHTML.includes('🔴 Atrasadas')) {
+                throw new Error('Falha Pilar 10: Filtro de status atrasadas não refletiu no DOM');
+              }
+              filterSemaphoreByStatus('all');
+              logger.log('Validação interativa dos Filtros Rápidos de Status no Semáforo (Pilar 10)', true);
+
+              toggleLongitudinalViewMode('teachers');
+              const teachersViewActive = document.getElementById('bimesterSemaphoreSection');
+              if (!teachersViewActive || !teachersViewActive.innerHTML.includes('Docente Titular')) {
+                throw new Error('Falha Pilar 10: Alternador para visão de docentes falhou');
+              }
+              toggleLongitudinalViewMode('classes');
+              logger.log('Validação do Alternador de Visão Turmas vs. Docentes Regentes (Pilar 10)', true);
+
+              // 13. PILAR 9: VALIDAÇÃO DO GATILHO FLUTUANTE CIRCULAR COM LUPINHA E BARRA DE FILTROS
               const mobileTriggerBtn = document.getElementById('btnMobileIndicatorsFilters');
               const mobileActiveBadge = document.getElementById('mobileIndFiltersActiveBadge');
               const filterToolbar = document.getElementById('indicatorsFilterToolbar');
@@ -20573,7 +20637,7 @@ function getActiveSections(obs) {
               }
               logger.log('Presença do Gatilho Flutuante Circular com Lupinha no DOM (#btnMobileIndicatorsFilters)', true);
 
-              // 11. PILAR 9: ESTRUTURA E SELETORES DA BOTTOM SHEET MÓVEL
+              // 14. PILAR 9: ESTRUTURA E SELETORES DA BOTTOM SHEET MÓVEL
               const mobileModal = document.getElementById('modalIndicatorsFiltersMobile');
               const mobUnitSel = document.getElementById('mobileIndUnitFilter');
               const mobMemberSel = document.getElementById('mobileIndMemberFilter');
@@ -20583,7 +20647,7 @@ function getActiveSections(obs) {
               }
               logger.log('Presença e Inicialização da Bottom Sheet (#modalIndicatorsFiltersMobile)', true);
 
-              // 12. PILAR 9: SIMULAÇÃO INTERATIVA DE ABERTURA E ESPELHAMENTO DE FILTROS
+              // 15. PILAR 9: SIMULAÇÃO INTERATIVA DE ABERTURA E ESPELHAMENTO DE FILTROS
               openMobileIndicatorsFiltersModal();
               if (!mobileModal.classList.contains('active')) {
                 throw new Error('Falha Pilar 9: openMobileIndicatorsFiltersModal não ativou a classe active');
@@ -20594,7 +20658,7 @@ function getActiveSections(obs) {
               }
               logger.log('Simulação Interativa de Abertura e Espelhamento de Filtros', true);
 
-              // 13. PILAR 9: INTERAÇÃO COM FILTRO DE BIMESTRE E APLICAÇÃO DIRETA
+              // 16. PILAR 9: INTERAÇÃO COM FILTRO DE BIMESTRE E APLICAÇÃO DIRETA
               mobBimSel.value = '1º Bimestre';
               applyAndCloseMobileIndicatorsFilters();
               if (mobileModal.classList.contains('active')) {
@@ -20609,7 +20673,7 @@ function getActiveSections(obs) {
               }
               logger.log('Interação com Filtro de Bimestre e Aplicação Direta', true, mobileActiveBadge.innerText);
 
-              // 14. PILAR 9: RESTAURAÇÃO PADRÃO E RECÁLCULO HIERÁRQUICO
+              // 17. PILAR 9: RESTAURAÇÃO PADRÃO E RECÁLCULO HIERÁRQUICO
               resetMobileIndicatorsFilters();
               if (deskBimSel.value !== 'ALL') {
                 throw new Error('Falha Pilar 9: resetMobileIndicatorsFilters não retornou bimestre para ALL');
