@@ -237,6 +237,10 @@ flowchart TD
 ---
 
 ### PILAR 9: Usabilidade e Design Mobile: Botão Pop-up de Filtros (Liberação do Viewport e Retomada Instantânea)
+> **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
+> **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_9_usabilidade_mobile_popup_filtros.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_9_usabilidade_mobile_popup_filtros.md)  
+> **Versão Alvo de Entrega:** `1.02` | **Backup Intermediário:** `intermediárias/aplicativo_v102_pilar_9_usabilidade_mobile_popup_filtros.html`
+
 * **Diagnóstico da Evolução do Design (Superação da Barra Sticky):**  
   A ideia inicial previa "travar a aba de filtros" (`position: sticky`) no topo da tela. No entanto, a análise ergonômica voltada estritamente para o uso no **celular** revelou que fixar a barra de filtros inteira (com seletores de UE, Turma, Bimestre e sub-abas) consome entre 25% e 40% da altura útil do visor, comprimindo o espaço de leitura das rubricas e forçando a coordenadora a enxergar critérios e réguas por uma fresta minúscula.
 * **Nova Lógica Ergonômica Mobile-First (Gatilho Pop-up):**
