@@ -27,7 +27,7 @@ MODULE_CATALOG = {
     'sintese_finalizacao': 'Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo de Tempo',
     'travas_seguranca': 'Travas de Duplo Lançamento, Imutabilidade Longitudinal e Segurança',
     'formadora_coordenacao': 'Acompanhamento da Formadora, Matriz de Coordenação e Isolamento de Perfis',
-    'agenda_cronograma': 'Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática',
+    'agenda_cronograma': 'Cronograma de Observações, Destaque da Próxima Observação e Baixa Automática',
     'historico_governanca': 'Histórico de Observações, Filtros Multidimensionais, Visualização e Exclusão',
     'indicadores_decisao': 'Indicadores Pedagógicos, Cobertura de Turmas (Pilar 1), KPIs e Apoio à Decisão',
     'backup_exportacao': 'Persistência Local, Backup JSON, Restauração e Relatório para Impressão',

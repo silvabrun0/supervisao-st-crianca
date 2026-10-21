@@ -57,7 +57,7 @@ flowchart TD
     end
 
     subgraph Ergonomia["3. Usabilidade, Prazos & Interface Mobile"]
-        P6["PILAR 6: Higienização 'Visita' ➔ 'Observação'"]
+        P6["PILAR 6: Higienização 'Visita' ➔ 'Observação'\n(✅ STATUS: IMPLEMENTADO)"]
         P7["PILAR 7: Extinção de Visitas Auditadas e N/A"]
         P8["PILAR 8: Foco nos Menores Índices (Gargalos)"]
         P9["PILAR 9: Usabilidade Mobile: Botão Pop-up de Filtros\n(Liberação do Viewport e Retomada Rápida)"]
@@ -201,9 +201,9 @@ flowchart TD
 ---
 
 ### PILAR 6: Higienização Terminológica Mandatória ("Visita" ➔ "Observação")
-> **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
+> **STATUS DO PILAR: ✅ IMPLEMENTADO / EM PRODUÇÃO (VERSÃO 1.00)**  
 > **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_6_higienizacao_terminologica_observacao.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_6_higienizacao_terminologica_observacao.md)  
-> **Versão Alvo de Entrega:** `1.00` | **Backup Intermediário:** `intermediárias/aplicativo_v100_pilar_6_higienizacao_terminologica_observacao.html`
+> **Versão Homologada:** `1.00` | **Backup Intermediário:** `intermediárias/aplicativo_v100_pilar_6_higienizacao_terminologica_observacao.html`
 
 * **Diretriz Aprovada (00:19:27):**  
   Substituição completa do vocábulo policialesco *"visita"* por **"observação"** em 100% dos textos, botões, rotas e relatórios.
@@ -211,6 +211,10 @@ flowchart TD
 ---
 
 ### PILAR 7: Extinção de Métricas Burocráticas ("Visitas Auditadas" e "Itens Válidos / N.A.")
+> **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
+> **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_7_extincao_metricas_burocraticas_kpis_decisorios.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_7_extincao_metricas_burocraticas_kpis_decisorios.md)  
+> **Versão Alvo de Entrega:** `1.01` | **Backup Intermediário:** `intermediárias/aplicativo_v101_pilar_7_extincao_metricas_burocraticas_kpis_decisorios.html`
+
 * **Diretriz Aprovada:**  
   - O card `Visitas Auditadas` é removido.
   - O card `Itens Válidos / N.A.` é removido.

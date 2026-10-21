@@ -2575,7 +2575,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.99 (v7.78)
+          Versão 1.00 (v7.79)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -2649,12 +2649,12 @@
         <div id="homeDraftsContainer" style="display:flex; flex-direction:column; gap:10px;"></div>
       </div>
 
-      <!-- Seção Dinâmica de Visitas Agendadas no Cronograma da Tela Inicial -->
+      <!-- Seção Dinâmica de Observações Agendadas no Cronograma da Tela Inicial -->
       <div id="homeScheduledSection" style="display:none; margin-bottom:24px;">
         <div class="page-title-row" style="margin-bottom:12px;">
           <div>
-            <h3 style="font-size:16px; font-weight:700; color:var(--primary-dark);" id="homeScheduledHeader">🗓️ Minhas Próximas Visitas Agendadas</h3>
-            <p style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Inicie diretamente as visitas planejadas no cronograma longitudinal</p>
+            <h3 style="font-size:16px; font-weight:700; color:var(--primary-dark);" id="homeScheduledHeader">🗓️ Minhas Próximas Observações Agendadas</h3>
+            <p style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Inicie diretamente as observações planejadas no cronograma longitudinal</p>
           </div>
           <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;" onclick="navigateToTab('schedule')">Ver Cronograma Completo →</button>
         </div>
@@ -2917,10 +2917,10 @@
             </div>
           </div>
 
-          <!-- Card Avaliações / Visitas -->
+          <!-- Card Observações Pedagógicas -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">📈 Visitas & Observações Realizadas</div>
+              <div class="export-card-title">📈 Observações Realizadas</div>
               <div class="export-card-desc">Base de acompanhamentos pedagógicos, sínteses, níveis de materiais e metadados.</div>
             </div>
             <div style="display:flex; gap:8px;">
@@ -2939,13 +2939,13 @@
       <div class="page-title-row schedule-header-row">
         <div class="page-title">Cronograma de Acompanhamento</div>
         <button class="btn btn-primary btn-add-schedule" onclick="openAddScheduleModal()">
-          + Agendar Nova Visita
+          + Agendar Nova Observação
         </button>
       </div>
 
       <div class="card">
         <div class="schedule-filters-toolbar">
-          <div class="schedule-filters-title">Visitas Planejadas e Realizadas</div>
+          <div class="schedule-filters-title">Observações Planejadas e Realizadas</div>
           <div class="schedule-filters-controls">
             <div class="schedule-filters-selects">
               <select id="scheduleFilterBimester" class="form-select schedule-filter-select" onchange="renderScheduleScreen()">
@@ -2956,12 +2956,12 @@
                 <option value="4º Bimestre">4º Bimestre</option>
               </select>
               <select id="scheduleFilterStatus" class="form-select schedule-filter-select" onchange="renderScheduleScreen()">
-                <option value="active">Visitas Ativas</option>
-                <option value="archived">Visitas Arquivadas</option>
-                <option value="all">Todas as Visitas</option>
+                <option value="active">Observações Ativas</option>
+                <option value="archived">Observações Arquivadas</option>
+                <option value="all">Todas as Observações</option>
               </select>
             </div>
-            <button class="btn btn-secondary schedule-archive-btn" onclick="archiveAllCompletedSchedules()" title="Arquivar todas as visitas já realizadas deste escopo">
+            <button class="btn btn-secondary schedule-archive-btn" onclick="archiveAllCompletedSchedules()" title="Arquivar todas as observações já realizadas deste escopo">
               Arquivar Realizadas
             </button>
           </div>
@@ -3013,13 +3013,13 @@
           <div id="setupScheduleSelectorGroup" class="form-group" style="display:none; background:#F0FDF4; border:1px solid #BBF7D0; padding:14px; border-radius:10px; margin-bottom:18px;">
             <label class="form-label" style="color:#166534; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              Vincular a uma Visita Agendada no Cronograma:
+              Vincular a uma Observação Agendada no Cronograma:
             </label>
             <select id="setupLinkedSchedule" class="form-select" onchange="onSetupLinkedScheduleChange()" style="border-color:#86EFAC; font-weight:600;">
               <option value="">-- Observação Avulsa (Não vinculada ao cronograma) --</option>
             </select>
             <div style="font-size:11px; color:#15803D; margin-top:5px; line-height:1.4;">
-              💡 Selecionar uma visita preenche automaticamente a escola, o profissional, a turma, o bimestre e o horário previsto.
+              💡 Selecionar uma observação preenche automaticamente a escola, o profissional, a turma, o bimestre e o horário previsto.
             </div>
           </div>
 
@@ -3082,11 +3082,11 @@
             <div id="setupBimesterValidationHint" style="font-size:12px; margin-top:6px; font-weight:600; display:none;"></div>
           </div>
 
-          <!-- Bloco de Registro Temporal Real da Visita Pedagógica -->
+          <!-- Bloco de Registro Temporal Real da Observação Pedagógica -->
           <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:16px; margin-bottom:18px;">
             <div style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:var(--primary-dark); margin-bottom:4px;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Data e Horários da Visita Pedagógica
+              Data e Horários da Observação Pedagógica
             </div>
             <div style="font-size:12px; color:#475569; line-height:1.4; margin-bottom:12px;">
               Informe os horários reais em que o acompanhamento ocorreu ou está ocorrendo. Se for enviar o formulário depois, seus horários anotados serão mantidos.
@@ -3160,7 +3160,7 @@
       <div style="max-width:880px; margin:0 auto;">
         <div class="page-title-row no-print">
           <div>
-            <div class="page-title">Síntese Final da Visita Pedagógica</div>
+            <div class="page-title">Síntese Final da Observação Pedagógica</div>
             <div class="page-subtitle">Organização do tempo, materiais, horários e fechamento da supervisão</div>
           </div>
           <div style="display:flex; gap:10px;">
@@ -3180,10 +3180,10 @@
         </div>
 
         <div class="card" id="synthesisPrintableArea">
-          <!-- Bloco de Identificação Oficial da Visita no Relatório e Síntese -->
+          <!-- Bloco de Identificação Oficial da Observação no Relatório e Síntese -->
           <div id="synthesisReportMetaBox" style="background:#F8FAFC; border:1px solid #CBD5E1; border-radius:10px; padding:16px; margin-bottom:16px; page-break-inside:avoid;">
             <div style="font-size:14px; font-weight:800; color:var(--primary-dark); margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-              <span>📋 Dados da Visita & Profissional Acompanhado(a)</span>
+              <span>📋 Dados da Observação & Profissional Acompanhado(a)</span>
               <span id="synthesisRoleBadge" style="font-size:11px; padding:3px 10px; border-radius:12px; font-weight:700; background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE;">Docente</span>
             </div>
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; font-size:12px; color:#334155;">
@@ -3201,7 +3201,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
               <div style="font-size:14px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:6px;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0066CC" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                Registro de Período e Duração da Visita
+                Registro de Período e Duração da Observação
               </div>
               <span id="synthesisTimeBadge" style="font-size:11px; font-weight:700; background:#E0F2FE; color:#0369A1; padding:3px 10px; border-radius:12px;">
                 Horários Efetivos de Sala
@@ -3337,14 +3337,14 @@
                   4. Ocorrências e Registros de Campo Vinculados
                 </h3>
                 <button class="btn btn-secondary no-print" style="font-size:11px; padding:6px 10px;" onclick="importNotesIntoSynthesis()">
-                  + Importar Ocorrências da Visita
+                  + Importar Ocorrências da Observação
                 </button>
               </div>
               <div id="synthesisLinkedNotesContainer" style="margin-top:8px;"></div>
             </div>
           </div>
 
-          <!-- Bloco de Evidências Fotográficas da Visita (Visível na Tela) -->
+          <!-- Bloco de Evidências Fotográficas da Observação (Visível na Tela) -->
           <div style="margin-top:20px; margin-bottom:14px;" id="synthesisPhotosBlock" class="no-print">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
               <h3 style="font-size:15px; font-weight:700; color:var(--primary-dark);" id="synthesisPhotosTitle">
@@ -3375,7 +3375,7 @@
           <h3 id="synthesisFeedbackTitle" style="font-size:15px; font-weight:700; color:var(--primary-dark); margin-top:20px; margin-bottom:10px;">
             5. Parecer Pedagógico e Devolutiva Formativa
           </h3>
-          <textarea id="synthesisGeneralComments" class="form-textarea" style="height:120px;" placeholder="Pontos fortes observados, combinados formativos e orientações pedagógicas para a próxima visita..."></textarea>
+          <textarea id="synthesisGeneralComments" class="form-textarea" style="height:120px;" placeholder="Pontos fortes observados, combinados formativos e orientações pedagógicas para a próxima observação..."></textarea>
 
           <!-- Printable Official Signatures Box -->
           <div class="print-signatures-box">
@@ -3706,10 +3706,10 @@
             </div>
             
             <h3 style="font-size:15px; font-weight:800; color:var(--text-primary); margin:0 0 8px 0; line-height:1.3;">
-              Instrumento de Acompanhamento das Visitas Pedagógicas
+              Instrumento de Acompanhamento das Observações Pedagógicas
             </h3>
             <p style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin:0 0 12px 0;">
-              Instrumento do formador para acompanhamento das visitas pedagógicas: planejamento didático-pedagógico, prática docente, implementação das formações continuadas e articulação formativa com a coordenação.
+              Instrumento do formador para acompanhamento das observações pedagógicas: planejamento didático-pedagógico, prática docente, implementação das formações continuadas e articulação formativa com a coordenação.
             </p>
             
             <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;">
@@ -3899,7 +3899,7 @@
         <span class="fab-menu-icon" style="background:#FEF3C7; color:#D97706;">📝</span>
         <div>
           <div class="fab-menu-title">Ocorrência de Campo</div>
-          <div class="fab-menu-desc">Registrar apontamento qualitativo desta visita</div>
+          <div class="fab-menu-desc">Registrar apontamento qualitativo desta observação</div>
         </div>
       </button>
       <button class="fab-menu-item danger" onclick="handleFabExitWithoutSaving()">
@@ -3955,7 +3955,7 @@
       </div>
 
       <p style="font-size:12px; color:#475569; margin-bottom:16px; line-height:1.5;">
-        Consulte, faça download ou atualize os instrumentos em PDF utilizados nas visitas pedagógicas da Educação Infantil do município de Patos. As atualizações enviadas ficam salvas localmente no navegador e passam a ser os documentos oficiais acessados pela rede.
+        Consulte, faça download ou atualize os instrumentos em PDF utilizados nas observações pedagógicas da Educação Infantil do município de Patos. As atualizações enviadas ficam salvas localmente no navegador e passam a ser os documentos oficiais acessados pela rede.
       </p>
 
       <div style="display:flex; flex-direction:column; gap:14px;">
@@ -4006,9 +4006,9 @@
                 <span id="pdfCoordinatorMetaBadge" class="pdf-meta-badge" style="display:none;">🟢 Atualizado pelo Município</span>
                 <span id="pdfCoordinatorInfo" style="font-size:11px; color:#64748B;">PDF de Fábrica · 170 KB</span>
               </div>
-              <h4 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-top:6px;">Instrumento de Acompanhamento das Visitas Pedagógicas</h4>
+              <h4 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-top:6px;">Instrumento de Acompanhamento das Observações Pedagógicas</h4>
               <p style="font-size:12px; color:var(--text-secondary); margin-top:4px; line-height:1.4;">
-                Instrumento do formador para acompanhamento das visitas pedagógicas: planejamento didático pedagógico, prática docente, implementação das formações e relação com a coordenação.
+                Instrumento do formador para acompanhamento das observações pedagógicas: planejamento didático pedagógico, prática docente, implementação das formações e relação com a coordenação.
               </p>
             </div>
           </div>
@@ -4051,6 +4051,45 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.01 - PILAR 7: EXTINÇÃO DE MÉTRICAS BUROCRÁTICAS E NOVOS KPIS DECISÓRIOS -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px; background:#F8FAFC; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.01 · v7.80 (Oficial)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Pilar 7: Extinção de Métricas Burocráticas e Reorganização Decisória do Painel de Indicadores:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🧹 <strong>Extinção de Métricas Burocráticas:</strong> Remoção definitiva dos cards cartoriais "Observações Auditadas" e "Itens Válidos / N.A.", eliminando ruído estatístico sem valor pedagógico.</li>
+          <li>🎯 <strong>Cobertura no Bimestre Corrente:</strong> Novo KPI em destaque visual com borda adaptativa exibindo a quantidade e o percentual de turmas observadas no bimestre ativo (<code>getCurrentSchoolBimester()</code>) e alerta acionável de turmas pendentes.</li>
+          <li>📈 <strong>Meta do Ciclo Anual (Longitudinal):</strong> Monitoramento do avanço acumulado das 4 observações anuais obrigatórias por turma (meta de $4 \times \text{Turmas}$) e acompanhamento de início do ciclo.</li>
+          <li>🧭 <strong>Dimensão Prioritária (Gargalo Pedagógico):</strong> Identificação algorítmica imediata da Grande Dimensão mais frágil e cálculo do desvio $\Delta$ frente à média da Rede Municipal de Patos para orientação formativa.</li>
+          <li>🔬 <strong>Auditoria Modular (100% de Cobertura):</strong> Módulo <code>indicadores_decisao</code> adaptado com asserções negativas para métricas extintas e testes determinísticos dos novos cards.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.00 - HIGIENIZAÇÃO TERMINOLÓGICA MANDATÓRIA (PILAR 6: VISITA ➔ OBSERVAÇÃO) -->
+      <div style="margin-bottom:20px; border-left:3px solid #10B981; padding-left:14px; background:#F0FDF4; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#065F46;">Versão 1.00 · v7.79 (Oficial)</span>
+          <span style="font-size:11px; background:#10B981; color:white; padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:#047857; margin-top:4px; font-weight:700;">
+          Higienização Terminológica Mandatória (Pilar 6: "Visita" ➔ "Observação"):
+        </div>
+        <p style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin:6px 0;">
+          Consolidação da diretriz pedagógica aprovada por unanimidade (Reunião Técnica ST Criança, Minuto 00:19:27), com a erradicação definitiva do vocábulo policialesco <em>"visita"</em> e adoção universal do termo <strong>"observação"</strong> em 100% das telas, formulários, botões, modais, cabeçalhos, relatórios, feedbacks e artefatos de exportação.
+        </p>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:6px; line-height:1.6; padding-left:16px;">
+          <li>🧹 <strong>Erradicação Universal de "Visita":</strong> Substituição integral por <em>"Observação"</em>, <em>"Observações"</em> e <em>"Observar"</em> nas telas de Início, Cronograma/Agenda, Setup, Observação Ativa, Síntese Pedagógica, Indicadores e Documentos Oficiais.</li>
+          <li>🗓️ <strong>Agenda e Hero Card:</strong> Rótulos atualizados para <em>"+ Agendar Nova Observação"</em>, <em>"Observações Ativas"</em>, <em>"Observações Arquivadas"</em> e card de destaque <em>"PRÓXIMA OBSERVAÇÃO"</em> com botão <em>"Iniciar Observação →"</em>.</li>
+          <li>📊 <strong>Painel de Indicadores e Dossiê:</strong> KPIs atualizados para <em>"Observações Concluídas"</em>, <em>"Observação diagnóstica inicial"</em>, badges <em>"Aguardando Observação"</em> e acompanhamento longitudinal alinhado.</li>
+          <li>📁 <strong>Exportações Padronizadas:</strong> Arquivos de download renomeados para <code>sertao_crianca_observacoes.json</code> e <code>sertao_crianca_observacoes.csv</code>.</li>
+          <li>🔬 <strong>Auditoria Modular (100% Aprovada):</strong> Correção no módulo <code>catalogo_dados</code> e inclusão de teste automatizado de integridade terminológica no Módulo 12.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.99 - REMOÇÃO DE BADGES E AVISOS DE VINCULAÇÃO AUTOMÁTICA NA ABA DE PESSOAL -->
@@ -5888,7 +5927,7 @@
   <!-- Container Oculto em Tela para Impressão da Ficha Individual de Devolutiva Pedagógica (Pilar 5) -->
   <div id="teacherIndividualDevolutivaPrintSection" class="print-only-block" style="display:none;"></div>
 
-  <!-- ================= MODAL: SELECIONAR VISITA AGENDADA ANTES DE INICIAR ================= -->
+  <!-- ================= MODAL: SELECIONAR OBSERVAÇÃO AGENDADA ANTES DE INICIAR ================= -->
   <div id="modalSelectScheduledObs" class="modal-backdrop" onclick="closeSelectScheduledObsModal()">
     <div class="modal-panel" onclick="event.stopPropagation()" style="max-width:660px;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
@@ -5898,7 +5937,7 @@
             Iniciar Observação Pedagógica
           </div>
           <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;" id="selectScheduledObsCountText">
-            Identificamos visitas planejadas no seu cronograma. Selecione um agendamento para iniciar ou opte por uma observação avulsa.
+            Identificamos observações planejadas no seu cronograma. Selecione um agendamento para iniciar ou opte por uma observação avulsa.
           </div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeSelectScheduledObsModal()">✕</button>
@@ -5907,7 +5946,7 @@
       <!-- Lista de Agendamentos Pendentes Disponíveis -->
       <div style="margin-bottom:16px;">
         <div style="font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:10px;">
-          🗓️ Visitas Planejadas Disponíveis para Início Imediato:
+          🗓️ Observações Planejadas Disponíveis para Início Imediato:
         </div>
         <div id="selectScheduledObsList" style="display:flex; flex-direction:column; gap:10px; max-height:280px; overflow-y:auto; padding-right:4px;">
           <!-- Dinamicamente preenchido via openSelectScheduledObsModal() -->
@@ -5933,11 +5972,11 @@
     </div>
   </div>
 
-  <!-- ================= MODAL: AGENDAR NOVA VISITA (CRONOGRAMA) ================= -->
+  <!-- ================= MODAL: AGENDAR NOVA OBSERVAÇÃO (CRONOGRAMA) ================= -->
   <div id="modalAddSchedule" class="modal-backdrop" onclick="closeAddScheduleModal()">
     <div class="modal-panel" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <div id="scheduleModalTitle" style="font-size:17px; font-weight:800; color:var(--primary-dark);">Planejar Visita no Cronograma</div>
+        <div id="scheduleModalTitle" style="font-size:17px; font-weight:800; color:var(--primary-dark);">Planejar Observação no Cronograma</div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeAddScheduleModal()">✕</button>
       </div>
 
@@ -8064,7 +8103,7 @@ function getActiveSections(obs) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Retorna exclusivamente visitas pendentes que o usuário ativo tem permissão para iniciar/observar
+    // Retorna exclusivamente observações pendentes que o usuário ativo tem permissão para iniciar/observar
     function getActionablePendingSchedules() {
       const user = getCurrentUser();
       const scopedSchedules = getScopedSchedules();
@@ -8093,7 +8132,7 @@ function getActiveSections(obs) {
         return;
       }
 
-      // 1. Verifica visitas pendentes de atribuição direta do usuário ativo
+      // 1. Verifica observações pendentes de atribuição direta do usuário ativo
       const pendingSchedules = getActionablePendingSchedules();
 
       // 2. Se houver agendamentos pertinentes, abre o modal de escolha prévia
@@ -8125,7 +8164,7 @@ function getActiveSections(obs) {
 
       const countTextEl = document.getElementById('selectScheduledObsCountText');
       if (countTextEl) {
-        countTextEl.innerText = `Identificamos ${pendingSchedules.length} visita(s) planejada(s) sob sua supervisão direta. Selecione um agendamento abaixo para iniciar ou opte por uma observação avulsa.`;
+        countTextEl.innerText = `Identificamos ${pendingSchedules.length} observação(ões) planejada(s) sob sua supervisão direta. Selecione um agendamento abaixo para iniciar ou opte por uma observação avulsa.`;
       }
 
       const todayStr = getTodayDateString();
@@ -8161,7 +8200,7 @@ function getActiveSections(obs) {
           </div>
           <div>
             <button class="btn btn-primary" style="white-space:nowrap; padding:7px 12px; font-size:12px; font-weight:700;" onclick="startObsFromScheduledModal('${s.id}')">
-              Iniciar Visita →
+              Iniciar Observação →
             </button>
           </div>
         `;
@@ -8285,7 +8324,7 @@ function getActiveSections(obs) {
         setupEndEl.value = addMinutesToTime(setupStartEl ? setupStartEl.value : getNowTimeString(), 90);
       }
 
-      // Atualiza o seletor rápido de agendamento pendente no topo do setup (APENAS VISITAS ACIONÁVEIS)
+      // Atualiza o seletor rápido de agendamento pendente no topo do setup (APENAS OBSERVAÇÕES ACIONÁVEIS)
       const scheduleSelectGroup = document.getElementById('setupScheduleSelectorGroup');
       const scheduleSelect = document.getElementById('setupLinkedSchedule');
       if (scheduleSelectGroup && scheduleSelect) {
@@ -8306,7 +8345,7 @@ function getActiveSections(obs) {
         }
       }
 
-      // Se houver visita do cronograma vinculada
+      // Se houver observação do cronograma vinculada
       if (prefilledSchedule) {
         if (prefilledSchedule.schoolName) schoolSelect.value = prefilledSchedule.schoolName;
         onSetupSchoolChange();
@@ -8343,7 +8382,7 @@ function getActiveSections(obs) {
         if (prefilledSchedule.plannedDate) {
           if (prefilledSchedule.plannedDate > todayStr) {
             setupDateEl.value = todayStr;
-            showToast(`A visita agendada era futura (${formatDateBR(prefilledSchedule.plannedDate)}). A data da observação foi ajustada para hoje.`);
+            showToast(`A observação agendada era futura (${formatDateBR(prefilledSchedule.plannedDate)}). A data foi ajustada para hoje.`);
           } else {
             setupDateEl.value = prefilledSchedule.plannedDate;
           }
@@ -8482,6 +8521,23 @@ function getActiveSections(obs) {
       const teacherName = document.getElementById('setupTargetPerson').value;
       autoSelectNextEligibleBimester(teacherName);
       updateSetupBimesterValidationUI();
+    }
+
+    // =========================================================================
+    // PILAR 7: Resolução do Bimestre Corrente do Ano Letivo (Patos/PB)
+    // =========================================================================
+    function getCurrentSchoolBimester(referenceDate = new Date()) {
+      const d = (referenceDate instanceof Date && !isNaN(referenceDate)) ? referenceDate : new Date(referenceDate);
+      const month = d.getMonth() + 1; // 1 a 12
+      // Calendário Escolar Oficial da Educação Infantil:
+      // 1º Bimestre: Fevereiro a Abril (meses 2, 3, 4)
+      // 2º Bimestre: Maio a Julho (meses 5, 6, 7)
+      // 3º Bimestre: Agosto a Outubro (meses 8, 9, 10)
+      // 4º Bimestre: Novembro a Janeiro (meses 11, 12, 1)
+      if (month >= 2 && month <= 4) return '1º Bimestre';
+      if (month >= 5 && month <= 7) return '2º Bimestre';
+      if (month >= 8 && month <= 10) return '3º Bimestre';
+      return '4º Bimestre';
     }
 
     // PILAR 1: Retorna o próximo bimestre necessário no ciclo longitudinal da TURMA
@@ -9371,8 +9427,8 @@ function getActiveSections(obs) {
         const synthBtn = document.createElement('button');
         const isAllDone = pendencies.length === 0;
         synthBtn.className = `dim-icon-btn synthesis-btn ${isAllDone ? 'synthesis-ready' : ''}`;
-        synthBtn.setAttribute('title', 'Síntese Final da Visita');
-        synthBtn.setAttribute('aria-label', 'Síntese Final da Visita');
+        synthBtn.setAttribute('title', 'Síntese Final da Observação');
+        synthBtn.setAttribute('aria-label', 'Síntese Final da Observação');
         synthBtn.innerHTML = `
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 11l3 3L22 4"/>
@@ -9888,7 +9944,7 @@ function getActiveSections(obs) {
         if (feedbackTitle) feedbackTitle.innerText = '5. Parecer Pedagógico e Devolutiva Formativa';
       }
 
-      // População do Bloco de Identificação Oficial da Visita
+      // População do Bloco de Identificação Oficial da Observação
       const metaTarget = document.getElementById('synthesisMetaTarget');
       const metaSchool = document.getElementById('synthesisMetaSchool');
       const metaClassBox = document.getElementById('synthesisMetaClassBox');
@@ -10207,7 +10263,7 @@ function getActiveSections(obs) {
       const notesContainer = document.getElementById('synthesisLinkedNotesContainer');
       notesContainer.innerHTML = '';
       if (!obs.linkedNotes || obs.linkedNotes.length === 0) {
-        notesContainer.innerHTML = `<div style="font-size:12px; color:var(--text-secondary); font-style:italic;">Nenhuma ocorrência vinculada a este roteiro de visita.</div>`;
+        notesContainer.innerHTML = `<div style="font-size:12px; color:var(--text-secondary); font-style:italic;">Nenhuma ocorrência vinculada a este roteiro de observação.</div>`;
       } else {
         obs.linkedNotes.forEach((noteText, nIdx) => {
           const item = document.createElement('div');
@@ -10478,7 +10534,7 @@ function getActiveSections(obs) {
         if (allPhotos.length === 0) {
           photosGalleryContainer.innerHTML = `
             <div style="font-size:12px; color:var(--text-secondary); font-style:italic; background:#F8FAFC; border:1px dashed #CBD5E1; border-radius:8px; padding:12px; text-align:center;">
-              Nenhuma evidência fotográfica anexada aos critérios desta visita.
+              Nenhuma evidência fotográfica anexada aos critérios desta observação.
             </div>
           `;
         } else {
@@ -10573,10 +10629,10 @@ function getActiveSections(obs) {
           rubricsHtml += `</div>`;
         });
 
-        // Injeção de Evidências Gerais da Visita no Relatório Impresso
+        // Injeção de Evidências Gerais da Observação no Relatório Impresso
         if (obs.photos && obs.photos['geral'] && obs.photos['geral'].length > 0) {
           rubricsHtml += `<div style="margin-top:16px; margin-bottom:16px; page-break-inside:avoid;">`;
-          rubricsHtml += `<h4 style="font-size:14px; font-weight:700; background:#E2E8F0; padding:6px 10px; border-radius:4px; color:#1E293B;">Evidências Gerais da Visita Pedagógica</h4>`;
+          rubricsHtml += `<h4 style="font-size:14px; font-weight:700; background:#E2E8F0; padding:6px 10px; border-radius:4px; color:#1E293B;">Evidências Gerais da Observação Pedagógica</h4>`;
           rubricsHtml += `<div class="photo-evidence-bar" style="margin-top:8px;">`;
           obs.photos['geral'].forEach((pUri, pIdx) => {
             rubricsHtml += `
@@ -10890,7 +10946,7 @@ function getActiveSections(obs) {
       const obs = appState.currentObs;
       if (!obs || appState.isReadOnly) return;
 
-      // 1. FILTRAGEM INTEGRADA: Ocorrências da Turma, da Visita ou dos Docentes da Turma
+      // 1. FILTRAGEM INTEGRADA: Ocorrências da Turma, da Observação ou dos Docentes da Turma
       const matchingNotes = appState.notes.filter(n => 
         !n.isSample && 
         n.schoolName === obs.schoolName && 
@@ -10902,7 +10958,7 @@ function getActiveSections(obs) {
         )
       );
 
-      const targetLabel = obs.className ? `Turma ${obs.className}` : (obs.teacherName || 'visita');
+      const targetLabel = obs.className ? `Turma ${obs.className}` : (obs.teacherName || 'observação');
 
       if (matchingNotes.length === 0) {
         showToast(`Nenhuma ocorrência encontrada para ${targetLabel}.`);
@@ -10912,7 +10968,7 @@ function getActiveSections(obs) {
       if (!obs.linkedNotes) obs.linkedNotes = [];
       let importedCount = 0;
 
-      // 2. Priorização inteligente: ocorrências da visita atual (obsId) ou da turma são incorporadas
+      // 2. Priorização inteligente: ocorrências da observação atual (obsId) ou da turma são incorporadas
       matchingNotes.forEach(n => {
         const text = `[${n.topic} · ${n.teacherName || n.className || 'Geral'}] ${n.content}`;
         if (!obs.linkedNotes.includes(text)) {
@@ -11260,7 +11316,7 @@ function getActiveSections(obs) {
             </div>
           </div>
 
-          <!-- Dossiê do Docente e da Visita -->
+          <!-- Dossiê do Docente e da Observação -->
           <div style="border:1px solid #CBD5E1; border-radius:8px; padding:12px; margin-bottom:16px; background:#F8FAFC;">
             <table style="width:100%; font-size:10pt; border-collapse:collapse;">
               <tr>
@@ -11272,7 +11328,7 @@ function getActiveSections(obs) {
                 <td style="padding:4px 8px;"><strong>Bimestre:</strong> ${obs.bimester || '--'}</td>
               </tr>
               <tr>
-                <td style="padding:4px 8px;"><strong>Data da Visita:</strong> ${obsDateFormatted}</td>
+                <td style="padding:4px 8px;"><strong>Data da Observação:</strong> ${obsDateFormatted}</td>
                 <td style="padding:4px 8px;"><strong>Avaliador(a):</strong> ${obs.evaluatedBy || '--'}</td>
               </tr>
             </table>
@@ -11419,7 +11475,7 @@ function getActiveSections(obs) {
       const draftsHeader = document.getElementById('homeDraftsHeader');
       if (draftsHeader) draftsHeader.innerText = `📝 Meus Rascunhos em Andamento (${drafts.length})`;
       const finCount = document.getElementById('homeFinalizedCount');
-      if (finCount) finCount.innerText = `${activeFinalized.length} Visitas Ativas`;
+      if (finCount) finCount.innerText = `${activeFinalized.length} Observações Ativas`;
       const notesCount = document.getElementById('homeNotesCountText');
       if (notesCount) notesCount.innerText = `${activeNotes.length} Ocorrências Ativas`;
 
@@ -11439,7 +11495,7 @@ function getActiveSections(obs) {
         }
       }
 
-      // Renderização dinâmica de visitas agendadas pendentes na Tela Inicial
+      // Renderização dinâmica de observações agendadas pendentes na Tela Inicial
       const scheduledSection = document.getElementById('homeScheduledSection');
       const scheduledCardsList = document.getElementById('homeScheduledCardsList');
       if (scheduledSection && scheduledCardsList) {
@@ -11452,9 +11508,9 @@ function getActiveSections(obs) {
           if (pendingSchedules.length === 0) {
             scheduledCardsList.innerHTML = `
               <div class="card" style="padding:16px; margin-bottom:0; color:var(--text-secondary); font-size:13px; grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-left:4px solid var(--border);">
-                <span>Você não possui nenhuma visita agendada pendente no momento.</span>
+                <span>Você não possui nenhuma observação agendada pendente no momento.</span>
                 <button class="btn btn-secondary" style="font-size:11px; padding:6px 12px;" onclick="openAddScheduleModal()">
-                  + Agendar Nova Visita
+                  + Agendar Nova Observação
                 </button>
               </div>
             `;
@@ -11463,7 +11519,7 @@ function getActiveSections(obs) {
             const todayStr = getTodayDateString();
             scheduledCardsList.innerHTML = '';
 
-            // Exibe as 4 visitas mais próximas na Home
+            // Exibe as 4 observações mais próximas na Home
             pendingSchedules.slice(0, 4).forEach(s => {
               let badgeHtml = '';
               if (s.plannedDate === todayStr) {
@@ -11489,7 +11545,7 @@ function getActiveSections(obs) {
                   </div>
                 </div>
                 <button class="btn btn-primary" style="padding:6px 12px; font-size:11px; font-weight:700; width:100%;" onclick="openSetupScreenFromSchedule('${s.id}')">
-                  Iniciar Visita →
+                  Iniciar Observação →
                 </button>
               `;
               scheduledCardsList.appendChild(card);
@@ -11957,7 +12013,7 @@ function getActiveSections(obs) {
       const obsBySchedId = appState.observations.find(o => o.scheduleId === sched.id && (o.status === 'finalized' || o.status === 'concluida'));
       if (obsBySchedId) return obsBySchedId;
 
-      // 3. Busca heurística resiliente por metadados da visita em observações finalizadas
+      // 3. Busca heurística resiliente por metadados do agendamento em observações finalizadas
       const obsByMeta = appState.observations.find(o => {
         if (o.status !== 'finalized' && o.status !== 'concluida') return false;
         if (sched.schoolName && o.schoolName !== sched.schoolName) return false;
@@ -11988,7 +12044,7 @@ function getActiveSections(obs) {
 
       const obs = findObservationForSchedule(sched);
       if (!obs) {
-        showToast('Nenhuma observação finalizada foi localizada para esta visita.');
+        showToast('Nenhuma observação finalizada foi localizada para este agendamento.');
         return;
       }
 
@@ -12016,7 +12072,7 @@ function getActiveSections(obs) {
       if (tbody) tbody.innerHTML = '';
       if (cardsContainer) cardsContainer.innerHTML = '';
 
-      // 1. Identificação e Renderização do Card de Próxima Visita
+      // 1. Identificação e Renderização do Card de Próxima Observação
       const nextVisit = getNextActionableSchedule();
 
       if (highlightContainer) {
@@ -12039,7 +12095,7 @@ function getActiveSections(obs) {
             <div class="next-visit-hero-card">
               <div class="next-visit-hero-header">
                 <div class="next-visit-title-badge">
-                  PRÓXIMA VISITA
+                  PRÓXIMA OBSERVAÇÃO
                 </div>
                 <div>${timingBadge}</div>
               </div>
@@ -12072,7 +12128,7 @@ function getActiveSections(obs) {
                 ` : ''}
                 ${canStartVisit ? `
                   <button class="btn btn-primary" style="padding:8px 18px; font-size:13px; font-weight:700;" onclick="openSetupScreenFromSchedule('${nextVisit.id}')">
-                    Iniciar Visita →
+                    Iniciar Observação →
                   </button>
                 ` : ''}
               </div>
@@ -12104,12 +12160,12 @@ function getActiveSections(obs) {
 
       if (schedules.length === 0) {
         if (tbody) {
-          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-secondary); padding:24px;">Nenhuma visita encontrada para os filtros selecionados.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-secondary); padding:24px;">Nenhuma observação encontrada para os filtros selecionados.</td></tr>`;
         }
         if (cardsContainer) {
           cardsContainer.innerHTML = `
             <div class="schedule-empty-state">
-              <div style="font-size:14px; font-weight:700; color:var(--text-primary);">Nenhuma visita encontrada</div>
+              <div style="font-size:14px; font-weight:700; color:var(--text-primary);">Nenhuma observação encontrada</div>
               <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Ajuste os filtros de bimestre ou status para visualizar os agendamentos.</div>
             </div>`;
         }
@@ -12150,14 +12206,14 @@ function getActiveSections(obs) {
                   📋 Devolutiva
                 </button>
               ` : ''}
-              <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="unarchiveSchedule('${s.id}')" title="Desarquivar visita">
+              <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="unarchiveSchedule('${s.id}')" title="Desarquivar observação">
                 Desarquivar
               </button>
             </div>
           `;
           cardActionHtml = `
             <div style="display:flex; gap:8px; width:100%; align-items:center; flex-wrap:wrap;">
-              <span style="font-size:11px; color:var(--text-secondary); font-weight:600; margin-right:auto;">Visita Arquivada</span>
+              <span style="font-size:11px; color:var(--text-secondary); font-weight:600; margin-right:auto;">Observação Arquivada</span>
               <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; flex:1;" onclick="unarchiveSchedule('${s.id}')">
                 Desarquivar
               </button>
@@ -12174,7 +12230,7 @@ function getActiveSections(obs) {
               <button class="btn btn-primary" style="padding:4px 8px; font-size:11px; display:inline-flex; align-items:center; gap:4px;" onclick="viewFeedbackFromSchedule('${s.id}')" title="Visualizar Devolutiva Pedagógica da Observação">
                 📋 Devolutiva
               </button>
-              <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="archiveSchedule('${s.id}')" title="Arquivar esta visita realizada">
+              <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="archiveSchedule('${s.id}')" title="Arquivar esta observação realizada">
                 Arquivar
               </button>
             </div>
@@ -12204,7 +12260,7 @@ function getActiveSections(obs) {
             actionHtml = `
               <div style="display:flex; gap:6px; justify-content:center; align-items:center;">
                 <button class="btn btn-primary" style="padding:5px 10px; font-size:11px;" onclick="openSetupScreenFromSchedule('${s.id}')">
-                  Iniciar Visita →
+                  Iniciar Observação →
                 </button>
                 ${canEditSchedule ? `
                   <button class="btn btn-secondary" style="padding:5px 10px; font-size:11px;" onclick="openEditScheduleModal('${s.id}')" title="Editar Agendamento">
@@ -12220,7 +12276,7 @@ function getActiveSections(obs) {
                 </button>
               ` : ''}
               <button class="btn btn-primary" style="padding:8px 14px; font-size:12px; font-weight:700; flex:1.4;" onclick="openSetupScreenFromSchedule('${s.id}')">
-                Iniciar Visita →
+                Iniciar Observação →
               </button>
             `;
           } else {
@@ -12321,7 +12377,7 @@ function getActiveSections(obs) {
       sched.archived = true;
       saveState();
       renderScheduleScreen();
-      showToast('Visita arquivada com sucesso! Movida para Visitas Arquivadas.');
+      showToast('Observação arquivada com sucesso! Movida para Observações Arquivadas.');
     }
 
     function unarchiveSchedule(scheduleId) {
@@ -12330,7 +12386,7 @@ function getActiveSections(obs) {
       sched.archived = false;
       saveState();
       renderScheduleScreen();
-      showToast('Visita desarquivada com sucesso! Movida para Visitas Ativas.');
+      showToast('Observação desarquivada com sucesso! Movida para Observações Ativas.');
     }
 
     function archiveAllCompletedSchedules() {
@@ -12338,11 +12394,11 @@ function getActiveSections(obs) {
       const completedActive = scopedSchedules.filter(s => s.status === 'realizado' && !s.archived);
 
       if (completedActive.length === 0) {
-        showToast('Não há visitas realizadas ativas para arquivar.');
+        showToast('Não há observações realizadas ativas para arquivar.');
         return;
       }
 
-      if (!confirm(`Deseja arquivar ${completedActive.length} visita(s) já realizada(s)?`)) {
+      if (!confirm(`Deseja arquivar ${completedActive.length} observação(ões) já realizada(s)?`)) {
         return;
       }
 
@@ -12352,12 +12408,12 @@ function getActiveSections(obs) {
 
       saveState();
       renderScheduleScreen();
-      showToast(`${completedActive.length} visita(s) arquivada(s) com sucesso!`);
+      showToast(`${completedActive.length} observação(ões) arquivada(s) com sucesso!`);
     }
 
     function openAddScheduleModal() {
       editingScheduleId = null;
-      document.getElementById('scheduleModalTitle').innerText = 'Planejar Visita no Cronograma';
+      document.getElementById('scheduleModalTitle').innerText = 'Planejar Observação no Cronograma';
       const user = getCurrentUser();
       const schoolSelect = document.getElementById('scheduleSchool');
       schoolSelect.innerHTML = '';
@@ -12399,7 +12455,7 @@ function getActiveSections(obs) {
       const sched = appState.schedules.find(s => s.id === scheduleId);
       if (!sched) return;
 
-      document.getElementById('scheduleModalTitle').innerText = 'Editar Visita no Cronograma';
+      document.getElementById('scheduleModalTitle').innerText = 'Editar Observação no Cronograma';
       
       const user = getCurrentUser();
       const schoolSelect = document.getElementById('scheduleSchool');
@@ -12595,7 +12651,7 @@ function getActiveSections(obs) {
           appState.schedules[schedIndex].plannedDate = plannedDate;
           appState.schedules[schedIndex].plannedTime = plannedTime;
         }
-        showToast('Visita atualizada com sucesso!');
+        showToast('Observação atualizada com sucesso!');
       } else {
         const newSched = {
           id: 'sch-' + Date.now(),
@@ -12612,7 +12668,7 @@ function getActiveSections(obs) {
           status: 'planejado'
         };
         appState.schedules.unshift(newSched);
-        showToast('Visita planejada adicionada ao cronograma!');
+        showToast('Observação planejada adicionada ao cronograma!');
       }
 
       saveState();
@@ -12665,7 +12721,7 @@ function getActiveSections(obs) {
         } else if (not.resolved) {
           badgeHtml = '<span class="status-badge note">✓ Intervenção Realizada</span>';
         } else if (not.obsId) {
-          badgeHtml = '<span class="status-badge note" style="background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE;">🔗 Vinculada à Visita</span>';
+          badgeHtml = '<span class="status-badge note" style="background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE;">🔗 Vinculada à Observação</span>';
         } else if (isTeacherEvaluated) {
           badgeHtml = '<span class="status-badge note" style="background:#ECFDF5; color:#065F46; border:1px solid #A7F3D0;">✓ Docente Avaliado(a)</span>';
         } else {
@@ -14708,12 +14764,12 @@ function getActiveSections(obs) {
           <!-- Cards de KPIs do Docente -->
           <div class="kpi-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:16px; margin-bottom:24px;">
             <div class="card" style="margin:0;">
-              <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Visitas Concluídas</div>
+              <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Observações Concluídas</div>
               <div style="font-size:28px; font-weight:800; color:var(--primary-dark); margin:4px 0;">
                 ${memberObs.length} <span style="font-size:15px; color:var(--text-secondary); font-weight:600;">de 4 bimestres</span>
               </div>
               <div style="font-size:12px; color:var(--text-secondary);">
-                ${memberObs.length >= 2 ? 'Série histórica apta para cruzamento' : 'Visita diagnóstica inicial'}
+                ${memberObs.length >= 2 ? 'Série histórica apta para cruzamento' : 'Observação diagnóstica inicial'}
               </div>
             </div>
 
@@ -14746,7 +14802,7 @@ function getActiveSections(obs) {
                 <span class="badge-trend-stable" style="display:flex; align-items:center; justify-content:center; width:100%; padding:6px 10px; font-size:12px; font-weight:700; border-radius:6px; box-sizing:border-box;">✓ ${countStable} Consolidados</span>
                 <span class="badge-trend-down" style="display:flex; align-items:center; justify-content:center; width:100%; padding:6px 10px; font-size:12px; font-weight:700; border-radius:6px; box-sizing:border-box;">⚠ ${countAlert} Atenção</span>
               </div>
-              <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${countTotalCriteria} critérios auditados na matriz</div>
+              <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${countTotalCriteria} critérios avaliados na matriz</div>
             </div>
 
             <div class="card" style="margin:0; display:flex; flex-direction:column; justify-content:space-between;">
@@ -14792,7 +14848,7 @@ function getActiveSections(obs) {
                     <div style="height:5px; border-radius:3px; background:#E2E8F0;"></div>
                   </div>
                   <div style="font-size:12px; color:var(--text-secondary); line-height:1.4;">
-                    ${targetType === 'coordenador' ? 'Não aplicável para coordenação' : 'Sem registro na última visita'}
+                    ${targetType === 'coordenador' ? 'Não aplicável para coordenação' : 'Sem registro na última observação'}
                   </div>
                 `}
               </div>
@@ -14802,7 +14858,7 @@ function getActiveSections(obs) {
                   <span>${lastObs.bimester || 'Última observação'}</span>
                   <span>${formatDateBR(lastObs.date)}</span>
                 ` : `
-                  <span>${targetType === 'coordenador' ? 'Foco em gestão' : 'Aguardando visita'}</span>
+                  <span>${targetType === 'coordenador' ? 'Foco em gestão' : 'Aguardando observação'}</span>
                   <span>—</span>
                 `}
               </div>
@@ -14831,7 +14887,7 @@ function getActiveSections(obs) {
                 Nenhuma Observação Finalizada para este(a) Profissional
               </div>
               <p style="font-size:13px; color:var(--text-secondary); max-width:480px; margin:0 auto 16px auto;">
-                Este profissional ainda não possui visitas concluídas no sistema. Agende ou finalize uma observação para iniciar o acompanhamento longitudinal item a item.
+                Este profissional ainda não possui observações concluídas no sistema. Agende ou finalize uma observação para iniciar o acompanhamento longitudinal item a item.
               </p>
               <button class="btn btn-primary" onclick="handleNewObsButtonClick()">Iniciar Nova Observação</button>
             </div>
@@ -15171,65 +15227,231 @@ function getActiveSections(obs) {
       const totalPts = scopeHierarchy.totalPts;
       const totalNA = scopeHierarchy.totalNA;
 
-      // CÁLCULO DE COBERTURA DE TURMAS (PILAR 1 & PILAR 7)
-      const totalAvaliandos = scopedAvaliandos.length;
-      let coverageLabel = 'Avaliandos / Cobertura';
-      let evaluatedCount = 0;
-      let totalCount = 0;
-      let coveragePct = 0;
+      // =========================================================================
+      // PILAR 7: CÁLCULO ESTRUTURADO DOS 4 KPIS DECISÓRIOS (EXTINÇÃO DE MÉTRICAS CARTORIAIS)
+      // =========================================================================
 
-      if (targetType === 'professora') {
-        coverageLabel = 'Cobertura de Turmas';
-        let scopedClasses = [];
-        let indSchools = (activeUnitFilter !== 'ALL') ? [activeUnitFilter] : ((appState.units || []).map(u => u.name));
-        indSchools.forEach(uName => {
-          scopedClasses = scopedClasses.concat(getClassesForSchool(uName));
-        });
-        totalCount = scopedClasses.length;
-        evaluatedCount = scopedClasses.filter(cls => 
-          scopedObs.some(o => o.className === cls.name && (o.status === 'finalized' || o.status === 'concluida'))
-        ).length;
-        coveragePct = totalCount > 0 ? Math.round((evaluatedCount / totalCount) * 100) : 0;
-      } else {
-        coverageLabel = 'Coordenadoras / Cobertura';
-        totalCount = scopedAvaliandos.length;
-        evaluatedCount = scopedAvaliandos.filter(av => 
-          scopedObs.some(o => o.teacherName === av.name && (o.status === 'finalized' || o.status === 'concluida'))
-        ).length;
-        coveragePct = totalCount > 0 ? Math.round((evaluatedCount / totalCount) * 100) : 0;
-      }
-
+      // 1. KPI 1: ÍNDICE DE CONSISTÊNCIA GERAL (Média Ponderada Formativa)
       const overallPercent = totalValidResp > 0 ? Math.round((totalPts / totalValidResp) * 100) : null;
       const overallColor = overallPercent === null ? 'var(--text-secondary)' : (overallPercent >= 80 ? 'var(--green)' : overallPercent >= 60 ? 'var(--yellow)' : 'var(--red)');
       const overallLabel = overallPercent === null ? 'Sem Observações Finalizadas' : (overallPercent >= 80 ? 'Consistência Forte' : overallPercent >= 60 ? 'Atenção Necessária' : 'Alerta de Fragilidade');
       const overallDisplay = overallPercent !== null ? `${overallPercent}%` : '—';
 
-      // 1. Linha de KPIs Superiores
+      // 2. KPI 2: COBERTURA NO BIMESTRE CORRENTE (DESTAQUE MÁXIMO DO PILAR 7)
+      const currentBimester = getCurrentSchoolBimester();
+      const currentBimNumMatch = currentBimester.match(/([1-4])/);
+      const currentBimNum = currentBimNumMatch ? currentBimNumMatch[1] : '1';
+
+      let totalEntitiesCount = 0;
+      let evaluatedEntitiesCurrentBim = 0;
+      let pendingEntitiesCurrentBim = 0;
+      let coverageCurrentBimPct = 0;
+      let kpiCoverageTitle = `Cobertura · ${currentBimester}`;
+      let kpiCoverageSubtitle = '';
+      let kpiCoverageBorderColor = 'var(--primary)';
+
+      // 3. KPI 3: META DO CICLO ANUAL (Avanço Longitudinal: Meta 4 Observações por Turma)
+      let totalAnnualTargetObs = 0;
+      let completedAnnualObs = scopedObs.length;
+      let annualCycleProgressPct = 0;
+      let entitiesStartedCycleCount = 0;
+      let kpiCycleTitle = 'Meta do Ciclo Anual';
+      let kpiCycleSubtitle = '';
+
+      if (targetType === 'professora') {
+        let scopedClasses = [];
+        let indSchools = (activeUnitFilter !== 'ALL') ? [activeUnitFilter] : ((appState.units || []).map(u => u.name));
+        indSchools.forEach(uName => {
+          scopedClasses = scopedClasses.concat(getClassesForSchool(uName));
+        });
+        totalEntitiesCount = scopedClasses.length;
+
+        // Turmas com observação finalizada no bimestre corrente
+        evaluatedEntitiesCurrentBim = scopedClasses.filter(cls => {
+          const cleanClassName = (cls.name || '').trim().toLowerCase();
+          return scopedObs.some(o => {
+            if (o.status !== 'finalized' && o.status !== 'concluida') return false;
+            if (!o.className || o.className.trim().toLowerCase() !== cleanClassName) return false;
+            const obsBimMatch = (o.bimester || '').match(/([1-4])/);
+            return obsBimMatch && obsBimMatch[1] === currentBimNum;
+          });
+        }).length;
+
+        pendingEntitiesCurrentBim = Math.max(0, totalEntitiesCount - evaluatedEntitiesCurrentBim);
+        coverageCurrentBimPct = totalEntitiesCount > 0 ? Math.round((evaluatedEntitiesCurrentBim / totalEntitiesCount) * 100) : 0;
+
+        // Turmas que possuem pelo menos 1 observação no ano letivo (ciclo iniciado)
+        entitiesStartedCycleCount = scopedClasses.filter(cls => {
+          const cleanClassName = (cls.name || '').trim().toLowerCase();
+          return scopedObs.some(o => {
+            if (o.status !== 'finalized' && o.status !== 'concluida') return false;
+            return o.className && o.className.trim().toLowerCase() === cleanClassName;
+          });
+        }).length;
+
+        totalAnnualTargetObs = totalEntitiesCount * 4; // 4 bimestres obrigatórios
+        annualCycleProgressPct = totalAnnualTargetObs > 0 ? Math.round((completedAnnualObs / totalAnnualTargetObs) * 100) : 0;
+
+        kpiCoverageTitle = `Cobertura Turmas · ${currentBimester}`;
+        if (totalEntitiesCount === 0) {
+          kpiCoverageSubtitle = 'Nenhuma turma mapeada';
+          kpiCoverageBorderColor = 'var(--text-secondary)';
+        } else if (pendingEntitiesCurrentBim === 0) {
+          kpiCoverageSubtitle = '✓ 100% das turmas concluídas';
+          kpiCoverageBorderColor = 'var(--green)';
+        } else {
+          kpiCoverageSubtitle = `⚠ ${pendingEntitiesCurrentBim} turma(s) pendente(s)`;
+          kpiCoverageBorderColor = coverageCurrentBimPct >= 50 ? 'var(--yellow)' : 'var(--red)';
+        }
+
+        kpiCycleSubtitle = `${entitiesStartedCycleCount} de ${totalEntitiesCount} turmas com ciclo iniciado`;
+      } else {
+        // Escopo de Coordenação Pedagógica (Formadores)
+        totalEntitiesCount = scopedAvaliandos.length;
+        evaluatedEntitiesCurrentBim = scopedAvaliandos.filter(av => {
+          const cleanAvName = (av.name || '').trim().toLowerCase();
+          return scopedObs.some(o => {
+            if (o.status !== 'finalized' && o.status !== 'concluida') return false;
+            if (!o.teacherName || o.teacherName.trim().toLowerCase() !== cleanAvName) return false;
+            const obsBimMatch = (o.bimester || '').match(/([1-4])/);
+            return obsBimMatch && obsBimMatch[1] === currentBimNum;
+          });
+        }).length;
+
+        pendingEntitiesCurrentBim = Math.max(0, totalEntitiesCount - evaluatedEntitiesCurrentBim);
+        coverageCurrentBimPct = totalEntitiesCount > 0 ? Math.round((evaluatedEntitiesCurrentBim / totalEntitiesCount) * 100) : 0;
+
+        entitiesStartedCycleCount = scopedAvaliandos.filter(av => {
+          const cleanAvName = (av.name || '').trim().toLowerCase();
+          return scopedObs.some(o => {
+            if (o.status !== 'finalized' && o.status !== 'concluida') return false;
+            return o.teacherName && o.teacherName.trim().toLowerCase() === cleanAvName;
+          });
+        }).length;
+
+        totalAnnualTargetObs = totalEntitiesCount * 4;
+        annualCycleProgressPct = totalAnnualTargetObs > 0 ? Math.round((completedAnnualObs / totalAnnualTargetObs) * 100) : 0;
+
+        kpiCoverageTitle = `Cobertura Coord. · ${currentBimester}`;
+        if (totalEntitiesCount === 0) {
+          kpiCoverageSubtitle = 'Nenhuma coordenação vinculada';
+          kpiCoverageBorderColor = 'var(--text-secondary)';
+        } else if (pendingEntitiesCurrentBim === 0) {
+          kpiCoverageSubtitle = '✓ 100% das coordenadoras atendidas';
+          kpiCoverageBorderColor = 'var(--green)';
+        } else {
+          kpiCoverageSubtitle = `⚠ ${pendingEntitiesCurrentBim} coord. pendente(s)`;
+          kpiCoverageBorderColor = coverageCurrentBimPct >= 50 ? 'var(--yellow)' : 'var(--red)';
+        }
+
+        kpiCycleSubtitle = `${entitiesStartedCycleCount} de ${totalEntitiesCount} coord. com ciclo iniciado`;
+      }
+
+      // 4. KPI 4: DIMENSÃO PRIORITÁRIA DE INTERVENÇÃO (Gargalo Pedagógico da UE / Polo)
+      let lowestDimTitle = '—';
+      let lowestDimPct = null;
+      let lowestDimDelta = null;
+      let lowestDimColor = 'var(--text-secondary)';
+      let lowestDimSubtitle = 'Sem dados suficientes';
+
+      if (scopeHierarchy.dims && scopeHierarchy.dims.length > 0) {
+        let minScore = 999;
+        let candidateDim = null;
+        let candidateIdx = -1;
+
+        scopeHierarchy.dims.forEach((d, idx) => {
+          if (d.validTotal > 0) {
+            const score = Math.round(((d.consistent * 1.0 + d.partial * 0.5) / d.validTotal) * 100);
+            if (score < minScore) {
+              minScore = score;
+              candidateDim = d;
+              candidateIdx = idx;
+            }
+          }
+        });
+
+        if (candidateDim) {
+          lowestDimPct = minScore;
+          lowestDimColor = lowestDimPct >= 80 ? 'var(--green)' : (lowestDimPct >= 60 ? 'var(--yellow)' : 'var(--red)');
+          
+          const cleanDimTitle = (candidateDim.title || '')
+            .replace(/^Dimens[aã]o\s*\d*\s*[:\.\-]?\s*/i, '')
+            .trim();
+          lowestDimTitle = `${candidateIdx + 1}. ${cleanDimTitle}`;
+
+          // Delta em relação à média da Rede Municipal de Patos
+          const redeCandidate = redeHierarchy.dims[candidateIdx];
+          if (redeCandidate && redeCandidate.validTotal > 0) {
+            const redeScore = Math.round(((redeCandidate.consistent * 1.0 + redeCandidate.partial * 0.5) / redeCandidate.validTotal) * 100);
+            lowestDimDelta = lowestDimPct - redeScore;
+          }
+
+          if (lowestDimPct >= 80) {
+            lowestDimSubtitle = '✓ Todas as dimensões consistentes';
+          } else {
+            lowestDimSubtitle = lowestDimDelta !== null 
+              ? `${lowestDimDelta > 0 ? '+' : ''}${lowestDimDelta}% vs. Rede Municipal`
+              : 'Pauta prioritária para formação';
+          }
+        }
+      }
+
+      // 1. Linha de KPIs Superiores Decisórios (Grid de 4 Colunas do Pilar 7)
       let html = `
         <div id="indicatorsSectionKPIs" style="display:${currentSubTab === 'kpis' ? 'block' : 'none'};">
-          <div class="kpi-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-bottom:20px;">
-            <div class="card" style="margin:0;">
-              <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Índice de Consistência</div>
-              <div style="font-size:28px; font-weight:800; color:${overallColor}; margin:4px 0;">${overallDisplay}</div>
-              <div style="font-size:12px; color:var(--text-secondary);">● ${overallLabel}</div>
-            </div>
-            <div class="card" style="margin:0;">
-              <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Observações Auditadas</div>
-              <div style="font-size:28px; font-weight:800; color:var(--primary-dark); margin:4px 0;">${scopedObs.length}</div>
-              <div style="font-size:12px; color:var(--text-secondary);">Finalizadas no escopo selecionado</div>
-            </div>
-            <div class="card" style="margin:0; border-left:4px solid var(--primary);">
-              <div style="font-size:11px; font-weight:700; color:var(--primary); text-transform:uppercase;">${coverageLabel}</div>
-              <div style="font-size:28px; font-weight:800; color:var(--primary-dark); margin:4px 0;">
-                ${evaluatedCount} <span style="font-size:16px; color:var(--text-secondary); font-weight:600;">de ${totalCount}</span>
+          <div class="kpi-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:16px; margin-bottom:20px;">
+            
+            <!-- CARD 1: QUALIDADE FORMATIVA (ÍNDICE DE CONSISTÊNCIA) -->
+            <div class="card" style="margin:0; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Índice de Consistência</div>
+                <div style="font-size:28px; font-weight:800; color:${overallColor}; margin:4px 0;">${overallDisplay}</div>
               </div>
-              <div style="font-size:12px; color:var(--text-secondary);">● ${coveragePct}% de turmas observadas</div>
+              <div style="font-size:12px; color:var(--text-secondary); line-height:1.3;">● ${overallLabel}</div>
             </div>
-            <div class="card" style="margin:0;">
-              <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Itens Válidos / N.A.</div>
-              <div style="font-size:28px; font-weight:800; color:var(--text-primary); margin:4px 0;">${totalValidResp} <span style="font-size:14px; color:var(--text-secondary); font-weight:600;">(${totalNA} N/A)</span></div>
-              <div style="font-size:12px; color:var(--text-secondary);">Excluindo "Não se Aplica"</div>
+
+            <!-- CARD 2: COBERTURA NO BIMESTRE CORRENTE (DESTAQUE MÁXIMO DO PILAR 7) -->
+            <div class="card" style="margin:0; border-left:4px solid ${kpiCoverageBorderColor}; display:flex; flex-direction:column; justify-content:space-between; background:#FFFFFF;">
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px;">${kpiCoverageTitle}</div>
+                <div style="font-size:28px; font-weight:800; color:var(--primary-dark); margin:4px 0;">
+                  ${evaluatedEntitiesCurrentBim} <span style="font-size:15px; color:var(--text-secondary); font-weight:600;">de ${totalEntitiesCount}</span>
+                  <span style="font-size:16px; font-weight:800; color:${coverageCurrentBimPct >= 80 ? 'var(--green)' : (coverageCurrentBimPct >= 50 ? 'var(--yellow)' : 'var(--red)')}; margin-left:6px;">(${coverageCurrentBimPct}%)</span>
+                </div>
+              </div>
+              <div style="font-size:12px; font-weight:600; color:${pendingEntitiesCurrentBim === 0 && totalEntitiesCount > 0 ? 'var(--green)' : 'var(--text-secondary)'}; line-height:1.3;">
+                ${kpiCoverageSubtitle}
+              </div>
             </div>
+
+            <!-- CARD 3: META DO CICLO ANUAL (AVANÇO LONGITUDINAL DAS 4 OBSERVAÇÕES) -->
+            <div class="card" style="margin:0; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">${kpiCycleTitle}</div>
+                <div style="font-size:28px; font-weight:800; color:var(--primary-dark); margin:4px 0;">
+                  ${completedAnnualObs} <span style="font-size:15px; color:var(--text-secondary); font-weight:600;">de ${totalAnnualTargetObs}</span>
+                  <span style="font-size:16px; font-weight:800; color:var(--primary); margin-left:6px;">(${annualCycleProgressPct}%)</span>
+                </div>
+              </div>
+              <div style="font-size:12px; color:var(--text-secondary); line-height:1.3;">● ${kpiCycleSubtitle}</div>
+            </div>
+
+            <!-- CARD 4: DIMENSÃO PRIORITÁRIA DE INTERVENÇÃO (GARGALO DA UE / POLO) -->
+            <div class="card" style="margin:0; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Dimensão Prioritária</div>
+                <div style="font-size:15px; font-weight:800; color:var(--text-primary); margin:6px 0 2px 0; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${lowestDimTitle}">
+                  ${lowestDimTitle}
+                </div>
+                <div style="font-size:18px; font-weight:800; color:${lowestDimColor}; margin-bottom:4px;">
+                  ${lowestDimPct !== null ? lowestDimPct + '%' : '—'}
+                </div>
+              </div>
+              <div style="font-size:12px; color:${lowestDimDelta !== null && lowestDimDelta < 0 ? 'var(--red)' : 'var(--text-secondary)'}; font-weight:600; line-height:1.3;">
+                ● ${lowestDimSubtitle}
+              </div>
+            </div>
+
           </div>
         </div>
       `;
@@ -15590,7 +15812,7 @@ function getActiveSections(obs) {
               evolutionBadge = `<span style="background:#EFF6FF; color:#1E40AF; padding:3px 8px; border-radius:12px; font-weight:700; font-size:11px;">Diagnóstico (${singleScore}%)</span>`;
             }
           } else {
-            evolutionBadge = `<span style="color:var(--text-secondary); font-size:11px; font-style:italic;">Aguardando Visita</span>`;
+            evolutionBadge = `<span style="color:var(--text-secondary); font-size:11px; font-style:italic;">Aguardando Observação</span>`;
           }
 
           const roleDetail = member.classAssigned ? `${member.classAssigned} · ${member.school}` : `${member.roleTitle} · ${member.school}`;
@@ -15751,7 +15973,7 @@ function getActiveSections(obs) {
             </tr>
             <tr>
               <td style="padding:4px 8px;"><strong>Supervisor(a) Formador(a):</strong> ${memberSupervisor}</td>
-              <td style="padding:4px 8px;"><strong>Visitas Finalizadas:</strong> ${memberObs.length} de 4 bimestres</td>
+              <td style="padding:4px 8px;"><strong>Observações Finalizadas:</strong> ${memberObs.length} de 4 bimestres</td>
             </tr>
           </table>
         </div>
@@ -16244,7 +16466,7 @@ function getActiveSections(obs) {
 
       if (title) {
         title.innerHTML = matrixType === 'coordinator' 
-          ? '👔 <strong>Visualização:</strong> Instrumento de Acompanhamento das Visitas Pedagógicas (Coordenadores)'
+          ? '👔 <strong>Visualização:</strong> Instrumento de Acompanhamento das Observações Pedagógicas (Coordenadores)'
           : '👩‍🏫 <strong>Visualização:</strong> Matriz de Observação da Prática Docente (Professores)';
       }
 
@@ -17105,8 +17327,8 @@ function getActiveSections(obs) {
     }
 
     function exportAllObservationsJSON() {
-      downloadAsJSON(appState.observations, "sertao_crianca_visitas.json");
-      showToast('Visitas exportadas com sucesso (JSON).');
+      downloadAsJSON(appState.observations, "sertao_crianca_observacoes.json");
+      showToast('Observações exportadas com sucesso (JSON).');
     }
 
     function triggerImportFullBase() {
@@ -17202,8 +17424,8 @@ function getActiveSections(obs) {
       const headers = ["ID", "Data", "Unidade", "Docente", "Avaliador", "Status"];
       const rows = (appState.observations || []).map(o => [o.id, `"${formatObservationDateRange(o) || o.date}"`, `"${o.schoolName}"`, `"${o.teacherName}"`, `"${o.evaluatedBy}"`, o.status]);
       const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-      downloadFile(csv, 'sertao_crianca_visitas.csv', 'text/csv');
-      showToast('Visitas exportadas com sucesso (CSV).');
+      downloadFile(csv, 'sertao_crianca_observacoes.csv', 'text/csv');
+      showToast('Observações exportadas com sucesso (CSV).');
     }
 
     function exportHistoryFilteredCSV() {
@@ -17752,7 +17974,7 @@ function getActiveSections(obs) {
               logger.log('Preservação integral dos horários anotados manualmente pelo docente (08:00 às 09:40)', true, `${obs.date} · 08:00 às 09:40`);
 
               if (obs.durationMinutes !== 100) throw new Error(`Cálculo de duração incorreto: esperado 100min, obtido ${obs.durationMinutes}min`);
-              logger.log('Cálculo da duração da visita em minutos (durationMinutes = 100)', true, `${obs.durationMinutes} min`);
+              logger.log('Cálculo da duração da observação em minutos (durationMinutes = 100)', true, `${obs.durationMinutes} min`);
 
               const archived = (appState.observations || []).find(o => o.id === obs.id);
               if (!archived) throw new Error('Observação finalizada não localizada em appState.observations');
@@ -18115,10 +18337,10 @@ function getActiveSections(obs) {
           }
         },
 
-        // --- MÓDULO 8: Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática ---
+        // --- MÓDULO 8: Cronograma de Observações, Destaque da Próxima Observação e Baixa Automática ---
         {
           id: 'agenda_cronograma',
-          name: 'Cronograma de Visitas, Destaque da Próxima Visita e Baixa Automática',
+          name: 'Cronograma de Observações, Destaque da Próxima Observação e Baixa Automática',
           run: function(logger) {
             try {
               appState.currentUserKey = 'mariana';
@@ -18135,7 +18357,7 @@ function getActiveSections(obs) {
 
               const createdSched = (appState.schedules || []).find(s => s.className === 'Infantil I - Turma A' && s.bimester === '3º Bimestre' && s.plannedTime === '09:00');
               if (!createdSched) throw new Error('Agendamento criado via modal não foi localizado em appState.schedules');
-              logger.log('Inclusão interativa de visita agendada no cronograma (#modalAddSchedule)', true);
+              logger.log('Inclusão interativa de observação agendada no cronograma (#modalAddSchedule)', true);
 
               const simObs = {
                 id: 'obs-sim-' + Date.now(),
@@ -18189,14 +18411,14 @@ function getActiveSections(obs) {
               if (!updatedSched || updatedSched.status !== 'realizado') {
                 throw new Error('Agendamento não atualizado para realizado após finalização');
               }
-              logger.log('Baixa automática no cronograma de visitas para status realizado', true);
+              logger.log('Baixa automática no cronograma de observações para status realizado', true);
 
               // Resolução relacional resiliente de observação vinculada
               const foundObs = findObservationForSchedule(updatedSched);
               if (!foundObs || foundObs.id !== simObs.id) {
                 throw new Error('findObservationForSchedule não localizou a observação correspondente');
               }
-              logger.log('Resolução relacional resiliente de observação vinculada à visita na agenda', true);
+              logger.log('Resolução relacional resiliente de observação vinculada ao agendamento no cronograma', true);
 
               // Renderização da tabela e validação do botão de devolutiva
               navigateToTab('schedule');
@@ -18205,7 +18427,7 @@ function getActiveSections(obs) {
               const tbody = document.getElementById('scheduleTableBody');
               const hasFeedbackBtn = tbody && (tbody.innerHTML.includes('viewFeedbackFromSchedule') || tbody.innerHTML.includes('Devolutiva'));
               if (!hasFeedbackBtn) {
-                throw new Error('Botão de Devolutiva não foi renderizado na tabela da Agenda para visita realizada');
+                throw new Error('Botão de Devolutiva não foi renderizado na tabela da Agenda para observação realizada');
               }
               logger.log('Renderização do botão de devolutiva na tabela da aba de Agenda', true);
 
@@ -18454,6 +18676,25 @@ function getActiveSections(obs) {
               const deskTabHomeLabel = document.getElementById('deskTabHomeLabel');
               if (!deskTabHomeLabel) throw new Error('#deskTabHomeLabel ausente');
               logger.log('Resiliência estrutural contra erros de nós de texto no cabeçalho', true);
+
+              // 5. TESTE DE CONFORMIDADE PILAR 6: HIGIENIZAÇÃO TERMINOLÓGICA MANDATÓRIA ("VISITA" ➔ "OBSERVAÇÃO")
+              const homeHeader = document.getElementById('homeScheduledHeader');
+              if (homeHeader && homeHeader.textContent.toLowerCase().includes('visita')) {
+                throw new Error('Pilar 6 Violado: #homeScheduledHeader ainda contém o termo "visita"');
+              }
+              const schedModalTitle = document.getElementById('scheduleModalTitle');
+              if (schedModalTitle && schedModalTitle.textContent.toLowerCase().includes('visita')) {
+                throw new Error('Pilar 6 Violado: #scheduleModalTitle ainda contém o termo "visita"');
+              }
+              const schedFilterStatus = document.getElementById('scheduleFilterStatus');
+              if (schedFilterStatus && schedFilterStatus.innerHTML.toLowerCase().includes('visita')) {
+                throw new Error('Pilar 6 Violado: #scheduleFilterStatus possui opções com o termo "visita"');
+              }
+              const addSchedBtn = document.querySelector('.btn-add-schedule');
+              if (addSchedBtn && addSchedBtn.textContent.toLowerCase().includes('visita')) {
+                throw new Error('Pilar 6 Violado: .btn-add-schedule ainda contém o termo "visita"');
+              }
+              logger.log('Conformidade Pilar 6: Erradicação de "visita" e validação universal de "observação" no DOM', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

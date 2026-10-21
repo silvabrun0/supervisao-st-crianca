@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.00** | 21/10/2026 16:30 | `intermediárias/aplicativo_v100_pilar_6_higienizacao_terminologica_observacao.html` | Deliberação SerTão Criança / Pilar 6 | Pilar 6: Higienização terminológica mandatória, erradicação completa do vocábulo policialesco "visita" em 100% dos botões, rotas, relatórios e telas, padronização de "observação", renomeação de exportações e teste de conformidade no DOM 🧹 |
 | **0.99** | 21/10/2026 15:45 | `intermediárias/aplicativo_v99_remocao_avisos_vinculacao_automatica_pessoal.html` | Deliberação SerTão Criança / UX Pessoal | Remoção de badges ("Auto via UE") e alertas informativos de vinculação automática na gestão de equipe & profissionais, com preservação funcional estrita da regra de negócio 🧹 |
 | **0.98** | 21/10/2026 15:30 | `intermediárias/aplicativo_v98_pilar_5_fechamento_nominal_atribuicao_parcial.html` | Deliberação SerTão Criança / Pilar 5 | Pilar 5: Fechamento nominal por professor(a) regente, avaliação nas 5 dimensões estruturantes, atribuição mandatória com justificativa em itens parciais, destaque de boas práticas consistentes e exportação segregada de PDF 👥 |
 | **0.97** | 21/10/2026 14:30 | `intermediárias/aplicativo_v97_simplificacao_modal_ocorrencias.html` | Solicitação direta / Pilar 1 | Simplificação radical do modal de ocorrências: eliminação de UE/Polo, Turma, Dimensão/Tópico e alerta azul redundante, com vinculação estrita à observação ativa 📝 |
@@ -117,6 +118,33 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.00] - Higienização Terminológica Mandatória (Pilar 6: "Visita" ➔ "Observação")
+* **Data e Horário:** 21 de Outubro de 2026 – 16:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v100_pilar_6_higienizacao_terminologica_observacao.html`
+* **Identificador no App:** 📌 Versão 1.00 (v7.79)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Erradicação Universal do Vocábulo Policialesco "Visita":**
+  Substituição completa e definitiva do termo "visita" por "observação" (e suas formas flexionadas "observações", "observar") em 100% da interface do usuário, englobando botões, modais, formulários, tabelas, relatórios em tela, espelho de impressão e toasts de notificação, em cumprimento à deliberação unânime da Reunião Técnica ST Criança (Minuto 00:19:27).
+- **Tela Inicial (Home):**
+  Cabeçalho atualizado para `🗓️ Minhas Próximas Observações Agendadas`, subtítulo harmonizado e botões de ação convertidos para `Iniciar Observação →` e `+ Agendar Nova Observação`.
+- **Cronograma de Acompanhamento (Agenda):**
+  Botão primário `+ Agendar Nova Observação`, filtros `Observações Ativas`, `Observações Arquivadas` e `Todas as Observações`, e Hero Card superior padronizado para `PRÓXIMA OBSERVAÇÃO` com botão `Iniciar Observação →`.
+- **Modais de Agendamento e Seleção Prévia:**
+  Títulos e contadores adaptados para `Planejar Observação no Cronograma` e seleção prévia informando a quantidade de observação(ões) planejada(s).
+- **Setup e Síntese Pedagógica:**
+  Campos e cartões oficiais padronizados para `Vincular a uma Observação Agendada no Cronograma:`, `Data e Horários da Observação Pedagógica`, `Síntese Final da Observação Pedagógica`, `📋 Dados da Observação & Profissional Acompanhado(a)` e botão `+ Importar Ocorrências da Observação`.
+- **Painel de Indicadores e Dossiê Individual:**
+  KPI atualizado para `Observações Concluídas`, evolução bimestral com badge `Aguardando Observação` e tabelas informando `Observações Finalizadas`.
+- **Exportações e Backups:**
+  Arquivos gerados renomeados para `sertao_crianca_observacoes.json` e `sertao_crianca_observacoes.csv`, com mensagens coerentes na UI.
+- **Auditoria Modular Contínua (100% de Cobertura):**
+  Correção da chamada residual em `catalogo_dados` (`renderTeamTable`), sincronização do Módulo 8 (`Cronograma de Observações, Destaque da Próxima Observação e Baixa Automática`) e adição de teste automatizado determinístico no Módulo 12 validando a ausência do termo "visita" no DOM ativo.
+
+---
 
 ### [Versão 0.99] - Remoção de Badges e Avisos de Vinculação Automática na Gestão de Pessoal
 * **Data e Horário:** 21 de Outubro de 2026 – 15:45:00
