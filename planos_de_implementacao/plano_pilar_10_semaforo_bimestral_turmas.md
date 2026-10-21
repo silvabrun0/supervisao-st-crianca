@@ -5,10 +5,10 @@
 > 1. Execução prévia de sincronização com o repositório remoto (`git pull origin main`).
 > 2. Preservação integral das regras de negócio existentes, dados cadastrais, blindagens RBAC, série histórica, turmas integrais em formulário único (Pilar 4), fechamento nominal e parecer em práticas consistentes (Pilar 5), higienização terminológica para "observação" (Pilar 6), KPIs decisórios com cobertura no bimestre corrente (Pilar 7), foco nos menores índices e diagnóstico de gargalos (Pilar 8), usabilidade mobile com gaveta deslizante de filtros (Pilar 9) e testes automatizados.
 > 3. Verificação de integridade pós-edição com dupla checagem de leitura em cada trecho modificado.
-> 4. Salvamento obrigatório do backup intermediário na pasta `intermediárias/` sob o nome `aplicativo_v104_pilar_10_semaforo_bimestral_turmas.html`.
-> 5. Gestão dupla de Changelog no arquivo `CHANGELOG.md` e no modal `#modalChangelog` do `index.html`, registrando a **Versão 1.04**.
+> 4. Salvamento obrigatório do backup intermediário na pasta `intermediárias/` sob o nome `aplicativo_v105_pilar_10_semaforo_bimestral_turmas.html`.
+> 5. Gestão dupla de Changelog no arquivo `CHANGELOG.md` e no modal `#modalChangelog` do `index.html`, registrando a **Versão 1.05**.
 > 6. Sincronização idêntica entre o arquivo principal `index.html` da raiz, `gestor supervisao_patos/index.html` e `gestor supervisao_patos/firebase_deploy/public/index.html`.
-> 7. Checagem pré-push (`git fetch origin main`), commit semântico (`feat: implementar pilar 10 - quadro de controle bimestral e semaforo de prazos por turma (v1.04)`), push para `origin main` e deploy automático no GitHub Pages.
+> 7. Checagem pré-push (`git fetch origin main`), commit semântico (`feat: implementar pilar 10 - quadro de controle bimestral e semaforo de prazos por turma (v1.05)`), push para `origin main` e deploy automático no GitHub Pages.
 > 8. Execução pós-deploy obrigatória do algoritmo de auditoria (`python3 audit_platform.py --silent-on-success`) com comunicação estrita a falhas.
 
 ---
@@ -98,7 +98,7 @@ gestor supervisao_patos/
 ├── audit_platform.py                                                                           # Motor de auditoria modular da plataforma
 ├── CHANGELOG.md                                                                                # Histórico oficial de versões
 ├── docs/documento_insights_supervisao_pedagogica_20261020.md                                   # Atualização de status do Pilar 10
-└── intermediárias/aplicativo_v104_pilar_10_semaforo_bimestral_turmas.html                     # Backup intermediário da Versão 1.04
+└── intermediárias/aplicativo_v105_pilar_10_semaforo_bimestral_turmas.html                     # Backup intermediário da Versão 1.05
 ```
 
 ### 2.2 Mapeamento por Módulo Funcional
@@ -111,7 +111,7 @@ gestor supervisao_patos/
 | **Sub-aba Longitudinal** | Contêiner `#indicatorsSectionLongitudinal` | Linhas ~16255 a 16460 | Substituir a listagem legada pela exibição primária do Quadro de Controle Bimestral de Turmas (Semáforo), incorporando o alternador Turmas vs. Docentes |
 | **Engine de Testes do Browser** | Módulo 10: `indicadores_decisao` em `runFullPlatformAudit()` | Linhas ~19580 a 19610 | Inserir asserções estritas do Pilar 10: renderização do Semáforo, validação determinística de Verde/Vermelho/Cinza, filtros e atalhos rápidos |
 | **Script CLI de Auditoria** | Catálogo `MODULE_CATALOG['indicadores_decisao']` em `audit_platform.py` | Linha 32 | Atualizar a descrição oficial do Módulo 10 para refletir os Pilares 7, 8 e 10 |
-| **Changelog Duplo** | `CHANGELOG.md` e modal `#modalChangelog` em `index.html` | Topo do log e linhas ~4245 | Registrar a entrega da Versão 1.04 com detalhamento completo das melhorias |
+| **Changelog Duplo** | `CHANGELOG.md` e modal `#modalChangelog` em `index.html` | Topo do log e linhas ~4245 | Registrar a entrega da Versão 1.05 com detalhamento completo das melhorias |
 
 ---
 
@@ -1144,21 +1144,21 @@ No **Card 2** (*Cobertura no Bimestre Corrente*) e no **Card 3** (*Meta do Ciclo
 
 ---
 
-### BLOCO 5: Gestão Dupla do Changelog (Versão 1.04)
+### BLOCO 5: Gestão Dupla do Changelog (Versão 1.05)
 
 #### 5.1 Em `index.html` (Modal `#modalChangelog` e botão `.btn-changelog`):
 1. Atualizar o botão de versão no cabeçalho:
    ```html
    <button class="btn-changelog" onclick="openChangelogModal()" title="Ver novidades e histórico de atualizações">
-     📌 Versão 1.04
+     📌 Versão 1.05
    </button>
    ```
-2. Adicionar o novo bloco da Versão 1.04 no topo da lista dentro de `#modalChangelog`:
+2. Adicionar o novo bloco da Versão 1.05 no topo da lista dentro de `#modalChangelog`:
    ```html
-      <!-- VERSÃO 1.04 - PILAR 10: QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE PRAZOS POR TURMA) -->
+      <!-- VERSÃO 1.05 - PILAR 10: QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE PRAZOS POR TURMA) -->
       <div style="margin-bottom:20px; border-left:3px solid #16A34A; padding-left:14px; background:#F0FDF4; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
         <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:14px; font-weight:800; color:#166534;">Versão 1.04 · v7.83 (Oficial)</span>
+          <span style="font-size:14px; font-weight:800; color:#166534;">Versão 1.05 · v7.84 (Oficial)</span>
           <span style="font-size:11px; background:#DCFCE7; color:#166534; padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
         </div>
         <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
@@ -1178,9 +1178,9 @@ No **Card 2** (*Cobertura no Bimestre Corrente*) e no **Card 3** (*Meta do Ciclo
 #### 5.2 Em `CHANGELOG.md`:
 Adicionar na tabela do Sumário Executivo:
 ```markdown
-| **1.04** | 21/10/2026 19:30 | `intermediárias/aplicativo_v104_pilar_10_semaforo_bimestral_turmas.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Quadro de Controle Bimestral matricial organizado por TURMA, Semáforo de Prazos Canônico (🟢 Verde Concluída, ⚪ Cinza No Prazo, 🔴 Vermelho Atrasada), micro-cards decisórios, filtros rápidos, atalhos de agendamento com 1 toque e cards adaptativos mobile 🚦 |
+| **1.05** | 21/10/2026 19:30 | `intermediárias/aplicativo_v105_pilar_10_semaforo_bimestral_turmas.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Quadro de Controle Bimestral matricial organizado por TURMA, Semáforo de Prazos Canônico (🟢 Verde Concluída, ⚪ Cinza No Prazo, 🔴 Vermelho Atrasada), micro-cards decisórios, filtros rápidos, atalhos de agendamento com 1 toque e cards adaptativos mobile 🚦 |
 ```
-E criar a seção detalhada da Versão 1.04 com Inclusões, Modificações e Exclusões.
+E criar a seção detalhada da Versão 1.05 com Inclusões, Modificações e Exclusões.
 
 ---
 
@@ -1192,7 +1192,7 @@ Atualizar a seção do **PILAR 10** para:
 ### PILAR 10: Quadro de Controle Bimestral (Semáforo de Prazos Verde / Cinza / Vermelho)
 > **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
 > **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_10_semaforo_bimestral_turmas.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_10_semaforo_bimestral_turmas.md)  
-> **Versão Alvo de Entrega:** `1.04` | **Backup Intermediário:** `intermediárias/aplicativo_v104_pilar_10_semaforo_bimestral_turmas.html`
+> **Versão Alvo de Entrega:** `1.05` | **Backup Intermediário:** `intermediárias/aplicativo_v105_pilar_10_semaforo_bimestral_turmas.html`
 
 
 * **Diretriz Aprovada (00:28:59):**  
@@ -1325,12 +1325,12 @@ Inserir logo após a validação da aba Longitudinal (por volta da linha ~19600)
 - [ ] Atualizar a renderização da sub-aba Longitudinal em `renderIndicatorsScreen()` incorporando o Semáforo e o alternador de visão.
 - [ ] Adicionar os atalhos de deep-linking nos Cards 2 e 3 do Grid de KPIs.
 - [ ] Atualizar o Módulo 10 na engine modular de testes do `index.html` e em `audit_platform.py`.
-- [ ] Atualizar o Changelog duplo (Versão `1.04` no `CHANGELOG.md` e no `#modalChangelog` do `index.html`).
+- [ ] Atualizar o Changelog duplo (Versão `1.05` no `CHANGELOG.md` e no `#modalChangelog` do `index.html`).
 - [ ] Atualizar o status do Pilar 10 no arquivo `docs/documento_insights_supervisao_pedagogica_20261020.md`.
 - [ ] Aplicar dupla checagem lendo os trechos editados.
-- [ ] Salvar cópia em `intermediárias/aplicativo_v104_pilar_10_semaforo_bimestral_turmas.html`.
+- [ ] Salvar cópia em `intermediárias/aplicativo_v105_pilar_10_semaforo_bimestral_turmas.html`.
 - [ ] Sincronizar os arquivos espelhados (`gestor supervisao_patos/index.html` e `gestor supervisao_patos/firebase_deploy/public/index.html`).
 - [ ] Executar checagem de concorrência (`git fetch origin main`).
-- [ ] Criar commit semântico: `feat: implementar pilar 10 - quadro de controle bimestral e semaforo de prazos por turma (v1.04)`.
+- [ ] Criar commit semântico: `feat: implementar pilar 10 - quadro de controle bimestral e semaforo de prazos por turma (v1.05)`.
 - [ ] Enviar com `git push origin main` (deploy automático no GitHub Pages).
 - [ ] Executar `python3 audit_platform.py --silent-on-success` e reportar estritamente se houverem falhas.
