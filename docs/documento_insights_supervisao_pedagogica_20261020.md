@@ -60,10 +60,11 @@ flowchart TD
         P6["PILAR 6: Higienização 'Visita' ➔ 'Observação'"]
         P7["PILAR 7: Extinção de Visitas Auditadas e N/A"]
         P8["PILAR 8: Foco nos Menores Índices (Gargalos)"]
-        P9["PILAR 9: Barra de Filtros Fixa (Sticky)"]
+        P9["PILAR 9: Usabilidade Mobile: Botão Pop-up de Filtros\n(Liberação do Viewport e Retomada Rápida)"]
         P10["PILAR 10: Semáforo Bimestral (Verde/Cinza/Vermelho)"]
         P11["PILAR 11: Pop-ups ℹ️ de Rubricas no Mobile"]
         P13["PILAR 13: Gestão de Ocorrências e Padrão MEC"]
+        P15["PILAR 15: Transição Sistêmica da Atribuição à TURMA\n(Agenda, Histórico, Painel & Séries Longitudinais)"]
     end
 ```
 
@@ -178,6 +179,10 @@ flowchart TD
 ---
 
 ### PILAR 5: Fechamento Nominal com Parecer em Práticas Consistentes e Atribuição Mandatória em Itens Parciais
+> **STATUS DO PILAR: 🏗️ PLANO EXECUTIVO DETALHADO (PRONTO PARA EXECUÇÃO - ETAPA 2)**  
+> **Documento Oficial Mestre de Execução:** [`./planos_de_implementacao/plano_pilar_5_fechamento_nominal_e_atribuicao_parcial.md`](file:///Users/bruno/Desktop/gestor%20supervisao_patos/planos_de_implementacao/plano_pilar_5_fechamento_nominal_e_atribuicao_parcial.md)  
+> **Versão Alvo de Entrega:** `0.98` | **Backup Intermediário:** `intermediárias/aplicativo_v98_pilar_5_fechamento_nominal_atribuicao_parcial.html`
+
 * **Fundamentação Pedagógica (Carolina Machado, 01:13:16) & Alinhamento Operacional:**  
   Para garantir que os professores recebam feedback individualizado e evitar o desincentivo de quem conduz bem a sala, o formulário da turma fecha com blocos nominais e traz rastreabilidade direta no preenchimento dos critérios da matriz.  
   Carolina Machado enfatizou que **o nível Consistente também deve ter campo de anotação descritiva**, documentando a boa prática pedagógica para fins de replicação e fornecendo dados ao Núcleo de EI sobre o padrão avaliativo da coordenação.
@@ -205,7 +210,7 @@ flowchart TD
 * **Diretriz Aprovada:**  
   - O card `Visitas Auditadas` é removido.
   - O card `Itens Válidos / N.A.` é removido.
-  - O grid superior de 4 colunas é reorganizado com métricas 100% orientadas à ação e intervenção.
+  - O grid superior de 4 colunas é reorganizado com métricas 100% orientadas à ação e intervenção, com destaque para a **Cobertura de Turmas** (% de turmas da unidade/polo com observação concluída no bimestre corrente).
 
 ---
 
@@ -216,17 +221,29 @@ flowchart TD
 
 ---
 
-### PILAR 9: Usabilidade e Ergonomia: Barra de Filtros Fixa (`position: sticky`)
-* **Diretriz Aprovada:**  
-  Fixação da barra de filtros e sub-abas durante a rolagem vertical (`position: sticky; top: 60px; z-index: 90`), mantendo a seleção de UE, turma e bimestre sempre acessível na navegação longa do afunilamento.
+### PILAR 9: Usabilidade e Design Mobile: Botão Pop-up de Filtros (Liberação do Viewport e Retomada Instantânea)
+* **Diagnóstico da Evolução do Design (Superação da Barra Sticky):**  
+  A ideia inicial previa "travar a aba de filtros" (`position: sticky`) no topo da tela. No entanto, a análise ergonômica voltada estritamente para o uso no **celular** revelou que fixar a barra de filtros inteira (com seletores de UE, Turma, Bimestre e sub-abas) consome entre 25% e 40% da altura útil do visor, comprimindo o espaço de leitura das rubricas e forçando a coordenadora a enxergar critérios e réguas por uma fresta minúscula.
+* **Nova Lógica Ergonômica Mobile-First (Gatilho Pop-up):**
+  1. **Liberação Integral do Viewport:** Os filtros não ficam mais colados de forma intrusiva no topo da tela durante a rolagem no celular. Eles rolam naturalmente junto com o fluxo da página, deixando 100% da tela livre para visualização das dimensões e réguas comparativas.
+  2. **Botão Pop-up de Retomada (Filtros sob Demanda):**  
+     - Durante a navegação no celular, exibe-se um gatilho compacto e ergonômico posicionado na zona de alcance natural do polegar (ex: pill button flutuante `🔘 Filtros (Turma · Bimestre)` ou chip de status no cabeçalho).
+     - O botão exibe um badge resumido de uma linha informando o contexto ativo (ex: `📍 Infantil I - Turma A · 2º Bim`), mantendo a coordenadora sempre orientada sem roubar espaço.
+  3. **Modal / Gaveta Deslizante (Pop-up de Filtros):**  
+     - Ao tocar no botão, abre-se uma folha deslizante (Bottom Sheet / Modal Pop-up) suave contendo todos os seletores organizados verticalmente:
+       - Unidade Escolar (com trava automática para a escola da coordenadora).
+       - Turma da Educação Infantil (com indicação de jornada e docentes vinculados).
+       - Bimestre de referência.
+       - Botão de aplicação rápida (`"Aplicar e Fechar"`).
+     - Ao confirmar, o pop-up fecha e a tela recalcula o afunilamento imediatamente, combinando máxima velocidade de filtragem com área de leitura limpa e espaçosa.
 
 ---
 
 ### PILAR 10: Quadro de Controle Bimestral (Semáforo de Prazos Verde / Cinza / Vermelho)
 * **Diretriz Aprovada (00:28:59):**  
-  Painel visual para o acompanhamento do ciclo das 4 observações:
-  - 🟢 **Verde:** Observação realizada e concluída.
-  - ⚪ **Cinza:** Bimestre em andamento (dentro do prazo regulamentar).
+  Painel visual matricial para o acompanhamento do ciclo das 4 observações anuais **organizado por TURMA**:
+  - 🟢 **Verde:** Observação da turma realizada e concluída no bimestre.
+  - ⚪ **Cinza:** Bimestre em andamento (dentro do prazo regulamentar de 2 meses).
   - 🔴 **Vermelho:** Bimestre expirado sem envio de observação para a turma (alerta de atraso).
 
 ---
@@ -243,9 +260,9 @@ flowchart TD
 
 ---
 
-### PILAR 13: Gestão de Ocorrências Críticas e Padrão MEC de Nomenclatura
+### PILAR 13: Gestão de Ocorrências Críticas Vinculadas à Turma e Padrão MEC
 * **Diretriz Aprovada (00:56:18 e 02:40:57):**  
-  - **Ocorrências Críticas:** Bloco com marcação de status **"Conversado"** e arquivamento com rastreabilidade da observação.
+  - **Ocorrências de Campo Vinculadas à Turma:** As ocorrências são atribuídas primariamente à Turma ativa em observação, com campo contextual para indicar qual docente regente esteve envolvido no fato (apenas quando couber conduta individual). Conta com bloco de gestão para marcação de status **"Conversado"** e arquivamento com rastreabilidade da observação.
   - **Padronização MEC:** Uso rigoroso de **"Turma em Tempo Parcial"** (Matutino/Vespertino) e **"Turma em Tempo Integral"**, abolindo o termo ambíguo "regular".
 
 ---
@@ -265,6 +282,22 @@ flowchart TD
   - **Princípio Rígido da Single Source of Truth (SSOT):**
     - Toda e qualquer edição cadastral (seja de turmas, docentes ou coordenações) é gravada diretamente na base única compartilhada (`appState` e repositório central), sincronizando instantaneamente referências relacionais.
     - Nenhuma alteração gera bases paralelas ou desconectadas: a integridade de turmas, séries históricas e relatórios permanece unificada e reativa em tempo real.
+
+---
+
+### PILAR 15: Transição Sistêmica da Lógica de Atribuição: A TURMA como Eixo Central em Todo o Ecossistema
+* **Diretriz Conceitual e Arquitetural Unificada:**  
+  A mudança da lógica de atribuição — vinculando à **TURMA** e não ao **professor** — transcende o formulário de rubricas (Pilar 1 e 5) e consolida-se como a regra estruturante de todos os módulos da plataforma:
+  1. **No Cronograma / Agenda (`#screenSchedule`):**  
+     O agendamento da observação é planejado e atribuído diretamente à **TURMA** (ex: *Infantil I - Turma A*), carregando automaticamente os docentes regentes titulares vinculados àquele turno.
+  2. **No Histórico de Observações (`#screenHistory`):**  
+     A listagem, filtros e exportações CSV organizam-se primariamente pela **Turma** e pelo período bimestral, informando a equipe docente regente como atributo relacional da aplicação.
+  3. **No Painel de Indicadores & Dossiê Longitudinal (`#screenIndicators`):**  
+     O seletor primário de análise individual passa a ser a **Turma / Sala de Referência** (substituindo a antiga filtragem exclusiva por docente). A série longitudinal de 4 bimestres acompanha a evolução contínua das crianças daquela turma, imune a trocas pontuais de escala, faltas ou licenças de docentes.
+  4. **Nas Ocorrências de Campo (`#modalQualitativeNote`):**  
+     A ocorrência é atrelada à Turma sob observação, permitindo apontar o docente específico apenas para efeito de intervenção pedagógica individualizada.
+  5. **Dossiê Individual Docente como Visão Derivada:**  
+     O professor continua tendo a sua ficha de devolutiva (Pilar 5), mas ela passa a ser uma visão derivada que consolida as avaliações das turmas em que atuou, sem fragmentar a base de dados escolar.
 
 ---
 
@@ -302,7 +335,7 @@ Na sub-aba **"Afunilamento por Dimensão"**, cada nível hierárquico apresenta 
   3. Renomeação do rótulo institucional de *"Equipe Técnica"* para **"Coordenadora do Núcleo de EI"** (`#roleBoxTecnico`, cadastros e cabeçalhos).
   4. Higienização terminológica completa de *"visita"* para *"observação"*.
   5. Remoção dos cards de *Visitas Auditadas* e *Itens Válidos/NA*, substituindo pelos novos KPIs decisórios.
-  6. Travamento CSS `position: sticky` na barra de filtros.
+  6. Usabilidade Mobile (Pilar 9): Implementação do botão pop-up / gaveta deslizante de filtros no celular, liberando 100% da altura útil do viewport e permitindo retomada instantânea de Unidade, Turma e Bimestre com 1 toque.
 
 ### 🔹 FRENTE 2: Coleta por Turma em 2 Etapas e Gestão Descentralizada (Estrutural)
 * **Escopo da Entrega:**
@@ -315,3 +348,4 @@ Na sub-aba **"Afunilamento por Dimensão"**, cada nível hierárquico apresenta 
   4. Quadro Semáforo Bimestral (Verde/Cinza/Vermelho).
   5. Pop-ups informativos `ℹ️` nas rubricas no mobile.
   6. Adequação formal da nomenclatura MEC (Tempo Parcial vs. Tempo Integral) e coleta de diversidade.
+  7. Transição sistêmica da atribuição à Turma no Painel de Indicadores (filtro primário por Turma/Sala e evolução longitudinal da turma) e no Histórico (Pilar 15).

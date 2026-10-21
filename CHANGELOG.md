@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **0.98** | 21/10/2026 15:30 | `intermediárias/aplicativo_v98_pilar_5_fechamento_nominal_atribuicao_parcial.html` | Deliberação SerTão Criança / Pilar 5 | Pilar 5: Fechamento nominal por professor(a) regente, avaliação nas 5 dimensões estruturantes, atribuição mandatória com justificativa em itens parciais, destaque de boas práticas consistentes e exportação segregada de PDF 👥 |
 | **0.97** | 21/10/2026 14:30 | `intermediárias/aplicativo_v97_simplificacao_modal_ocorrencias.html` | Solicitação direta / Pilar 1 | Simplificação radical do modal de ocorrências: eliminação de UE/Polo, Turma, Dimensão/Tópico e alerta azul redundante, com vinculação estrita à observação ativa 📝 |
 | **0.96** | 21/10/2026 14:00 | `intermediárias/aplicativo_v96_remocao_avisos_orientacao_setup_pilar4.html` | Solicitação direta / Ajuste Fino Pilar 4 | Otimização visual da tela de setup: remoção da caixa informativa de unidade de análise e supressão de aviso textual no card de docentes regentes 🧹 |
 | **0.95** | 20/10/2026 17:55 | `intermediárias/aplicativo_v95_auditoria_interativa_comportamental_end_to_end.html` | Solicitação direta / Simulação Comportamental Real | Reestruturação completa do motor de testes com simulação interativa de ponta a ponta (login, modais, selects e botões) 🤖 |
@@ -115,6 +116,33 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 0.98] - Pilar 5: Fechamento Nominal com Parecer em Práticas Consistentes, Atribuição Mandatória Parcial e Devolutiva Individual Segregada
+* **Data e Horário:** 21 de Outubro de 2026 – 15:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v98_pilar_5_fechamento_nominal_atribuicao_parcial.html`
+* **Identificador no App:** 📌 Versão 0.98 (v7.77)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Atribuição Mandatória em Itens Parciais:**
+  Ao pontuar qualquer critério da matriz de rubricas como `"Parcial"`, o sistema expande dinamicamente no card do item o container `#partial-attribution-box-[id]`, exigindo seleção ativa do(a) docente regente responsável e justificativa textual com pelo menos 5 caracteres.
+- **Incentivo e Registro de Práticas Consistentes:**
+  Critérios marcados como `"Consistente"` recebem o badge de incentivo `✨ Prática Consistente · Evidência de Boa Prática` e orientam o registro de boas práticas para subsídio formativo e replicação na rede municipal de Patos.
+- **Motor de Pendências em Tempo Real (`getObservationPendencies`):**
+  Identifica itens parciais incompletos (sem docente ou justificativa < 5 caracteres) como pendências críticas impeditivas de finalização.
+- **Blocos Finais Nominais por Professor(a) Regente na Síntese (`#screenSynthesis`):**
+  Nova seção `"4. Avaliação Nominal e Devolutiva por Professor(a) Regente"` exibindo cards individuais com avaliação sintetizada nas 5 dimensões canônicas (`Consistente`, `Parcial`, `Não Realizado`), consolidação automática de critérios parciais atribuídos ao docente e parecer formativo individual.
+- **Validação Mandatória na Finalização (`finalizeObservation`):**
+  Exige a avaliação das 5 dimensões e parecer descritivo de cada docente regente titular da turma antes de permitir o fechamento em modo somente leitura.
+- **Exportação Parametrizada de PDF Segregado (`#modalExportPdfOptions`):**
+  Modal de escolha entre o *Relatório Geral Integrado da Turma* e a *Ficha Individual Formativa de Devolutiva Pedagógica* de cada professor(a) regente.
+- **Template de Impressão Segregada:**
+  Injeção de `#teacherIndividualDevolutivaPrintSection` para geração de PDF formal de 1 a 2 páginas por professor com notas, itens parciais, parecer e campos de assinatura formal do supervisor e do docente.
+- **Auditoria Automatizada Completa:**
+  Expansão do algoritmo de auditoria para 75 asserções determinísticas nos 12 módulos canônicos com 100% de aprovação.
+
+---
 
 ### [Versão 0.97] - Simplificação do Modal de Ocorrências de Campo e Vinculação Estrita à Observação Ativa (Pilar 1)
 * **Data e Horário:** 21 de Outubro de 2026 – 14:30:00

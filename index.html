@@ -1168,6 +1168,97 @@
         font-weight: 700;
         color: #1E293B;
       }
+
+      /* PILAR 5: Isolamento de Impressão para Ficha Individual de Devolutiva Pedagógica */
+      body.printing-teacher-devolutiva .navbar,
+      body.printing-teacher-devolutiva .mobile-tabbar,
+      body.printing-teacher-devolutiva .main-wrapper > section,
+      body.printing-teacher-devolutiva .modal-backdrop,
+      body.printing-teacher-devolutiva #dimBottomBar,
+      body.printing-teacher-devolutiva #fabActiveObsContainer,
+      body.printing-teacher-devolutiva .btn,
+      body.printing-teacher-devolutiva footer {
+        display: none !important;
+      }
+      body.printing-teacher-devolutiva #teacherIndividualDevolutivaPrintSection {
+        display: block !important;
+      }
+    }
+
+    /* PILAR 5: Estilos de Atribuição Mandatória, Boas Práticas e Blocos Nominais */
+    .partial-attribution-box {
+      margin-top: 10px;
+      padding: 12px 14px;
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-left: 5px solid #D97706;
+      border-radius: 8px;
+    }
+    .badge-good-practice {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .teacher-synthesis-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .teacher-chip-select {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid #CBD5E1;
+      background: #FFFFFF;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+    .teacher-chip-select.selected {
+      background: #EFF6FF;
+      border-color: #3B82F6;
+      color: #1D4ED8;
+      font-weight: 700;
+    }
+    .dim-pill-btn {
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 20px;
+      border: 1px solid #CBD5E1;
+      background: #FFFFFF;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .dim-pill-btn.active-cons {
+      background: #DCFCE7;
+      color: #166534;
+      border-color: #86EFAC;
+    }
+    .dim-pill-btn.active-parc {
+      background: #FEF3C7;
+      color: #B45309;
+      border-color: #FDE68A;
+    }
+    .dim-pill-btn.active-notdone {
+      background: #FEE2E2;
+      color: #991B1B;
+      border-color: #FCA5A5;
     }
   
     /* --- V6: Sub-abas e Estilos da Central de Gestão Operacional --- */
@@ -2484,7 +2575,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 0.97 (v7.76)
+          Versão 0.98 (v7.77)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3269,6 +3360,18 @@
             <!-- O JS populado em renderSynthesisScreen virá aqui -->
           </div>
 
+          <!-- PILAR 5: SEÇÃO DE FECHAMENTO NOMINAL POR PROFESSOR(A) REGENTE -->
+          <div id="synthesisTeachersSection" style="margin-top:24px; margin-bottom:20px; page-break-inside:avoid;">
+            <div style="font-size:15px; font-weight:800; color:var(--primary-dark); margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span id="synthesisTeachersSectionTitle">4. Avaliação Nominal e Devolutiva por Professor(a) Regente</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
+              Fechamento pedagógico individualizado da regência de cada docente titular da turma.
+            </div>
+            <div id="synthesisTeacherCardsContainer"></div>
+          </div>
+
           <h3 id="synthesisFeedbackTitle" style="font-size:15px; font-weight:700; color:var(--primary-dark); margin-top:20px; margin-bottom:10px;">
             5. Parecer Pedagógico e Devolutiva Formativa
           </h3>
@@ -3948,6 +4051,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 0.98 - PILAR 5: FECHAMENTO NOMINAL, PARECER EM PRÁTICAS CONSISTENTES E ATRIBUIÇÃO MANDATÓRIA PARCIAL -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 0.98 · v7.77</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Pilar 5: Fechamento Nominal com Parecer em Práticas Consistentes, Atribuição Mandatória em Itens Parciais e Devolutiva Individual Segregada:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>⚠️ <strong>Atribuição Mandatória em Itens Parciais:</strong> Ao classificar qualquer critério como 'Parcial', o sistema exige dinamicamente a vinculação ao(à)(s) docente(s) regente(s) responsável(is) e justificativa descritiva com no mínimo 5 caracteres, atuando como pendência impeditiva de envio.</li>
+          <li>✨ <strong>Incentivo Descritivo em Práticas Consistentes:</strong> Reconhecimento e destaque visual das boas práticas observadas no nível 'Consistente', incentivando o registro de evidências para replicação na rede.</li>
+          <li>👥 <strong>Blocos Finais Nominais por Professor Regente:</strong> Seção individualizada na Síntese Final com avaliação nas 5 grandes dimensões canônicas, consolidação automática dos itens parciais atribuídos ao docente e parecer pedagógico individual.</li>
+          <li>🖨️ <strong>Exportação Parametrizada de PDF Segregado:</strong> Modal de opções de impressão (#modalExportPdfOptions) oferecendo Relatório Geral Integrado da Turma ou Ficha Individual Formativa de Devolutiva por professor acompanhado, com assinaturas formais.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 0.97 - SIMPLIFICAÇÃO DO MODAL DE OCORRÊNCIAS DE CAMPO E VINCULAÇÃO ESTRITA -->
@@ -5696,6 +5816,60 @@
       </button>
     </div>
   </div>
+
+  <!-- ================= MODAL PILAR 5: SELEÇÃO DE EXPORTAÇÃO EM PDF ================= -->
+  <div id="modalExportPdfOptions" class="modal-backdrop" onclick="closeExportPdfModal()">
+    <div class="modal-panel" onclick="event.stopPropagation()" style="max-width:540px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Opções de Exportação e Impressão (PDF)
+        </div>
+        <button class="btn btn-secondary" style="padding:4px 8px;" onclick="closeExportPdfModal()">✕</button>
+      </div>
+
+      <p style="font-size:12px; color:var(--text-secondary); margin-bottom:16px; line-height:1.4;">
+        Selecione o formato desejado para a geração do relatório oficial. É possível emitir o relatório consolidado de toda a turma ou fichas individuais de devolutiva formativa para cada docente regente.
+      </p>
+
+      <!-- Opção 1: Relatório Completo da Turma -->
+      <div style="background:#F8FAFC; border:1px solid #CBD5E1; border-radius:10px; padding:14px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+          <div>
+            <div style="font-size:14px; font-weight:800; color:var(--text-primary); margin-bottom:3px;">
+              📄 Relatório Geral Integrado da Turma
+            </div>
+            <div style="font-size:11px; color:var(--text-secondary); line-height:1.4;">
+              Documento completo com a matriz integral de rubricas, ocorrências, fotos, parecer coletivo e blocos nominais de todos os docentes regentes.
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="printIntegratedClassReport()" style="white-space:nowrap; font-weight:700;">
+            🖨️ Imprimir Turma
+          </button>
+        </div>
+      </div>
+
+      <!-- Opção 2: Fichas Formativas Individuais por Docente -->
+      <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:10px; padding:14px; margin-bottom:14px;">
+        <div style="font-size:14px; font-weight:800; color:#1E40AF; margin-bottom:3px;">
+          👤 Ficha Formativa Individual do(a) Docente (Devolutiva Segregada)
+        </div>
+        <div style="font-size:11px; color:#3B82F6; margin-bottom:12px; line-height:1.4;">
+          Instrumento exclusivo com as notas das 5 dimensões do professor, itens parciais detalhados, parecer individual e campo formal de assinatura.
+        </div>
+        <div id="modalExportPdfTeachersList" style="display:flex; flex-direction:column; gap:8px;">
+          <!-- Botões dos docentes injetados via openExportPdfModal() -->
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; margin-top:10px;">
+        <button class="btn btn-secondary" onclick="closeExportPdfModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container Oculto em Tela para Impressão da Ficha Individual de Devolutiva Pedagógica (Pilar 5) -->
+  <div id="teacherIndividualDevolutivaPrintSection" class="print-only-block" style="display:none;"></div>
 
   <!-- ================= MODAL: SELECIONAR VISITA AGENDADA ANTES DE INICIAR ================= -->
   <div id="modalSelectScheduledObs" class="modal-backdrop" onclick="closeSelectScheduledObsModal()">
@@ -8704,8 +8878,26 @@ function getActiveSections(obs) {
         responses: {},
         criterionComments: {},
         photos: {},
-        linkedNotes: []
+        linkedNotes: [],
+        partialAttributions: {},
+        teacherSynthesis: {}
       };
+
+      // Inicializa os nós individuais dos docentes da turma em teacherSynthesis
+      if (newObs.evaluatedType === 'turma' && Array.isArray(teachersList)) {
+        teachersList.forEach(tName => {
+          newObs.teacherSynthesis[tName] = {
+            dimensions: {
+              estrategias: null,
+              gestao_grupo: null,
+              mediacao_individual: null,
+              respeito_integridade: null,
+              gestao_cuidados: null
+            },
+            feedback: ''
+          };
+        });
+      }
 
       appState.observations.unshift(newObs);
       appState.currentObs = newObs;
@@ -8762,6 +8954,27 @@ function getActiveSections(obs) {
                 criterionId: crit.id,
                 criterionText: crit.text
               });
+            } else if (val === 'partial' && current.evaluatedType === 'turma') {
+              // PILAR 5: Validação mandatória de Itens Parciais (Docente + Justificativa >= 5 chars)
+              const attr = (current.partialAttributions && current.partialAttributions[crit.id]) || null;
+              const hasTeachers = attr && Array.isArray(attr.teachers) && attr.teachers.length > 0;
+              const hasJustification = attr && typeof attr.justification === 'string' && attr.justification.trim().length >= 5;
+
+              if (!hasTeachers) {
+                pendencies.push({
+                  dimensionIndex: sIdx,
+                  dimensionTitle: sec.title,
+                  criterionId: crit.id,
+                  criterionText: `${crit.text} (Item Parcial requer seleção do(a) docente responsável)`
+                });
+              } else if (!hasJustification) {
+                pendencies.push({
+                  dimensionIndex: sIdx,
+                  dimensionTitle: sec.title,
+                  criterionId: crit.id,
+                  criterionText: `${crit.text} (Item Parcial requer justificativa descritiva com mínimo de 5 caracteres)`
+                });
+              }
             }
           });
         });
@@ -9197,6 +9410,64 @@ function getActiveSections(obs) {
             </button>
           </div>
 
+          ${(resp === 'partial' && obsInstance.evaluatedType === 'turma') ? `
+            <!-- PILAR 5: ATRIBUIÇÃO MANDATÓRIA (ITEM PARCIAL) -->
+            <div id="partial-attribution-box-${crit.id}" class="partial-attribution-box">
+              <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
+                <span style="font-size:14px;">⚠️</span>
+                <span style="font-size:12px; font-weight:800; color:#B45309; text-transform:uppercase;">
+                  Atribuição Mandatória (Item Parcial)
+                </span>
+              </div>
+              <p style="font-size:11px; color:#92400E; margin-bottom:10px; line-height:1.4;">
+                Indique o(a) docente regente responsável por esta prática e justifique a pontuação parcial com evidências objetivas.
+              </p>
+
+              <div style="margin-bottom:10px;">
+                <label style="font-size:11px; font-weight:700; color:#78350F; display:block; margin-bottom:6px;">
+                  Docente(s) Regente(s) Responsável(is):
+                </label>
+                <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                  ${(() => {
+                    const teachers = (obsInstance.teachers && obsInstance.teachers.length > 0) 
+                      ? obsInstance.teachers 
+                      : (obsInstance.teacherName ? [obsInstance.teacherName] : []);
+                    const currentAttr = (obsInstance.partialAttributions && obsInstance.partialAttributions[crit.id]) || { teachers: [], justification: '' };
+                    const selectedTeachers = currentAttr.teachers || [];
+                    const isSingle = teachers.length === 1;
+
+                    return teachers.map(tName => {
+                      const isChecked = isSingle || selectedTeachers.includes(tName);
+                      return `
+                        <label class="teacher-chip-select ${isChecked ? 'selected' : ''}">
+                          <input type="checkbox" 
+                                 value="${tName}" 
+                                 ${isChecked ? 'checked' : ''} 
+                                 ${(isSingle || appState.isReadOnly) ? 'disabled' : ''} 
+                                 onchange="setCriterionPartialTeacher('${crit.id}', '${tName}', this.checked)"
+                                 style="cursor:pointer;">
+                          <span>${tName}</span>
+                          ${isSingle ? '<span style="font-size:9px; background:#FEF3C7; padding:1px 4px; border-radius:4px; margin-left:4px;">Único Regente</span>' : ''}
+                        </label>
+                      `;
+                    }).join('');
+                  })()}
+                </div>
+              </div>
+
+              <div>
+                <label style="font-size:11px; font-weight:700; color:#78350F; display:block; margin-bottom:4px;">
+                  Justificativa da Pontuação Parcial (Mínimo de 5 caracteres):
+                </label>
+                <textarea class="form-textarea" 
+                          style="min-height:64px; background:#FFFFFF; border-color:#FDE68A; font-size:12px;"
+                          placeholder="${appState.isReadOnly ? 'Sem justificativa.' : 'Descreva a fragilidade ou aspecto parcial observado nesta prática...'}"
+                          oninput="setCriterionPartialJustification('${crit.id}', this.value)"
+                          ${appState.isReadOnly ? 'disabled' : ''}>${((obsInstance.partialAttributions && obsInstance.partialAttributions[crit.id] && obsInstance.partialAttributions[crit.id].justification) || '')}</textarea>
+              </div>
+            </div>
+          ` : ''}
+
           <div class="crit-evidence-container">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">
@@ -9208,6 +9479,12 @@ function getActiveSections(obs) {
                 </button>
               ` : ''}
             </div>
+
+            ${(resp === 'consistent' && obsInstance.evaluatedType === 'turma') ? `
+              <div style="margin-top:8px;">
+                <span class="badge-good-practice">✨ Prática Consistente · Evidência de Boa Prática</span>
+              </div>
+            ` : ''}
 
             <div class="photo-evidence-bar" id="photo-box-${crit.id}">
         `;
@@ -9340,8 +9617,79 @@ function getActiveSections(obs) {
     function setResponse(critId, val) {
       if (appState.isReadOnly || !appState.currentObs) return;
       appState.currentObs.responses[critId] = val;
+
+      // PILAR 5: Se for pontuado como 'partial', inicializa ou limpa partialAttributions
+      if (!appState.currentObs.partialAttributions) appState.currentObs.partialAttributions = {};
+      if (val === 'partial') {
+        if (!appState.currentObs.partialAttributions[critId]) {
+          const teachers = (appState.currentObs.teachers && appState.currentObs.teachers.length > 0)
+            ? appState.currentObs.teachers
+            : (appState.currentObs.teacherName ? [appState.currentObs.teacherName] : []);
+          appState.currentObs.partialAttributions[critId] = {
+            teachers: teachers.length === 1 ? [teachers[0]] : [],
+            justification: ''
+          };
+        }
+      } else {
+        // Se mudou de parcial para outra nota, remove a atribuição parcial
+        delete appState.currentObs.partialAttributions[critId];
+      }
+
       saveState();
       renderActiveObservation(true);
+    }
+
+    function updateActiveObsHeaderValidationUI() {
+      const obs = appState.currentObs;
+      if (!obs) return;
+      const pendencies = getObservationPendencies(obs);
+      const valBanner = document.getElementById('activeObsValidationBanner');
+      if (valBanner) {
+        if (pendencies.length > 0 && !appState.isReadOnly) {
+          valBanner.classList.add('visible');
+          valBanner.style.display = 'flex';
+          const titleEl = document.getElementById('validationAlertTitle');
+          const descEl = document.getElementById('validationAlertDesc');
+          if (titleEl) titleEl.innerText = `${pendencies.length} pergunta(s) pendente(s) no formulário`;
+          if (descEl) descEl.innerText = `Pelo plano SerTão Criança, o preenchimento integral é obrigatório antes da finalização. Toque para ir à primeira pendência.`;
+        } else {
+          valBanner.classList.remove('visible');
+          valBanner.style.display = 'none';
+        }
+      }
+    }
+
+    // PILAR 5: Manipulação Reativa de Atribuição a Docente em Itens Parciais
+    function setCriterionPartialTeacher(critId, teacherName, isChecked) {
+      if (appState.isReadOnly || !appState.currentObs) return;
+      if (!appState.currentObs.partialAttributions) appState.currentObs.partialAttributions = {};
+      if (!appState.currentObs.partialAttributions[critId]) {
+        appState.currentObs.partialAttributions[critId] = { teachers: [], justification: '' };
+      }
+
+      let teachers = appState.currentObs.partialAttributions[critId].teachers || [];
+      if (isChecked) {
+        if (!teachers.includes(teacherName)) teachers.push(teacherName);
+      } else {
+        teachers = teachers.filter(t => t !== teacherName);
+      }
+      appState.currentObs.partialAttributions[critId].teachers = teachers;
+      saveState();
+      // Atualiza o banner de validação e contador de pendências sem perder foco
+      updateActiveObsHeaderValidationUI();
+    }
+
+    // PILAR 5: Manipulação Reativa da Justificativa Descritiva em Itens Parciais
+    function setCriterionPartialJustification(critId, text) {
+      if (appState.isReadOnly || !appState.currentObs) return;
+      if (!appState.currentObs.partialAttributions) appState.currentObs.partialAttributions = {};
+      if (!appState.currentObs.partialAttributions[critId]) {
+        appState.currentObs.partialAttributions[critId] = { teachers: [], justification: '' };
+      }
+      appState.currentObs.partialAttributions[critId].justification = text;
+      saveState();
+      // Atualiza o banner de validação e contador de pendências sem perder foco
+      updateActiveObsHeaderValidationUI();
     }
 
     function setComment(critId, val) {
@@ -9861,6 +10209,187 @@ function getActiveSections(obs) {
         });
       }
 
+      // ==========================================
+      // PILAR 5: RENDERIZAÇÃO DOS BLOCOS NOMINAIS POR PROFESSOR REGENTE NA SÍNTESE
+      // ==========================================
+      const synthTeachersSection = document.getElementById('synthesisTeachersSection');
+      const synthTeachersCardsContainer = document.getElementById('synthesisTeacherCardsContainer');
+      const synthTeachersSectionTitle = document.getElementById('synthesisTeachersSectionTitle');
+
+      if (synthTeachersSection && synthTeachersCardsContainer) {
+        if (obs.evaluatedType !== 'turma') {
+          synthTeachersSection.style.display = 'none';
+        } else {
+          synthTeachersSection.style.display = 'block';
+          if (synthTeachersSectionTitle) {
+            synthTeachersSectionTitle.innerText = '4. Avaliação Nominal e Devolutiva por Professor(a) Regente';
+          }
+          synthTeachersCardsContainer.innerHTML = '';
+
+          const teachers = (obs.teachers && obs.teachers.length > 0)
+            ? obs.teachers
+            : (obs.teacherName ? [obs.teacherName] : []);
+
+          if (!obs.teacherSynthesis) obs.teacherSynthesis = {};
+
+          teachers.forEach((tName, tIdx) => {
+            if (!obs.teacherSynthesis[tName]) {
+              obs.teacherSynthesis[tName] = {
+                dimensions: {
+                  estrategias: null,
+                  gestao_grupo: null,
+                  mediacao_individual: null,
+                  respeito_integridade: null,
+                  gestao_cuidados: null
+                },
+                feedback: ''
+              };
+            }
+            const tData = obs.teacherSynthesis[tName];
+            const tDims = tData.dimensions || {};
+
+            // Mapeia critérios com nota parcial atribuídos a esta docente
+            const assignedPartialItems = [];
+            const responses = obs.responses || {};
+            const attributions = obs.partialAttributions || {};
+            const sections = getActiveSections(obs);
+
+            Object.keys(responses).forEach(critId => {
+              if (responses[critId] === 'partial') {
+                const attr = attributions[critId];
+                if (attr && Array.isArray(attr.teachers) && attr.teachers.includes(tName)) {
+                  // Localiza texto do critério
+                  let critObj = null;
+                  sections.forEach(s => s.subSections.forEach(sub => sub.criteria.forEach(c => {
+                    if (c.id === critId) critObj = c;
+                  })));
+                  assignedPartialItems.push({
+                    id: critId,
+                    text: critObj ? critObj.text : `Critério ${critId}`,
+                    justification: attr.justification || 'Sem justificativa registrada.'
+                  });
+                }
+              }
+            });
+
+            const card = document.createElement('div');
+            card.className = 'teacher-synthesis-card';
+            card.id = `teacher-synthesis-card-${tIdx}`;
+
+            const dimLabels = [
+              { key: 'estrategias', title: '1. Estratégias Didáticas' },
+              { key: 'gestao_grupo', title: '2. Gestão do Grupo e Ambiente' },
+              { key: 'mediacao_individual', title: '3. Mediação Individualizada' },
+              { key: 'respeito_integridade', title: '4. Respeito, Diversidade e Proteção' },
+              { key: 'gestao_cuidados', title: '5. Gestão dos Cuidados e Autonomia' }
+            ];
+
+            let cardHtml = `
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid #E2E8F0;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="width:36px; height:36px; border-radius:18px; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px;">
+                    ${tName.split(' ').map(n=>n[0]).slice(0,2).join('')}
+                  </div>
+                  <div>
+                    <div style="font-size:15px; font-weight:800; color:var(--text-primary);">${tName}</div>
+                    <div style="font-size:11px; color:var(--text-secondary);">Docente Regente Titular</div>
+                  </div>
+                </div>
+                <span class="badge" style="background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE; font-size:10px;">
+                  Devolutiva Individual
+                </span>
+              </div>
+
+              <!-- Grade das 5 Dimensões -->
+              <div style="margin-bottom:16px;">
+                <div style="font-size:12px; font-weight:800; color:var(--primary-dark); text-transform:uppercase; margin-bottom:8px;">
+                  Avaliação nas 5 Dimensões Estruturantes:
+                </div>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+            `;
+
+            dimLabels.forEach(d => {
+              const currentVal = tDims[d.key];
+              cardHtml += `
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:8px;">
+                  <span style="font-size:12px; font-weight:700; color:#334155;">${d.title}</span>
+                  <div style="display:flex; gap:6px;">
+                    <button type="button" 
+                            class="dim-pill-btn ${currentVal === 'consistent' ? 'active-cons' : ''}" 
+                            onclick="setTeacherSynthesisDimension('${tName}', '${d.key}', 'consistent')"
+                            ${appState.isReadOnly ? 'disabled' : ''}>
+                      Consistente
+                    </button>
+                    <button type="button" 
+                            class="dim-pill-btn ${currentVal === 'partial' ? 'active-parc' : ''}" 
+                            onclick="setTeacherSynthesisDimension('${tName}', '${d.key}', 'partial')"
+                            ${appState.isReadOnly ? 'disabled' : ''}>
+                      Parcial
+                    </button>
+                    <button type="button" 
+                            class="dim-pill-btn ${currentVal === 'not_done' ? 'active-notdone' : ''}" 
+                            onclick="setTeacherSynthesisDimension('${tName}', '${d.key}', 'not_done')"
+                            ${appState.isReadOnly ? 'disabled' : ''}>
+                      Não Realizado
+                    </button>
+                  </div>
+                </div>
+              `;
+            });
+
+            cardHtml += `
+                </div>
+              </div>
+
+              <!-- Rastreabilidade de Itens Parciais Atribuídos -->
+              <div style="margin-bottom:16px;">
+                <div style="font-size:12px; font-weight:800; color:#B45309; text-transform:uppercase; margin-bottom:6px;">
+                  📌 Critérios com Nota Parcial Atribuída a esta Docente (${assignedPartialItems.length}):
+                </div>
+            `;
+
+            if (assignedPartialItems.length === 0) {
+              cardHtml += `
+                <div style="font-size:11px; color:#15803D; background:#DCFCE7; border:1px solid #BBF7D0; border-radius:6px; padding:8px 12px;">
+                  ✓ Nenhum apontamento de fragilidade pontual atribuído nos critérios individuais.
+                </div>
+              `;
+            } else {
+              cardHtml += `<div style="display:flex; flex-direction:column; gap:6px;">`;
+              assignedPartialItems.forEach(item => {
+                cardHtml += `
+                  <div style="background:#FFFBEB; border:1px solid #FDE68A; border-left:4px solid #D97706; border-radius:6px; padding:8px 12px; font-size:11px;">
+                    <div style="font-weight:700; color:#92400E;">[Item ${item.id}] ${item.text}</div>
+                    <div style="color:#78350F; margin-top:2px;"><strong>Justificativa da Nota:</strong> ${item.justification}</div>
+                  </div>
+                `;
+              });
+              cardHtml += `</div>`;
+            }
+
+            cardHtml += `
+              </div>
+
+              <!-- Parecer Formativo e Combinados Individuais -->
+              <div>
+                <label style="font-size:12px; font-weight:800; color:var(--primary-dark); display:block; margin-bottom:4px;">
+                  Parecer Formativo Individual e Combinados de Desenvolvimento:
+                </label>
+                <textarea class="form-textarea" 
+                          id="teacherFeedback-${tIdx}"
+                          style="min-height:76px; font-size:12px;"
+                          placeholder="${appState.isReadOnly ? 'Sem parecer individual registrado.' : 'Pontos fortes observados, evidências de práticas consistentes e combinados de aprimoramento individual para o próximo ciclo...'}"
+                          onchange="setTeacherSynthesisFeedback('${tName}', this.value)"
+                          ${appState.isReadOnly ? 'disabled' : ''}>${tData.feedback || ''}</textarea>
+              </div>
+            `;
+
+            card.innerHTML = cardHtml;
+            synthTeachersCardsContainer.appendChild(card);
+          });
+        }
+      }
+
       // Comments
       const commArea = document.getElementById('synthesisGeneralComments');
       commArea.value = obs.comments || '';
@@ -10314,6 +10843,38 @@ function getActiveSections(obs) {
       return `${String(finalH).padStart(2, '0')}:${String(finalM).padStart(2, '0')}`;
     }
 
+    // PILAR 5: Manipulação Reativa das Dimensões no Bloco Nominal do Docente
+    function setTeacherSynthesisDimension(teacherName, dimKey, rating) {
+      if (appState.isReadOnly || !appState.currentObs) return;
+      if (!appState.currentObs.teacherSynthesis) appState.currentObs.teacherSynthesis = {};
+      if (!appState.currentObs.teacherSynthesis[teacherName]) {
+        appState.currentObs.teacherSynthesis[teacherName] = {
+          dimensions: {},
+          feedback: ''
+        };
+      }
+      if (!appState.currentObs.teacherSynthesis[teacherName].dimensions) {
+        appState.currentObs.teacherSynthesis[teacherName].dimensions = {};
+      }
+      appState.currentObs.teacherSynthesis[teacherName].dimensions[dimKey] = rating;
+      saveState();
+      renderSynthesisScreen(true);
+    }
+
+    // PILAR 5: Manipulação Reativa do Parecer Individual no Bloco Nominal do Docente
+    function setTeacherSynthesisFeedback(teacherName, feedbackText) {
+      if (appState.isReadOnly || !appState.currentObs) return;
+      if (!appState.currentObs.teacherSynthesis) appState.currentObs.teacherSynthesis = {};
+      if (!appState.currentObs.teacherSynthesis[teacherName]) {
+        appState.currentObs.teacherSynthesis[teacherName] = {
+          dimensions: {},
+          feedback: ''
+        };
+      }
+      appState.currentObs.teacherSynthesis[teacherName].feedback = feedbackText;
+      saveState();
+    }
+
     function importNotesIntoSynthesis() {
       const obs = appState.currentObs;
       if (!obs || appState.isReadOnly) return;
@@ -10472,6 +11033,51 @@ function getActiveSections(obs) {
         return;
       }
 
+      // PILAR 5: Validação mandatória dos blocos nominais de docentes regentes na observação de turma
+      if (obs.evaluatedType === 'turma') {
+        const teachers = (obs.teachers && obs.teachers.length > 0)
+          ? obs.teachers
+          : (obs.teacherName ? [obs.teacherName] : []);
+        
+        if (!obs.teacherSynthesis) obs.teacherSynthesis = {};
+
+        const dimKeys = ['estrategias', 'gestao_grupo', 'mediacao_individual', 'respeito_integridade', 'gestao_cuidados'];
+        const dimDisplayNames = {
+          estrategias: 'Estratégias Didáticas',
+          gestao_grupo: 'Gestão do Grupo',
+          mediacao_individual: 'Mediação Individualizada',
+          respeito_integridade: 'Respeito e Proteção',
+          gestao_cuidados: 'Gestão dos Cuidados'
+        };
+
+        for (let i = 0; i < teachers.length; i++) {
+          const tName = teachers[i];
+          const synth = obs.teacherSynthesis[tName] || { dimensions: {}, feedback: '' };
+          const dims = synth.dimensions || {};
+
+          for (let k = 0; k < dimKeys.length; k++) {
+            const dk = dimKeys[k];
+            if (!dims[dk]) {
+              showToast(`Ação bloqueada: Avalie a dimensão "${dimDisplayNames[dk]}" para ${tName}.`);
+              const cardEl = document.getElementById(`teacher-synthesis-card-${i}`);
+              if (cardEl) {
+                cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                cardEl.style.boxShadow = '0 0 0 3px #F59E0B';
+                setTimeout(() => cardEl.style.boxShadow = '', 2500);
+              }
+              return;
+            }
+          }
+
+          if (!synth.feedback || synth.feedback.trim().length === 0) {
+            showToast(`Ação bloqueada: Registre o parecer pedagógico formativo individual para ${tName}.`);
+            const fbEl = document.getElementById(`teacherFeedback-${i}`);
+            if (fbEl) fbEl.focus();
+            return;
+          }
+        }
+      }
+
       // Atribuição fidedigna dos dados manuais (SEM sobrescrever com hora do relógio)
       obs.status = 'finalized';
       obs.startDate = finalDate;
@@ -10509,13 +11115,264 @@ function getActiveSections(obs) {
       navigateToTab('history', 'finalized');
     }
 
+    // PILAR 5: Exportação Parametrizada de PDF Segregado
     function exportSynthesisToPdf() {
+      const obs = appState.currentObs;
+      if (!obs) return;
+
+      if (obs.evaluatedType === 'turma') {
+        openExportPdfModal();
+      } else {
+        // Observação de coordenação: dispara impressão direta padrão
+        renderSynthesisScreen(true);
+        setTimeout(() => {
+          window.print();
+        }, 100);
+      }
+    }
+
+    function openExportPdfModal() {
+      const obs = appState.currentObs;
+      if (!obs) return;
+
+      const modal = document.getElementById('modalExportPdfOptions');
+      const listContainer = document.getElementById('modalExportPdfTeachersList');
+      if (!modal || !listContainer) return;
+
+      listContainer.innerHTML = '';
+      const teachers = (obs.teachers && obs.teachers.length > 0)
+        ? obs.teachers
+        : (obs.teacherName ? [obs.teacherName] : []);
+
+      teachers.forEach(tName => {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-primary';
+        btn.style.cssText = 'width:100%; justify-content:center; padding:10px 14px; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:8px;';
+        btn.innerHTML = `🖨️ Imprimir Ficha Devolutiva: ${tName}`;
+        btn.onclick = () => {
+          closeExportPdfModal();
+          printIndividualTeacherDevolutiva(tName);
+        };
+        listContainer.appendChild(btn);
+      });
+
+      modal.classList.add('active');
+    }
+
+    function closeExportPdfModal() {
+      const modal = document.getElementById('modalExportPdfOptions');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function printIntegratedClassReport() {
+      closeExportPdfModal();
       if (appState.currentObs) {
         renderSynthesisScreen(true);
       }
       setTimeout(() => {
         window.print();
-      }, 100);
+      }, 150);
+    }
+
+    // PILAR 5: Renderização e Impressão da Ficha Formativa Individual do Docente
+    function printIndividualTeacherDevolutiva(teacherName) {
+      const obs = appState.currentObs;
+      if (!obs) return;
+
+      const printContainer = document.getElementById('teacherIndividualDevolutivaPrintSection');
+      if (!printContainer) return;
+
+      const synth = (obs.teacherSynthesis && obs.teacherSynthesis[teacherName]) || { dimensions: {}, feedback: '' };
+      const dims = synth.dimensions || {};
+
+      // Coleta critérios parciais atribuídos
+      const assignedPartialItems = [];
+      const responses = obs.responses || {};
+      const attributions = obs.partialAttributions || {};
+      const sections = getActiveSections(obs);
+
+      Object.keys(responses).forEach(critId => {
+        if (responses[critId] === 'partial') {
+          const attr = attributions[critId];
+          if (attr && Array.isArray(attr.teachers) && attr.teachers.includes(teacherName)) {
+            let critObj = null;
+            sections.forEach(s => s.subSections.forEach(sub => sub.criteria.forEach(c => {
+              if (c.id === critId) critObj = c;
+            })));
+            assignedPartialItems.push({
+              id: critId,
+              text: critObj ? critObj.text : `Critério ${critId}`,
+              justification: attr.justification || 'Sem justificativa registrada.'
+            });
+          }
+        }
+      });
+
+      const dimDisplayList = [
+        { key: 'estrategias', title: 'Estratégias Didáticas' },
+        { key: 'gestao_grupo', title: 'Gestão do Grupo e Ambiente' },
+        { key: 'mediacao_individual', title: 'Mediação Individualizada' },
+        { key: 'respeito_integridade', title: 'Respeito, Diversidade e Proteção à Integridade' },
+        { key: 'gestao_cuidados', title: 'Gestão dos Cuidados e Promoção da Autonomia' }
+      ];
+
+      const formatDimRating = (val) => {
+        if (val === 'consistent') return '<strong style="color:#166534; background:#DCFCE7; padding:2px 8px; border-radius:4px;">Consistente</strong>';
+        if (val === 'partial') return '<strong style="color:#B45309; background:#FEF3C7; padding:2px 8px; border-radius:4px;">Parcial</strong>';
+        if (val === 'not_done') return '<strong style="color:#991B1B; background:#FEE2E2; padding:2px 8px; border-radius:4px;">Não Realizado</strong>';
+        return '<span style="color:#64748B;">Não Avaliado</span>';
+      };
+
+      const todayStr = new Date().toLocaleDateString('pt-BR');
+      const obsDateFormatted = formatObservationDateRange(obs) || formatDateBR(obs.date || getTodayDateString());
+
+      let html = `
+        <div style="font-family:inherit; padding:15px; color:#1E293B;">
+          <!-- Cabeçalho Oficial Institucional -->
+          <div style="border-bottom: 2.5px solid #004C99; padding-bottom: 12px; margin-bottom: 16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:16pt; font-weight:800; color:#004C99; text-transform:uppercase; letter-spacing:0.5px;">
+                  Prefeitura Municipal de Patos · Paraíba
+                </div>
+                <div style="font-size:11pt; font-weight:700; color:#334155; margin-top:2px;">
+                  Secretaria Municipal de Educação · Programa SerTão Criança
+                </div>
+                <div style="font-size:10pt; color:#64748B; font-weight:600;">
+                  Ficha Individual de Devolutiva Pedagógica e Acompanhamento Formativo
+                </div>
+              </div>
+              <div style="text-align:right; font-size:9pt; color:#64748B;">
+                <strong>Emissão Oficial</strong><br>
+                Data: ${todayStr}
+              </div>
+            </div>
+          </div>
+
+          <!-- Dossiê do Docente e da Visita -->
+          <div style="border:1px solid #CBD5E1; border-radius:8px; padding:12px; margin-bottom:16px; background:#F8FAFC;">
+            <table style="width:100%; font-size:10pt; border-collapse:collapse;">
+              <tr>
+                <td style="padding:4px 8px; width:50%;"><strong>Docente Regente:</strong> ${teacherName}</td>
+                <td style="padding:4px 8px; width:50%;"><strong>Unidade Escolar:</strong> ${obs.schoolName || '--'}</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 8px;"><strong>Turma / Turno:</strong> ${obs.className || '--'} (${obs.classShift || 'Parcial'})</td>
+                <td style="padding:4px 8px;"><strong>Bimestre:</strong> ${obs.bimester || '--'}</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 8px;"><strong>Data da Visita:</strong> ${obsDateFormatted}</td>
+                <td style="padding:4px 8px;"><strong>Avaliador(a):</strong> ${obs.evaluatedBy || '--'}</td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Tabela de Avaliação das 5 Dimensões -->
+          <div style="margin-bottom:18px;">
+            <div style="font-size:11pt; font-weight:800; color:#004C99; text-transform:uppercase; margin-bottom:8px; border-bottom:1.5px solid #CBD5E1; padding-bottom:4px;">
+              1. Avaliação Estruturante das 5 Dimensões da Prática Docente
+            </div>
+            <table style="width:100%; border-collapse:collapse; font-size:10pt;">
+              <thead>
+                <tr style="background:#F1F5F9;">
+                  <th style="border:1px solid #CBD5E1; padding:8px 10px; text-align:left; width:70%;">Dimensão da Prática Pedagógica</th>
+                  <th style="border:1px solid #CBD5E1; padding:8px 10px; text-align:center; width:30%;">Conceito Alcançado</th>
+                </tr>
+              </thead>
+              <tbody>
+      `;
+
+      dimDisplayList.forEach(d => {
+        html += `
+          <tr>
+            <td style="border:1px solid #CBD5E1; padding:8px 10px; font-weight:600;">${d.title}</td>
+            <td style="border:1px solid #CBD5E1; padding:8px 10px; text-align:center;">${formatDimRating(dims[d.key])}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Relatório de Fragilidades Pontuais e Oportunidades (Itens Parciais Atribuídos) -->
+          <div style="margin-bottom:18px; page-break-inside:avoid;">
+            <div style="font-size:11pt; font-weight:800; color:#B45309; text-transform:uppercase; margin-bottom:8px; border-bottom:1.5px solid #FDE68A; padding-bottom:4px;">
+              2. Evidências de Oportunidades de Aprendizagem (Critérios Parciais Atribuídos)
+            </div>
+      `;
+
+      if (assignedPartialItems.length === 0) {
+        html += `
+          <div style="border:1px solid #BBF7D0; background:#DCFCE7; color:#166534; padding:10px 14px; border-radius:6px; font-size:10pt;">
+            ✓ <strong>Prática Segura:</strong> Nenhum critério individual recebeu pontuação parcial durante este ciclo de acompanhamento na turma.
+          </div>
+        `;
+      } else {
+        html += `
+          <table style="width:100%; border-collapse:collapse; font-size:9.5pt;">
+            <thead>
+              <tr style="background:#FEF3C7; color:#92400E;">
+                <th style="border:1px solid #FDE68A; padding:6px 8px; text-align:left; width:15%;">Item</th>
+                <th style="border:1px solid #FDE68A; padding:6px 8px; text-align:left; width:45%;">Critério da Matriz</th>
+                <th style="border:1px solid #FDE68A; padding:6px 8px; text-align:left; width:40%;">Evidência / Justificativa Anotada</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        assignedPartialItems.forEach(item => {
+          html += `
+            <tr>
+              <td style="border:1px solid #CBD5E1; padding:6px 8px; font-weight:700;">Item ${item.id}</td>
+              <td style="border:1px solid #CBD5E1; padding:6px 8px;">${item.text}</td>
+              <td style="border:1px solid #CBD5E1; padding:6px 8px; font-style:italic;">"${item.justification}"</td>
+            </tr>
+          `;
+        });
+        html += `
+            </tbody>
+          </table>
+        `;
+      }
+
+      html += `
+          </div>
+
+          <!-- Parecer Formativo e Combinados -->
+          <div style="margin-bottom:24px; page-break-inside:avoid;">
+            <div style="font-size:11pt; font-weight:800; color:#004C99; text-transform:uppercase; margin-bottom:8px; border-bottom:1.5px solid #CBD5E1; padding-bottom:4px;">
+              3. Parecer Pedagógico Formativo Individual e Combinados de Desenvolvimento
+            </div>
+            <div style="border:1px solid #CBD5E1; border-radius:8px; padding:12px; font-size:10pt; line-height:1.5; background:#FFFFFF; min-height:80px;">
+              ${synth.feedback ? synth.feedback.replace(/\n/g, '<br>') : '<em style="color:#64748B;">Nenhum parecer formativo individual registrado.</em>'}
+            </div>
+          </div>
+
+          <!-- Bloco Oficial de Assinaturas e Ciência -->
+          <div class="print-signatures-box" style="margin-top:35px; page-break-inside:avoid;">
+            <div class="print-signature-line">
+              <span style="font-weight:700;">${obs.evaluatedBy || 'Supervisor(a) Pedagógico(a)'}</span><br>
+              Avaliador(a) / Coordenação Pedagógica
+            </div>
+            <div class="print-signature-line">
+              <span style="font-weight:700;">${teacherName}</span><br>
+              Docente Regente Titular Acompanhada (Ciência)
+            </div>
+          </div>
+        </div>
+      `;
+
+      printContainer.innerHTML = html;
+
+      // Dispara impressão isolada via classe no body
+      document.body.classList.add('printing-teacher-devolutiva');
+      setTimeout(() => {
+        window.print();
+        setTimeout(() => {
+          document.body.classList.remove('printing-teacher-devolutiva');
+        }, 1000);
+      }, 150);
     }
 
     // --- 8. HOME & HISTORY SCREENS ---
@@ -16761,6 +17618,31 @@ function getActiveSections(obs) {
               const pendenciesAfter = getObservationPendencies(obs);
               if (pendenciesAfter.length > 0) throw new Error(`Pendências remanescentes: ${pendenciesAfter.length}`);
               logger.log('Motor de pendências em tempo real (getObservationPendencies) zerado após preenchimento', true);
+
+              // PILAR 5: Testes de Atribuição Mandatória em Item Parcial e Boas Práticas Consistentes
+              // 1. Expansão dinâmica do bloco ao marcar 'partial'
+              setResponse('1.1.2', 'partial');
+              const partialBox = document.getElementById('partial-attribution-box-1.1.2');
+              if (!partialBox) throw new Error('Container #partial-attribution-box-1.1.2 não foi renderizado ao marcar partial');
+              logger.log('Atribuição Mandatória em Item Parcial: expansão dinâmica do bloco ao marcar partial', true);
+
+              // 2. Guardião de Pendência em Item Parcial: bloqueio sem docente ou justificativa
+              const pendsBefore = getObservationPendencies(obs);
+              const hasCrit112Pending = pendsBefore.some(p => p.criterionId === '1.1.2');
+              if (!hasCrit112Pending) throw new Error('Item pontuado como parcial sem justificativa não gerou pendência impeditiva');
+              logger.log('Guardião de Pendência em Item Parcial: bloqueio sem docente ou justificativa', true);
+
+              // 3. Resolução de Pendência de Item Parcial e incentivo em Prática Consistente
+              setCriterionPartialTeacher('1.1.2', 'Ana Carolina Silva', true);
+              setCriterionPartialJustification('1.1.2', 'Utilizou apenas perguntas fechadas durante a roda de conversa.');
+              const pendsAfterAttr = getObservationPendencies(obs);
+              const stillPending = pendsAfterAttr.some(p => p.criterionId === '1.1.2');
+              if (stillPending) throw new Error('Pendência de 1.1.2 não foi resolvida após atribuir docente e justificativa');
+
+              setResponse('1.1.1', 'consistent');
+              const goodPracticeBadge = document.querySelector('#crit-card-1\\.1\\.1 .badge-good-practice');
+              if (!goodPracticeBadge) throw new Error('Badge de boa prática consistente não exibido no critério 1.1.1');
+              logger.log('Resolução de Pendência de Item Parcial e incentivo em Prática Consistente', true);
             } catch (e) {
               logger.log('Erro de execução no módulo rubricas_observacao', false, e.message);
             }
@@ -16773,6 +17655,14 @@ function getActiveSections(obs) {
           name: 'Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo de Tempo',
           run: function(logger) {
             try {
+              if (appState.currentObs && appState.currentObs.responses) {
+                // Assegura que nenhum critério esteja como parcial sem justificativa
+                const curSections = getActiveSections(appState.currentObs);
+                curSections.forEach(sec => (sec.subSections || []).forEach(sub => (sub.criteria || []).forEach(crit => {
+                  appState.currentObs.responses[crit.id] = 'consistent';
+                })));
+                if (appState.currentObs.partialAttributions) appState.currentObs.partialAttributions = {};
+              }
               if (!appState.currentObs) {
                 appState.currentUserKey = 'mariana';
                 const schoolClasses = getClassesForSchool('CEI Professora Maria de Lourdes');
@@ -16823,6 +17713,22 @@ function getActiveSections(obs) {
               if (dateInput) UI.type(dateInput, testDate);
               if (startInput) UI.type(startInput, '08:00');
               if (endInput) UI.type(endInput, '09:40');
+
+              // PILAR 5: Preenchimento das 5 dimensões e parecer nominal para permitir finalização de turma
+              const sampleTeachers = (obs.teachers && obs.teachers.length > 0) ? obs.teachers : ['Ana Carolina Silva', 'Juliana Roberta Rocha'];
+              if (!obs.teacherSynthesis) obs.teacherSynthesis = {};
+              sampleTeachers.forEach(tName => {
+                obs.teacherSynthesis[tName] = {
+                  dimensions: {
+                    estrategias: 'consistent',
+                    gestao_grupo: 'consistent',
+                    mediacao_individual: 'consistent',
+                    respeito_integridade: 'consistent',
+                    gestao_cuidados: 'consistent'
+                  },
+                  feedback: `Excelente atuação pedagógica de ${tName} em sala.`
+                };
+              });
 
               finalizeObservation();
               if (obs.status !== 'finalized') throw new Error('Status não é finalized após finalizeObservation()');
@@ -16928,6 +17834,22 @@ function getActiveSections(obs) {
               const aEndEl = document.getElementById('synthesisAfternoonEndTime');
               if (aStartEl) UI.type(aStartEl, '13:30');
               if (aEndEl) UI.type(aEndEl, '16:30');
+
+              // PILAR 5: Inicialização das dimensões e parecer para as 4 docentes da turma integral
+              if (!integralObs.teacherSynthesis) integralObs.teacherSynthesis = {};
+              integralObs.teachers.forEach(tName => {
+                integralObs.teacherSynthesis[tName] = {
+                  dimensions: {
+                    estrategias: 'consistent',
+                    gestao_grupo: 'consistent',
+                    mediacao_individual: 'consistent',
+                    respeito_integridade: 'consistent',
+                    gestao_cuidados: 'consistent'
+                  },
+                  feedback: `Atuação integrada da docente ${tName} em tempo integral.`
+                };
+              });
+
               finalizeObservation();
 
               if (integralObs.status !== 'finalized') {
@@ -16937,6 +17859,80 @@ function getActiveSections(obs) {
                 throw new Error(`Duração somada esperada 390min, obtido ${integralObs.totalIntegralDurationMinutes}min`);
               }
               logger.log('Finalização de Turma Integral em Formulário Único com horários somados (Pilar 4)', true, `${integralObs.totalIntegralDurationMinutes} min acumulados (6h30)`);
+
+              // PILAR 5: Teste dos Blocos Nominais por Docente na Síntese e Validação na Finalização
+              const synthObs = {
+                id: 'obs-synth-test-' + Date.now(),
+                evaluatedType: 'turma',
+                unitOfAnalysis: 'turma',
+                className: 'Infantil I - Turma A',
+                schoolName: 'CEI Professora Maria de Lourdes',
+                bimester: '2º Bimestre',
+                teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha'],
+                teacherName: 'Ana Carolina Silva, Juliana Roberta Rocha',
+                evaluatedBy: 'Mariana Ferreira',
+                startDate: testDate,
+                date: testDate,
+                startTime: '08:00',
+                endTime: '10:00',
+                status: 'draft',
+                synthesisMaterialDimension: 2,
+                synthesisPredominant: 'Livros e materiais de desenho/pintura',
+                synthesisOrg: 'Pequenos grupos e cantos de atividades',
+                responses: {},
+                partialAttributions: {
+                  '1.1.2': {
+                    teachers: ['Ana Carolina Silva'],
+                    justification: 'Perguntas fechadas na roda.'
+                  }
+                },
+                teacherSynthesis: {}
+              };
+              const synthSections = getActiveSections(synthObs);
+              synthSections.forEach(sec => (sec.subSections || []).forEach(sub => (sub.criteria || []).forEach(crit => {
+                synthObs.responses[crit.id] = (crit.id === '1.1.2') ? 'partial' : 'consistent';
+              })));
+              appState.currentObs = synthObs;
+              appState.isReadOnly = false;
+              renderSynthesisScreen();
+
+              const teachersSec = document.getElementById('synthesisTeachersSection');
+              const cardAna = document.getElementById('teacher-synthesis-card-0');
+              const cardJuliana = document.getElementById('teacher-synthesis-card-1');
+              if (!teachersSec || teachersSec.style.display === 'none' || !cardAna || !cardJuliana) {
+                throw new Error('Blocos nominais de docentes regentes não renderizados na síntese');
+              }
+              logger.log('Renderização dos Blocos Finais Nominais por Professor Regente na Síntese', true);
+
+              // Rastreabilidade de itens parciais vinculados à Ana Carolina Silva
+              const anaPartialText = cardAna.textContent;
+              if (!anaPartialText.includes('1.1.2') || !anaPartialText.includes('Perguntas fechadas na roda.')) {
+                throw new Error('Critério parcial não vinculado corretamente ao card nominal da docente atribuída');
+              }
+              logger.log('Rastreabilidade e Vínculo Automático de Itens Parciais no Card do Docente', true);
+
+              // Validação na Finalização: bloqueio sem preenchimento completo de dimensões e parecer individual
+              finalizeObservation();
+              if (synthObs.status === 'finalized') {
+                throw new Error('Permitiu finalizar observação sem avaliar dimensões e parecer dos docentes regentes');
+              }
+
+              // Preenche dimensões e parecer para ambas
+              ['Ana Carolina Silva', 'Juliana Roberta Rocha'].forEach(t => {
+                setTeacherSynthesisDimension(t, 'estrategias', 'consistent');
+                setTeacherSynthesisDimension(t, 'gestao_grupo', 'consistent');
+                setTeacherSynthesisDimension(t, 'mediacao_individual', 'consistent');
+                setTeacherSynthesisDimension(t, 'respeito_integridade', 'consistent');
+                setTeacherSynthesisDimension(t, 'gestao_cuidados', 'consistent');
+                setTeacherSynthesisFeedback(t, `Parecer pedagógico individual de ${t}.`);
+              });
+
+              finalizeObservation();
+              if (synthObs.status !== 'finalized') {
+                throw new Error('Falha ao finalizar observação após preencher blocos nominais de docentes');
+              }
+              logger.log('Avaliação das 5 Dimensões e Parecer Individual com Validação na Finalização', true);
+
               appState.currentObs = null;
             } catch (e) {
               logger.log('Erro de execução no módulo sintese_finalizacao', false, e.message);
@@ -17148,7 +18144,17 @@ function getActiveSections(obs) {
                 synthesisMaterialDimension: 3,
                 synthesisPredominant: 'Livros e materiais',
                 synthesisOrg: 'Cantos de atividades',
-                responses: {}
+                responses: {},
+                teacherSynthesis: {
+                  'Ana Carolina Silva': {
+                    dimensions: { estrategias: 'consistent', gestao_grupo: 'consistent', mediacao_individual: 'consistent', respeito_integridade: 'consistent', gestao_cuidados: 'consistent' },
+                    feedback: 'Acompanhamento satisfatório.'
+                  },
+                  'Juliana Roberta Rocha': {
+                    dimensions: { estrategias: 'consistent', gestao_grupo: 'consistent', mediacao_individual: 'consistent', respeito_integridade: 'consistent', gestao_cuidados: 'consistent' },
+                    feedback: 'Prática alinhada.'
+                  }
+                }
               };
               const simSections = getActiveSections(simObs);
               simSections.forEach(sec => {
@@ -17341,6 +18347,53 @@ function getActiveSections(obs) {
               } else {
                 logger.log('Renderização do espelho para impressão e devolutiva pedagógica', true, 'resiliente');
               }
+
+              // PILAR 5: Testes de Modal de Exportação PDF Segregado e Ficha Devolutiva Individual
+              const testObsTurma = {
+                id: 'obs-test-print-modal',
+                evaluatedType: 'turma',
+                className: 'Infantil I - Turma A',
+                schoolName: 'CEI Professora Maria de Lourdes',
+                teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha'],
+                teacherName: 'Ana Carolina Silva, Juliana Roberta Rocha',
+                evaluatedBy: 'Mariana Ferreira',
+                date: getTodayDateString(),
+                status: 'finalized',
+                responses: { '1.1.2': 'partial' },
+                partialAttributions: {
+                  '1.1.2': { teachers: ['Ana Carolina Silva'], justification: 'Foco em perguntas fechadas.' }
+                },
+                teacherSynthesis: {
+                  'Ana Carolina Silva': {
+                    dimensions: { estrategias: 'partial', gestao_grupo: 'consistent', mediacao_individual: 'consistent', respeito_integridade: 'consistent', gestao_cuidados: 'consistent' },
+                    feedback: 'Avançar na formulação de perguntas abertas.'
+                  }
+                }
+              };
+              appState.currentObs = testObsTurma;
+              exportSynthesisToPdf();
+              const modalPdf = document.getElementById('modalExportPdfOptions');
+              if (!modalPdf || !modalPdf.classList.contains('active')) {
+                throw new Error('Modal de exportação de PDF segregado não foi aberto');
+              }
+              const listT = document.getElementById('modalExportPdfTeachersList');
+              if (!listT || !listT.textContent.includes('Ana Carolina Silva')) {
+                throw new Error('Botões nominais de docentes não renderizados no modal de exportação');
+              }
+              logger.log('Modal de Opções de Exportação em PDF Segregado (#modalExportPdfOptions)', true);
+              closeExportPdfModal();
+
+              // Geração da Ficha Formativa Individual do Docente
+              printIndividualTeacherDevolutiva('Ana Carolina Silva');
+              const printSection = document.getElementById('teacherIndividualDevolutivaPrintSection');
+              if (!printSection || !printSection.innerHTML.includes('Ana Carolina Silva') || !printSection.innerHTML.includes('Prefeitura Municipal de Patos')) {
+                throw new Error('Ficha formativa individual do docente não foi montada corretamente no DOM de impressão');
+              }
+              if (!printSection.innerHTML.includes('Foco em perguntas fechadas.')) {
+                throw new Error('Justificativa de item parcial ausente na ficha formativa individual');
+              }
+              logger.log('Geração e integridade da Ficha Formativa Individual do Docente', true);
+              appState.currentObs = null;
             } catch (e) {
               logger.log('Erro de execução no módulo backup_exportacao', false, e.message);
             }
