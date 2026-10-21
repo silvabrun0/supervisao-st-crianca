@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.04** | 21/10/2026 19:00 | `intermediárias/aplicativo_v104_correcao_autenticacao_auditoria_emulacao_e2e.html` | Solicitação direta / Correção de Auditoria & Emulação E2E | Resolução canônica de credenciais em auditoria interativa (`mariana@teste.com`), isolamento determinístico de sessão RBAC, erradicação de falsos positivos/negativos e fortalecimento da emulação comportamental no motor de testes 🛡️ |
+| **1.03** | 21/10/2026 18:30 | `intermediárias/aplicativo_v103_pilar_9_usabilidade_mobile_popup_filtros.html` | Deliberação SerTão Criança / Pilar 9 | Pilar 9: Usabilidade Mobile First com liberação total do viewport vertical no smartphone, gatilho flutuante tipo pill na zona do polegar com badge de status ativo, folha deslizante (Bottom Sheet) de filtros sob demanda e harmonização do filtro de Bimestre no Afunilamento 📱 |
 | **1.02** | 21/10/2026 18:00 | `intermediárias/aplicativo_v102_pilar_8_foco_menores_indices_gargalos.html` | Deliberação SerTão Criança / Pilar 8 | Pilar 8: Diagnóstico de Prioridades Formativas, Bloco "Foco nos Menores Índices" (Gargalos), identificação automática dos 3 pontos críticos, alternador de ordenação (Consistência vs. Desvio Rede), pautas sugeridas, deep-linking para Afunilamento e cópia de pauta 🎯 |
 | **1.01** | 21/10/2026 16:35 | `intermediárias/aplicativo_v101_pilar_7_extincao_metricas_burocraticas_kpis_decisorios.html` | Deliberação SerTão Criança / Pilar 7 | Pilar 7: Extinção dos cards burocráticos ("Observações Auditadas" e "Itens Válidos / N.A."), novo KPI em destaque de Cobertura no Bimestre Corrente, Meta do Ciclo Anual e Dimensão Prioritária (Gargalo) 🎯 |
 | **1.00** | 21/10/2026 16:30 | `intermediárias/aplicativo_v100_pilar_6_higienizacao_terminologica_observacao.html` | Deliberação SerTão Criança / Pilar 6 | Pilar 6: Higienização terminológica mandatória, erradicação completa do vocábulo policialesco "visita" em 100% dos botões, rotas, relatórios e telas, padronização de "observação", renomeação de exportações e teste de conformidade no DOM 🧹 |
@@ -120,6 +122,27 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.03] - Pilar 9: Usabilidade Mobile First (Botão Pop-up de Filtros e Liberação do Viewport)
+* **Data e Horário:** 21 de Outubro de 2026 – 18:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v103_pilar_9_usabilidade_mobile_popup_filtros.html`
+* **Identificador no App:** 📌 Versão 1.03 (v7.82)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Liberação Total do Viewport Vertical no Celular:**
+  Superação definitiva da compressão visual provocada por barras fixas (*sticky bars*), garantindo que 100% da altura do smartphone fique livre para leitura contínua das rubricas e réguas comparativas.
+- **Gatilho Flutuante Compacto no Polegar (`#btnMobileIndicatorsFilters`):**
+  Botão flutuante tipo *pill* localizado estrategicamente na base da tela (`bottom: calc(var(--tabbar-height) + 12px)`), dentro da zona natural do polegar (*thumb zone*), contendo ícone de engrenagem, rótulo formal e badge dinâmico contextual informando a configuração ativa (UE, avaliando e período).
+- **Gaveta Deslizante Tátil (Bottom Sheet Modal `#modalIndicatorsFiltersMobile`):**
+  Folha deslizante que sobe a partir da base do visor ao tocar no gatilho, apresentando alça de toque tátil, fechamento rápido (`✕`), seletores verticais para Unidade Escolar, Turma/Docente e Bimestre de Referência, além de botões para "Restaurar Padrão" e "✓ Aplicar e Fechar".
+- **Filtro de Bimestre no Afunilamento e Benchmark:**
+  Inclusão do seletor `#indicatorsBimesterFilter` tanto na barra do desktop quanto na folha móvel, permitindo filtrar o afunilamento de critérios por bimestre letivo (1º, 2º, 3º, 4º ou Ano Completo) com espelhamento transparente na média da Rede de Patos.
+- **Auditoria Automatizada Expandida (Módulo 10 e Módulo 12):**
+  Inclusão de asserções comportamentais no DOM cobrindo renderização do gatilho, abertura e fechamento da bottom sheet, sincronização bidirecional, teste de recálculo com 1º Bimestre e isolamento de rotas.
+
+---
 
 ### [Versão 1.02] - Pilar 8: Diagnóstico de Prioridades Formativas (Bloco "Foco nos Menores Índices")
 * **Data e Horário:** 21 de Outubro de 2026 – 18:00:00
