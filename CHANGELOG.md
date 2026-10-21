@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.06** | 21/10/2026 20:00 | `intermediárias/aplicativo_v106_pilar_9_mobile_fab_lupinha_filtros.html` | Solicitação direta / Refinamento Pilar 9 | Botão flutuante circular com lupinha no canto inferior direito para acesso aos filtros no celular, e ocultação total da barra desktop de filtros abaixo de "Índices para Diagnóstico" na visualização móvel 🔍 |
+| **1.05** | 21/10/2026 19:30 | `intermediárias/aplicativo_v105_remocao_pautas_prefabricadas_autonomia.html` | Solicitação direta / Autonomia Formativa da Rede | Remoção integral de pautas, caixas amarelas e diretrizes formativas pré-fabricadas no bloco de menores índices (Pilar 8), preservação da autonomia reflexiva da rede, foco em dados diagnósticos objetivos e cópia de resumo 🏛️ |
 | **1.04** | 21/10/2026 19:00 | `intermediárias/aplicativo_v104_correcao_autenticacao_auditoria_emulacao_e2e.html` | Solicitação direta / Correção de Auditoria & Emulação E2E | Resolução canônica de credenciais em auditoria interativa (`mariana@teste.com`), isolamento determinístico de sessão RBAC, erradicação de falsos positivos/negativos e fortalecimento da emulação comportamental no motor de testes 🛡️ |
 | **1.03** | 21/10/2026 18:30 | `intermediárias/aplicativo_v103_pilar_9_usabilidade_mobile_popup_filtros.html` | Deliberação SerTão Criança / Pilar 9 | Pilar 9: Usabilidade Mobile First com liberação total do viewport vertical no smartphone, gatilho flutuante tipo pill na zona do polegar com badge de status ativo, folha deslizante (Bottom Sheet) de filtros sob demanda e harmonização do filtro de Bimestre no Afunilamento 📱 |
 | **1.02** | 21/10/2026 18:00 | `intermediárias/aplicativo_v102_pilar_8_foco_menores_indices_gargalos.html` | Deliberação SerTão Criança / Pilar 8 | Pilar 8: Diagnóstico de Prioridades Formativas, Bloco "Foco nos Menores Índices" (Gargalos), identificação automática dos 3 pontos críticos, alternador de ordenação (Consistência vs. Desvio Rede), pautas sugeridas, deep-linking para Afunilamento e cópia de pauta 🎯 |
@@ -122,6 +124,27 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.05] - Remoção de Pautas Pré-fabricadas no Diagnóstico de Gargalos (Autonomia Formativa da Rede)
+* **Data e Horário:** 21 de Outubro de 2026 – 19:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v105_remocao_pautas_prefabricadas_autonomia.html`
+* **Identificador no App:** 📌 Versão 1.05 (v7.84)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Erradicação Completa de Textos Prescritivos e Pautas Pré-fabricadas:**
+  Exclusão da função `getPedagogicalActionPrompt` e remoção física da caixa amarela (`.bottleneck-prompt-box`) dos cards de gargalos do Pilar 8, garantindo que o software não imponha textos ou diretrizes formativas pré-concebidas.
+- **Autonomia Pedagógica e Reflexiva da Equipe Escolar:**
+  Preservação da soberania da coordenação pedagógica, formadoras e professoras regentes para debaterem, interpretarem os dados e elaborarem livremente suas pautas e combinados de apoio em reuniões coletivas e HTPC.
+- **Foco Estrito na Pureza dos Dados e Evidências:**
+  Os cards de menores índices apresentam estritamente os fatos observados em sala: código e redação oficial do critério, localização por Dimensão/Subdimensão, índice percentual da unidade, benchmark municipal da Rede de Patos, variação relativa ($\Delta \pm\%$) e distribuição das respostas observadas (`Consistente`, `Parcial`, `Não Realizado`).
+- **Resumo Diagnóstico na Área de Transferência (`📋 Copiar Diagnóstico`):**
+  Ajuste do recurso de cópia para gerar um relatório objetivo e conciso com os 3 critérios prioritários e perguntas reflexivas norteadoras, sem ingerência de conteúdos artificiais.
+- **Auditoria Automatizada com Teste Negativo (Módulo 10):**
+  Inclusão de asserção negativa no motor de testes do `index.html` atestando que a caixa `.bottleneck-prompt-box` não é renderizada no DOM e que `getPedagogicalActionPrompt` não existe no escopo global.
+
+---
 
 ### [Versão 1.04] - Correção da Autenticação na Auditoria Interativa, Blindagem contra Falsos Positivos e Fortalecimento E2E
 * **Data e Horário:** 21 de Outubro de 2026 – 19:00:00
