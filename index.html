@@ -2575,7 +2575,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          Versão 1.00 (v7.79)
+          📌 Versão 1.01 (v7.80)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -15226,6 +15226,7 @@ function getActiveSections(obs) {
       const totalValidResp = scopeHierarchy.totalValid;
       const totalPts = scopeHierarchy.totalPts;
       const totalNA = scopeHierarchy.totalNA;
+      const totalAvaliandos = scopedAvaliandos.length;
 
       // =========================================================================
       // PILAR 7: CÁLCULO ESTRUTURADO DOS 4 KPIS DECISÓRIOS (EXTINÇÃO DE MÉTRICAS CARTORIAIS)
@@ -18480,10 +18481,10 @@ function getActiveSections(obs) {
           }
         },
 
-        // --- MÓDULO 10: Indicadores Pedagógicos, Cobertura de Turmas (Pilar 1), KPIs e Apoio à Decisão ---
+        // --- MÓDULO 10: Indicadores Pedagógicos, Cobertura no Bimestre Corrente (Pilar 7), KPIs Decisórios e Apoio à Decisão ---
         {
           id: 'indicadores_decisao',
-          name: 'Indicadores Pedagógicos, Cobertura de Turmas (Pilar 1), KPIs e Apoio à Decisão',
+          name: 'Indicadores Pedagógicos, Cobertura no Bimestre Corrente (Pilar 7), KPIs Decisórios e Apoio à Decisão',
           run: function(logger) {
             try {
               appState.currentUserKey = 'mariana';
@@ -18493,14 +18494,42 @@ function getActiveSections(obs) {
               if (!kpiSection) throw new Error('Seção de KPIs ausente em indicadores');
               logger.log('Renderização do Painel de Indicadores e seção de KPIs', true);
 
+              // 1. PILAR 7: ASSERÇÕES NEGATIVAS ESTRITAS (EXTINÇÃO DE MÉTRICAS BUROCRÁTICAS)
+              const kpiHtml = kpiSection.innerHTML;
+              const hasOldAuditadas = kpiHtml.includes('Observações Auditadas') || kpiHtml.includes('Visitas Auditadas');
+              const hasOldValidosNA = kpiHtml.includes('Itens Válidos / N.A.') || kpiHtml.includes('Excluindo "Não se Aplica"');
+              if (hasOldAuditadas) throw new Error('Falha Pilar 7: Métrica burocrática "Auditadas" ainda presente no DOM dos KPIs');
+              if (hasOldValidosNA) throw new Error('Falha Pilar 7: Métrica burocrática "Itens Válidos / N.A." ainda presente no DOM dos KPIs');
+              logger.log('Extinção confirmada de métricas burocráticas ("Auditadas" e "Itens Válidos / N.A.")', true);
+
+              // 2. PILAR 7: RESOLUÇÃO E VALIDAÇÃO DO BIMESTRE CORRENTE
+              const currentBim = getCurrentSchoolBimester();
+              if (!currentBim || !currentBim.includes('Bimestre')) {
+                throw new Error('Falha ao resolver o bimestre escolar corrente via getCurrentSchoolBimester()');
+              }
+              logger.log(`Resolução do bimestre escolar corrente (Pilar 7) ➔ ${currentBim}`, true);
+
+              // 3. PILAR 7: VALIDAÇÃO DOS 4 NOVOS CARDS DECISÓRIOS
+              const hasConsistencyCard = kpiHtml.includes('Índice de Consistência');
+              const hasCurrentBimCoverageCard = kpiHtml.includes('Cobertura Turmas') && kpiHtml.includes(currentBim);
+              const hasAnnualCycleCard = kpiHtml.includes('Meta do Ciclo Anual');
+              const hasPriorityDimCard = kpiHtml.includes('Dimensão Prioritária');
+
+              if (!hasConsistencyCard) throw new Error('Card 1 (Índice de Consistência) ausente no grid');
+              if (!hasCurrentBimCoverageCard) throw new Error('Card 2 (Cobertura no Bimestre Corrente) ausente no grid');
+              if (!hasAnnualCycleCard) throw new Error('Card 3 (Meta do Ciclo Anual) ausente no grid');
+              if (!hasPriorityDimCard) throw new Error('Card 4 (Dimensão Prioritária) ausente no grid');
+              logger.log('Validação estrutural dos 4 novos Cards Decisórios do Grid Superior (Pilar 7)', true);
+
+              // 4. PILAR 1 & 7: CÁLCULO E AGREGAÇÃO DE TURMAS
               const indSchools = (appState.units || []).map(u => u.name);
               let totalClasses = 0;
               indSchools.forEach(uName => {
                 totalClasses += getClassesForSchool(uName).length;
               });
-              logger.log('Cálculo e agregação de turmas mapeadas para cobertura na rede (Pilar 1)', totalClasses > 0, `${totalClasses} turmas totais`);
+              logger.log('Cálculo e agregação de turmas mapeadas para cobertura na rede (Pilar 1 e 7)', totalClasses > 0, `${totalClasses} turmas totais`);
 
-              // PILAR 3: BENCHMARK AFUNILAMENTO (UE VS. REDE)
+              // 5. PILAR 3: BENCHMARK AFUNILAMENTO (UE VS. REDE)
               const sampleSections = appState.activeSectionsTeacher || DEFAULT_SECTIONS_TEACHER;
               const mockObsUE = [{
                 id: 'obs-mock-p3-1',

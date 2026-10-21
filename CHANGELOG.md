@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.01** | 21/10/2026 16:35 | `intermediárias/aplicativo_v101_pilar_7_extincao_metricas_burocraticas_kpis_decisorios.html` | Deliberação SerTão Criança / Pilar 7 | Pilar 7: Extinção dos cards burocráticos ("Observações Auditadas" e "Itens Válidos / N.A."), novo KPI em destaque de Cobertura no Bimestre Corrente, Meta do Ciclo Anual e Dimensão Prioritária (Gargalo) 🎯 |
 | **1.00** | 21/10/2026 16:30 | `intermediárias/aplicativo_v100_pilar_6_higienizacao_terminologica_observacao.html` | Deliberação SerTão Criança / Pilar 6 | Pilar 6: Higienização terminológica mandatória, erradicação completa do vocábulo policialesco "visita" em 100% dos botões, rotas, relatórios e telas, padronização de "observação", renomeação de exportações e teste de conformidade no DOM 🧹 |
 | **0.99** | 21/10/2026 15:45 | `intermediárias/aplicativo_v99_remocao_avisos_vinculacao_automatica_pessoal.html` | Deliberação SerTão Criança / UX Pessoal | Remoção de badges ("Auto via UE") e alertas informativos de vinculação automática na gestão de equipe & profissionais, com preservação funcional estrita da regra de negócio 🧹 |
 | **0.98** | 21/10/2026 15:30 | `intermediárias/aplicativo_v98_pilar_5_fechamento_nominal_atribuicao_parcial.html` | Deliberação SerTão Criança / Pilar 5 | Pilar 5: Fechamento nominal por professor(a) regente, avaliação nas 5 dimensões estruturantes, atribuição mandatória com justificativa em itens parciais, destaque de boas práticas consistentes e exportação segregada de PDF 👥 |
@@ -118,6 +119,30 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.01] - Pilar 7: Extinção de Métricas Burocráticas e Reorganização Decisória de KPIs
+* **Data e Horário:** 21 de Outubro de 2026 – 16:35:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v101_pilar_7_extincao_metricas_burocraticas_kpis_decisorios.html`
+* **Identificador no App:** 📌 Versão 1.01 (v7.80)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Extinção Definitiva de Métricas Burocráticas e Cartoriais:**
+  Remoção definitiva e completa dos cards `Observações Auditadas` (contagem bruta sem valor temporal) e `Itens Válidos / N.A.` (métrica estatística de depuração da matriz), eliminando ruídos que desviavam o foco da gestão pedagógica.
+- **Higienização Residual no Dossiê do Docente:**
+  Substituição da frase `critérios auditados na matriz` por `critérios avaliados na matriz` no card de balanço de critérios do Caso B da tela de Indicadores.
+- **Função Canônica Global `getCurrentSchoolBimester()`:**
+  Mapeamento determinístico do calendário escolar municipal de Patos/PB com base no relógio do sistema (1º Bimestre: Fev-Abr, 2º Bimestre: Mai-Jul, 3º Bimestre: Ago-Out, 4º Bimestre: Nov-Jan).
+- **Grid Superior Reorganizado em 4 KPIs Decisórios de Alto Impacto:**
+  1. *Índice de Consistência Geral:* Média ponderada formativa com semáforo qualitativo (Consistência Forte $\ge 80\%$, Atenção Necessária $60-79\%$, Alerta de Fragilidade $< 60\%$).
+  2. *Cobertura no Bimestre Corrente (Destaque Máximo):* Card com borda semântica adaptativa exibindo turmas concluídas no bimestre ativo, percentual e alerta acionável de turmas pendentes (`⚠ N turma(s) pendente(s)`).
+  3. *Meta do Ciclo Anual (Avanço Longitudinal):* Acompanhamento do progresso da meta obrigatória das 4 observações anuais por turma ($4 \times \text{Turmas}$) e quantitativo de turmas com ciclo iniciado.
+  4. *Dimensão Prioritária (Gargalo da UE/Polo):* Identificação algorítmica da Grande Dimensão com menor índice de consistência formativa e exibição do $\Delta\%$ comparativo em relação à Rede Municipal de Patos.
+- **Auditoria Modular Contínua (100% de Cobertura):**
+  Atualização do Módulo 10 (`indicadores_decisao`) com asserções negativas estritas para garantir ausência das métricas extintas e testes determinísticos dos novos 4 cards e da função `getCurrentSchoolBimester()`.
+
+---
 
 ### [Versão 1.00] - Higienização Terminológica Mandatória (Pilar 6: "Visita" ➔ "Observação")
 * **Data e Horário:** 21 de Outubro de 2026 – 16:30:00
