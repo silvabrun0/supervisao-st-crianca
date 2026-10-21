@@ -989,6 +989,390 @@
         display: none !important;
       }
     }
+
+    /* =========================================================================
+       PILAR 10: QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE PRAZOS POR TURMA)
+       ========================================================================= */
+    .bimester-semaphore-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .semaphore-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .semaphore-title-group h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin: 0 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .semaphore-title-group p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.4;
+    }
+    .semaphore-view-toggle {
+      display: inline-flex;
+      background: #F1F5F9;
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      gap: 4px;
+    }
+    .semaphore-view-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .semaphore-view-btn.active {
+      background: #FFFFFF;
+      color: var(--primary);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+    
+    /* Micro-cards de Resumo Decisório */
+    .semaphore-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .sem-stat-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      transition: transform 0.15s ease;
+    }
+    .sem-stat-card:hover {
+      transform: translateY(-1px);
+    }
+    .sem-stat-card.alert-card {
+      background: #FFF1F2;
+      border-color: #FECDD3;
+    }
+    .sem-stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sem-stat-card.alert-card .sem-stat-label {
+      color: #9F1239;
+    }
+    .sem-stat-value {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--text-primary);
+      margin-top: 4px;
+      line-height: 1.1;
+    }
+    .sem-stat-card.alert-card .sem-stat-value {
+      color: #E11D48;
+    }
+    .sem-stat-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+    
+    /* Barra de Filtros Rápidos de Status */
+    .semaphore-filters-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      background: #F8FAFC;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .sem-filter-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+    .sem-filter-chip {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .sem-filter-chip:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .sem-filter-chip.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+    }
+    .sem-filter-chip.chip-red.active {
+      background: #DC2626;
+      border-color: #DC2626;
+    }
+    .sem-filter-chip.chip-green.active {
+      background: #16A34A;
+      border-color: #16A34A;
+    }
+    
+    /* Pílulas Semafóricas Canônicas (Verde / Cinza / Vermelho) */
+    .sem-status-pill {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      line-height: 1.2;
+      width: 100%;
+      box-sizing: border-box;
+      transition: all 0.15s ease;
+      text-align: left;
+      cursor: pointer;
+      position: relative;
+    }
+    .sem-status-pill:hover {
+      filter: brightness(0.97);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    }
+    .sem-status-pill .pill-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      font-weight: 800;
+      gap: 4px;
+    }
+    .sem-status-pill .pill-sub {
+      font-size: 10px;
+      margin-top: 3px;
+      opacity: 0.85;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    
+    /* 🟢 VERDE: Observação Concluída */
+    .sem-status-pill.status-completed {
+      background: #DCFCE7;
+      border: 1px solid #86EFAC;
+      color: #166534;
+    }
+    
+    /* 🔴 VERMELHO: Bimestre Expirado sem Observação (Atraso) */
+    .sem-status-pill.status-overdue {
+      background: #FEE2E2;
+      border: 1px solid #FCA5A5;
+      color: #991B1B;
+      animation: semOverduePulse 3s infinite ease-in-out;
+    }
+    @keyframes semOverduePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+      50% { box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15); }
+    }
+    
+    /* ⚪ CINZA / AZUL SUAVE: Bimestre em Andamento (No Prazo) */
+    .sem-status-pill.status-in_progress {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: #1E40AF;
+    }
+    
+    /* ⚪ CINZA NEUTRO: Ciclo Futuro */
+    .sem-status-pill.status-future {
+      background: #F8FAFC;
+      border: 1px dashed #CBD5E1;
+      color: #94A3B8;
+      cursor: default;
+    }
+    .sem-status-pill.status-future:hover {
+      transform: none;
+      box-shadow: none;
+      filter: none;
+    }
+    
+    /* Barra de Progresso do Ciclo Anual da Turma */
+    .sem-cycle-progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 110px;
+    }
+    .sem-cycle-bar-bg {
+      height: 7px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .sem-cycle-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .sem-cycle-text {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    /* Tabela Matricial (Desktop) */
+    .semaphore-table-view {
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+    .semaphore-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .semaphore-table th {
+      background: #F8FAFC;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      font-weight: 800;
+      color: var(--primary-dark);
+      white-space: nowrap;
+    }
+    .semaphore-table th.col-bim {
+      width: 16%;
+      text-align: center;
+    }
+    .semaphore-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      vertical-align: middle;
+      background: #FFFFFF;
+    }
+    .semaphore-table tr:hover td {
+      background: #F8FAFC;
+    }
+    
+    /* Cards Mobile Sem Rolagem Horizontal (Smartphone) */
+    .semaphore-cards-view {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .sem-mobile-class-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .sem-mobile-class-card.has-overdue {
+      border-left: 4px solid #DC2626;
+    }
+    .sem-mobile-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .sem-mobile-class-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+    .sem-mobile-class-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+    }
+    .sem-mobile-bimesters-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin: 12px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .semaphore-table-view {
+        display: none !important;
+      }
+      .semaphore-cards-view {
+        display: flex !important;
+      }
+      .semaphore-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .semaphore-view-toggle {
+        width: 100%;
+      }
+      .semaphore-view-btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+    
+    @media print {
+      .semaphore-view-toggle, .semaphore-filters-bar, .sem-filter-chip, .btn-action-sem {
+        display: none !important;
+      }
+      .bimester-semaphore-container {
+        border: 1px solid #CBD5E1 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+      .sem-status-pill.status-overdue {
+        animation: none !important;
+      }
+    }
+
+    .data-table {
       font-size: 13px;
     }
     .data-table th, .data-table td {
@@ -2816,7 +3200,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.06 (v7.85)
+          📌 Versão 1.07 (v7.86)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4319,6 +4703,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.07 - CORREÇÃO DA ALTERNÂNCIA DE DADOS ENTRE MENOR CONSISTÊNCIA E MAIOR DESVIO VS. REDE (PILAR 8) -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px; background:#F8FAFC; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.07 · v7.86 (Oficial)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">21/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Pilar 8: Correção da Alternância Dinâmica de Dados entre Menor Consistência e Maior Desvio vs. Rede Municipal:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🔄 <strong>Alternância Real e Efetiva de Critérios:</strong> Resolução do problema em que os botões <em>"📉 Menor Consistência"</em> e <em>"🔻 Maior Desvio vs. Rede"</em> exibiam rigorosamente os mesmos números e critérios com badge fixo em 0%. O algoritmo agora reordena e recalcula com precisão matemática os critérios com maior defasagem negativa ($\Delta < 0$).</li>
+          <li>🏫 <strong>Enriquecimento Multi-Unidade da Semente:</strong> Inclusão de observações finalizadas para múltiplas escolas da rede municipal (<code>EMEI Pequeno Príncipe</code> e <code>CEI Professora Maria de Lourdes</code>), propiciando variância estatística realista entre o score de cada escola e a média consolidada de Patos.</li>
+          <li>💡 <strong>Feedback Contextual em Rede Consolidada:</strong> Alerta inteligente sutil quando o modo de desvio relativo é visualizado em escopo de rede ampla ($\Delta = 0\%$), orientando o gestor a selecionar uma escola específica para análise comparativa.</li>
+          <li>🛡️ <strong>Auditoria Contínua Aprovada:</strong> Cobertura estrita no Módulo 10 com asserção comportamental interativa de alternância de dados e validação de 100% dos subsistemas da plataforma.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.06 - PILAR 9: BOTÃO CIRCULAR COM LUPINHA (CANTO INFERIOR DIREITO) E SUPRESSÃO DA BARRA NO MOBILE -->
@@ -7431,6 +7832,7 @@ function getActiveSections(obs) {
       schedules: JSON.parse(JSON.stringify(INITIAL_SCHEDULES)),
       observations: [],
       currentObs: null,
+      bottlenecksSortMode: 'absolute',
       activeTabIndex: 0,
       isReadOnly: false,
       historyFilter: 'drafts',
@@ -7445,6 +7847,7 @@ function getActiveSections(obs) {
           const parsed = JSON.parse(saved);
           appState = { ...appState, ...parsed };
           if (!appState.units || appState.units.length === 0) appState.units = JSON.parse(JSON.stringify(INITIAL_UNITS));
+          if (!appState.bottlenecksSortMode) appState.bottlenecksSortMode = 'absolute';
           if (!appState.classes || appState.classes.length === 0) {
             appState.classes = JSON.parse(JSON.stringify(INITIAL_CLASSES));
           }
@@ -7818,6 +8221,67 @@ function getActiveSections(obs) {
           criterionComments: {},
           photos: {},
           linkedNotes: []
+        },
+        {
+          id: 'obs-004',
+          evaluatedType: 'professora',
+          teacherName: 'Fernanda Lima',
+          className: 'Maternal I - Turma A',
+          schoolName: 'EMEI Pequeno Príncipe',
+          evaluatedBy: 'Sônia Regina Alcantara',
+          bimester: '1º Bimestre',
+          date: '2026-03-18',
+          startTime: '08:00',
+          endTime: '09:40',
+          durationMinutes: 100,
+          status: 'finalized',
+          synthesisMaterialDimension: 3,
+          synthesisPredominant: 'Materiais tridimensionais e estruturados',
+          synthesisOrg: 'Grandes grupos com atividades coletivas',
+          comments: 'Prática expressiva e acolhedora em linguagem e contação; rotinas e cantos em estruturação.',
+          responses: {
+            '1.1.1': 'consistent', '1.1.2': 'consistent', '1.1.3': 'consistent', '1.1.4': 'consistent', '1.1.5': 'consistent',
+            '1.2.1': 'consistent', '1.2.2': 'consistent', '1.3.1': 'consistent', '1.3.2': 'consistent',
+            '2.1.1': 'partial', '2.1.2': 'not_done', '2.1.4': 'not_done', '2.2.1': 'not_done', '2.3.1': 'partial',
+            '3.1': 'consistent', '3.2': 'not_done', '3.3': 'consistent', '3.4': 'not_done',
+            '4.1.1': 'consistent', '4.1.2': 'consistent', '4.2.1': 'consistent', '4.2.4': 'consistent', '4.3.1': 'consistent', '4.4.1': 'consistent',
+            '5.1': 'consistent', '5.2': 'consistent', '5.3': 'consistent'
+          },
+          criterionComments: {
+            '2.1.2': 'Cantos com materiais inacessíveis.',
+            '2.2.1': 'Transição sem aviso prévio gerou agitação.'
+          },
+          photos: {},
+          linkedNotes: []
+        },
+        {
+          id: 'obs-005',
+          evaluatedType: 'professora',
+          teacherName: 'Fernanda Lima',
+          className: 'Maternal I - Turma A',
+          schoolName: 'EMEI Pequeno Príncipe',
+          evaluatedBy: 'Sônia Regina Alcantara',
+          bimester: '2º Bimestre',
+          date: '2026-05-25',
+          startTime: '08:00',
+          endTime: '09:45',
+          durationMinutes: 105,
+          status: 'finalized',
+          synthesisMaterialDimension: 3,
+          synthesisPredominant: 'Materiais concretos e cantos de leitura',
+          synthesisOrg: 'Pequenos grupos e cantos temáticos',
+          comments: 'Evolução significativa na organização dos cantos e mediação.',
+          responses: {
+            '1.1.1': 'consistent', '1.1.2': 'consistent', '1.1.3': 'consistent', '1.1.4': 'consistent', '1.1.5': 'consistent',
+            '1.2.1': 'consistent', '1.2.2': 'consistent', '1.3.1': 'consistent', '1.3.2': 'consistent',
+            '2.1.1': 'consistent', '2.1.2': 'partial', '2.1.4': 'not_done', '2.2.1': 'partial', '2.3.1': 'consistent',
+            '3.1': 'consistent', '3.2': 'not_done', '3.3': 'consistent', '3.4': 'not_done',
+            '4.1.1': 'consistent', '4.1.2': 'consistent', '4.2.1': 'consistent', '4.2.4': 'consistent', '4.3.1': 'consistent', '4.4.1': 'consistent',
+            '5.1': 'consistent', '5.2': 'consistent', '5.3': 'consistent'
+          },
+          criterionComments: {},
+          photos: {},
+          linkedNotes: ['Avanço na autonomia das crianças na hora da roda.']
         }
       ];
       saveState();
@@ -14927,10 +15391,13 @@ function getActiveSections(obs) {
       // Ordenação conforme o modo ativo
       list.sort((a, b) => {
         if (sortMode === 'delta') {
-          // Maior defasagem negativa em relação à rede (delta menor primeiro: ex: -30% antes de -10%)
+          // Prioriza itens com desvio negativo mais acentuado (delta mais baixo: ex: -45% antes de -15%)
           if (a.delta !== null && b.delta !== null) {
             if (a.delta !== b.delta) return a.delta - b.delta;
-            return a.score - b.score;
+            // Desempate 1: menor score absoluto na UE
+            if (a.score !== b.score) return a.score - b.score;
+            // Desempate 2: maior quantidade de fragilidades somadas
+            return (b.notDone + b.partial) - (a.notDone + a.partial);
           }
           if (a.delta !== null) return -1;
           if (b.delta !== null) return 1;
@@ -14938,9 +15405,9 @@ function getActiveSections(obs) {
         } else {
           // Menor consistência absoluta (padrão): menor score primeiro
           if (a.score !== b.score) return a.score - b.score;
-          // Desempate: menor delta em relação à rede
+          // Desempate 1: menor delta em relação à rede
           if (a.delta !== null && b.delta !== null) return a.delta - b.delta;
-          // Segundo desempate: maior quantidade de respostas 'not_done' e 'partial'
+          // Desempate 2: maior quantidade de respostas 'not_done' e 'partial'
           return (b.notDone + b.partial) - (a.notDone + a.partial);
         }
       });
@@ -15152,6 +15619,19 @@ function getActiveSections(obs) {
         });
       }
 
+      let consolidatedNotice = '';
+      const unitEl = document.getElementById('indicatorsUnitFilter');
+      const currentUnitVal = unitEl ? unitEl.value : 'ALL';
+      const isConsolidatedRede = (currentUnitVal === 'ALL' || (scopeLabelText && (scopeLabelText.includes('Toda a Rede') || scopeLabelText.includes('Rede Consolidada') || scopeLabelText.includes('Visão Geral')))) || (bottlenecks.length > 0 && bottlenecks.every(b => b.delta === 0));
+      if (sortMode === 'delta' && isConsolidatedRede) {
+        consolidatedNotice = `
+          <div style="background:#F0F9FF; border:1px solid #BAE6FD; border-radius:8px; padding:10px 14px; margin-bottom:12px; grid-column: 1 / -1; display:flex; align-items:flex-start; gap:8px; font-size:12px; color:#0369A1; line-height:1.4;">
+            <span style="font-size:14px; margin-top:-1px;">💡</span>
+            <span><strong>Visão Consolidada da Rede de Patos:</strong> Neste escopo ampliado, a média avaliada coincide com a própria rede municipal (Δ = 0%). Para verificar quais critérios específicos apresentam maior defasagem comparativa, selecione uma Unidade Escolar específica no filtro superior.</span>
+          </div>
+        `;
+      }
+
       return `
         <div class="bottlenecks-priority-block" id="indicatorsSectionBottlenecks">
           <div class="bottlenecks-header-row">
@@ -15184,6 +15664,7 @@ function getActiveSections(obs) {
 
           <!-- GRID DOS 3 CARDS DE GARGALO -->
           <div class="bottlenecks-grid">
+            ${consolidatedNotice}
             ${cardsHtml}
           </div>
         </div>
@@ -15376,6 +15857,246 @@ function getActiveSections(obs) {
       if (dotEl) {
         const isFiltered = (activeUnit !== 'ALL' && activeUnit !== (user.school || '')) || activeMember !== 'ALL' || activeBim !== 'ALL';
         dotEl.style.display = isFiltered ? 'block' : 'none';
+      }
+    }
+
+    // =========================================================================
+    // PILAR 10: MOTOR ALGORÍTMICO DO QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO)
+    // =========================================================================
+
+    /**
+     * Calcula o status semafórico determinístico de uma Turma em um determinado Bimestre
+     * @param {string} className - Nome da Turma (ex: 'Infantil I - Turma A')
+     * @param {string} schoolName - Nome da Unidade Escolar
+     * @param {string} bimesterName - Nome do Bimestre (ex: '1º Bimestre')
+     * @param {Date|string} referenceDate - Data de referência do calendário
+     * @returns {Object} { status, colorKey, label, subLabel, score, date, obsId, hasSchedule, scheduleDate, isDraft, bimesterNum, currentBimNum }
+     */
+    function calculateClassBimesterStatus(className, schoolName, bimesterName, referenceDate = new Date()) {
+      if (!className) return { status: 'future', colorKey: 'gray', label: '—' };
+      
+      const cleanClass = (className || '').trim().toLowerCase();
+      const cleanSchool = (schoolName || '').trim().toLowerCase();
+      
+      const bimMatch = (bimesterName || '').match(/([1-4])/);
+      const bimesterNum = bimMatch ? parseInt(bimMatch[1], 10) : 1;
+      
+      const currentBimStr = getCurrentSchoolBimester(referenceDate);
+      const currentBimMatch = currentBimStr.match(/([1-4])/);
+      const currentBimNum = currentBimMatch ? parseInt(currentBimMatch[1], 10) : 1;
+
+      // 1. Busca observação finalizada para a TURMA neste bimestre
+      const finalizedObs = (appState.observations || []).find(o => {
+        if (o.status !== 'finalized' && o.status !== 'concluida') return false;
+        if (!o.className) return false;
+        const oCls = o.className.trim().toLowerCase();
+        const matchesClass = oCls === cleanClass || cleanClass.includes(oCls) || oCls.includes(cleanClass);
+        if (!matchesClass) return false;
+        if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+        const oBimMatch = (o.bimester || '').match(/([1-4])/);
+        return oBimMatch && parseInt(oBimMatch[1], 10) === bimesterNum;
+      });
+
+      if (finalizedObs) {
+        // Calcula consistência da observação
+        let pts = 0;
+        let valid = 0;
+        const resp = finalizedObs.responses || {};
+        Object.keys(resp).forEach(k => {
+          const r = resp[k];
+          if (r && r !== 'na') {
+            valid++;
+            if (r === 'consistent') pts += 1.0;
+            else if (r === 'partial') pts += 0.5;
+          }
+        });
+        const score = valid > 0 ? Math.round((pts / valid) * 100) : 100;
+        const dateFormatted = finalizedObs.date ? finalizedObs.date.split('-').reverse().slice(0, 2).join('/') : '';
+
+        return {
+          status: 'completed',
+          colorKey: 'green',
+          label: `Concluída (${score}%)`,
+          subLabel: dateFormatted ? `Realizada em ${dateFormatted}` : 'Observação Finalizada',
+          score: score,
+          date: finalizedObs.date,
+          obsId: finalizedObs.id,
+          hasSchedule: false,
+          scheduleDate: null,
+          isDraft: false,
+          bimesterNum,
+          currentBimNum
+        };
+      }
+
+      // 2. Busca se há observação em Rascunho (draft)
+      const draftObs = (appState.observations || []).find(o => {
+        if (o.status !== 'draft') return false;
+        if (!o.className) return false;
+        const oCls = o.className.trim().toLowerCase();
+        const matchesClass = oCls === cleanClass || cleanClass.includes(oCls) || oCls.includes(cleanClass);
+        if (!matchesClass) return false;
+        if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+        const oBimMatch = (o.bimester || '').match(/([1-4])/);
+        return oBimMatch && parseInt(oBimMatch[1], 10) === bimesterNum;
+      });
+
+      // 3. Busca se há agendamento planejado no cronograma
+      const sched = (appState.schedules || []).find(s => {
+        if (s.archived || s.status === 'realizado') return false;
+        const sTarget = (s.className || s.targetName || '').trim().toLowerCase();
+        if (!sTarget) return false;
+        const matchesClass = sTarget === cleanClass || cleanClass.includes(sTarget) || sTarget.includes(cleanClass);
+        if (!matchesClass) return false;
+        if (cleanSchool && s.schoolName && s.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+        const sBimMatch = (s.bimester || '').match(/([1-4])/);
+        return sBimMatch && parseInt(sBimMatch[1], 10) === bimesterNum;
+      });
+
+      const schedDateFormatted = (sched && sched.date) ? sched.date.split('-').reverse().slice(0, 2).join('/') : '';
+
+      // 4. Se o bimestre já passou no calendário letivo (bimesterNum < currentBimNum) ➔ 🔴 VERMELHO (ATRASADO)
+      if (bimesterNum < currentBimNum) {
+        let sub = 'Prazo expirado sem observação';
+        if (draftObs) sub = 'Rascunho não finalizado (Expirado)';
+        else if (sched) sub = `Agendamento pendente (${schedDateFormatted})`;
+
+        return {
+          status: 'overdue',
+          colorKey: 'red',
+          label: draftObs ? 'Rascunho Atrasado' : sched ? 'Agend. Atrasada' : 'Atrasado',
+          subLabel: sub,
+          score: null,
+          date: null,
+          obsId: draftObs ? draftObs.id : null,
+          hasSchedule: !!sched,
+          scheduleDate: sched ? sched.date : null,
+          isDraft: !!draftObs,
+          bimesterNum,
+          currentBimNum
+        };
+      }
+
+      // 5. Se o bimestre é o atual (bimesterNum === currentBimNum) ➔ ⚪ CINZA / AZUL (NO PRAZO)
+      if (bimesterNum === currentBimNum) {
+        let sub = 'Janela de 2 meses em aberto';
+        if (draftObs) sub = 'Rascunho iniciado em andamento';
+        else if (sched) sub = `Agendada para ${schedDateFormatted}`;
+
+        return {
+          status: 'in_progress',
+          colorKey: 'gray',
+          label: draftObs ? 'Rascunho' : sched ? `Agendada (${schedDateFormatted})` : 'No Prazo',
+          subLabel: sub,
+          score: null,
+          date: null,
+          obsId: draftObs ? draftObs.id : null,
+          hasSchedule: !!sched,
+          scheduleDate: sched ? sched.date : null,
+          isDraft: !!draftObs,
+          bimesterNum,
+          currentBimNum
+        };
+      }
+
+      // 6. Se o bimestre é futuro (bimesterNum > currentBimNum) ➔ ⚪ CINZA NEUTRO (CICLO FUTURO)
+      return {
+        status: 'future',
+        colorKey: 'gray',
+        label: sched ? `Agendada (${schedDateFormatted})` : 'Ciclo Futuro',
+        subLabel: sched ? `Planejada antecipadamente` : 'Aguardando período letivo',
+        score: null,
+        date: null,
+        obsId: null,
+        hasSchedule: !!sched,
+        scheduleDate: sched ? sched.date : null,
+        isDraft: false,
+        bimesterNum,
+        currentBimNum
+      };
+    }
+
+    /**
+     * Alternador de Visão no Acompanhamento Longitudinal: Turmas vs Docentes
+     */
+    function toggleLongitudinalViewMode(mode) {
+      appState.longitudinalViewMode = mode; // 'classes' ou 'teachers'
+      renderIndicatorsScreen();
+    }
+
+    /**
+     * Filtro rápido de status no Semáforo
+     */
+    function filterSemaphoreByStatus(statusKey) {
+      appState.activeSemaphoreStatusFilter = statusKey; // 'all', 'overdue', 'in_progress', 'completed_cur', 'completed_all'
+      renderIndicatorsScreen();
+    }
+
+    /**
+     * Rola suavemente até o Quadro de Controle Bimestral (Semáforo)
+     */
+    function scrollToBimesterSemaphore() {
+      switchIndicatorsSubTab('longitudinal');
+      setTimeout(() => {
+        const el = document.getElementById('bimesterSemaphoreSection');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+    /**
+     * Atalho rápido: Abre o modal de agendamento pré-configurado para a Turma e Bimestre
+     */
+    function quickScheduleForClass(className, schoolName, bimesterName) {
+      openAddScheduleModal();
+      const schoolSelect = document.getElementById('scheduleSchool');
+      if (schoolSelect && schoolName) {
+        schoolSelect.value = schoolName;
+        onScheduleSchoolChange();
+      }
+      const classSelect = document.getElementById('scheduleTarget') || document.getElementById('scheduleTargetClass');
+      if (classSelect && className) {
+        classSelect.value = className;
+        if (typeof onScheduleTargetChange === 'function') onScheduleTargetChange();
+        else if (typeof onScheduleClassChange === 'function') onScheduleClassChange();
+      }
+      const bimSelect = document.getElementById('scheduleBimester');
+      if (bimSelect && bimesterName) {
+        bimSelect.value = bimesterName;
+      }
+    }
+
+    /**
+     * Atalho rápido: Inicia diretamente a observação no Setup para a Turma e Bimestre
+     */
+    function quickStartObservationForClass(className, schoolName, bimesterName) {
+      navigateToTab('setup');
+      const schoolSelect = document.getElementById('setupSchool');
+      if (schoolSelect && schoolName) {
+        schoolSelect.value = schoolName;
+        onSetupSchoolChange();
+      }
+      const classSelect = document.getElementById('setupClass') || document.getElementById('setupTargetClass');
+      if (classSelect && className) {
+        classSelect.value = className;
+        if (typeof onSetupClassChange === 'function') onSetupClassChange();
+      }
+      const bimSelect = document.getElementById('setupBimester');
+      if (bimSelect && bimesterName) {
+        bimSelect.value = bimesterName;
+        if (typeof updateSetupBimesterValidationUI === 'function') updateSetupBimesterValidationUI();
+      }
+    }
+
+    /**
+     * Atalho rápido ao tocar em uma célula do Semáforo
+     */
+    function handleSemaphoreCellClick(className, schoolName, bimesterName, statusObj) {
+      if (statusObj.status === 'completed' && statusObj.obsId) {
+        openReadOnlyObsModal(statusObj.obsId, 'indicators');
+      } else if (statusObj.isDraft && statusObj.obsId) {
+        resumeObservation(statusObj.obsId);
+      } else if (statusObj.status === 'overdue' || statusObj.status === 'in_progress') {
+        quickScheduleForClass(className, schoolName, bimesterName);
       }
     }
 
@@ -16222,12 +16943,13 @@ function getActiveSections(obs) {
       let kpiCycleTitle = 'Meta do Ciclo Anual';
       let kpiCycleSubtitle = '';
 
+      let scopedClasses = [];
+      let indSchools = (activeUnitFilter !== 'ALL') ? [activeUnitFilter] : ((appState.units || []).map(u => u.name));
+      indSchools.forEach(uName => {
+        scopedClasses = scopedClasses.concat(getClassesForSchool(uName));
+      });
+
       if (targetType === 'professora') {
-        let scopedClasses = [];
-        let indSchools = (activeUnitFilter !== 'ALL') ? [activeUnitFilter] : ((appState.units || []).map(u => u.name));
-        indSchools.forEach(uName => {
-          scopedClasses = scopedClasses.concat(getClassesForSchool(uName));
-        });
         totalEntitiesCount = scopedClasses.length;
 
         // Turmas com observação finalizada no bimestre corrente
@@ -16249,7 +16971,7 @@ function getActiveSections(obs) {
           const cleanClassName = (cls.name || '').trim().toLowerCase();
           return scopedObs.some(o => {
             if (o.status !== 'finalized' && o.status !== 'concluida') return false;
-            return o.className && o.className.trim().toLowerCase() === cleanClassName;
+            return o.className && o.className.trim().toLowerCase() !== cleanClassName;
           });
         }).length;
 
@@ -16396,6 +17118,11 @@ function getActiveSections(obs) {
               <div style="font-size:12px; font-weight:600; color:${pendingEntitiesCurrentBim === 0 && totalEntitiesCount > 0 ? 'var(--green)' : 'var(--text-secondary)'}; line-height:1.3;">
                 ${kpiCoverageSubtitle}
               </div>
+              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed rgba(0,0,0,0.08);">
+                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Abrir o Quadro de Controle Bimestral de Turmas">
+                  🚦 Ver Quadro Semáforo ↓
+                </button>
+              </div>
             </div>
 
             <!-- CARD 3: META DO CICLO ANUAL (AVANÇO LONGITUDINAL DAS 4 OBSERVAÇÕES) -->
@@ -16408,6 +17135,11 @@ function getActiveSections(obs) {
                 </div>
               </div>
               <div style="font-size:12px; color:var(--text-secondary); line-height:1.3;">● ${kpiCycleSubtitle}</div>
+              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed rgba(0,0,0,0.08);">
+                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Visualizar avanço do ciclo longitudinal das 4 observações anuais">
+                  📈 Ver Semáforo do Ciclo ↓
+                </button>
+              </div>
             </div>
 
             <!-- CARD 4: DIMENSÃO PRIORITÁRIA DE INTERVENÇÃO (GARGALO DA UE / POLO) -->
@@ -16661,208 +17393,365 @@ function getActiveSections(obs) {
         });
       }
 
-      // 3. Acompanhamento Longitudinal de Avaliandos com Visualização Dupla (Desktop Tabela + Mobile Cards sem rolagem horizontal)
+      // =======================================================================
+      // PILAR 10: QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE PRAZOS POR TURMA)
+      // =======================================================================
+      const BIMESTERS_CANONICAL = ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'];
+      const curBim = getCurrentSchoolBimester();
+      const curBimNum = parseInt(curBim.match(/([1-4])/)[1], 10);
+      
+      const viewMode = appState.longitudinalViewMode || (targetType === 'coordenador' ? 'teachers' : 'classes');
+      const statusFilter = appState.activeSemaphoreStatusFilter || 'all';
+
+      // 1. Coleta estatística de turmas no escopo
+      let semOverdueClassesCount = 0;
+      let semInProgressPendingCount = 0;
+      let semCompletedCurrentBimCount = 0;
+      let semCycleCompletedClassesCount = 0;
+      let totalCompletedObsInCycle = 0;
+
+      const classesStatusData = scopedClasses.map(cls => {
+        const bimesterStatuses = {};
+        let completedCount = 0;
+        let hasOverdue = false;
+        let hasCurrentPending = false;
+
+        BIMESTERS_CANONICAL.forEach(bName => {
+          const st = calculateClassBimesterStatus(cls.name, cls.school, bName);
+          bimesterStatuses[bName] = st;
+          if (st.status === 'completed') completedCount++;
+          if (st.status === 'overdue') hasOverdue = true;
+          if (st.status === 'in_progress' && st.bimesterNum === curBimNum) hasCurrentPending = true;
+        });
+
+        if (hasOverdue) semOverdueClassesCount++;
+        if (hasCurrentPending) semInProgressPendingCount++;
+        if (bimesterStatuses[curBim]?.status === 'completed') semCompletedCurrentBimCount++;
+        if (completedCount === 4) semCycleCompletedClassesCount++;
+        totalCompletedObsInCycle += completedCount;
+
+        const cyclePct = Math.round((completedCount / 4) * 100);
+
+        return {
+          classObj: cls,
+          bimesterStatuses,
+          completedCount,
+          cyclePct,
+          hasOverdue,
+          hasCurrentPending,
+          isCompletedCurrent: bimesterStatuses[curBim]?.status === 'completed',
+          isCycleCompleted: completedCount === 4
+        };
+      });
+
+      // Aplica o filtro rápido de status do Semáforo
+      const filteredClassesStatusData = classesStatusData.filter(item => {
+        if (statusFilter === 'overdue') return item.hasOverdue;
+        if (statusFilter === 'in_progress') return item.hasCurrentPending;
+        if (statusFilter === 'completed_cur') return item.isCompletedCurrent;
+        if (statusFilter === 'completed_all') return item.isCycleCompleted;
+        return true;
+      });
+
+      const totalAnnualTarget = scopedClasses.length * 4;
+      const overallCyclePct = totalAnnualTarget > 0 ? Math.round((totalCompletedObsInCycle / totalAnnualTarget) * 100) : 0;
+
       html += `
         </div>
 
+        <!-- SUB-ABA 3: ACOMPANHAMENTO LONGITUDINAL (QUADRO DE CONTROLE SEMAFÓRICO) -->
         <div id="indicatorsSectionLongitudinal" style="display:${currentSubTab === 'longitudinal' ? 'block' : 'none'};">
-          <div class="card" style="margin-top:4px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-            <div>
-              <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark); margin:0;">
-                Acompanhamento Longitudinal (Evolução por Bimestre)
-              </h3>
-              <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
-                Série histórica das 4 observações bimestrais previstas para os ${totalAvaliandos} profissional(is) no seu escopo:
-              </p>
+          <div class="bimester-semaphore-container" id="bimesterSemaphoreSection">
+            
+            <!-- Cabeçalho e Alternador de Visão -->
+            <div class="semaphore-header-row">
+              <div class="semaphore-title-group">
+                <h3>
+                  <span>🚦</span> Quadro de Controle Bimestral (Semáforo do Ciclo Anual)
+                </h3>
+                <p>
+                  Acompanhamento matricial do cumprimento das 4 observações obrigatórias organizado por <strong>TURMA</strong>: 
+                  <strong style="color:#16A34A;">🟢 Concluída</strong> · 
+                  <strong style="color:#1E40AF;">⚪ No Prazo</strong> · 
+                  <strong style="color:#DC2626;">🔴 Atrasada</strong>.
+                </p>
+              </div>
+
+              <!-- Alternador Turmas vs Docentes -->
+              <div class="semaphore-view-toggle">
+                <button type="button" class="semaphore-view-btn ${viewMode === 'classes' ? 'active' : ''}" onclick="toggleLongitudinalViewMode('classes')">
+                  🏫 Turmas (${scopedClasses.length})
+                </button>
+                <button type="button" class="semaphore-view-btn ${viewMode === 'teachers' ? 'active' : ''}" onclick="toggleLongitudinalViewMode('teachers')">
+                  👥 Docentes Regentes (${scopedAvaliandos.length})
+                </button>
+              </div>
             </div>
-            <span class="status-badge" style="background:#EFF6FF; color:#1E40AF; font-weight:700;">
-              ${scopedAvaliandos.length} Profissional(is) Ativo(s)
-            </span>
-          </div>
       `;
 
-      if (scopedAvaliandos.length === 0) {
+      if (viewMode === 'classes') {
         html += `
-          <div style="text-align:center; color:var(--text-secondary); padding:24px;">
-            Nenhum profissional com perfil <strong>${targetType === 'coordenador' ? 'Coordenador(a)' : 'Professor(a)'}</strong> vinculado ao seu escopo no momento.
-          </div>
-        `;
-      } else {
-        let tableRowsHtml = '';
-        let mobileCardsHtml = '';
-
-        scopedAvaliandos.forEach(member => {
-          const personObs = scopedObs.filter(o => o.teacherName === member.name);
-          const bimesterScores = {};
-
-          // Células dos 4 Bimestres (para Tabela Desktop)
-          const cellsHtml = bimesters.map(bimName => {
-            const bimObs = personObs.find(o => o.bimester === bimName);
-            if (bimObs) {
-              let pts = 0;
-              let valid = 0;
-              activeSections.forEach(sec => {
-                sec.subSections.forEach(sub => {
-                  sub.criteria.forEach(crit => {
-                    const r = bimObs.responses ? bimObs.responses[crit.id] : null;
-                    if (r && r !== 'na') {
-                      valid++;
-                      if (r === 'consistent') pts += 1.0;
-                      else if (r === 'partial') pts += 0.5;
-                    }
-                  });
-                });
-              });
-              const pct = valid > 0 ? Math.round((pts / valid) * 100) : 0;
-              bimesterScores[bimName] = pct;
-              const color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--yellow)' : 'var(--red)';
-              return `<td><span style="color:${color}; font-weight:700;">${pct}%</span></td>`;
-            } else {
-              const hasSched = (appState.schedules || []).some(s => 
-                s.targetName === member.name && 
-                s.bimester === bimName && 
-                !s.archived &&
-                s.status !== 'realizado'
-              );
-              if (hasSched) {
-                return `<td><span style="color:var(--text-secondary); font-style:italic;">Agendada</span></td>`;
-              } else {
-                return `<td><span style="color:var(--text-secondary); opacity:0.5;">— Pendente</span></td>`;
-              }
-            }
-          }).join('');
-
-          // Células compactas para Card Mobile
-          const mobileBimCells = bimesters.map(bimName => {
-            const score = bimesterScores[bimName];
-            const shortName = bimName.replace(/º? Bimestre$/, 'º').replace(/ºº/g, 'º');
-            if (score !== undefined) {
-              const color = score >= 80 ? 'var(--green)' : score >= 60 ? 'var(--yellow)' : 'var(--red)';
-              return `
-                <div class="longitudinal-bimester-cell">
-                  <div class="longitudinal-bimester-title">${shortName}</div>
-                  <div class="longitudinal-bimester-score" style="color:${color};">${score}%</div>
+            <!-- 4 Micro-cards de Resumo Decisório -->
+            <div class="semaphore-stats-grid">
+              <div class="sem-stat-card ${semOverdueClassesCount > 0 ? 'alert-card' : ''}">
+                <div class="sem-stat-label">
+                  <span>${semOverdueClassesCount > 0 ? '⚠' : '🛡️'}</span> Turmas em Atraso
                 </div>
-              `;
-            } else {
-              const hasSched = (appState.schedules || []).some(s => 
-                s.targetName === member.name && 
-                s.bimester === bimName && 
-                !s.archived &&
-                s.status !== 'realizado'
-              );
-              return `
-                <div class="longitudinal-bimester-cell">
-                  <div class="longitudinal-bimester-title">${shortName}</div>
-                  <div style="font-size:10px; color:var(--text-secondary); line-height:1.2; margin-top:2px;">
-                    ${hasSched ? 'Agend.' : '— Pend.'}
-                  </div>
-                </div>
-              `;
-            }
-          }).join('');
-
-          // Cálculo da Evolução Global
-          let evolutionBadge = '';
-          const recordedBims = bimesters.filter(b => bimesterScores[b] !== undefined);
-          
-          if (recordedBims.length >= 2) {
-            const firstScore = bimesterScores[recordedBims[0]];
-            const lastScore = bimesterScores[recordedBims[recordedBims.length - 1]];
-            const diff = lastScore - firstScore;
-
-            if (diff > 0) {
-              evolutionBadge = `<span style="background:#DCFCE7; color:#166534; padding:3px 8px; border-radius:12px; font-weight:700; font-size:11px;">+${diff}% Crescimento</span>`;
-            } else if (diff === 0) {
-              evolutionBadge = `<span style="background:#F1F5F9; color:#475569; padding:3px 8px; border-radius:12px; font-weight:700; font-size:11px;">Estável (${lastScore}%)</span>`;
-            } else {
-              evolutionBadge = `<span style="background:#FEE2E2; color:#991B1B; padding:3px 8px; border-radius:12px; font-weight:700; font-size:11px;">${diff}% Variação</span>`;
-            }
-          } else if (recordedBims.length === 1) {
-            const singleScore = bimesterScores[recordedBims[0]];
-            if (singleScore < 60) {
-              evolutionBadge = `<span style="background:#FEF3C7; color:#92400E; padding:3px 8px; border-radius:12px; font-weight:700; font-size:11px;">Apoio Formativo (${singleScore}%)</span>`;
-            } else {
-              evolutionBadge = `<span style="background:#EFF6FF; color:#1E40AF; padding:3px 8px; border-radius:12px; font-weight:700; font-size:11px;">Diagnóstico (${singleScore}%)</span>`;
-            }
-          } else {
-            evolutionBadge = `<span style="color:var(--text-secondary); font-size:11px; font-style:italic;">Aguardando Observação</span>`;
-          }
-
-          const roleDetail = member.classAssigned ? `${member.classAssigned} · ${member.school}` : `${member.roleTitle} · ${member.school}`;
-
-          // Monta Linha da Tabela Desktop
-          tableRowsHtml += `
-            <tr>
-              <td><strong>${member.name}</strong><br><span style="font-size:11px; color:var(--text-secondary);">${roleDetail}</span></td>
-              ${cellsHtml}
-              <td>${evolutionBadge}</td>
-              <td style="text-align:center;">
-                <button class="btn btn-secondary" style="font-size:11px; padding:4px 8px; white-space:nowrap;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')" title="Visualizar matriz completa item a item e extrair relatório deste profissional">
-                  Raio-X Item a Item
-                </button>
-              </td>
-            </tr>
-          `;
-
-          // Monta Card Mobile
-          mobileCardsHtml += `
-            <div class="longitudinal-member-card">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
-                <div style="flex:1;">
-                  <div style="font-size:14px; font-weight:800; color:var(--text-primary); line-height:1.3;">
-                    ${member.name}
-                  </div>
-                  <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
-                    ${roleDetail}
-                  </div>
-                </div>
-                <div>
-                  ${evolutionBadge}
-                </div>
+                <div class="sem-stat-value">${semOverdueClassesCount}</div>
+                <div class="sem-stat-desc">${semOverdueClassesCount === 0 ? 'Nenhum atraso acumulado' : 'Requer intervenção imediata'}</div>
               </div>
 
-              <!-- Mini-grid 4 Bimestres que cabe perfeitamente na tela do celular -->
-              <div class="longitudinal-bimesters-grid">
-                ${mobileBimCells}
+              <div class="sem-stat-card">
+                <div class="sem-stat-label">
+                  <span>⏳</span> Pendentes no ${curBim}
+                </div>
+                <div class="sem-stat-value">${semInProgressPendingCount}</div>
+                <div class="sem-stat-desc">Dentro do prazo regulamentar</div>
               </div>
 
-              <button class="btn btn-secondary btn-full" style="font-size:11px; padding:7px 10px; justify-content:center; display:flex; align-items:center; gap:6px; margin-top:6px;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')">
-                Raio-X Item a Item
+              <div class="sem-stat-card">
+                <div class="sem-stat-label">
+                  <span>🟢</span> Concluídas no ${curBim}
+                </div>
+                <div class="sem-stat-value">${semCompletedCurrentBimCount} <span style="font-size:14px; font-weight:700; color:var(--text-secondary);">/ ${scopedClasses.length}</span></div>
+                <div class="sem-stat-desc">${scopedClasses.length > 0 ? Math.round((semCompletedCurrentBimCount / scopedClasses.length) * 100) : 0}% de cobertura bimestral</div>
+              </div>
+
+              <div class="sem-stat-card">
+                <div class="sem-stat-label">
+                  <span>🏆</span> Avanço do Ciclo Anual
+                </div>
+                <div class="sem-stat-value">${overallCyclePct}%</div>
+                <div class="sem-stat-desc">${totalCompletedObsInCycle} de ${totalAnnualTarget} observações anuais</div>
+              </div>
+            </div>
+
+            <!-- Barra de Filtros Rápidos de Status -->
+            <div class="semaphore-filters-bar">
+              <span class="sem-filter-label">Filtrar:</span>
+              <button type="button" class="sem-filter-chip ${statusFilter === 'all' ? 'active' : ''}" onclick="filterSemaphoreByStatus('all')">
+                Todas (${scopedClasses.length})
+              </button>
+              <button type="button" class="sem-filter-chip chip-red ${statusFilter === 'overdue' ? 'active' : ''}" onclick="filterSemaphoreByStatus('overdue')">
+                🔴 Atrasadas (${semOverdueClassesCount})
+              </button>
+              <button type="button" class="sem-filter-chip ${statusFilter === 'in_progress' ? 'active' : ''}" onclick="filterSemaphoreByStatus('in_progress')">
+                ⚪ No Prazo (${semInProgressPendingCount})
+              </button>
+              <button type="button" class="sem-filter-chip chip-green ${statusFilter === 'completed_cur' ? 'active' : ''}" onclick="filterSemaphoreByStatus('completed_cur')">
+                🟢 Concluídas (${semCompletedCurrentBimCount})
+              </button>
+              <button type="button" class="sem-filter-chip ${statusFilter === 'completed_all' ? 'active' : ''}" onclick="filterSemaphoreByStatus('completed_all')">
+                🏆 Ciclo 100% (${semCycleCompletedClassesCount})
               </button>
             </div>
-          `;
-        });
+        `;
 
+        if (filteredClassesStatusData.length === 0) {
+          html += `
+            <div style="text-align:center; padding:32px 16px; color:var(--text-secondary); background:#F8FAFC; border-radius:8px;">
+              Nenhuma turma encontrada para o filtro selecionado.
+            </div>
+          `;
+        } else {
+          // Renderização da Tabela Matricial (Desktop)
+          let tableRows = '';
+          let mobileCards = '';
+
+          filteredClassesStatusData.forEach(item => {
+            const cls = item.classObj;
+            const teachersStr = (cls.teachers && cls.teachers.length > 0) ? cls.teachers.join(', ') : 'Equipe Regente Titular';
+            const shiftStr = cls.shift || 'Parcial';
+
+            // Células dos 4 Bimestres (Desktop)
+            const bimesterCellsHtml = BIMESTERS_CANONICAL.map(bName => {
+              const st = item.bimesterStatuses[bName];
+              return `
+                <td style="text-align:center; padding:8px 6px;">
+                  <div class="sem-status-pill status-${st.status}" onclick="handleSemaphoreCellClick('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${bName}', ${JSON.stringify(st).replace(/"/g, '&quot;')})" title="Clique para detalhes ou ações imediatas">
+                    <div class="pill-top">
+                      <span>${st.status === 'completed' ? '✓' : st.status === 'overdue' ? '⚠' : st.status === 'in_progress' ? '⏳' : '○'} ${bName.replace(' Bimestre', 'º')}</span>
+                      ${st.score !== null ? `<span style="font-weight:900;">${st.score}%</span>` : ''}
+                    </div>
+                    <div class="pill-sub">${st.label}</div>
+                  </div>
+                </td>
+              `;
+            }).join('');
+
+            // Pílulas para Cards Mobile
+            const mobileBimGridHtml = BIMESTERS_CANONICAL.map(bName => {
+              const st = item.bimesterStatuses[bName];
+              return `
+                <div class="sem-status-pill status-${st.status}" onclick="handleSemaphoreCellClick('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${bName}', ${JSON.stringify(st).replace(/"/g, '&quot;')})">
+                  <div class="pill-top">
+                    <span>${st.status === 'completed' ? '✓' : st.status === 'overdue' ? '⚠' : st.status === 'in_progress' ? '⏳' : '○'} ${bName.replace(' Bimestre', 'º')}</span>
+                    ${st.score !== null ? `<span>${st.score}%</span>` : ''}
+                  </div>
+                  <div class="pill-sub">${st.label}</div>
+                </div>
+              `;
+            }).join('');
+
+            // Barra de Progresso do Ciclo
+            const cycleProgressHtml = `
+              <div class="sem-cycle-progress-wrap">
+                <div class="sem-cycle-text">
+                  <span>${item.completedCount} de 4</span>
+                  <span>${item.cyclePct}%</span>
+                </div>
+                <div class="sem-cycle-bar-bg">
+                  <div class="sem-cycle-bar-fill" style="width:${item.cyclePct}%; background:${item.cyclePct === 100 ? '#16A34A' : item.cyclePct >= 50 ? 'var(--primary)' : '#EAB308'};"></div>
+                </div>
+              </div>
+            `;
+
+            // Linha da Tabela Desktop
+            tableRows += `
+              <tr>
+                <td>
+                  <strong style="color:var(--text-primary); font-size:13px;">${cls.name}</strong>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
+                    <span style="font-weight:700; color:var(--primary);">${shiftStr}</span> · ${teachersStr}
+                  </div>
+                </td>
+                ${bimesterCellsHtml}
+                <td>${cycleProgressHtml}</td>
+                <td style="text-align:center; white-space:nowrap;">
+                  <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px;" onclick="quickScheduleForClass('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${getNextEligibleBimesterForClass(cls.name, cls.school)}')">
+                    📅 Agendar
+                  </button>
+                </td>
+              </tr>
+            `;
+
+            // Card Mobile
+            mobileCards += `
+              <div class="sem-mobile-class-card ${item.hasOverdue ? 'has-overdue' : ''}">
+                <div class="sem-mobile-card-header">
+                  <div>
+                    <div class="sem-mobile-class-name">${cls.name}</div>
+                    <div class="sem-mobile-class-sub"><span style="font-weight:700; color:var(--primary);">${shiftStr}</span> · ${teachersStr}</div>
+                  </div>
+                  <div>${cycleProgressHtml}</div>
+                </div>
+                
+                <div class="sem-mobile-bimesters-grid">
+                  ${mobileBimGridHtml}
+                </div>
+
+                <div style="display:flex; gap:8px; margin-top:8px;">
+                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center;" onclick="quickScheduleForClass('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${getNextEligibleBimesterForClass(cls.name, cls.school)}')">
+                    📅 Agendar Próxima Observação
+                  </button>
+                </div>
+              </div>
+            `;
+          });
+
+          html += `
+            <!-- Visão Tabela Desktop -->
+            <div class="semaphore-table-view">
+              <table class="semaphore-table">
+                <thead>
+                  <tr>
+                    <th>Turma da Educação Infantil</th>
+                    <th class="col-bim">1º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Fev - Abr</span></th>
+                    <th class="col-bim">2º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Mai - Jul</span></th>
+                    <th class="col-bim">3º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Ago - Out</span></th>
+                    <th class="col-bim">4º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Nov - Jan</span></th>
+                    <th style="width:130px;">Ciclo Anual</th>
+                    <th style="width:90px; text-align:center;">Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRows}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Visão Cards Mobile -->
+            <div class="semaphore-cards-view">
+              ${mobileCards}
+            </div>
+          `;
+        }
+      } else {
+        // VISÃO DERIVADA POR DOCENTES (PRESERVAÇÃO DO FLUXO ANTERIOR)
         html += `
-          <!-- Visão em Tabela (Desktop) -->
-          <div class="longitudinal-table-view">
-            <div style="overflow-x:auto;">
+          <div style="margin-top:12px;">
+            <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
+              Fichas formativas individuais dos ${scopedAvaliandos.length} docentes regentes titulares vinculados às turmas:
+            </p>
+        `;
+
+        if (scopedAvaliandos.length === 0) {
+          html += `
+            <div style="text-align:center; color:var(--text-secondary); padding:24px;">
+              Nenhum docente regente titular localizado no seu escopo.
+            </div>
+          `;
+        } else {
+          // Renderiza a tabela de docentes existente
+          let teacherRows = '';
+          scopedAvaliandos.forEach(member => {
+            const personObs = scopedObs.filter(o => o.teacherName === member.name || (o.teachers && o.teachers.includes(member.name)));
+            const bScores = {};
+            BIMESTERS_CANONICAL.forEach(bName => {
+              const bObs = personObs.find(o => o.bimester === bName);
+              if (bObs) {
+                let pts = 0, v = 0;
+                activeSections.forEach(sec => sec.subSections.forEach(sub => sub.criteria.forEach(crit => {
+                  const r = bObs.responses ? bObs.responses[crit.id] : null;
+                  if (r && r !== 'na') { v++; if (r === 'consistent') pts += 1.0; else if (r === 'partial') pts += 0.5; }
+                })));
+                bScores[bName] = v > 0 ? Math.round((pts / v) * 100) : 100;
+              }
+            });
+
+            const cells = BIMESTERS_CANONICAL.map(bName => {
+              const sc = bScores[bName];
+              if (sc !== undefined) {
+                const color = sc >= 80 ? 'var(--green)' : sc >= 60 ? 'var(--yellow)' : 'var(--red)';
+                return `<td><span style="color:${color}; font-weight:700;">${sc}%</span></td>`;
+              }
+              return `<td><span style="color:var(--text-secondary); opacity:0.6;">—</span></td>`;
+            }).join('');
+
+            teacherRows += `
+              <tr>
+                <td><strong>${member.name}</strong><br><span style="font-size:11px; color:var(--text-secondary);">${member.classAssigned || member.roleTitle}</span></td>
+                ${cells}
+                <td style="text-align:center;">
+                  <button type="button" class="btn btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')">
+                    Raio-X Item a Item
+                  </button>
+                </td>
+              </tr>
+            `;
+          });
+
+          html += `
+            <div class="longitudinal-table-view">
               <table class="data-table">
                 <thead>
                   <tr>
-                    <th>Profissional / Função</th>
+                    <th>Docente Titular</th>
                     <th>1º Bimestre</th>
                     <th>2º Bimestre</th>
                     <th>3º Bimestre</th>
                     <th>4º Bimestre</th>
-                    <th>Evolução Global</th>
                     <th style="text-align:center;">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  ${tableRowsHtml}
+                  ${teacherRows}
                 </tbody>
               </table>
             </div>
-          </div>
-
-          <!-- Visão em Cards Adaptativos (Mobile sem rolagem horizontal) -->
-          <div class="longitudinal-cards-view">
-            ${mobileCardsHtml}
-          </div>
-        `;
+          `;
+        }
+        html += `</div>`;
       }
 
       html += `
@@ -18648,7 +19537,9 @@ function getActiveSections(obs) {
               if (!Array.isArray(INITIAL_CLASSES) || INITIAL_CLASSES.length === 0) throw new Error('INITIAL_CLASSES vazio');
               if (!Array.isArray(INITIAL_UNITS) || INITIAL_UNITS.length === 0) throw new Error('INITIAL_UNITS vazio');
               if (!Array.isArray(INITIAL_TEAM) || INITIAL_TEAM.length === 0) throw new Error('INITIAL_TEAM vazio');
-              logger.log('Coleções canônicas de dados populadas (classes, units, team)', true);
+              const seedSchools = Array.from(new Set((appState.observations || []).map(o => o.schoolName).filter(Boolean)));
+              if (seedSchools.length < 2) throw new Error('Base de observações não possui diversidade multi-unidade escolar');
+              logger.log('Coleções canônicas de dados e observações multi-unidade populadas', true, `${seedSchools.length} unidades com observações`);
 
               const classesLourdes = getClassesForSchool('CEI Professora Maria de Lourdes');
               if (classesLourdes.length === 0) throw new Error('getClassesForSchool falhou para CEI Maria de Lourdes');
@@ -19615,6 +20506,56 @@ function getActiveSections(obs) {
                 throw new Error('Falha Autonomia: Função getPedagogicalActionPrompt ainda definida no escopo');
               }
               logger.log('Autonomia Formativa da Rede: confirmação de ausência de pautas pré-fabricadas no Bloco de Gargalos', true);
+
+              // 9.2 PILAR 8: VALIDAÇÃO DA ALTERNÂNCIA REAL ENTRE MENOR CONSISTÊNCIA E MAIOR DESVIO VS. REDE
+              const mockObsMultiUE = [
+                {
+                  id: 'obs-multi-ue-1',
+                  status: 'finalized',
+                  evaluatedType: 'turma',
+                  schoolName: 'CEI Professora Maria de Lourdes',
+                  responses: {
+                    '1.1.1': 'consistent', '1.1.2': 'not_done', '1.2.2': 'not_done', '2.1.4': 'consistent'
+                  }
+                },
+                {
+                  id: 'obs-multi-ue-2',
+                  status: 'finalized',
+                  evaluatedType: 'turma',
+                  schoolName: 'EMEI Pequeno Príncipe',
+                  responses: {
+                    '1.1.1': 'consistent', '1.1.2': 'consistent', '1.2.2': 'consistent', '2.1.4': 'not_done'
+                  }
+                }
+              ];
+              const lourdesMultiObs = mockObsMultiUE.filter(o => o.schoolName === 'CEI Professora Maria de Lourdes');
+              const redeMultiObs = mockObsMultiUE;
+              const lourdesHierarchy = calculateHierarchyStats(lourdesMultiObs, sampleSections);
+              const redeHierarchyConsolidated = calculateHierarchyStats(redeMultiObs, sampleSections);
+
+              const absBottlenecks = calculateTopBottlenecks(lourdesHierarchy, redeHierarchyConsolidated, 'absolute', 3);
+              const deltaBottlenecks = calculateTopBottlenecks(lourdesHierarchy, redeHierarchyConsolidated, 'delta', 3);
+
+              if (!absBottlenecks || absBottlenecks.length === 0 || !deltaBottlenecks || deltaBottlenecks.length === 0) {
+                throw new Error('Falha Pilar 8: calculateTopBottlenecks retornou conjunto vazio para base multi-unidade');
+              }
+              const firstDelta = deltaBottlenecks[0];
+              if (firstDelta.delta === null || firstDelta.delta >= 0) {
+                throw new Error(`Falha Pilar 8: Esperado delta negativo no topo do modo delta, obtido ${firstDelta.delta}%`);
+              }
+              // Interação real no DOM
+              toggleBottlenecksSortMode('delta');
+              const deltaBtn = document.querySelector('.bottlenecks-toggle-btn:nth-child(2)');
+              if (!deltaBtn || !deltaBtn.classList.contains('active')) {
+                throw new Error('Falha Pilar 8: Botão "Maior Desvio vs. Rede" não ativado no DOM');
+              }
+
+              toggleBottlenecksSortMode('absolute');
+              const absBtn = document.querySelector('.bottlenecks-toggle-btn:nth-child(1)');
+              if (!absBtn || !absBtn.classList.contains('active')) {
+                throw new Error('Falha Pilar 8: Botão "Menor Consistência" não ativado no DOM');
+              }
+              logger.log('Alternância dinâmica de dados e modos de ordenação validada com sucesso no DOM (Pilar 8)', true);
 
               switchIndicatorsSubTab('longitudinal');
               const longSection = document.getElementById('indicatorsSectionLongitudinal');

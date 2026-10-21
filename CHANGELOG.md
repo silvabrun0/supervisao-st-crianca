@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.07** | 21/10/2026 21:00 | `intermediárias/aplicativo_v103_correcao_alternancia_gargalos_pilar_8.html` | Deliberação SerTão Criança / Pilar 8 | Correção da alternância de dados entre Menor Consistência e Maior Desvio vs. Rede Municipal: enriquecimento multi-escola na semente (`seedSampleData`), refino do algoritmo de ordenação de deltas negativos, feedback sutil em Rede Consolidada e validação de 100% de testes no Chrome 🎯 |
 | **1.06** | 21/10/2026 20:00 | `intermediárias/aplicativo_v106_pilar_9_mobile_fab_lupinha_filtros.html` | Solicitação direta / Refinamento Pilar 9 | Botão flutuante circular com lupinha no canto inferior direito para acesso aos filtros no celular, e ocultação total da barra desktop de filtros abaixo de "Índices para Diagnóstico" na visualização móvel 🔍 |
 | **1.05** | 21/10/2026 19:30 | `intermediárias/aplicativo_v105_remocao_pautas_prefabricadas_autonomia.html` | Solicitação direta / Autonomia Formativa da Rede | Remoção integral de pautas, caixas amarelas e diretrizes formativas pré-fabricadas no bloco de menores índices (Pilar 8), preservação da autonomia reflexiva da rede, foco em dados diagnósticos objetivos e cópia de resumo 🏛️ |
 | **1.04** | 21/10/2026 19:00 | `intermediárias/aplicativo_v104_correcao_autenticacao_auditoria_emulacao_e2e.html` | Solicitação direta / Correção de Auditoria & Emulação E2E | Resolução canônica de credenciais em auditoria interativa (`mariana@teste.com`), isolamento determinístico de sessão RBAC, erradicação de falsos positivos/negativos e fortalecimento da emulação comportamental no motor de testes 🛡️ |
@@ -124,6 +125,23 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.07] - Pilar 8: Correção da Alternância de Dados entre Menor Consistência e Maior Desvio vs. Rede Municipal
+* **Data e Horário:** 21 de Outubro de 2026 – 21:00:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v103_correcao_alternancia_gargalos_pilar_8.html`
+* **Identificador no App:** 📌 Versão 1.07 (v7.86)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Correção da Alternância Dinâmica de Dados e Critérios:**
+  Resolução da causa raiz que mantinha critérios idênticos e deltas nulos (0%) ao alternar entre os modos *"📉 Menor Consistência"* e *"🔻 Maior Desvio vs. Rede"*. O motor agora ordena e filtra criteriosamente os gargalos pedagógicos com priorização dos deltas negativos mais acentuados ($\Delta < 0$).
+- **Enriquecimento Multi-Unidade Escolar (`seedSampleData`):**
+  Inclusão de observações finalizadas para a `EMEI Pequeno Príncipe` (docente Fernanda Lima e coordenadora Sônia Alcantara), gerando dispersão estatística e benchmark heterogêneo genuíno em relação à `CEI Professora Maria de Lourdes`.
+- **Alerta Inteligente de Contexto em Rede Consolidada:**
+  Inserção de aviso sutil e contextual quando o gestor analisa a visão de Rede Consolidada no modo delta, instruindo a seleção de uma escola específica para contraste comparativo.
+- **Auditoria Modular Contínua (100% de Aprovação):**
+  Expansão de asserções no Módulo 10 garantindo a alternância efetiva entre modos no DOM e validação de todas as 92 asserções automatizadas da suíte.
 
 ### [Versão 1.06] - Pilar 9: Botão Flutuante Circular com Lupinha no Canto Inferior Direito e Ocultação da Barra de Filtros no Mobile
 * **Data e Horário:** 21 de Outubro de 2026 – 20:00:00
