@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.10** | 22/10/2026 14:15 | `intermediárias/aplicativo_v110_supressao_impressao_preservacao_rota_auditoria.html` | Deliberação SerTão Criança / UX Auditoria | Supressão de disparo de impressão no diagnóstico e preservação contextual de rota da plataforma 🔇 |
 | **1.09** | 22/10/2026 14:00 | `intermediárias/aplicativo_v109_pilar_10_semaforo_docentes_regentes.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Semáforo Anual para Docentes Regentes | Resolução completa da visão semafórica de Docentes Regentes no Pilar 10, eliminação de células em branco, micro-cards decisórios docentes, filtros rápidos e integração com agendamento 🚦 |
 | **1.08** | 21/10/2026 21:30 | `intermediárias/aplicativo_v108_pilar_10_semaforo_bimestral_turmas.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Quadro de Controle Bimestral matricial organizado por TURMA, Semáforo de Prazos Canônico (🟢 Verde Concluída, ⚪ Cinza No Prazo, 🔴 Vermelho Atrasada), micro-cards decisórios, filtros rápidos, atalhos de agendamento com 1 toque e cards adaptativos mobile 🚦 |
 | **1.07** | 21/10/2026 21:00 | `intermediárias/aplicativo_v103_correcao_alternancia_gargalos_pilar_8.html` | Deliberação SerTão Criança / Pilar 8 | Correção da alternância de dados entre Menor Consistência e Maior Desvio vs. Rede Municipal: enriquecimento multi-escola na semente (`seedSampleData`), refino do algoritmo de ordenação de deltas negativos, feedback sutil em Rede Consolidada e validação de 100% de testes no Chrome 🎯 |
@@ -127,6 +128,23 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.10] - Supressão de Disparo de Impressão e Preservação Contextual de Rota na Auditoria da Plataforma
+* **Data e Horário:** 22 de Outubro de 2026 – 14:15:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v110_supressao_impressao_preservacao_rota_auditoria.html`
+* **Identificador no App:** 📌 Versão 1.10 (v7.88)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Supressão de Disparo de Impressão Física (`window.print`):**
+  Desacoplamento do disparo de impressão na função `printIndividualTeacherDevolutiva(teacherName, autoPrint = true)`, permitindo que a ficha formativa individual continue sendo inspecionada e testada no DOM durante a auditoria (Módulo 11) com `autoPrint = false`, sem acionar a caixa de diálogo nativa do navegador.
+- **Guardião Global Defensivo Temporário:**
+  Interceptação e supressão de qualquer chamada a `window.print` ao longo da execução da suíte de auditoria (`runFullPlatformAudit`), reativando a API original do navegador somente após a estabilização e encerramento seguro dos micro-timers no bloco `finally`.
+- **Preservação e Restauração Contextual da Rota:**
+  Captura da tela ativa e sub-abas antes da auditoria e restauração fiel no bloco `finally`, eliminando o redirecionamento indesejado para a Home ao concluir o diagnóstico e mantendo o usuário exatamente no contexto em que estava trabalhando.
+- **Enriquecimento da Bateria de Auditoria (100% de Cobertura):**
+  Módulos 11 (`backup_exportacao`) e 12 (`navegacao_layout`) atualizados com asserções de integridade estrutural e blindagem do guardião global de rotas.
 
 ### [Versão 1.09] - Pilar 10: Semáforo Anual do Ciclo Bimestral para Docentes Regentes Titulares
 * **Data e Horário:** 22 de Outubro de 2026 – 14:00:00

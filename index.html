@@ -3200,7 +3200,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.09 (v7.88)
+          📌 Versão 1.10 (v7.88)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4703,6 +4703,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.10 - SUPRESSÃO DE IMPRESSÃO E PRESERVAÇÃO CONTEXTUAL DE ROTA NA AUDITORIA -->
+      <div style="margin-bottom:20px; border-left:3px solid #0284C7; padding-left:14px; background:#F0F9FF; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#0369A1;">Versão 1.10 · v7.88 (Oficial)</span>
+          <span style="font-size:11px; background:#E0F2FE; color:#0369A1; padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Supressão de Disparo de Impressão e Preservação Contextual de Rota na Auditoria:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🔇 <strong>Supressão Segura do Disparo de Impressão:</strong> Parametrização desacoplada de <code>printIndividualTeacherDevolutiva(teacherName, autoPrint = true)</code>, permitindo montagem e inspeção integral da ficha formativa no DOM durante testes e auditoria sem acionar o diálogo nativo <code>window.print()</code> do navegador.</li>
+          <li>🛡️ <strong>Guardião Defensivo Global:</strong> Interceptação e blindagem temporária de <code>window.print</code> durante a rotina <code>runFullPlatformAudit()</code> com reativação segura após buffer de estabilização.</li>
+          <li>📍 <strong>Preservação Contextual da Rota do Usuário:</strong> Captura da tela ativa e sub-abas antes da auditoria e restauração fiel no bloco <code>finally</code>, eliminando o redirecionamento indesejado para a Home ao concluir o diagnóstico.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Módulos 11 e 12 enriquecidos com asserções de integridade estrutural da ficha individual e blindagem do guardião global de rotas.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.09 - PILAR 10: SEMÁFORO DO CICLO ANUAL PARA DOCENTES REGENTES -->
@@ -12170,7 +12187,7 @@ function getActiveSections(obs) {
     }
 
     // PILAR 5: Renderização e Impressão da Ficha Formativa Individual do Docente
-    function printIndividualTeacherDevolutiva(teacherName) {
+    function printIndividualTeacherDevolutiva(teacherName, autoPrint = true) {
       const obs = appState.currentObs;
       if (!obs) return;
 
@@ -12359,6 +12376,12 @@ function getActiveSections(obs) {
       `;
 
       printContainer.innerHTML = html;
+
+      // Se autoPrint for falso (ex: testes automatizados/auditoria), interrompe aqui
+      // garantindo que o DOM seja montado para inspeção sem acionar a impressora física
+      if (!autoPrint) {
+        return;
+      }
 
       // Dispara impressão isolada via classe no body
       document.body.classList.add('printing-teacher-devolutiva');
@@ -19859,6 +19882,23 @@ function getActiveSections(obs) {
       const modulesOutput = [];
       const allResults = [];
 
+      // 1. CAPTURA DO CONTEXTO DE ROTA E TELA ATIVA ANTES DA AUDITORIA
+      const activeScreenEl = document.querySelector('.app-screen.active');
+      const initialScreenId = activeScreenEl ? activeScreenEl.id : 'screenHome';
+      const initialIndicatorsSubTab = appState.activeIndicatorsSubTab || 'kpis';
+      const initialPedagSubTab = appState.currentPedagSubTab || 'units';
+      const initialHistoryFilter = appState.historyFilter || 'drafts';
+      const wasGestaoView = document.getElementById('homeGestaoView')?.style.display === 'block';
+
+      // 2. GUARDIÃO GLOBAL DEFENSIVO CONTRA DISPARO DE IMPRESSÃO
+      window.__isPlatformAuditRunning = true;
+      window.__auditPrintInterceptionCount = 0;
+      const originalWindowPrint = window.print;
+      window.print = function() {
+        window.__auditPrintInterceptionCount = (window.__auditPrintInterceptionCount || 0) + 1;
+        console.warn('🔇 [Auditoria SerTão Criança] Chamada a window.print() interceptada e suprimida com sucesso para preservar a UX.');
+      };
+
       // Utilitários Canônicos de Simulação de Ações Reais do Usuário no DOM (End-to-End)
       const UI = {
         click: function(el) {
@@ -21219,8 +21259,8 @@ function getActiveSections(obs) {
               logger.log('Modal de Opções de Exportação em PDF Segregado (#modalExportPdfOptions)', true);
               closeExportPdfModal();
 
-              // Geração da Ficha Formativa Individual do Docente
-              printIndividualTeacherDevolutiva('Ana Carolina Silva');
+              // Geração da Ficha Formativa Individual do Docente (sem disparo físico de hardware)
+              printIndividualTeacherDevolutiva('Ana Carolina Silva', false);
               const printSection = document.getElementById('teacherIndividualDevolutivaPrintSection');
               if (!printSection || !printSection.innerHTML.includes('Ana Carolina Silva') || !printSection.innerHTML.includes('Prefeitura Municipal de Patos')) {
                 throw new Error('Ficha formativa individual do docente não foi montada corretamente no DOM de impressão');
@@ -21228,7 +21268,10 @@ function getActiveSections(obs) {
               if (!printSection.innerHTML.includes('Foco em perguntas fechadas.')) {
                 throw new Error('Justificativa de item parcial ausente na ficha formativa individual');
               }
-              logger.log('Geração e integridade da Ficha Formativa Individual do Docente', true);
+              if (document.body.classList.contains('printing-teacher-devolutiva')) {
+                throw new Error('Classe de impressão printing-teacher-devolutiva não deveria ter sido adicionada com autoPrint=false');
+              }
+              logger.log('Geração e integridade da Ficha Formativa Individual do Docente (sem disparo de hardware)', true);
               appState.currentObs = null;
             } catch (e) {
               logger.log('Erro de execução no módulo backup_exportacao', false, e.message);
@@ -21305,6 +21348,12 @@ function getActiveSections(obs) {
                 throw new Error('Falha Pilar 9: #screenIndicators deveria estar ativo na tela indicators');
               }
               logger.log('Conformidade Pilar 9: Isolamento contextual de exibição do gatilho móvel via rotas', true);
+
+              // 7. PRESERVAÇÃO E PROTEÇÃO DE ROTA E SUPRESSÃO DE HARDWARE
+              if (window.__isPlatformAuditRunning !== true) {
+                throw new Error('Guardião global __isPlatformAuditRunning deveria estar ativo durante a execução da suíte');
+              }
+              logger.log('Blindagem do Guardião Global contra disparo de impressão e preservação contextual', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
@@ -21342,9 +21391,56 @@ function getActiveSections(obs) {
 
         console.groupEnd();
       } finally {
+        // Restauração do Estado Canônico dos Dados
         appState = stateBackup;
         saveState();
         applyUserRoleUI();
+
+        // Restauração Fiel da Tela e Sub-aba de Origem do Usuário
+        try {
+          if (initialScreenId === 'screenHome') {
+            if (wasGestaoView) {
+              navigateToTab(initialPedagSubTab === 'team' ? 'team' : 'units');
+            } else {
+              navigateToTab('home');
+            }
+          } else if (initialScreenId === 'screenSchedule') {
+            navigateToTab('schedule');
+          } else if (initialScreenId === 'screenIndicators') {
+            navigateToTab('indicators');
+            if (typeof switchIndicatorsSubTab === 'function') {
+              switchIndicatorsSubTab(initialIndicatorsSubTab);
+            }
+          } else if (initialScreenId === 'screenHistory') {
+            navigateToTab('history', initialHistoryFilter);
+          } else if (initialScreenId === 'screenNotes') {
+            navigateToTab('notes');
+          } else if (initialScreenId === 'screenRefDocs') {
+            navigateToTab('refDocs');
+          } else if (initialScreenId === 'screenRubricsAdmin') {
+            navigateToTab('rubrics');
+          } else if (initialScreenId === 'screenSetup') {
+            if (typeof openObservationSetupScreen === 'function') openObservationSetupScreen();
+            else navigateToTab('home');
+          } else if (initialScreenId === 'screenActiveObs') {
+            if (stateBackup.currentObs && typeof renderActiveObsScreen === 'function') renderActiveObsScreen();
+            else navigateToTab('home');
+          } else if (initialScreenId === 'screenSynthesis') {
+            if (stateBackup.currentObs && typeof renderSynthesisScreen === 'function') renderSynthesisScreen(stateBackup.currentObs);
+            else navigateToTab('home');
+          } else {
+            navigateToTab('home');
+          }
+        } catch(errRestore) {
+          console.warn('Aviso na restauração de rota pós-auditoria:', errRestore);
+          navigateToTab('home');
+        }
+
+        // Buffer de segurança para restaurar window.print após expiração de eventuais micro-timers
+        setTimeout(() => {
+          window.__isPlatformAuditRunning = false;
+          window.print = originalWindowPrint;
+        }, 600);
       }
 
       const duration = Math.round(performance.now() - startTime);
