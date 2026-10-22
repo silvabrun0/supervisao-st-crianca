@@ -12,6 +12,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
 | **1.14** | 22/10/2026 15:40 | `intermediárias/aplicativo_v114_enxugamento_mobile_textos_longos_criterios.html` | Solicitação direta / `plano_enxugamento_mobile_textos_longos_criterios.md` | Enxugamento visual mobile dos cards de critérios com textos longos/parênteses explicativos, botão tátil `.btn-crit-detail-trigger`, Bottom Sheet canônica `#modalCriterionDetail` exibindo 100% do texto oficial sem invenções, preservação desktop e touch target de 32px 📱🏛️ |
+| **1.14** | 22/10/2026 15:30 | `intermediárias/aplicativo_v114_bloqueio_docentes_vespertinos_etapa_matutina_integral.html` | Deliberação SerTão Criança / Pilares 4 e 5 | Bloqueio mandatório de avaliação das 5 dimensões e parecer individual de docentes vespertinos durante a Etapa 1 (Turno Matutino) em turmas integrais, com banner contextual 🔒, controles físicos desabilitados, blindagem lógica em controladores JS e liberação integral dos 4 regentes na Etapa 2 (Tarde) ☀️🌅 |
 | **1.13** | 22/10/2026 15:15 | `intermediárias/aplicativo_v113_remocao_orientacoes_artificiais_rubricas.html` | Solicitação direta / Soberania da Matriz Oficial | Remoção integral do repositório artificial de orientações pedagógicas (RUBRIC_GUIDANCE_DB), do modal deslizante (#modalRubricGuidance), dos botões de gatilho de apoio (.btn-rubric-guidance-trigger e .btn-rubric-drilldown-trigger), e restauração fidedigna dos enunciados canônicos oficiais sem intervenção na lógica técnico-pedagógica municipal 🏛️ |
 | **1.12** | 22/10/2026 15:00 | `intermediárias/aplicativo_v112_pilar_13_gestao_ocorrencias_padrao_mec.html` | Deliberação SerTão Criança / Pilar 13 | Pilar 13: Gestão de ocorrências críticas vinculadas primariamente à Turma, seletor de rotina coletiva vs. conduta individual, ciclo formativo com status "Conversado" e registro de acordos pactuados, rastreabilidade bidirecional com a observação de origem e padronização MEC formal de jornadas e turnos 👥💬 |
 | **1.12** | 22/10/2026 14:45 | `intermediárias/aplicativo_v112_qualificacao_docentes_turnos_turmas_integrais.html` | Deliberação SerTão Criança / Pilares 4 e 5 | Qualificação de docentes por turno (manhã/tarde) em turmas integrais, botões interativos de remanejamento no setup, higienização da base de dados inicial com exclusividade por turno/escola, atribuição parcial seletiva e sequenciamento nominal 4.1 e 4.2 na síntese pedagógica ☀️🌅 |
@@ -152,6 +153,32 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
   Regras CSS que mantêm a exibição 100% completa dos enunciados em telas de computador (>= 768px) com display inline, ocultando os botões móveis.
 - **Cobertura Modular de Testes (100% de Aprovação):**
   Módulos 4 (`rubricas_observacao`) e 12 (`navegacao_layout`) enriquecidos com validação automatizada de ausência de botões em critérios curtos, presença em critérios longos, abertura e fechamento interativo da bottom sheet oficial e asserção de conformidade de touch target.
+
+
+### [Versão 1.14] - Bloqueio Mandatório de Avaliação de Docentes Vespertinos na Etapa Matutina em Turmas Integrais
+* **Data e Horário:** 22 de Outubro de 2026 – 15:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v114_bloqueio_docentes_vespertinos_etapa_matutina_integral.html`
+* **Identificador no App:** 📌 Versão 1.14 (v7.92)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Inclusões e Modificações
+- **Bloqueio Mandatório na Etapa Matutina (Pilares 4 e 5):**
+  Em turmas de Tempo Integral observadas no turno matutino (`obs.integralStage === 'matutino'`), os cards nominais das docentes alocadas no turno vespertino (`teachersAfternoon`) na tela de Síntese Pedagógica (`#screenSynthesis`, subseção 4.2) passam a ter avaliação integralmente bloqueada.
+- **Camada Visual / DOM de Bloqueio e Proteção:**
+  - Aplicação de estilo atenuado (`opacity: 0.72; background: #F8FAFC; border: 1px dashed #CBD5E1;`).
+  - Inserção de selo de status no cabeçalho do card: `🔒 Bloqueado no Turno Matutino`.
+  - Exibição do banner destacado `#synthesisAfternoonBlockedNotice` informando o coordenador/observador sobre a regra de bloqueio.
+  - Desabilitação física (`disabled`) de todos os botões das 5 dimensões estruturantes (*Consistente*, *Parcial*, *Não Realizado*).
+  - Desabilitação da caixa de texto de parecer individual (`textarea`) com placeholder informativo `🔒 Avaliação bloqueada: esta docente atua no turno vespertino e será avaliada na Etapa 2 (Tarde)...`.
+- **Blindagem Defensiva em Controladores JS (Dupla Camada):**
+  - `setTeacherSynthesisDimension`: bloqueia mutação de estado se o docente pertencer ao turno vespertino e a etapa for matutina, emitindo toast de aviso.
+  - `setTeacherSynthesisFeedback`: bloqueia alteração de parecer individual para docentes da tarde na etapa matutina.
+  - `setCriterionPartialTeacher`: bloqueia atribuição de itens parciais na observação ativa para docentes da tarde na etapa matutina.
+- **Desbloqueio e Liberação Plena na Etapa Vespertina:**
+  Ao transicionar para a Etapa 2 (`obs.integralStage === 'vespertino'`), todos os 4 docentes titulares da turma tornam-se plenamente acessíveis para avaliação, garantindo 100% de cobertura nos indicadores do Pilar 10.
+- **Ampliação da Auditoria Modular Automatizada (100% de Aprovação):**
+  Módulo 6 (`sintese_finalizacao`) enriquecido com verificação determinística de bloqueio dos docentes vespertinos na etapa matutina e desbloqueio completo na etapa vespertina.
 
 
 ### [Versão 1.13] - Remoção Integral de Orientações Pedagógicas Artificiais e Soberania da Matriz Oficial da Rede Municipal

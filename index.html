@@ -4769,6 +4769,24 @@
         </ul>
       </div>
 
+      <!-- VERSÃO 1.14 - BLOQUEIO DE DOCENTES VESPERTINOS NA ETAPA MATUTINA EM TURMAS INTEGRAIS -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.14 · v7.92</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Bloqueio Mandatório de Avaliação de Docentes Vespertinos na Etapa Matutina em Turmas Integrais (Pilares 4 e 5):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🔒 <strong>Bloqueio Integral na Etapa Matutina:</strong> Em turmas de Tempo Integral, durante a Etapa 1 (Turno Matutino), os cards das docentes regentes do turno vespertino permanecem estritamente bloqueados e desabilitados na Síntese Pedagógica (dimensões e pareceres protegidos contra preenchimento precoce).</li>
+          <li>🌤️ <strong>Banner Contextual de Bloqueio por Turno:</strong> Inclusão de aviso destacado (<code>#synthesisAfternoonBlockedNotice</code>) e selo <code>🔒 Bloqueado no Turno Matutino</code> orientando o observador de que a avaliação nominal da tarde será liberada na Etapa 2 (Vespertina).</li>
+          <li>🛡️ <strong>Blindagem Lógica em Dupla Camada:</strong> Proteção nos controladores JavaScript <code>setTeacherSynthesisDimension</code>, <code>setTeacherSynthesisFeedback</code> e <code>setCriterionPartialTeacher</code> contra alterações diretas para docentes da tarde enquanto na etapa matutina.</li>
+          <li>👥 <strong>Disponibilidade Plena na Etapa Vespertina:</strong> Na Etapa 2 (Tarde), todos os 4 docentes regentes titulares da turma integral tornam-se plenamente acessíveis e editáveis para validação e fechamento da turma.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Módulo 6 (Síntese Pedagógica) ampliado com verificação determinística de desabilitação e bloqueio de docentes vespertinos na etapa matutina e desbloqueio integral na vespertina.</li>
+        </ul>
+      </div>
+
       <!-- VERSÃO 1.13 - REMOÇÃO DE ORIENTAÇÕES PEDAGÓGICAS ARTIFICIAIS E SOBERANIA DA MATRIZ OFICIAL -->
       <div style="margin-bottom:20px; border-left:3px solid #DC2626; padding-left:14px; background:#FEF2F2; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
         <div style="display:flex; align-items:center; gap:8px;">
