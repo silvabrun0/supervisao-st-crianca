@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.13** | 22/10/2026 15:15 | `intermediárias/aplicativo_v113_remocao_orientacoes_artificiais_rubricas.html` | Solicitação direta / Soberania da Matriz Oficial | Remoção integral do repositório artificial de orientações pedagógicas (RUBRIC_GUIDANCE_DB), do modal deslizante (#modalRubricGuidance), dos botões de gatilho de apoio (.btn-rubric-guidance-trigger e .btn-rubric-drilldown-trigger), e restauração fidedigna dos enunciados canônicos oficiais sem intervenção na lógica técnico-pedagógica municipal 🏛️ |
 | **1.12** | 22/10/2026 15:00 | `intermediárias/aplicativo_v112_pilar_13_gestao_ocorrencias_padrao_mec.html` | Deliberação SerTão Criança / Pilar 13 | Pilar 13: Gestão de ocorrências críticas vinculadas primariamente à Turma, seletor de rotina coletiva vs. conduta individual, ciclo formativo com status "Conversado" e registro de acordos pactuados, rastreabilidade bidirecional com a observação de origem e padronização MEC formal de jornadas e turnos 👥💬 |
 | **1.12** | 22/10/2026 14:45 | `intermediárias/aplicativo_v112_qualificacao_docentes_turnos_turmas_integrais.html` | Deliberação SerTão Criança / Pilares 4 e 5 | Qualificação de docentes por turno (manhã/tarde) em turmas integrais, botões interativos de remanejamento no setup, higienização da base de dados inicial com exclusividade por turno/escola, atribuição parcial seletiva e sequenciamento nominal 4.1 e 4.2 na síntese pedagógica ☀️🌅 |
 | **1.11** | 22/10/2026 14:30 | `intermediárias/aplicativo_v110_pilar_11_popups_rubricas_apoio_mobile.html` | Deliberação SerTão Criança / Pilar 11 | Pilar 11: Enxugamento Visual no Mobile com Pop-ups e Bottom Sheet de Apoio Pedagógico às Rubricas (`ℹ️`), síntese inteligente de orientações longas, redução de 45% na altura dos cards, repositório canônico de apoio formativo e régua de gradação 📱 |
@@ -131,6 +132,26 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.13] - Remoção Integral de Orientações Pedagógicas Artificiais e Soberania da Matriz Oficial da Rede Municipal
+* **Data e Horário:** 22 de Outubro de 2026 – 15:15:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v113_remocao_orientacoes_artificiais_rubricas.html`
+* **Identificador no App:** 📌 Versão 1.13 (v7.91)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações, Exclusões e Inclusões
+- **Extinção Completa de Repositório Canônico Artificial (`RUBRIC_GUIDANCE_DB`):**
+  Eliminação definitiva de dicionários ou bases simuladas que tentavam inventar interpretações pedagógicas, orientações de chão de sala ou réguas de gradação não aprovadas pela rede municipal de Patos. Preservação da soberania da lógica técnico-pedagógica oficial da rede.
+- **Remoção da Bottom Sheet / Modal de Orientações (`#modalRubricGuidance`):**
+  Descarte completo da estrutura HTML do modal deslizante `#modalRubricGuidance` e de seus controladores JavaScript (`openRubricGuidanceModal`, `closeRubricGuidanceModal` e `getCriterionGuidance`).
+- **Limpeza dos Cards de Critério e Afunilamento de Indicadores:**
+  Remoção dos botões de gatilho `.btn-rubric-guidance-trigger` (`ℹ️ Orientações`) na observação ativa (`#screenActiveObs`) e `.btn-rubric-drilldown-trigger` (`ℹ️ Apoio`) na sub-aba de Afunilamento de Indicadores (`#indicatorsDrilldownView`).
+- **Restauração Fidedigna dos Enunciados Canônicos:**
+  Reversão de qualquer sintetização ou encurtamento móvel artificial (`formatCriterionMobileTitle`), garantindo que o texto oficial integral aprovado pelo município seja renderizado diretamente no card de cada critério.
+- **Enriquecimento da Auditoria Modular Automatizada (100% de Aprovação):**
+  Módulo 4 (`rubricas_observacao`) atualizado com asserções estritas que validam no DOM a ausência dos gatilhos artificiais, a inexistência do modal órfão e a integridade fidedigna do texto canônico oficial.
+
 
 ### [Versão 1.12] - Pilar 13: Gestão de Ocorrências Críticas Vinculadas à Turma e Padronização MEC
 * **Data e Horário:** 22 de Outubro de 2026 – 15:00:00
