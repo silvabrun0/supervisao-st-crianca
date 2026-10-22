@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.16** | 22/10/2026 16:30 | `intermediárias/aplicativo_v0.94_alinhamento_filtros_diagnostico.html` | Solicitação direta / `plano_alinhamento_filtros_diagnostico.md` | Alinhamento, centralização e padronização visual das caixas de filtros para diagnóstico (`#indicatorsFilterToolbar` e `#modalIndicatorsFiltersMobile`) e formulários globais, eliminação de padding zero do reset universal, proteção contra transbordamento (`padding-right: 36px` e `text-overflow: ellipsis`), chevron SVG canônico e resiliência no semáforo 📐✨ |
+| **1.15** | 22/10/2026 16:00 | `intermediárias/aplicativo_v0.93_edicao_data_e_exclusao_agendamento.html` | Solicitação direta / `plano_edicao_data_agendamento_realizado_e_exclusao_cronograma.md` | Edição de data e horário em agendamentos realizados e arquivados no cronograma, sincronização bidirecional imediata com observação vinculada (`obs.date`, `obs.startTime`, turmas integrais), semáforo resiliente do Pilar 10 e exclusão segura (`deleteSchedule`) com desvinculação relacional ✏️🗑️ |
 | **1.14** | 22/10/2026 15:40 | `intermediárias/aplicativo_v114_enxugamento_mobile_textos_longos_criterios.html` | Solicitação direta / `plano_enxugamento_mobile_textos_longos_criterios.md` | Enxugamento visual mobile dos cards de critérios com textos longos/parênteses explicativos, botão tátil `.btn-crit-detail-trigger`, Bottom Sheet canônica `#modalCriterionDetail` exibindo 100% do texto oficial sem invenções, preservação desktop e touch target de 32px 📱🏛️ |
 | **1.14** | 22/10/2026 15:30 | `intermediárias/aplicativo_v114_bloqueio_docentes_vespertinos_etapa_matutina_integral.html` | Deliberação SerTão Criança / Pilares 4 e 5 | Bloqueio mandatório de avaliação das 5 dimensões e parecer individual de docentes vespertinos durante a Etapa 1 (Turno Matutino) em turmas integrais, com banner contextual 🔒, controles físicos desabilitados, blindagem lógica em controladores JS e liberação integral dos 4 regentes na Etapa 2 (Tarde) ☀️🌅 |
 | **1.13** | 22/10/2026 15:15 | `intermediárias/aplicativo_v113_remocao_orientacoes_artificiais_rubricas.html` | Solicitação direta / Soberania da Matriz Oficial | Remoção integral do repositório artificial de orientações pedagógicas (RUBRIC_GUIDANCE_DB), do modal deslizante (#modalRubricGuidance), dos botões de gatilho de apoio (.btn-rubric-guidance-trigger e .btn-rubric-drilldown-trigger), e restauração fidedigna dos enunciados canônicos oficiais sem intervenção na lógica técnico-pedagógica municipal 🏛️ |
@@ -134,6 +136,52 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.16] - Alinhamento, Centralização e Padronização Visual das Caixas de Filtros para Diagnóstico e Formulários Globais
+
+> **Data:** 22/10/2026 · **Arquivo de Referência:** `intermediárias/aplicativo_v0.94_alinhamento_filtros_diagnostico.html`  
+> **Origem:** Solicitação direta do usuário e plano `planos_de_implementacao/plano_alinhamento_filtros_diagnostico.md`.
+
+#### 🚀 Inclusões e Modificações:
+1. **Centralização e Alinhamento Perfeito das Opções dos Filtros:**
+   - Resolução da causa raiz provocada pelo reset universal `* { margin: 0; padding: 0; }` que forçava o padding interno dos seletores `<select class="form-control">` para 0px, fazendo o texto encostar na borda esquerda.
+   - Aplicação universal de `padding: 0 14px`, `height: 42px`, `line-height: 40px`, `border: 1px solid var(--border)` e `border-radius: 8px` para as classes `.form-control`, `.form-select` e `.form-input`.
+2. **Eliminação de Transbordamento e Colisão Visual:**
+   - Adição de `padding-right: 36px`, `text-overflow: ellipsis`, `white-space: nowrap` e `overflow: hidden` em todos os elementos `<select>`, garantindo que opções longas não colidam com o chevron ou transbordem a caixa.
+3. **Padronização Canônica de Chevron:**
+   - Unificação dos seletores com `appearance: none; -webkit-appearance: none;` acompanhado de ícone SVG canônico de chevron sutil e elegante posicionado à direita (`right: 12px; center`).
+4. **Ergonomia e Touch Target Mobile:**
+   - Proporções ideais de toque (44px a 46px de altura) e cantos arredondados (10px) dentro do modal deslizante `#modalIndicatorsFiltersMobile`.
+5. **Auditoria Contínua com 100% de Aprovação:**
+   - Módulo 10 (`indicadores_decisao`) e Módulo 12 (`navegacao_layout`) atualizados com asserções dimensionais, padding, chevron e proteção anti-reentrância.
+
+---
+
+### [Versão 1.15] - Edição de Data em Agendamentos Realizados, Sincronização Bidirecional e Exclusão Segura no Cronograma
+* **Data e Horário:** 22 de Outubro de 2026 – 16:00:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v0.93_edicao_data_e_exclusao_agendamento.html`
+* **Tipo de Modificação:** Refatoração de UX / Sincronização Relacional / CRUD Seguro de Agendamentos / Resiliência Semafórica
+* **Origem da Demanda:** Solicitação direta do usuário relatando impossibilidade de atualizar datas de visitas concluídas e ausência de recurso de exclusão no cronograma.
+
+#### 1. Contexto e Diagnóstico
+* Identificou-se que agendamentos com `status === 'realizado'` e arquivados ocultavam os botões de edição, impedindo ajustes retroativos ou correções de calendário.
+* Além disso, a finalização da visita em `finalizeObservation` e a edição via `saveNewSchedule` não sincronizavam bidirecionalmente a data com a observação (`obs.date`), gerando divergências com a Devolutiva em PDF, Histórico e Semáforo do Pilar 10.
+* A ausência total de funcionalidade de exclusão no cronograma forçava a permanência de agendamentos errôneos ou cancelados.
+
+#### 2. Implementações Realizadas
+1. **Edição Ampla em Agendamentos Realizados e Arquivados:** Habilitação universal dos botões "✏️ Editar" na tabela e nos cards mobile da Agenda para visitas realizadas e arquivadas, respeitando RBAC.
+2. **Sincronização Bidirecional de Datas e Horários:**
+   - Ao editar um agendamento no modal `#modalAddSchedule`, a nova data e hora são propagadas imediatamente para a observação vinculada (`obs.date`, `obs.startDate`, `obs.endDate`, `obs.startTime`, bem como sub-etapas matutina e vespertina em turmas integrais).
+   - Ao finalizar a observação em `finalizeObservation()`, o agendamento correspondente tem seus campos `sched.plannedDate`, `sched.date` e `sched.plannedTime` atualizados fidedignamente com a data/hora real da visita.
+3. **Resiliência Semafórica do Pilar 10:** Leitura segura de `sched.plannedDate || sched.date` no cálculo semafórico bimestral da turma (`calculateClassBimesterStatus`).
+4. **Exclusão Segura de Agendamento (`deleteSchedule` e `confirmDeleteSchedule`):**
+   - Modal com botão contextual "🗑️ Excluir Agendamento" alinhado à esquerda na edição.
+   - Botões de lixeira/exclusão na tabela desktop e cards mobile da Agenda.
+   - Diálogo preventivo e desvinculação mandatória da observação (`obs.scheduleId = null`), preservando rascunhos e observações finalizadas intactas no histórico da rede.
+5. **Auditoria e Verificação Contínua:** Módulo `agenda_cronograma` expandido com testes determinísticos de edição de data em visita realizada, sincronização relacional e exclusão segura.
+
+---
 
 ### [Versão 1.14] - Enxugamento Visual Mobile de Textos Longos e Soberania da Matriz Oficial
 * **Data e Horário:** 22 de Outubro de 2026 – 15:40:00

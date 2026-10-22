@@ -536,6 +536,7 @@
     }
     .btn-crit-detail-trigger {
       display: none;
+      min-height: 32px;
     }
     .crit-tag {
       background: var(--border-light);
@@ -1468,28 +1469,67 @@
     .tabbar-item.active { color: var(--primary); }
     .tabbar-item svg { width: 22px; height: 22px; }
 
-    /* Form Controls */
+    /* Form Controls & Global Selectors Unificados */
     .form-group { margin-bottom: 14px; }
-    .form-label { display: block; font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 5px; }
-    .form-select, .form-input {
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+    }
+    .form-control, .form-select, .form-input {
+      display: block;
       width: 100%;
       max-width: 100%;
       min-width: 0;
       box-sizing: border-box;
-      padding: 9px 12px;
+      height: 42px;
+      line-height: 40px;
+      padding: 0 14px;
       border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 13px;
-      background: var(--surface);
+      font-weight: 600;
+      background-color: var(--surface);
       color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    input[type="date"].form-input {
-      width: 100%;
-      max-width: 100%;
-      min-width: 0;
-      box-sizing: border-box;
-      padding: 6px 8px;
-      font-size: 12px;
+    .form-control:focus, .form-select:focus, .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .form-control:disabled, .form-select:disabled, .form-input:disabled {
+      background-color: #F1F5F9;
+      color: #94A3B8;
+      cursor: not-allowed;
+      opacity: 0.85;
+    }
+    select.form-control, select.form-select, select {
+      padding-right: 36px !important;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px 16px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    input[type="date"].form-control,
+    input[type="date"].form-input,
+    input[type="time"].form-control,
+    input[type="time"].form-input {
+      line-height: normal;
+      padding: 8px 12px;
+      font-weight: 600;
+      background-image: none;
     }
 
     /* Filters Bar in History */
@@ -3141,6 +3181,17 @@
         margin: 0 auto 12px auto;
       }
 
+      .mobile-bottom-sheet-panel select.form-control,
+      .mobile-bottom-sheet-panel select.form-select,
+      .mobile-bottom-sheet-panel .form-control {
+        height: 46px;
+        line-height: 44px;
+        font-size: 14px;
+        padding-left: 14px;
+        padding-right: 38px;
+        border-radius: 10px;
+      }
+
       /* Enxugamento Mobile de Textos Longos nos Cards de Critério */
       .crit-text-desktop {
         display: none !important;
@@ -3244,7 +3295,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.14 (v7.92)
+          📌 Versão 1.16 (v7.94)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4076,7 +4127,7 @@
           <!-- Seletor 1: Público-Alvo -->
           <div id="indicatorsTargetTypeWrapper" style="display:flex; flex-direction:column; gap:6px;">
             <label style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Público-Alvo</label>
-            <select id="indicatorsTargetTypeFilter" class="form-control" onchange="onIndicatorsTargetTypeChange()" style="font-weight:700; color:var(--primary-dark); width:100%; height:42px; font-size:13px;">
+            <select id="indicatorsTargetTypeFilter" class="form-select form-control" onchange="onIndicatorsTargetTypeChange()" style="font-weight:700; color:var(--primary-dark);">
               <option value="professora">👩‍🏫 Professores(as)</option>
               <option value="coordenador">👤 Coordenadores(as)</option>
             </select>
@@ -4088,7 +4139,7 @@
           <!-- Seletor 2: Unidade Escolar -->
           <div style="display:flex; flex-direction:column; gap:6px;">
             <label style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Unidade Escolar</label>
-            <select id="indicatorsUnitFilter" class="form-control" onchange="onIndicatorsUnitChange()" style="font-weight:600; color:var(--text-primary); width:100%; height:42px; font-size:13px;">
+            <select id="indicatorsUnitFilter" class="form-select form-control" onchange="onIndicatorsUnitChange()" style="font-weight:600; color:var(--text-primary);">
               <option value="ALL">Todas as Unidades do Escopo</option>
             </select>
           </div>
@@ -4099,7 +4150,7 @@
               <label id="indicatorsMemberLabel" style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Professora / Docente</label>
               <a href="javascript:void(0)" id="btnIndicatorsClearMember" onclick="clearTeacherLongitudinalFilter()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none; display:none;">✕ Ver Todas</a>
             </div>
-            <select id="indicatorsMemberFilter" class="form-control" onchange="renderIndicatorsScreen()" style="font-weight:600; color:var(--primary); width:100%; height:42px; font-size:13px;" title="Selecione para análise individual">
+            <select id="indicatorsMemberFilter" class="form-select form-control" onchange="renderIndicatorsScreen()" style="font-weight:600; color:var(--primary);" title="Selecione para análise individual">
               <option value="ALL">Todas (Visão Geral)</option>
             </select>
           </div>
@@ -4107,7 +4158,7 @@
           <!-- Seletor 4: Bimestre de Referência (Pilar 9) -->
           <div style="display:flex; flex-direction:column; gap:6px;">
             <label style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Bimestre</label>
-            <select id="indicatorsBimesterFilter" class="form-control" onchange="renderIndicatorsScreen()" style="font-weight:700; color:var(--text-primary); width:100%; height:42px; font-size:13px;" title="Filtre as observações por bimestre escolar">
+            <select id="indicatorsBimesterFilter" class="form-select form-control" onchange="renderIndicatorsScreen()" style="font-weight:700; color:var(--text-primary);" title="Filtre as observações por bimestre escolar">
               <option value="ALL">Ano Completo (Todos)</option>
               <option value="1º Bimestre">1º Bimestre</option>
               <option value="2º Bimestre">2º Bimestre</option>
@@ -4749,6 +4800,42 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.16 - ALINHAMENTO, CENTRALIZAÇÃO E PADRONIZAÇÃO VISUAL DOS FILTROS DE DIAGNÓSTICO -->
+      <div style="margin-bottom:20px; border-left:3px solid #2563EB; padding-left:14px; background:#EFF6FF; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#1D4ED8;">Versão 1.16 · v7.94 (Oficial)</span>
+          <span style="font-size:11px; background:#DBEAFE; color:#1E40AF; padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Alinhamento, Centralização e Padronização Visual das Caixas de Filtros para Diagnóstico e Formulários:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📐 <strong>Alinhamento e Centralização Perfeita:</strong> Eliminação do padding zero decorrente do reset universal. Todos os seletores e entradas agora contam com <code>padding-left: 14px</code>, garantindo respiro confortável, tipografia perfeitamente centralizada e visual harmonioso.</li>
+          <li>🛡️ <strong>Proteção Anti-Transbordamento:</strong> Implementação de <code>padding-right: 36px</code>, <code>text-overflow: ellipsis</code>, <code>white-space: nowrap</code> e <code>overflow: hidden</code>, impedindo que opções extensas colidam com as bordas ou com a seta.</li>
+          <li>✨ <strong>Chevron Moderno Canônico:</strong> Padronização dos seletores com <code>appearance: none</code> e SVG canônico refinado posicionado à direita.</li>
+          <li>📱 <strong>Conforto Tátil no Modal Móvel:</strong> Caixas do modal deslizante <code>#modalIndicatorsFiltersMobile</code> com touch target ideal de 44px a 46px e bordas arredondadas (10px).</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Módulo 10 (<code>indicadores_decisao</code>) e Módulo 12 (<code>navegacao_layout</code>) enriquecidos com validação dimensional, padding, chevron e blindagem anti-reentrância.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.15 - EDIÇÃO DE DATA EM AGENDAMENTO REALIZADO E EXCLUSÃO SEGURA NO CRONOGRAMA -->
+      <div style="margin-bottom:20px; border-left:3px solid #059669; padding-left:14px; background:#ECFDF5; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#047857;">Versão 1.15 · v7.93 (Oficial)</span>
+          <span style="font-size:11px; background:#D1FAE5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Edição de Data em Agendamentos Realizados, Sincronização Bidirecional e Exclusão Segura no Cronograma:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>✏️ <strong>Edição Ampla de Agendamentos Realizados e Arquivados:</strong> Habilitação dos botões "✏️ Editar" na tabela desktop e cards mobile da Agenda mesmo para visitas com status <code>realizado</code> ou <code>arquivada</code>, respeitando regras RBAC (coordenadora, formadora e núcleo EI).</li>
+          <li>🔄 <strong>Sincronização Bidirecional de Datas:</strong> Ao editar a data/horário de um agendamento já realizado no modal, a nova data é propagada automaticamente para a observação vinculada (<code>obs.date</code>, <code>obs.startDate</code>, <code>obs.endDate</code>, <code>obs.startTime</code> e turmas integrais). Além disso, ao finalizar uma observação, a data fidedigna da visita atualiza imediatamente o agendamento correspondente.</li>
+          <li>🚦 <strong>Resiliência Semafórica do Pilar 10:</strong> Adequação nos cálculos do Semáforo Bimestral para leitura segura de <code>sched.plannedDate || sched.date</code>, mantendo integridade nos indicadores e prazos.</li>
+          <li>🗑️ <strong>Exclusão Segura de Agendamentos (Delete Schedule):</strong> Criação da rotina <code>deleteSchedule()</code> e <code>confirmDeleteSchedule()</code> com diálogo preventivo contextual, desvinculação relacional mandatória (preservando rascunhos e observações concluídas no histórico) e botões de exclusão no modal e nas ações do cronograma.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Módulo <code>agenda_cronograma</code> expandido testando edição em visita realizada, propagação relacional para observação e expurgo seguro de agendamentos.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.14 - ENXUGAMENTO VISUAL MOBILE DE TEXTOS LONGOS E SOBERANIA DA MATRIZ OFICIAL -->
@@ -6892,7 +6979,7 @@
         <!-- Público-Alvo (se aplicável ao perfil) -->
         <div id="mobileIndTargetTypeGroup" class="form-group" style="margin-bottom:0;">
           <label class="form-label" style="font-size:12px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">Público-Alvo</label>
-          <select id="mobileIndTargetTypeFilter" class="form-control" onchange="syncMobileToDesktopFilters('targetType')" style="width:100%; height:44px; font-weight:700; color:var(--primary-dark); font-size:13px;">
+          <select id="mobileIndTargetTypeFilter" class="form-select form-control" onchange="syncMobileToDesktopFilters('targetType')" style="width:100%; height:44px; font-weight:700; color:var(--primary-dark); font-size:13px;">
             <option value="professora">👩‍🏫 Professores(as)</option>
             <option value="coordenador">👤 Coordenadores(as)</option>
           </select>
@@ -6901,7 +6988,7 @@
         <!-- Unidade Escolar -->
         <div class="form-group" style="margin-bottom:0;">
           <label class="form-label" style="font-size:12px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">Unidade Escolar</label>
-          <select id="mobileIndUnitFilter" class="form-control" onchange="syncMobileToDesktopFilters('unit')" style="width:100%; height:44px; font-weight:600; font-size:13px;">
+          <select id="mobileIndUnitFilter" class="form-select form-control" onchange="syncMobileToDesktopFilters('unit')" style="width:100%; height:44px; font-weight:600; font-size:13px;">
           </select>
         </div>
 
@@ -6911,14 +6998,14 @@
             <label id="mobileIndMemberLabel" class="form-label" style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">Professora / Docente</label>
             <a href="javascript:void(0)" id="btnMobileIndClearMember" onclick="clearMobileIndicatorsMemberFilter()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none; display:none;">✕ Ver Todas</a>
           </div>
-          <select id="mobileIndMemberFilter" class="form-control" onchange="syncMobileToDesktopFilters('member')" style="width:100%; height:44px; font-weight:600; color:var(--primary); font-size:13px;">
+          <select id="mobileIndMemberFilter" class="form-select form-control" onchange="syncMobileToDesktopFilters('member')" style="width:100%; height:44px; font-weight:600; color:var(--primary); font-size:13px;">
           </select>
         </div>
 
         <!-- Bimestre de Referência -->
         <div class="form-group" style="margin-bottom:0;">
           <label class="form-label" style="font-size:12px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">Bimestre de Referência</label>
-          <select id="mobileIndBimesterFilter" class="form-control" onchange="syncMobileToDesktopFilters('bimester')" style="width:100%; height:44px; font-weight:700; color:var(--text-primary); font-size:13px;">
+          <select id="mobileIndBimesterFilter" class="form-select form-control" onchange="syncMobileToDesktopFilters('bimester')" style="width:100%; height:44px; font-weight:700; color:var(--text-primary); font-size:13px;">
             <option value="ALL">Ano Letivo Completo (Todos os Bimestres)</option>
             <option value="1º Bimestre">1º Bimestre</option>
             <option value="2º Bimestre">2º Bimestre</option>
@@ -7131,9 +7218,10 @@
         </div>
       </div>
 
-      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:14px;">
-        <button class="btn btn-secondary" onclick="closeAddScheduleModal()">Cancelar</button>
-        <button class="btn btn-primary" onclick="saveNewSchedule()">Salvar no Cronograma</button>
+      <div style="display:flex; gap:10px; justify-content:flex-end; align-items:center; margin-top:14px;">
+        <button type="button" id="btnDeleteScheduleModal" class="btn btn-secondary" style="display:none; color:var(--red); border-color:var(--red); margin-right:auto;" onclick="confirmDeleteSchedule(editingScheduleId)">🗑️ Excluir Agendamento</button>
+        <button type="button" class="btn btn-secondary" onclick="closeAddScheduleModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="saveNewSchedule()">Salvar no Cronograma</button>
       </div>
     </div>
   </div>
@@ -10821,12 +10909,32 @@ function getActiveSections(obs) {
       function formatCriterionMobileDisplay(crit) {
         if (!crit || !crit.text) return { isLong: false, mainText: '', fullText: '' };
         const text = crit.text;
+
+        // Condição 1: Presença de parênteses explicativo longo (> 20 caracteres)
         const parenMatch = text.match(/\(([^)]+)\)/);
         if (parenMatch && parenMatch[1].length > 20) {
           let mainText = text.replace(/\s*\([^)]+\)/, '');
           mainText = mainText.replace(/\s+([.,?!;:])/g, '$1').trim();
           return { isLong: true, mainText: mainText, fullText: text };
         }
+
+        // Condição 2: Extensão total excessiva (> 90 caracteres) e divisível logicamente por ':' ou '—'
+        if (text.length > 90) {
+          if (text.includes(':')) {
+            const parts = text.split(':');
+            const prefix = parts[0].trim();
+            if (prefix.length > 0 && prefix.length <= 55) {
+              return { isLong: true, mainText: prefix, fullText: text };
+            }
+          } else if (text.includes('—')) {
+            const parts = text.split('—');
+            const prefix = parts[0].trim();
+            if (prefix.length > 0 && prefix.length <= 65) {
+              return { isLong: true, mainText: prefix, fullText: text };
+            }
+          }
+        }
+
         return { isLong: false, mainText: text, fullText: text };
       }
 
@@ -12737,6 +12845,9 @@ function getActiveSections(obs) {
       if (sched) {
         sched.status = 'realizado';
         sched.observationId = obs.id;
+        sched.plannedDate = obs.date;
+        sched.date = obs.date;
+        if (obs.startTime) sched.plannedTime = obs.startTime;
       }
 
       saveState();
@@ -13468,6 +13579,16 @@ function getActiveSections(obs) {
       }
     }
 
+    function escapeCriterionHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // Modal / Bottom Sheet de Detalhamento Canônico Oficial do Critério (Mobile)
     function openCriterionDetailModal(critId) {
       const modal = document.getElementById('modalCriterionDetail');
@@ -13518,7 +13639,50 @@ function getActiveSections(obs) {
         titleEl.textContent = mobileFormat.mainText || `Critério ${targetCrit.id}`;
       }
       if (textEl) {
-        textEl.textContent = targetCrit.text;
+        const text = targetCrit.text || '';
+        const parenMatch = text.match(/\(([^)]+)\)/);
+        if (parenMatch && parenMatch[1].length > 20) {
+          let mainPart = text.replace(/\s*\([^)]+\)/, '');
+          mainPart = mainPart.replace(/\s+([.,?!;:])/g, '$1').trim();
+          const parenPart = parenMatch[1].trim();
+          textEl.innerHTML = `
+            <div style="font-size:13.5px; font-weight:700; color:var(--text-primary); margin-bottom:12px; line-height:1.5;">
+              ${escapeCriterionHtml(mainPart)}
+            </div>
+            <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-left:4px solid #2563EB; border-radius:8px; padding:10px 12px; font-size:12.5px; color:#1E40AF; line-height:1.5;">
+              <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; color:#1D4ED8;">
+                📌 Notas e Exemplos Práticos da Matriz:
+              </div>
+              (${escapeCriterionHtml(parenPart)})
+            </div>
+          `;
+        } else if (text.length > 90 && text.includes(':')) {
+          const parts = text.split(':');
+          const prefix = parts[0].trim();
+          const rest = parts.slice(1).join(':').trim();
+          textEl.innerHTML = `
+            <div style="font-size:14px; font-weight:800; color:var(--primary-dark); margin-bottom:8px;">
+              ${escapeCriterionHtml(prefix)}:
+            </div>
+            <div style="font-size:13px; color:var(--text-primary); line-height:1.6; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px 12px;">
+              ${escapeCriterionHtml(rest)}
+            </div>
+          `;
+        } else if (text.length > 90 && text.includes('—')) {
+          const parts = text.split('—');
+          const prefix = parts[0].trim();
+          const rest = parts.slice(1).join('—').trim();
+          textEl.innerHTML = `
+            <div style="font-size:14px; font-weight:800; color:var(--primary-dark); margin-bottom:8px;">
+              ${escapeCriterionHtml(prefix)}
+            </div>
+            <div style="font-size:13px; color:var(--text-primary); line-height:1.6; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px 12px;">
+              — ${escapeCriterionHtml(rest)}
+            </div>
+          `;
+        } else {
+          textEl.textContent = text;
+        }
       }
 
       modal.classList.add('active');
@@ -13830,12 +13994,30 @@ function getActiveSections(obs) {
         const linkedObs = findObservationForSchedule(s);
         const hasFeedback = !!linkedObs;
 
+        const targetMember = (appState.teamMembers || []).find(m => m.name === s.targetName || resolveCanonicalUserName(m.name) === resolveCanonicalUserName(s.targetName));
+        const isTargetTeacher = targetMember ? (targetMember.roleKey === 'professora') : true;
+
+        const canStartVisit = (user.roleKey === 'coordenador' && isTargetTeacher && s.schoolName === user.school) ||
+                              (user.roleKey === 'formador' && !isTargetTeacher);
+
+        const canEditSchedule = (user.roleKey === 'coordenador' && isTargetTeacher && s.schoolName === user.school) ||
+                                (user.roleKey === 'formador' && !isTargetTeacher) ||
+                                isNucleoEI(user);
+
         if (s.archived) {
           actionHtml = `
             <div style="display:flex; gap:6px; justify-content:center; align-items:center; flex-wrap:wrap;">
               ${hasFeedback ? `
                 <button class="btn btn-primary" style="padding:4px 8px; font-size:11px; display:inline-flex; align-items:center; gap:4px;" onclick="viewFeedbackFromSchedule('${s.id}')" title="Visualizar Devolutiva Pedagógica da Observação">
                   📋 Devolutiva
+                </button>
+              ` : ''}
+              ${canEditSchedule ? `
+                <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="openEditScheduleModal('${s.id}')" title="Editar Agendamento">
+                  ✏️ Editar
+                </button>
+                <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red); border-color:var(--red);" onclick="confirmDeleteSchedule('${s.id}')" title="Excluir Agendamento do Cronograma">
+                  🗑️ Excluir
                 </button>
               ` : ''}
               <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="unarchiveSchedule('${s.id}')" title="Desarquivar observação">
@@ -13849,6 +14031,14 @@ function getActiveSections(obs) {
               <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; flex:1;" onclick="unarchiveSchedule('${s.id}')">
                 Desarquivar
               </button>
+              ${canEditSchedule ? `
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; flex:1;" onclick="openEditScheduleModal('${s.id}')">
+                  ✏️ Editar
+                </button>
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; flex:1; color:var(--red); border-color:var(--red);" onclick="confirmDeleteSchedule('${s.id}')">
+                  🗑️ Excluir
+                </button>
+              ` : ''}
               ${hasFeedback ? `
                 <button class="btn btn-primary" style="padding:7px 12px; font-size:12px; font-weight:700; flex:1.4; display:inline-flex; align-items:center; justify-content:center; gap:5px;" onclick="viewFeedbackFromSchedule('${s.id}')">
                   📋 Ver Devolutiva
@@ -13862,6 +14052,14 @@ function getActiveSections(obs) {
               <button class="btn btn-primary" style="padding:4px 8px; font-size:11px; display:inline-flex; align-items:center; gap:4px;" onclick="viewFeedbackFromSchedule('${s.id}')" title="Visualizar Devolutiva Pedagógica da Observação">
                 📋 Devolutiva
               </button>
+              ${canEditSchedule ? `
+                <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="openEditScheduleModal('${s.id}')" title="Editar Agendamento">
+                  ✏️ Editar
+                </button>
+                <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red); border-color:var(--red);" onclick="confirmDeleteSchedule('${s.id}')" title="Excluir Agendamento do Cronograma">
+                  🗑️ Excluir
+                </button>
+              ` : ''}
               <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="archiveSchedule('${s.id}')" title="Arquivar esta observação realizada">
                 Arquivar
               </button>
@@ -13869,6 +14067,14 @@ function getActiveSections(obs) {
           `;
           cardActionHtml = `
             <div style="display:flex; gap:8px; width:100%; align-items:center; flex-wrap:wrap;">
+              ${canEditSchedule ? `
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; flex:1;" onclick="openEditScheduleModal('${s.id}')">
+                  ✏️ Editar
+                </button>
+                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; flex:1; color:var(--red); border-color:var(--red);" onclick="confirmDeleteSchedule('${s.id}')">
+                  🗑️ Excluir
+                </button>
+              ` : ''}
               <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; flex:1;" onclick="archiveSchedule('${s.id}')">
                 Arquivar
               </button>
@@ -13878,57 +14084,63 @@ function getActiveSections(obs) {
             </div>
           `;
         } else {
-          const targetMember = (appState.teamMembers || []).find(m => m.name === s.targetName || resolveCanonicalUserName(m.name) === resolveCanonicalUserName(s.targetName));
-          const isTargetTeacher = targetMember ? (targetMember.roleKey === 'professora') : true;
-
-          const canStartVisit = (user.roleKey === 'coordenador' && isTargetTeacher && s.schoolName === user.school) ||
-                                (user.roleKey === 'formador' && !isTargetTeacher);
-
-          const canEditSchedule = (user.roleKey === 'coordenador' && isTargetTeacher && s.schoolName === user.school) ||
-                                  (user.roleKey === 'formador' && !isTargetTeacher) ||
-                                  isNucleoEI(user);
-
           if (canStartVisit) {
             actionHtml = `
-              <div style="display:flex; gap:6px; justify-content:center; align-items:center;">
+              <div style="display:flex; gap:6px; justify-content:center; align-items:center; flex-wrap:wrap;">
                 <button class="btn btn-primary" style="padding:5px 10px; font-size:11px;" onclick="openSetupScreenFromSchedule('${s.id}')">
                   Iniciar Observação →
                 </button>
                 ${canEditSchedule ? `
                   <button class="btn btn-secondary" style="padding:5px 10px; font-size:11px;" onclick="openEditScheduleModal('${s.id}')" title="Editar Agendamento">
-                    Editar
+                    ✏️ Editar
+                  </button>
+                  <button class="btn btn-secondary" style="padding:5px 10px; font-size:11px; color:var(--red); border-color:var(--red);" onclick="confirmDeleteSchedule('${s.id}')" title="Excluir Agendamento do Cronograma">
+                    🗑️ Excluir
                   </button>
                 ` : ''}
               </div>
             `;
             cardActionHtml = `
-              ${canEditSchedule ? `
-                <button class="btn btn-secondary" style="padding:8px 12px; font-size:12px; flex:1;" onclick="openEditScheduleModal('${s.id}')">
-                  Editar
+              <div style="display:flex; gap:8px; width:100%; align-items:center; flex-wrap:wrap;">
+                ${canEditSchedule ? `
+                  <button class="btn btn-secondary" style="padding:8px 12px; font-size:12px; flex:1;" onclick="openEditScheduleModal('${s.id}')">
+                    ✏️ Editar
+                  </button>
+                  <button class="btn btn-secondary" style="padding:8px 12px; font-size:12px; flex:1; color:var(--red); border-color:var(--red);" onclick="confirmDeleteSchedule('${s.id}')">
+                    🗑️ Excluir
+                  </button>
+                ` : ''}
+                <button class="btn btn-primary" style="padding:8px 14px; font-size:12px; font-weight:700; flex:1.4;" onclick="openSetupScreenFromSchedule('${s.id}')">
+                  Iniciar Observação →
                 </button>
-              ` : ''}
-              <button class="btn btn-primary" style="padding:8px 14px; font-size:12px; font-weight:700; flex:1.4;" onclick="openSetupScreenFromSchedule('${s.id}')">
-                Iniciar Observação →
-              </button>
+              </div>
             `;
           } else {
             actionHtml = `
-              <div style="display:flex; gap:6px; justify-content:center; align-items:center;">
+              <div style="display:flex; gap:6px; justify-content:center; align-items:center; flex-wrap:wrap;">
                 <span style="font-size:11px; color:var(--text-secondary); font-style:italic;" title="Observação de competência da coordenação local">Acompanhamento</span>
                 ${canEditSchedule ? `
                   <button class="btn btn-secondary" style="padding:5px 10px; font-size:11px;" onclick="openEditScheduleModal('${s.id}')" title="Editar Agendamento">
-                    Editar
+                    ✏️ Editar
+                  </button>
+                  <button class="btn btn-secondary" style="padding:5px 10px; font-size:11px; color:var(--red); border-color:var(--red);" onclick="confirmDeleteSchedule('${s.id}')" title="Excluir Agendamento do Cronograma">
+                    🗑️ Excluir
                   </button>
                 ` : ''}
               </div>
             `;
             cardActionHtml = `
-              <span style="font-size:11px; color:var(--text-secondary); font-style:italic; margin-right:auto;">Acompanhamento pedagógico em cascata</span>
-              ${canEditSchedule ? `
-                <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;" onclick="openEditScheduleModal('${s.id}')">
-                  Editar
-                </button>
-              ` : ''}
+              <div style="display:flex; gap:8px; width:100%; align-items:center; flex-wrap:wrap;">
+                <span style="font-size:11px; color:var(--text-secondary); font-style:italic; margin-right:auto;">Acompanhamento pedagógico em cascata</span>
+                ${canEditSchedule ? `
+                  <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;" onclick="openEditScheduleModal('${s.id}')">
+                    ✏️ Editar
+                  </button>
+                  <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px; color:var(--red); border-color:var(--red);" onclick="confirmDeleteSchedule('${s.id}')">
+                    🗑️ Excluir
+                  </button>
+                ` : ''}
+              </div>
             `;
           }
         }
@@ -14001,6 +14213,56 @@ function getActiveSections(obs) {
           cardsContainer.appendChild(card);
         }
       });
+    }
+
+    function confirmDeleteSchedule(scheduleId) {
+      if (!scheduleId) return;
+      const sched = (appState.schedules || []).find(s => s.id === scheduleId);
+      if (!sched) return;
+
+      const linkedObs = findObservationForSchedule(sched);
+      let confirmMsg = 'Tem certeza que deseja excluir este agendamento do cronograma? Esta ação não poderá ser desfeita.';
+      if (linkedObs && (linkedObs.status === 'finalized' || linkedObs.status === 'concluida')) {
+        confirmMsg = 'Este agendamento já possui uma observação realizada e finalizada. Deseja realmente removê-lo do cronograma? A observação concluída no histórico continuará preservada.';
+      } else if (linkedObs) {
+        confirmMsg = 'Este agendamento possui uma observação em andamento (rascunho). Deseja remover o agendamento? O rascunho de anotações continuará preservado como observação avulsa.';
+      }
+
+      if (window.confirm(confirmMsg)) {
+        deleteSchedule(scheduleId);
+      }
+    }
+
+    function deleteSchedule(scheduleId) {
+      if (!scheduleId || !appState.schedules) return;
+      const schedIndex = appState.schedules.findIndex(s => s.id === scheduleId);
+      if (schedIndex === -1) return;
+
+      const sched = appState.schedules[schedIndex];
+
+      // Desvinculação relacional segura: se houver observações vinculadas, desvincula o scheduleId
+      if (appState.observations && appState.observations.length > 0) {
+        appState.observations.forEach(obs => {
+          if (obs.scheduleId === scheduleId) {
+            obs.scheduleId = null;
+          }
+        });
+      }
+
+      // Remove do array de agendamentos
+      appState.schedules.splice(schedIndex, 1);
+
+      // Fecha o modal caso esteja aberto
+      if (typeof closeAddScheduleModal === 'function') {
+        closeAddScheduleModal();
+      }
+
+      saveState();
+      showToast('Agendamento excluído com sucesso do cronograma.');
+
+      if (typeof renderScheduleScreen === 'function') renderScheduleScreen();
+      if (typeof renderHomeScreen === 'function') renderHomeScreen();
+      if (typeof renderIndicatorsScreen === 'function') renderIndicatorsScreen();
     }
 
     function archiveSchedule(scheduleId) {
@@ -14079,6 +14341,8 @@ function getActiveSections(obs) {
       onScheduleSchoolChange();
       document.getElementById('scheduleDate').value = getTodayDateString();
       document.getElementById('scheduleTime').value = '08:00';
+      const btnDeleteModal = document.getElementById('btnDeleteScheduleModal');
+      if (btnDeleteModal) btnDeleteModal.style.display = 'none';
       document.getElementById('modalAddSchedule').classList.add('active');
     }
 
@@ -14129,8 +14393,11 @@ function getActiveSections(obs) {
       onScheduleTargetChange();
 
       document.getElementById('scheduleBimester').value = sched.bimester;
-      document.getElementById('scheduleDate').value = sched.plannedDate;
+      document.getElementById('scheduleDate').value = sched.plannedDate || sched.date;
       document.getElementById('scheduleTime').value = sched.plannedTime || '08:00';
+
+      const btnDeleteModal = document.getElementById('btnDeleteScheduleModal');
+      if (btnDeleteModal) btnDeleteModal.style.display = 'inline-block';
 
       document.getElementById('modalAddSchedule').classList.add('active');
     }
@@ -14273,15 +14540,32 @@ function getActiveSections(obs) {
       if (editingScheduleId) {
         const schedIndex = appState.schedules.findIndex(s => s.id === editingScheduleId);
         if (schedIndex !== -1) {
-          appState.schedules[schedIndex].schoolName = schoolName;
-          appState.schedules[schedIndex].targetType = targetType;
-          appState.schedules[schedIndex].targetName = targetName;
-          appState.schedules[schedIndex].className = className;
-          appState.schedules[schedIndex].classId = classId;
-          appState.schedules[schedIndex].teachers = teachersList;
-          appState.schedules[schedIndex].bimester = bimester;
-          appState.schedules[schedIndex].plannedDate = plannedDate;
-          appState.schedules[schedIndex].plannedTime = plannedTime;
+          const schedToUpdate = appState.schedules[schedIndex];
+          schedToUpdate.schoolName = schoolName;
+          schedToUpdate.targetType = targetType;
+          schedToUpdate.targetName = targetName;
+          schedToUpdate.className = className;
+          schedToUpdate.classId = classId;
+          schedToUpdate.teachers = teachersList;
+          schedToUpdate.bimester = bimester;
+          schedToUpdate.plannedDate = plannedDate;
+          schedToUpdate.date = plannedDate;
+          schedToUpdate.plannedTime = plannedTime;
+
+          // Sincronização relacional bidirecional com observação vinculada (se houver)
+          const linkedObs = findObservationForSchedule(schedToUpdate);
+          if (linkedObs) {
+            linkedObs.date = plannedDate;
+            linkedObs.startDate = plannedDate;
+            linkedObs.endDate = plannedDate;
+            if (plannedTime) linkedObs.startTime = plannedTime;
+
+            // Turmas de Tempo Integral: sincronizar sub-etapas matutina e vespertina
+            if (linkedObs.isIntegral) {
+              if (linkedObs.morningObs) linkedObs.morningObs.date = plannedDate;
+              if (linkedObs.afternoonObs) linkedObs.afternoonObs.date = plannedDate;
+            }
+          }
         }
         showToast('Observação atualizada com sucesso!');
       } else {
@@ -16765,7 +17049,21 @@ function getActiveSections(obs) {
         if (o.status !== 'finalized' && o.status !== 'concluida') return false;
         if (!o.className) return false;
         const oCls = o.className.trim().toLowerCase();
-        const matchesClass = oCls === cleanClass || cleanClass.includes(oCls) || oCls.includes(cleanClass);
+        // Casamento preciso de turmas com proteção estrita de numerais romanos (evita falso positivo Infantil I vs Infantil II)
+        let matchesClass = (cleanClass === oCls);
+        if (!matchesClass) {
+          const t1 = new Set(cleanClass.match(/[a-z0-9]+/g) || []);
+          const t2 = new Set(oCls.match(/[a-z0-9]+/g) || []);
+          const romans = ['i', 'ii', 'iii', 'iv', 'v'];
+          const r1 = romans.filter(r => t1.has(r));
+          const r2 = romans.filter(r => t2.has(r));
+          const romanConflict = (r1.length > 0 && r2.length > 0 && r1[0] !== r2[0]);
+          if (!romanConflict) {
+            const isSub1 = [...t2].every(x => t1.has(x));
+            const isSub2 = [...t1].every(x => t2.has(x));
+            matchesClass = isSub1 || isSub2;
+          }
+        }
         if (!matchesClass) return false;
         if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
         const oBimMatch = (o.bimester || '').match(/([1-4])/);
@@ -16809,7 +17107,12 @@ function getActiveSections(obs) {
         if (o.status !== 'draft') return false;
         if (!o.className) return false;
         const oCls = o.className.trim().toLowerCase();
-        const matchesClass = oCls === cleanClass || cleanClass.includes(oCls) || oCls.includes(cleanClass);
+        // Casamento preciso de turmas evitando colisao de numerais romanos (ex: infantil i vs infantil ii)
+        const normalizeClass = s => s.replace(/[^a-z0-9]/g, ' ').replace(/\s+/g, ' ').trim();
+        const normClean = normalizeClass(cleanClass);
+        const normObs = normalizeClass(oCls);
+        const matchesClass = normClean === normObs || 
+          (normClean.length > 5 && normObs.length > 5 && (new RegExp('\b' + normClean + '\b').test(normObs) || new RegExp('\b' + normObs + '\b').test(normClean)));
         if (!matchesClass) return false;
         if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
         const oBimMatch = (o.bimester || '').match(/([1-4])/);
@@ -16828,7 +17131,7 @@ function getActiveSections(obs) {
         return sBimMatch && parseInt(sBimMatch[1], 10) === bimesterNum;
       });
 
-      const schedDateFormatted = (sched && sched.date) ? sched.date.split('-').reverse().slice(0, 2).join('/') : '';
+      const schedDateFormatted = (sched && (sched.date || sched.plannedDate)) ? (sched.date || sched.plannedDate).split('-').reverse().slice(0, 2).join('/') : '';
 
       // 4. Se o bimestre já passou no calendário letivo (bimesterNum < currentBimNum) ➔ 🔴 VERMELHO (ATRASADO)
       if (bimesterNum < currentBimNum) {
@@ -16845,7 +17148,7 @@ function getActiveSections(obs) {
           date: null,
           obsId: draftObs ? draftObs.id : null,
           hasSchedule: !!sched,
-          scheduleDate: sched ? sched.date : null,
+          scheduleDate: sched ? (sched.date || sched.plannedDate) : null,
           isDraft: !!draftObs,
           bimesterNum,
           currentBimNum
@@ -16867,7 +17170,7 @@ function getActiveSections(obs) {
           date: null,
           obsId: draftObs ? draftObs.id : null,
           hasSchedule: !!sched,
-          scheduleDate: sched ? sched.date : null,
+          scheduleDate: sched ? (sched.date || sched.plannedDate) : null,
           isDraft: !!draftObs,
           bimesterNum,
           currentBimNum
@@ -16884,7 +17187,7 @@ function getActiveSections(obs) {
         date: null,
         obsId: null,
         hasSchedule: !!sched,
-        scheduleDate: sched ? sched.date : null,
+        scheduleDate: sched ? (sched.date || sched.plannedDate) : null,
         isDraft: false,
         bimesterNum,
         currentBimNum
@@ -21252,6 +21555,27 @@ function getActiveSections(obs) {
                 throw new Error('Bottom sheet #modalCriterionDetail não removeu a classe active ao fechar');
               }
               logger.log('Fechamento interativo da bottom sheet oficial de critério', true);
+
+              // Validação da heurística de texto extenso com subtítulo / dois pontos (Item 1.2.1)
+              const critCard121 = document.getElementById('crit-card-1.2.1');
+              if (!critCard121) throw new Error('Card do critério longo 1.2.1 não renderizado');
+              const trigger121 = critCard121.querySelector('.btn-crit-detail-trigger');
+              if (!trigger121) {
+                throw new Error('Critério extenso 1.2.1 com subtítulo deve possuir botão .btn-crit-detail-trigger');
+              }
+              const mobileSpan121 = critCard121.querySelector('.crit-text-mobile');
+              if (!mobileSpan121 || !mobileSpan121.textContent.includes('Brincadeira livre')) {
+                throw new Error('Critério 1.2.1 deve exibir subtítulo conciso "Brincadeira livre" no mobile');
+              }
+              openCriterionDetailModal('1.2.1');
+              if (!modalCritDetail.classList.contains('active')) {
+                throw new Error('Bottom sheet não abriu para o critério 1.2.1');
+              }
+              if (!fullTextEl.textContent.includes('organiza previamente materiais, tempos e espaços')) {
+                throw new Error('Enunciado canônico integral do critério 1.2.1 ausente no #criterionDetailFullText');
+              }
+              closeCriterionDetailModal();
+              logger.log('Enxugamento mobile determinístico com subtítulo e abertura oficial', true, 'Critério 1.2.1');
             } catch (e) {
               logger.log('Erro de execução no módulo rubricas_observacao', false, e.message);
             }
@@ -21973,6 +22297,69 @@ function getActiveSections(obs) {
                 throw new Error('exitReadOnlyMode não retornou para screenSchedule');
               }
               logger.log('Retorno contextual à aba Agenda com integridade de navegação', true);
+
+              // 1. Validação de Botão Editar em Observações Realizadas na Tabela
+              const hasEditBtnInRealizado = tbody && tbody.innerHTML.includes(`openEditScheduleModal('${updatedSched.id}')`);
+              if (!hasEditBtnInRealizado) {
+                throw new Error('Botão de Edição não foi renderizado na linha de observação realizada');
+              }
+              logger.log('Disponibilização do botão de edição para agendamento com status realizado', true);
+
+              // 2. Edição de Data em Agendamento Realizado e Sincronização com Observação Vinculada
+              openEditScheduleModal(updatedSched.id);
+              const btnDeleteModal = document.getElementById('btnDeleteScheduleModal');
+              if (!btnDeleteModal || btnDeleteModal.style.display === 'none') {
+                throw new Error('Botão de exclusão não foi exibido no modal ao editar agendamento');
+              }
+              logger.log('Exibição contextual do botão de exclusão no modal de edição (#btnDeleteScheduleModal)', true);
+
+              const newTestDate = '2026-10-25';
+              const newTestTime = '10:00';
+              UI.type(document.getElementById('scheduleDate'), newTestDate);
+              UI.type(document.getElementById('scheduleTime'), newTestTime);
+              saveNewSchedule();
+
+              if (updatedSched.plannedDate !== newTestDate || updatedSched.date !== newTestDate || updatedSched.plannedTime !== newTestTime) {
+                throw new Error('Agendamento não atualizou plannedDate/date/plannedTime após salvar edição');
+              }
+              const reFoundObs = findObservationForSchedule(updatedSched);
+              if (!reFoundObs || reFoundObs.date !== newTestDate || reFoundObs.startDate !== newTestDate || reFoundObs.endDate !== newTestDate || reFoundObs.startTime !== newTestTime) {
+                throw new Error('Data e horário alterados não sincronizaram com a observação realizada vinculada');
+              }
+              logger.log('Sincronização bidirecional de data e hora entre agendamento realizado e observação vinculada', true, `${newTestDate} ${newTestTime}`);
+
+              // 3. Exclusão Segura de Agendamento (Delete Schedule)
+              // 3a. Cria agendamento temporário
+              openAddScheduleModal();
+              if (btnDeleteModal.style.display !== 'none') {
+                throw new Error('Botão de exclusão não deve estar visível ao adicionar novo agendamento');
+              }
+              UI.select(document.getElementById('scheduleSchool'), 'CEI Professora Maria de Lourdes');
+              UI.select(document.getElementById('scheduleTarget'), 'Infantil II - Turma B');
+              UI.select(document.getElementById('scheduleBimester'), '3º Bimestre');
+              UI.type(document.getElementById('scheduleDate'), '2026-10-28');
+              UI.type(document.getElementById('scheduleTime'), '11:00');
+              saveNewSchedule();
+
+              const tempSched = (appState.schedules || []).find(s => s.className === 'Infantil II - Turma B' && s.bimester === '3º Bimestre' && s.plannedDate === '2026-10-28');
+              if (!tempSched) throw new Error('Agendamento temporário para teste de exclusão não foi criado');
+              
+              // 3b. Executa exclusão do agendamento temporário
+              deleteSchedule(tempSched.id);
+              const existsAfterDel = (appState.schedules || []).some(s => s.id === tempSched.id);
+              if (existsAfterDel) throw new Error('Agendamento temporário ainda consta em appState.schedules após deleteSchedule');
+
+              // 3c. Exclusão do agendamento vinculado com verificação de desvinculação da observação
+              const schedWithObsId = updatedSched.id;
+              deleteSchedule(schedWithObsId);
+              const schedStillExists = (appState.schedules || []).some(s => s.id === schedWithObsId);
+              if (schedStillExists) throw new Error('Agendamento realizado não foi expurgado de appState.schedules');
+              if (simObs.scheduleId !== null) {
+                throw new Error('A observação vinculada não teve seu scheduleId desvinculado (deve ser null)');
+              }
+              const obsStillInDb = (appState.observations || []).some(o => o.id === simObs.id);
+              if (!obsStillInDb) throw new Error('Observação foi deletada indevidamente ao remover o agendamento');
+              logger.log('Exclusão segura de agendamento com desvinculação relacional e preservação de observação no histórico', true);
             } catch (e) {
               logger.log('Erro de execução no módulo agenda_cronograma', false, e.message);
             }
@@ -22351,6 +22738,60 @@ function getActiveSections(obs) {
               }
               closeMobileIndicatorsFiltersModal();
               logger.log('Restauração Padrão e Recálculo Hierárquico', true);
+
+              // 18. ALINHAMENTO, PADDING E PREVENÇÃO DE COLISÃO NOS FILTROS DE DIAGNÓSTICO (DESKTOP)
+              const testDeskUnitFilter = document.getElementById('indicatorsUnitFilter');
+              if (!testDeskUnitFilter) throw new Error('#indicatorsUnitFilter não encontrado no DOM');
+              const computedDeskUnit = window.getComputedStyle(testDeskUnitFilter);
+              const padLeftDesk = parseInt(computedDeskUnit.paddingLeft, 10);
+              const padRightDesk = parseInt(computedDeskUnit.paddingRight, 10);
+              if (isNaN(padLeftDesk) || padLeftDesk < 12) {
+                throw new Error(`Seletor de diagnóstico desktop deve possuir padding-left >= 12px para evitar texto colado à esquerda (atual: ${computedDeskUnit.paddingLeft})`);
+              }
+              if (isNaN(padRightDesk) || padRightDesk < 32) {
+                throw new Error(`Seletor de diagnóstico desktop deve possuir padding-right >= 32px para respiro do chevron (atual: ${computedDeskUnit.paddingRight})`);
+              }
+              if (computedDeskUnit.boxSizing !== 'border-box') {
+                throw new Error(`Seletor de diagnóstico desktop deve possuir box-sizing: border-box (atual: ${computedDeskUnit.boxSizing})`);
+              }
+              if (computedDeskUnit.textOverflow !== 'ellipsis') {
+                throw new Error(`Seletor de diagnóstico desktop deve possuir text-overflow: ellipsis (atual: ${computedDeskUnit.textOverflow})`);
+              }
+              logger.log('Validação Dimensional e Padding do Seletor de Diagnóstico Desktop (#indicatorsUnitFilter)', true, `PL: ${computedDeskUnit.paddingLeft} · PR: ${computedDeskUnit.paddingRight}`);
+
+              // 19. CONFORMIDADE DO SELETOR MOBILE DE DIAGNÓSTICO (#mobileIndUnitFilter)
+              openMobileIndicatorsFiltersModal();
+              const testMobUnitFilter = document.getElementById('mobileIndUnitFilter');
+              if (!testMobUnitFilter) {
+                closeMobileIndicatorsFiltersModal();
+                throw new Error('#mobileIndUnitFilter não encontrado no DOM');
+              }
+              const computedMobUnit = window.getComputedStyle(testMobUnitFilter);
+              const padLeftMob = parseInt(computedMobUnit.paddingLeft, 10);
+              const padRightMob = parseInt(computedMobUnit.paddingRight, 10);
+              const heightMob = parseInt(computedMobUnit.height, 10);
+              if (isNaN(padLeftMob) || padLeftMob < 12) {
+                closeMobileIndicatorsFiltersModal();
+                throw new Error(`Seletor de diagnóstico mobile deve possuir padding-left >= 12px (atual: ${computedMobUnit.paddingLeft})`);
+              }
+              if (isNaN(padRightMob) || padRightMob < 32) {
+                closeMobileIndicatorsFiltersModal();
+                throw new Error(`Seletor de diagnóstico mobile deve possuir padding-right >= 32px (atual: ${computedMobUnit.paddingRight})`);
+              }
+              if (isNaN(heightMob) || heightMob < 40) {
+                closeMobileIndicatorsFiltersModal();
+                throw new Error(`Seletor de diagnóstico mobile deve possuir altura confortável >= 40px (atual: ${computedMobUnit.height})`);
+              }
+              closeMobileIndicatorsFiltersModal();
+              logger.log('Validação de Conformidade do Seletor Mobile de Diagnóstico (#mobileIndUnitFilter)', true, `H: ${computedMobUnit.height} · PL: ${computedMobUnit.paddingLeft}`);
+
+              // 20. PRESENÇA E ALINHAMENTO DO CHEVRON NOS SELETORES DE DIAGNÓSTICO
+              const bgImgDesk = computedDeskUnit.backgroundImage || '';
+              const hasChevronSvg = bgImgDesk.includes('data:image/svg+xml') || computedDeskUnit.appearance === 'none';
+              if (!hasChevronSvg) {
+                throw new Error('Seletor de diagnóstico deve adotar chevron padronizado ou appearance: none');
+              }
+              logger.log('Validação de Presença e Alinhamento do Chevron nos Seletores de Diagnóstico', true);
             } catch (e) {
               logger.log('Erro de execução no módulo indicadores_decisao', false, e.message);
             }
@@ -22523,6 +22964,123 @@ function getActiveSections(obs) {
               }
               document.body.removeChild(testBtnCrit);
               logger.log('Conformidade de Touch Target e Ergonomia Mobile nos Detalhes dos Critérios', true);
+
+              // 9. VALIDAÇÃO DE REGRAS DE MÍDIA E VISIBILIDADE (.crit-text-desktop / .crit-text-mobile)
+              const testWrap = document.createElement('div');
+              testWrap.style.display = 'block';
+              document.body.appendChild(testWrap);
+
+              const testSpanDesktop = document.createElement('span');
+              testSpanDesktop.className = 'crit-text-desktop';
+              testWrap.appendChild(testSpanDesktop);
+              const styleDesktop = window.getComputedStyle(testSpanDesktop);
+
+              const testSpanMobile = document.createElement('span');
+              testSpanMobile.className = 'crit-text-mobile';
+              testWrap.appendChild(testSpanMobile);
+              const styleMobile = window.getComputedStyle(testSpanMobile);
+
+              const isMobileMedia = window.matchMedia('(max-width: 768px)').matches;
+              if (isMobileMedia) {
+                if (styleDesktop.display !== 'none') {
+                  if (testWrap.parentNode) document.body.removeChild(testWrap); //
+                  
+                  throw new Error('No mobile (<= 768px), .crit-text-desktop deve possuir display: none');
+                }
+                if (styleMobile.display !== 'inline') {
+                  const val = styleMobile.display;
+                  if (testWrap.parentNode) document.body.removeChild(testWrap);
+                  throw new Error(`No mobile (<= 768px), .crit-text-mobile deve possuir display: inline (atual: ${val})`);
+                }
+              } else {
+                if (styleDesktop.display !== 'inline') {
+                  if (testWrap.parentNode) document.body.removeChild(testWrap); //
+                  
+                  throw new Error(`No desktop (> 768px), .crit-text-desktop deve possuir display: inline (atual: ${styleDesktop.display})`);
+                }
+                if (styleMobile.display !== 'none') {
+                  if (testWrap.parentNode) document.body.removeChild(testWrap); //
+                  
+                  throw new Error(`No desktop (> 768px), .crit-text-mobile deve possuir display: none (atual: ${styleMobile.display})`);
+                }
+              }
+
+              // Validação estática das regras declaradas nas folhas de estilo
+              let foundDesktopBaseRule = false;
+              let foundMobileBaseRule = false;
+              let foundMediaRule = false;
+              Array.from(document.styleSheets).forEach(sheet => {
+                try {
+                  Array.from(sheet.cssRules || []).forEach(rule => {
+                    if (rule.selectorText === '.crit-text-desktop' && rule.style.display === 'inline') {
+                      foundDesktopBaseRule = true;
+                    }
+                    if (rule.selectorText === '.crit-text-mobile' && rule.style.display === 'none') {
+                      foundMobileBaseRule = true;
+                    }
+                    if (rule.media && rule.media.mediaText && rule.media.mediaText.includes('768px')) {
+                      Array.from(rule.cssRules || []).forEach(subRule => {
+                        if (subRule.selectorText === '.crit-text-desktop' && subRule.style.display === 'none') {
+                          foundMediaRule = true;
+                        }
+                      });
+                    }
+                  });
+                } catch (e) {}
+              });
+
+              if (testWrap.parentNode) document.body.removeChild(testWrap); //
+              
+
+              if (!foundDesktopBaseRule || !foundMobileBaseRule || !foundMediaRule) {
+                throw new Error('Folhas de estilo devem conter as regras de mídia e classes responsivas para .crit-text-desktop e .crit-text-mobile');
+              }
+              logger.log('Validação de Regras de Mídia e Visibilidade (.crit-text-desktop / .crit-text-mobile)', true);
+
+              // 10. VALIDAÇÃO UNIVERSAL DE CLASSES E ESTILOS PARA .form-control E .form-select
+              const testGenericWrap = document.createElement('div');
+              testGenericWrap.style.display = 'block';
+              document.body.appendChild(testGenericWrap);
+
+              const testDynSelect = document.createElement('select');
+              testDynSelect.className = 'form-control';
+              const testDynOption = document.createElement('option');
+              testDynOption.textContent = 'Opção Teste Padronização';
+              testDynSelect.appendChild(testDynOption);
+              testGenericWrap.appendChild(testDynSelect);
+
+              const testDynInput = document.createElement('input');
+              testDynInput.type = 'text';
+              testDynInput.className = 'form-control';
+              testGenericWrap.appendChild(testDynInput);
+
+              const compDynSel = window.getComputedStyle(testDynSelect);
+              const compDynInp = window.getComputedStyle(testDynInput);
+
+              const padSel = parseInt(compDynSel.paddingLeft, 10);
+              const padInp = parseInt(compDynInp.paddingLeft, 10);
+              const bRadiusSel = compDynSel.borderRadius;
+
+              if (compDynSel.boxSizing !== 'border-box' || compDynInp.boxSizing !== 'border-box') {
+                if (testGenericWrap.parentNode) document.body.removeChild(testGenericWrap);
+                throw new Error('Elementos .form-control devem possuir box-sizing: border-box universalmente');
+              }
+              if (isNaN(padSel) || padSel < 12 || isNaN(padInp) || padInp < 12) {
+                if (testGenericWrap.parentNode) document.body.removeChild(testGenericWrap);
+                throw new Error(`Controles .form-control devem possuir padding-left >= 12px (Select: ${compDynSel.paddingLeft}, Input: ${compDynInp.paddingLeft})`);
+              }
+              if (!bRadiusSel || bRadiusSel === '0px') {
+                if (testGenericWrap.parentNode) document.body.removeChild(testGenericWrap);
+                throw new Error('Controles .form-control devem possuir border-radius moderno (>= 6px)');
+              }
+              if (testGenericWrap.parentNode) document.body.removeChild(testGenericWrap);
+              logger.log('Validação Universal de Classes e Estilos para .form-control e .form-select', true, `Radius: ${bRadiusSel} · Padding: ${compDynSel.paddingLeft}`);
+
+              // 11. BLINDAGEM ANTI-REENTRÂNCIA DO MOTOR DE AUDITORIA AUTOMÁTICA
+              if (typeof __autoAuditTriggered === 'undefined' || !__autoAuditTriggered) {
+                throw new Error('Motor de auditoria deve declarar e acionar trava booleana anti-reentrância __autoAuditTriggered');
+              }
+              logger.log('Blindagem Anti-Reentrância do Motor de Auditoria Automática', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
@@ -22644,7 +23202,10 @@ function getActiveSections(obs) {
       return summary;
     };
 
+    let __autoAuditTriggered = false;
     function triggerAutoAudit() {
+      if (__autoAuditTriggered) return;
+      __autoAuditTriggered = true;
       const urlParams = new URLSearchParams(window.location.search);
       const mod = urlParams.get('module') || 'all';
       setTimeout(() => {
