@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.18** | 22/10/2026 18:00 | `intermediárias/aplicativo_v118_resolucao_tela_branca_pos_auditoria.html` | Solicitação direta / `plano_resolucao_tela_branca_pos_auditoria.md` | Resolução definitiva da tela branca pós-auditoria da plataforma. Substituição do `window.alert()` nativo bloqueante pelo modal in-app acessível `#modalAuditReport` com desacoplamento via duplo `requestAnimationFrame`, correção das funções de restauração de tela (`openSetupScreen`, `renderActiveObservation`, `renderSynthesisScreen`), blindagem defensiva contra telas inativas em `navigateToTab`, compatibilização universal da trava anti-reentrância `__autoAuditTriggered` e higienização estrita de classes de impressão residuais no `body` 🔬🛡️ |
 | **1.17** | 22/10/2026 17:40 | `intermediárias/aplicativo_v117_pilar_14_governanca_descentralizada_ssot.html` | Deliberação SerTão Criança / Pilar 14 | Pilar 14: Governança Operacional Descentralizada e Gestão Autônoma sob SSOT Única: autonomia da Coordenadora (turmas, docentes, turno MEC e caracterização da escola), autonomia da Formadora (coordenadoras e polo regional), Núcleo de EI (governança central), resiliência contra ressurreição de turmas excluídas e integridade relacional total 🏫🌐 |
 | **1.16** | 22/10/2026 16:30 | `intermediárias/aplicativo_v0.94_alinhamento_filtros_diagnostico.html` | Solicitação direta / `plano_alinhamento_filtros_diagnostico.md` | Alinhamento, centralização e padronização visual das caixas de filtros para diagnóstico (`#indicatorsFilterToolbar` e `#modalIndicatorsFiltersMobile`) e formulários globais, eliminação de padding zero do reset universal, proteção contra transbordamento (`padding-right: 36px` e `text-overflow: ellipsis`), chevron SVG canônico e resiliência no semáforo 📐✨ |
 | **1.15** | 22/10/2026 16:00 | `intermediárias/aplicativo_v0.93_edicao_data_e_exclusao_agendamento.html` | Solicitação direta / `plano_edicao_data_agendamento_realizado_e_exclusao_cronograma.md` | Edição de data e horário em agendamentos realizados e arquivados no cronograma, sincronização bidirecional imediata com observação vinculada (`obs.date`, `obs.startTime`, turmas integrais), semáforo resiliente do Pilar 10 e exclusão segura (`deleteSchedule`) com desvinculação relacional ✏️🗑️ |
@@ -137,6 +138,26 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.18] - Resolução Definitiva da Tela Branca Pós-Auditoria da Plataforma
+- **Data / Horário:** 22/10/2026 18:00
+- **Arquivo de Referência:** `intermediárias/aplicativo_v118_resolucao_tela_branca_pos_auditoria.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_resolucao_tela_branca_pos_auditoria.md`.
+- **Foco Central:** Resolução definitiva do problema de tela inteiramente branca (WSOD) que ocorria após a execução do diagnóstico automatizado pela interface do usuário. Substituição de `window.alert()` nativo síncrono pelo modal in-app rico `#modalAuditReport`, restauração canônica de rotas no bloco `finally`, blindagem fail-safe defensiva de navegação em `navigateToTab`, compatibilização universal da trava anti-reentrância e higienização mandatória de classes residuais de impressão.
+
+#### Inclusões
+- **Modal In-App Não-Bloqueante (`#modalAuditReport`):** Criação de modal nativo acessível com cabeçalho semântico, métricas de tempo de execução, badge com contagem de asserções aprovadas/falhas e lista visual dos 12 módulos testados com status cromático individual.
+- **Funções de Controle do Relatório:** Adição de `openAuditReportModal(audit)` e `closeAuditReportModal()`, com desacoplamento assíncrono via duplo `requestAnimationFrame` que garante repaint e renderização completa da interface do navegador antes de apresentar o diálogo.
+- **Asserções de Blindagem contra Tela Branca (WSOD) no Módulo 12:** Validação determinística de que exatamente uma tela possui a classe `.active` após navegação sequencial, que a altura computada da tela ativa é superior a zero (`targetEl.getBoundingClientRect().height > 0`) e que o modal `#modalAuditReport` opera sem exceções.
+
+#### Modificações
+- **Gatilho de Auditoria pela Interface (`triggerPlatformAuditUI`):** Extinção completa de chamadas a `window.alert()`. Ativação canônica prévia de `__autoAuditTriggered = true` e `window.__autoAuditTriggered = true` para evitar falso-positivo de trava anti-reentrância no Módulo 12.
+- **Restauração Canônica de Rotas no Bloco `finally` (`runFullPlatformAudit`):** Correção de chamadas para as funções reais do sistema: `openSetupScreen()` (em vez de `openObservationSetupScreen`), `renderActiveObservation()` (em vez de `renderActiveObsScreen`) e chamada sem argumentos para `renderSynthesisScreen()`, restaurando previamente `appState.currentObs = stateBackup.currentObs`.
+- **Blindagem Defensiva em `navigateToTab`:** Mapeamento do elemento de destino logo no início do fluxo com aplicação imediata de `.active` antes da execução dos renderizadores de tela, associado a encapsulamento em bloco `try/catch` com card visual de recuperação automática caso ocorra erro imprevisto.
+- **Higienização Mandatória do DOM Pós-Auditoria:** Remoção forçada das classes `.printing-teacher-devolutiva`, `.is-printing` e `.print-preview` do `document.body`, limpeza do container `#teacherIndividualDevolutivaPrintSection` e reflow forçado limpo (`void document.body.offsetHeight; window.scrollTo(0, 0);`).
+
+#### Exclusões
+- **Extinção de `window.alert()` no Diagnóstico:** Supressão total de alertas modais nativos síncronos do browser durante a execução e ao término da auditoria.
 
 ### [Versão 1.17] - Governança Operacional Descentralizada e Gestão Autônoma sob SSOT Única (Pilar 14)
 - **Data / Horário:** 22/10/2026 17:40
