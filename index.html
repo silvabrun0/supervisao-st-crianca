@@ -3244,7 +3244,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.13 (v7.91)
+          📌 Versão 1.14 (v7.92)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4749,6 +4749,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.14 - ENXUGAMENTO VISUAL MOBILE DE TEXTOS LONGOS E SOBERANIA DA MATRIZ OFICIAL -->
+      <div style="margin-bottom:20px; border-left:3px solid #2563EB; padding-left:14px; background:#EFF6FF; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#1D4ED8;">Versão 1.14 · v7.92 (Oficial)</span>
+          <span style="font-size:11px; background:#DBEAFE; color:#1E40AF; padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Enxugamento Visual Mobile de Textos Longos e Soberania da Matriz Oficial da Rede Municipal:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📱 <strong>Enxugamento Ergonômico Mobile:</strong> Substituição visual dos blocos de parênteses longos (mais de 20 caracteres) nos cards de critério por botões táteis discretos (<code>.btn-crit-detail-trigger</code>), condensando o enunciado principal no card do celular e mantendo a interface ágil e limpa.</li>
+          <li>🏛️ <strong>Soberania Curricular Canônica:</strong> Ao tocar em <code>ℹ️ Detalhes</code>, abertura de uma Bottom Sheet nativa deslizante (<code>#modalCriterionDetail</code>) exibindo na íntegra o texto canônico e oficial aprovado pela rede municipal de Patos, sem palavras ou rubricas inventadas.</li>
+          <li>🎯 <strong>Seletividade Determinística:</strong> Critérios curtos e diretos (como <code>1.1.1</code>) mantêm seu enunciado 100% integral no card sem poluição visual ou botões desnecessários.</li>
+          <li>🖥️ <strong>Preservação Integral no Desktop:</strong> Em telas maiores ou iguais a 768px, os enunciados oficiais completos continuam sendo exibidos nativamente sem botões retráteis.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Módulo 4 (<code>rubricas_observacao</code>) e Módulo 12 (<code>navegacao_layout</code>) enriquecidos com validação de abertura, fechamento, regras de mídia e conformidade de touch target mínimo de 32px.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.13 - REMOÇÃO DE ORIENTAÇÕES PEDAGÓGICAS ARTIFICIAIS E SOBERANIA DA MATRIZ OFICIAL -->
@@ -10608,6 +10626,19 @@ function getActiveSections(obs) {
         if (fabContainer) fabContainer.style.display = 'none';
         navigateToTab('home');
       }
+    }
+
+    // Helper determinístico para formatação de enunciado enxuto no mobile
+    function formatCriterionMobileDisplay(crit) {
+      if (!crit || !crit.text) return { isLong: false, mainText: '', fullText: '' };
+      const text = crit.text;
+      const parenMatch = text.match(/\(([^)]+)\)/);
+      if (parenMatch && parenMatch[1].length > 20) {
+        let mainText = text.replace(/\s*\([^)]+\)/, '');
+        mainText = mainText.replace(/\s+([.,?!;:])/g, '$1').trim();
+        return { isLong: true, mainText: mainText, fullText: text };
+      }
+      return { isLong: false, mainText: text, fullText: text };
     }
 
     function renderActiveObservation(preserveScroll = false) {
