@@ -22999,14 +22999,6 @@ function getActiveSections(obs) {
               }
               logger.log('Validação de Regras de Mídia e Visibilidade (.crit-text-desktop / .crit-text-mobile)', true);
 
-              if (testWrap.parentNode) document.body.removeChild(testWrap); //
-              
-
-              if (!foundDesktopBaseRule || !foundMobileBaseRule || !foundMediaRule) {
-                throw new Error('Folhas de estilo devem conter as regras de mídia e classes responsivas para .crit-text-desktop e .crit-text-mobile');
-              }
-              logger.log('Validação de Regras de Mídia e Visibilidade (.crit-text-desktop / .crit-text-mobile)', true);
-
               // 10. VALIDAÇÃO UNIVERSAL DE CLASSES E ESTILOS PARA .form-control E .form-select
               const testGenericWrap = document.createElement('div');
               testGenericWrap.style.display = 'block';
