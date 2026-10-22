@@ -528,6 +528,15 @@
       line-height: 1.5;
       flex: 1;
     }
+    .crit-text-desktop {
+      display: inline;
+    }
+    .crit-text-mobile {
+      display: none;
+    }
+    .btn-crit-detail-trigger {
+      display: none;
+    }
     .crit-tag {
       background: var(--border-light);
       color: var(--text-secondary);
@@ -3130,6 +3139,40 @@
         background: #CBD5E1;
         border-radius: 3px;
         margin: 0 auto 12px auto;
+      }
+
+      /* Enxugamento Mobile de Textos Longos nos Cards de Critério */
+      .crit-text-desktop {
+        display: none !important;
+      }
+      .crit-text-mobile {
+        display: inline !important;
+      }
+      .btn-crit-detail-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #EFF6FF;
+        border: 1px solid #BFDBFE;
+        color: #1D4ED8;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 9px;
+        min-height: 32px;
+        box-sizing: border-box;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-left: 6px;
+        vertical-align: middle;
+        text-decoration: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .btn-crit-detail-trigger:hover,
+      .btn-crit-detail-trigger:active {
+        background: #DBEAFE;
+        border-color: #93C5FD;
+        color: #1E40AF;
       }
 
     }
@@ -6856,6 +6899,44 @@
         </button>
         <button type="button" class="btn btn-primary" onclick="applyAndCloseMobileIndicatorsFilters()" style="flex:2; height:46px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
           <span>✓ Aplicar e Fechar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL / BOTTOM SHEET: DETALHAMENTO CANÔNICO OFICIAL DO CRITÉRIO (MOBILE)
+       ========================================================================= -->
+  <div id="modalCriterionDetail" class="modal-backdrop mobile-bottom-sheet-backdrop" onclick="closeCriterionDetailModal(event)">
+    <div class="modal-panel mobile-bottom-sheet-panel" onclick="event.stopPropagation()">
+      <div class="mobile-bottom-sheet-handle"></div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; width:100%; margin-bottom:12px; gap:10px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span id="criterionDetailBadge" class="badge" style="background:#DBEAFE; color:#1E40AF; font-size:11px; font-weight:800; padding:3px 8px; border-radius:6px;">
+              Critério
+            </span>
+            <span id="criterionDetailSectionTag" style="font-size:11px; font-weight:700; color:var(--text-secondary);">
+              Matriz Oficial
+            </span>
+          </div>
+          <h3 id="criterionDetailTitle" style="margin:6px 0 0 0; font-size:16px; font-weight:800; color:var(--primary-dark); line-height:1.3;">
+            Enunciado Oficial
+          </h3>
+        </div>
+        <button type="button" class="btn-close-modal" onclick="closeCriterionDetailModal()" style="background:none; border:none; font-size:22px; font-weight:700; cursor:pointer; color:var(--text-secondary); line-height:1; padding:4px;">&times;</button>
+      </div>
+
+      <div class="mobile-bottom-sheet-body" style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:14px; margin-bottom:16px; max-height:55vh; overflow-y:auto;">
+        <p id="criterionDetailFullText" style="font-size:13px; color:var(--text-primary); line-height:1.6; margin:0; font-weight:500;">
+        </p>
+      </div>
+
+      <!-- Rodapé do Modal -->
+      <div style="display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-primary" onclick="closeCriterionDetailModal()" style="width:100%; height:44px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>✓ Entendido / Fechar</span>
         </button>
       </div>
     </div>
@@ -10687,6 +10768,19 @@ function getActiveSections(obs) {
         dimBottomBar.appendChild(synthBtn);
       }
 
+      // Helper determinístico para formatação de enunciado enxuto no mobile
+      function formatCriterionMobileDisplay(crit) {
+        if (!crit || !crit.text) return { isLong: false, mainText: '', fullText: '' };
+        const text = crit.text;
+        const parenMatch = text.match(/\(([^)]+)\)/);
+        if (parenMatch && parenMatch[1].length > 20) {
+          let mainText = text.replace(/\s*\([^)]+\)/, '');
+          mainText = mainText.replace(/\s+([.,?!;:])/g, '$1').trim();
+          return { isLong: true, mainText: mainText, fullText: text };
+        }
+        return { isLong: false, mainText: text, fullText: text };
+      }
+
       // Helper para renderizar os cards individuais de critérios
       function renderCriterionCard(crit, obsInstance) {
         const resp = (obsInstance.responses && obsInstance.responses[crit.id]) || null;
@@ -10697,9 +10791,19 @@ function getActiveSections(obs) {
         card.id = `crit-card-${crit.id}`;
         card.className = `crit-card ${resp === null ? 'unanswered' : ''}`;
 
+        const mobileFormat = formatCriterionMobileDisplay(crit);
+
         let html = `
           <div class="crit-top">
-            <div class="crit-text">${crit.text}</div>
+            <div class="crit-text">
+              <span class="crit-text-desktop">${crit.text}</span>
+              <span class="crit-text-mobile">${mobileFormat.mainText}</span>
+              ${mobileFormat.isLong ? `
+                <button type="button" class="btn-crit-detail-trigger" onclick="openCriterionDetailModal('${crit.id}')" title="Ver enunciado canônico oficial completo">
+                  <span>ℹ️</span> Detalhes
+                </button>
+              ` : ''}
+            </div>
             <div class="crit-tag">Item ${crit.id}</div>
           </div>
 
@@ -11571,8 +11675,8 @@ function getActiveSections(obs) {
 
           if (!obs.teacherSynthesis) obs.teacherSynthesis = {};
 
-          // Helper interno para gerar o card de cada docente
-          function buildTeacherCard(tName, globalIdx, shiftTag = null) {
+          // Helper interno para gerar o card de cada docente (com suporte a bloqueio condicional por turno)
+          function buildTeacherCard(tName, globalIdx, shiftTag = null, isBlocked = false) {
             if (!obs.teacherSynthesis[tName]) {
               obs.teacherSynthesis[tName] = {
                 dimensions: {
@@ -11587,6 +11691,7 @@ function getActiveSections(obs) {
             }
             const tData = obs.teacherSynthesis[tName];
             const tDims = tData.dimensions || {};
+            const isDisabled = appState.isReadOnly || isBlocked;
 
             // Mapeia critérios com nota parcial atribuídos a esta docente
             const assignedPartialItems = [];
@@ -11612,17 +11717,23 @@ function getActiveSections(obs) {
             });
 
             const card = document.createElement('div');
-            card.className = 'teacher-synthesis-card';
+            card.className = `teacher-synthesis-card ${isBlocked ? 'teacher-card-blocked' : ''}`;
             card.id = `teacher-synthesis-card-${globalIdx}`;
+            if (isBlocked) {
+              card.style.opacity = '0.72';
+              card.style.background = '#F8FAFC';
+              card.style.border = '1px dashed #CBD5E1';
+              card.style.transition = 'all 0.2s ease';
+            }
 
             let cardHtml = `
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid #E2E8F0;">
                 <div style="display:flex; align-items:center; gap:10px;">
-                  <div style="width:36px; height:36px; border-radius:18px; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px;">
+                  <div style="width:36px; height:36px; border-radius:18px; background:${isBlocked ? '#94A3B8' : 'var(--primary)'}; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px;">
                     ${tName.split(' ').map(n=>n[0]).slice(0,2).join('')}
                   </div>
                   <div>
-                    <div style="font-size:15px; font-weight:800; color:var(--text-primary);">${tName}</div>
+                    <div style="font-size:15px; font-weight:800; color:${isBlocked ? '#64748B' : 'var(--text-primary)'};">${tName}</div>
                     <div style="font-size:11px; color:var(--text-secondary);">Docente Regente Titular</div>
                   </div>
                 </div>
@@ -11632,15 +11743,28 @@ function getActiveSections(obs) {
                       ${shiftTag.label}
                     </span>
                   ` : ''}
-                  <span class="badge" style="background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE; font-size:10px;">
-                    Devolutiva Individual
-                  </span>
+                  ${isBlocked ? `
+                    <span class="badge" style="background:#F1F5F9; color:#475569; border:1px solid #CBD5E1; font-size:10px; font-weight:700;">
+                      🔒 Bloqueado no Turno Matutino
+                    </span>
+                  ` : `
+                    <span class="badge" style="background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE; font-size:10px;">
+                      Devolutiva Individual
+                    </span>
+                  `}
                 </div>
               </div>
 
+              ${isBlocked ? `
+                <div style="background:#FFFBEB; border:1px solid #FDE68A; border-left:4px solid #D97706; border-radius:6px; padding:8px 12px; margin-bottom:14px; font-size:11px; color:#92400E; display:flex; align-items:center; gap:8px;">
+                  <span>🔒</span>
+                  <span><strong>Avaliação Bloqueada:</strong> Esta docente atua no <strong>Turno Vespertino (Tarde)</strong>. A avaliação das dimensões estruturantes e parecer pedagógico será habilitada na <strong>Etapa 2 (Tarde)</strong>.</span>
+                </div>
+              ` : ''}
+
               <!-- Grade das 5 Dimensões -->
               <div style="margin-bottom:16px;">
-                <div style="font-size:12px; font-weight:800; color:var(--primary-dark); text-transform:uppercase; margin-bottom:8px;">
+                <div style="font-size:12px; font-weight:800; color:${isBlocked ? '#64748B' : 'var(--primary-dark)'}; text-transform:uppercase; margin-bottom:8px;">
                   Avaliação nas 5 Dimensões Estruturantes:
                 </div>
                 <div style="display:flex; flex-direction:column; gap:8px;">
@@ -11649,25 +11773,28 @@ function getActiveSections(obs) {
             dimLabels.forEach(d => {
               const currentVal = tDims[d.key];
               cardHtml += `
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:8px;">
-                  <span style="font-size:12px; font-weight:700; color:#334155;">${d.title}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; background:${isBlocked ? '#F1F5F9' : '#F8FAFC'}; border:1px solid ${isBlocked ? '#E2E8F0' : '#E2E8F0'}; padding:8px 12px; border-radius:8px;">
+                  <span style="font-size:12px; font-weight:700; color:${isBlocked ? '#64748B' : '#334155'};">${d.title}</span>
                   <div style="display:flex; gap:6px;">
                     <button type="button" 
                             class="dim-pill-btn ${currentVal === 'consistent' ? 'active-cons' : ''}" 
                             onclick="setTeacherSynthesisDimension('${tName}', '${d.key}', 'consistent')"
-                            ${appState.isReadOnly ? 'disabled' : ''}>
+                            ${isDisabled ? 'disabled' : ''}
+                            style="${isDisabled ? 'cursor:not-allowed; opacity:0.55;' : ''}">
                       Consistente
                     </button>
                     <button type="button" 
                             class="dim-pill-btn ${currentVal === 'partial' ? 'active-parc' : ''}" 
                             onclick="setTeacherSynthesisDimension('${tName}', '${d.key}', 'partial')"
-                            ${appState.isReadOnly ? 'disabled' : ''}>
+                            ${isDisabled ? 'disabled' : ''}
+                            style="${isDisabled ? 'cursor:not-allowed; opacity:0.55;' : ''}">
                       Parcial
                     </button>
                     <button type="button" 
                             class="dim-pill-btn ${currentVal === 'not_done' ? 'active-notdone' : ''}" 
                             onclick="setTeacherSynthesisDimension('${tName}', '${d.key}', 'not_done')"
-                            ${appState.isReadOnly ? 'disabled' : ''}>
+                            ${isDisabled ? 'disabled' : ''}
+                            style="${isDisabled ? 'cursor:not-allowed; opacity:0.55;' : ''}">
                       Não Realizado
                     </button>
                   </div>
@@ -11681,15 +11808,15 @@ function getActiveSections(obs) {
 
               <!-- Rastreabilidade de Itens Parciais Atribuídos -->
               <div style="margin-bottom:16px;">
-                <div style="font-size:12px; font-weight:800; color:#B45309; text-transform:uppercase; margin-bottom:6px;">
+                <div style="font-size:12px; font-weight:800; color:${isBlocked ? '#94A3B8' : '#B45309'}; text-transform:uppercase; margin-bottom:6px;">
                   📌 Critérios com Nota Parcial Atribuída a esta Docente (${assignedPartialItems.length}):
                 </div>
             `;
 
             if (assignedPartialItems.length === 0) {
               cardHtml += `
-                <div style="font-size:11px; color:#15803D; background:#DCFCE7; border:1px solid #BBF7D0; border-radius:6px; padding:8px 12px;">
-                  ✓ Nenhum apontamento de fragilidade pontual atribuído nos critérios individuais.
+                <div style="font-size:11px; color:${isBlocked ? '#64748B' : '#15803D'}; background:${isBlocked ? '#F1F5F9' : '#DCFCE7'}; border:1px solid ${isBlocked ? '#E2E8F0' : '#BBF7D0'}; border-radius:6px; padding:8px 12px;">
+                  ${isBlocked ? '🔒 Sem registros de fragilidades pontuais no período matutino.' : '✓ Nenhum apontamento de fragilidade pontual atribuído nos critérios individuais.'}
                 </div>
               `;
             } else {
@@ -11710,15 +11837,15 @@ function getActiveSections(obs) {
 
               <!-- Parecer Formativo e Combinados Individuais -->
               <div>
-                <label style="font-size:12px; font-weight:800; color:var(--primary-dark); display:block; margin-bottom:4px;">
+                <label style="font-size:12px; font-weight:800; color:${isBlocked ? '#64748B' : 'var(--primary-dark)'}; display:block; margin-bottom:4px;">
                   Parecer Formativo Individual e Combinados de Desenvolvimento:
                 </label>
                 <textarea class="form-textarea" 
                           id="teacherFeedback-${globalIdx}"
-                          style="min-height:76px; font-size:12px;"
-                          placeholder="${appState.isReadOnly ? 'Sem parecer individual registrado.' : 'Pontos fortes observados, evidências de práticas consistentes e combinados de aprimoramento individual para o próximo ciclo...'}"
+                          style="min-height:76px; font-size:12px; ${isBlocked ? 'background:#F1F5F9; cursor:not-allowed; color:#64748B; border-color:#CBD5E1;' : ''}"
+                          placeholder="${isBlocked ? '🔒 Avaliação bloqueada: esta docente atua no turno vespertino e será avaliada na Etapa 2 (Tarde)...' : (appState.isReadOnly ? 'Sem parecer individual registrado.' : 'Pontos fortes observados, evidências de práticas consistentes e combinados de aprimoramento individual para o próximo ciclo...')}"
                           onchange="setTeacherSynthesisFeedback('${tName}', this.value)"
-                          ${appState.isReadOnly ? 'disabled' : ''}>${tData.feedback || ''}</textarea>
+                          ${isDisabled ? 'disabled' : ''}>${tData.feedback || ''}</textarea>
               </div>
             `;
 
@@ -11781,17 +11908,28 @@ function getActiveSections(obs) {
             `;
             synthTeachersCardsContainer.appendChild(afternoonHeader);
 
-            if (obs.integralStage === 'matutino') {
+            const isMorningStage = (obs.integralStage === 'matutino');
+
+            if (isMorningStage) {
               const noticeCard = document.createElement('div');
-              noticeCard.style.cssText = 'background:#FFFBEB; border:1px dashed #F59E0B; border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:12px; color:#B45309; line-height:1.4;';
+              noticeCard.id = 'synthesisAfternoonBlockedNotice';
+              noticeCard.style.cssText = 'background:#FFFBEB; border:1px solid #F59E0B; border-left:5px solid #D97706; border-radius:8px; padding:12px 14px; margin-bottom:14px; font-size:12px; color:#B45309; line-height:1.5;';
               noticeCard.innerHTML = `
-                ℹ️ <strong>Observação em Etapa Matutina:</strong> A avaliação nominal das docentes da tarde será preenchida durante a Etapa 2 (Vespertina). Salve o turno matutino para prosseguir à tarde.
+                <div style="font-weight:800; display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+                  <span>🔒</span> <span>Avaliação Bloqueada no Turno Matutino (Etapa 1/2)</span>
+                </div>
+                <div>Os docentes abaixo atuam no <strong>Turno Vespertino (Tarde)</strong> e não podem ser avaliados durante a observação matutina. A avaliação nominal das 5 dimensões e parecer individual será liberada na <strong>Etapa 2 (Tarde)</strong>, quando os 4 regentes estarão disponíveis para fechamento. Salve o turno matutino abaixo para retomar à tarde.</div>
               `;
               synthTeachersCardsContainer.appendChild(noticeCard);
             }
 
             aTeachers.forEach(tName => {
-              const card = buildTeacherCard(tName, globalIdx, { label: '🌅 Turno Vespertino', style: 'background:#FFF7ED; color:#EA580C; border:1px solid #FED7AA;' });
+              const card = buildTeacherCard(
+                tName, 
+                globalIdx, 
+                { label: '🌅 Turno Vespertino', style: 'background:#FFF7ED; color:#EA580C; border:1px solid #FED7AA;' },
+                isMorningStage // isBlocked: true na etapa matutina, false na etapa vespertina
+              );
               synthTeachersCardsContainer.appendChild(card);
               globalIdx++;
             });
@@ -12266,17 +12404,28 @@ function getActiveSections(obs) {
     // PILAR 5: Manipulação Reativa das Dimensões no Bloco Nominal do Docente
     function setTeacherSynthesisDimension(teacherName, dimKey, rating) {
       if (appState.isReadOnly || !appState.currentObs) return;
-      if (!appState.currentObs.teacherSynthesis) appState.currentObs.teacherSynthesis = {};
-      if (!appState.currentObs.teacherSynthesis[teacherName]) {
-        appState.currentObs.teacherSynthesis[teacherName] = {
+      const obs = appState.currentObs;
+
+      // BLINDAGEM DE TURNO: Em turma integral na etapa matutina, bloqueia avaliação de docentes da tarde!
+      if (obs.isIntegral && obs.integralStage === 'matutino') {
+        const afternoonTeachers = obs.teachersAfternoon || [];
+        if (afternoonTeachers.includes(teacherName)) {
+          showToast(`Ação bloqueada: ${teacherName} pertence ao turno vespertino e só pode ser avaliada na Etapa 2 (Tarde).`);
+          return;
+        }
+      }
+
+      if (!obs.teacherSynthesis) obs.teacherSynthesis = {};
+      if (!obs.teacherSynthesis[teacherName]) {
+        obs.teacherSynthesis[teacherName] = {
           dimensions: {},
           feedback: ''
         };
       }
-      if (!appState.currentObs.teacherSynthesis[teacherName].dimensions) {
-        appState.currentObs.teacherSynthesis[teacherName].dimensions = {};
+      if (!obs.teacherSynthesis[teacherName].dimensions) {
+        obs.teacherSynthesis[teacherName].dimensions = {};
       }
-      appState.currentObs.teacherSynthesis[teacherName].dimensions[dimKey] = rating;
+      obs.teacherSynthesis[teacherName].dimensions[dimKey] = rating;
       saveState();
       renderSynthesisScreen(true);
     }
@@ -12284,14 +12433,25 @@ function getActiveSections(obs) {
     // PILAR 5: Manipulação Reativa do Parecer Individual no Bloco Nominal do Docente
     function setTeacherSynthesisFeedback(teacherName, feedbackText) {
       if (appState.isReadOnly || !appState.currentObs) return;
-      if (!appState.currentObs.teacherSynthesis) appState.currentObs.teacherSynthesis = {};
-      if (!appState.currentObs.teacherSynthesis[teacherName]) {
-        appState.currentObs.teacherSynthesis[teacherName] = {
+      const obs = appState.currentObs;
+
+      // BLINDAGEM DE TURNO: Em turma integral na etapa matutina, bloqueia parecer de docentes da tarde!
+      if (obs.isIntegral && obs.integralStage === 'matutino') {
+        const afternoonTeachers = obs.teachersAfternoon || [];
+        if (afternoonTeachers.includes(teacherName)) {
+          showToast(`Ação bloqueada: ${teacherName} pertence ao turno vespertino e só pode receber parecer na Etapa 2 (Tarde).`);
+          return;
+        }
+      }
+
+      if (!obs.teacherSynthesis) obs.teacherSynthesis = {};
+      if (!obs.teacherSynthesis[teacherName]) {
+        obs.teacherSynthesis[teacherName] = {
           dimensions: {},
           feedback: ''
         };
       }
-      appState.currentObs.teacherSynthesis[teacherName].feedback = feedbackText;
+      obs.teacherSynthesis[teacherName].feedback = feedbackText;
       saveState();
     }
 
@@ -13254,6 +13414,70 @@ function getActiveSections(obs) {
     function closeConfirmDeleteDraftModal() {
       pendingDeleteDraftId = null;
       const modal = document.getElementById('modalConfirmDeleteDraft');
+      if (modal) {
+        modal.classList.remove('active');
+      }
+    }
+
+    // Modal / Bottom Sheet de Detalhamento Canônico Oficial do Critério (Mobile)
+    function openCriterionDetailModal(critId) {
+      const modal = document.getElementById('modalCriterionDetail');
+      if (!modal) return;
+
+      let targetCrit = null;
+      let targetSec = null;
+      let targetSub = null;
+
+      const allSecs = (appState.currentObs && appState.currentObs.evaluatedType === 'coordenador')
+        ? (appState.activeSectionsCoordinator || DEFAULT_SECTIONS_COORDINATOR)
+        : (appState.activeSectionsTeacher || DEFAULT_SECTIONS_TEACHER);
+
+      if (Array.isArray(allSecs)) {
+        for (const sec of allSecs) {
+          if (sec && sec.subSections) {
+            for (const sub of sec.subSections) {
+              if (sub && sub.criteria) {
+                const found = sub.criteria.find(c => String(c.id) === String(critId));
+                if (found) {
+                  targetCrit = found;
+                  targetSec = sec;
+                  targetSub = sub;
+                  break;
+                }
+              }
+            }
+          }
+          if (targetCrit) break;
+        }
+      }
+
+      if (!targetCrit) return;
+
+      const badgeEl = document.getElementById('criterionDetailBadge');
+      const secTagEl = document.getElementById('criterionDetailSectionTag');
+      const titleEl = document.getElementById('criterionDetailTitle');
+      const textEl = document.getElementById('criterionDetailFullText');
+
+      if (badgeEl) badgeEl.textContent = `Critério ${targetCrit.id}`;
+      if (secTagEl) {
+        const secName = targetSec ? targetSec.title : 'Matriz Oficial';
+        const subName = targetSub && targetSub.title ? ` · ${targetSub.title}` : '';
+        secTagEl.textContent = `${secName}${subName}`;
+      }
+      if (titleEl) {
+        const mobileFormat = formatCriterionMobileDisplay(targetCrit);
+        titleEl.textContent = mobileFormat.mainText || `Critério ${targetCrit.id}`;
+      }
+      if (textEl) {
+        textEl.textContent = targetCrit.text;
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeCriterionDetailModal(e) {
+      if (e && e.target && e.target.id !== 'modalCriterionDetail') return;
+      const modal = document.getElementById('modalCriterionDetail');
       if (modal) {
         modal.classList.remove('active');
       }
@@ -20931,7 +21155,7 @@ function getActiveSections(obs) {
               appState.currentObs = savedObsBackup;
               renderActiveObservation(false);
 
-              // Validação de Soberania da Matriz Curricular: Enunciado canônico integral sem botões artificiais
+              // Validação de Soberania da Matriz Curricular e Enxugamento Mobile
               const critCard111 = document.getElementById('crit-card-1.1.1');
               if (!critCard111) throw new Error('Card do critério 1.1.1 não renderizado');
               const artificialTrigger = critCard111.querySelector('.btn-rubric-guidance-trigger');
@@ -20946,7 +21170,39 @@ function getActiveSections(obs) {
               if (!critTextEl || !critTextEl.innerText.includes('Realiza leitura ou contação de histórias.')) {
                 throw new Error('Enunciado canônico oficial do critério 1.1.1 adulterado ou incompleto');
               }
+              // Confirmação determinística de ausência de botão de detalhes em critérios curtos
+              const shortDetailTrigger = critCard111.querySelector('.btn-crit-detail-trigger');
+              if (shortDetailTrigger) {
+                throw new Error('Critério curto 1.1.1 não deve possuir botão .btn-crit-detail-trigger');
+              }
               logger.log('Soberania da Matriz Oficial e Ausência de Gatilhos Artificiais nos Critérios', true);
+
+              // Validação do Enxugamento Mobile de Textos Longos e Abertura Canônica da Bottom Sheet (#modalCriterionDetail)
+              const critCard131 = document.getElementById('crit-card-1.3.1');
+              if (!critCard131) throw new Error('Card do critério longo 1.3.1 não renderizado');
+              const longDetailTrigger = critCard131.querySelector('.btn-crit-detail-trigger');
+              if (!longDetailTrigger) {
+                throw new Error('Critério longo 1.3.1 deve possuir o botão .btn-crit-detail-trigger');
+              }
+
+              // Disparo interativo de abertura do modal de detalhamento
+              openCriterionDetailModal('1.3.1');
+              const modalCritDetail = document.getElementById('modalCriterionDetail');
+              if (!modalCritDetail || !modalCritDetail.classList.contains('active')) {
+                throw new Error('Bottom sheet #modalCriterionDetail não foi ativada ao chamar openCriterionDetailModal');
+              }
+              const fullTextEl = document.getElementById('criterionDetailFullText');
+              if (!fullTextEl || !fullTextEl.textContent.includes('práticas relacionadas à oralidade, leitura, registros gráficos')) {
+                throw new Error('Enunciado canônico integral ausente no #criterionDetailFullText');
+              }
+              logger.log('Detecção de texto longo e abertura canônica de bottom sheet (#modalCriterionDetail)', true, 'Critério 1.3.1');
+
+              // Disparo interativo de fechamento do modal de detalhamento
+              closeCriterionDetailModal();
+              if (modalCritDetail.classList.contains('active')) {
+                throw new Error('Bottom sheet #modalCriterionDetail não removeu a classe active ao fechar');
+              }
+              logger.log('Fechamento interativo da bottom sheet oficial de critério', true);
             } catch (e) {
               logger.log('Erro de execução no módulo rubricas_observacao', false, e.message);
             }
@@ -21225,6 +21481,77 @@ function getActiveSections(obs) {
                 throw new Error('Apontamento parcial da manhã não foi vinculado ao card de Mariana Santos');
               }
               logger.log('Rastreabilidade de apontamento de fragilidade matutina no card da docente da manhã', true);
+
+              // PILAR 4 & 5 (v1.14): Teste de Bloqueio Mandatório de Docentes Vespertinos na Etapa Matutina em Turma Integral
+              const testIntegralMorningSynth = {
+                id: 'obs-test-integral-morning-synth-' + Date.now(),
+                evaluatedType: 'turma',
+                unitOfAnalysis: 'turma',
+                className: 'Maternal II - Turma Integral',
+                schoolName: 'CEI Professora Maria de Lourdes',
+                isIntegral: true,
+                integralStage: 'matutino',
+                teachersMorning: ['Mariana Santos', 'Roberta Dias'],
+                teachersAfternoon: ['Patricia Souza', 'Camila Vasconcelos'],
+                teachers: ['Mariana Santos', 'Roberta Dias', 'Patricia Souza', 'Camila Vasconcelos'],
+                teacherName: 'Mariana, Roberta, Patricia e Camila',
+                evaluatedBy: 'Mariana Ferreira',
+                startDate: testDate,
+                date: testDate,
+                startTime: '08:00',
+                endTime: '11:30',
+                status: 'draft',
+                synthesisMaterialDimension: 3,
+                synthesisPredominant: 'Livros e materiais de desenho/pintura',
+                synthesisOrg: 'Pequenos grupos e cantos de atividades',
+                responses: {},
+                partialAttributions: {},
+                teacherSynthesis: {}
+              };
+              appState.currentObs = testIntegralMorningSynth;
+              appState.isReadOnly = false;
+              renderSynthesisScreen();
+
+              // 1. Verifica presença do banner contextual de bloqueio
+              const blockedNoticeEl = document.getElementById('synthesisAfternoonBlockedNotice');
+              if (!blockedNoticeEl) {
+                throw new Error('Banner #synthesisAfternoonBlockedNotice ausente na síntese de turma integral na Etapa Matutina');
+              }
+
+              // 2. Verifica desabilitação dos controles dos docentes da tarde (cards 2 e 3)
+              const cardAft0 = document.getElementById('teacher-synthesis-card-2');
+              const cardAft1 = document.getElementById('teacher-synthesis-card-3');
+              if (!cardAft0 || !cardAft1) {
+                throw new Error('Cards dos docentes vespertinos não encontrados para verificação de bloqueio');
+              }
+              if (!cardAft0.innerText.includes('Bloqueado no Turno Matutino') || !cardAft1.innerText.includes('Bloqueado no Turno Matutino')) {
+                throw new Error('Selo "Bloqueado no Turno Matutino" ausente nos cards dos docentes vespertinos');
+              }
+
+              const aftButtons = cardAft0.querySelectorAll('.dim-pill-btn');
+              aftButtons.forEach(btn => {
+                if (!btn.disabled) throw new Error('Botão de dimensão em docente vespertino não está desabilitado na Etapa Matutina');
+              });
+              const aftTextarea = cardAft0.querySelector('textarea');
+              if (!aftTextarea || !aftTextarea.disabled) {
+                throw new Error('Textarea de parecer em docente vespertino não está desabilitado na Etapa Matutina');
+              }
+
+              // 3. Verifica rejeição da blindagem lógica JS
+              setTeacherSynthesisDimension('Patricia Souza', 'estrategias', 'consistent');
+              if (testIntegralMorningSynth.teacherSynthesis['Patricia Souza']?.dimensions?.estrategias === 'consistent') {
+                throw new Error('setTeacherSynthesisDimension não bloqueou mutação para docente vespertino na Etapa Matutina');
+              }
+
+              // 4. Transiciona para Etapa Vespertina e verifica desbloqueio dos 4 docentes
+              testIntegralMorningSynth.integralStage = 'vespertino';
+              renderSynthesisScreen();
+              const cardAft0After = document.getElementById('teacher-synthesis-card-2');
+              const aftBtnUnlocked = cardAft0After.querySelectorAll('.dim-pill-btn');
+              aftBtnUnlocked.forEach(btn => {
+                if (btn.disabled) throw new Error('Botão de dimensão em docente vespertino permaneceu desabilitado na Etapa Vespertina');
+              });
+              logger.log('Bloqueio Mandatório de Docentes Vespertinos na Etapa Matutina e Desbloqueio na Vespertina (v1.14)', true, '4 regentes liberados na tarde');
 
               // PILAR 5: Teste dos Blocos Nominais por Docente na Síntese e Validação na Finalização
               const synthObs = {
@@ -22134,6 +22461,19 @@ function getActiveSections(obs) {
                 throw new Error('Guardião global __isPlatformAuditRunning deveria estar ativo durante a execução da suíte');
               }
               logger.log('Blindagem do Guardião Global contra disparo de impressão e preservação contextual', true);
+
+              // 8. ERGONOMIA MOBILE: REGRAS RESPONSIVAS E TOUCH TARGET DE GATILHOS DE CRITÉRIOS
+              const testBtnCrit = document.createElement('button');
+              testBtnCrit.className = 'btn-crit-detail-trigger';
+              testBtnCrit.innerHTML = '<span>ℹ️</span> Detalhes';
+              document.body.appendChild(testBtnCrit);
+              const computedBtn = window.getComputedStyle(testBtnCrit);
+              if (computedBtn.minHeight !== '32px') {
+                document.body.removeChild(testBtnCrit);
+                throw new Error('Botão .btn-crit-detail-trigger deve possuir touch target mínimo de 32px (min-height: 32px)');
+              }
+              document.body.removeChild(testBtnCrit);
+              logger.log('Conformidade de Touch Target e Ergonomia Mobile nos Detalhes dos Critérios', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
