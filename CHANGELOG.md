@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.12** | 22/10/2026 15:00 | `intermediárias/aplicativo_v112_pilar_13_gestao_ocorrencias_padrao_mec.html` | Deliberação SerTão Criança / Pilar 13 | Pilar 13: Gestão de ocorrências críticas vinculadas primariamente à Turma, seletor de rotina coletiva vs. conduta individual, ciclo formativo com status "Conversado" e registro de acordos pactuados, rastreabilidade bidirecional com a observação de origem e padronização MEC formal de jornadas e turnos 👥💬 |
 | **1.12** | 22/10/2026 14:45 | `intermediárias/aplicativo_v112_qualificacao_docentes_turnos_turmas_integrais.html` | Deliberação SerTão Criança / Pilares 4 e 5 | Qualificação de docentes por turno (manhã/tarde) em turmas integrais, botões interativos de remanejamento no setup, higienização da base de dados inicial com exclusividade por turno/escola, atribuição parcial seletiva e sequenciamento nominal 4.1 e 4.2 na síntese pedagógica ☀️🌅 |
 | **1.11** | 22/10/2026 14:30 | `intermediárias/aplicativo_v110_pilar_11_popups_rubricas_apoio_mobile.html` | Deliberação SerTão Criança / Pilar 11 | Pilar 11: Enxugamento Visual no Mobile com Pop-ups e Bottom Sheet de Apoio Pedagógico às Rubricas (`ℹ️`), síntese inteligente de orientações longas, redução de 45% na altura dos cards, repositório canônico de apoio formativo e régua de gradação 📱 |
 | **1.10** | 22/10/2026 14:15 | `intermediárias/aplicativo_v110_supressao_impressao_preservacao_rota_auditoria.html` | Deliberação SerTão Criança / UX Auditoria | Supressão de disparo de impressão no diagnóstico e preservação contextual de rota da plataforma 🔇 |
@@ -130,6 +131,27 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.12] - Pilar 13: Gestão de Ocorrências Críticas Vinculadas à Turma e Padronização MEC
+* **Data e Horário:** 22 de Outubro de 2026 – 15:00:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v112_pilar_13_gestao_ocorrencias_padrao_mec.html`
+* **Identificador no App:** 📌 Versão 1.12 (v7.90)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Vinculação Primária à Turma no Registro de Ocorrências (`#modalQualitativeNote`):**
+  Adoção da diretriz deliberada onde fatos de campo são vinculados primariamente à **Turma**. Em salas com regência compartilhada (dupla ou quarteto em tempo integral), a opção padrão inicial selecionada é expressamente *👥 Toda a Turma / Ambas as Regentes (Rotina Coletiva da Sala)* (`__TURMA_GERAL__`), persistindo `isIndividualConduct: false`. O seletor disponibiliza também os nomes individuais de cada regente para quando couber conduta estritamente individual (`isIndividualConduct: true`). Em turmas com regência unívoca (docente único), o sistema aplica travamento transparente.
+- **Ciclo de Gestão Formativa e Status Oficial "Conversado" (`#modalResolveNote`):**
+  Substituição da flag genérica de resolução por modal estruturado de devolutiva pedagógica. A supervisora registra a Data do Diálogo Formativo e os Acordos Pedagógicos e Encaminhamentos combinados com a equipe escolar. Os cards na tela de ocorrências ganham os badges canônicos `🟢 Conversado` e `🟡 Aguardando Conversa`, exibindo a devolutiva documentada e permitindo reabertura para novo alinhamento.
+- **Rastreabilidade Bidirecional com a Observação de Origem:**
+  Ocorrências registradas em campo guardam o vínculo unívoco com o `obsId`. O card da ocorrência exibe o bloco informativo da observação originária e um botão direto `🔍 Ver Observação Vinculada →` para consulta contextual.
+- **Padronização MEC Formal de Jornadas Escolares:**
+  Substituição de designações legadas pela nomenclatura oficial do Censo Escolar/MEC: *Tempo Parcial (Matutino)*, *Tempo Parcial (Vespertino)* e *Tempo Integral*, erradicando qualquer menção residual ao termo ambíguo "regular". Renderização de crachás informativos padronizados (`☀️`, `⛅`, `🌟`) no Setup, Agenda, Semáforo Bimestral e Histórico.
+- **Exportação CSV Enriquecida e Filtros Avançados:**
+  Cabeçalho do arquivo CSV atualizado com colunas detalhadas (`Jornada_MEC`, `Tipo_Ocorrencia`, `Status_Conversado`, `Acordos_Pedagogicos`, `ID_Observacao_Origem`) e suporte a filtros rápidos no dropdown (`active`, `pending`, `resolved`, `archived`, `all`).
+- **Auditoria Contínua com 100% de Aprovação:**
+  Módulos 2 (Padronização MEC), 3 (Badge Setup MEC), 6 (Ocorrência de Turma, Conduta Individual e Ciclo Conversado), 9 (Filtros de Ocorrência) e 11 (Exportação CSV) enriquecidos com asserções automatizadas.
 
 ### [Versão 1.12] - Qualificação de Docentes por Turno (Manhã/Tarde) em Turmas Integrais e Higienização da Base de Dados
 * **Data e Horário:** 22 de Outubro de 2026 – 14:45:00

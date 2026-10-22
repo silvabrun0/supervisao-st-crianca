@@ -21,11 +21,11 @@ CHROME_PATH = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 MODULE_CATALOG = {
     'auth_rbac': 'Autenticação, Usuários, Perfis e RBAC',
-    'catalogo_dados': 'Catálogo Canônico, Escolas, Turmas, Professores e Estado Global',
+    'catalogo_dados': 'Catálogo Canônico, Escolas, Turmas, Padronização MEC (Pilar 13) e Estado Global',
     'setup_longitudinal': 'Setup de Observação, Seleção de Turmas e Ciclo Longitudinal (Pilar 1)',
-    'rubricas_observacao': 'Observação Ativa, Matrizes Curriculares, Rubricas, Pendências e Apoio Pedagógico Mobile (Pilar 11)',
+    'rubricas_observacao': 'Observação Ativa, Matrizes Curriculares, Rubricas e Pendências',
     'sintese_finalizacao': 'Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo de Tempo',
-    'travas_seguranca': 'Travas de Duplo Lançamento, Imutabilidade Longitudinal e Segurança',
+    'travas_seguranca': 'Travas de Duplo Lançamento, Gestão de Ocorrências (Pilar 13) e Segurança',
     'formadora_coordenacao': 'Acompanhamento da Formadora, Matriz de Coordenação e Isolamento de Perfis',
     'agenda_cronograma': 'Cronograma de Observações, Destaque da Próxima Observação e Baixa Automática',
     'historico_governanca': 'Histórico de Observações, Filtros Multidimensionais, Visualização e Exclusão',
