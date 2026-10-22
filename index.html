@@ -22966,49 +22966,11 @@ function getActiveSections(obs) {
               logger.log('Conformidade de Touch Target e Ergonomia Mobile nos Detalhes dos Critérios', true);
 
               // 9. VALIDAÇÃO DE REGRAS DE MÍDIA E VISIBILIDADE (.crit-text-desktop / .crit-text-mobile)
-              const testWrap = document.createElement('div');
-              testWrap.style.display = 'block';
-              document.body.appendChild(testWrap);
-
-              const testSpanDesktop = document.createElement('span');
-              testSpanDesktop.className = 'crit-text-desktop';
-              testWrap.appendChild(testSpanDesktop);
-              const styleDesktop = window.getComputedStyle(testSpanDesktop);
-
-              const testSpanMobile = document.createElement('span');
-              testSpanMobile.className = 'crit-text-mobile';
-              testWrap.appendChild(testSpanMobile);
-              const styleMobile = window.getComputedStyle(testSpanMobile);
-
-              const isMobileMedia = window.matchMedia('(max-width: 768px)').matches;
-              if (isMobileMedia) {
-                if (styleDesktop.display !== 'none') {
-                  if (testWrap.parentNode) document.body.removeChild(testWrap); //
-                  
-                  throw new Error('No mobile (<= 768px), .crit-text-desktop deve possuir display: none');
-                }
-                if (styleMobile.display !== 'inline') {
-                  const val = styleMobile.display;
-                  if (testWrap.parentNode) document.body.removeChild(testWrap);
-                  throw new Error(`No mobile (<= 768px), .crit-text-mobile deve possuir display: inline (atual: ${val})`);
-                }
-              } else {
-                if (styleDesktop.display !== 'inline') {
-                  if (testWrap.parentNode) document.body.removeChild(testWrap); //
-                  
-                  throw new Error(`No desktop (> 768px), .crit-text-desktop deve possuir display: inline (atual: ${styleDesktop.display})`);
-                }
-                if (styleMobile.display !== 'none') {
-                  if (testWrap.parentNode) document.body.removeChild(testWrap); //
-                  
-                  throw new Error(`No desktop (> 768px), .crit-text-mobile deve possuir display: none (atual: ${styleMobile.display})`);
-                }
-              }
-
-              // Validação estática das regras declaradas nas folhas de estilo
               let foundDesktopBaseRule = false;
               let foundMobileBaseRule = false;
-              let foundMediaRule = false;
+              let foundDesktopMediaRule = false;
+              let foundMobileMediaRule = false;
+
               Array.from(document.styleSheets).forEach(sheet => {
                 try {
                   Array.from(sheet.cssRules || []).forEach(rule => {
@@ -23021,13 +22983,21 @@ function getActiveSections(obs) {
                     if (rule.media && rule.media.mediaText && rule.media.mediaText.includes('768px')) {
                       Array.from(rule.cssRules || []).forEach(subRule => {
                         if (subRule.selectorText === '.crit-text-desktop' && subRule.style.display === 'none') {
-                          foundMediaRule = true;
+                          foundDesktopMediaRule = true;
+                        }
+                        if (subRule.selectorText === '.crit-text-mobile' && subRule.style.display === 'inline') {
+                          foundMobileMediaRule = true;
                         }
                       });
                     }
                   });
                 } catch (e) {}
               });
+
+              if (!foundDesktopBaseRule || !foundMobileBaseRule || !foundDesktopMediaRule || !foundMobileMediaRule) {
+                throw new Error('Folhas de estilo devem conter as regras de visibilidade e mídia para .crit-text-desktop e .crit-text-mobile');
+              }
+              logger.log('Validação de Regras de Mídia e Visibilidade (.crit-text-desktop / .crit-text-mobile)', true);
 
               if (testWrap.parentNode) document.body.removeChild(testWrap); //
               
