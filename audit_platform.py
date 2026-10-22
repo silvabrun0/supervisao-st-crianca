@@ -23,7 +23,7 @@ MODULE_CATALOG = {
     'auth_rbac': 'Autenticação, Usuários, Perfis e RBAC',
     'catalogo_dados': 'Catálogo Canônico, Escolas, Turmas, Professores e Estado Global',
     'setup_longitudinal': 'Setup de Observação, Seleção de Turmas e Ciclo Longitudinal (Pilar 1)',
-    'rubricas_observacao': 'Observação Ativa, Matrizes Curriculares, Rubricas e Pendências',
+    'rubricas_observacao': 'Observação Ativa, Matrizes Curriculares, Rubricas, Pendências e Apoio Pedagógico Mobile (Pilar 11)',
     'sintese_finalizacao': 'Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo de Tempo',
     'travas_seguranca': 'Travas de Duplo Lançamento, Imutabilidade Longitudinal e Segurança',
     'formadora_coordenacao': 'Acompanhamento da Formadora, Matriz de Coordenação e Isolamento de Perfis',

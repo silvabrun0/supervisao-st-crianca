@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.11** | 22/10/2026 14:30 | `intermediárias/aplicativo_v110_pilar_11_popups_rubricas_apoio_mobile.html` | Deliberação SerTão Criança / Pilar 11 | Pilar 11: Enxugamento Visual no Mobile com Pop-ups e Bottom Sheet de Apoio Pedagógico às Rubricas (`ℹ️`), síntese inteligente de orientações longas, redução de 45% na altura dos cards, repositório canônico de apoio formativo e régua de gradação 📱 |
 | **1.10** | 22/10/2026 14:15 | `intermediárias/aplicativo_v110_supressao_impressao_preservacao_rota_auditoria.html` | Deliberação SerTão Criança / UX Auditoria | Supressão de disparo de impressão no diagnóstico e preservação contextual de rota da plataforma 🔇 |
 | **1.09** | 22/10/2026 14:00 | `intermediárias/aplicativo_v109_pilar_10_semaforo_docentes_regentes.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Semáforo Anual para Docentes Regentes | Resolução completa da visão semafórica de Docentes Regentes no Pilar 10, eliminação de células em branco, micro-cards decisórios docentes, filtros rápidos e integração com agendamento 🚦 |
 | **1.08** | 21/10/2026 21:30 | `intermediárias/aplicativo_v108_pilar_10_semaforo_bimestral_turmas.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Quadro de Controle Bimestral matricial organizado por TURMA, Semáforo de Prazos Canônico (🟢 Verde Concluída, ⚪ Cinza No Prazo, 🔴 Vermelho Atrasada), micro-cards decisórios, filtros rápidos, atalhos de agendamento com 1 toque e cards adaptativos mobile 🚦 |
@@ -128,6 +129,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.11] - Pilar 11: Enxugamento Visual no Mobile com Pop-ups e Bottom Sheet de Apoio Pedagógico às Rubricas (ℹ️)
+* **Data e Horário:** 22 de Outubro de 2026 – 14:30:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v110_pilar_11_popups_rubricas_apoio_mobile.html`
+* **Identificador no App:** 📌 Versão 1.11 (v7.89)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Enxugamento Ergonômico de 45% no Smartphone:**
+  Otimização substancial do espaço vertical nos cards de critério (`.crit-card`) na tela de observação ativa (`#screenActiveObs`). Textos extensos com listas de materiais e instruções entre parênteses são sintetizados no mobile com o indicador táctil `(mais...)`, mantendo o enunciado essencial visível e reduzindo drasticamente a rolagem necessária.
+- **Gatilho Informativo Tátil e Acessível (`ℹ️`):**
+  Inserção do botão `.btn-rubric-guidance-trigger` com ícone informativo discreto `ℹ️` no cabeçalho de cada critério na observação ativa e na sub-aba de Afunilamento de Indicadores (`.btn-rubric-drilldown-trigger`).
+- **Modal / Bottom Sheet Deslizante de Apoio Pedagógico (`#modalRubricGuidance`):**
+  Ao tocar no gatilho `ℹ️`, abre-se instantaneamente um painel tátil deslizante estruturado com a hierarquia da dimensão/subdimensão, enunciado canônico integral, card de orientações práticas ("O Que Observar"), card de exemplos concretos de chão de sala e régua formativa de gradação da escala (Consistente, Parcial, Não Realizado).
+- **Repositório Canônico Formativo (`RUBRIC_GUIDANCE_DB`):**
+  Mapeamento determinístico de orientações e evidências para a matriz curricular da Educação Infantil de Patos, disponível nativamente na aplicação com fallback inteligente para edições customizadas.
+- **Enriquecimento da Bateria de Auditoria (100% de Aprovação):**
+  Módulo 4 (`rubricas_observacao`) expandido com asserções estritas dos elementos do modal no DOM, renderização dos botões `ℹ️`, abertura e fechamento interativo via simulação comportamental, integridade da base de orientações e validação do helper de formatação móvel.
 
 ### [Versão 1.10] - Supressão de Disparo de Impressão e Preservação Contextual de Rota na Auditoria da Plataforma
 * **Data e Horário:** 22 de Outubro de 2026 – 14:15:00

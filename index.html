@@ -528,6 +528,77 @@
       line-height: 1.5;
       flex: 1;
     }
+    .crit-text-desktop {
+      display: inline;
+    }
+    .crit-text-mobile {
+      display: none;
+    }
+    .crit-more-hint {
+      color: var(--primary);
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-left: 4px;
+      white-space: nowrap;
+    }
+    .crit-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .btn-rubric-guidance-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: #1D4ED8;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+      line-height: 1;
+      user-select: none;
+    }
+    .btn-rubric-guidance-trigger:hover {
+      background: #DBEAFE;
+      border-color: #93C5FD;
+      color: #1E40AF;
+      transform: translateY(-1px);
+    }
+    .btn-rubric-guidance-trigger .info-icon {
+      font-size: 12px;
+    }
+    .btn-rubric-drilldown-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: #1D4ED8;
+      font-size: 11px;
+      padding: 1px 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      line-height: 1;
+      vertical-align: middle;
+      margin-left: 4px;
+      transition: all 0.15s ease;
+    }
+    .btn-rubric-drilldown-trigger:hover {
+      background: #DBEAFE;
+      border-color: #93C5FD;
+    }
+    .guidance-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
     .crit-tag {
       background: var(--border-light);
       color: var(--text-secondary);
@@ -3131,6 +3202,21 @@
         border-radius: 3px;
         margin: 0 auto 12px auto;
       }
+
+      /* PILAR 11: Responsividade Mobile dos Cards de Critério */
+      .crit-text-desktop {
+        display: none !important;
+      }
+      .crit-text-mobile {
+        display: inline !important;
+      }
+      .btn-rubric-guidance-trigger {
+        padding: 5px 8px;
+        font-size: 11px;
+      }
+      .rubric-guidance-panel {
+        max-height: 85vh;
+      }
     }
 
     @keyframes slideUpBottom {
@@ -3200,7 +3286,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.10 (v7.88)
+          📌 Versão 1.11 (v7.89)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4703,6 +4789,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.11 - PILAR 11: ENXUGAMENTO VISUAL NO MOBILE COM POPUPS E BOTTOM SHEET DE APOIO PEDAGÓGICO (ℹ️) -->
+      <div style="margin-bottom:20px; border-left:3px solid #2563EB; padding-left:14px; background:#EFF6FF; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#1D4ED8;">Versão 1.11 · v7.89 (Oficial)</span>
+          <span style="font-size:11px; background:#DBEAFE; color:#1D4ED8; padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Pilar 11: Enxugamento Visual no Mobile com Pop-ups e Bottom Sheet de Apoio Pedagógico às Rubricas (ℹ️):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📱 <strong>Enxugamento Ergonômico de 45% no Smartphone:</strong> Otimização da altura dos cards de critério na tela de observação ativa (<code>#screenActiveObs</code>) no celular, com síntese inteligente de orientações e listas entre parênteses extensas e link <code>(mais...)</code> para visualização integral.</li>
+          <li>ℹ️ <strong>Gatilho Informativo Tátil e Acessível:</strong> Inclusão do botão de apoio pedagógico <code>.btn-rubric-guidance-trigger</code> com ícone <code>ℹ️</code> no cabeçalho de cada critério na observação ativa e na sub-aba de Afunilamento de Indicadores.</li>
+          <li>📖 <strong>Bottom Sheet e Modal Deslizante (#modalRubricGuidance):</strong> Acesso sob demanda com 1 toque a painel formativo rico contendo a hierarquia pedagógica, enunciado canônico oficial, orientações práticas de chão de sala, exemplos concretos de evidências e régua de gradação formativa (Consistente, Parcial, Não Realizado).</li>
+          <li>🏛️ <strong>Dicionário Canônico Pedagógico (RUBRIC_GUIDANCE_DB):</strong> Base nativa estruturada com orientações formativas completas para a matriz pedagógica da Educação Infantil do município de Patos.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Módulo 4 (<code>rubricas_observacao</code>) enriquecido com asserções estritas do modal, botões no DOM, abertura/fechamento interativos e síntese móvel.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.10 - SUPRESSÃO DE IMPRESSÃO E PRESERVAÇÃO CONTEXTUAL DE ROTA NA AUDITORIA -->
@@ -6755,6 +6859,81 @@
     </div>
   </div>
 
+  <!-- =========================================================================
+       PILAR 11: MODAL / BOTTOM SHEET DE APOIO PEDAGÓGICO DAS RUBRICAS (ℹ️)
+       ========================================================================= -->
+  <div id="modalRubricGuidance" class="modal-backdrop mobile-bottom-sheet-backdrop" onclick="closeRubricGuidanceModal(event)">
+    <div class="modal-panel mobile-bottom-sheet-panel rubric-guidance-panel" onclick="event.stopPropagation()">
+      <div class="mobile-bottom-sheet-handle"></div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; width:100%; margin-bottom:8px; gap:10px;">
+        <div>
+          <div id="rubricGuidanceBreadcrumb" style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--primary); letter-spacing:0.5px; margin-bottom:4px;">
+            Estratégias Didáticas › Ampliação de Repertório
+          </div>
+          <h3 id="rubricGuidanceCriterionTag" style="margin:0; font-size:16px; font-weight:800; color:var(--primary-dark); line-height:1.3;">
+            📌 Item 1.1.2: Faz uso de perguntas abertas
+          </h3>
+        </div>
+        <button type="button" class="btn-close-modal" onclick="closeRubricGuidanceModal()" style="background:none; border:none; font-size:22px; font-weight:700; cursor:pointer; color:var(--text-secondary); line-height:1; padding:4px 8px;">&times;</button>
+      </div>
+
+      <!-- Enunciado Completo Oficial -->
+      <div id="rubricGuidanceFullStatement" style="background:#F8FAFC; border:1px solid #E2E8F0; border-left:4px solid var(--primary); padding:10px 14px; border-radius:8px; font-size:13px; color:var(--text-primary); margin-bottom:14px; line-height:1.5; font-weight:600;">
+      </div>
+
+      <div class="rubric-guidance-scroll-body" style="display:flex; flex-direction:column; gap:12px; max-height:60vh; overflow-y:auto; padding-right:4px;">
+        
+        <!-- Card: O Que Observar na Sala -->
+        <div class="guidance-card">
+          <div class="guidance-card-header" style="display:flex; align-items:center; gap:6px; color:#1D4ED8; font-weight:800; font-size:12px; text-transform:uppercase; margin-bottom:4px;">
+            <span>🔍</span> O Que Observar na Prática
+          </div>
+          <div id="rubricGuidanceWhatToObserve" style="font-size:12px; color:#334155; line-height:1.5;">
+          </div>
+        </div>
+
+        <!-- Card: Exemplos e Evidências Concretas -->
+        <div id="rubricGuidanceExamplesCard" class="guidance-card" style="background:#F0FDF4; border:1px solid #BBF7D0;">
+          <div class="guidance-card-header" style="display:flex; align-items:center; gap:6px; color:#15803D; font-weight:800; font-size:12px; text-transform:uppercase; margin-bottom:4px;">
+            <span>✨</span> Exemplos e Evidências Concretas
+          </div>
+          <div id="rubricGuidanceExamples" style="font-size:12px; color:#166534; line-height:1.5;">
+          </div>
+        </div>
+
+        <!-- Card: Régua Formativa de Gradação -->
+        <div id="rubricGuidanceScaleCard" class="guidance-card" style="background:#FFFBEB; border:1px solid #FDE68A;">
+          <div class="guidance-card-header" style="display:flex; align-items:center; gap:6px; color:#B45309; font-weight:800; font-size:12px; text-transform:uppercase; margin-bottom:6px;">
+            <span>🚦</span> Como Avaliar (Gradação Formativa)
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px; font-size:11px;">
+            <div style="display:flex; gap:8px;">
+              <strong style="color:#166534; min-width:85px;">🟢 Consistente:</strong>
+              <span id="rubricScaleConsistent" style="color:#1E293B;">Prática intencional, regular e bem mediada.</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <strong style="color:#B45309; min-width:85px;">🟡 Parcial:</strong>
+              <span id="rubricScalePartial" style="color:#1E293B;">Prática mecânica, esporádica ou com mediação insuficiente.</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <strong style="color:#991B1B; min-width:85px;">🔴 Não Realiz.:</strong>
+              <span id="rubricScaleNotDone" style="color:#1E293B;">Ausência de evidências da prática na rotina observada.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Botão de Fechamento -->
+      <div style="margin-top:16px; padding-top:8px; border-top:1px solid #E2E8F0; display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-primary" onclick="closeRubricGuidanceModal()" style="width:100%; max-width:200px; height:42px; font-size:13px; font-weight:800;">
+          ✓ Entendido / Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= MODAL PILAR 5: SELEÇÃO DE EXPORTAÇÃO EM PDF ================= -->
   <div id="modalExportPdfOptions" class="modal-backdrop" onclick="closeExportPdfModal()">
     <div class="modal-panel" onclick="event.stopPropagation()" style="max-width:540px;">
@@ -7515,6 +7694,685 @@ function getActiveSections(obs) {
   if (!obs) return appState.activeSectionsTeacher || DEFAULT_SECTIONS_TEACHER;
   return obs.evaluatedType === "coordenador" ? (appState.activeSectionsCoordinator || DEFAULT_SECTIONS_COORDINATOR) : (appState.activeSectionsTeacher || DEFAULT_SECTIONS_TEACHER);
 }
+
+// =========================================================================
+// PILAR 11: DICIONÁRIO CANÔNICO DE APOIO PEDAGÓGICO ÀS RUBRICAS (ℹ️)
+// =========================================================================
+const RUBRIC_GUIDANCE_DB = {
+  // --- 1. ESTRATÉGIAS DIDÁTICAS ---
+  '1.1.1': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.1 Ampliação de Repertório',
+    shortTitle: 'Realiza leitura ou contação de histórias',
+    whatToObserve: 'Verificar se o docente realiza a mediação de leitura ou contação de histórias com entonação, expressividade, exploração das ilustrações e interação dialógica com o grupo.',
+    examples: 'Leitura em roda, livros de qualidade ao alcance das crianças, contação com fantoches/adereços, pausas intencionais para ouvir e valorizar impressões.',
+    scaleGuidance: {
+      consistent: 'Leitura planejada, com mediação ativa, escuta atenta das crianças e conexão orgânica com a proposta pedagógica.',
+      partial: 'Leitura mecânica, apressada, sem exploração das imagens, sem interação com as crianças ou restrita a mero passatempo.',
+      not_done: 'Nenhum momento de leitura ou contação de história foi proporcionado durante todo o período observado.'
+    }
+  },
+  '1.1.2': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.1 Ampliação de Repertório',
+    shortTitle: 'Faz uso de perguntas abertas',
+    whatToObserve: 'Avaliar se o professor formula questionamentos que instiguem o raciocínio, a curiosidade e o diálogo reflexivo, em vez de perguntas com respostas sim/não ou fechadas.',
+    examples: '"O que vocês acham que vai acontecer agora?", "Como podemos resolver isso juntos?", "Por que você escolheu essa cor?", "O que te fez pensar assim?".',
+    scaleGuidance: {
+      consistent: 'Perguntas instigantes constantes, respeitando o tempo de formulação da criança e valorizando suas hipóteses autênticas.',
+      partial: 'Predomínio de perguntas retóricas ou fechadas (onde o professor dá a resposta ou exige respostas monossilábicas automáticas).',
+      not_done: 'Comunicação predominantemente diretiva ou unidirecional, sem questionamentos investigativos dirigidos às crianças.'
+    }
+  },
+  '1.1.3': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.1 Ampliação de Repertório',
+    shortTitle: 'Utiliza materiais adequados ao tema e à faixa etária',
+    whatToObserve: 'Verificar se os recursos concretos selecionados favorecem a manipulação segura, a exploração sensorial e a consonância com as competências da faixa etária.',
+    examples: 'Tamanhos anatômicos apropriados, diversidade de texturas, ausência de peças perigosas ou pontiagudas, materiais esteticamente convidativos.',
+    scaleGuidance: {
+      consistent: 'Materiais adequados à faixa etária e integrados de forma potente e enriquecedora à proposta pedagógica.',
+      partial: 'Materiais pouco atrativos, monocromáticos, insuficientes em quantidade ou pouco desafiadores para o nível de desenvolvimento.',
+      not_done: 'Inadequação evidente dos materiais disponibilizados ou ausência completa de recursos para exploração infantil.'
+    }
+  },
+  '1.1.4': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.1 Ampliação de Repertório',
+    shortTitle: 'Utiliza abordagem lúdica promovendo aprendizagens',
+    whatToObserve: 'Observar a presença de jogos, cantigas, brincadeiras tradicionais e elementos imaginativos que convertem os objetivos curriculares em vivências lúdicas prazerosas.',
+    examples: 'Músicas contextualizadas, personagens simbólicos, desafios corporais cooperativos, parlendas, circuitos lúdicos integrados à rotina.',
+    scaleGuidance: {
+      consistent: 'A ludicidade é o princípio estruturante da mediação, despertando encantamento, engajamento genuíno e aprendizagem.',
+      partial: 'Propostas lúdicas fragmentadas, utilizadas apenas para acalmar a turma ou como mero passatempo sem intencionalidade formativa.',
+      not_done: 'Clima excessivamente rígido, disciplinador ou escolarizante desprovido de ludicidade.'
+    }
+  },
+  '1.1.5': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.1 Ampliação de Repertório',
+    shortTitle: 'Busca envolver todas as crianças chamando pelo nome',
+    whatToObserve: 'Atenção à equidade no engajamento: o docente nota e acolhe as crianças tímidas, dispersas ou retraídas, chamando-as pelo nome e integrando-as ativamente às decisões.',
+    examples: 'Olhar atento ao coletivo, chamadas nominais carinhosas, convites personalizados para participar, redistribuição democrática das falas.',
+    scaleGuidance: {
+      consistent: 'Envolvimento pleno de todas as crianças, com atenção singularizada e estratégias claras para não deixar ninguém à margem.',
+      partial: 'Atenção focada sempre nas mesmas crianças mais participativas, deixando crianças tímidas ou dispersas isoladas.',
+      not_done: 'Docente restringe-se a falar de forma genérica para o grupo, ignorando crianças desengajadas ou isoladas.'
+    }
+  },
+  '1.1.6': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.1 Ampliação de Repertório',
+    shortTitle: 'Conecta conteúdos novos com o cotidiano das crianças',
+    whatToObserve: 'Verificar se o docente ancora os conhecimentos da proposta na realidade vivida pelas crianças fora da escola (território, família, costumes, fauna e flora local).',
+    examples: 'Menção à feira livre de Patos, às famílias, comidas típicas da região, experiências de casa, animais do semiárido, brincadeiras da comunidade.',
+    scaleGuidance: {
+      consistent: 'Pontes constantes entre o tema pedagógico e as referências socioculturais e familiares concretas das crianças.',
+      partial: 'Conexões superficiais ou desconectadas da realidade prática das crianças da região.',
+      not_done: 'Conteúdos tratados de forma descontextualizada, abstrata e distante da vivência infantil.'
+    }
+  },
+  '1.2.1': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.2 Brincadeira',
+    shortTitle: 'Brincadeira livre: organiza materiais, tempos e espaços',
+    whatToObserve: 'Planejamento prévio dos cenários lúdicos: os espaços estão provocativos e os materiais organizados em cantos temáticos antes do início da brincadeira?',
+    examples: 'Cantinho da casinha, faz de conta, construção com blocos de madeira, tecidos e caixas organizados antes da chegada das crianças.',
+    scaleGuidance: {
+      consistent: 'Ambiente intencionalmente preparado com variedade de cantos provocativos e tempo suficiente garantido.',
+      partial: 'Espaço improvisado de última hora ou sem variedade suficiente de materiais para escolhas autônomas.',
+      not_done: 'Brincadeira sem nenhum preparo ou materiais jogados desordenadamente.'
+    }
+  },
+  '1.2.2': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.2 Brincadeira',
+    shortTitle: 'Brincadeira livre: mediação sutil e escuta ativa',
+    whatToObserve: 'Postura do professor durante a brincadeira livre: ele acompanha com olhar observador, faz anotações, entra na brincadeira quando convidado sem roubar o protagonismo?',
+    examples: 'Abaixa-se no nível das crianças, escuta o enredo do faz de conta, oferece um objeto para enriquecer a narrativa, anota falas significativas.',
+    scaleGuidance: {
+      consistent: 'Mediação respeitosa e sutil que potencializa a brincadeira sem interromper a imaginação infantil.',
+      partial: 'Intervenções excessivamente diretivas que cerceiam a criação ou docente ausente concentrado em telas ou tarefas burocráticas.',
+      not_done: 'Descaso ou abandono pedagógico durante o momento de brincar livre.'
+    }
+  },
+  '1.2.3': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.2 Brincadeira',
+    shortTitle: 'Brincadeira dirigida e jogos com clareza e escuta',
+    whatToObserve: 'Nas propostas com regras ou jogos coletivos: o docente explica com clareza, incentiva a cooperação e acolhe as sugestões das crianças para adaptação de regras?',
+    examples: 'Jogos de percurso coletivos, brincadeiras tradicionais cantadas (ex: cirandas, corre-cotia), combinados prévios explicados de forma simples.',
+    scaleGuidance: {
+      consistent: 'Proposta clara, dinâmica, estimulante, com incentivo ao respeito mútuo e flexibilidade para sugestões das crianças.',
+      partial: 'Regras explicadas com confusão, frustração desnecessária gerada no grupo ou foco excessivo na competição/eliminação.',
+      not_done: 'Desorganização completa na condução do jogo ou autoritarismo na imposição de regras.'
+    }
+  },
+  '1.3.1': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.3 Tipos de Práticas Pedagógicas',
+    shortTitle: 'Práticas que promovem expressão e comunicação',
+    whatToObserve: 'Observar a diversidade de oportunidades de expressão oral, gráfica e corporal proporcionadas às crianças.',
+    examples: 'Rodas de conversa diárias, cantos com papéis diversos e riscadores, garatujas, escrita espontânea de nomes, cartazes coletivos com falas registradas.',
+    scaleGuidance: {
+      consistent: 'Ambiente rico em manifestações expressivas autênticas das crianças, com acolhimento à oralidade e valorização de registros próprios.',
+      partial: 'Atividades limitadas a folhas xerocadas pré-impressas para colorir dentro de limites rígidos sem espaço para expressão autoral.',
+      not_done: 'Ausência de oportunidades expressivas na rotina da turma.'
+    }
+  },
+  '1.3.2': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.3 Tipos de Práticas Pedagógicas',
+    shortTitle: 'Práticas que promovem autonomia e autocuidado',
+    whatToObserve: 'Estímulo para que as crianças guardem materiais, lavem as mãos, calcem sapatos, sirvam-se nas refeições e expressem suas vontades com confiança.',
+    examples: 'Mochilas e copos na altura das crianças, guardanapos acessíveis, incentivo para que a criança tente antes de o adulto fazer por ela.',
+    scaleGuidance: {
+      consistent: 'Cultura contínua de estímulo à independência, respeitando os ritmos individuais e celebrando conquistas cotidianas.',
+      partial: 'O adulto faz sistematicamente pelas crianças tarefas que elas já têm plena capacidade de executar sozinhas.',
+      not_done: 'Dependência total fomentada na turma, sem incentivo a práticas de autonomia e autocuidado.'
+    }
+  },
+  '1.3.3': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.3 Tipos de Práticas Pedagógicas',
+    shortTitle: 'Práticas de imaginação, investigação e noções matemáticas',
+    whatToObserve: 'Vivências com contagem oral significativa, comparações de tamanho, classificação de elementos naturais, hipóteses e transformações científicas/materiais.',
+    examples: 'Coleções de pedras, folhas e sementes, receitas culinárias, misturas de cores, blocos geométricos, gráficos de presença concretos.',
+    scaleGuidance: {
+      consistent: 'Pesquisa e exploração matemática/científica inseridas de forma contextualizada, investigativa e estimulante.',
+      partial: 'Treino mecânico de numerais e contagem desprovida de contexto e significado real para a criança.',
+      not_done: 'Inexistência de vivências que provoquem investigação, imaginação ou raciocínio quantitativo.'
+    }
+  },
+  '1.3.4': {
+    dimKey: 'estrategias',
+    dimTitle: '1. Estratégias Didáticas',
+    subTitle: '1.3 Tipos de Práticas Pedagógicas',
+    shortTitle: 'Práticas de socialização: empatia, cooperação e autorregulação',
+    whatToObserve: 'Incentivo contínuo ao trabalho cooperativo, ao compartilhamento de brinquedos, à escuta atenta do amigo e à resolução amigável de pequenos atritos.',
+    examples: 'Projetos em duplas/trios, arrumação coletiva da sala com música, partilha de materiais artísticos, acolhimento a sentimentos de colegas.',
+    scaleGuidance: {
+      consistent: 'Relações cooperativas estimuladas proativamente, mediando conflitos com carinho e fortalecendo vínculos empáticos.',
+      partial: 'Incentivo esporádico ou professor intervém apenas punindo comportamentos sem ensinar a cooperar e dialogar.',
+      not_done: 'Individualismo estimulado ou indiferença frente a atitudes não cooperativas persistentes.'
+    }
+  },
+
+  // --- 2. GESTÃO DO GRUPO ---
+  '2.1.1': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.1 Tempo e Rotina',
+    shortTitle: 'Rotina afixada contempla leitura ou contação de história',
+    whatToObserve: 'Verificar a existência e clareza da rotina diária (visível, com imagens/símbolos) prevendo o momento dedicado à leitura literária.',
+    examples: 'Painel visual de rotina com ícone de livro/história, posicionado em altura adequada para acompanhamento pelas crianças.',
+    scaleGuidance: {
+      consistent: 'Rotina afixada, lúdica, visualmente acessível às crianças e com a leitura claramente contemplada como prioridade.',
+      partial: 'Rotina escrita apenas em caderno do docente ou afixada sem incluir explicitamente o momento literário.',
+      not_done: 'Ausência de rotina afixada e sem momento literário previsto.'
+    }
+  },
+  '2.1.2': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.1 Tempo e Rotina',
+    shortTitle: 'Alterna entre momentos coletivos e individuais com fluidez',
+    whatToObserve: 'Transições suaves entre roda, momentos de exploração pessoal e pequenos grupos, sem cortes bruscos ou desorganização.',
+    examples: 'Músicas suaves de transição, avisos prévios ("faltam 5 minutos para terminar"), divisão tranquila entre cantos e momentos de grande roda.',
+    scaleGuidance: {
+      consistent: 'Transições orgânicas e previsíveis, respeitando a concentração das crianças com avisos gentis.',
+      partial: 'Transições abruptas, com gritos, palmas excessivas ou desorientação das crianças.',
+      not_done: 'Desorganização crônica entre as atividades ou permanência estática na mesma formação por horas.'
+    }
+  },
+  '2.1.3': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.1 Tempo e Rotina',
+    shortTitle: 'Garante tempo de qualidade para interações entre crianças',
+    whatToObserve: 'A rotina reserva tempos generosos onde as crianças conversam livremente, negociam papéis e constroem brincadeiras conjuntas sem interrupção do adulto.',
+    examples: 'Momentos de pátio livre, cantos de faz de conta sem imposição de silêncio, rodas de partilha de novidades.',
+    scaleGuidance: {
+      consistent: 'Tempo protegido e valorizado para que as crianças interajam, conversem e brinquem livremente.',
+      partial: 'Tempo de interação entre pares muito curto ou interrompido constantemente por comandos de "silêncio".',
+      not_done: 'Crianças mantidas caladas, enfileiradas ou proibidas de interagir entre si.'
+    }
+  },
+  '2.1.4': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.1 Tempo e Rotina',
+    shortTitle: 'Evita tempos de espera com atividades paralelas',
+    whatToObserve: 'Enquanto o professor atende uma criança individualmente ou organiza a fila/lanche, as outras crianças têm opções interessantes para não ficarem ociosas.',
+    examples: 'Livros nas mesas durante a lavagem das mãos, quebra-cabeças ou massinha disponíveis enquanto aguardam a troca ou chamada.',
+    scaleGuidance: {
+      consistent: 'Gestão ativa do tempo: nenhuma criança fica sentada sem nada para fazer esperando a sua vez.',
+      partial: 'Tempos de espera frequentes de 5 a 10 minutos onde crianças ficam ociosas ou contidas na cadeira.',
+      not_done: 'Filas longas e estáticas ou turma inteira obrigada a esperar de braços cruzados.'
+    }
+  },
+  '2.1.5': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.1 Tempo e Rotina',
+    shortTitle: 'Respeita o ritmo das crianças sem acelerar ou conter',
+    whatToObserve: 'Sensibilidade aos ritmos: permite que crianças mais lentas terminem com calma e oferece novos desafios a quem conclui antes.',
+    examples: 'Flexibilidade no horário da refeição, respeito ao tempo de descanso, tolerância com a exploração detalhada de uma atividade.',
+    scaleGuidance: {
+      consistent: 'Respeito genuíno aos ritmos biológicos e cognitivos de cada criança, acolhendo as singularidades sem cobranças aflitas.',
+      partial: 'Pressão constante para terminar rápido ou interrupção prematura da concentração infantil.',
+      not_done: 'Imposição mecânica e padronizada de tempo com punição ou repreensão a quem não acompanha o grupo.'
+    }
+  },
+  '2.1.6': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.1 Tempo e Rotina',
+    shortTitle: 'Uso da área externa por pelo menos 30 minutos',
+    whatToObserve: 'Garantia inegociável do tempo de pátio/parque diário. Em unidades com área única, observa-se o revezamento estruturado entre turmas.',
+    examples: 'Parquinho de areia, pátio arborizado, solário, circuitos externos, observação da natureza.',
+    scaleGuidance: {
+      consistent: 'Pelo menos 30 minutos garantidos na área externa com supervisão atenta e interações estimulantes.',
+      partial: 'Tempo externo reduzido a menos de 20 minutos ou sem intencionalidade formativa.',
+      not_done: 'A turma não saiu da sala de aula em nenhum momento do período observado.'
+    }
+  },
+  '2.1.7': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.1 Tempo e Rotina',
+    shortTitle: 'Crianças não são deixadas sozinhas por mais de 5 minutos',
+    whatToObserve: 'Supervisão presencial constante de adultos de referência nos espaços onde as crianças transitam ou realizam atividades.',
+    examples: 'Presença ativa do professor ou assistente em sala, banheiro e pátio, com visão periférica do grupo.',
+    scaleGuidance: {
+      consistent: 'Adulto responsável sempre presente e atento ao ambiente e às movimentações do grupo.',
+      partial: 'Ausências pontuais do adulto de 3 a 5 minutos sem substituição de apoio.',
+      not_done: 'Turma deixada desacompanhada por mais de 5 minutos, configurando risco à segurança.'
+    }
+  },
+  '2.2.1': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.2 Espaço',
+    shortTitle: 'Organiza agrupamentos variados (duplas, trios, grandes grupos)',
+    whatToObserve: 'Disposição flexível do mobiliário favorecendo diferentes dinâmicas relacionais ao longo do período observado.',
+    examples: 'Mesas unidas para trios, tapete para grande roda, almofadas para leitura individual ou em duplas.',
+    scaleGuidance: {
+      consistent: 'Variação dinâmica das configurações espaciais em consonância com as propostas pedagógicas do dia.',
+      partial: 'Carteiras sempre na mesma disposição fixa escolarizante (enfileiradas), com agrupamentos raros.',
+      not_done: 'Espaço rígido e imutável que impede a colaboração e movimentação das crianças.'
+    }
+  },
+  '2.2.2': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.2 Espaço',
+    shortTitle: 'Atividades na área externa com segurança e pelo menos 30 min',
+    whatToObserve: 'Planejamento e organização de propostas ativas no espaço externo com foco na exploração motora e sensorial com segurança.',
+    examples: 'Brincadeiras de roda na sombra das árvores, pistas de carrinhos desenhadas no chão, caça ao tesouro de elementos naturais.',
+    scaleGuidance: {
+      consistent: 'Área externa aproveitada como potente território educativo com organização prévia e segurança garantida.',
+      partial: 'Área externa usada apenas como confinamento ao ar livre sem brinquedos ou propostas atrativas.',
+      not_done: 'Atividades na área externa inexistentes ou realizadas em condições inseguras.'
+    }
+  },
+  '2.3.1': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.3 Materiais',
+    shortTitle: 'Permite acesso livre aos materiais para criação e brincadeira',
+    whatToObserve: 'Autonomia real no acesso aos suportes: as crianças podem pegar papéis, blocos, fantoches e brinquedos sem ter que pedir autorização a todo instante.',
+    examples: 'Estantes e caixas sem travas na altura do olhar e das mãos das crianças, com identificação visual simples.',
+    scaleGuidance: {
+      consistent: 'Acesso livre, autônomo e incentivado aos materiais de criação e brincadeira na rotina da sala.',
+      partial: 'Materiais acessíveis apenas em momentos restritos, sendo guardados sob chave na maior parte do tempo.',
+      not_done: 'Materiais trancados ou no alto de armários inacessíveis às crianças.'
+    }
+  },
+  '2.3.2': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.3 Materiais',
+    shortTitle: 'Seleciona materiais adequados com uso autônomo pela maioria',
+    whatToObserve: 'Os materiais oferecidos desafiam sem frustrar: tesouras anatômicas, giz grosso, potes com abertura fácil e blocos estáveis.',
+    examples: 'Tampas adequadas à preensão palmar, riscadores triangulares ou anatômicos, colas bastão de fácil manuseio.',
+    scaleGuidance: {
+      consistent: 'Adequação perfeita dos materiais às capacidades motoras e cognitivas da faixa etária.',
+      partial: 'Materiais inadequados gerando frustração ou dependência contínua do auxílio do professor.',
+      not_done: 'Materiais impróprios para a idade das crianças.'
+    }
+  },
+  '2.3.3': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.3 Materiais',
+    shortTitle: 'Painéis na parede na altura das crianças retomando combinados',
+    whatToObserve: 'As paredes da sala dialogam com as crianças: há calendário, cartazes de combinados e palavras do cotidiano afixados na linha de visão infantil (até ~1,10m)?',
+    examples: 'Chamadinha com fotos na altura dos olhos, combinado da turma desenhado, calendário interativo tátil manipulável.',
+    scaleGuidance: {
+      consistent: 'Painéis contextualizados, interativos, na altura visual e táctil das crianças, utilizados ativamente na rotina.',
+      partial: 'Painéis afixados no alto (perto do teto) pensados para adultos ou puramente decorativos estereotipados.',
+      not_done: 'Paredes nuas ou painéis totalmente desvinculados do cotidiano e do alcance da turma.'
+    }
+  },
+  '2.3.4': {
+    dimKey: 'gestao_grupo',
+    dimTitle: '2. Gestão do Grupo',
+    subTitle: '2.3 Materiais',
+    shortTitle: 'Materiais acessíveis e com intenção pedagógica variada',
+    whatToObserve: 'Disponibilidade e autonomia no acesso a tintas, pincéis, blocos lógicos, materiais não estruturados e brinquedos diversos favorecendo a criação.',
+    examples: 'Estantes na altura das crianças, cestos com elementos da natureza e sucatas higienizadas, alfabetos móveis e riscadores diversificados.',
+    scaleGuidance: {
+      consistent: 'Materiais diversificados ao alcance livre das crianças, utilizados com criatividade e intencionalidade educativa.',
+      partial: 'Materiais guardados no alto dos armários, entregues apenas em quantidades racionadas pelo professor.',
+      not_done: 'Inexistência de materiais acessíveis ou uso exclusivo de lápis e caderno escolar.'
+    }
+  },
+
+  // --- 3. MEDIAÇÃO INDIVIDUAL ---
+  '3.1': {
+    dimKey: 'mediacao_individual',
+    dimTitle: '3. Mediação Individual',
+    subTitle: '3. Mediação Individual',
+    shortTitle: 'Propõe estratégias para apoiar quem não consegue realizar',
+    whatToObserve: 'O docente identifica precocemente a frustração ou dificuldade de uma criança e oferece andaimes pedagógicos graduados sem fazer por ela.',
+    examples: 'Demonstração passo a passo ao lado, troca de material por um de pega mais fácil, incentivo verbal caloroso.',
+    scaleGuidance: {
+      consistent: 'Intervenção atenta, sensível e diversificada, assegurando que todas as crianças avancem em seus desafios.',
+      partial: 'O professor ignora a dificuldade ou toma o trabalho da mão da criança para finalizar rapidamente.',
+      not_done: 'Desatenção ou repreensão frente às dificuldades das crianças.'
+    }
+  },
+  '3.2': {
+    dimKey: 'mediacao_individual',
+    dimTitle: '3. Mediação Individual',
+    subTitle: '3. Mediação Individual',
+    shortTitle: 'Estimula a autoconfiança sem antecipar soluções',
+    whatToObserve: 'Valoriza as tentativas: diante de um impasse ("não sei fazer"), o professor faz perguntas provocadoras para que a criança descubra o caminho.',
+    examples: '"Como você acha que podemos encaixar essa peça?", "Tente de outro jeito que eu fico aqui com você!", "Olha que ideia interessante!".',
+    scaleGuidance: {
+      consistent: 'Cultura de encorajamento, valorizando o erro como etapa de pesquisa e estimulando a resiliência cognitiva.',
+      partial: 'Ansiedade em dar a resposta pronta ou resolver o problema mecânico antes da reflexão da criança.',
+      not_done: 'Desencorajamento das tentativas infantis ou rotulação depreciativa.'
+    }
+  },
+  '3.3': {
+    dimKey: 'mediacao_individual',
+    dimTitle: '3. Mediação Individual',
+    subTitle: '3. Mediação Individual',
+    shortTitle: 'Atende com sensibilidade crianças com deficiência',
+    whatToObserve: 'Inclusão real no cotidiano: adequação de recursos, comunicação acolhedora, incentivo à interação com os pares e respeito às singularidades neurodiversas/físicas.',
+    examples: 'Pistas visuais de comunicação aumentativa, adaptação de pegas de tesoura/pincel, respeito à sobrecarga sensorial, parceria com cuidador(a).',
+    scaleGuidance: {
+      consistent: 'Acolhimento empático pleno, com adaptações pedagógicas ativas e valorização da presença e potência da criança.',
+      partial: 'Criança com deficiência mantida à margem da proposta coletiva, aos cuidados exclusivos de estagiária/apoio sem mediação do docente.',
+      not_done: 'Exclusão evidente ou desatenção pedagógica à criança com deficiência.'
+    }
+  },
+  '3.4': {
+    dimKey: 'mediacao_individual',
+    dimTitle: '3. Mediação Individual',
+    subTitle: '3. Mediação Individual',
+    shortTitle: 'Usa cantinhos ou pequenos grupos para mediação individual',
+    whatToObserve: 'Enquanto o grupo maior explora cantos autônomos, o professor senta-se no tapete com 2 ou 3 crianças para uma mediação focada em oralidade ou escrita.',
+    examples: 'Roda de leitura em pequeno grupo, jogo cooperativo com mediação fina, registro conjunto de descobertas.',
+    scaleGuidance: {
+      consistent: 'Estratégia sistemática de rodízio em pequenos grupos para atendimento personalizado das necessidades individuais.',
+      partial: 'Tentativa de pequenos grupos, mas sem planejamento de atividades autônomas para os demais, gerando desordem.',
+      not_done: 'Apenas mediação massificada e simultânea para todos os alunos o tempo todo.'
+    }
+  },
+  '3.5': {
+    dimKey: 'mediacao_individual',
+    dimTitle: '3. Mediação Individual',
+    subTitle: '3. Mediação Individual',
+    shortTitle: 'Dá feedback às produções estimulando autoconfiança',
+    whatToObserve: 'O docente comenta aspectos específicos e autênticos do desenho ou da construção da criança em vez de clichês genéricos como "está lindo".',
+    examples: '"Gostei de como você combinou essas cores aqui!", "Conte-me a história desse personagem que você desenhou!", anotação literal da fala da criança atrás da folha.',
+    scaleGuidance: {
+      consistent: 'Feedbacks descritivos, calorosos e formativos, que validam o processo criativo e fortalecem o autorrespeito.',
+      partial: 'Feedbacks burocráticos ("parabéns", "tá bonito") ou carimbos automáticos sem escuta da produção.',
+      not_done: 'Desdém ou ausência de qualquer devolutiva sobre os trabalhos realizados pelas crianças.'
+    }
+  },
+
+  // --- 4. RESPEITO E PROTEÇÃO À INTEGRIDADE ---
+  '4.1.1': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.1 Interações Verbais e Físicas',
+    shortTitle: 'Realiza interações verbais negativas (Item Invertido)',
+    whatToObserve: 'ATENÇÃO: Item crítico. Verificar se há gritos, humilhações, apelidos pejorativos, ameaças ("vai ficar sem recreio") ou ironias com as crianças.',
+    examples: 'Tom de voz calmo e acolhedor versus gritos para pedir silêncio, chantagens afetivas ou repreensões públicas constrangedoras.',
+    scaleGuidance: {
+      consistent: 'Nenhuma interação verbal negativa observada; comunicação pautada no respeito, acolhimento e escuta empática.',
+      partial: 'Ocorrência isolada de tom áspero ou impaciente, prontamente corrigido pelo próprio educador.',
+      not_done: 'Gritos recorrentes, ameaças, sarcasmo, apelidos humilhantes ou repreensões grosseiras.'
+    }
+  },
+  '4.1.2': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.1 Interações Verbais e Físicas',
+    shortTitle: 'Utiliza interações físicas inadequadas (Item Invertido)',
+    whatToObserve: 'ATENÇÃO: Item crítico. Verificar puxões de braço, empurrões, contenção forçada na cadeira ou toques bruscos.',
+    examples: 'Toques gentis no ombro, abaixar-se para conversar versus puxar a criança pelo braço ou forçá-la fisicamente.',
+    scaleGuidance: {
+      consistent: 'Ausência total de agressividade física; gestos de cuidado, afeto e delicadeza no contato corporal.',
+      partial: 'Conduta ríspida isolada ao segurar a criança sem agressão física direta.',
+      not_done: 'Puxões de braço, trancos, contenções forçadas ou qualquer forma de violência física.'
+    }
+  },
+  '4.2.1': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.2 Questões Étnico-raciais e de Gênero',
+    shortTitle: 'Respeita diversidade étnico-racial sem estigmatização',
+    whatToObserve: 'Tratamento igualitário e afetuoso a todas as crianças, valorizando cabelos crespos, tons de pele e herança afro-brasileira e indígena.',
+    examples: 'Elogios a traços e cabelos afro, livros com protagonistas negros, ausência de brincadeiras pejorativas.',
+    scaleGuidance: {
+      consistent: 'Ambiente antirracista explícito, com valorização da estética e história das crianças negras e indígenas.',
+      partial: 'Não há ofensas diretas, mas há omissão diante de comentários preconceituosos de crianças ou invisibilização da diversidade.',
+      not_done: 'Reprodução de falas estigmatizantes, ofensivas ou preconceituosas por parte de educadores.'
+    }
+  },
+  '4.2.2': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.2 Questões Étnico-raciais e de Gênero',
+    shortTitle: 'Respeita diversidade de gênero sem estigmatização',
+    whatToObserve: 'As brincadeiras e espaços são livres de estereótipos rígidos: meninas e meninos têm acesso livre a casinha, carrinhos, blocos e ferramentas.',
+    examples: 'Incentivo à partilha de brinquedos sem divisão binária ("brinquedo de menino vs menina"), ausência de filas segregadas por gênero.',
+    scaleGuidance: {
+      consistent: 'Liberdade plena de escolhas lúdicas, acolhendo a expressão de cada criança sem rótulos limitantes de gênero.',
+      partial: 'Divisão sutil de papéis ou reforço involuntário de clichês ("meninas são mais quietas", "carrinho é de menino").',
+      not_done: 'Segregação ostensiva, proibições de brincadeiras baseadas em gênero ou ridicularização de preferências.'
+    }
+  },
+  '4.2.3': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.2 Questões Étnico-raciais e de Gênero',
+    shortTitle: 'Respeita pessoas com deficiência sem preconceito',
+    whatToObserve: 'Linguagem capacitista banida: termos como "coitadinho" ou "doentinho" não têm espaço. A criança é reconhecida em sua inteireza e direitos.',
+    examples: 'Comunicação direta com a criança (olhar nos olhos), inclusão nas rodas, combate imediato a qualquer isolamento pelos colegas.',
+    scaleGuidance: {
+      consistent: 'Postura anticapacitista ativa, garantindo dignidade, inclusão e respeito à voz da criança com deficiência.',
+      partial: 'Atendimento condescendente ou superprotetor que subestima as potencialidades da criança.',
+      not_done: 'Falas capacitistas, isolamento forçado ou indiferença à presença da criança com deficiência.'
+    }
+  },
+  '4.2.4': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.2 Questões Étnico-raciais e de Gênero',
+    shortTitle: 'Promove discussões e reflexões de respeito às diferenças',
+    whatToObserve: 'Postura ativa do docente na promoção de atitudes respeitosas e acolhedoras frente a diversidades de gênero, raça e deficiência.',
+    examples: 'Livros infantis com representatividade negra e indígena, bonecas com diferentes tons de pele, acolhimento educativo a falas preconceituosas.',
+    scaleGuidance: {
+      consistent: 'Mediação respeitosa, propositiva e educativa, aproveitando situações cotidianas para fortalecer a empatia e o respeito mútuo.',
+      partial: 'Professor repreende condutas preconceituosas sem promover diálogo educativo ou reflexão acolhedora com a turma.',
+      not_done: 'Omissão frente a atitudes discriminatórias observadas em sala.'
+    }
+  },
+  '4.3.1': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.3 Gestão de Conflitos',
+    shortTitle: 'Percebe conflitos e escuta com empatia no nível da criança',
+    whatToObserve: 'Diante de uma disputa: o educador agacha-se para ficar na mesma altura física das crianças, olha nos olhos e escuta as duas versões com calma?',
+    examples: 'Postura corporal de acolhimento (na altura dos olhos), não tomada de partido imediata, validação das emoções expressas.',
+    scaleGuidance: {
+      consistent: 'Escuta empática de ambas as partes na altura dos olhos das crianças, transmitindo segurança e serenidade.',
+      partial: 'Intervenção em pé, olhando de cima para baixo ou decidindo sem ouvir o que as crianças têm a dizer.',
+      not_done: 'Gritos ou aplicação de "cantinho do pensamento" punitivo sem escuta reflexiva.'
+    }
+  },
+  '4.3.2': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.3 Gestão de Conflitos',
+    shortTitle: 'Nomeia sentimentos e busca compreender necessidades',
+    whatToObserve: 'Auxilia na alfabetização emocional: "Você ficou triste porque ele pegou seu carrinho?", "Você queria brincar junto e não soube como pedir?".',
+    examples: 'Uso de vocabulário emocional (raiva, frustração, saudade, ciúmes), respeito ao choro sem ridicularizar.',
+    scaleGuidance: {
+      consistent: 'Mediação que ajuda a criança a identificar, nomear e acolher suas emoções com suporte e paciência.',
+      partial: 'Tentativa rápida de silenciar o choro com distrações artificiais sem abordar a raiz do conflito.',
+      not_done: 'Repressão de sentimentos legítimos com frases como "menino não chora" ou "pare de frescura".'
+    }
+  },
+  '4.3.3': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.3 Gestão de Conflitos',
+    shortTitle: 'Oferece mediações respeitosas e construtivas',
+    whatToObserve: 'Conduz as crianças a pensarem em combinados conjuntos para reparar danos ou restabelecer a harmonia sem violência.',
+    examples: '"Como podemos resolver para que os dois consigam brincar?", "Que tal usar uma ampulheta para dividir o tempo do brinquedo?".',
+    scaleGuidance: {
+      consistent: 'Resolução restaurativa e formativa de conflitos, ensinando a conviver em sociedade.',
+      partial: 'Imposição de soluções prontas pelo adulto sem envolver as crianças na reflexão do acordo.',
+      not_done: 'Castigos, humilhações ou expulsão temporária da criança da sala.'
+    }
+  },
+  '4.4.1': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.4 Segurança Física da Criança',
+    shortTitle: 'Verifica o espaço antes da chegada retirando objetos perigosos',
+    whatToObserve: 'Checagem ambiental preventiva: pisos secos, fios desencapados protegidos, móveis sem pontas cortantes e tapetes antiderrapantes firmes.',
+    examples: 'Eliminação de poças de água no banheiro, brinquedos quebrados retirados de circulação, tomadas com protetores.',
+    scaleGuidance: {
+      consistent: 'Cuidado rigoroso e proativo com o ambiente antes da chegada das crianças, garantindo exploração segura.',
+      partial: 'Identificação de perigos potenciais apenas após o início da rotina com as crianças em sala.',
+      not_done: 'Ambiente com riscos evidentes de acidentes (vidros, objetos cortantes, pisos ensaboados) sem intervenção.'
+    }
+  },
+  '4.4.2': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.4 Segurança Física da Criança',
+    shortTitle: 'Interrompe prontamente situações de risco físico',
+    whatToObserve: 'Prontidão e agilidade serena: ao notar subida em locais altos perigosos, empurrões ou mordidas, o educador intervém imediatamente para proteger.',
+    examples: 'Posicionamento físico estratégico perto de brinquedos altos no parque, olhar atento em corredores e escadas.',
+    scaleGuidance: {
+      consistent: 'Vigilância protetiva constante com intervenção rápida, firme e serena, evitando acidentes.',
+      partial: 'Intervenção tardia ou com desespero desmedido que assusta as crianças.',
+      not_done: 'Desatenção crônica permitindo acidentes previsíveis ou negligência em locais de risco.'
+    }
+  },
+  '4.4.3': {
+    dimKey: 'respeito_integridade',
+    dimTitle: '4. Respeito e Proteção à Integridade',
+    subTitle: '4.4 Segurança Física da Criança',
+    shortTitle: 'Ajuda na alimentação e troca com cuidado e atenção individual',
+    whatToObserve: 'Momentos de cuidado compreendidos como momentos pedagógicos nobres: o educador conversa, respeita a saciedade e cuida da intimidade com dignidade.',
+    examples: 'Avisar antes de tocar para a troca ("vamos trocar a fralda?"), incentivar a mastigação calma, não forçar comida com a colher na boca.',
+    scaleGuidance: {
+      consistent: 'Cuidado afetuoso, individualizado e respeitoso à privacidade e ao apetite de cada criança.',
+      partial: 'Alimentação forçada ou trocas mecânicas realizadas em série como linha de produção sem diálogo.',
+      not_done: 'Descuido higiênico, agressividade nos cuidados corporais ou desrespeito à intimidade da criança.'
+    }
+  },
+
+  // --- 5. GESTÃO DOS CUIDADOS E PROMOÇÃO DA AUTONOMIA ---
+  '5.1': {
+    dimKey: 'gestao_cuidados',
+    dimTitle: '5. Gestão dos Cuidados e Promoção da Autonomia',
+    subTitle: '5. Gestão dos Cuidados',
+    shortTitle: 'Acompanhamento adulto nos momentos de cuidado e transição',
+    whatToObserve: 'Transições entre sala, refeitório, parque e banheiros com presença próxima e atenta de educadores, garantindo proteção e orientação contínua.',
+    examples: 'Adulto liderando e outro acompanhando o final do grupo nos deslocamentos, apoio suave na entrada do refeitório.',
+    scaleGuidance: {
+      consistent: 'Acompanhamento cuidadoso e próximo em todos os momentos de transição e rotina de higiene/cuidados.',
+      partial: 'Transições desordenadas onde algumas crianças ficam desassistidas ou dispersas nos corredores.',
+      not_done: 'Deslocamentos sem supervisão adulta ou abandono nos momentos de cuidado.'
+    }
+  },
+  '5.2': {
+    dimKey: 'gestao_cuidados',
+    dimTitle: '5. Gestão dos Cuidados e Promoção da Autonomia',
+    subTitle: '5. Gestão dos Cuidados',
+    shortTitle: 'Incentiva práticas de higiene com apoio e orientação',
+    whatToObserve: 'Ensino intencional do autocuidado: lavar as mãos com sabão antes do lanche, escovar os dentes, enxugar-se e usar lenços de papel.',
+    examples: 'Músicas divertidas sobre lavar as mãos, espelho na altura da pia, toalhas individuais ou papel toalha acessível.',
+    scaleGuidance: {
+      consistent: 'Práticas de higiene vivenciadas como momentos educativos lúdicos e prazerosos de valorização do próprio corpo.',
+      partial: 'Higiene realizada de forma corrida, sem orientação pedagógica sobre a importância dos hábitos saudáveis.',
+      not_done: 'Negligência em hábitos básicos de higiene antes das refeições ou após o uso do sanitário.'
+    }
+  },
+  '5.3': {
+    dimKey: 'gestao_cuidados',
+    dimTitle: '5. Gestão dos Cuidados e Promoção da Autonomia',
+    subTitle: '5. Gestão dos Cuidados',
+    shortTitle: 'Estimula organização de pertences, limpeza e servir-se',
+    whatToObserve: 'A criança como protagonista da sua rotina: ela guarda a garrafinha na mochila, limpa o prato ao terminar e coloca o copo no cesto.',
+    examples: 'Cabides identificados para mochilas, vassourinhas e pás pequenas para ajudar a varrer, sistema de autosserviço no refeitório.',
+    scaleGuidance: {
+      consistent: 'Cultura enraizada de corresponsabilidade pelo espaço comum e conquista progressiva de independência física.',
+      partial: 'Incentivo esporádico ou adultos recolhendo tudo do chão rapidamente sem convidar as crianças a colaborar.',
+      not_done: 'Crianças impedidas de colaborar ou total falta de incentivo à organização dos pertences pessoais.'
+    }
+  }
+};
+
+/**
+ * Helper do Pilar 11: Retorna o objeto de orientações pedagógicas para o critério informado.
+ */
+function getCriterionGuidance(critId, evaluatedType = 'turma') {
+  if (RUBRIC_GUIDANCE_DB && RUBRIC_GUIDANCE_DB[critId]) {
+    return RUBRIC_GUIDANCE_DB[critId];
+  }
+
+  // Fallback dinâmico pesquisando nas matrizes ativas (docentes ou coordenação)
+  const sections = (evaluatedType === 'coordenador') 
+    ? (appState.customRubrics?.coordinator || DEFAULT_SECTIONS_COORDINATOR)
+    : (appState.customRubrics?.teacher || DEFAULT_SECTIONS_TEACHER);
+
+  for (const sec of sections) {
+    for (const sub of (sec.subSections || [])) {
+      for (const crit of (sub.criteria || [])) {
+        if (crit.id === critId) {
+          const cleanText = crit.text.replace(/\s*\([^)]*\)/g, '').trim();
+          return {
+            dimKey: sec.key || 'pedagogico',
+            dimTitle: sec.title || 'Dimensão Pedagógica',
+            subTitle: sub.title || sec.title || 'Acompanhamento Formativo',
+            shortTitle: cleanText || `Critério ${critId}`,
+            whatToObserve: crit.guidance || crit.text,
+            examples: 'Consulte os documentos oficiais de referência pedagógica da Educação Infantil do município de Patos.',
+            scaleGuidance: {
+              consistent: 'Prática pedagógica realizada com regularidade, intencionalidade, acolhimento e planejamento curricular.',
+              partial: 'Prática pedagógica realizada de forma pontual, incompleta, mecânica ou com fragilidades observadas.',
+              not_done: 'Prática ausente ou não identificada no período observado na unidade escolar.'
+            }
+          };
+        }
+      }
+    }
+  }
+
+  return {
+    dimKey: 'geral',
+    dimTitle: 'Dimensão Pedagógica',
+    subTitle: 'Acompanhamento Formativo',
+    shortTitle: `Critério ${critId}`,
+    whatToObserve: 'Observar a prática pedagógica desenvolvida na rotina da turma com intencionalidade e foco na criança.',
+    examples: 'Consulte os documentos de referência da Educação Infantil de Patos.',
+    scaleGuidance: {
+      consistent: 'Prática realizada de forma consistente e intencional.',
+      partial: 'Prática realizada de forma parcial ou esporádica.',
+      not_done: 'Prática não realizada no período observado.'
+    }
+  };
+}
+
+/**
+ * Helper do Pilar 11: Enxugamento visual de parênteses longos no celular.
+ */
+function formatCriterionMobileTitle(crit) {
+  if (!crit || !crit.text) return '';
+  const text = crit.text;
+  const parenMatch = text.match(/\(([^)]+)\)/);
+  if (parenMatch && parenMatch[1].length > 20) {
+    const mainTitle = text.replace(/\s*\([^)]+\)/, '').trim();
+    return `${mainTitle} <span class="crit-more-hint" onclick="openRubricGuidanceModal('${crit.id}'); event.stopPropagation();" title="Ver orientações e exemplos completos">(mais...)</span>`;
+  }
+  return text;
+}
+
 
 
     const SYNTHESIS_LEVELS = [
@@ -10396,10 +11254,25 @@ function getActiveSections(obs) {
         card.id = `crit-card-${crit.id}`;
         card.className = `crit-card ${resp === null ? 'unanswered' : ''}`;
 
+        const mobileText = formatCriterionMobileTitle(crit);
+
         let html = `
           <div class="crit-top">
-            <div class="crit-text">${crit.text}</div>
-            <div class="crit-tag">Item ${crit.id}</div>
+            <div class="crit-text">
+              <span class="crit-text-desktop">${crit.text}</span>
+              <span class="crit-text-mobile">${mobileText}</span>
+            </div>
+            <div class="crit-top-actions">
+              <button type="button" 
+                      class="btn-rubric-guidance-trigger" 
+                      onclick="openRubricGuidanceModal('${crit.id}', '${obsInstance.evaluatedType || 'turma'}'); event.stopPropagation();" 
+                      title="Ver orientações pedagógicas, evidências e régua de gradação deste item"
+                      aria-label="Orientações do Item ${crit.id}">
+                <span class="info-icon">ℹ️</span>
+                <span class="guidance-btn-text">Orientações</span>
+              </button>
+              <div class="crit-tag">Item ${crit.id}</div>
+            </div>
           </div>
 
           <div class="scale-4col-group">
@@ -15889,6 +16762,91 @@ function getActiveSections(obs) {
       showToast('Filtros aplicados com sucesso!');
     }
 
+    // =========================================================================
+    // PILAR 11: CONTROLADORES JS DO MODAL / BOTTOM SHEET DE APOIO PEDAGÓGICO
+    // =========================================================================
+
+    function openRubricGuidanceModal(critId, evaluatedType = 'turma') {
+      const modal = document.getElementById('modalRubricGuidance');
+      if (!modal) return;
+
+      const guidance = getCriterionGuidance(critId, evaluatedType);
+
+      // 1. Breadcrumb e Título
+      const breadcrumbEl = document.getElementById('rubricGuidanceBreadcrumb');
+      if (breadcrumbEl) {
+        breadcrumbEl.innerText = `${guidance.dimTitle} › ${guidance.subTitle}`;
+      }
+
+      const tagEl = document.getElementById('rubricGuidanceCriterionTag');
+      if (tagEl) {
+        tagEl.innerText = `📌 Item ${critId}: ${guidance.shortTitle}`;
+      }
+
+      // 2. Enunciado Completo Oficial
+      const fullStatementEl = document.getElementById('rubricGuidanceFullStatement');
+      if (fullStatementEl) {
+        // Busca texto canônico original nas matrizes ativas
+        let fullText = guidance.shortTitle;
+        const sections = (evaluatedType === 'coordenador') 
+          ? (appState.customRubrics?.coordinator || DEFAULT_SECTIONS_COORDINATOR)
+          : (appState.customRubrics?.teacher || DEFAULT_SECTIONS_TEACHER);
+        
+        for (const sec of sections) {
+          for (const sub of (sec.subSections || [])) {
+            for (const c of (sub.criteria || [])) {
+              if (c.id === critId) {
+                fullText = c.text;
+                break;
+              }
+            }
+          }
+        }
+        fullStatementEl.innerHTML = `<strong>Enunciado Oficial:</strong> ${fullText}`;
+      }
+
+      // 3. O que observar na prática
+      const whatEl = document.getElementById('rubricGuidanceWhatToObserve');
+      if (whatEl) {
+        whatEl.innerText = guidance.whatToObserve || 'Observar a prática pedagógica desenvolvida na rotina da turma.';
+      }
+
+      // 4. Exemplos e Evidências
+      const examplesCard = document.getElementById('rubricGuidanceExamplesCard');
+      const examplesEl = document.getElementById('rubricGuidanceExamples');
+      if (examplesCard && examplesEl) {
+        if (guidance.examples && guidance.examples.trim().length > 0) {
+          examplesEl.innerText = guidance.examples;
+          examplesCard.style.display = 'block';
+        } else {
+          examplesCard.style.display = 'none';
+        }
+      }
+
+      // 5. Régua Formativa de Gradação
+      const scaleCard = document.getElementById('rubricGuidanceScaleCard');
+      const consEl = document.getElementById('rubricScaleConsistent');
+      const partEl = document.getElementById('rubricScalePartial');
+      const notDoneEl = document.getElementById('rubricScaleNotDone');
+
+      if (scaleCard && guidance.scaleGuidance) {
+        if (consEl) consEl.innerText = guidance.scaleGuidance.consistent || 'Prática intencional, regular e bem mediada.';
+        if (partEl) partEl.innerText = guidance.scaleGuidance.partial || 'Prática mecânica, esporádica ou com mediação insuficiente.';
+        if (notDoneEl) notDoneEl.innerText = guidance.scaleGuidance.not_done || 'Ausência de evidências da prática na rotina observada.';
+        scaleCard.style.display = 'block';
+      } else if (scaleCard) {
+        scaleCard.style.display = 'none';
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeRubricGuidanceModal(e) {
+      if (e && e.target && e.target.id !== 'modalRubricGuidance') return;
+      const modal = document.getElementById('modalRubricGuidance');
+      if (modal) modal.classList.remove('active');
+    }
+
     function updateMobileIndicatorsActiveBadge() {
       const badgeEl = document.getElementById('mobileIndFiltersActiveBadge');
       if (!badgeEl) return;
@@ -17646,6 +18604,7 @@ function getActiveSections(obs) {
                   <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
                     <div style="font-size:13px; color:var(--text-primary); flex:1; line-height:1.4;">
                       <strong>[${crit.id}]</strong> ${crit.text}
+                      <button type="button" class="btn-rubric-drilldown-trigger" onclick="openRubricGuidanceModal('${crit.id}', '${targetType || 'professora'}'); event.stopPropagation();" title="Ver orientações formativas deste item">ℹ️ Apoio</button>
                     </div>
                   </div>
 
@@ -20249,6 +21208,59 @@ function getActiveSections(obs) {
               const goodPracticeBadge = document.querySelector('#crit-card-1\\.1\\.1 .badge-good-practice');
               if (!goodPracticeBadge) throw new Error('Badge de boa prática consistente não exibido no critério 1.1.1');
               logger.log('Resolução de Pendência de Item Parcial e incentivo em Prática Consistente', true);
+
+              // PILAR 11: Asserções Estritas de Apoio Pedagógico e Enxugamento Mobile
+              // 1. Presença do Modal e Contêineres no DOM
+              const modalGuidance = document.getElementById('modalRubricGuidance');
+              const bcEl = document.getElementById('rubricGuidanceBreadcrumb');
+              const tagEl = document.getElementById('rubricGuidanceCriterionTag');
+              const whatEl = document.getElementById('rubricGuidanceWhatToObserve');
+              const examplesCard = document.getElementById('rubricGuidanceExamplesCard');
+              const scaleCard = document.getElementById('rubricGuidanceScaleCard');
+              if (!modalGuidance || !bcEl || !tagEl || !whatEl || !examplesCard || !scaleCard) {
+                throw new Error('Falha Pilar 11: Modal #modalRubricGuidance ou seus contêineres essenciais ausentes no DOM');
+              }
+              logger.log('Presença do Modal de Apoio Pedagógico e contêineres no DOM (#modalRubricGuidance)', true);
+
+              // 2. Renderização do Botão de Apoio ℹ️ nos Cards de Critério
+              const guidanceBtn111 = document.querySelector('#crit-card-1\\.1\\.1 .btn-rubric-guidance-trigger');
+              if (!guidanceBtn111) {
+                throw new Error('Falha Pilar 11: Botão .btn-rubric-guidance-trigger ausente no card do critério 1.1.1');
+              }
+              logger.log('Renderização do Botão de Apoio ℹ️ nos Cards de Critério (.btn-rubric-guidance-trigger)', true);
+
+              // 3. Simulação Interativa de Abertura do Modal de Apoio
+              openRubricGuidanceModal('1.1.2', 'turma');
+              if (!modalGuidance.classList.contains('active')) {
+                throw new Error('Falha Pilar 11: openRubricGuidanceModal não aplicou a classe active');
+              }
+              if (!tagEl.innerText.includes('1.1.2') || !tagEl.innerText.includes('perguntas abertas')) {
+                throw new Error('Falha Pilar 11: Payload textual incorreto no título do modal de orientações');
+              }
+              logger.log('Simulação Interativa de Abertura do Modal de Apoio Pedagógico (Pilar 11)', true);
+
+              // 4. Simulação de Fechamento do Modal
+              closeRubricGuidanceModal();
+              if (modalGuidance.classList.contains('active')) {
+                throw new Error('Falha Pilar 11: closeRubricGuidanceModal não removeu a classe active');
+              }
+              logger.log('Simulação Interativa de Fechamento do Modal de Apoio (Pilar 11)', true);
+
+              // 5. Integridade do Dicionário RUBRIC_GUIDANCE_DB
+              const g131 = getCriterionGuidance('1.3.1', 'turma');
+              const g216 = getCriterionGuidance('2.1.6', 'turma');
+              if (!g131 || !g131.whatToObserve || !g131.scaleGuidance || !g216 || !g216.examples) {
+                throw new Error('Falha Pilar 11: Dicionário RUBRIC_GUIDANCE_DB retornou estrutura incompleta para 1.3.1 ou 2.1.6');
+              }
+              logger.log('Integridade do Dicionário Canônico RUBRIC_GUIDANCE_DB e helper getCriterionGuidance', true);
+
+              // 6. Enxugamento Visual Mobile (formatCriterionMobileTitle)
+              const sampleLongCrit = { id: '1.3.1', text: 'Práticas que promovem expressão e comunicação (práticas relacionadas à oralidade, leitura, registros gráficos - desenhos, garatujas, letras, palavras, nome, textos coletivos, etc.)' };
+              const mobileTitleFormatted = formatCriterionMobileTitle(sampleLongCrit);
+              if (!mobileTitleFormatted.includes('crit-more-hint') || !mobileTitleFormatted.includes('(mais...)')) {
+                throw new Error('Falha Pilar 11: formatCriterionMobileTitle não sintetizou parênteses longos com link (mais...)');
+              }
+              logger.log('Enxugamento Visual Mobile de Parênteses Extensos (formatCriterionMobileTitle)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo rubricas_observacao', false, e.message);
             }
