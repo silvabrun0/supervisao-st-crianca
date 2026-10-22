@@ -29,7 +29,7 @@ MODULE_CATALOG = {
     'formadora_coordenacao': 'Acompanhamento da Formadora, Matriz de Coordenação e Isolamento de Perfis',
     'agenda_cronograma': 'Cronograma de Observações, Destaque da Próxima Observação e Baixa Automática',
     'historico_governanca': 'Histórico de Observações, Filtros Multidimensionais, Visualização e Exclusão',
-    'indicadores_decisao': 'Indicadores Pedagógicos, Cobertura Bimestral (Pilar 7), Gargalos (Pilar 8), Pop-up Mobile (Pilar 9) e Semáforo de Turmas (Pilar 10)',
+    'indicadores_decisao': 'Indicadores Pedagógicos, Cobertura Bimestral (Pilar 7), Gargalos (Pilar 8), Pop-up Mobile (Pilar 9) e Semáforo de Turmas e Docentes (Pilar 10)',
     'backup_exportacao': 'Persistência Local, Backup JSON, Restauração e Relatório para Impressão',
     'navegacao_layout': 'Sistema de Rotas/Tabs, Menu Mobile Overlay, Acessibilidade e Changelog'
 }

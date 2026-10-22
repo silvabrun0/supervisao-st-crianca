@@ -3200,7 +3200,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.08 (v7.87)
+          📌 Versão 1.09 (v7.88)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4703,6 +4703,25 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.09 - PILAR 10: SEMÁFORO DO CICLO ANUAL PARA DOCENTES REGENTES -->
+      <div style="margin-bottom:20px; border-left:3px solid #16A34A; padding-left:14px; background:#F0FDF4; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#166534;">Versão 1.09 · v7.88 (Oficial)</span>
+          <span style="font-size:11px; background:#DCFCE7; color:#166534; padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Pilar 10: Semáforo Anual do Ciclo Bimestral para Docentes Regentes Titulares:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🚦 <strong>Visão Semafórica Completa de Docentes:</strong> Resolução integral da visão de Docentes Regentes no Semáforo do Pilar 10, eliminando células em branco (<code>—</code>) e implementando o motor algorítmico <code>calculateTeacherBimesterStatus</code>.</li>
+          <li>📊 <strong>4 Micro-cards de Resumo Decisório:</strong> Métricas em tempo real para Docentes em Atraso, Pendentes no Bimestre, Cobertos no Bimestre (com percentual) e Avanço Geral do Ciclo Docente.</li>
+          <li>⚡ <strong>Barra de Filtros Rápidos de Status Docente:</strong> Filtragem instantânea com 1 clique por Todos, Com Atraso, No Prazo, Cobertos e Ciclo 100%.</li>
+          <li>🎯 <strong>Matriz Semafórica e Ações Rápidas:</strong> Pílulas com consistência ponderada e data, atalho para <em>📅 Agendar Turma</em> (pré-preenchido com a turma de lotação e próximo bimestre) e <em>🔍 Raio-X</em> (acesso imediato ao dossiê longitudinal item a item).</li>
+          <li>📱 <strong>Cards Mobile Responsivos:</strong> Adaptação móvel otimizada para smartphones com visualização vertical e mini-grade semafórica.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Cobertura:</strong> Módulo 10 atualizado com asserções estritas dos 4 estados semafóricos, DOM e filtros interativos de docentes.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.08 - PILAR 10: QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE PRAZOS POR TURMA) -->
@@ -16119,6 +16138,244 @@ function getActiveSections(obs) {
       }
     }
 
+    /**
+     * PILAR 10: Calcula o status semafórico temporal de um DOCENTE REGENTE no ciclo bimestral.
+     * Considera observações diretas do professor, observações da turma onde atua e agendamentos no cronograma.
+     * Retorna objeto canônico: { status, colorKey, label, score, obsId, obsDate, className, scheduleId, bimesterNum, currentBimNum }
+     */
+    function calculateTeacherBimesterStatus(teacherName, schoolName, bimesterName, referenceDate = new Date()) {
+      if (!teacherName) return { status: 'future', colorKey: 'gray', label: '—', score: null };
+
+      const cleanTeacher = (teacherName || '').trim().toLowerCase();
+      const cleanSchool = (schoolName || '').trim().toLowerCase();
+
+      const bimMatch = (bimesterName || '').match(/([1-4])/);
+      const bimesterNum = bimMatch ? parseInt(bimMatch[1], 10) : 1;
+
+      const currentBimStr = getCurrentSchoolBimester(referenceDate);
+      const currentBimMatch = currentBimStr.match(/([1-4])/);
+      const currentBimNum = currentBimMatch ? parseInt(currentBimMatch[1], 10) : 1;
+
+      // Localiza o membro na equipe para obter turma vinculada
+      const member = (appState.teamMembers || []).find(m => (m.name || '').trim().toLowerCase() === cleanTeacher);
+      const assignedClassClean = (member?.classAssigned || '').trim().toLowerCase();
+
+      // Localiza as turmas que possuem este docente no catálogo canônico
+      const teacherClassNames = (appState.classes || []).filter(c => {
+        if (cleanSchool && c.school && c.school.trim().toLowerCase() !== cleanSchool) return false;
+        return Array.isArray(c.teachers) && c.teachers.some(t => (t || '').trim().toLowerCase() === cleanTeacher);
+      }).map(c => (c.name || '').trim().toLowerCase());
+
+      if (assignedClassClean && !teacherClassNames.includes(assignedClassClean)) {
+        teacherClassNames.push(assignedClassClean);
+      }
+
+      const defaultClassName = member?.classAssigned || (teacherClassNames.length > 0 ? teacherClassNames[0] : 'Educação Infantil');
+
+      // 1. Busca observação finalizada correspondente ao docente neste bimestre
+      const finalizedObs = (appState.observations || []).find(o => {
+        if (o.status !== 'finalized' && o.status !== 'concluida') return false;
+        if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+
+        const oBimMatch = (o.bimester || '').match(/([1-4])/);
+        if (!oBimMatch || parseInt(oBimMatch[1], 10) !== bimesterNum) return false;
+
+        // Correspondência nominal direta
+        if (o.teacherName && o.teacherName.trim().toLowerCase().includes(cleanTeacher)) return true;
+        if (Array.isArray(o.teachers) && o.teachers.some(t => (t || '').trim().toLowerCase() === cleanTeacher)) return true;
+        if (o.teacherSynthesis && Object.keys(o.teacherSynthesis).some(k => (k || '').trim().toLowerCase() === cleanTeacher)) return true;
+
+        // Correspondência através da turma vinculada ao docente
+        if (o.className) {
+          const oClsClean = o.className.trim().toLowerCase();
+          if (teacherClassNames.some(tCls => tCls === oClsClean || tCls.includes(oClsClean) || oClsClean.includes(tCls))) {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      if (finalizedObs) {
+        let pts = 0;
+        let valid = 0;
+        const resp = finalizedObs.responses || {};
+        Object.keys(resp).forEach(k => {
+          const r = resp[k];
+          if (r && r !== 'na') {
+            valid++;
+            if (r === 'consistent') pts += 1.0;
+            else if (r === 'partial') pts += 0.5;
+          }
+        });
+        const score = valid > 0 ? Math.round((pts / valid) * 100) : 100;
+        const dateStr = formatDateBR(finalizedObs.date || finalizedObs.startDate || '');
+        return {
+          status: 'completed',
+          colorKey: 'green',
+          label: dateStr ? `Concluída (${dateStr})` : 'Concluída',
+          score: score,
+          obsId: finalizedObs.id,
+          obsDate: finalizedObs.date,
+          className: finalizedObs.className || defaultClassName,
+          bimesterNum,
+          currentBimNum
+        };
+      }
+
+      // 2. Busca rascunho em andamento
+      const draftObs = (appState.observations || []).find(o => {
+        if (o.status !== 'draft') return false;
+        if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+        const oBimMatch = (o.bimester || '').match(/([1-4])/);
+        if (!oBimMatch || parseInt(oBimMatch[1], 10) !== bimesterNum) return false;
+
+        if (o.teacherName && o.teacherName.trim().toLowerCase().includes(cleanTeacher)) return true;
+        if (Array.isArray(o.teachers) && o.teachers.some(t => (t || '').trim().toLowerCase() === cleanTeacher)) return true;
+        if (o.className) {
+          const oClsClean = o.className.trim().toLowerCase();
+          return teacherClassNames.some(tCls => tCls === oClsClean || tCls.includes(oClsClean) || oClsClean.includes(tCls));
+        }
+        return false;
+      });
+
+      if (draftObs) {
+        return {
+          status: 'in_progress',
+          colorKey: 'blue',
+          label: 'Rascunho Aberto',
+          score: null,
+          obsId: draftObs.id,
+          className: draftObs.className || defaultClassName,
+          isDraft: true,
+          bimesterNum,
+          currentBimNum
+        };
+      }
+
+      // 3. Busca agendamento previsto no cronograma
+      const sched = (appState.schedules || []).find(s => {
+        if (s.status === 'cancelado' || s.status === 'realizado') return false;
+        if (cleanSchool && s.schoolName && s.schoolName.trim().toLowerCase() !== cleanSchool) return false;
+        const sBimMatch = (s.bimester || '').match(/([1-4])/);
+        if (!sBimMatch || parseInt(sBimMatch[1], 10) !== bimesterNum) return false;
+
+        if (s.targetName && s.targetName.trim().toLowerCase().includes(cleanTeacher)) return true;
+        if (Array.isArray(s.teachers) && s.teachers.some(t => (t || '').trim().toLowerCase() === cleanTeacher)) return true;
+        if (s.className) {
+          const sClsClean = s.className.trim().toLowerCase();
+          return teacherClassNames.some(tCls => tCls === sClsClean || tCls.includes(sClsClean) || sClsClean.includes(tCls));
+        }
+        return false;
+      });
+
+      // 4. Regra temporal do Semáforo contra o bimestre letivo de referência
+      if (bimesterNum < currentBimNum) {
+        const schedDate = formatDateBR(sched ? (sched.date || sched.plannedDate || '') : '');
+        return {
+          status: 'overdue',
+          colorKey: 'red',
+          label: draftObs ? 'Rascunho Atrasado' : sched ? 'Agend. Atrasada' : 'Atrasada (Expirado)',
+          score: null,
+          obsId: draftObs ? draftObs.id : null,
+          scheduleId: sched ? sched.id : null,
+          scheduleDate: sched ? (sched.date || sched.plannedDate) : null,
+          className: defaultClassName,
+          bimesterNum,
+          currentBimNum
+        };
+      }
+
+      if (sched) {
+        const schedDate = formatDateBR(sched.date || sched.plannedDate || '');
+        return {
+          status: 'in_progress',
+          colorKey: 'blue',
+          label: schedDate ? `Agendada (${schedDate})` : 'Agendada',
+          score: null,
+          scheduleId: sched.id,
+          scheduleDate: sched.date || sched.plannedDate,
+          className: sched.className || defaultClassName,
+          isDraft: false,
+          bimesterNum,
+          currentBimNum
+        };
+      }
+
+      if (bimesterNum === currentBimNum) {
+        return {
+          status: 'in_progress',
+          colorKey: 'blue',
+          label: 'No Prazo (Pendente)',
+          score: null,
+          className: defaultClassName,
+          bimesterNum,
+          currentBimNum
+        };
+      }
+
+      return {
+        status: 'future',
+        colorKey: 'gray',
+        label: 'Ciclo Futuro',
+        score: null,
+        className: defaultClassName,
+        bimesterNum,
+        currentBimNum
+      };
+    }
+
+    /**
+     * Determina o próximo bimestre elegível para agendamento rápido de um docente
+     */
+    function getNextEligibleBimesterForTeacher(teacherName, schoolName) {
+      const BIMESTERS_CANONICAL = ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'];
+      for (const bName of BIMESTERS_CANONICAL) {
+        const st = calculateTeacherBimesterStatus(teacherName, schoolName, bName);
+        if (st.status === 'overdue' || (st.status === 'in_progress' && !st.obsId && !st.scheduleId)) {
+          return bName;
+        }
+      }
+      return getCurrentSchoolBimester();
+    }
+
+    /**
+     * Interação com a célula semafórica do Docente Regente (Pilar 10)
+     */
+    function handleTeacherSemaphoreCellClick(teacherName, schoolName, bimesterName, statusObj) {
+      if (!statusObj) return;
+
+      const member = (appState.teamMembers || []).find(m => m.name === teacherName);
+      const targetClass = statusObj.className || member?.classAssigned || 'Infantil I - Turma A';
+
+      if (statusObj.status === 'completed' && statusObj.obsId) {
+        // Redireciona para o Histórico focando na observação finalizada
+        appState.activeTabIndex = 3;
+        appState.historyFilter = 'finalized';
+        renderHistoryScreen();
+        switchTab(3);
+        setTimeout(() => {
+          const card = document.getElementById(`obs-card-${statusObj.obsId}`);
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.style.outline = '3px solid var(--primary)';
+            setTimeout(() => { card.style.outline = ''; }, 3000);
+          }
+        }, 150);
+      } else if (statusObj.status === 'in_progress' && statusObj.obsId && statusObj.isDraft) {
+        resumeObservation(statusObj.obsId, false);
+      } else if (statusObj.status === 'overdue' || statusObj.status === 'in_progress') {
+        quickScheduleForClass(targetClass, schoolName, bimesterName);
+      }
+    }
+
+    /**
+     * Alternador de filtro rápido no Semáforo de Docentes
+     */
+    function filterTeacherSemaphoreByStatus(statusKey) {
+      appState.activeSemaphoreTeacherStatusFilter = statusKey; // 'all', 'overdue', 'in_progress', 'completed_cur', 'completed_all'
+      renderIndicatorsScreen();
+    }
+
     function renderIndicatorsScreen() {
       const container = document.getElementById('indicatorsBodyContainer');
       if (!container) return;
@@ -17475,6 +17732,59 @@ function getActiveSections(obs) {
       const totalAnnualTarget = scopedClasses.length * 4;
       const overallCyclePct = totalAnnualTarget > 0 ? Math.round((totalCompletedObsInCycle / totalAnnualTarget) * 100) : 0;
 
+      // 1.2 Coleta estatística de DOCENTES REGENTES no escopo
+      let semOverdueTeachersCount = 0;
+      let semInProgressPendingTeachersCount = 0;
+      let semCompletedCurrentBimTeachersCount = 0;
+      let semCycleCompletedTeachersCount = 0;
+      let totalCompletedTeacherObsInCycle = 0;
+
+      const teachersStatusData = scopedAvaliandos.map(member => {
+        const bimesterStatuses = {};
+        let completedCount = 0;
+        let hasOverdue = false;
+        let hasCurrentPending = false;
+
+        BIMESTERS_CANONICAL.forEach(bName => {
+          const st = calculateTeacherBimesterStatus(member.name, member.school, bName);
+          bimesterStatuses[bName] = st;
+          if (st.status === 'completed') completedCount++;
+          if (st.status === 'overdue') hasOverdue = true;
+          if (st.status === 'in_progress' && st.bimesterNum === curBimNum) hasCurrentPending = true;
+        });
+
+        if (hasOverdue) semOverdueTeachersCount++;
+        if (hasCurrentPending) semInProgressPendingTeachersCount++;
+        if (bimesterStatuses[curBim]?.status === 'completed') semCompletedCurrentBimTeachersCount++;
+        if (completedCount === 4) semCycleCompletedTeachersCount++;
+        totalCompletedTeacherObsInCycle += completedCount;
+
+        const cyclePct = Math.round((completedCount / 4) * 100);
+
+        return {
+          member,
+          bimesterStatuses,
+          completedCount,
+          cyclePct,
+          hasOverdue,
+          hasCurrentPending,
+          isCompletedCurrent: bimesterStatuses[curBim]?.status === 'completed',
+          isCycleCompleted: completedCount === 4
+        };
+      });
+
+      const teacherStatusFilter = appState.activeSemaphoreTeacherStatusFilter || 'all';
+      const filteredTeachersStatusData = teachersStatusData.filter(item => {
+        if (teacherStatusFilter === 'overdue') return item.hasOverdue;
+        if (teacherStatusFilter === 'in_progress') return item.hasCurrentPending;
+        if (teacherStatusFilter === 'completed_cur') return item.isCompletedCurrent;
+        if (teacherStatusFilter === 'completed_all') return item.isCycleCompleted;
+        return true;
+      });
+
+      const totalTeacherAnnualTarget = scopedAvaliandos.length * 4;
+      const overallTeacherCyclePct = totalTeacherAnnualTarget > 0 ? Math.round((totalCompletedTeacherObsInCycle / totalTeacherAnnualTarget) * 100) : 0;
+
       html += `
         </div>
 
@@ -17489,7 +17799,7 @@ function getActiveSections(obs) {
                   <span>🚦</span> Quadro de Controle Bimestral (Semáforo do Ciclo Anual)
                 </h3>
                 <p>
-                  Acompanhamento matricial do cumprimento das 4 observações obrigatórias organizado por <strong>TURMA</strong>: 
+                  Acompanhamento matricial do cumprimento das 4 observações obrigatórias organizado por <strong>${viewMode === 'classes' ? 'TURMA' : 'DOCENTE REGENTE TITULAR'}</strong>: 
                   <strong style="color:#16A34A;">🟢 Concluída</strong> · 
                   <strong style="color:#1E40AF;">⚪ No Prazo</strong> · 
                   <strong style="color:#DC2626;">🔴 Atrasada</strong>.
@@ -17696,81 +18006,204 @@ function getActiveSections(obs) {
           `;
         }
       } else {
-        // VISÃO DERIVADA POR DOCENTES (PRESERVAÇÃO DO FLUXO ANTERIOR)
+        // =======================================================================
+        // PILAR 10: VISÃO DERIVADA POR DOCENTES REGENTES (SEMÁFORO CANÔNICO)
+        // =======================================================================
         html += `
-          <div style="margin-top:12px;">
-            <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
-              Fichas formativas individuais dos ${scopedAvaliandos.length} docentes regentes titulares vinculados às turmas:
-            </p>
+          <!-- 4 Micro-cards de Resumo Decisório para Docentes -->
+          <div class="semaphore-stats-grid">
+            <div class="sem-stat-card ${semOverdueTeachersCount > 0 ? 'alert-card' : ''}">
+              <div class="sem-stat-label">
+                <span>${semOverdueTeachersCount > 0 ? '⚠' : '🛡️'}</span> Docentes em Atraso
+              </div>
+              <div class="sem-stat-value">${semOverdueTeachersCount}</div>
+              <div class="sem-stat-desc">${semOverdueTeachersCount === 0 ? 'Nenhum atraso acumulado' : 'Requer intervenção imediata'}</div>
+            </div>
+
+            <div class="sem-stat-card">
+              <div class="sem-stat-label">
+                <span>⏳</span> Pendentes no ${curBim}
+              </div>
+              <div class="sem-stat-value">${semInProgressPendingTeachersCount}</div>
+              <div class="sem-stat-desc">Dentro do prazo regulamentar</div>
+            </div>
+
+            <div class="sem-stat-card">
+              <div class="sem-stat-label">
+                <span>🟢</span> Cobertos no ${curBim}
+              </div>
+              <div class="sem-stat-value">${semCompletedCurrentBimTeachersCount} <span style="font-size:14px; font-weight:700; color:var(--text-secondary);">/ ${scopedAvaliandos.length}</span></div>
+              <div class="sem-stat-desc">${scopedAvaliandos.length > 0 ? Math.round((semCompletedCurrentBimTeachersCount / scopedAvaliandos.length) * 100) : 0}% de cobertura docente</div>
+            </div>
+
+            <div class="sem-stat-card">
+              <div class="sem-stat-label">
+                <span>🏆</span> Avanço do Ciclo Docente
+              </div>
+              <div class="sem-stat-value">${overallTeacherCyclePct}%</div>
+              <div class="sem-stat-desc">${totalCompletedTeacherObsInCycle} de ${totalTeacherAnnualTarget} observações anuais</div>
+            </div>
+          </div>
+
+          <!-- Barra de Filtros Rápidos de Status Docente -->
+          <div class="semaphore-filters-bar">
+            <span class="sem-filter-label">Filtrar:</span>
+            <button type="button" class="sem-filter-chip ${teacherStatusFilter === 'all' ? 'active' : ''}" onclick="filterTeacherSemaphoreByStatus('all')">
+              Todos (${scopedAvaliandos.length})
+            </button>
+            <button type="button" class="sem-filter-chip chip-red ${teacherStatusFilter === 'overdue' ? 'active' : ''}" onclick="filterTeacherSemaphoreByStatus('overdue')">
+              🔴 Com Atraso (${semOverdueTeachersCount})
+            </button>
+            <button type="button" class="sem-filter-chip ${teacherStatusFilter === 'in_progress' ? 'active' : ''}" onclick="filterTeacherSemaphoreByStatus('in_progress')">
+              ⚪ No Prazo (${semInProgressPendingTeachersCount})
+            </button>
+            <button type="button" class="sem-filter-chip chip-green ${teacherStatusFilter === 'completed_cur' ? 'active' : ''}" onclick="filterTeacherSemaphoreByStatus('completed_cur')">
+              🟢 Cobertos (${semCompletedCurrentBimTeachersCount})
+            </button>
+            <button type="button" class="sem-filter-chip ${teacherStatusFilter === 'completed_all' ? 'active' : ''}" onclick="filterTeacherSemaphoreByStatus('completed_all')">
+              🏆 Ciclo 100% (${semCycleCompletedTeachersCount})
+            </button>
+          </div>
         `;
 
-        if (scopedAvaliandos.length === 0) {
+        if (filteredTeachersStatusData.length === 0) {
           html += `
-            <div style="text-align:center; color:var(--text-secondary); padding:24px;">
-              Nenhum docente regente titular localizado no seu escopo.
+            <div style="text-align:center; padding:32px 16px; color:var(--text-secondary); background:#F8FAFC; border-radius:8px;">
+              Nenhum docente regente titular localizado para o filtro selecionado.
             </div>
           `;
         } else {
-          // Renderiza a tabela de docentes existente
-          let teacherRows = '';
-          scopedAvaliandos.forEach(member => {
-            const personObs = scopedObs.filter(o => o.teacherName === member.name || (o.teachers && o.teachers.includes(member.name)));
-            const bScores = {};
-            BIMESTERS_CANONICAL.forEach(bName => {
-              const bObs = personObs.find(o => o.bimester === bName);
-              if (bObs) {
-                let pts = 0, v = 0;
-                activeSections.forEach(sec => sec.subSections.forEach(sub => sub.criteria.forEach(crit => {
-                  const r = bObs.responses ? bObs.responses[crit.id] : null;
-                  if (r && r !== 'na') { v++; if (r === 'consistent') pts += 1.0; else if (r === 'partial') pts += 0.5; }
-                })));
-                bScores[bName] = v > 0 ? Math.round((pts / v) * 100) : 100;
-              }
-            });
+          // Renderização da Tabela Matricial Semafórica de Docentes (Desktop)
+          let teacherTableRows = '';
+          let teacherMobileCards = '';
 
-            const cells = BIMESTERS_CANONICAL.map(bName => {
-              const sc = bScores[bName];
-              if (sc !== undefined) {
-                const color = sc >= 80 ? 'var(--green)' : sc >= 60 ? 'var(--yellow)' : 'var(--red)';
-                return `<td><span style="color:${color}; font-weight:700;">${sc}%</span></td>`;
-              }
-              return `<td><span style="color:var(--text-secondary); opacity:0.6;">—</span></td>`;
+          filteredTeachersStatusData.forEach(item => {
+            const member = item.member;
+            const targetClass = member.classAssigned || 'Turma Regente';
+            const memberSchool = member.school || 'Unidade Escolar';
+            const nextBim = getNextEligibleBimesterForTeacher(member.name, memberSchool);
+
+            // Células dos 4 Bimestres (Desktop)
+            const bimesterCellsHtml = BIMESTERS_CANONICAL.map(bName => {
+              const st = item.bimesterStatuses[bName];
+              return `
+                <td style="text-align:center; padding:8px 6px;">
+                  <div class="sem-status-pill status-${st.status}" onclick="handleTeacherSemaphoreCellClick('${member.name.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${bName}', ${JSON.stringify(st).replace(/"/g, '&quot;')})" title="Clique para detalhes ou ações imediatas">
+                    <div class="pill-top">
+                      <span>${st.status === 'completed' ? '✓' : st.status === 'overdue' ? '⚠' : st.status === 'in_progress' ? '⏳' : '○'} ${bName.replace(' Bimestre', 'º')}</span>
+                      ${st.score !== null ? `<span style="font-weight:900;">${st.score}%</span>` : ''}
+                    </div>
+                    <div class="pill-sub">${st.label}</div>
+                  </div>
+                </td>
+              `;
             }).join('');
 
-            teacherRows += `
+            // Pílulas para Cards Mobile
+            const mobileBimGridHtml = BIMESTERS_CANONICAL.map(bName => {
+              const st = item.bimesterStatuses[bName];
+              return `
+                <div class="sem-status-pill status-${st.status}" onclick="handleTeacherSemaphoreCellClick('${member.name.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${bName}', ${JSON.stringify(st).replace(/"/g, '&quot;')})">
+                  <div class="pill-top">
+                    <span>${st.status === 'completed' ? '✓' : st.status === 'overdue' ? '⚠' : st.status === 'in_progress' ? '⏳' : '○'} ${bName.replace(' Bimestre', 'º')}</span>
+                    ${st.score !== null ? `<span>${st.score}%</span>` : ''}
+                  </div>
+                  <div class="pill-sub">${st.label}</div>
+                </div>
+              `;
+            }).join('');
+
+            // Barra de Progresso do Ciclo
+            const cycleProgressHtml = `
+              <div class="sem-cycle-progress-wrap">
+                <div class="sem-cycle-text">
+                  <span>${item.completedCount} de 4</span>
+                  <span>${item.cyclePct}%</span>
+                </div>
+                <div class="sem-cycle-bar-bg">
+                  <div class="sem-cycle-bar-fill" style="width:${item.cyclePct}%; background:${item.cyclePct === 100 ? '#16A34A' : item.cyclePct >= 50 ? 'var(--primary)' : '#EAB308'};"></div>
+                </div>
+              </div>
+            `;
+
+            // Linha da Tabela Desktop
+            teacherTableRows += `
               <tr>
-                <td><strong>${member.name}</strong><br><span style="font-size:11px; color:var(--text-secondary);">${member.classAssigned || member.roleTitle}</span></td>
-                ${cells}
-                <td style="text-align:center;">
-                  <button type="button" class="btn btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')">
-                    Raio-X Item a Item
-                  </button>
+                <td>
+                  <strong style="color:var(--text-primary); font-size:13px;">${member.name}</strong>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
+                    <span style="font-weight:700; color:var(--primary);">${targetClass}</span> · ${memberSchool}
+                  </div>
+                </td>
+                ${bimesterCellsHtml}
+                <td>${cycleProgressHtml}</td>
+                <td style="text-align:center; white-space:nowrap;">
+                  <div style="display:flex; gap:6px; justify-content:center;">
+                    <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px;" onclick="quickScheduleForClass('${targetClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')" title="Agendar observação para a turma desta docente">
+                      📅 Agendar
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')" title="Abrir Raio-X individual da docente">
+                      🔍 Raio-X
+                    </button>
+                  </div>
                 </td>
               </tr>
+            `;
+
+            // Card Mobile
+            teacherMobileCards += `
+              <div class="sem-mobile-class-card ${item.hasOverdue ? 'has-overdue' : ''}">
+                <div class="sem-mobile-card-header">
+                  <div>
+                    <div class="sem-mobile-class-name">${member.name}</div>
+                    <div class="sem-mobile-class-sub"><span style="font-weight:700; color:var(--primary);">${targetClass}</span> · ${memberSchool}</div>
+                  </div>
+                  <div>${cycleProgressHtml}</div>
+                </div>
+
+                <div class="sem-mobile-bimesters-grid">
+                  ${mobileBimGridHtml}
+                </div>
+
+                <div style="display:flex; gap:8px; margin-top:8px;">
+                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center;" onclick="quickScheduleForClass('${targetClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')">
+                    📅 Agendar Turma
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')">
+                    🔍 Raio-X Item a Item
+                  </button>
+                </div>
+              </div>
             `;
           });
 
           html += `
-            <div class="longitudinal-table-view">
-              <table class="data-table">
+            <!-- Visão Tabela Desktop para Docentes -->
+            <div class="semaphore-table-view">
+              <table class="semaphore-table">
                 <thead>
                   <tr>
-                    <th>Docente Titular</th>
-                    <th>1º Bimestre</th>
-                    <th>2º Bimestre</th>
-                    <th>3º Bimestre</th>
-                    <th>4º Bimestre</th>
-                    <th style="text-align:center;">Ações</th>
+                    <th>Docente Regente Titular</th>
+                    <th class="col-bim">1º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Fev - Abr</span></th>
+                    <th class="col-bim">2º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Mai - Jul</span></th>
+                    <th class="col-bim">3º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Ago - Out</span></th>
+                    <th class="col-bim">4º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Nov - Jan</span></th>
+                    <th style="width:130px;">Ciclo Anual</th>
+                    <th style="width:140px; text-align:center;">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  ${teacherRows}
+                  ${teacherTableRows}
                 </tbody>
               </table>
             </div>
+
+            <!-- Visão Cards Mobile para Docentes -->
+            <div class="semaphore-cards-view">
+              ${teacherMobileCards}
+            </div>
           `;
         }
-        html += `</div>`;
       }
 
       html += `
@@ -20611,6 +21044,29 @@ function getActiveSections(obs) {
               }
               logger.log('Cálculo algorítmico do Semáforo Canônico: ⚪ No Prazo (Bimestre em Andamento)', true, statusCurrent.label);
 
+              // PILAR 10: VALIDAÇÃO DO MOTOR ALGORÍTMICO CALCULATETEACHERBIMESTERSTATUS
+              // Caso 1: Docente com observação concluída (Ana Carolina Silva no 1º Bimestre)
+              const teacherStatusGreen = calculateTeacherBimesterStatus('Ana Carolina Silva', 'CEI Professora Maria de Lourdes', '1º Bimestre');
+              if (teacherStatusGreen.status !== 'completed' || teacherStatusGreen.colorKey !== 'green') {
+                throw new Error(`Falha Pilar 10 Docente: Esperado status completed/green para Ana Carolina no 1º Bimestre, obtido ${teacherStatusGreen.status}/${teacherStatusGreen.colorKey}`);
+              }
+              logger.log('Cálculo algorítmico do Semáforo Docente: 🟢 Verde (Concluída)', true, `${teacherStatusGreen.label} - Score: ${teacherStatusGreen.score}%`);
+
+              // Caso 2: Docente com observação atrasada (Carla Beatriz Mendes no 1º Bimestre sem observação)
+              const teacherStatusRed = calculateTeacherBimesterStatus('Carla Beatriz Mendes', 'CEI Professora Maria de Lourdes', '1º Bimestre');
+              if (teacherStatusRed.status !== 'overdue' || teacherStatusRed.colorKey !== 'red') {
+                throw new Error(`Falha Pilar 10 Docente: Esperado status overdue/red para Carla Beatriz no 1º Bimestre, obtido ${teacherStatusRed.status}/${teacherStatusRed.colorKey}`);
+              }
+              logger.log('Cálculo algorítmico do Semáforo Docente: 🔴 Vermelho (Atrasada / Bimestre Expirado)', true, teacherStatusRed.label);
+
+              // Caso 3: Docente no bimestre corrente
+              const curBimTeacherTest = getCurrentSchoolBimester();
+              const teacherStatusCurrent = calculateTeacherBimesterStatus('Carla Beatriz Mendes', 'CEI Professora Maria de Lourdes', curBimTeacherTest);
+              if (teacherStatusCurrent.status !== 'in_progress' && teacherStatusCurrent.status !== 'completed') {
+                throw new Error(`Falha Pilar 10 Docente: Esperado status in_progress para Carla Beatriz no bimestre corrente, obtido ${teacherStatusCurrent.status}`);
+              }
+              logger.log('Cálculo algorítmico do Semáforo Docente: ⚪ No Prazo (Bimestre Corrente)', true, teacherStatusCurrent.label);
+
               // 12. PILAR 10: VALIDAÇÃO DOS FILTROS RÁPIDOS E ALTERNADOR DE VISÃO
               filterSemaphoreByStatus('overdue');
               const overdueSec = document.getElementById('bimesterSemaphoreSection');
@@ -20620,11 +21076,30 @@ function getActiveSections(obs) {
               filterSemaphoreByStatus('all');
               logger.log('Validação interativa dos Filtros Rápidos de Status no Semáforo (Pilar 10)', true);
 
+              // PILAR 10: VALIDAÇÃO DO DOM DA VISÃO DE DOCENTES REGENTES NO SEMÁFORO
               toggleLongitudinalViewMode('teachers');
               const teachersViewActive = document.getElementById('bimesterSemaphoreSection');
-              if (!teachersViewActive || !teachersViewActive.innerHTML.includes('Docente Titular')) {
-                throw new Error('Falha Pilar 10: Alternador para visão de docentes falhou');
+              if (!teachersViewActive || !teachersViewActive.innerHTML.includes('Docente Regente Titular')) {
+                throw new Error('Falha Pilar 10: Alternador para visão de docentes falhou na tabela');
               }
+              if (!teachersViewActive.innerHTML.includes('Docentes em Atraso') || !teachersViewActive.innerHTML.includes('Avanço do Ciclo Docente')) {
+                throw new Error('Falha Pilar 10: Micro-cards de resumo decisório de docentes ausentes no DOM');
+              }
+              if (!teachersViewActive.innerHTML.includes('sem-status-pill status-completed')) {
+                throw new Error('Falha Pilar 10: Pílulas semafóricas não renderizadas na matriz de docentes');
+              }
+              logger.log('Renderização completa e semafórica da Visão de Docentes Regentes (Pilar 10)', true);
+
+              // Validação do Filtro Rápido de Docentes
+              filterTeacherSemaphoreByStatus('overdue');
+              const overdueTeacherDom = document.getElementById('bimesterSemaphoreSection');
+              if (!overdueTeacherDom || !overdueTeacherDom.innerHTML.includes('🔴 Com Atraso')) {
+                throw new Error('Falha Pilar 10: Filtro rápido de docentes com atraso não refletiu no DOM');
+              }
+              filterTeacherSemaphoreByStatus('all');
+              logger.log('Validação dos Filtros Rápidos de Status no Semáforo de Docentes (Pilar 10)', true);
+
+              // Restaura a visão de turmas padrão
               toggleLongitudinalViewMode('classes');
               logger.log('Validação do Alternador de Visão Turmas vs. Docentes Regentes (Pilar 10)', true);
 

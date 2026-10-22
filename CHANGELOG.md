@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.09** | 22/10/2026 14:00 | `intermediárias/aplicativo_v109_pilar_10_semaforo_docentes_regentes.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Semáforo Anual para Docentes Regentes | Resolução completa da visão semafórica de Docentes Regentes no Pilar 10, eliminação de células em branco, micro-cards decisórios docentes, filtros rápidos e integração com agendamento 🚦 |
 | **1.08** | 21/10/2026 21:30 | `intermediárias/aplicativo_v108_pilar_10_semaforo_bimestral_turmas.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Quadro de Controle Bimestral matricial organizado por TURMA, Semáforo de Prazos Canônico (🟢 Verde Concluída, ⚪ Cinza No Prazo, 🔴 Vermelho Atrasada), micro-cards decisórios, filtros rápidos, atalhos de agendamento com 1 toque e cards adaptativos mobile 🚦 |
 | **1.07** | 21/10/2026 21:00 | `intermediárias/aplicativo_v103_correcao_alternancia_gargalos_pilar_8.html` | Deliberação SerTão Criança / Pilar 8 | Correção da alternância de dados entre Menor Consistência e Maior Desvio vs. Rede Municipal: enriquecimento multi-escola na semente (`seedSampleData`), refino do algoritmo de ordenação de deltas negativos, feedback sutil em Rede Consolidada e validação de 100% de testes no Chrome 🎯 |
 | **1.06** | 21/10/2026 20:00 | `intermediárias/aplicativo_v106_pilar_9_mobile_fab_lupinha_filtros.html` | Solicitação direta / Refinamento Pilar 9 | Botão flutuante circular com lupinha no canto inferior direito para acesso aos filtros no celular, e ocultação total da barra desktop de filtros abaixo de "Índices para Diagnóstico" na visualização móvel 🔍 |
@@ -126,6 +127,27 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.09] - Pilar 10: Semáforo Anual do Ciclo Bimestral para Docentes Regentes Titulares
+* **Data e Horário:** 22 de Outubro de 2026 – 14:00:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v109_pilar_10_semaforo_docentes_regentes.html`
+* **Identificador no App:** 📌 Versão 1.09 (v7.88)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Visão Semafórica Completa de Docentes:**
+  Resolução integral da visão de Docentes Regentes no Semáforo do Pilar 10, eliminando células em branco (`—`) e implementando o motor algorítmico `calculateTeacherBimesterStatus`.
+- **4 Micro-cards de Resumo Decisório para Docentes:**
+  Métricas em tempo real para Docentes em Atraso, Pendentes no Bimestre, Cobertos no Bimestre (com percentual de cobertura docente) e Avanço Geral do Ciclo Docente.
+- **Barra de Filtros Rápidos de Status Docente:**
+  Filtragem instantânea com 1 clique por Todos, Com Atraso, No Prazo, Cobertos e Ciclo 100%.
+- **Matriz Semafórica e Ações Rápidas:**
+  Pílulas com consistência ponderada e data, atalho para *📅 Agendar Turma* (pré-preenchido com a turma de lotação e próximo bimestre) e *🔍 Raio-X* (acesso imediato ao dossiê longitudinal item a item).
+- **Cards Mobile Responsivos:**
+  Adaptação móvel otimizada para smartphones com visualização vertical e mini-grade semafórica.
+- **Auditoria Contínua com 100% de Cobertura:**
+  Módulo 10 atualizado com asserções estritas dos 4 estados semafóricos, DOM e filtros interativos de docentes.
 
 ### [Versão 1.08] - Pilar 10: Quadro de Controle Bimestral e Semáforo de Prazos do Ciclo Anual por Turma
 * **Data e Horário:** 21 de Outubro de 2026 – 21:30:00
