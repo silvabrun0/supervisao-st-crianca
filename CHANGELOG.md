@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.17** | 22/10/2026 17:40 | `intermediárias/aplicativo_v117_pilar_14_governanca_descentralizada_ssot.html` | Deliberação SerTão Criança / Pilar 14 | Pilar 14: Governança Operacional Descentralizada e Gestão Autônoma sob SSOT Única: autonomia da Coordenadora (turmas, docentes, turno MEC e caracterização da escola), autonomia da Formadora (coordenadoras e polo regional), Núcleo de EI (governança central), resiliência contra ressurreição de turmas excluídas e integridade relacional total 🏫🌐 |
 | **1.16** | 22/10/2026 16:30 | `intermediárias/aplicativo_v0.94_alinhamento_filtros_diagnostico.html` | Solicitação direta / `plano_alinhamento_filtros_diagnostico.md` | Alinhamento, centralização e padronização visual das caixas de filtros para diagnóstico (`#indicatorsFilterToolbar` e `#modalIndicatorsFiltersMobile`) e formulários globais, eliminação de padding zero do reset universal, proteção contra transbordamento (`padding-right: 36px` e `text-overflow: ellipsis`), chevron SVG canônico e resiliência no semáforo 📐✨ |
 | **1.15** | 22/10/2026 16:00 | `intermediárias/aplicativo_v0.93_edicao_data_e_exclusao_agendamento.html` | Solicitação direta / `plano_edicao_data_agendamento_realizado_e_exclusao_cronograma.md` | Edição de data e horário em agendamentos realizados e arquivados no cronograma, sincronização bidirecional imediata com observação vinculada (`obs.date`, `obs.startTime`, turmas integrais), semáforo resiliente do Pilar 10 e exclusão segura (`deleteSchedule`) com desvinculação relacional ✏️🗑️ |
 | **1.14** | 22/10/2026 15:40 | `intermediárias/aplicativo_v114_enxugamento_mobile_textos_longos_criterios.html` | Solicitação direta / `plano_enxugamento_mobile_textos_longos_criterios.md` | Enxugamento visual mobile dos cards de critérios com textos longos/parênteses explicativos, botão tátil `.btn-crit-detail-trigger`, Bottom Sheet canônica `#modalCriterionDetail` exibindo 100% do texto oficial sem invenções, preservação desktop e touch target de 32px 📱🏛️ |
@@ -136,6 +137,28 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.17] - Governança Operacional Descentralizada e Gestão Autônoma sob SSOT Única (Pilar 14)
+- **Data / Horário:** 22/10/2026 17:40
+- **Arquivo de Referência:** `intermediárias/aplicativo_v117_pilar_14_governanca_descentralizada_ssot.html`
+- **Origem / Insumos Principais:** Deliberação SerTão Criança / Documento de Insights da Supervisão Pedagógica (`docs/documento_insights_supervisao_pedagogica_20261020.md`, linhas 293–308) / `planos_de_implementacao/plano_pilar_14_governanca_descentralizada_ssot.md`.
+- **Foco Central:** Pilar 14: Governança Operacional Descentralizada e Gestão Autônoma sob SSOT Única. Concessão de autonomia de gestão de turmas, docentes e caracterização da unidade para Coordenadoras Pedagógicas (escopo UE), gestão e reatribuição de coordenadoras para Formadoras Pedagógicas (escopo Polo), preservação da autoridade central do Núcleo de EI sobre as 32 UEs, resiliência relacional com bloqueio de ressurreição de turmas e sincronização reativa em tempo real com todas as abas.
+
+#### Inclusões
+- **Autonomia da Coordenadora Pedagógica (Escopo UE):** Sub-aba dedicada de "Turmas & Regência" (`#pedagTabClasses` / `#pedagViewClasses`) com tabela completa de turmas, modal de cadastro e edição de turma (`#modalClassEditor`), definição de padrão de turno MEC (Tempo Parcial vs. Tempo Integral), alocação nominal de professores regentes titulares segregados por turno (manhã/tarde) e gestão da caracterização escolar (`totalStudents`, `inclusiveStudents`, `totalClasses`, `address`) com card dedicado `#coordinatorUnitCardContainer`. Bloqueio estrito de visualização e edição de dados de outras unidades escolares.
+- **Autonomia da Formadora Pedagógica (Escopo Polo):** Gestão e reatribuição autônoma de Coordenadoras Pedagógicas estritamente entre as escolas pertencentes ao seu polo regional de supervisão (`poloUnits`), com filtro automático por polo e bloqueio de unidades externas.
+- **Autoridade Central do Núcleo de EI:** Governança irrestrita e global sobre todas as 32 UEs, Polos, Formadoras, Coordenadoras e Turmas, incluindo exportação e importação de base SSOT unificada.
+- **Menu e Acesso Rápido:** Item de navegação desktop `#deskTabOpManagement` e no menu mobile `#mobMenuOpManagementBtn` com rotulagem dinâmica contextual ("Minha Escola" para Coordenadora, "Meu Polo" para Formadora, "Gestão Operacional" para Núcleo de EI), além de card de acesso rápido na Home (`#homeOpManagementCard`).
+- **Resiliência Relacional da SSOT:** Criação de `appState.deletedClassIds` para prevenir ressurgimento de turmas deletadas via fallback do catálogo estático, sincronização em cascata de nomes em agendamentos futuros, rascunhos de observação e notas formativas, e desvinculação limpa de professores excluídos de turmas regidas.
+
+#### Modificações
+- **Estrutura de Unidades Iniciais (`INITIAL_UNITS`):** Enriquecimento das 32 unidades escolares com caracterização padrão inicial (`totalStudents: 120`, `inclusiveStudents: 6`, `totalClasses: 4`, além dos endereços já catalogados).
+- **Controladores de Acesso (RBAC):** Atualização de `applyUserRoleUI()`, `navigateToTab()`, `renderTeamScreen()`, `openAddMemberModal()`, `openEditMemberModal()`, `saveNewTeamMember()`, `saveEditTeamMember()` e `deleteTeamMember()` com validação estrita de escopo por papel.
+- **Sub-abas de Gestão:** Atualização de `switchPedagSubTab()` para suportar dinamicamente a sub-aba `classes`, renderizando a tabela em tempo real com dados da SSOT (`appState.classes`).
+- **Modal de Edição de Unidades (`#modalEditUnit`):** Adição de inputs numéricos para Total de Alunos Matriculados e Alunos da Educação Inclusiva.
+
+#### Exclusões
+- **Hardcoding e Duplicação de Estado:** Eliminação de qualquer duplicação de turmas ou equipes em arrays paralelos ou desconectados da SSOT única compartilhada.
 
 ### [Versão 1.16] - Alinhamento, Centralização e Padronização Visual das Caixas de Filtros para Diagnóstico e Formulários Globais
 

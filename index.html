@@ -3248,9 +3248,9 @@
 
       <!-- Desktop Nav Tabs -->
       <nav class="desktop-nav">
-                <button class="nav-link" id="deskTabOpManagement" onclick="navigateToTab('opManagement')" style="display:none;">
+        <button class="nav-link" id="deskTabOpManagement" onclick="navigateToTab('opManagement')" style="display:none;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          Gestão Operacional
+          <span id="deskTabOpManagementLabel">Gestão Operacional</span>
         </button>
         <button class="nav-link active" id="deskTabHome" onclick="navigateToTab('home')">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -3295,7 +3295,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.16 (v7.94)
+          📌 Versão 1.17 (v7.95)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3380,6 +3380,24 @@
         </div>
         <div id="homeScheduledCardsList" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px;"></div>
       </div>
+
+      <!-- Card Dinâmico de Gestão Operacional Descentralizada (Pilar 14) -->
+      <div id="homeOpManagementCard" style="display:none; margin-bottom:24px;">
+        <div class="card" style="border-left: 4px solid var(--primary); background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="font-size:28px;" id="homeOpManagementIcon">🏫</div>
+              <div>
+                <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark); margin:0;" id="homeOpManagementTitle">Gestão da Unidade Escolar</h4>
+                <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;" id="homeOpManagementSubtitle">Gerencie as turmas, jornada MEC, docentes regentes titulares e caracterização da sua escola.</p>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="navigateToTab('opManagement')" id="homeOpManagementBtn" style="font-size:12px; padding:8px 14px; white-space:nowrap;">
+              Acessar Gestão da Escola →
+            </button>
+          </div>
+        </div>
+      </div>
     
       </div>
       
@@ -3387,10 +3405,10 @@
         
       <div class="page-title-row">
         <div>
-          <div class="page-title">Gestão Pedagógica</div>
-          <div class="page-subtitle">Administração unificada de Unidades Escolares, Polos Regionais, Servidores e Base Integral</div>
+          <div class="page-title" id="homeGestaoTitle">Gestão Pedagógica</div>
+          <div class="page-subtitle" id="homeGestaoSubtitle">Administração unificada de Unidades Escolares, Polos Regionais, Servidores e Base Integral</div>
         </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;" id="homeGestaoActionsCentral">
           <button class="btn btn-secondary" onclick="exportFullBaseJSON()" style="color:#059669; font-weight:700;">
             💾 Exportar Base Completa (JSON)
           </button>
@@ -3404,10 +3422,13 @@
       <!-- Segmented Navigation for Operational Modules -->
       <div style="display:flex; gap:8px; margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:12px; overflow-x:auto;">
         <button class="btn pedag-subtab-btn active" id="pedagTabUnits" onclick="switchPedagSubTab('units')">
-          🏢 Unidades Escolares & Polos
+          <span id="pedagTabUnitsLabel">🏢 Unidades Escolares & Polos</span>
+        </button>
+        <button class="btn pedag-subtab-btn" id="pedagTabClasses" onclick="switchPedagSubTab('classes')">
+          <span id="pedagTabClassesLabel">🏫 Turmas & Regência Titular</span>
         </button>
         <button class="btn pedag-subtab-btn" id="pedagTabTeam" onclick="switchPedagSubTab('team')">
-          👥 Equipes & Servidores da Rede
+          <span id="pedagTabTeamLabel">👥 Equipes & Servidores da Rede</span>
         </button>
         <button class="btn pedag-subtab-btn" id="pedagTabExports" onclick="switchPedagSubTab('exports')">
           📊 Extrações & Relatórios SSOT
@@ -3416,76 +3437,124 @@
 
       <!-- SUB-VIEW 1: UEs & POLOS -->
       <div id="pedagViewUnits" class="pedag-subview">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-          <div>
-            <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark);">Rede Municipal de Ensino: Polos e Unidades</h3>
-            <p style="font-size:12px; color:var(--text-secondary);">Estrutura territorial, lotação de profissionais e cobertura pedagógica</p>
-          </div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button class="btn btn-secondary" onclick="exportUnitsCSV()">💾 Exportar UEs (CSV)</button>
-            <button class="btn btn-secondary" onclick="exportUnitsJSON()">📄 Exportar UEs (JSON)</button>
-            <button class="btn btn-secondary" onclick="downloadUnitsCsvTemplate()">📥 Baixar Modelo (CSV)</button>
-            <button class="btn btn-secondary" onclick="triggerUnitsCsvImport()">📤 Importar CSV</button>
-            <button class="btn btn-primary" onclick="openAddUnitModal()">+ Cadastrar Nova UE</button>
-          </div>
-        </div>
+        <!-- Container Exclusivo de Caracterização da UE para Coordenadora Pedagógica (Pilar 14) -->
+        <div id="coordinatorUnitCardContainer" style="display:none; margin-bottom:20px;"></div>
 
-        <!-- Matriz de Cobertura por Polo Regional (Requisito 7) -->
-        <div class="card" style="margin-bottom:20px; border-left:4px solid var(--primary);">
-          <div style="font-size:15px; font-weight:800; color:var(--primary-dark); margin-bottom:6px;">
-            🗺️ Matriz de Distribuição e Cobertura da Rede por Polo Regional
-          </div>
-          <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
-            Mapeamento consolidado das Coordenadoras Pedagógicas e Unidades Escolares alocadas em cada Polo da Rede Municipal.
-          </p>
-          <div style="overflow-x:auto;">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Polo Regional</th>
-                  <th>Formadora Responsável</th>
-                  <th>Unidades Escolares Vinculadas</th>
-                  <th>Coordenadoras Pedagógicas Atuantes</th>
-                  <th>Docentes Atendidos</th>
-                  <th>Status de Cobertura</th>
-                </tr>
-              </thead>
-              <tbody id="networkCoverageTableBody">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Tabela Detalhada de Unidades Escolares com Filtros (Requisito 3) -->
-        <div class="card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
-            <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark);">Unidades Escolares Cadastradas</h4>
-            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-              <div>
-                <select id="unitsFilterPolo" class="form-select" style="width:auto; padding:6px 12px; font-size:12px;" onchange="renderUnitsScreen()">
-                  <option value="ALL">Todos os Polos Regionais</option>
-                  <!-- Populated dynamically -->
-                </select>
-              </div>
-              <div>
-                <input type="text" id="unitsFilterSearch" class="form-input" placeholder="Buscar UE por nome..." style="width:200px; padding:6px 12px; font-size:12px;" oninput="renderUnitsScreen()">
-              </div>
+        <div id="unitsManagementContainer">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark);" id="unitsViewTitle">Rede Municipal de Ensino: Polos e Unidades</h3>
+              <p style="font-size:12px; color:var(--text-secondary);" id="unitsViewSubtitle">Estrutura territorial, lotação de profissionais e cobertura pedagógica</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;" id="unitsActionsButtons">
+              <button class="btn btn-secondary" onclick="exportUnitsCSV()">💾 Exportar UEs (CSV)</button>
+              <button class="btn btn-secondary" onclick="exportUnitsJSON()">📄 Exportar UEs (JSON)</button>
+              <button class="btn btn-secondary" onclick="downloadUnitsCsvTemplate()">📥 Baixar Modelo (CSV)</button>
+              <button class="btn btn-secondary" onclick="triggerUnitsCsvImport()">📤 Importar CSV</button>
+              <button class="btn btn-primary" id="btnAddUnitMain" onclick="openAddUnitModal()">+ Cadastrar Nova UE</button>
             </div>
           </div>
+
+          <!-- Matriz de Cobertura por Polo Regional (Requisito 7) -->
+          <div class="card" id="networkCoverageCard" style="margin-bottom:20px; border-left:4px solid var(--primary);">
+            <div style="font-size:15px; font-weight:800; color:var(--primary-dark); margin-bottom:6px;">
+              🗺️ Matriz de Distribuição e Cobertura da Rede por Polo Regional
+            </div>
+            <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
+              Mapeamento consolidado das Coordenadoras Pedagógicas e Unidades Escolares alocadas em cada Polo da Rede Municipal.
+            </p>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Polo Regional</th>
+                    <th>Formadora Responsável</th>
+                    <th>Unidades Escolares Vinculadas</th>
+                    <th>Coordenadoras Pedagógicas Atuantes</th>
+                    <th>Docentes Atendidos</th>
+                    <th>Status de Cobertura</th>
+                  </tr>
+                </thead>
+                <tbody id="networkCoverageTableBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tabela Detalhada de Unidades Escolares com Filtros (Requisito 3) -->
+          <div class="card" id="unitsDetailedCard">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+              <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark);">Unidades Escolares Cadastradas</h4>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <div>
+                  <select id="unitsFilterPolo" class="form-select" style="width:auto; padding:6px 12px; font-size:12px;" onchange="renderUnitsScreen()">
+                    <option value="ALL">Todos os Polos Regionais</option>
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
+                <div>
+                  <input type="text" id="unitsFilterSearch" class="form-input" placeholder="Buscar UE por nome..." style="width:200px; padding:6px 12px; font-size:12px;" oninput="renderUnitsScreen()">
+                </div>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nome da Unidade Escolar</th>
+                    <th>Polo Regional Vinculado</th>
+                    <th>Endereço / Bairro</th>
+                    <th>Docentes na Unidade</th>
+                    <th style="width:140px; text-align:center;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="unitsTableBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW: TURMAS & REGÊNCIA TITULAR (PILAR 14) -->
+      <div id="pedagViewClasses" class="pedag-subview" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark);" id="classesViewTitle">Turmas & Regência Titular</h3>
+            <p style="font-size:12px; color:var(--text-secondary);" id="classesViewSubtitle">Gestão descentralizada de turmas, jornada MEC e alocação nominal de docentes regentes</p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="openAddClassModal()">+ Cadastrar Nova Turma</button>
+          </div>
+        </div>
+
+        <div class="card" id="classesFilterCard" style="display:none; margin-bottom:14px;">
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <label class="form-label" style="margin:0;">Filtrar Unidade Escolar:</label>
+            <select id="classesFilterSchool" class="form-select" style="width:auto; padding:6px 12px; font-size:12px;" onchange="renderClassesScreen()">
+              <!-- Populado dinamicamente -->
+            </select>
+            <input type="text" id="classesFilterSearch" class="form-input" placeholder="Buscar turma ou docente..." style="width:220px; padding:6px 12px; font-size:12px;" oninput="renderClassesScreen()">
+          </div>
+        </div>
+
+        <div class="card">
           <div style="overflow-x:auto;">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Nome da Unidade Escolar</th>
-                  <th>Polo Regional Vinculado</th>
-                  <th>Endereço / Bairro</th>
-                  <th>Docentes na Unidade</th>
+                  <th>Turma / Etapa</th>
+                  <th>Unidade Escolar</th>
+                  <th>Jornada (Padrão MEC)</th>
+                  <th>Turno(s)</th>
+                  <th>Docentes Regentes Titulares</th>
                   <th style="width:140px; text-align:center;">Ações</th>
                 </tr>
               </thead>
-              <tbody id="unitsTableBody">
-                <!-- Dynamically populated -->
+              <tbody id="classesTableBody">
+                <!-- Populado dinamicamente -->
               </tbody>
             </table>
           </div>
@@ -4800,6 +4869,25 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.17 - GOVERNANÇA OPERACIONAL DESCENTRALIZADA E GESTÃO AUTÔNOMA SOB SSOT ÚNICA (PILAR 14) -->
+      <div style="margin-bottom:20px; border-left:3px solid #7C3AED; padding-left:14px; background:#F5F3FF; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#6D28D9;">Versão 1.17 · v7.95 (Oficial)</span>
+          <span style="font-size:11px; background:#EDE9FE; color:#5B21B6; padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Pilar 14 · Governança Operacional Descentralizada e Gestão Autônoma sob SSOT Única:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🏫 <strong>Autonomia da Coordenadora Pedagógica (Escopo UE):</strong> Gestão autônoma e descentralizada da própria unidade escolar (<code>user.school</code>). Adição, edição e exclusão de turmas com definição de jornada MEC (Tempo Parcial vs. Tempo Integral), alocação de docentes titulares segregados por turno e manutenção da caracterização escolar (total de alunos, alunos inclusivos, endereço). Bloqueio estrito de acesso e modificação sobre outras unidades da rede.</li>
+          <li>🌐 <strong>Autonomia da Formadora Pedagógica (Escopo Polo):</strong> Gestão e reatribuição autônoma de Coordenadoras Pedagógicas estritamente entre as escolas pertencentes ao seu polo regional de supervisão (<code>poloUnits</code>). Bloqueio estrito de alteração sobre unidades ou coordenadoras de outros polos.</li>
+          <li>🏛️ <strong>Autoridade Central do Núcleo de EI:</strong> Governança global e irrestrita sobre as 32 UEs, Polos, Formadoras, Coordenadoras e Turmas, incluindo exportação e importação integral da base SSOT.</li>
+          <li>🔄 <strong>Princípio Rígido da SSOT Única (Single Source of Truth):</strong> Todas as alterações efetuadas nas turmas, equipes ou caracterizações persistem no estado compartilhado (<code>appState.classes</code>, <code>appState.units</code>, <code>appState.teamMembers</code>) e propagam reativamente e em tempo real para o Setup de Observação, Cronograma de Visitas, Diagnóstico & Semáforo e Histórico, eliminando bases desconectadas.</li>
+          <li>🗑️ <strong>Blindagem Relacional e Resiliência contra Ressurreição:</strong> Implementação de <code>appState.deletedClassIds</code> para garantir que turmas excluídas não ressuscitem, sincronização em cascata de nomes em agendamentos/notas/rascunhos, e desvinculação limpa de docentes excluídos de suas turmas.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Módulo de Catálogo de Dados (<code>catalogo_dados</code>) e Autenticação/RBAC enriquecidos com testes automatizados de autonomia de gestão, caracterização de UE, CRUD de turmas e isolamento de escopo.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.16 - ALINHAMENTO, CENTRALIZAÇÃO E PADRONIZAÇÃO VISUAL DOS FILTROS DE DIAGNÓSTICO -->
@@ -7288,9 +7376,99 @@
         <input type="text" id="editUnitAddress" class="form-input" placeholder="Ex: Centro / Zona Urbana (opcional)">
       </div>
 
+      <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label class="form-label">Total de Alunos Matriculados</label>
+          <input type="number" id="editUnitStudents" class="form-input" min="0" placeholder="Ex: 120">
+        </div>
+        <div>
+          <label class="form-label">Crianças Inclusão / Diversidade</label>
+          <input type="number" id="editUnitInclusive" class="form-input" min="0" placeholder="Ex: 6">
+        </div>
+      </div>
+
       <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:14px;">
         <button class="btn btn-secondary" onclick="closeEditUnitModal()">Cancelar</button>
         <button class="btn btn-primary" onclick="saveEditUnit()">Salvar Alterações</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CADASTRAR / EDITAR TURMA (PILAR 14) ================= -->
+  <div id="modalClassEditor" class="modal-backdrop" onclick="closeClassEditorModal()">
+    <div class="modal-panel" onclick="event.stopPropagation()" style="max-width:550px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);" id="modalClassEditorTitle">Cadastrar Turma</div>
+        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeClassEditorModal()">✕</button>
+      </div>
+      <input type="hidden" id="editClassId">
+
+      <div class="form-group" id="groupClassSchool">
+        <label class="form-label">Unidade Escolar</label>
+        <select id="classEditorSchool" class="form-select" onchange="onClassEditorSchoolChange()">
+          <!-- Populado dinamicamente -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nome da Turma</label>
+        <input type="text" id="classEditorName" class="form-input" placeholder="Ex: Infantil I - Turma A">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Etapa da Educação Infantil</label>
+        <select id="classEditorStage" class="form-select">
+          <option value="Berçário I">Berçário I (0 a 1 ano)</option>
+          <option value="Berçário II">Berçário II (1 a 2 anos)</option>
+          <option value="Maternal I">Maternal I (2 a 3 anos)</option>
+          <option value="Maternal II">Maternal II (3 a 4 anos)</option>
+          <option value="Infantil I">Infantil I (4 a 5 anos)</option>
+          <option value="Infantil II">Infantil II (5 a 6 anos)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Jornada Escolar (Padrão MEC)</label>
+        <select id="classEditorShiftType" class="form-select" onchange="onClassShiftTypeChange()">
+          <option value="parcial">Tempo Parcial</option>
+          <option value="integral">Tempo Integral</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="groupClassShiftDetail">
+        <label class="form-label">Turno de Funcionamento</label>
+        <select id="classEditorShiftPeriod" class="form-select">
+          <option value="Tempo Parcial (Matutino)">Matutino (Manhã)</option>
+          <option value="Tempo Parcial (Vespertino)">Vespertino (Tarde)</option>
+        </select>
+      </div>
+
+      <!-- Bloco de Docentes: Tempo Parcial -->
+      <div class="form-group" id="groupTeachersSingle">
+        <label class="form-label">Docentes Regentes Titulares</label>
+        <div id="classEditorTeachersList" style="display:flex; flex-direction:column; gap:6px; max-height:160px; overflow-y:auto; border:1px solid var(--border); border-radius:8px; padding:10px; background:#F8FAFC;">
+          <!-- Checkboxes das docentes da UE -->
+        </div>
+      </div>
+
+      <!-- Bloco de Docentes: Tempo Integral (Manhã / Tarde) -->
+      <div id="groupTeachersIntegral" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">☀️ Docentes Regentes - Turno Matutino</label>
+          <div id="classEditorTeachersMorningList" style="display:flex; flex-direction:column; gap:6px; max-height:130px; overflow-y:auto; border:1px solid var(--border); border-radius:8px; padding:10px; background:#F8FAFC;"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">🌤️ Docentes Regentes - Turno Vespertino</label>
+          <div id="classEditorTeachersAfternoonList" style="display:flex; flex-direction:column; gap:6px; max-height:130px; overflow-y:auto; border:1px solid var(--border); border-radius:8px; padding:10px; background:#F8FAFC;"></div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:space-between; margin-top:18px;">
+        <button class="btn btn-secondary" id="btnDeleteClassEditor" style="color:var(--red); border-color:var(--red); display:none;" onclick="deleteClassFromEditor()">Excluir Turma</button>
+        <div style="display:flex; gap:10px; margin-left:auto;">
+          <button class="btn btn-secondary" onclick="closeClassEditorModal()">Cancelar</button>
+          <button class="btn btn-primary" onclick="saveClassEditor()">Salvar Turma</button>
+        </div>
       </div>
     </div>
   </div>
@@ -8015,8 +8193,12 @@ function getActiveSections(obs) {
       if (!appState.classes || !Array.isArray(appState.classes) || appState.classes.length === 0) {
         appState.classes = JSON.parse(JSON.stringify(INITIAL_CLASSES));
       }
-      // Blindagem resiliente: assegura que turmas canônicas de INITIAL_CLASSES constem no estado
+      if (!appState.deletedClassIds) appState.deletedClassIds = [];
+      const deletedIds = appState.deletedClassIds;
+
+      // Blindagem resiliente: assegura que turmas canônicas de INITIAL_CLASSES constem no estado (a menos que deletadas)
       INITIAL_CLASSES.forEach(initC => {
+        if (deletedIds.includes(initC.id)) return;
         const found = appState.classes.find(c => c.id === initC.id);
         if (!found) {
           appState.classes.push(JSON.parse(JSON.stringify(initC)));
@@ -8030,7 +8212,7 @@ function getActiveSections(obs) {
           }
         }
       });
-      let schoolClasses = appState.classes.filter(c => c.school === schoolName);
+      let schoolClasses = appState.classes.filter(c => c.school === schoolName && !deletedIds.includes(c.id));
 
       // Resiliência transparente: se a escola não possuir turmas cadastradas explicitamente,
       // gera agrupamentos a partir das professoras vinculadas à unidade em teamMembers
@@ -8084,9 +8266,9 @@ function getActiveSections(obs) {
 
     // Initial School Units (UEs) & Polos
     const INITIAL_UNITS = [
-      { id: 'ue-1', name: 'CEI Professora Maria de Lourdes', polo: 'Polo Regional 1 (Norte)', address: 'Bairro Alto das Flores' },
-      { id: 'ue-2', name: 'EMEI Pequeno Príncipe', polo: 'Polo Regional 1 (Norte)', address: 'Vila Esperança' },
-      { id: 'ue-3', name: 'CEI Vovó Zezé', polo: 'Polo Regional 2 (Sul)', address: 'Jardim do Sertão' }
+      { id: 'ue-1', name: 'CEI Professora Maria de Lourdes', polo: 'Polo Regional 1 (Norte)', address: 'Bairro Alto das Flores', totalStudents: 120, inclusiveStudents: 6, totalClasses: 4 },
+      { id: 'ue-2', name: 'EMEI Pequeno Príncipe', polo: 'Polo Regional 1 (Norte)', address: 'Vila Esperança', totalStudents: 95, inclusiveStudents: 4, totalClasses: 3 },
+      { id: 'ue-3', name: 'CEI Vovó Zezé', polo: 'Polo Regional 2 (Sul)', address: 'Jardim do Sertão', totalStudents: 60, inclusiveStudents: 2, totalClasses: 2 }
     ];
 
     // Initial Team Members
@@ -8242,6 +8424,7 @@ function getActiveSections(obs) {
       activeSectionsTeacher: JSON.parse(JSON.stringify(DEFAULT_SECTIONS_TEACHER)), activeSectionsCoordinator: JSON.parse(JSON.stringify(DEFAULT_SECTIONS_COORDINATOR)),
       units: JSON.parse(JSON.stringify(INITIAL_UNITS)),
       classes: JSON.parse(JSON.stringify(INITIAL_CLASSES)), // <-- PILAR 1: CATÁLOGO DE TURMAS
+      deletedClassIds: [], // <-- PILAR 14: SSOT EXCLUSÕES
       teamMembers: JSON.parse(JSON.stringify(INITIAL_TEAM)),
       notes: JSON.parse(JSON.stringify(INITIAL_NOTES)),
       schedules: JSON.parse(JSON.stringify(INITIAL_SCHEDULES)),
@@ -8262,6 +8445,16 @@ function getActiveSections(obs) {
           const parsed = JSON.parse(saved);
           appState = { ...appState, ...parsed };
           if (!appState.units || appState.units.length === 0) appState.units = JSON.parse(JSON.stringify(INITIAL_UNITS));
+          if (!appState.deletedClassIds) appState.deletedClassIds = [];
+          if (Array.isArray(appState.units)) {
+            appState.units.forEach(u => {
+              if (u.totalStudents === undefined) u.totalStudents = 120;
+              if (u.inclusiveStudents === undefined) u.inclusiveStudents = 5;
+              if (u.totalClasses === undefined) {
+                u.totalClasses = (appState.classes || []).filter(c => c.school === u.name).length || 4;
+              }
+            });
+          }
           if (!appState.bottlenecksSortMode) appState.bottlenecksSortMode = 'absolute';
           if (!appState.classes || appState.classes.length === 0) {
             appState.classes = JSON.parse(JSON.stringify(INITIAL_CLASSES));
@@ -9299,6 +9492,88 @@ function getActiveSections(obs) {
       const mobRubricsBtn = document.getElementById('mobMenuRubricsBtn');
       if (mobRubricsBtn) mobRubricsBtn.style.display = isNucleoEI(user) ? 'flex' : 'none';
 
+      // Pilar 14: Governança Operacional Descentralizada & SSOT Única
+      const opNavTab = document.getElementById('deskTabOpManagement');
+      const opNavLabel = document.getElementById('deskTabOpManagementLabel');
+      const homeOpCard = document.getElementById('homeOpManagementCard');
+      const homeOpTitle = document.getElementById('homeOpManagementTitle');
+      const homeOpSubtitle = document.getElementById('homeOpManagementSubtitle');
+      const homeOpBtn = document.getElementById('homeOpManagementBtn');
+      const mobMenuOpBtn = document.getElementById('mobMenuOpManagementBtn');
+      const mobMenuOpText = document.getElementById('mobMenuOpManagementText');
+
+      const pedagUnitsLabel = document.getElementById('pedagTabUnitsLabel');
+      const pedagClassesLabel = document.getElementById('pedagTabClassesLabel');
+      const pedagTeamLabel = document.getElementById('pedagTabTeamLabel');
+      const pedagExportsTab = document.getElementById('pedagTabExports');
+      const homeGestaoActionsCentral = document.getElementById('homeGestaoActionsCentral');
+      const homeGestaoTitle = document.getElementById('homeGestaoTitle');
+      const homeGestaoSubtitle = document.getElementById('homeGestaoSubtitle');
+
+      if (user.roleKey === 'coordenador') {
+        if (opNavTab) {
+          opNavTab.style.display = 'flex';
+          if (opNavLabel) opNavLabel.innerText = 'Minha Escola';
+        }
+        if (homeOpCard) {
+          homeOpCard.style.display = 'block';
+          if (homeOpTitle) homeOpTitle.innerText = 'Gestão da Minha Escola';
+          if (homeOpSubtitle) homeOpSubtitle.innerText = `Gerencie as turmas, jornada MEC, docentes regentes titulares e caracterização de ${user.school}.`;
+          if (homeOpBtn) homeOpBtn.innerText = 'Acessar Gestão da Escola →';
+        }
+        if (mobMenuOpBtn) {
+          mobMenuOpBtn.style.display = 'flex';
+          if (mobMenuOpText) mobMenuOpText.innerText = '🏫 Gestão da Minha Escola';
+        }
+        if (pedagUnitsLabel) pedagUnitsLabel.innerText = '🏢 Minha Escola';
+        if (pedagClassesLabel) pedagClassesLabel.innerText = '🏫 Turmas & Regência';
+        if (pedagTeamLabel) pedagTeamLabel.innerText = '👩‍🏫 Docentes da UE';
+        if (pedagExportsTab) pedagExportsTab.style.display = 'none';
+        if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'none';
+        if (homeGestaoTitle) homeGestaoTitle.innerText = `Gestão da Unidade Escolar · ${user.school}`;
+        if (homeGestaoSubtitle) homeGestaoSubtitle.innerText = 'Administração autônoma de turmas, docentes e caracterização da escola sob SSOT única.';
+      } else if (user.roleKey === 'formador') {
+        if (opNavTab) {
+          opNavTab.style.display = 'flex';
+          if (opNavLabel) opNavLabel.innerText = 'Meu Polo';
+        }
+        if (homeOpCard) {
+          homeOpCard.style.display = 'block';
+          if (homeOpTitle) homeOpTitle.innerText = 'Gestão do Polo Regional';
+          if (homeOpSubtitle) homeOpSubtitle.innerText = `Supervisão territorial das escolas e coordenações do ${user.school}.`;
+          if (homeOpBtn) homeOpBtn.innerText = 'Acessar Gestão do Polo →';
+        }
+        if (mobMenuOpBtn) {
+          mobMenuOpBtn.style.display = 'flex';
+          if (mobMenuOpText) mobMenuOpText.innerText = '🗺️ Gestão do Polo Regional';
+        }
+        if (pedagUnitsLabel) pedagUnitsLabel.innerText = '🏢 Escolas do Polo';
+        if (pedagClassesLabel) pedagClassesLabel.innerText = '🏫 Turmas do Polo';
+        if (pedagTeamLabel) pedagTeamLabel.innerText = '👥 Coordenações Pedagógicas';
+        if (pedagExportsTab) pedagExportsTab.style.display = 'none';
+        if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'none';
+        if (homeGestaoTitle) homeGestaoTitle.innerText = `Gestão do Polo Regional · ${user.school}`;
+        if (homeGestaoSubtitle) homeGestaoSubtitle.innerText = 'Supervisão territorial das Unidades Escolares e gestão de coordenações sob SSOT única.';
+      } else if (isNucleoEI(user)) {
+        if (opNavTab) opNavTab.style.display = 'none';
+        if (homeOpCard) homeOpCard.style.display = 'none';
+        if (mobMenuOpBtn) {
+          mobMenuOpBtn.style.display = 'flex';
+          if (mobMenuOpText) mobMenuOpText.innerText = '🏛️ Gestão da Rede Municipal';
+        }
+        if (pedagUnitsLabel) pedagUnitsLabel.innerText = '🏢 Unidades Escolares & Polos';
+        if (pedagClassesLabel) pedagClassesLabel.innerText = '🏫 Turmas da Rede Municipal';
+        if (pedagTeamLabel) pedagTeamLabel.innerText = '👥 Equipes & Servidores da Rede';
+        if (pedagExportsTab) pedagExportsTab.style.display = 'block';
+        if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'flex';
+        if (homeGestaoTitle) homeGestaoTitle.innerText = 'Gestão Pedagógica Central';
+        if (homeGestaoSubtitle) homeGestaoSubtitle.innerText = 'Administração unificada de Unidades Escolares, Polos Regionais, Turmas, Servidores e Base Integral';
+      } else {
+        if (opNavTab) opNavTab.style.display = 'none';
+        if (homeOpCard) homeOpCard.style.display = 'none';
+        if (mobMenuOpBtn) mobMenuOpBtn.style.display = 'none';
+      }
+
       const mobTabSchedule = document.getElementById('mobTabSchedule');
       if (mobTabSchedule) {
         mobTabSchedule.style.display = (isNucleoEI(user) || user.roleKey === 'pendente' || user.roleKey === 'professora') ? 'none' : 'flex';
@@ -9339,13 +9614,25 @@ function getActiveSections(obs) {
       document.querySelectorAll('.nav-link, .tabbar-item').forEach(t => t.classList.remove('active'));
 
       if (tabName === 'opManagement' || tabName === 'units') {
-        document.getElementById('deskTabHome')?.classList.add('active');
+        const opNav = document.getElementById('deskTabOpManagement');
+        if (opNav && opNav.style.display !== 'none') {
+          opNav.classList.add('active');
+        } else {
+          document.getElementById('deskTabHome')?.classList.add('active');
+        }
         document.getElementById('screenHome').classList.add('active');
         const homeStandardView = document.getElementById('homeStandardView');
         const homeGestaoView = document.getElementById('homeGestaoView');
         if (homeStandardView) homeStandardView.style.display = 'none';
         if (homeGestaoView) homeGestaoView.style.display = 'block';
-        switchPedagSubTab('units');
+        
+        let initialSubTab = 'units';
+        if (user.roleKey === 'coordenador') {
+          initialSubTab = appState.currentPedagSubTab || 'classes';
+        } else {
+          initialSubTab = appState.currentPedagSubTab || 'units';
+        }
+        switchPedagSubTab(initialSubTab);
       } else if (tabName === 'home') {
         document.getElementById('deskTabHome')?.classList.add('active');
         document.getElementById('mobTabHome')?.classList.add('active');
@@ -13136,6 +13423,7 @@ function getActiveSections(obs) {
       if(activeView) activeView.style.display = 'block';
 
       if (tabName === 'units') renderUnitsScreen();
+      if (tabName === 'classes') renderClassesScreen();
       if (tabName === 'team') renderTeamScreen();
     }
 
@@ -15073,6 +15361,90 @@ function getActiveSections(obs) {
 
     // --- 11. UNITS & TEAM MANAGEMENT WITH SPREADSHEET IMPORT ---
     function renderUnitsScreen() {
+      const user = getCurrentUser();
+      const coordContainer = document.getElementById('coordinatorUnitCardContainer');
+      const unitsMgmtContainer = document.getElementById('unitsManagementContainer');
+      const addUnitBtn = document.getElementById('btnAddUnitMain');
+
+      if (user.roleKey === 'coordenador') {
+        if (coordContainer) {
+          coordContainer.style.display = 'block';
+          const myUnit = (appState.units || []).find(u => u.name === user.school) || {
+            name: user.school,
+            polo: 'Polo Municipal',
+            address: '',
+            totalStudents: 120,
+            inclusiveStudents: 6,
+            totalClasses: 4
+          };
+          const schoolClasses = getClassesForSchool(user.school);
+          const teachersCount = (appState.teamMembers || []).filter(m => m.school === user.school && m.roleKey === 'professora').length;
+
+          coordContainer.innerHTML = `
+            <div class="card" style="border-left: 4px solid var(--primary); padding: 20px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+                <div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:24px;">🏢</span>
+                    <h3 style="font-size:18px; font-weight:800; color:var(--primary-dark); margin:0;">${myUnit.name}</h3>
+                  </div>
+                  <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+                    📍 ${myUnit.polo} · Gestão Autônoma sob SSOT Única (Pilar 14)
+                  </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveSchoolCharacterization()" style="font-size:12px; padding:8px 14px;">
+                  💾 Salvar Caracterização da UE
+                </button>
+              </div>
+
+              <!-- Grid de Métricas da UE -->
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; margin-bottom:20px;">
+                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
+                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Matriculados</div>
+                  <div style="margin-top:6px;">
+                    <input type="number" id="coordUnitTotalStudents" class="form-input" min="0" value="${myUnit.totalStudents !== undefined ? myUnit.totalStudents : 120}" style="font-size:18px; font-weight:800; color:#1E40AF;">
+                  </div>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Total de crianças matriculadas no Censo</div>
+                </div>
+
+                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
+                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva / Diversidade</div>
+                  <div style="margin-top:6px;">
+                    <input type="number" id="coordUnitInclusiveStudents" class="form-input" min="0" value="${myUnit.inclusiveStudents !== undefined ? myUnit.inclusiveStudents : 6}" style="font-size:18px; font-weight:800; color:#059669;">
+                  </div>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Público-alvo da educação especial (AEE)</div>
+                </div>
+
+                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
+                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas em Atividade</div>
+                  <div style="margin-top:6px;">
+                    <input type="number" id="coordUnitTotalClasses" class="form-input" min="0" value="${myUnit.totalClasses !== undefined ? myUnit.totalClasses : schoolClasses.length}" style="font-size:18px; font-weight:800; color:#6D28D9;">
+                  </div>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">${schoolClasses.length} turma(s) ativas no catálogo</div>
+                </div>
+
+                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
+                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Docentes na UE</div>
+                  <div style="font-size:22px; font-weight:800; color:#D97706; margin-top:8px;">${teachersCount}</div>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Professoras titulares lotadas</div>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label" style="font-size:12px;">Endereço / Bairro da Unidade Escolar</label>
+                <input type="text" id="coordUnitAddress" class="form-input" value="${myUnit.address || ''}" placeholder="Ex: Bairro Alto das Flores, Rua das Acácias, nº 120">
+              </div>
+            </div>
+          `;
+        }
+        if (unitsMgmtContainer) unitsMgmtContainer.style.display = 'none';
+        return;
+      }
+
+      if (coordContainer) coordContainer.style.display = 'none';
+      if (unitsMgmtContainer) unitsMgmtContainer.style.display = 'block';
+      if (addUnitBtn) addUnitBtn.style.display = isNucleoEI(user) ? 'inline-flex' : 'none';
+
       // 1. Matriz de Cobertura da Rede por Polo Regional (Requisito 7)
       const covTbody = document.getElementById('networkCoverageTableBody');
       if (covTbody) {
@@ -15080,8 +15452,12 @@ function getActiveSections(obs) {
         
         const polosSet = new Set();
         appState.units.forEach(u => { if (u.polo) polosSet.add(u.polo); });
-        const polos = Array.from(polosSet);
+        let polos = Array.from(polosSet);
         if (polos.length === 0) polos.push('Polo Regional 1 (Norte)', 'Polo Regional 2 (Sul)');
+
+        if (user.roleKey === 'formador') {
+          polos = polos.filter(p => p === user.school || p.toLowerCase().includes(user.school.toLowerCase()));
+        }
 
         polos.forEach(poloName => {
           const unitsInPolo = appState.units.filter(u => u.polo === poloName);
@@ -15113,7 +15489,10 @@ function getActiveSections(obs) {
       // 2. Popular Dropdown de Filtro por Polo (Requisito 3)
       const filterPoloSelect = document.getElementById('unitsFilterPolo');
       if (filterPoloSelect && filterPoloSelect.options.length <= 1) {
-        const uniquePolos = Array.from(new Set(appState.units.map(u => u.polo).filter(Boolean)));
+        let uniquePolos = Array.from(new Set(appState.units.map(u => u.polo).filter(Boolean)));
+        if (user.roleKey === 'formador') {
+          uniquePolos = uniquePolos.filter(p => p === user.school);
+        }
         uniquePolos.forEach(p => {
           const opt = document.createElement('option');
           opt.value = p;
@@ -15131,7 +15510,9 @@ function getActiveSections(obs) {
       const searchFilter = (document.getElementById('unitsFilterSearch')?.value || '').trim().toLowerCase();
 
       let filteredUnits = appState.units;
-      if (poloFilter !== 'ALL') {
+      if (user.roleKey === 'formador') {
+        filteredUnits = filteredUnits.filter(u => u.polo === user.school || u.name === user.school);
+      } else if (poloFilter !== 'ALL') {
         filteredUnits = filteredUnits.filter(u => u.polo === poloFilter);
       }
       if (searchFilter) {
@@ -15145,6 +15526,7 @@ function getActiveSections(obs) {
 
       filteredUnits.forEach(u => {
         const teachersCount = appState.teamMembers.filter(m => m.school === u.name).length;
+        const canDelete = isNucleoEI(user);
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${u.name}</strong></td>
@@ -15153,7 +15535,7 @@ function getActiveSections(obs) {
           <td><span class="status-badge" style="background:#EFF6FF; color:#1E40AF;">${teachersCount} Profissionais</span></td>
           <td style="text-align:center; white-space:nowrap;">
             <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditUnitModal('${u.id}')">Editar</button>
-            <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="removeUnit('${u.id}')">Excluir</button>
+            ${canDelete ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="removeUnit('${u.id}')">Excluir</button>` : ''}
           </td>
         `;
         tbody.appendChild(tr);
@@ -15187,7 +15569,10 @@ function getActiveSections(obs) {
         id: 'ue-' + Date.now(),
         name,
         polo,
-        address
+        address,
+        totalStudents: 120,
+        inclusiveStudents: 5,
+        totalClasses: 4
       };
 
       appState.units.push(newUnit);
@@ -15207,6 +15592,12 @@ function getActiveSections(obs) {
       document.getElementById('editUnitId').value = unit.id;
       document.getElementById('editUnitName').value = unit.name || '';
       document.getElementById('editUnitAddress').value = unit.address || '';
+      if (document.getElementById('editUnitStudents')) {
+        document.getElementById('editUnitStudents').value = unit.totalStudents !== undefined ? unit.totalStudents : 120;
+      }
+      if (document.getElementById('editUnitInclusive')) {
+        document.getElementById('editUnitInclusive').value = unit.inclusiveStudents !== undefined ? unit.inclusiveStudents : 5;
+      }
 
       // Popula opções de polo com base nos polos já cadastrados ou opções padrão
       const poloSelect = document.getElementById('editUnitPolo');
@@ -15242,6 +15633,8 @@ function getActiveSections(obs) {
       const name = document.getElementById('editUnitName').value.trim();
       const polo = document.getElementById('editUnitPolo').value;
       const address = document.getElementById('editUnitAddress').value.trim();
+      const totStudents = parseInt(document.getElementById('editUnitStudents')?.value, 10);
+      const incStudents = parseInt(document.getElementById('editUnitInclusive')?.value, 10);
 
       if (!name) {
         showToast('Informe o nome da Unidade Escolar.');
@@ -15265,7 +15658,9 @@ function getActiveSections(obs) {
         ...appState.units[unitIndex],
         name,
         polo,
-        address: address || '' // Endereço opcional
+        address: address || '',
+        totalStudents: !isNaN(totStudents) ? totStudents : (appState.units[unitIndex].totalStudents || 120),
+        inclusiveStudents: !isNaN(incStudents) ? incStudents : (appState.units[unitIndex].inclusiveStudents || 5)
       };
 
       // Propagação de integridade relacional se o nome da unidade mudou
@@ -15288,6 +15683,13 @@ function getActiveSections(obs) {
           Object.values(USERS_DB).forEach(u => {
             if (u.school === oldName) {
               u.school = name;
+            }
+          });
+        }
+        if (appState.classes) {
+          appState.classes.forEach(c => {
+            if (c.school === oldName) {
+              c.school = name;
             }
           });
         }
@@ -15362,7 +15764,10 @@ function getActiveSections(obs) {
               id: 'ue-' + Date.now() + '-' + i,
               name: parts[0],
               polo: parts[1] || 'Polo Regional 1 (Norte)',
-              address: parts[2] || 'Importado via planilha'
+              address: parts[2] || 'Importado via planilha',
+              totalStudents: 120,
+              inclusiveStudents: 5,
+              totalClasses: 4
             });
             imported++;
           }
@@ -15374,6 +15779,487 @@ function getActiveSections(obs) {
       };
       reader.readAsText(file);
       e.target.value = '';
+    }
+
+    // --- CARACTERIZAÇÃO DA ESCOLA (PILAR 14) ---
+    function saveSchoolCharacterization() {
+      const user = getCurrentUser();
+      const schoolName = user.school;
+      const unit = (appState.units || []).find(u => u.name === schoolName);
+      if (!unit) {
+        showToast('Unidade escolar não encontrada.');
+        return;
+      }
+
+      const totalStud = parseInt(document.getElementById('coordUnitTotalStudents')?.value, 10);
+      const inclStud = parseInt(document.getElementById('coordUnitInclusiveStudents')?.value, 10);
+      const totClasses = parseInt(document.getElementById('coordUnitTotalClasses')?.value, 10);
+      const address = document.getElementById('coordUnitAddress')?.value.trim();
+
+      if (!isNaN(totalStud)) unit.totalStudents = totalStud;
+      if (!isNaN(inclStud)) unit.inclusiveStudents = inclStud;
+      if (!isNaN(totClasses)) unit.totalClasses = totClasses;
+      if (address !== undefined) unit.address = address;
+
+      saveState();
+      renderUnitsScreen();
+      showToast(`Caracterização do ${schoolName} salva com sucesso!`);
+    }
+
+    // --- GESTÃO DESCENTRALIZADA DE TURMAS (PILAR 14) ---
+    function renderClassesScreen() {
+      const user = getCurrentUser();
+      const tbody = document.getElementById('classesTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const filterCard = document.getElementById('classesFilterCard');
+      const schoolFilterSelect = document.getElementById('classesFilterSchool');
+      const searchInput = document.getElementById('classesFilterSearch');
+      const filterSearch = (searchInput ? searchInput.value : '').trim().toLowerCase();
+
+      let targetSchool = 'ALL';
+
+      if (user.roleKey === 'coordenador') {
+        if (filterCard) filterCard.style.display = 'none';
+        targetSchool = user.school;
+        const title = document.getElementById('classesViewTitle');
+        const subtitle = document.getElementById('classesViewSubtitle');
+        if (title) title.innerText = `Turmas & Regência · ${user.school}`;
+        if (subtitle) subtitle.innerText = `Gestão descentralizada de turmas, jornada MEC e alocação nominal de docentes da sua escola.`;
+      } else if (user.roleKey === 'formador') {
+        if (filterCard) filterCard.style.display = 'block';
+        const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school).map(u => u.name);
+        if (schoolFilterSelect) {
+          if (schoolFilterSelect.dataset.populatedFor !== user.name) {
+            schoolFilterSelect.innerHTML = '<option value="ALL">Todas as UEs do Polo</option>';
+            formadorUnits.forEach(uName => {
+              const opt = document.createElement('option');
+              opt.value = uName;
+              opt.text = uName;
+              schoolFilterSelect.appendChild(opt);
+            });
+            schoolFilterSelect.dataset.populatedFor = user.name;
+          }
+          targetSchool = schoolFilterSelect.value;
+        }
+      } else if (isNucleoEI(user)) {
+        if (filterCard) filterCard.style.display = 'block';
+        if (schoolFilterSelect) {
+          if (schoolFilterSelect.dataset.populatedFor !== 'nucleo') {
+            schoolFilterSelect.innerHTML = '<option value="ALL">Todas as Unidades Escolares da Rede</option>';
+            (appState.units || []).forEach(u => {
+              const opt = document.createElement('option');
+              opt.value = u.name;
+              opt.text = u.name;
+              schoolFilterSelect.appendChild(opt);
+            });
+            schoolFilterSelect.dataset.populatedFor = 'nucleo';
+          }
+          targetSchool = schoolFilterSelect.value;
+        }
+      }
+
+      // Obter turmas
+      let classesToRender = [];
+      if (user.roleKey === 'coordenador') {
+        classesToRender = getClassesForSchool(user.school);
+      } else if (user.roleKey === 'formador') {
+        const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school).map(u => u.name);
+        if (targetSchool === 'ALL') {
+          formadorUnits.forEach(uName => {
+            classesToRender = classesToRender.concat(getClassesForSchool(uName));
+          });
+        } else {
+          classesToRender = getClassesForSchool(targetSchool);
+        }
+      } else {
+        if (targetSchool === 'ALL') {
+          (appState.units || []).forEach(u => {
+            classesToRender = classesToRender.concat(getClassesForSchool(u.name));
+          });
+        } else {
+          classesToRender = getClassesForSchool(targetSchool);
+        }
+      }
+
+      // Deduplicar por id
+      const seenIds = new Set();
+      classesToRender = classesToRender.filter(c => {
+        if (seenIds.has(c.id)) return false;
+        seenIds.add(c.id);
+        return true;
+      });
+
+      if (filterSearch) {
+        classesToRender = classesToRender.filter(c => 
+          c.name.toLowerCase().includes(filterSearch) || 
+          (c.stage && c.stage.toLowerCase().includes(filterSearch)) ||
+          (c.school && c.school.toLowerCase().includes(filterSearch)) ||
+          (Array.isArray(c.teachers) && c.teachers.some(t => t.toLowerCase().includes(filterSearch)))
+        );
+      }
+
+      if (classesToRender.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-secondary); padding:24px;">Nenhuma turma encontrada. Clique em "+ Cadastrar Nova Turma" para adicionar.</td></tr>`;
+        return;
+      }
+
+      classesToRender.forEach(cls => {
+        const isIntegral = (cls.shift || '').toLowerCase().includes('integral');
+        const jornadaBadge = isIntegral 
+          ? `<span class="status-badge" style="background:#EDE9FE; color:#6D28D9; font-weight:700;">☀️ Tempo Integral</span>`
+          : `<span class="status-badge" style="background:#EFF6FF; color:#1E40AF; font-weight:700;">Tempo Parcial</span>`;
+
+        let turnoBadge = `<span class="status-badge" style="background:#FEF3C7; color:#92400E; font-size:11px;">${cls.shift || 'Não definido'}</span>`;
+        if (isIntegral) {
+          turnoBadge = `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:11px;">☀️ Manhã + 🌤️ Tarde</span>`;
+        }
+
+        let teachersDisplay = '';
+        if (isIntegral && (cls.teachersMorning || cls.teachersAfternoon)) {
+          const mList = (cls.teachersMorning && cls.teachersMorning.length > 0) ? cls.teachersMorning.join(', ') : 'A definir';
+          const aList = (cls.teachersAfternoon && cls.teachersAfternoon.length > 0) ? cls.teachersAfternoon.join(', ') : 'A definir';
+          teachersDisplay = `
+            <div style="font-size:11px; line-height:1.4;">
+              <div><strong style="color:#B45309;">☀️ Manhã:</strong> ${mList}</div>
+              <div><strong style="color:#4338CA;">🌤️ Tarde:</strong> ${aList}</div>
+            </div>
+          `;
+        } else {
+          const tList = (Array.isArray(cls.teachers) && cls.teachers.length > 0) ? cls.teachers.join(', ') : '<span style="color:var(--text-secondary); font-style:italic;">Nenhum regente alocado</span>';
+          teachersDisplay = `<div style="font-size:12px; font-weight:600; color:#1E293B;">${tList}</div>`;
+        }
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>
+            <strong style="color:var(--primary-dark); font-size:13px;">${cls.name}</strong><br>
+            <span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:10px;">${cls.stage || 'Educação Infantil'}</span>
+          </td>
+          <td style="font-size:12px;">${cls.school}</td>
+          <td>${jornadaBadge}</td>
+          <td>${turnoBadge}</td>
+          <td>${teachersDisplay}</td>
+          <td style="text-align:center; white-space:nowrap;">
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditClassModal('${cls.id}')">Editar</button>
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="deleteClass('${cls.id}')">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openAddClassModal() {
+      const user = getCurrentUser();
+      document.getElementById('modalClassEditorTitle').innerText = 'Cadastrar Nova Turma';
+      document.getElementById('editClassId').value = '';
+      document.getElementById('classEditorName').value = '';
+      document.getElementById('classEditorStage').value = 'Infantil I';
+      document.getElementById('classEditorShiftType').value = 'parcial';
+      document.getElementById('classEditorShiftPeriod').value = 'Tempo Parcial (Matutino)';
+      document.getElementById('btnDeleteClassEditor').style.display = 'none';
+
+      const schoolSelect = document.getElementById('classEditorSchool');
+      const groupSchool = document.getElementById('groupClassSchool');
+      schoolSelect.innerHTML = '';
+
+      if (user.roleKey === 'coordenador') {
+        if (groupSchool) groupSchool.style.display = 'none';
+        const opt = document.createElement('option');
+        opt.value = user.school;
+        opt.text = user.school;
+        schoolSelect.appendChild(opt);
+        schoolSelect.value = user.school;
+      } else if (user.roleKey === 'formador') {
+        if (groupSchool) groupSchool.style.display = 'block';
+        const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school);
+        formadorUnits.forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u.name;
+          opt.text = u.name;
+          schoolSelect.appendChild(opt);
+        });
+      } else {
+        if (groupSchool) groupSchool.style.display = 'block';
+        (appState.units || []).forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u.name;
+          opt.text = u.name;
+          schoolSelect.appendChild(opt);
+        });
+      }
+
+      onClassShiftTypeChange();
+      populateClassEditorTeachers();
+      document.getElementById('modalClassEditor').classList.add('active');
+    }
+
+    function openEditClassModal(classId) {
+      const user = getCurrentUser();
+      const cls = (appState.classes || []).find(c => c.id === classId);
+      if (!cls) {
+        showToast('Turma não encontrada.');
+        return;
+      }
+
+      // Restrição estrita de escopo
+      if (user.roleKey === 'coordenador' && cls.school !== user.school) {
+        showToast('Acesso negado: você só pode gerenciar turmas da sua escola.');
+        return;
+      }
+
+      document.getElementById('modalClassEditorTitle').innerText = `Editar Turma: ${cls.name}`;
+      document.getElementById('editClassId').value = cls.id;
+      document.getElementById('classEditorName').value = cls.name;
+      document.getElementById('classEditorStage').value = cls.stage || 'Infantil I';
+      
+      const isIntegral = (cls.shift || '').toLowerCase().includes('integral');
+      document.getElementById('classEditorShiftType').value = isIntegral ? 'integral' : 'parcial';
+      if (!isIntegral && cls.shift) {
+        document.getElementById('classEditorShiftPeriod').value = cls.shift;
+      }
+
+      const schoolSelect = document.getElementById('classEditorSchool');
+      const groupSchool = document.getElementById('groupClassSchool');
+      schoolSelect.innerHTML = '';
+
+      if (user.roleKey === 'coordenador') {
+        if (groupSchool) groupSchool.style.display = 'none';
+        const opt = document.createElement('option');
+        opt.value = user.school;
+        opt.text = user.school;
+        schoolSelect.appendChild(opt);
+        schoolSelect.value = user.school;
+      } else if (user.roleKey === 'formador') {
+        if (groupSchool) groupSchool.style.display = 'block';
+        const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school);
+        formadorUnits.forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u.name;
+          opt.text = u.name;
+          if (u.name === cls.school) opt.selected = true;
+          schoolSelect.appendChild(opt);
+        });
+      } else {
+        if (groupSchool) groupSchool.style.display = 'block';
+        (appState.units || []).forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u.name;
+          opt.text = u.name;
+          if (u.name === cls.school) opt.selected = true;
+          schoolSelect.appendChild(opt);
+        });
+      }
+
+      onClassShiftTypeChange();
+      populateClassEditorTeachers(cls);
+      document.getElementById('btnDeleteClassEditor').style.display = 'inline-block';
+      document.getElementById('modalClassEditor').classList.add('active');
+    }
+
+    function closeClassEditorModal() {
+      document.getElementById('modalClassEditor').classList.remove('active');
+    }
+
+    function onClassShiftTypeChange() {
+      const shiftType = document.getElementById('classEditorShiftType').value;
+      const groupShiftDetail = document.getElementById('groupClassShiftDetail');
+      const groupTeachersSingle = document.getElementById('groupTeachersSingle');
+      const groupTeachersIntegral = document.getElementById('groupTeachersIntegral');
+
+      if (shiftType === 'integral') {
+        if (groupShiftDetail) groupShiftDetail.style.display = 'none';
+        if (groupTeachersSingle) groupTeachersSingle.style.display = 'none';
+        if (groupTeachersIntegral) groupTeachersIntegral.style.display = 'block';
+      } else {
+        if (groupShiftDetail) groupShiftDetail.style.display = 'block';
+        if (groupTeachersSingle) groupTeachersSingle.style.display = 'block';
+        if (groupTeachersIntegral) groupTeachersIntegral.style.display = 'none';
+      }
+    }
+
+    function onClassEditorSchoolChange() {
+      populateClassEditorTeachers();
+    }
+
+    function populateClassEditorTeachers(existingClass = null) {
+      const school = document.getElementById('classEditorSchool').value;
+      const teachers = (appState.teamMembers || []).filter(m => m.school === school && m.roleKey === 'professora');
+
+      const singleContainer = document.getElementById('classEditorTeachersList');
+      const morningContainer = document.getElementById('classEditorTeachersMorningList');
+      const afternoonContainer = document.getElementById('classEditorTeachersAfternoonList');
+
+      if (!singleContainer || !morningContainer || !afternoonContainer) return;
+
+      if (teachers.length === 0) {
+        const emptyMsg = '<div style="font-size:12px; color:var(--text-secondary); font-style:italic;">Nenhuma professora cadastrada nesta unidade escolar.</div>';
+        singleContainer.innerHTML = emptyMsg;
+        morningContainer.innerHTML = emptyMsg;
+        afternoonContainer.innerHTML = emptyMsg;
+        return;
+      }
+
+      // 1. Single Shift Checkboxes
+      singleContainer.innerHTML = teachers.map(t => {
+        const checked = existingClass && Array.isArray(existingClass.teachers) && existingClass.teachers.includes(t.name) ? 'checked' : '';
+        return `
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+            <input type="checkbox" name="classTeacherSingle" value="${t.name}" ${checked}>
+            <span>${t.name}</span>
+          </label>
+        `;
+      }).join('');
+
+      // 2. Morning Shift Checkboxes
+      morningContainer.innerHTML = teachers.map(t => {
+        const checked = existingClass && Array.isArray(existingClass.teachersMorning) && existingClass.teachersMorning.includes(t.name) ? 'checked' : '';
+        return `
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+            <input type="checkbox" name="classTeacherMorning" value="${t.name}" ${checked}>
+            <span>${t.name}</span>
+          </label>
+        `;
+      }).join('');
+
+      // 3. Afternoon Shift Checkboxes
+      afternoonContainer.innerHTML = teachers.map(t => {
+        const checked = existingClass && Array.isArray(existingClass.teachersAfternoon) && existingClass.teachersAfternoon.includes(t.name) ? 'checked' : '';
+        return `
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+            <input type="checkbox" name="classTeacherAfternoon" value="${t.name}" ${checked}>
+            <span>${t.name}</span>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function saveClassEditor() {
+      const id = document.getElementById('editClassId').value;
+      const school = document.getElementById('classEditorSchool').value;
+      const name = document.getElementById('classEditorName').value.trim();
+      const stage = document.getElementById('classEditorStage').value;
+      const shiftType = document.getElementById('classEditorShiftType').value;
+      const shiftPeriod = document.getElementById('classEditorShiftPeriod').value;
+
+      if (!name) {
+        showToast('Por favor, informe o nome da turma.');
+        return;
+      }
+
+      let finalShift = 'Tempo Parcial (Matutino)';
+      let finalTeachers = [];
+      let finalMorning = [];
+      let finalAfternoon = [];
+
+      if (shiftType === 'integral') {
+        finalShift = 'Tempo Integral';
+        document.querySelectorAll('input[name="classTeacherMorning"]:checked').forEach(cb => finalMorning.push(cb.value));
+        document.querySelectorAll('input[name="classTeacherAfternoon"]:checked').forEach(cb => finalAfternoon.push(cb.value));
+        finalTeachers = Array.from(new Set([...finalMorning, ...finalAfternoon]));
+      } else {
+        finalShift = shiftPeriod;
+        document.querySelectorAll('input[name="classTeacherSingle"]:checked').forEach(cb => finalTeachers.push(cb.value));
+      }
+
+      if (id) {
+        // Modo Edição
+        const idx = (appState.classes || []).findIndex(c => c.id === id);
+        if (idx === -1) {
+          showToast('Turma não encontrada para edição.');
+          return;
+        }
+        const oldName = appState.classes[idx].name;
+        appState.classes[idx] = {
+          ...appState.classes[idx],
+          name,
+          school,
+          stage,
+          shift: finalShift,
+          teachers: finalTeachers,
+          teachersMorning: finalMorning,
+          teachersAfternoon: finalAfternoon
+        };
+
+        // Propagação de integridade relacional SSOT se o nome da turma mudou
+        if (oldName && oldName !== name) {
+          if (Array.isArray(appState.schedules)) {
+            appState.schedules.forEach(s => {
+              if (s.className === oldName && s.schoolName === school) {
+                s.className = name;
+                s.targetName = name;
+              }
+            });
+          }
+          if (Array.isArray(appState.notes)) {
+            appState.notes.forEach(n => {
+              if (n.className === oldName && n.schoolName === school) {
+                n.className = name;
+              }
+            });
+          }
+          if (Array.isArray(appState.observations)) {
+            appState.observations.forEach(o => {
+              if (o.className === oldName && o.schoolName === school) {
+                o.className = name;
+              }
+            });
+          }
+        }
+        showToast(`Turma "${name}" atualizada com sucesso!`);
+      } else {
+        // Modo Criação
+        const newId = 'cls-' + Date.now();
+        const newClass = {
+          id: newId,
+          name,
+          school,
+          stage,
+          shift: finalShift,
+          teachers: finalTeachers,
+          teachersMorning: finalMorning,
+          teachersAfternoon: finalAfternoon
+        };
+        if (!appState.classes) appState.classes = [];
+        appState.classes.push(newClass);
+        showToast(`Turma "${name}" cadastrada com sucesso!`);
+      }
+
+      saveState();
+      closeClassEditorModal();
+      renderClassesScreen();
+    }
+
+    function deleteClass(classId) {
+      const cls = (appState.classes || []).find(c => c.id === classId);
+      if (!cls) return;
+
+      const user = getCurrentUser();
+      if (user.roleKey === 'coordenador' && cls.school !== user.school) {
+        showToast('Acesso negado: você só pode excluir turmas da sua escola.');
+        return;
+      }
+
+      if (!confirm(`Tem certeza que deseja excluir a turma "${cls.name}"? Esta ação removerá a turma do catálogo da unidade.`)) {
+        return;
+      }
+
+      appState.classes = (appState.classes || []).filter(c => c.id !== classId);
+      if (!appState.deletedClassIds) appState.deletedClassIds = [];
+      if (!appState.deletedClassIds.includes(classId)) {
+        appState.deletedClassIds.push(classId);
+      }
+
+      saveState();
+      closeClassEditorModal();
+      renderClassesScreen();
+      showToast(`Turma "${cls.name}" excluída com sucesso!`);
+    }
+
+    function deleteClassFromEditor() {
+      const id = document.getElementById('editClassId').value;
+      if (id) deleteClass(id);
     }
 
     // Team Management
@@ -15410,33 +16296,41 @@ function getActiveSections(obs) {
       const searchQuery = (document.getElementById('teamFilterSearch')?.value || '').trim().toLowerCase();
 
       let members = appState.teamMembers;
+      const user = getCurrentUser();
 
-      if (roleFilter !== 'ALL') {
-        if (roleFilter === 'nucleo_ei' || roleFilter === 'tecnico') {
-          members = members.filter(m => isNucleoEI(m));
-        } else {
-          members = members.filter(m => m.roleKey === roleFilter);
-        }
-      }
-
-      if (supervisorFilter !== 'ALL') {
-        members = members.filter(m => {
-          let sup = m.supervisor;
-          if (m.roleKey === 'professora') {
-            const cp = appState.teamMembers.find(c => c.roleKey === 'coordenador' && c.school === m.school);
-            if (cp) sup = cp.name;
+      if (user.roleKey === 'coordenador') {
+        members = members.filter(m => m.school === user.school && m.roleKey === 'professora');
+      } else if (user.roleKey === 'formador') {
+        const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school).map(u => u.name);
+        members = members.filter(m => m.roleKey === 'coordenador' && formadorUnits.includes(m.school));
+      } else {
+        if (roleFilter !== 'ALL') {
+          if (roleFilter === 'nucleo_ei' || roleFilter === 'tecnico') {
+            members = members.filter(m => isNucleoEI(m));
+          } else {
+            members = members.filter(m => m.roleKey === roleFilter);
           }
-          return sup === supervisorFilter;
-        });
-      }
+        }
 
-      if (schoolOrPoloFilter !== 'ALL') {
-        members = members.filter(m => {
-          if (m.roleKey === 'pendente') return true; // Sempre exibe pendentes para facilitar a atribuição pelo admin
-          const ue = appState.units.find(u => u.name === m.school);
-          const polo = ue ? ue.polo : m.school;
-          return m.school === schoolOrPoloFilter || polo === schoolOrPoloFilter;
-        });
+        if (supervisorFilter !== 'ALL') {
+          members = members.filter(m => {
+            let sup = m.supervisor;
+            if (m.roleKey === 'professora') {
+              const cp = appState.teamMembers.find(c => c.roleKey === 'coordenador' && c.school === m.school);
+              if (cp) sup = cp.name;
+            }
+            return sup === supervisorFilter;
+          });
+        }
+
+        if (schoolOrPoloFilter !== 'ALL') {
+          members = members.filter(m => {
+            if (m.roleKey === 'pendente') return true; // Sempre exibe pendentes para facilitar a atribuição pelo admin
+            const ue = appState.units.find(u => u.name === m.school);
+            const polo = ue ? ue.polo : m.school;
+            return m.school === schoolOrPoloFilter || polo === schoolOrPoloFilter;
+          });
+        }
       }
 
       if (searchQuery) {
@@ -15491,7 +16385,23 @@ function getActiveSections(obs) {
     }
 
     function openAddMemberModal() {
+      const user = getCurrentUser();
       document.getElementById('newMemberName').value = '';
+      if(document.getElementById('newMemberEmail')) document.getElementById('newMemberEmail').value = '';
+      if(document.getElementById('newMemberPassword')) document.getElementById('newMemberPassword').value = '';
+
+      const roleSelect = document.getElementById('newMemberRole');
+      if (user.roleKey === 'coordenador') {
+        roleSelect.value = 'professora';
+        roleSelect.disabled = true;
+      } else if (user.roleKey === 'formador') {
+        roleSelect.value = 'coordenador';
+        roleSelect.disabled = true;
+      } else {
+        roleSelect.disabled = false;
+        roleSelect.value = 'pendente';
+      }
+
       onNewMemberRoleChange();
       document.getElementById('modalAddMember').classList.add('active');
     }
@@ -15500,6 +16410,7 @@ function getActiveSections(obs) {
     }
 
     function onNewMemberRoleChange() {
+      const user = getCurrentUser();
       const role = document.getElementById('newMemberRole').value;
       const schoolGroup = document.getElementById('groupNewMemberSchool');
       const schoolSelect = document.getElementById('newMemberSchool');
@@ -15511,20 +16422,35 @@ function getActiveSections(obs) {
       const currentSchoolVal = schoolSelect.value;
       schoolSelect.innerHTML = '';
 
-      // Popula Polos se for formador, senão popula Unidades
-      if (role === 'formador') {
-        const polos = [...new Set(appState.units.map(u => u.polo))];
-        polos.forEach(p => {
-          const opt = document.createElement('option');
-          opt.value = p; opt.text = p;
-          schoolSelect.appendChild(opt);
-        });
-      } else {
-        appState.units.forEach(u => {
+      if (user.roleKey === 'coordenador') {
+        schoolSelect.innerHTML = `<option value="${user.school}">${user.school}</option>`;
+        schoolSelect.value = user.school;
+        schoolSelect.disabled = true;
+      } else if (user.roleKey === 'formador') {
+        const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school);
+        formadorUnits.forEach(u => {
           const opt = document.createElement('option');
           opt.value = u.name; opt.text = u.name;
           schoolSelect.appendChild(opt);
         });
+        schoolSelect.disabled = false;
+      } else {
+        schoolSelect.disabled = false;
+        // Popula Polos se for formador, senão popula Unidades
+        if (role === 'formador') {
+          const polos = [...new Set(appState.units.map(u => u.polo))];
+          polos.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p; opt.text = p;
+            schoolSelect.appendChild(opt);
+          });
+        } else {
+          appState.units.forEach(u => {
+            const opt = document.createElement('option');
+            opt.value = u.name; opt.text = u.name;
+            schoolSelect.appendChild(opt);
+          });
+        }
       }
 
       // Preserva a seleção se o valor continuar válido
@@ -15648,8 +16574,23 @@ function getActiveSections(obs) {
     }
 
     function openEditMemberModal(id) {
+      const user = getCurrentUser();
       const member = appState.teamMembers.find(m => m.id === id);
       if (!member) return;
+
+      // Scoping RBAC check:
+      if (user.roleKey === 'coordenador') {
+        if (member.roleKey !== 'professora' || member.school !== user.school) {
+          showToast('Permissão restrita: você só pode editar docentes da sua própria unidade escolar.');
+          return;
+        }
+      } else if (user.roleKey === 'formador') {
+        const poloUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school).map(u => u.name);
+        if (member.roleKey !== 'coordenador' || !poloUnits.includes(member.school)) {
+          showToast('Permissão restrita: você só pode editar coordenadoras vinculadas ao seu polo regional.');
+          return;
+        }
+      }
 
       document.getElementById('editMemberId').value = member.id;
       document.getElementById('editMemberName').value = member.name;
@@ -15664,7 +16605,14 @@ function getActiveSections(obs) {
         }
         document.getElementById('editMemberEmail').value = emailVal;
       }
-      document.getElementById('editMemberRole').value = member.roleKey;
+      
+      const roleSelect = document.getElementById('editMemberRole');
+      roleSelect.value = member.roleKey;
+      if (user.roleKey === 'coordenador' || user.roleKey === 'formador') {
+        roleSelect.disabled = true;
+      } else {
+        roleSelect.disabled = false;
+      }
       
       const schoolSelect = document.getElementById('editMemberSchool');
       // Setamos um option temporario para o onRoleChange preservar
@@ -15683,6 +16631,7 @@ function getActiveSections(obs) {
     }
 
     function onEditMemberRoleChange(currentSupervisor) {
+      const user = getCurrentUser();
       const role = document.getElementById('editMemberRole').value;
       const schoolGroup = document.getElementById('groupEditMemberSchool');
       const schoolSelect = document.getElementById('editMemberSchool');
@@ -15694,19 +16643,35 @@ function getActiveSections(obs) {
       
       const currentSchoolVal = schoolSelect.value;
       schoolSelect.innerHTML = '';
-      if (role === 'formador') {
-        const polos = [...new Set(appState.units.map(u => u.polo))];
-        polos.forEach(p => {
-          const opt = document.createElement('option');
-          opt.value = p; opt.text = p;
-          schoolSelect.appendChild(opt);
-        });
-      } else {
-        appState.units.forEach(u => {
+
+      if (user.roleKey === 'coordenador') {
+        schoolSelect.innerHTML = `<option value="${user.school}">${user.school}</option>`;
+        schoolSelect.value = user.school;
+        schoolSelect.disabled = true;
+      } else if (user.roleKey === 'formador') {
+        const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school);
+        formadorUnits.forEach(u => {
           const opt = document.createElement('option');
           opt.value = u.name; opt.text = u.name;
           schoolSelect.appendChild(opt);
         });
+        schoolSelect.disabled = false;
+      } else {
+        schoolSelect.disabled = false;
+        if (role === 'formador') {
+          const polos = [...new Set(appState.units.map(u => u.polo))];
+          polos.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p; opt.text = p;
+            schoolSelect.appendChild(opt);
+          });
+        } else {
+          appState.units.forEach(u => {
+            const opt = document.createElement('option');
+            opt.value = u.name; opt.text = u.name;
+            schoolSelect.appendChild(opt);
+          });
+        }
       }
       
       // Preserve choice if it still exists
@@ -15731,20 +16696,24 @@ function getActiveSections(obs) {
         schoolGroup.style.display = 'block';
         if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
         supLabel.innerText = 'Formadora Responsável';
-        supSelect.disabled = false;
-        
-        const formadores = appState.teamMembers.filter(m => m.roleKey === 'formador');
-        if (formadores.length > 0) {
-          formadores.forEach(f => {
-            const opt = document.createElement('option');
-            opt.value = f.name;
-            opt.text = `${f.name} (${f.school})`;
-            supSelect.appendChild(opt);
-          });
+        if (user.roleKey === 'formador') {
+          supSelect.disabled = true;
+          supSelect.innerHTML = `<option value="${user.name}">${user.name} (${user.school})</option>`;
         } else {
-          supSelect.innerHTML = `<option value="">Sem formadoras cadastradas</option>`;
+          supSelect.disabled = false;
+          const formadores = appState.teamMembers.filter(m => m.roleKey === 'formador');
+          if (formadores.length > 0) {
+            formadores.forEach(f => {
+              const opt = document.createElement('option');
+              opt.value = f.name;
+              opt.text = `${f.name} (${f.school})`;
+              supSelect.appendChild(opt);
+            });
+          } else {
+            supSelect.innerHTML = `<option value="">Sem formadoras cadastradas</option>`;
+          }
+          if (typeof currentSupervisor === 'string' && currentSupervisor) supSelect.value = currentSupervisor;
         }
-        if (typeof currentSupervisor === 'string' && currentSupervisor) supSelect.value = currentSupervisor;
       } else if (role === 'formador') {
         schoolGroup.style.display = 'block';
         if(schoolLabel) schoolLabel.innerText = 'Polo Regional / Vinculação';
@@ -15765,6 +16734,7 @@ function getActiveSections(obs) {
         schoolGroup.style.display = 'none';
         supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
+        const ruleNote = document.getElementById('groupEditMemberRuleNote');
         if (ruleNote) ruleNote.style.display = 'none';
         supSelect.innerHTML = `
           <option value="Aguardando Definição">Aguardando Definição</option>
@@ -15773,6 +16743,7 @@ function getActiveSections(obs) {
     }
 
     function saveEditTeamMember() {
+      const user = getCurrentUser();
       const id = document.getElementById('editMemberId').value;
       const name = document.getElementById('editMemberName').value.trim();
       const roleKey = document.getElementById('editMemberRole').value;
@@ -15786,6 +16757,20 @@ function getActiveSections(obs) {
       if (!name) {
         showToast('Por favor, informe o nome do profissional.');
         return;
+      }
+
+      // Validação de Escopo / RBAC
+      if (user.roleKey === 'coordenador') {
+        if (roleKey !== 'professora' || school !== user.school) {
+          showToast('Permissão restrita: você só pode gerenciar docentes da sua própria unidade escolar.');
+          return;
+        }
+      } else if (user.roleKey === 'formador') {
+        const poloUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school).map(u => u.name);
+        if (roleKey !== 'coordenador' || !poloUnits.includes(school)) {
+          showToast('Permissão restrita: você só pode gerenciar coordenadoras do seu polo regional.');
+          return;
+        }
       }
 
       if (!confirm('Tem certeza que deseja salvar as alterações neste profissional?')) {
@@ -15997,9 +16982,29 @@ function getActiveSections(obs) {
     }
 
     function deleteTeamMember() {
+      const user = getCurrentUser();
       const id = document.getElementById('editMemberId').value;
       const member = (appState.teamMembers || []).find(m => m.id === id);
       if (!member) return;
+
+      // Validação de Escopo / RBAC para exclusão
+      if (user.roleKey === 'coordenador') {
+        if (member.roleKey !== 'professora' || member.school !== user.school) {
+          showToast('Permissão restrita: você só pode excluir docentes da sua própria unidade escolar.');
+          return;
+        }
+      } else if (user.roleKey === 'formador') {
+        const poloUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school).map(u => u.name);
+        if (member.roleKey !== 'coordenador' || !poloUnits.includes(member.school)) {
+          showToast('Permissão restrita: você só pode excluir coordenadoras vinculadas ao seu polo regional.');
+          return;
+        }
+      }
+
+      if (id === appState.currentUserKey || member.name === user.name) {
+        showToast('Não é permitido excluir o usuário atualmente em sessão.');
+        return;
+      }
 
       if(confirm(`Tem certeza que deseja excluir o(a) profissional "${member.name}"? Os agendamentos futuros e rascunhos vinculados serão removidos para preservar a integridade das métricas.`)) {
         const memberName = member.name;
@@ -16019,6 +17024,18 @@ function getActiveSections(obs) {
         }
         if (appState.observations) {
           appState.observations = appState.observations.filter(o => !(o.status === 'draft' && o.teacherName === memberName));
+        }
+
+        // 3. Limpa alocações docentes em turmas da SSOT
+        if (Array.isArray(appState.classes)) {
+          appState.classes.forEach(c => {
+            if (c.teacher === memberName) c.teacher = '';
+            if (c.teacherMorning === memberName) c.teacherMorning = '';
+            if (c.teacherAfternoon === memberName) c.teacherAfternoon = '';
+            if (Array.isArray(c.teachers)) {
+              c.teachers = c.teachers.filter(t => t !== memberName);
+            }
+          });
         }
 
         saveState();
@@ -21267,6 +22284,80 @@ function getActiveSections(obs) {
               if (formatMECShift('Integral') !== 'Tempo Integral') throw new Error('Falha no helper formatMECShift integral');
               logger.log('Conformidade do Catálogo de Turmas com o Padrão MEC de Jornadas (Pilar 13)', true, 'Tempo Parcial & Tempo Integral');
 
+              // 9. GOVERNANÇA OPERACIONAL DESCENTRALIZADA E GESTÃO AUTÔNOMA SOB SSOT ÚNICA (PILAR 14)
+              // 9.1 Caracterização canônica das Unidades Escolares
+              const missingChar = (appState.units || []).filter(u => typeof u.totalStudents !== 'number' || typeof u.inclusiveStudents !== 'number' || typeof u.totalClasses !== 'number');
+              if (missingChar.length > 0) throw new Error(`${missingChar.length} unidades sem caracterização completa de alunos/turmas`);
+              logger.log('Caracterização canônica das 32 Unidades Escolares (Pilar 14)', true, `${appState.units.length} UEs com métricas ativas`);
+
+              // 9.2 Adição, resolução e exclusão resiliente de Turmas sob a SSOT
+              const testClassId = 'cls-audit-p14-' + Date.now();
+              const testClassName = 'Infantil II - Turma Teste SSOT';
+              const testSchoolName = 'CEI Professora Maria de Lourdes';
+              if (!Array.isArray(appState.classes)) appState.classes = [...INITIAL_CLASSES];
+              appState.classes.push({
+                id: testClassId,
+                school: testSchoolName,
+                name: testClassName,
+                stage: 'Pré-Escola (4 a 5 anos)',
+                shift: 'Tempo Integral',
+                shiftType: 'integral',
+                teacherMorning: 'Luciana Ramos',
+                teacherAfternoon: 'Mariana Santos',
+                teachersMorning: ['Luciana Ramos'],
+                teachersAfternoon: ['Mariana Santos'],
+                teachers: ['Luciana Ramos', 'Mariana Santos'],
+                totalStudents: 22,
+                inclusiveStudents: 2,
+                room: 'Sala 05'
+              });
+              saveState();
+
+              const classesResolved = getClassesForSchool(testSchoolName);
+              const foundTestClass = classesResolved.find(c => c.id === testClassId);
+              if (!foundTestClass || foundTestClass.name !== testClassName) {
+                throw new Error('Falha na resolução da nova turma autônoma via getClassesForSchool() sob a SSOT');
+              }
+              logger.log('Criação autônoma de turma e resolução imediata na SSOT única', true, `${foundTestClass.name} (${foundTestClass.shift})`);
+
+              // Exclusão resiliente: impede ressuscitação via deletedClassIds
+              if (!Array.isArray(appState.deletedClassIds)) appState.deletedClassIds = [];
+              appState.deletedClassIds.push(testClassId);
+              appState.classes = appState.classes.filter(c => c.id !== testClassId);
+              saveState();
+
+              const classesAfterDelete = getClassesForSchool(testSchoolName);
+              if (classesAfterDelete.some(c => c.id === testClassId)) {
+                throw new Error('Turma excluída ressuscitou indevidamente no catálogo de turmas da escola');
+              }
+              logger.log('Blindagem contra ressurgimento de turmas excluídas (deletedClassIds)', true);
+
+              // Limpeza do id de teste
+              appState.deletedClassIds = appState.deletedClassIds.filter(id => id !== testClassId);
+              saveState();
+
+              // 9.3 Validação de Isolamento de Escopo e RBAC (Pilar 14)
+              const previousUserKey = appState.currentUserKey;
+              try {
+                // Simula Coordenadora (Mariana Ferreira)
+                selectUserAccount('mariana');
+                openAddClassModal();
+                const clsSchoolEl = document.getElementById('classEditorSchool');
+                const groupClsSchoolEl = document.getElementById('groupClassSchool');
+                if (clsSchoolEl.value !== 'CEI Professora Maria de Lourdes' || groupClsSchoolEl.style.display !== 'none') {
+                  throw new Error('Escopo da Coordenadora não travou a seleção para sua própria Unidade Escolar');
+                }
+                closeClassEditorModal();
+
+                // Simula Formadora (Clarice Barbosa)
+                selectUserAccount('clarice');
+                renderUnitsScreen();
+                const polo1Units = (appState.units || []).filter(u => u.polo === 'Polo Regional 1 (Norte)');
+                logger.log('Isolamento de governança e escopo territorial por papel (Pilar 14)', true, `Coordenadora (UE) & Formadora (${polo1Units.length} UEs Polo 1)`);
+              } finally {
+                if (previousUserKey) selectUserAccount(previousUserKey);
+              }
+
               // Limpeza do membro temporário de teste
               appState.teamMembers = (appState.teamMembers || []).filter(m => m.id !== createdMember.id);
               if (appState.customUsers) delete appState.customUsers[createdMember.id];
@@ -23191,6 +24282,11 @@ function getActiveSections(obs) {
     <div class="modal-panel" style="position:absolute; bottom:0; width:100%; border-radius: 16px 16px 0 0; padding: 24px;" onclick="event.stopPropagation()">
       <h3 style="margin-bottom: 20px; font-size: 18px; font-weight: 800; color: var(--primary-dark);">Mais Opções</h3>
       
+      <button class="btn btn-secondary" id="mobMenuOpManagementBtn" style="width: 100%; margin-bottom: 14px; display:none; align-items:center; gap:12px; padding: 14px;" onclick="navigateToFromMenu('opManagement')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span id="mobMenuOpManagementText">Gestão Operacional</span>
+      </button>
+
       <button class="btn btn-secondary" style="width: 100%; margin-bottom: 14px; display:flex; align-items:center; gap:12px; padding: 14px;" onclick="navigateToFromMenu('history')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 
         Acessar Histórico

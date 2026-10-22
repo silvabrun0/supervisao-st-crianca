@@ -21,7 +21,7 @@ CHROME_PATH = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 MODULE_CATALOG = {
     'auth_rbac': 'Autenticação, Usuários, Perfis e RBAC',
-    'catalogo_dados': 'Catálogo Canônico, Escolas, Turmas, Padronização MEC (Pilar 13) e Estado Global',
+    'catalogo_dados': 'Catálogo Canônico, Escolas, Turmas, Governança Descentralizada SSOT (Pilar 14) e Estado Global',
     'setup_longitudinal': 'Setup de Observação, Seleção de Turmas e Ciclo Longitudinal (Pilar 1)',
     'rubricas_observacao': 'Observação Ativa, Matrizes Curriculares, Rubricas e Pendências',
     'sintese_finalizacao': 'Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo de Tempo',
