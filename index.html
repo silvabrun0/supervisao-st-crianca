@@ -3286,7 +3286,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.11 (v7.89)
+          📌 Versão 1.12 (v7.90)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4789,6 +4789,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.12 - QUALIFICAÇÃO DE DOCENTES POR TURNO EM TURMAS INTEGRAIS E HIGIENIZAÇÃO DA BASE -->
+      <div style="margin-bottom:20px; border-left:3px solid #7C3AED; padding-left:14px; background:#FAF5FF; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#6D28D9;">Versão 1.12 · v7.90 (Oficial)</span>
+          <span style="font-size:11px; background:#EDE9FE; color:#6D28D9; padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Qualificação de Docentes por Turno (Manhã/Tarde) em Turmas Integrais e Higienização da Base de Dados:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🧹 <strong>Higienização Cadastral e Exclusividade Docente:</strong> Erradicação de sobreposições indevidas de turnos e escolas no catálogo canônico (<code>INITIAL_CLASSES</code> e <code>INITIAL_TEAM</code>). Integração das novas docentes titulares <code>Luciana Ramos</code>, <code>Mariana Santos</code>, <code>Roberta Dias</code>, <code>Patricia Souza</code> e <code>Camila Vasconcelos</code> com dedicação exclusiva por turma e turno.</li>
+          <li>☀️🌅 <strong>Qualificação de Turno no Setup (#screenSetup):</strong> Divisão visual e reativa da equipe de regência de turmas integrais em dois turnos bem delimitados: <em>☀️ Turno Matutino (Manhã)</em> e <em>🌅 Turno Vespertino (Tarde)</em>, com botões interativos <code>⇄ Passar p/ Tarde</code> e <code>⇄ Passar p/ Manhã</code> para remanejamento autônomo pelo observador.</li>
+          <li>🎯 <strong>Atribuição Parcial Seletiva por Etapa:</strong> Na Etapa 1 (Matutina), a atribuição mandatória de itens parciais restringe-se estritamente às docentes regentes da manhã, evitando apontamentos indevidos a quem atua à tarde. Na Etapa 2 (Vespertina), toda a equipe de 4 docentes fica disponível.</li>
+          <li>📋 <strong>Sequenciamento Estrito na Síntese Pedagógica (#screenSynthesis):</strong> Reestruturação da seção 4 de devolutivas nominais em duas subseções sequenciais: <em>4.1 · Turno Matutino</em> (docentes da manhã) seguido por <em>4.2 · Turno Vespertino</em> (docentes da tarde), com rastreabilidade isolada de critérios parciais, notas nas 5 dimensões e pareceres formativos individuais.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Módulos 2, 3, 4 e 5 enriquecidos com validações de turnos, remanejamento interativo, exclusividade de regência e renderização sequencial no DOM.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.11 - PILAR 11: ENXUGAMENTO VISUAL NO MOBILE COM POPUPS E BOTTOM SHEET DE APOIO PEDAGÓGICO (ℹ️) -->
@@ -8480,7 +8498,7 @@ function formatCriterionMobileTitle(crit) {
         school: 'CEI Professora Maria de Lourdes',
         stage: 'Infantil I',
         shift: 'Parcial Matutino',
-        teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha']
+        teachers: ['Ana Carolina Silva']
       },
       {
         id: 'cls-pml-02',
@@ -8504,7 +8522,9 @@ function formatCriterionMobileTitle(crit) {
         school: 'CEI Professora Maria de Lourdes',
         stage: 'Maternal II',
         shift: 'Integral',
-        teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha', 'Carla Beatriz Mendes', 'Patricia Souza']
+        teachersMorning: ['Mariana Santos', 'Roberta Dias'],
+        teachersAfternoon: ['Patricia Souza', 'Camila Vasconcelos'],
+        teachers: ['Mariana Santos', 'Roberta Dias', 'Patricia Souza', 'Camila Vasconcelos']
       },
       {
         id: 'cls-pp-01',
@@ -8520,7 +8540,7 @@ function formatCriterionMobileTitle(crit) {
         school: 'EMEI Pequeno Príncipe',
         stage: 'Infantil I',
         shift: 'Parcial Vespertino',
-        teachers: ['Fernanda Lima']
+        teachers: ['Luciana Ramos']
       },
       {
         id: 'cls-vz-01',
@@ -8528,6 +8548,8 @@ function formatCriterionMobileTitle(crit) {
         school: 'CEI Vovó Zezé',
         stage: 'Maternal II',
         shift: 'Integral',
+        teachersMorning: [],
+        teachersAfternoon: [],
         teachers: []
       }
     ];
@@ -8539,8 +8561,17 @@ function formatCriterionMobileTitle(crit) {
       }
       // Blindagem resiliente: assegura que turmas canônicas de INITIAL_CLASSES constem no estado
       INITIAL_CLASSES.forEach(initC => {
-        if (!appState.classes.some(c => c.id === initC.id)) {
+        const found = appState.classes.find(c => c.id === initC.id);
+        if (!found) {
           appState.classes.push(JSON.parse(JSON.stringify(initC)));
+        } else {
+          // Atualiza / preserva atributos específicos de turnos se presentes no canônico
+          if (initC.teachersMorning && (!found.teachersMorning || found.teachersMorning.length === 0)) {
+            found.teachersMorning = [...initC.teachersMorning];
+          }
+          if (initC.teachersAfternoon && (!found.teachersAfternoon || found.teachersAfternoon.length === 0)) {
+            found.teachersAfternoon = [...initC.teachersAfternoon];
+          }
         }
       });
       let schoolClasses = appState.classes.filter(c => c.school === schoolName);
@@ -8610,7 +8641,12 @@ function formatCriterionMobileTitle(crit) {
       { id: 'usr-4', name: 'Fernanda Lima', roleKey: 'professora', roleTitle: 'Professora', school: 'EMEI Pequeno Príncipe', supervisor: 'Sônia Regina Alcantara', classAssigned: 'Maternal I' },
       { id: 'usr-5', name: 'Mariana Ferreira', roleKey: 'coordenador', roleTitle: 'Coordenadora Pedagógica', school: 'CEI Professora Maria de Lourdes', supervisor: 'Clarice Barbosa' },
       { id: 'usr-6', name: 'Sônia Regina Alcantara', roleKey: 'coordenador', roleTitle: 'Coordenadora Pedagógica', school: 'EMEI Pequeno Príncipe', supervisor: 'Clarice Barbosa' },
-      { id: 'usr-7', name: 'Clarice Barbosa', roleKey: 'formador', roleTitle: 'Formadora Pedagógica', school: 'Polo Regional 1 (Norte)', supervisor: 'Helena Martins' }
+      { id: 'usr-7', name: 'Clarice Barbosa', roleKey: 'formador', roleTitle: 'Formadora Pedagógica', school: 'Polo Regional 1 (Norte)', supervisor: 'Helena Martins' },
+      { id: 'usr-8', name: 'Luciana Ramos', roleKey: 'professora', roleTitle: 'Professora', school: 'EMEI Pequeno Príncipe', supervisor: 'Sônia Regina Alcantara', classAssigned: 'Infantil I' },
+      { id: 'usr-9', name: 'Mariana Santos', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II' },
+      { id: 'usr-10', name: 'Roberta Dias', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II' },
+      { id: 'usr-11', name: 'Patricia Souza', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II' },
+      { id: 'usr-12', name: 'Camila Vasconcelos', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II' }
     ];
 
     // Mapa de Resolução Canônica de Nomes (Hard Users & Padrões)
@@ -8626,7 +8662,17 @@ function formatCriterionMobileTitle(crit) {
       'usr-4': 'Fernanda Lima',
       'usr-5': 'Mariana Ferreira',
       'usr-6': 'Sônia Regina Alcantara',
-      'usr-7': 'Clarice Barbosa'
+      'usr-7': 'Clarice Barbosa',
+      'usr-8': 'Luciana Ramos',
+      'usr-9': 'Mariana Santos',
+      'usr-10': 'Roberta Dias',
+      'usr-11': 'Patricia Souza',
+      'usr-12': 'Camila Vasconcelos',
+      'luciana ramos': 'Luciana Ramos',
+      'mariana santos': 'Mariana Santos',
+      'roberta dias': 'Roberta Dias',
+      'patricia souza': 'Patricia Souza',
+      'camila vasconcelos': 'Camila Vasconcelos'
     };
 
     function resolveCanonicalUserName(nameOrId) {
@@ -10263,6 +10309,104 @@ function formatCriterionMobileTitle(crit) {
       }
     }
 
+    // Controle temporário de turnos no Setup para Turmas Integrais
+    let currentSetupIntegralMorningTeachers = [];
+    let currentSetupIntegralAfternoonTeachers = [];
+
+    function renderSetupIntegralTeachersUI() {
+      const teachersListEl = document.getElementById('setupClassTeachersList');
+      if (!teachersListEl) return;
+      teachersListEl.innerHTML = '';
+      teachersListEl.style.flexDirection = 'column';
+      teachersListEl.style.width = '100%';
+
+      const container = document.createElement('div');
+      container.style.cssText = 'display:flex; flex-direction:column; gap:12px; width:100%;';
+
+      // Bloco Manhã
+      const morningBox = document.createElement('div');
+      morningBox.style.cssText = 'background:#FFFFFF; border:1px solid #DDD6FE; border-radius:8px; padding:10px 12px; box-shadow:0 1px 2px rgba(0,0,0,0.04);';
+      let morningHtml = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:12px; font-weight:800; color:#6D28D9; display:flex; align-items:center; gap:6px;">
+            <span>☀️</span> <span>Turno Matutino (Manhã · ${currentSetupIntegralMorningTeachers.length} Docentes)</span>
+          </div>
+          <span style="font-size:10px; background:#FAF5FF; color:#7C3AED; border:1px solid #E9D5FF; padding:1px 6px; border-radius:10px; font-weight:700;">Etapa 1</span>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      `;
+      if (currentSetupIntegralMorningTeachers.length === 0) {
+        morningHtml += '<span style="font-size:11px; color:#DC2626; font-style:italic;">Nenhuma docente alocada na manhã.</span>';
+      } else {
+        currentSetupIntegralMorningTeachers.forEach(tName => {
+          morningHtml += `
+            <div style="background:#F5F3FF; border:1px solid #DDD6FE; border-radius:18px; padding:3px 10px; font-size:12px; font-weight:700; color:#5B21B6; display:inline-flex; align-items:center; gap:8px;">
+              <span>👩‍🏫 ${tName}</span>
+              <button type="button" 
+                      onclick="moveTeacherToShift('${tName}', 'afternoon')" 
+                      title="Mover para o Turno Vespertino (Tarde)"
+                      style="background:#EDE9FE; border:1px solid #C4B5FD; color:#6D28D9; border-radius:10px; font-size:10px; font-weight:700; padding:2px 6px; cursor:pointer;">
+                ⇄ Passar p/ Tarde
+              </button>
+            </div>
+          `;
+        });
+      }
+      morningHtml += '</div>';
+      morningBox.innerHTML = morningHtml;
+      container.appendChild(morningBox);
+
+      // Bloco Tarde
+      const afternoonBox = document.createElement('div');
+      afternoonBox.style.cssText = 'background:#FFFFFF; border:1px solid #FED7AA; border-radius:8px; padding:10px 12px; box-shadow:0 1px 2px rgba(0,0,0,0.04);';
+      let afternoonHtml = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:12px; font-weight:800; color:#C2410C; display:flex; align-items:center; gap:6px;">
+            <span>🌅</span> <span>Turno Vespertino (Tarde · ${currentSetupIntegralAfternoonTeachers.length} Docentes)</span>
+          </div>
+          <span style="font-size:10px; background:#FFF7ED; color:#EA580C; border:1px solid #FFEDD5; padding:1px 6px; border-radius:10px; font-weight:700;">Etapa 2</span>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      `;
+      if (currentSetupIntegralAfternoonTeachers.length === 0) {
+        afternoonHtml += '<span style="font-size:11px; color:#DC2626; font-style:italic;">Nenhuma docente alocada na tarde.</span>';
+      } else {
+        currentSetupIntegralAfternoonTeachers.forEach(tName => {
+          afternoonHtml += `
+            <div style="background:#FFF7ED; border:1px solid #FDBA74; border-radius:18px; padding:3px 10px; font-size:12px; font-weight:700; color:#9A3412; display:inline-flex; align-items:center; gap:8px;">
+              <span>👩‍🏫 ${tName}</span>
+              <button type="button" 
+                      onclick="moveTeacherToShift('${tName}', 'morning')" 
+                      title="Mover para o Turno Matutino (Manhã)"
+                      style="background:#FFEDD5; border:1px solid #FDBA74; color:#C2410C; border-radius:10px; font-size:10px; font-weight:700; padding:2px 6px; cursor:pointer;">
+                ⇄ Passar p/ Manhã
+              </button>
+            </div>
+          `;
+        });
+      }
+      afternoonHtml += '</div>';
+      afternoonBox.innerHTML = afternoonHtml;
+      container.appendChild(afternoonBox);
+
+      teachersListEl.appendChild(container);
+    }
+
+    function moveTeacherToShift(teacherName, targetShift) {
+      if (targetShift === 'afternoon') {
+        currentSetupIntegralMorningTeachers = currentSetupIntegralMorningTeachers.filter(t => t !== teacherName);
+        if (!currentSetupIntegralAfternoonTeachers.includes(teacherName)) {
+          currentSetupIntegralAfternoonTeachers.push(teacherName);
+        }
+      } else if (targetShift === 'morning') {
+        currentSetupIntegralAfternoonTeachers = currentSetupIntegralAfternoonTeachers.filter(t => t !== teacherName);
+        if (!currentSetupIntegralMorningTeachers.includes(teacherName)) {
+          currentSetupIntegralMorningTeachers.push(teacherName);
+        }
+      }
+      renderSetupIntegralTeachersUI();
+    }
+
     function onSetupClassChange() {
       const user = getCurrentUser();
       const schoolName = document.getElementById('setupSchool').value;
@@ -10300,17 +10444,33 @@ function formatCriterionMobileTitle(crit) {
           startBtn.innerText = isIntegral ? 'INICIAR OBSERVAÇÃO · ETAPA 1 (TURNO MATUTINO) →' : 'INICIAR INSTRUMENTO DE OBSERVAÇÃO →';
         }
         if (teachersListEl) {
-          teachersListEl.innerHTML = '';
-          const teachers = targetClass.teachers || [];
-          if (teachers.length === 0) {
-            teachersListEl.innerHTML = '<span style="font-size:12px; color:#DC2626; font-style:italic;">⚠️ Nenhuma professora regente vinculada no cadastro desta turma.</span>';
+          if (isIntegral) {
+            // Inicializa listas de docentes por turno a partir da turma
+            const mTeachers = (targetClass.teachersMorning && targetClass.teachersMorning.length > 0)
+              ? [...targetClass.teachersMorning]
+              : (targetClass.teachers ? targetClass.teachers.slice(0, 2) : []);
+            const aTeachers = (targetClass.teachersAfternoon && targetClass.teachersAfternoon.length > 0)
+              ? [...targetClass.teachersAfternoon]
+              : (targetClass.teachers ? targetClass.teachers.slice(2) : []);
+
+            currentSetupIntegralMorningTeachers = mTeachers;
+            currentSetupIntegralAfternoonTeachers = aTeachers;
+            renderSetupIntegralTeachersUI();
           } else {
-            teachers.forEach(tName => {
-              const pill = document.createElement('div');
-              pill.style.cssText = 'background:#FFFFFF; border:1px solid #BFDBFE; border-radius:20px; padding:4px 12px; font-size:12px; font-weight:700; color:#1E40AF; display:inline-flex; align-items:center; gap:6px; box-shadow:0 1px 2px rgba(0,0,0,0.05);';
-              pill.innerHTML = `<span>👩‍🏫</span> <span>${tName}</span> <span style="font-size:10px; background:#EFF6FF; color:#2563EB; padding:1px 6px; border-radius:10px;">Regente Titular</span>`;
-              teachersListEl.appendChild(pill);
-            });
+            teachersListEl.style.flexDirection = 'row';
+            teachersListEl.style.width = 'auto';
+            teachersListEl.innerHTML = '';
+            const teachers = targetClass.teachers || [];
+            if (teachers.length === 0) {
+              teachersListEl.innerHTML = '<span style="font-size:12px; color:#DC2626; font-style:italic;">⚠️ Nenhuma professora regente vinculada no cadastro desta turma.</span>';
+            } else {
+              teachers.forEach(tName => {
+                const pill = document.createElement('div');
+                pill.style.cssText = 'background:#FFFFFF; border:1px solid #BFDBFE; border-radius:20px; padding:4px 12px; font-size:12px; font-weight:700; color:#1E40AF; display:inline-flex; align-items:center; gap:6px; box-shadow:0 1px 2px rgba(0,0,0,0.05);';
+                pill.innerHTML = `<span>👩‍🏫</span> <span>${tName}</span> <span style="font-size:10px; background:#EFF6FF; color:#2563EB; padding:1px 6px; border-radius:10px;">Regente Titular</span>`;
+                teachersListEl.appendChild(pill);
+              });
+            }
           }
         }
       }
@@ -10702,6 +10862,28 @@ function formatCriterionMobileTitle(crit) {
       const morningEnd = chosenEnd || (isIntegral ? '11:30' : null);
       const morningDuration = morningEnd ? calculateObservationDuration({ startDate: chosenDate, endDate: chosenDate, startTime: morningStart, endTime: morningEnd }) : null;
 
+      let finalMorningTeachers = [];
+      let finalAfternoonTeachers = [];
+      if (isIntegral) {
+        if (currentSetupIntegralMorningTeachers && currentSetupIntegralMorningTeachers.length > 0) {
+          finalMorningTeachers = [...currentSetupIntegralMorningTeachers];
+        } else if (targetClassObj?.teachersMorning && targetClassObj.teachersMorning.length > 0) {
+          finalMorningTeachers = [...targetClassObj.teachersMorning];
+        } else {
+          finalMorningTeachers = teachersList.slice(0, 2);
+        }
+
+        if (currentSetupIntegralAfternoonTeachers && currentSetupIntegralAfternoonTeachers.length > 0) {
+          finalAfternoonTeachers = [...currentSetupIntegralAfternoonTeachers];
+        } else if (targetClassObj?.teachersAfternoon && targetClassObj.teachersAfternoon.length > 0) {
+          finalAfternoonTeachers = [...targetClassObj.teachersAfternoon];
+        } else {
+          finalAfternoonTeachers = teachersList.slice(2);
+        }
+        teachersList = [...finalMorningTeachers, ...finalAfternoonTeachers];
+        teacherName = teachersList.join(', ');
+      }
+
       const newObs = {
         id: 'obs-' + Date.now(),
         scheduleId: appState.currentSetupScheduleId || null,
@@ -10712,6 +10894,8 @@ function formatCriterionMobileTitle(crit) {
         classShift: targetClassObj?.shift || (isIntegral ? 'Integral' : 'Parcial Matutino'),
         isIntegral: isIntegral,
         integralStage: isIntegral ? 'matutino' : 'concluido',
+        teachersMorning: isIntegral ? finalMorningTeachers : null,
+        teachersAfternoon: isIntegral ? finalAfternoonTeachers : null,
         morningObs: isIntegral ? {
           date: chosenDate,
           startTime: morningStart,
@@ -11298,14 +11482,23 @@ function formatCriterionMobileTitle(crit) {
           ${(resp === 'partial' && obsInstance.evaluatedType === 'turma') ? `
             <!-- PILAR 5: ATRIBUIÇÃO MANDATÓRIA (ITEM PARCIAL) -->
             <div id="partial-attribution-box-${crit.id}" class="partial-attribution-box">
-              <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
-                <span style="font-size:14px;">⚠️</span>
-                <span style="font-size:12px; font-weight:800; color:#B45309; text-transform:uppercase;">
-                  Atribuição Mandatória (Item Parcial)
-                </span>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:6px;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span style="font-size:14px;">⚠️</span>
+                  <span style="font-size:12px; font-weight:800; color:#B45309; text-transform:uppercase;">
+                    Atribuição Mandatória (Item Parcial)
+                  </span>
+                </div>
+                ${obsInstance.isIntegral ? `
+                  <span style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; ${obsInstance.integralStage === 'matutino' ? 'background:#DBEAFE; color:#1E40AF;' : 'background:#FEF3C7; color:#92400E;'}">
+                    ${obsInstance.integralStage === 'matutino' ? '☀️ Etapa Matutina: Restrita aos Regentes da Manhã' : '🌅 Etapa Vespertina: Equipe Completa (4 Regentes)'}
+                  </span>
+                ` : ''}
               </div>
               <p style="font-size:11px; color:#92400E; margin-bottom:10px; line-height:1.4;">
-                Indique o(a) docente regente responsável por esta prática e justifique a pontuação parcial com evidências objetivas.
+                ${obsInstance.isIntegral && obsInstance.integralStage === 'matutino'
+                  ? '☀️ <strong>Etapa Matutina:</strong> Indique o(a) docente regente da manhã responsável por esta fragilidade e justifique objetivamente.'
+                  : 'Indique o(a) docente regente responsável por esta prática e justifique a pontuação parcial com evidências objetivas.'}
               </p>
 
               <div style="margin-bottom:10px;">
@@ -11314,9 +11507,22 @@ function formatCriterionMobileTitle(crit) {
                 </label>
                 <div style="display:flex; flex-wrap:wrap; gap:8px;">
                   ${(() => {
-                    const teachers = (obsInstance.teachers && obsInstance.teachers.length > 0) 
+                    let teachers = (obsInstance.teachers && obsInstance.teachers.length > 0) 
                       ? obsInstance.teachers 
                       : (obsInstance.teacherName ? [obsInstance.teacherName] : []);
+
+                    if (obsInstance.isIntegral) {
+                      if (obsInstance.integralStage === 'matutino') {
+                        teachers = (obsInstance.teachersMorning && obsInstance.teachersMorning.length > 0)
+                          ? obsInstance.teachersMorning
+                          : teachers.slice(0, 2);
+                      } else {
+                        teachers = (obsInstance.teachers && obsInstance.teachers.length > 0)
+                          ? obsInstance.teachers
+                          : teachers;
+                      }
+                    }
+
                     const currentAttr = (obsInstance.partialAttributions && obsInstance.partialAttributions[crit.id]) || { teachers: [], justification: '' };
                     const selectedTeachers = currentAttr.teachers || [];
                     const isSingle = teachers.length === 1;
@@ -12111,13 +12317,18 @@ function formatCriterionMobileTitle(crit) {
           }
           synthTeachersCardsContainer.innerHTML = '';
 
-          const teachers = (obs.teachers && obs.teachers.length > 0)
-            ? obs.teachers
-            : (obs.teacherName ? [obs.teacherName] : []);
+          const dimLabels = [
+            { key: 'estrategias', title: '1. Estratégias Didáticas' },
+            { key: 'gestao_grupo', title: '2. Gestão do Grupo e Ambiente' },
+            { key: 'mediacao_individual', title: '3. Mediação Individualizada' },
+            { key: 'respeito_integridade', title: '4. Respeito, Diversidade e Proteção' },
+            { key: 'gestao_cuidados', title: '5. Gestão dos Cuidados e Autonomia' }
+          ];
 
           if (!obs.teacherSynthesis) obs.teacherSynthesis = {};
 
-          teachers.forEach((tName, tIdx) => {
+          // Helper interno para gerar o card de cada docente
+          function buildTeacherCard(tName, globalIdx, shiftTag = null) {
             if (!obs.teacherSynthesis[tName]) {
               obs.teacherSynthesis[tName] = {
                 dimensions: {
@@ -12143,7 +12354,6 @@ function formatCriterionMobileTitle(crit) {
               if (responses[critId] === 'partial') {
                 const attr = attributions[critId];
                 if (attr && Array.isArray(attr.teachers) && attr.teachers.includes(tName)) {
-                  // Localiza texto do critério
                   let critObj = null;
                   sections.forEach(s => s.subSections.forEach(sub => sub.criteria.forEach(c => {
                     if (c.id === critId) critObj = c;
@@ -12159,15 +12369,7 @@ function formatCriterionMobileTitle(crit) {
 
             const card = document.createElement('div');
             card.className = 'teacher-synthesis-card';
-            card.id = `teacher-synthesis-card-${tIdx}`;
-
-            const dimLabels = [
-              { key: 'estrategias', title: '1. Estratégias Didáticas' },
-              { key: 'gestao_grupo', title: '2. Gestão do Grupo e Ambiente' },
-              { key: 'mediacao_individual', title: '3. Mediação Individualizada' },
-              { key: 'respeito_integridade', title: '4. Respeito, Diversidade e Proteção' },
-              { key: 'gestao_cuidados', title: '5. Gestão dos Cuidados e Autonomia' }
-            ];
+            card.id = `teacher-synthesis-card-${globalIdx}`;
 
             let cardHtml = `
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid #E2E8F0;">
@@ -12180,9 +12382,16 @@ function formatCriterionMobileTitle(crit) {
                     <div style="font-size:11px; color:var(--text-secondary);">Docente Regente Titular</div>
                   </div>
                 </div>
-                <span class="badge" style="background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE; font-size:10px;">
-                  Devolutiva Individual
-                </span>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  ${shiftTag ? `
+                    <span class="badge" style="font-size:10px; font-weight:700; ${shiftTag.style}">
+                      ${shiftTag.label}
+                    </span>
+                  ` : ''}
+                  <span class="badge" style="background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE; font-size:10px;">
+                    Devolutiva Individual
+                  </span>
+                </div>
               </div>
 
               <!-- Grade das 5 Dimensões -->
@@ -12261,7 +12470,7 @@ function formatCriterionMobileTitle(crit) {
                   Parecer Formativo Individual e Combinados de Desenvolvimento:
                 </label>
                 <textarea class="form-textarea" 
-                          id="teacherFeedback-${tIdx}"
+                          id="teacherFeedback-${globalIdx}"
                           style="min-height:76px; font-size:12px;"
                           placeholder="${appState.isReadOnly ? 'Sem parecer individual registrado.' : 'Pontos fortes observados, evidências de práticas consistentes e combinados de aprimoramento individual para o próximo ciclo...'}"
                           onchange="setTeacherSynthesisFeedback('${tName}', this.value)"
@@ -12270,8 +12479,90 @@ function formatCriterionMobileTitle(crit) {
             `;
 
             card.innerHTML = cardHtml;
-            synthTeachersCardsContainer.appendChild(card);
-          });
+            return card;
+          }
+
+          if (obs.isIntegral) {
+            // RENDERIZAÇÃO SEGREGADA SEQUENCIAL POR TURNO: MANHÃ (4.1) ➔ TARDE (4.2)
+            const mTeachers = (obs.teachersMorning && obs.teachersMorning.length > 0)
+              ? obs.teachersMorning
+              : (obs.teachers ? obs.teachers.slice(0, 2) : []);
+            const aTeachers = (obs.teachersAfternoon && obs.teachersAfternoon.length > 0)
+              ? obs.teachersAfternoon
+              : (obs.teachers ? obs.teachers.slice(2) : []);
+
+            let globalIdx = 0;
+
+            // --- Subseção 4.1: Turno Matutino ---
+            const morningHeader = document.createElement('div');
+            morningHeader.id = 'synthesisMorningTeachersHeader';
+            morningHeader.style.cssText = 'background:#FAF5FF; border:1px solid #DDD6FE; border-left:5px solid #7C3AED; border-radius:8px; padding:12px 14px; margin-top:14px; margin-bottom:12px;';
+            morningHeader.innerHTML = `
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:13px; font-weight:800; color:#581C87; display:flex; align-items:center; gap:6px;">
+                    <span>☀️</span> <span>4.1 · Avaliação e Devolutiva dos Docentes da Manhã (Turno Matutino)</span>
+                  </div>
+                  <div style="font-size:11px; color:#6B21A8; margin-top:2px;">
+                    Práticas pedagógicas, rotinas e mediações observadas no período matutino (${mTeachers.length} docentes)
+                  </div>
+                </div>
+                <span style="font-size:10px; background:#EDE9FE; color:#6D28D9; border:1px solid #DDD6FE; padding:2px 8px; border-radius:12px; font-weight:700;">Etapa 1</span>
+              </div>
+            `;
+            synthTeachersCardsContainer.appendChild(morningHeader);
+
+            mTeachers.forEach(tName => {
+              const card = buildTeacherCard(tName, globalIdx, { label: '☀️ Turno Matutino', style: 'background:#F5F3FF; color:#6D28D9; border:1px solid #DDD6FE;' });
+              synthTeachersCardsContainer.appendChild(card);
+              globalIdx++;
+            });
+
+            // --- Subseção 4.2: Turno Vespertino ---
+            const afternoonHeader = document.createElement('div');
+            afternoonHeader.id = 'synthesisAfternoonTeachersHeader';
+            afternoonHeader.style.cssText = 'background:#FFF7ED; border:1px solid #FED7AA; border-left:5px solid #EA580C; border-radius:8px; padding:12px 14px; margin-top:20px; margin-bottom:12px;';
+            afternoonHeader.innerHTML = `
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:13px; font-weight:800; color:#9A3412; display:flex; align-items:center; gap:6px;">
+                    <span>🌅</span> <span>4.2 · Avaliação e Devolutiva dos Docentes da Tarde (Turno Vespertino)</span>
+                  </div>
+                  <div style="font-size:11px; color:#C2410C; margin-top:2px;">
+                    Práticas pedagógicas, rotinas e mediações observadas no período vespertino (${aTeachers.length} docentes)
+                  </div>
+                </div>
+                <span style="font-size:10px; background:#FFEDD5; color:#EA580C; border:1px solid #FDBA74; padding:2px 8px; border-radius:12px; font-weight:700;">Etapa 2</span>
+              </div>
+            `;
+            synthTeachersCardsContainer.appendChild(afternoonHeader);
+
+            if (obs.integralStage === 'matutino') {
+              const noticeCard = document.createElement('div');
+              noticeCard.style.cssText = 'background:#FFFBEB; border:1px dashed #F59E0B; border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:12px; color:#B45309; line-height:1.4;';
+              noticeCard.innerHTML = `
+                ℹ️ <strong>Observação em Etapa Matutina:</strong> A avaliação nominal das docentes da tarde será preenchida durante a Etapa 2 (Vespertina). Salve o turno matutino para prosseguir à tarde.
+              `;
+              synthTeachersCardsContainer.appendChild(noticeCard);
+            }
+
+            aTeachers.forEach(tName => {
+              const card = buildTeacherCard(tName, globalIdx, { label: '🌅 Turno Vespertino', style: 'background:#FFF7ED; color:#EA580C; border:1px solid #FED7AA;' });
+              synthTeachersCardsContainer.appendChild(card);
+              globalIdx++;
+            });
+
+          } else {
+            // Renderização Padrão para Turmas Parciais
+            const teachers = (obs.teachers && obs.teachers.length > 0)
+              ? obs.teachers
+              : (obs.teacherName ? [obs.teacherName] : []);
+
+            teachers.forEach((tName, tIdx) => {
+              const card = buildTeacherCard(tName, tIdx);
+              synthTeachersCardsContainer.appendChild(card);
+            });
+          }
         }
       }
 
@@ -21066,6 +21357,31 @@ function formatCriterionMobileTitle(crit) {
               }
               logger.log('Supressão de badges e avisos informativos de vinculação automática na gestão de pessoal', true);
 
+              // 7. VALIDAÇÃO DE TURMAS INTEGRAIS COM SEGREGAÇÃO DE TURNOS E EXCLUSIVIDADE DOCENTE
+              const integralCls = (appState.classes || []).find(c => c.id === 'cls-pml-04');
+              if (!integralCls || !Array.isArray(integralCls.teachersMorning) || !Array.isArray(integralCls.teachersAfternoon)) {
+                throw new Error('cls-pml-04 não possui teachersMorning e teachersAfternoon estruturados como array');
+              }
+              if (integralCls.teachersMorning.length !== 2 || integralCls.teachersAfternoon.length !== 2) {
+                throw new Error(`cls-pml-04 deve conter 2 docentes na manhã e 2 na tarde (obtido: manhã=${integralCls.teachersMorning.length}, tarde=${integralCls.teachersAfternoon.length})`);
+              }
+              logger.log('Validação da segregação de turnos em INITIAL_CLASSES (cls-pml-04)', true, `Manhã: ${integralCls.teachersMorning.join(', ')} · Tarde: ${integralCls.teachersAfternoon.join(', ')}`);
+
+              // Validação da presença dos novos membros em INITIAL_TEAM
+              const requiredNewMembers = ['Luciana Ramos', 'Mariana Santos', 'Roberta Dias', 'Patricia Souza', 'Camila Vasconcelos'];
+              requiredNewMembers.forEach(name => {
+                const found = (appState.teamMembers || []).some(m => m.name === name);
+                if (!found) throw new Error(`Profissional obrigatório "${name}" não localizado em appState.teamMembers`);
+              });
+              logger.log('Presença de novos membros docentes em INITIAL_TEAM', true, requiredNewMembers.join(', '));
+
+              // Validação de exclusividade docente (nenhuma docente de turma parcial atuando em turnos acumulados indevidos)
+              const anaClasses = (appState.classes || []).filter(c => (c.teachers || []).includes('Ana Carolina Silva'));
+              if (anaClasses.length !== 1 || anaClasses[0].name !== 'Infantil I - Turma A') {
+                throw new Error('Ana Carolina Silva não possui alocação exclusiva em Infantil I - Turma A');
+              }
+              logger.log('Exclusividade docente e integridade de alocação por turno', true);
+
               // Limpeza do membro temporário de teste
               appState.teamMembers = (appState.teamMembers || []).filter(m => m.id !== createdMember.id);
               if (appState.customUsers) delete appState.customUsers[createdMember.id];
@@ -21118,7 +21434,7 @@ function formatCriterionMobileTitle(crit) {
               }
               logger.log('Supressão da mensagem textual de orientação no card de regentes titulares', true);
 
-              // PILAR 4: Validação de Setup e Detecção de Turma em Tempo Integral
+              // PILAR 4 & 1.12: Validação de Setup e Detecção de Turma em Tempo Integral com Segregação e Remanejamento
               const classOptions = Array.from(classSel.options);
               const integralOpt = classOptions.find(o => isClassIntegral(o.value));
               if (integralOpt) {
@@ -21127,9 +21443,52 @@ function formatCriterionMobileTitle(crit) {
                 const isShiftIntegral = shiftBadge && shiftBadge.innerText.includes('Integral');
                 if (!isShiftIntegral) throw new Error('Badge de turno não identificou Tempo Integral');
                 logger.log('Detecção e estilização de Turma em Tempo Integral no Setup (Pilar 4)', true, integralOpt.value);
+
+                // Validação dos dois blocos no card de regência
+                const morningBlockTitle = teachersListEl.innerText.includes('Turno Matutino');
+                const afternoonBlockTitle = teachersListEl.innerText.includes('Turno Vespertino');
+                if (!morningBlockTitle || !afternoonBlockTitle) {
+                  throw new Error('Blocos de Turno Matutino ou Vespertino ausentes no card de regência da turma integral');
+                }
+                logger.log('Renderização dos blocos segregados por turno no card de regência (#screenSetup)', true);
+
+                // Remanejamento interativo de turno (moveTeacherToShift)
+                const initialMorningCount = currentSetupIntegralMorningTeachers.length;
+                const teacherToMove = currentSetupIntegralMorningTeachers[0];
+                if (teacherToMove) {
+                  moveTeacherToShift(teacherToMove, 'afternoon');
+                  if (currentSetupIntegralMorningTeachers.includes(teacherToMove) || !currentSetupIntegralAfternoonTeachers.includes(teacherToMove)) {
+                    throw new Error(`moveTeacherToShift falhou ao mover ${teacherToMove} para a tarde`);
+                  }
+                  // Retorna para a manhã para restaurar a integridade
+                  moveTeacherToShift(teacherToMove, 'morning');
+                  if (currentSetupIntegralMorningTeachers.length !== initialMorningCount) {
+                    throw new Error('Falha ao restaurar docente para o turno matutino via moveTeacherToShift');
+                  }
+                  logger.log('Remanejamento interativo de turno de docente no Setup (moveTeacherToShift)', true, teacherToMove);
+                }
+
+                // Inicia observação da turma integral e verifica teachersMorning / teachersAfternoon
+                UI.select(document.getElementById('setupBimester'), '1º Bimestre');
+                const btnStartIntegral = document.getElementById('btnStartObservation');
+                if (btnStartIntegral) {
+                  UI.click(btnStartIntegral);
+                  if (!appState.currentObs || !appState.currentObs.isIntegral) {
+                    throw new Error('Inicialização de turma integral não definiu isIntegral como true');
+                  }
+                  if (!Array.isArray(appState.currentObs.teachersMorning) || appState.currentObs.teachersMorning.length !== 2) {
+                    throw new Error('appState.currentObs.teachersMorning inválido ou não possui 2 docentes');
+                  }
+                  if (!Array.isArray(appState.currentObs.teachersAfternoon) || appState.currentObs.teachersAfternoon.length !== 2) {
+                    throw new Error('appState.currentObs.teachersAfternoon inválido ou não possui 2 docentes');
+                  }
+                  logger.log('Gravação determinística de teachersMorning e teachersAfternoon em appState.currentObs', true, `Manhã: ${appState.currentObs.teachersMorning.join(', ')} · Tarde: ${appState.currentObs.teachersAfternoon.join(', ')}`);
+                }
               }
 
-              // Disparo interativo via botão
+              // Disparo interativo via botão (restaura turma parcial padrão para sequência da auditoria)
+              openSetupScreen();
+              UI.select(schoolSel, 'CEI Professora Maria de Lourdes');
               UI.select(classSel, 'Infantil I - Turma A');
               UI.select(document.getElementById('setupBimester'), '1º Bimestre');
               const btnStart = document.getElementById('btnStartObservation') || document.querySelector('#screenSetup button.btn-primary');
@@ -21208,6 +21567,53 @@ function formatCriterionMobileTitle(crit) {
               const goodPracticeBadge = document.querySelector('#crit-card-1\\.1\\.1 .badge-good-practice');
               if (!goodPracticeBadge) throw new Error('Badge de boa prática consistente não exibido no critério 1.1.1');
               logger.log('Resolução de Pendência de Item Parcial e incentivo em Prática Consistente', true);
+
+              // PILAR 5 & 1.12: Teste de Atribuição Parcial Seletiva por Etapa em Turma Integral
+              const savedObsBackup = appState.currentObs;
+              const testIntegralActiveObs = {
+                id: 'obs-test-integral-active',
+                evaluatedType: 'turma',
+                unitOfAnalysis: 'turma',
+                className: 'Maternal II - Turma Integral',
+                isIntegral: true,
+                integralStage: 'matutino',
+                teachersMorning: ['Mariana Santos', 'Roberta Dias'],
+                teachersAfternoon: ['Patricia Souza', 'Camila Vasconcelos'],
+                teachers: ['Mariana Santos', 'Roberta Dias', 'Patricia Souza', 'Camila Vasconcelos'],
+                teacherName: 'Mariana Santos, Roberta Dias, Patricia Souza, Camila Vasconcelos',
+                responses: { '1.1.2': 'partial' },
+                partialAttributions: {},
+                criterionComments: {},
+                photos: {}
+              };
+              appState.currentObs = testIntegralActiveObs;
+              renderActiveObservation(false);
+
+              // 1. Etapa Matutina: Verifica se as opções de docentes contêm estritamente as 2 docentes da manhã
+              const morningPartialBox = document.getElementById('partial-attribution-box-1.1.2');
+              if (!morningPartialBox) throw new Error('partial-attribution-box-1.1.2 ausente na observação ativa integral matutina');
+              const morningTeacherChips = Array.from(morningPartialBox.querySelectorAll('.teacher-chip-select input')).map(i => i.value);
+              if (!morningTeacherChips.includes('Mariana Santos') || !morningTeacherChips.includes('Roberta Dias')) {
+                throw new Error('Docentes da manhã (Mariana Santos e Roberta Dias) não estão disponíveis na Etapa 1');
+              }
+              if (morningTeacherChips.includes('Patricia Souza') || morningTeacherChips.includes('Camila Vasconcelos')) {
+                throw new Error('Docentes da tarde não devem estar disponíveis para atribuição na Etapa 1 (Matutina)');
+              }
+              logger.log('Atribuição Parcial Seletiva na Etapa Matutina restrita aos regentes da manhã', true, morningTeacherChips.join(', '));
+
+              // 2. Etapa Vespertina: Verifica se as 4 docentes da turma estão disponíveis
+              testIntegralActiveObs.integralStage = 'vespertino';
+              renderActiveObservation(false);
+              const afternoonPartialBox = document.getElementById('partial-attribution-box-1.1.2');
+              const afternoonTeacherChips = Array.from(afternoonPartialBox.querySelectorAll('.teacher-chip-select input')).map(i => i.value);
+              if (afternoonTeacherChips.length !== 4 || !afternoonTeacherChips.includes('Patricia Souza') || !afternoonTeacherChips.includes('Camila Vasconcelos')) {
+                throw new Error('Equipe completa de 4 docentes deve estar disponível para atribuição na Etapa 2 (Vespertina)');
+              }
+              logger.log('Atribuição Parcial Seletiva na Etapa Vespertina disponível para os 4 regentes', true, afternoonTeacherChips.join(', '));
+
+              // Restaura a observação ativa anterior
+              appState.currentObs = savedObsBackup;
+              renderActiveObservation(false);
 
               // PILAR 11: Asserções Estritas de Apoio Pedagógico e Enxugamento Mobile
               // 1. Presença do Modal e Contêineres no DOM
@@ -21478,6 +21884,67 @@ function formatCriterionMobileTitle(crit) {
                 throw new Error(`Duração somada esperada 390min, obtido ${integralObs.totalIntegralDurationMinutes}min`);
               }
               logger.log('Finalização de Turma Integral em Formulário Único com horários somados (Pilar 4)', true, `${integralObs.totalIntegralDurationMinutes} min acumulados (6h30)`);
+
+              // PILAR 5 & 1.12: Teste de Renderização Sequencial por Turno na Síntese Integral
+              const integralSynthObs = {
+                id: 'obs-synth-integral-test-' + Date.now(),
+                evaluatedType: 'turma',
+                unitOfAnalysis: 'turma',
+                className: 'Maternal II - Turma Integral',
+                schoolName: 'CEI Professora Maria de Lourdes',
+                isIntegral: true,
+                integralStage: 'vespertino',
+                teachersMorning: ['Mariana Santos', 'Roberta Dias'],
+                teachersAfternoon: ['Patricia Souza', 'Camila Vasconcelos'],
+                teachers: ['Mariana Santos', 'Roberta Dias', 'Patricia Souza', 'Camila Vasconcelos'],
+                teacherName: 'Mariana, Roberta, Patricia e Camila',
+                evaluatedBy: 'Mariana Ferreira',
+                startDate: testDate,
+                date: testDate,
+                startTime: '08:00',
+                endTime: '16:30',
+                status: 'draft',
+                synthesisMaterialDimension: 3,
+                synthesisPredominant: 'Livros e materiais de desenho/pintura',
+                synthesisOrg: 'Pequenos grupos e cantos de atividades',
+                responses: { '1.1.2': 'partial' },
+                partialAttributions: {
+                  '1.1.2': {
+                    teachers: ['Mariana Santos'],
+                    justification: 'Perguntas fechadas na rotina matutina.'
+                  }
+                },
+                teacherSynthesis: {}
+              };
+              appState.currentObs = integralSynthObs;
+              appState.isReadOnly = false;
+              renderSynthesisScreen();
+
+              const mHeader = document.getElementById('synthesisMorningTeachersHeader');
+              const aHeader = document.getElementById('synthesisAfternoonTeachersHeader');
+              if (!mHeader || !aHeader) {
+                throw new Error('Cabeçalhos segregados de turno (synthesisMorningTeachersHeader ou synthesisAfternoonTeachersHeader) ausentes na síntese integral');
+              }
+              const cardM0 = document.getElementById('teacher-synthesis-card-0');
+              const cardM1 = document.getElementById('teacher-synthesis-card-1');
+              const cardA2 = document.getElementById('teacher-synthesis-card-2');
+              const cardA3 = document.getElementById('teacher-synthesis-card-3');
+              if (!cardM0 || !cardM1 || !cardA2 || !cardA3) {
+                throw new Error('Cards nominais das 4 docentes da turma integral não foram renderizados sequencialmente (0, 1, 2, 3)');
+              }
+              if (!cardM0.innerText.includes('Mariana Santos') || !cardM1.innerText.includes('Roberta Dias')) {
+                throw new Error('Subseção 4.1 da manhã não contém Mariana Santos e Roberta Dias');
+              }
+              if (!cardA2.innerText.includes('Patricia Souza') || !cardA3.innerText.includes('Camila Vasconcelos')) {
+                throw new Error('Subseção 4.2 da tarde não contém Patricia Souza e Camila Vasconcelos');
+              }
+              logger.log('Renderização Sequencial por Turno na Síntese Integral (Manhã 4.1 ➔ Tarde 4.2)', true);
+
+              // Validação de atribuição matutina no card de Mariana Santos
+              if (!cardM0.innerText.includes('1.1.2') || !cardM0.innerText.includes('Perguntas fechadas na rotina matutina.')) {
+                throw new Error('Apontamento parcial da manhã não foi vinculado ao card de Mariana Santos');
+              }
+              logger.log('Rastreabilidade de apontamento de fragilidade matutina no card da docente da manhã', true);
 
               // PILAR 5: Teste dos Blocos Nominais por Docente na Síntese e Validação na Finalização
               const synthObs = {

@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.12** | 22/10/2026 14:45 | `intermediárias/aplicativo_v112_qualificacao_docentes_turnos_turmas_integrais.html` | Deliberação SerTão Criança / Pilares 4 e 5 | Qualificação de docentes por turno (manhã/tarde) em turmas integrais, botões interativos de remanejamento no setup, higienização da base de dados inicial com exclusividade por turno/escola, atribuição parcial seletiva e sequenciamento nominal 4.1 e 4.2 na síntese pedagógica ☀️🌅 |
 | **1.11** | 22/10/2026 14:30 | `intermediárias/aplicativo_v110_pilar_11_popups_rubricas_apoio_mobile.html` | Deliberação SerTão Criança / Pilar 11 | Pilar 11: Enxugamento Visual no Mobile com Pop-ups e Bottom Sheet de Apoio Pedagógico às Rubricas (`ℹ️`), síntese inteligente de orientações longas, redução de 45% na altura dos cards, repositório canônico de apoio formativo e régua de gradação 📱 |
 | **1.10** | 22/10/2026 14:15 | `intermediárias/aplicativo_v110_supressao_impressao_preservacao_rota_auditoria.html` | Deliberação SerTão Criança / UX Auditoria | Supressão de disparo de impressão no diagnóstico e preservação contextual de rota da plataforma 🔇 |
 | **1.09** | 22/10/2026 14:00 | `intermediárias/aplicativo_v109_pilar_10_semaforo_docentes_regentes.html` | Deliberação SerTão Criança / Pilar 10 | Pilar 10: Semáforo Anual para Docentes Regentes | Resolução completa da visão semafórica de Docentes Regentes no Pilar 10, eliminação de células em branco, micro-cards decisórios docentes, filtros rápidos e integração com agendamento 🚦 |
@@ -129,6 +130,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.12] - Qualificação de Docentes por Turno (Manhã/Tarde) em Turmas Integrais e Higienização da Base de Dados
+* **Data e Horário:** 22 de Outubro de 2026 – 14:45:00
+* **Arquivo em Produção:** `index.html`
+* **Arquivo Intermediário:** `intermediárias/aplicativo_v112_qualificacao_docentes_turnos_turmas_integrais.html`
+* **Identificador no App:** 📌 Versão 1.12 (v7.90)
+* **Hosting Oficial:** https://silvabrun0.github.io/supervisao-st-crianca/
+
+#### 🚀 Modificações e Inclusões
+- **Higienização Cadastral e Exclusividade Docente na Base Canônica:**
+  Erradicação definitiva de acúmulo de turnos e escolas no catálogo inicial (`INITIAL_CLASSES` e `INITIAL_TEAM`). Alocação exclusiva de `Ana Carolina Silva` no Infantil I Matutino, `Carla Beatriz Mendes` no Berçário II Matutino, `Juliana Roberta Rocha` no Infantil II Vespertino, `Fernanda Lima` no Maternal I Matutino da EMEI Pequeno Príncipe e admissão da nova docente `Luciana Ramos` no Infantil I Vespertino. A turma de tempo integral do CEI Maria de Lourdes (`cls-pml-04`) passa a contar com quarteto próprio e exclusivo: `Mariana Santos` e `Roberta Dias` no Turno Matutino; `Patricia Souza` e `Camila Vasconcelos` no Turno Vespertino.
+- **Painel Reativo de Qualificação de Turno no Setup (`#screenSetup`):**
+  Ao selecionar uma turma em tempo integral (`isClassIntegral`), a equipe de regência é apresentada segregada visualmente em dois blocos verticais: *☀️ Turno Matutino (Manhã)* e *🌅 Turno Vespertino (Tarde)*. O observador dispõe de botões interativos `⇄ Passar p/ Tarde` e `⇄ Passar p/ Manhã` (`moveTeacherToShift`) para remanejar a alocação dos docentes com total autonomia e sincronização em tempo real.
+- **Atribuição Parcial Seletiva por Etapa no Pilar 5:**
+  No preenchimento de itens pontuados como parciais (`partial`), as opções de seleção de docentes regentes adaptam-se dinamicamente: na Etapa 1 (Matutina), a seleção é restrita às 2 docentes da manhã (`teachersMorning`), impedindo atribuições prematuras às docentes da tarde. Na Etapa 2 (Vespertina), toda a equipe de 4 docentes fica disponível para atribuição.
+- **Sequenciamento Estrito na Síntese Pedagógica (`#screenSynthesis`):**
+  Reestruturação da seção 4 de devolutivas nominais para renderizar primeiramente a *Subseção 4.1 · ☀️ Turno Matutino* (docentes da manhã) e, em seguida, a *Subseção 4.2 · 🌅 Turno Vespertino* (docentes da tarde). Cada docente conta com seus apontamentos de itens parciais isolados, avaliação independente nas 5 dimensões estruturantes e parecer formativo individual.
+- **Auditoria Modular Contínua com 100% de Aprovação:**
+  Enriquecimento determinístico dos Módulos 2 (Catálogo e Exclusividade Docente), 3 (Setup e Remanejamento de Turno), 4 (Atribuição Parcial Seletiva por Etapa) e 5 (Renderização Sequencial por Turno na Síntese Integral), totalizando 120 asserções automatizadas aprovadas em motor headless do Chrome.
 
 ### [Versão 1.11] - Pilar 11: Enxugamento Visual no Mobile com Pop-ups e Bottom Sheet de Apoio Pedagógico às Rubricas (ℹ️)
 * **Data e Horário:** 22 de Outubro de 2026 – 14:30:00
