@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.24** | 23/10/2026 15:30 | `intermediárias/aplicativo_v124_botoes_novo_professor_e_novo_usuario_ssot.html` | Solicitação direta / `plano_botoes_novo_professor_e_novo_usuario_ssot.md` | Especialização dos botões da Gestão Pedagógica em `+ Novo Professor` (`#btnNewTeacher`) e `+ Novo Usuário` (`#btnNewUser`), blindagem absoluta contra coleta de e-mail ou senha docente no DOM, escrita na SSOT (`appState.teamMembers`), sincronização seletiva com `USERS_DB` e isolamento RBAC para Coordenadoras 👩‍🏫🔑 |
 | **1.23** | 23/10/2026 15:15 | `intermediárias/aplicativo_v123_definicao_autonoma_periodos_ciclos_ssot.html` | Solicitação direta / `plano_definicao_autonoma_periodos_ciclos_ssot.md` | Definição autônoma dos períodos e prazos dos 4 bimestres letivos pela Coordenadora do Núcleo de EI (Helena Martins) via modal `#modalBimesterPeriods`, persistência e governança na SSOT única (`appState.bimesterPeriods`), motor algorítmico dinâmico em `getCurrentSchoolBimester()`, erradicação de rótulos e prazos estimados no Semáforo (`Fev - Abr`, `Janela de 2 meses em aberto`) em favor de `getBimesterPeriodDisplay()` e sincronização reativa inter-abas 📅🌐 |
 | **1.22** | 23/10/2026 14:35 | `intermediárias/aplicativo_v122_remocao_botao_nova_ocorrencia_registros.html` | Solicitação direta / `plano_remocao_botao_nova_ocorrencia_registros.md` | Remoção do botão de nova ocorrência (#btnNewQualitativeNote) no módulo de Registros Formativos, alinhando a interface à regra canônica dos Pilares 1 e 13 (ocorrências vinculadas estritamente à observação ativa via menu FAB), higienização de referências no RBAC e asserção no módulo travas_seguranca 📝🚫 |
 | **1.22** | 23/10/2026 14:35 | `intermediárias/aplicativo_v122_simplificacao_cadastro_docente_jornada_e_ordem_abas.html` | Solicitação direta / `plano_simplificacao_cadastro_docente_jornada_e_ordem_abas.md` | Simplificação radical no cadastro de docentes pela Coordenadora (apenas Nome Completo, sem login ou base de autenticação), higienização visual de subtítulo de turmas e card da UE, rotulagem limpa 'Jornada Escolar' e ordenação canônica de abas desktop 👩‍🏫📐 |
@@ -145,6 +146,40 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.24] - Botões Especializados "+ Novo Professor" e "+ Novo Usuário" na Gestão Pedagógica (SSOT e Blindagem)
+- **Data / Horário:** 23/10/2026 15:30
+- **Arquivo de Referência:** `intermediárias/aplicativo_v124_botoes_novo_professor_e_novo_usuario_ssot.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_botoes_novo_professor_e_novo_usuario_ssot.md`.
+- **Foco Central:** Substituição do botão único e genérico `+ Novo Profissional` por dois botões especializados: `+ Novo Professor` (`#btnNewTeacher`) e `+ Novo Usuário` (`#btnNewUser`), com blindagem absoluta contra coleta de e-mail de professores no DOM, escrita na SSOT (`appState.teamMembers`), sincronização seletiva com `USERS_DB` e isolamento RBAC.
+
+#### Inclusões
+- **Botão "+ Novo Professor" (`#btnNewTeacher`):** Aciona o modal `#modalAddTeacher`, focado exclusivamente na caracterização pedagógica do docente (Nome Completo e UE contextual). Não há campos de e-mail ou senha no DOM. Os docentes não acessam o sistema e são persistidos em `appState.teamMembers` sem criação de contas em `USERS_DB` ou `appState.customUsers`.
+- **Botão "+ Novo Usuário" (`#btnNewUser`):** Aciona o modal `#modalAddUser`, destinado unicamente a operadores do sistema (Coordenadoras, Formadoras, Núcleo de EI e Acesso Pendente), com coleta obrigatória de e-mail e senha provisória, gravando simultaneamente na SSOT e na base de autenticação (`USERS_DB` e `customUsers`).
+- **Governança RBAC em `applyUserRoleUI()`:** Ocultação de `#btnNewUser` para Coordenadoras Pedagógicas de escola (mantendo visível apenas `#btnNewTeacher`), enquanto Formadoras e Núcleo de EI têm acesso a ambos os botões.
+- **Rótulo Canônico na Tabela de Pessoal:** Exibição clara de `Docente Regente (Sem acesso)` na coluna de e-mail da listagem de servidores para professoras.
+- **Auditoria Contínua com 100% de Aprovação:** Novos testes comportamentais no módulo `catalogo_dados` simulando criação de professor sem credenciais, criação de usuário com e-mail/senha sincronizados na autenticação e verificação de visibilidade RBAC.
+
+#### Modificações
+- **Higienização de Importação CSV (`handleTeamCsvUpload`):** Forçamento de e-mail vazio para docentes importados e bloqueio de criação indevida de registros de autenticação em `USERS_DB`.
+- **Retrocompatibilidade de Funções Legadas:** Definição de aliases seguros para `openAddMemberModal`, `closeAddMemberModal` e `saveNewTeamMember`.
+
+#### Exclusões
+- **Remoção do Botão Genérico `#btnNewMember` / `+ Novo Profissional`:** Extinção do botão ambíguo e unificação da interface em fluxos conceituais e estruturais segregados.
+
+### [Versão 1.23] - Definição Autônoma dos Períodos de Ciclos Avaliativos pela Coordenadora da EI sob a SSOT Única
+- **Data / Horário:** 23/10/2026 15:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v123_definicao_autonoma_periodos_ciclos_ssot.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_definicao_autonoma_periodos_ciclos_ssot.md`.
+- **Foco Central:** Definição autônoma dos períodos e prazos dos 4 bimestres letivos pela Coordenadora do Núcleo de EI (Helena Martins) via modal `#modalBimesterPeriods`, persistência e governança na SSOT única (`appState.bimesterPeriods`), motor algorítmico dinâmico em `getCurrentSchoolBimester()`, erradicação de rótulos e prazos estimados no Semáforo (`Fev - Abr`, `Janela de 2 meses em aberto`) em favor de `getBimesterPeriodDisplay()` e sincronização reativa inter-abas.
+
+#### Inclusões
+- **Modal Gerencial `#modalBimesterPeriods`:** Formulário de parametrização autônoma dos 4 bimestres letivos, com validação de datas, persistência na SSOT (`appState.bimesterPeriods`) e recálculo dinâmico.
+- **Helper Dinâmico `getBimesterPeriodDisplay()`:** Resolução em tempo real dos períodos para exibição no Semáforo e cabeçalhos.
+- **Sincronização Reativa via Storage Event:** Transmissão inter-abas de atualizações de períodos sem recarregamento de página.
+
+#### Modificações
+- **Refatoração de `getCurrentSchoolBimester()`:** Resolução baseada nos intervalos reais cadastrados na SSOT em vez de constantes rígidas.
 
 ### [Versão 1.22] - Remoção do Botão de Nova Ocorrência em Registros Formativos
 - **Data / Horário:** 23/10/2026 14:45

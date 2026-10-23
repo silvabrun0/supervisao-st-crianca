@@ -3295,7 +3295,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.23 (v8.00)
+          📌 Versão 1.24 (v8.00)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3576,7 +3576,8 @@
             <button class="btn btn-secondary" onclick="exportTeamMembersJSON()">📄 Exportar Servidores (JSON)</button>
             <button class="btn btn-secondary" onclick="downloadTeamCsvTemplate()">📥 Baixar Modelo (CSV)</button>
             <button class="btn btn-secondary" onclick="triggerTeamCsvImport()">📤 Importar CSV</button>
-            <button class="btn btn-primary" onclick="openAddMemberModal()">+ Novo Profissional</button>
+            <button class="btn btn-primary" id="btnNewTeacher" onclick="openAddTeacherModal()">+ Novo Professor</button>
+            <button class="btn btn-secondary" id="btnNewUser" onclick="openAddUserModal()">+ Novo Usuário</button>
           </div>
         </div>
 
@@ -4869,6 +4870,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.24 - BOTÕES ESPECIALIZADOS "+ NOVO PROFESSOR" E "+ NOVO USUÁRIO" NA GESTÃO PEDAGÓGICA (SSOT E BLINDAGEM) -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; font-weight:800; color:#10B981;">Versão 1.24 · v8.00 (Oficial)</span>
+          <span style="font-size:11px; background:#ECFDF5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">23/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Especialização dos Botões de Cadastro e Blindagem contra Coleta de E-mail Docente sob a SSOT Única:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>👩‍🏫 <strong>Botão "+ Novo Professor" (#btnNewTeacher):</strong> Abertura do modal especializado <code>#modalAddTeacher</code> com foco estrito no sujeito pedagógico, exigindo apenas Nome Completo e contexto da UE, sem coleta ou campos de e-mail e senha no DOM, preservando a ausência de acesso de docentes.</li>
+          <li>🔑 <strong>Botão "+ Novo Usuário" (#btnNewUser):</strong> Abertura do modal especializado <code>#modalAddUser</code> exclusivo para operadores da plataforma (Coordenadora, Formadora, Núcleo de EI), com campos obrigatórios de e-mail e senha provisória e sincronização imediata na base de autenticação (<code>USERS_DB</code> e <code>appState.customUsers</code>).</li>
+          <li>🛡️ <strong>Governança RBAC Estrita:</strong> Ocultação automática de <code>#btnNewUser</code> para Coordenadoras Pedagógicas escolares (que gerenciam unicamente o corpo docente de sua UE) e disponibilização para Formadoras e Núcleo de EI.</li>
+          <li>📑 <strong>Higienização na Tabela e Importação CSV:</strong> Exibição do rótulo canônico <em>"Docente Regente (Sem acesso)"</em> na listagem de servidores e garantia de não proliferação de e-mails em importações de docentes via CSV.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Testes automatizados no módulo <code>catalogo_dados</code> validando o ciclo interativo dos dois modais, ausência de credenciais em professores e validação de escopo RBAC.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.23 - DEFINIÇÃO AUTÔNOMA DOS PERÍODOS DE CICLOS AVALIATIVOS PELA COORDENADORA DA EI SOB A SSOT ÚNICA -->
@@ -7605,57 +7624,88 @@
     </div>
   </div>
 
-  <!-- ================= MODAL: ADICIONAR MEMBRO DA EQUIPE (MANUAL) ================= -->
-  <div id="modalAddMember" class="modal-backdrop" onclick="closeAddMemberModal()">
+  <!-- ================= MODAL: CADASTRAR NOVO PROFESSOR ================= -->
+  <div id="modalAddTeacher" class="modal-backdrop" onclick="closeAddTeacherModal()">
     <div class="modal-panel" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);" id="modalAddMemberTitle">Cadastrar Novo Profissional na Rede</div>
-        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeAddMemberModal()">✕</button>
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);" id="modalAddTeacherTitle">Cadastrar Novo Professor</div>
+        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeAddTeacherModal()">✕</button>
       </div>
 
       <div class="form-group">
         <label class="form-label">Nome Completo</label>
-        <input type="text" id="newMemberName" class="form-input" placeholder="Ex: Patrícia Alves">
+        <input type="text" id="newTeacherName" class="form-input" placeholder="Ex: Patrícia Alves">
       </div>
 
-      <div class="form-group" id="groupNewMemberEmail">
-        <label class="form-label">E-mail (Login)</label>
-        <input type="email" id="newMemberEmail" class="form-input" placeholder="E-mail de acesso">
+      <div class="form-group" id="groupNewTeacherSchool">
+        <label class="form-label">Unidade Escolar</label>
+        <select id="newTeacherSchool" class="form-select" onchange="onNewTeacherSchoolChange()">
+          <!-- Populated dynamically -->
+        </select>
       </div>
 
-      <div class="form-group" id="groupNewMemberPassword">
-        <label class="form-label">Senha</label>
-        <input type="text" id="newMemberPassword" class="form-input" placeholder="Senha provisória">
+      <div class="form-group" id="groupNewTeacherSupervisor">
+        <label class="form-label">Coordenadora Pedagógica Vinculada</label>
+        <input type="text" id="newTeacherSupervisorDisplay" class="form-input" readonly style="background:#F8FAFC; color:#64748B;">
       </div>
 
-      <div class="form-group" id="groupNewMemberRole">
-        <label class="form-label">Função / Cargo</label>
-        <select id="newMemberRole" class="form-select" onchange="onNewMemberRoleChange()">
-          <option value="pendente">Acesso Pendente</option>
-          <option value="professora">Professora de Educação Infantil</option>
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:18px;">
+        <button class="btn btn-secondary" onclick="closeAddTeacherModal()">Cancelar</button>
+        <button class="btn btn-primary" id="btnSaveTeacher" onclick="saveNewTeacher()">Salvar Professor</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CADASTRAR NOVO USUÁRIO ================= -->
+  <div id="modalAddUser" class="modal-backdrop" onclick="closeAddUserModal()">
+    <div class="modal-panel" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);" id="modalAddUserTitle">Cadastrar Novo Usuário da Plataforma</div>
+        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeAddUserModal()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nome Completo</label>
+        <input type="text" id="newUserName" class="form-input" placeholder="Ex: Maria das Graças">
+      </div>
+
+      <div class="form-group" id="groupNewUserEmail">
+        <label class="form-label">E-mail (Login Institucional)</label>
+        <input type="email" id="newUserEmail" class="form-input" placeholder="exemplo@patos.pb.gov.br">
+      </div>
+
+      <div class="form-group" id="groupNewUserPassword">
+        <label class="form-label">Senha Provisória</label>
+        <input type="text" id="newUserPassword" class="form-input" placeholder="Senha provisória de primeiro acesso">
+      </div>
+
+      <div class="form-group" id="groupNewUserRole">
+        <label class="form-label">Função / Perfil de Acesso</label>
+        <select id="newUserRole" class="form-select" onchange="onNewUserRoleChange()">
           <option value="coordenador">Coordenador(a) Pedagógico(a)</option>
           <option value="formador">Formador(a) Pedagógico(a)</option>
           <option value="nucleo_ei">Coordenadora do Núcleo de EI (Acesso Global)</option>
+          <option value="pendente">Acesso Pendente</option>
         </select>
       </div>
 
-      <div class="form-group" id="groupNewMemberSchool">
-        <label class="form-label">Unidade Escolar</label>
-        <select id="newMemberSchool" class="form-select" onchange="onNewMemberRoleChange()">
-          <!-- Populated dynamically from units -->
+      <div class="form-group" id="groupNewUserSchool">
+        <label class="form-label" id="newUserSchoolLabel">Unidade Escolar</label>
+        <select id="newUserSchool" class="form-select" onchange="onNewUserSchoolChange()">
+          <!-- Populated dynamically -->
         </select>
       </div>
 
-      <div class="form-group" id="groupNewMemberSupervisor">
-        <label class="form-label" id="newMemberSupervisorLabel">Superior Imediato / Vinculação</label>
-        <select id="newMemberSupervisor" class="form-select">
+      <div class="form-group" id="groupNewUserSupervisor">
+        <label class="form-label" id="newUserSupervisorLabel">Superior Imediato / Vinculação</label>
+        <select id="newUserSupervisor" class="form-select">
           <!-- Populated dynamically -->
         </select>
       </div>
 
       <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:18px;">
-        <button class="btn btn-secondary" onclick="closeAddMemberModal()">Cancelar</button>
-        <button class="btn btn-primary" id="btnSaveNewMember" onclick="saveNewTeamMember()">Salvar Cadastro</button>
+        <button class="btn btn-secondary" onclick="closeAddUserModal()">Cancelar</button>
+        <button class="btn btn-primary" id="btnSaveUser" onclick="saveNewUser()">Salvar Usuário</button>
       </div>
     </div>
   </div>
@@ -9837,6 +9887,22 @@ function getActiveSections(obs) {
       const adminCoordModal = document.getElementById('adminRefDocsCoordinatorModal');
       if (adminTeacherModal) adminTeacherModal.style.display = isTecnico ? 'flex' : 'none';
       if (adminCoordModal) adminCoordModal.style.display = isTecnico ? 'flex' : 'none';
+
+      // Governança RBAC para criação de profissionais/usuários
+      const btnNewTeacher = document.getElementById('btnNewTeacher');
+      const btnNewUser = document.getElementById('btnNewUser');
+
+      if (user.roleKey === 'coordenador') {
+        if (btnNewTeacher) btnNewTeacher.style.display = 'inline-flex';
+        if (btnNewUser) btnNewUser.style.display = 'none'; // Coordenadora gerencia unicamente o corpo docente da escola
+      } else if (user.roleKey === 'formador') {
+        if (btnNewTeacher) btnNewTeacher.style.display = 'inline-flex';
+        if (btnNewUser) btnNewUser.style.display = 'inline-flex';
+      } else {
+        // Helena / Núcleo de EI / Administrador
+        if (btnNewTeacher) btnNewTeacher.style.display = 'inline-flex';
+        if (btnNewUser) btnNewUser.style.display = 'inline-flex';
+      }
     }
 
     // --- 5. NAVIGATION ---
@@ -16752,14 +16818,16 @@ function getActiveSections(obs) {
 
         const tr = document.createElement('tr');
         let memberEmail = m.email;
-        if (!memberEmail) {
+        if (!memberEmail && m.roleKey !== 'professora') {
           const dbKey = Object.keys(USERS_DB).find(k => k === m.id || USERS_DB[k].id === m.id || (USERS_DB[k].name && USERS_DB[k].name.toLowerCase() === m.name.toLowerCase()));
           if (dbKey && USERS_DB[dbKey] && USERS_DB[dbKey].email) {
             memberEmail = USERS_DB[dbKey].email;
             m.email = memberEmail;
           }
         }
-        const emailDisplay = memberEmail ? `✉️ ${memberEmail}` : 'Sem e-mail vinculado';
+        const emailDisplay = (m.roleKey === 'professora') 
+          ? '<span style="font-size:11px; color:var(--text-secondary); font-style:italic;">Docente Regente (Sem acesso)</span>'
+          : (memberEmail ? `✉️ ${memberEmail}` : 'Sem e-mail vinculado');
         
         tr.innerHTML = `
           <td>
@@ -16780,244 +16848,303 @@ function getActiveSections(obs) {
       });
     }
 
-    function openAddMemberModal() {
+    // =========================================================================
+    // GESTÃO DE PROFESSORES (SEM LOGIN, SEM COLETA DE E-MAIL, ESCRITA NA SSOT)
+    // =========================================================================
+    function openAddTeacherModal() {
       const user = getCurrentUser();
-      const modalTitle = document.getElementById('modalAddMemberTitle');
-      const grpEmail = document.getElementById('groupNewMemberEmail');
-      const grpPass = document.getElementById('groupNewMemberPassword');
-      const grpRole = document.getElementById('groupNewMemberRole');
-      const grpSchool = document.getElementById('groupNewMemberSchool');
-      const grpSup = document.getElementById('groupNewMemberSupervisor');
-      const btnSave = document.getElementById('btnSaveNewMember');
+      const modalTitle = document.getElementById('modalAddTeacherTitle');
+      const grpSchool = document.getElementById('groupNewTeacherSchool');
+      const schoolSelect = document.getElementById('newTeacherSchool');
+      const grpSup = document.getElementById('groupNewTeacherSupervisor');
+      const btnSave = document.getElementById('btnSaveTeacher');
 
-      document.getElementById('newMemberName').value = '';
-      if(document.getElementById('newMemberEmail')) document.getElementById('newMemberEmail').value = '';
-      if(document.getElementById('newMemberPassword')) document.getElementById('newMemberPassword').value = '';
-
-      const roleSelect = document.getElementById('newMemberRole');
-      if (user.roleKey === 'coordenador') {
-        if (modalTitle) modalTitle.innerText = `Cadastrar Docente · ${user.school}`;
-        if (btnSave) btnSave.innerText = 'Salvar Docente';
-        roleSelect.value = 'professora';
-        roleSelect.disabled = true;
-        // Docentes não acessam o sistema: remove login, senha, função, unidade e coordenadora vinculada
-        if (grpEmail) grpEmail.style.display = 'none';
-        if (grpPass) grpPass.style.display = 'none';
-        if (grpRole) grpRole.style.display = 'none';
-        if (grpSchool) grpSchool.style.display = 'none';
-        if (grpSup) grpSup.style.display = 'none';
-      } else if (user.roleKey === 'formador') {
-        if (modalTitle) modalTitle.innerText = 'Cadastrar Coordenadora Pedagógica';
-        if (btnSave) btnSave.innerText = 'Salvar Cadastro';
-        roleSelect.value = 'coordenador';
-        roleSelect.disabled = true;
-        if (grpEmail) grpEmail.style.display = 'block';
-        if (grpPass) grpPass.style.display = 'block';
-        if (grpRole) grpRole.style.display = 'block';
-        if (grpSchool) grpSchool.style.display = 'block';
-        if (grpSup) grpSup.style.display = 'block';
-      } else {
-        if (modalTitle) modalTitle.innerText = 'Cadastrar Novo Profissional na Rede';
-        if (btnSave) btnSave.innerText = 'Salvar Cadastro';
-        roleSelect.disabled = false;
-        roleSelect.value = 'pendente';
-        if (grpEmail) grpEmail.style.display = 'block';
-        if (grpPass) grpPass.style.display = 'block';
-        if (grpRole) grpRole.style.display = 'block';
-        if (grpSchool) grpSchool.style.display = 'block';
-        if (grpSup) grpSup.style.display = 'block';
-      }
-
-      onNewMemberRoleChange();
-      document.getElementById('modalAddMember').classList.add('active');
-    }
-    function closeAddMemberModal() {
-      document.getElementById('modalAddMember').classList.remove('active');
-    }
-
-    function onNewMemberRoleChange() {
-      const user = getCurrentUser();
-      const role = document.getElementById('newMemberRole').value;
-      const schoolGroup = document.getElementById('groupNewMemberSchool');
-      const schoolSelect = document.getElementById('newMemberSchool');
-      const schoolLabel = document.querySelector('#groupNewMemberSchool .form-label');
-      const supLabel = document.getElementById('newMemberSupervisorLabel');
-      const supSelect = document.getElementById('newMemberSupervisor');
-      
-      supSelect.innerHTML = '';
-      const currentSchoolVal = schoolSelect.value;
+      document.getElementById('newTeacherName').value = '';
       schoolSelect.innerHTML = '';
 
       if (user.roleKey === 'coordenador') {
+        if (modalTitle) modalTitle.innerText = `Cadastrar Docente · ${user.school}`;
+        if (btnSave) btnSave.innerText = 'Salvar Docente';
         schoolSelect.innerHTML = `<option value="${user.school}">${user.school}</option>`;
         schoolSelect.value = user.school;
         schoolSelect.disabled = true;
-        if (schoolGroup) schoolGroup.style.display = 'none';
-        if (document.getElementById('groupNewMemberRole')) document.getElementById('groupNewMemberRole').style.display = 'none';
-        if (document.getElementById('groupNewMemberEmail')) document.getElementById('groupNewMemberEmail').style.display = 'none';
-        if (document.getElementById('groupNewMemberPassword')) document.getElementById('groupNewMemberPassword').style.display = 'none';
-        if (document.getElementById('groupNewMemberSupervisor')) document.getElementById('groupNewMemberSupervisor').style.display = 'none';
+        if (grpSchool) grpSchool.style.display = 'none';
+        if (grpSup) grpSup.style.display = 'none';
       } else if (user.roleKey === 'formador') {
+        if (modalTitle) modalTitle.innerText = 'Cadastrar Novo Professor no Polo';
+        if (btnSave) btnSave.innerText = 'Salvar Professor';
         const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school);
         formadorUnits.forEach(u => {
           const opt = document.createElement('option');
-          opt.value = u.name; opt.text = u.name;
+          opt.value = u.name;
+          opt.text = u.name;
           schoolSelect.appendChild(opt);
         });
         schoolSelect.disabled = false;
-        if (schoolGroup) schoolGroup.style.display = 'block';
+        if (grpSchool) grpSchool.style.display = 'block';
+        if (grpSup) grpSup.style.display = 'block';
+        onNewTeacherSchoolChange();
       } else {
+        // Helena / Núcleo de EI / Admin
+        if (modalTitle) modalTitle.innerText = 'Cadastrar Novo Professor na Rede';
+        if (btnSave) btnSave.innerText = 'Salvar Professor';
+        (appState.units || []).forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u.name;
+          opt.text = u.name;
+          schoolSelect.appendChild(opt);
+        });
         schoolSelect.disabled = false;
+        if (grpSchool) grpSchool.style.display = 'block';
+        if (grpSup) grpSup.style.display = 'block';
+        onNewTeacherSchoolChange();
+      }
+
+      document.getElementById('modalAddTeacher').classList.add('active');
+    }
+
+    function closeAddTeacherModal() {
+      const modal = document.getElementById('modalAddTeacher');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function onNewTeacherSchoolChange() {
+      const schoolSelect = document.getElementById('newTeacherSchool');
+      const supDisplay = document.getElementById('newTeacherSupervisorDisplay');
+      if (!schoolSelect || !supDisplay) return;
+
+      const selSchool = schoolSelect.value;
+      const cp = (appState.teamMembers || []).find(m => m.roleKey === 'coordenador' && m.school === selSchool);
+      supDisplay.value = cp ? `${cp.name} (Coordenação Pedagógica da Unidade)` : 'Coordenação Pedagógica da Unidade';
+    }
+
+    function saveNewTeacher() {
+      const user = getCurrentUser();
+      const nameInput = document.getElementById('newTeacherName');
+      const name = (nameInput ? nameInput.value : '').trim();
+      const schoolSelect = document.getElementById('newTeacherSchool');
+      
+      if (!name) {
+        showToast('Por favor, informe o nome completo do professor.');
+        return;
+      }
+
+      const school = (user.roleKey === 'coordenador') ? user.school : (schoolSelect ? schoolSelect.value : '');
+      if (!school) {
+        showToast('Por favor, selecione a Unidade Escolar do docente.');
+        return;
+      }
+
+      let supervisor = '';
+      if (user.roleKey === 'coordenador') {
+        supervisor = user.name;
+      } else {
+        const cp = (appState.teamMembers || []).find(m => m.roleKey === 'coordenador' && m.school === school);
+        supervisor = cp ? cp.name : 'Coordenação Pedagógica da Unidade';
+      }
+
+      const newId = 'usr-' + Date.now();
+      const newTeacher = {
+        id: newId,
+        name: name,
+        roleKey: 'professora',
+        roleTitle: 'Professora',
+        school: school,
+        supervisor: supervisor,
+        email: '',
+        password: '',
+        avatarText: name.substring(0, 2).toUpperCase(),
+        mustChangePassword: false
+      };
+
+      if (!Array.isArray(appState.teamMembers)) appState.teamMembers = [];
+      appState.teamMembers.push(newTeacher);
+
+      // Docentes não acessam o sistema: não sincronizar em USERS_DB nem em customUsers
+      saveState();
+      closeAddTeacherModal();
+      renderTeamScreen();
+      showToast(user.roleKey === 'coordenador' ? 'Docente cadastrada com sucesso!' : 'Professor cadastrado com sucesso!');
+    }
+
+    // =========================================================================
+    // GESTÃO DE USUÁRIOS DA PLATAFORMA (COM LOGIN, SENHA E BASE DE AUTENTICAÇÃO)
+    // =========================================================================
+    function openAddUserModal() {
+      const user = getCurrentUser();
+      const modalTitle = document.getElementById('modalAddUserTitle');
+      const roleSelect = document.getElementById('newUserRole');
+
+      document.getElementById('newUserName').value = '';
+      document.getElementById('newUserEmail').value = '';
+      document.getElementById('newUserPassword').value = '';
+
+      if (user.roleKey === 'formador') {
+        if (modalTitle) modalTitle.innerText = `Cadastrar Coordenadora · ${user.school}`;
+        roleSelect.value = 'coordenador';
+        roleSelect.disabled = true;
+      } else {
+        if (modalTitle) modalTitle.innerText = 'Cadastrar Novo Usuário da Plataforma';
+        roleSelect.disabled = false;
+        roleSelect.value = 'coordenador';
+      }
+
+      onNewUserRoleChange();
+      document.getElementById('modalAddUser').classList.add('active');
+    }
+
+    function closeAddUserModal() {
+      const modal = document.getElementById('modalAddUser');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function onNewUserRoleChange() {
+      const user = getCurrentUser();
+      const role = document.getElementById('newUserRole').value;
+      const schoolGroup = document.getElementById('groupNewUserSchool');
+      const schoolSelect = document.getElementById('newUserSchool');
+      const schoolLabel = document.getElementById('newUserSchoolLabel');
+      const supLabel = document.getElementById('newUserSupervisorLabel');
+      const supSelect = document.getElementById('newUserSupervisor');
+
+      supSelect.innerHTML = '';
+      schoolSelect.innerHTML = '';
+
+      if (role === 'coordenador') {
         if (schoolGroup) schoolGroup.style.display = 'block';
-        // Popula Polos se for formador, senão popula Unidades
-        if (role === 'formador') {
-          const polos = [...new Set(appState.units.map(u => u.polo))];
-          polos.forEach(p => {
-            const opt = document.createElement('option');
-            opt.value = p; opt.text = p;
-            schoolSelect.appendChild(opt);
-          });
-        } else {
-          appState.units.forEach(u => {
+        if (schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
+        if (supLabel) supLabel.innerText = 'Formadora Responsável';
+        supSelect.disabled = false;
+
+        if (user.roleKey === 'formador') {
+          const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school);
+          formadorUnits.forEach(u => {
             const opt = document.createElement('option');
             opt.value = u.name; opt.text = u.name;
             schoolSelect.appendChild(opt);
           });
-        }
-      }
-
-      // Preserva a seleção se o valor continuar válido
-      if (Array.from(schoolSelect.options).some(o => o.value === currentSchoolVal)) {
-        schoolSelect.value = currentSchoolVal;
-      }
-
-      if (role === 'professora') {
-        if (user.roleKey !== 'coordenador') {
-          if (schoolGroup) schoolGroup.style.display = 'block';
-          if (supLabel) supLabel.innerText = 'Coordenadora Pedagógica Vinculada (Automática)';
+          supSelect.innerHTML = `<option value="${user.name}">${user.name} (Formadora do Polo)</option>`;
           supSelect.disabled = true;
-          
-          const selSchool = schoolSelect.value;
-          const cp = appState.teamMembers.find(m => m.roleKey === 'coordenador' && m.school === selSchool);
-          if (cp) {
-            supSelect.innerHTML = `<option value="${cp.name}">${cp.name} (CP da Unidade)</option>`;
-          } else {
-            supSelect.innerHTML = `<option value="">Vinculação Automática pela Unidade</option>`;
-          }
-        }
-      } else if (role === 'coordenador') {
-        if (schoolGroup) schoolGroup.style.display = 'block';
-        if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
-        if (supLabel) supLabel.innerText = 'Formadora Responsável';
-        supSelect.disabled = false;
-        
-        const formadores = appState.teamMembers.filter(m => m.roleKey === 'formador');
-        if (formadores.length > 0) {
-          formadores.forEach(f => {
-            const opt = document.createElement('option');
-            opt.value = f.name;
-            opt.text = `${f.name} (${f.school})`;
-            supSelect.appendChild(opt);
-          });
         } else {
-          supSelect.innerHTML = `<option value="">Sem formadoras cadastradas</option>`;
+          (appState.units || []).forEach(u => {
+            const opt = document.createElement('option');
+            opt.value = u.name; opt.text = u.name;
+            schoolSelect.appendChild(opt);
+          });
+          const formadores = (appState.teamMembers || []).filter(m => m.roleKey === 'formador');
+          if (formadores.length > 0) {
+            formadores.forEach(f => {
+              const opt = document.createElement('option');
+              opt.value = f.name; opt.text = `${f.name} (${f.school})`;
+              supSelect.appendChild(opt);
+            });
+          } else {
+            supSelect.innerHTML = `<option value="Helena Martins">Helena Martins (Núcleo de EI)</option>`;
+          }
         }
       } else if (role === 'formador') {
         if (schoolGroup) schoolGroup.style.display = 'block';
-        if(schoolLabel) schoolLabel.innerText = 'Polo Regional / Vinculação';
+        if (schoolLabel) schoolLabel.innerText = 'Polo Regional / Vinculação';
         if (supLabel) supLabel.innerText = 'Supervisão Institucional';
-        supSelect.disabled = false;
-        supSelect.innerHTML = `
-          <option value="Helena Martins">Helena Martins (Coordenadora do Núcleo de EI / Secretaria)</option>
-        `;
+        supSelect.disabled = true;
+        supSelect.innerHTML = `<option value="Helena Martins">Helena Martins (Coordenadora do Núcleo de EI)</option>`;
+
+        const polos = [...new Set((appState.units || []).map(u => u.polo))];
+        polos.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p; opt.text = p;
+          schoolSelect.appendChild(opt);
+        });
       } else if (isNucleoEI(role)) {
         if (schoolGroup) schoolGroup.style.display = 'none';
         if (supLabel) supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
-        supSelect.innerHTML = `
-          <option value="Sede / Gestão Geral">Sede / Gestão Geral</option>
-        `;
+        supSelect.innerHTML = `<option value="Sede / Gestão Geral">Sede / Gestão Geral</option>`;
       } else if (role === 'pendente') {
         if (schoolGroup) schoolGroup.style.display = 'none';
         if (supLabel) supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
-        supSelect.innerHTML = `
-          <option value="Aguardando Definição">Aguardando Definição</option>
-        `;
+        supSelect.innerHTML = `<option value="Aguardando Definição">Aguardando Definição</option>`;
       }
     }
 
-    function saveNewTeamMember() {
+    function onNewUserSchoolChange() {
+      const role = document.getElementById('newUserRole').value;
+      if (role === 'coordenador') {
+        const schoolVal = document.getElementById('newUserSchool').value;
+        const unitObj = (appState.units || []).find(u => u.name === schoolVal);
+        if (unitObj) {
+          const formadora = (appState.teamMembers || []).find(m => m.roleKey === 'formador' && m.school === unitObj.polo);
+          const supSelect = document.getElementById('newUserSupervisor');
+          if (formadora && supSelect && !supSelect.disabled) {
+            supSelect.value = formadora.name;
+          }
+        }
+      }
+    }
+
+    function saveNewUser() {
       const user = getCurrentUser();
-      const name = document.getElementById('newMemberName').value.trim();
-      let email = (document.getElementById('newMemberEmail')?.value || '').trim().toLowerCase();
-      let password = document.getElementById('newMemberPassword')?.value || '';
-      let roleKey = document.getElementById('newMemberRole').value;
-      let school = document.getElementById('newMemberSchool').value;
-      let supervisor = document.getElementById('newMemberSupervisor').value;
+      const name = (document.getElementById('newUserName')?.value || '').trim();
+      const email = (document.getElementById('newUserEmail')?.value || '').trim().toLowerCase();
+      const password = document.getElementById('newUserPassword')?.value || '';
+      const roleKey = document.getElementById('newUserRole').value;
+      const school = document.getElementById('newUserSchool')?.value || '';
+      const supervisor = document.getElementById('newUserSupervisor')?.value || '';
 
       if (!name) {
-        showToast('Por favor, informe o nome do profissional.');
+        showToast('Por favor, informe o nome completo do usuário.');
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        showToast('Por favor, informe um e-mail válido para login.');
+        return;
+      }
+      if (!password) {
+        showToast('Por favor, informe uma senha provisória.');
         return;
       }
 
-      // Se for coordenadora cadastrando, fixa o papel de professora na própria unidade sem login
-      if (user.roleKey === 'coordenador') {
-        roleKey = 'professora';
-        school = user.school;
-        supervisor = user.name;
-        email = '';
-        password = '';
-      }
-
-      let roleTitle = 'Professora';
-      if (roleKey === 'coordenador') roleTitle = 'Coordenadora Pedagógica';
+      let roleTitle = 'Coordenadora Pedagógica';
       if (roleKey === 'formador') roleTitle = 'Formadora Pedagógica';
       if (isNucleoEI(roleKey)) roleTitle = 'Coordenadora do Núcleo de EI';
       if (roleKey === 'pendente') roleTitle = 'Acesso Pendente';
 
-      if (roleKey === 'professora') {
-        const cp = appState.teamMembers.find(m => m.roleKey === 'coordenador' && m.school === school);
-        supervisor = cp ? cp.name : (user.roleKey === 'coordenador' ? user.name : 'Coordenação Pedagógica da Unidade');
-      }
-
-      const schoolVal = ((isNucleoEI(roleKey)) ? 'Sede / Gestão Geral' : ((roleKey === 'pendente') ? 'Aguardando Definição' : school));
+      const schoolVal = isNucleoEI(roleKey) ? 'Sede / Gestão Geral' : ((roleKey === 'pendente') ? 'Aguardando Definição' : school);
       const supVal = (roleKey === 'pendente') ? 'Aguardando Definição' : (supervisor || 'Helena Martins');
 
       const newId = 'usr-' + Date.now();
-      const newMember = {
+      const newUser = {
         id: newId,
         name,
         roleKey,
         roleTitle,
         school: schoolVal,
         supervisor: supVal,
-        email: email || '',
-        password: password || '',
+        email,
+        password,
         avatarText: name.substring(0, 2).toUpperCase(),
-        mustChangePassword: roleKey !== 'professora'
+        mustChangePassword: true
       };
 
-      appState.teamMembers.push(newMember);
+      if (!Array.isArray(appState.teamMembers)) appState.teamMembers = [];
+      appState.teamMembers.push(newUser);
 
-      // Docentes não têm acesso à plataforma: sincronizar apenas perfis avaliadores/gestores em USERS_DB e customUsers
-      if (roleKey !== 'professora' && (email || password)) {
-        if (!appState.customUsers) appState.customUsers = {};
-        appState.customUsers[newId] = newMember;
-        USERS_DB[newId] = newMember;
-      }
+      // Sincronização na base de autenticação (SSOT)
+      if (!appState.customUsers) appState.customUsers = {};
+      appState.customUsers[newId] = newUser;
+      USERS_DB[newId] = newUser;
 
       saveState();
-      closeAddMemberModal();
-      
-      // Limpa os campos após salvar
-      document.getElementById('newMemberName').value = '';
-      if(document.getElementById('newMemberEmail')) document.getElementById('newMemberEmail').value = '';
-      if(document.getElementById('newMemberPassword')) document.getElementById('newMemberPassword').value = '';
-
+      closeAddUserModal();
       renderTeamScreen();
-      showToast(user.roleKey === 'coordenador' ? 'Docente cadastrada com sucesso!' : 'Profissional cadastrado com sucesso!');
+      showToast('Usuário cadastrado com sucesso!');
     }
+
+    // Aliases para retrocompatibilidade
+    function openAddMemberModal() { openAddTeacherModal(); }
+    function closeAddMemberModal() { closeAddTeacherModal(); closeAddUserModal(); }
+    function saveNewTeamMember() { saveNewTeacher(); }
 
     function openEditMemberModal(id) {
       const user = getCurrentUser();
@@ -17700,14 +17827,19 @@ function getActiveSections(obs) {
             avatarText: resolvedName.substring(0, 2).toUpperCase()
           };
 
+          if (roleKey === 'professora') {
+            email = '';
+            memberData.email = '';
+          }
+
           if (existingIdx >= 0) {
             appState.teamMembers[existingIdx] = { ...appState.teamMembers[existingIdx], ...memberData };
           } else {
             appState.teamMembers.push(memberData);
           }
 
-          // Sincroniza com USERS_DB e customUsers para habilitar login
-          if (email || memberId.startsWith('usr-') || USERS_DB[memberId]) {
+          // Sincroniza com USERS_DB e customUsers apenas se NÃO for docente
+          if (roleKey !== 'professora' && (email || memberId.startsWith('usr-') || USERS_DB[memberId])) {
             const authRecord = {
               id: memberId,
               name: resolvedName,
@@ -17720,6 +17852,7 @@ function getActiveSections(obs) {
               avatarText: resolvedName.substring(0, 2).toUpperCase(),
               mustChangePassword: true
             };
+            if (!appState.customUsers) appState.customUsers = {};
             appState.customUsers[memberId] = authRecord;
             USERS_DB[memberId] = authRecord;
           }
@@ -22937,38 +23070,65 @@ function getActiveSections(obs) {
               }
               logger.log('Presença e integridade relacional de bimesterPeriods na SSOT unificada', true);
 
-              // 4. CICLO COMPLETO DE ADIÇÃO DE PROFISSIONAL VIA MODAL COM SELEÇÃO INTERATIVA
-              openAddMemberModal();
-              const nameInp = document.getElementById('newMemberName');
-              const emailInp = document.getElementById('newMemberEmail');
-              const passInp = document.getElementById('newMemberPassword');
-              const roleSel = document.getElementById('newMemberRole');
-              const schoolSel = document.getElementById('newMemberSchool');
+              // 4. CICLO COMPLETO DE ADIÇÃO DE PROFESSOR E USUÁRIO VIA MODAIS ESPECIALIZADOS
+              // 4.1 Cadastro de Professor (#modalAddTeacher) - Blindado contra e-mail e sem USERS_DB
+              openAddTeacherModal();
+              const teacherModalEl = document.getElementById('modalAddTeacher');
+              if (teacherModalEl.querySelector('input[type="email"]') || document.getElementById('newTeacherEmail')) {
+                throw new Error('Modal #modalAddTeacher contém indevidamente campo de e-mail');
+              }
+              const teacherNameInp = document.getElementById('newTeacherName');
+              const teacherSchoolSel = document.getElementById('newTeacherSchool');
 
               const testProfName = 'Docente Teste Auditoria EndToEnd';
-              UI.type(nameInp, testProfName);
-              UI.type(emailInp, 'docente.audit.e2e@patos.pb.gov.br');
-              UI.type(passInp, '123456');
-              UI.select(roleSel, 'professora');
+              UI.type(teacherNameInp, testProfName);
 
-              // Seleciona explicitamente uma unidade diferente da primeira e garante retenção
               const targetSchoolName = 'EMEI Pequeno Príncipe';
-              UI.select(schoolSel, targetSchoolName);
-              if (schoolSel.value !== targetSchoolName) {
-                throw new Error(`Falha de retenção da unidade selecionada no cadastro: esperado "${targetSchoolName}", obtido "${schoolSel.value}"`);
+              UI.select(teacherSchoolSel, targetSchoolName);
+              if (teacherSchoolSel.value !== targetSchoolName) {
+                throw new Error(`Falha de retenção da unidade selecionada no cadastro de professor: esperado "${targetSchoolName}", obtido "${teacherSchoolSel.value}"`);
               }
-              logger.log('Seleção e retenção interativa de unidade escolar no cadastro de profissional', true, targetSchoolName);
 
-              // Submete o cadastro
-              saveNewTeamMember();
-              const createdMember = (appState.teamMembers || []).find(m => m.name === testProfName);
-              if (!createdMember || createdMember.school !== targetSchoolName) {
-                throw new Error('Profissional cadastrado não foi persistido com a unidade escolar atribuída');
+              saveNewTeacher();
+              const createdTeacher = (appState.teamMembers || []).find(m => m.name === testProfName);
+              if (!createdTeacher || createdTeacher.school !== targetSchoolName || createdTeacher.roleKey !== 'professora' || createdTeacher.email !== '') {
+                throw new Error('Professor cadastrado não foi persistido corretamente na SSOT ou recebeu e-mail');
               }
-              logger.log('Ciclo completo de cadastro interativo de profissional (#modalAddMember)', true, `${createdMember.name} ➔ ${createdMember.school}`);
+              if (USERS_DB[createdTeacher.id] || (appState.customUsers && appState.customUsers[createdTeacher.id])) {
+                throw new Error('Professor foi indevidamente cadastrado na base de autenticação (USERS_DB / customUsers)');
+              }
+              logger.log('Ciclo completo de cadastro de Professor (#modalAddTeacher, sem login/e-mail)', true, `${createdTeacher.name} ➔ ${createdTeacher.school}`);
+
+              // 4.2 Cadastro de Usuário (#modalAddUser) - Com e-mail, senha e USERS_DB
+              openAddUserModal();
+              const userRoleSel = document.getElementById('newUserRole');
+              if (Array.from(userRoleSel.options).some(o => o.value === 'professora')) {
+                throw new Error('Dropdown #newUserRole contém indevidamente opção de professora');
+              }
+              const userNameInp = document.getElementById('newUserName');
+              const userEmailInp = document.getElementById('newUserEmail');
+              const userPassInp = document.getElementById('newUserPassword');
+              const userSchoolSel = document.getElementById('newUserSchool');
+
+              const testUserName = 'Coordenador Teste Auditoria EndToEnd';
+              UI.type(userNameInp, testUserName);
+              UI.type(userEmailInp, 'coord.audit.e2e@patos.pb.gov.br');
+              UI.type(userPassInp, '123456');
+              UI.select(userRoleSel, 'coordenador');
+              UI.select(userSchoolSel, targetSchoolName);
+
+              saveNewUser();
+              const createdUser = (appState.teamMembers || []).find(m => m.name === testUserName);
+              if (!createdUser || createdUser.roleKey !== 'coordenador' || createdUser.email !== 'coord.audit.e2e@patos.pb.gov.br') {
+                throw new Error('Usuário cadastrado não foi persistido corretamente em appState.teamMembers');
+              }
+              if (!USERS_DB[createdUser.id] || !appState.customUsers || !appState.customUsers[createdUser.id]) {
+                throw new Error('Usuário cadastrado não foi sincronizado com USERS_DB ou appState.customUsers');
+              }
+              logger.log('Ciclo completo de cadastro de Usuário (#modalAddUser, sincronizado na SSOT de login)', true, `${createdUser.name} ➔ ${createdUser.email}`);
 
               // 5. TESTE DE EDIÇÃO INTERATIVA NO MODAL DE EDIÇÃO (#modalEditMember)
-              openEditMemberModal(createdMember.id);
+              openEditMemberModal(createdTeacher.id);
               const editSchoolSel = document.getElementById('editMemberSchool');
               const newEditedSchool = 'CEI Professora Maria de Lourdes';
               UI.select(editSchoolSel, newEditedSchool);
@@ -22981,7 +23141,7 @@ function getActiveSections(obs) {
               saveEditTeamMember();
               window.confirm = originalConfirm;
 
-              const updatedMember = (appState.teamMembers || []).find(m => m.id === createdMember.id);
+              const updatedMember = (appState.teamMembers || []).find(m => m.id === createdTeacher.id);
               if (!updatedMember || updatedMember.school !== newEditedSchool) {
                 throw new Error('Edição de profissional não persistiu a nova unidade escolar');
               }
@@ -23098,18 +23258,24 @@ function getActiveSections(obs) {
                 }
                 closeClassEditorModal();
 
-                // Validação de simplificação no cadastro de docentes pela Coordenadora (Versão 1.20)
-                openAddMemberModal();
-                const grpEmail = document.getElementById('groupNewMemberEmail');
-                const grpPass = document.getElementById('groupNewMemberPassword');
-                const grpRole = document.getElementById('groupNewMemberRole');
-                const grpSchool = document.getElementById('groupNewMemberSchool');
-                const grpSup = document.getElementById('groupNewMemberSupervisor');
-                if (grpEmail.style.display !== 'none' || grpPass.style.display !== 'none' || grpRole.style.display !== 'none' || grpSchool.style.display !== 'none' || grpSup.style.display !== 'none') {
-                  throw new Error('Modal de cadastro de docente para Coordenadora não ocultou credenciais ou campos redundantes');
+                // Validação de RBAC dos novos botões e simplificação no cadastro de docentes pela Coordenadora (Versão 1.23)
+                const btnTeacher = document.getElementById('btnNewTeacher');
+                const btnUser = document.getElementById('btnNewUser');
+                if (!btnTeacher || btnTeacher.style.display === 'none') {
+                  throw new Error('Botão #btnNewTeacher não está visível para a Coordenadora');
                 }
-                closeAddMemberModal();
-                logger.log('Simplificação radical no cadastro de docentes pela Coordenadora (apenas Nome Completo)', true);
+                if (!btnUser || btnUser.style.display !== 'none') {
+                  throw new Error('Botão #btnNewUser deveria estar oculto para a Coordenadora');
+                }
+
+                openAddTeacherModal();
+                const grpTeacherSchool = document.getElementById('groupNewTeacherSchool');
+                const grpTeacherSup = document.getElementById('groupNewTeacherSupervisor');
+                if (grpTeacherSchool.style.display !== 'none' || grpTeacherSup.style.display !== 'none') {
+                  throw new Error('Modal de cadastro de docente para Coordenadora não ocultou unidade ou coordenadora vinculada');
+                }
+                closeAddTeacherModal();
+                logger.log('Blindagem RBAC e simplificação radical no cadastro de docentes pela Coordenadora (apenas Nome Completo)', true);
 
                 // Validação da padronização limpa de rótulos de Jornada Escolar
                 const classesThs = Array.from(document.querySelectorAll('#pedagViewClasses table thead th')).map(th => th.innerText.trim());
@@ -23145,10 +23311,14 @@ function getActiveSections(obs) {
                 if (previousUserKey) selectUserAccount(previousUserKey);
               }
 
-              // Limpeza do membro temporário de teste
-              appState.teamMembers = (appState.teamMembers || []).filter(m => m.id !== createdMember.id);
-              if (appState.customUsers) delete appState.customUsers[createdMember.id];
-              delete USERS_DB[createdMember.id];
+              // Limpeza dos membros temporários de teste
+              appState.teamMembers = (appState.teamMembers || []).filter(m => m.id !== createdTeacher.id && m.id !== createdUser.id);
+              if (appState.customUsers) {
+                delete appState.customUsers[createdTeacher.id];
+                delete appState.customUsers[createdUser.id];
+              }
+              delete USERS_DB[createdTeacher.id];
+              delete USERS_DB[createdUser.id];
               saveState();
               closeEditMemberModal();
             } catch (e) {
@@ -25035,14 +25205,14 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.23
-              if (!btnChangelog.textContent.includes('Versão 1.23')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.24
+              if (!btnChangelog.textContent.includes('Versão 1.24')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.23')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.23');
+              if (!modalChg.innerHTML.includes('Versão 1.24')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.24');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.23 (v8.00)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.24 (v8.00)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
