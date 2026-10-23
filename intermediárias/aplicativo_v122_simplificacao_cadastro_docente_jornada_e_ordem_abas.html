@@ -24615,14 +24615,14 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.21
-              if (!btnChangelog.textContent.includes('Versão 1.21')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.22
+              if (!btnChangelog.textContent.includes('Versão 1.22')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.21')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.21');
+              if (!modalChg.innerHTML.includes('Versão 1.22')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.22');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.21 (v7.99)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.22 (v8.00)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
