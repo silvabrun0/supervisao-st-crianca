@@ -3295,7 +3295,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.22 (v8.00)
+          📌 Versão 1.23 (v8.00)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3409,6 +3409,9 @@
           <div class="page-subtitle" id="homeGestaoSubtitle">Administração unificada de Unidades Escolares, Polos Regionais, Servidores e Base Integral</div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;" id="homeGestaoActionsCentral">
+          <button class="btn btn-secondary" onclick="openBimesterPeriodsModal()" style="color:#0284C7; font-weight:700;" title="Definir os períodos e prazos dos 4 bimestres letivos">
+            📅 Ciclos Avaliativos & Calendário
+          </button>
           <button class="btn btn-secondary" onclick="exportFullBaseJSON()" style="color:#059669; font-weight:700;">
             💾 Exportar Base Completa (JSON)
           </button>
@@ -3761,7 +3764,7 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>Profissional / Turma</th>
+                <th>Turma / Regência Titular</th>
                 <th>Unidade Escolar / Polo</th>
                 <th>Bimestre</th>
                 <th>Data Prevista</th>
@@ -4866,6 +4869,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.23 - DEFINIÇÃO AUTÔNOMA DOS PERÍODOS DE CICLOS AVALIATIVOS PELA COORDENADORA DA EI SOB A SSOT ÚNICA -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #0284C7;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; font-weight:800; color:#0284C7;">Versão 1.23 · v8.00 (Oficial)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:#1E40AF; padding:2px 8px; border-radius:12px; font-weight:700;">23/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Definição Autônoma dos Períodos de Ciclos Avaliativos pela Coordenadora do Núcleo de EI sob a SSOT Única:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🏛️ <strong>Soberania e Autonomia da Coordenadora da EI (RBAC):</strong> Implementação do modal gerencial <code>#modalBimesterPeriods</code> com acesso exclusivo para o Núcleo de EI (Helena Martins), permitindo parametrizar e retificar as datas exatas (início e término) dos 4 bimestres letivos municipais.</li>
+          <li>🌐 <strong>Single Source of Truth (SSOT Unificada):</strong> Os períodos são armazenados no <code>appState.bimesterPeriods</code> com autocura na inicialização, inclusão mandatória no backup e exportação JSON integral (<code>exportFullBaseJSON</code>/<code>importFullBaseJSON</code>) e sincronização reativa inter-abas via evento <code>storage</code>.</li>
+          <li>🧹 <strong>Extinção Completa de Prazos e Rótulos Estimados:</strong> Erradicação de rótulos estáticos no Semáforo (<code>Fev - Abr</code>, <code>Mai - Jul</code>, etc.) em favor de helper dinâmico <code>getBimesterPeriodDisplay()</code>, e substituição da estimativa genérica <code>Janela de 2 meses em aberto</code> por datas limites precisas baseadas na SSOT.</li>
+          <li>🎯 <strong>Motor Algorítmico Dinâmico do Bimestre Corrente:</strong> Refatoração de <code>getCurrentSchoolBimester()</code> para resolver determinística e infalivelmente o bimestre com base nas janelas reais oficiais do calendário de Patos/PB.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Novos testes automatizados nos módulos <code>catalogo_dados</code>, <code>indicadores_decisao</code> e <code>navegacao_layout</code> garantindo integridade de persistência, asserções negativas no DOM e reflexo imediato no Semáforo.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.22 - REMOÇÃO DO BOTÃO INCONSISTENTE DE NOVA OCORRÊNCIA EM REGISTROS FORMATIVOS -->
@@ -7733,6 +7754,99 @@
     </div>
   </div>
 
+  <!-- ================= MODAL: CALENDÁRIO DE CICLOS AVALIATIVOS (SSOT) ================= -->
+  <div id="modalBimesterPeriods" class="modal-backdrop" onclick="closeBimesterPeriodsModal()">
+    <div class="modal-panel" style="max-width:580px;" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div>
+          <div style="font-size:17px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:8px;">
+            <span>📅</span> Ciclos Avaliativos & Prazos Oficiais (SSOT)
+          </div>
+          <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
+            Defina as datas exatas dos 4 bimestres letivos para toda a rede municipal da Educação Infantil.
+          </div>
+        </div>
+        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeBimesterPeriodsModal()">✕</button>
+      </div>
+
+      <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:12px; color:#1E40AF; line-height:1.4;">
+        🏛️ <strong>Autoridade Municipal da Coordenadora da EI:</strong> Todas as alterações salvas aqui persistem na SSOT unificada e refletem imediatamente para todas as unidades escolares, semáforos e cronogramas.
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:18px;">
+        <!-- 1º Bimestre -->
+        <div class="card" style="padding:12px; margin-bottom:0; background:#F8FAFC; border:1px solid #E2E8F0;">
+          <div style="font-size:13px; font-weight:800; color:var(--primary-dark); margin-bottom:8px;">1º Bimestre (Diagnóstico Inicial)</div>
+          <div class="grid-2col" style="gap:10px;">
+            <div>
+              <label class="form-label" style="font-size:11px;">Data Inicial</label>
+              <input type="date" id="bimPeriodStart_1" class="form-input" style="font-size:12px; padding:6px 10px;">
+            </div>
+            <div>
+              <label class="form-label" style="font-size:11px;">Data Final (Prazo Limite)</label>
+              <input type="date" id="bimPeriodEnd_1" class="form-input" style="font-size:12px; padding:6px 10px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2º Bimestre -->
+        <div class="card" style="padding:12px; margin-bottom:0; background:#F8FAFC; border:1px solid #E2E8F0;">
+          <div style="font-size:13px; font-weight:800; color:var(--primary-dark); margin-bottom:8px;">2º Bimestre</div>
+          <div class="grid-2col" style="gap:10px;">
+            <div>
+              <label class="form-label" style="font-size:11px;">Data Inicial</label>
+              <input type="date" id="bimPeriodStart_2" class="form-input" style="font-size:12px; padding:6px 10px;">
+            </div>
+            <div>
+              <label class="form-label" style="font-size:11px;">Data Final (Prazo Limite)</label>
+              <input type="date" id="bimPeriodEnd_2" class="form-input" style="font-size:12px; padding:6px 10px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 3º Bimestre -->
+        <div class="card" style="padding:12px; margin-bottom:0; background:#F8FAFC; border:1px solid #E2E8F0;">
+          <div style="font-size:13px; font-weight:800; color:var(--primary-dark); margin-bottom:8px;">3º Bimestre</div>
+          <div class="grid-2col" style="gap:10px;">
+            <div>
+              <label class="form-label" style="font-size:11px;">Data Inicial</label>
+              <input type="date" id="bimPeriodStart_3" class="form-input" style="font-size:12px; padding:6px 10px;">
+            </div>
+            <div>
+              <label class="form-label" style="font-size:11px;">Data Final (Prazo Limite)</label>
+              <input type="date" id="bimPeriodEnd_3" class="form-input" style="font-size:12px; padding:6px 10px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4º Bimestre -->
+        <div class="card" style="padding:12px; margin-bottom:0; background:#F8FAFC; border:1px solid #E2E8F0;">
+          <div style="font-size:13px; font-weight:800; color:var(--primary-dark); margin-bottom:8px;">4º Bimestre (Consolidação Anual)</div>
+          <div class="grid-2col" style="gap:10px;">
+            <div>
+              <label class="form-label" style="font-size:11px;">Data Inicial</label>
+              <input type="date" id="bimPeriodStart_4" class="form-input" style="font-size:12px; padding:6px 10px;">
+            </div>
+            <div>
+              <label class="form-label" style="font-size:11px;">Data Final (Prazo Limite)</label>
+              <input type="date" id="bimPeriodEnd_4" class="form-input" style="font-size:12px; padding:6px 10px;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <button type="button" class="btn btn-secondary" onclick="restoreDefaultBimesterPeriodsPrompt()" style="font-size:12px; color:#DC2626; border-color:#FECACA;">
+          ↺ Restaurar Padrões
+        </button>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="btn btn-secondary" onclick="closeBimesterPeriodsModal()">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="saveBimesterPeriodsSettings()">💾 Salvar Prazos na SSOT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= MODAL: LOGIN / LOGOUT EFETIVO ================= -->
   <div id="modalLoginScreen" class="modal-backdrop" style="background:#0F172A; z-index:9999;">
     <div class="modal-panel" style="max-width:400px; text-align:center; padding:32px 24px;">
@@ -8529,6 +8643,14 @@ function getActiveSections(obs) {
       }
     ];
 
+    // --- PILAR 15: PERÍODOS OFICIAIS DOS CICLOS AVALIATIVOS (SSOT) ---
+    const DEFAULT_BIMESTER_PERIODS = {
+      '1º Bimestre': { startDate: '2026-02-02', endDate: '2026-04-30', label: '1º Bimestre' },
+      '2º Bimestre': { startDate: '2026-05-04', endDate: '2026-07-31', label: '2º Bimestre' },
+      '3º Bimestre': { startDate: '2026-08-03', endDate: '2026-10-31', label: '3º Bimestre' },
+      '4º Bimestre': { startDate: '2026-11-03', endDate: '2027-01-29', label: '4º Bimestre' }
+    };
+
     // --- 2. GLOBAL STATE ---
     let appState = {
       currentUserKey: 'mariana',
@@ -8536,6 +8658,7 @@ function getActiveSections(obs) {
       units: JSON.parse(JSON.stringify(INITIAL_UNITS)),
       classes: JSON.parse(JSON.stringify(INITIAL_CLASSES)), // <-- PILAR 1: CATÁLOGO DE TURMAS
       deletedClassIds: [], // <-- PILAR 14: SSOT EXCLUSÕES
+      bimesterPeriods: JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS)), // <-- PILAR 15: SSOT CICLOS
       teamMembers: JSON.parse(JSON.stringify(INITIAL_TEAM)),
       notes: JSON.parse(JSON.stringify(INITIAL_NOTES)),
       schedules: JSON.parse(JSON.stringify(INITIAL_SCHEDULES)),
@@ -8569,6 +8692,16 @@ function getActiveSections(obs) {
           if (!appState.bottlenecksSortMode) appState.bottlenecksSortMode = 'absolute';
           if (!appState.classes || appState.classes.length === 0) {
             appState.classes = JSON.parse(JSON.stringify(INITIAL_CLASSES));
+          }
+          if (!appState.bimesterPeriods || typeof appState.bimesterPeriods !== 'object') {
+            appState.bimesterPeriods = JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS));
+          } else {
+            // Garante presença e integridade dos 4 bimestres canônicos
+            ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'].forEach(bName => {
+              if (!appState.bimesterPeriods[bName] || !appState.bimesterPeriods[bName].startDate || !appState.bimesterPeriods[bName].endDate) {
+                appState.bimesterPeriods[bName] = JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS[bName]));
+              }
+            });
           }
           if (!appState.teamMembers || appState.teamMembers.length === 0) appState.teamMembers = JSON.parse(JSON.stringify(INITIAL_TEAM));
           if (!appState.notes) appState.notes = JSON.parse(JSON.stringify(INITIAL_NOTES));
@@ -10381,20 +10514,66 @@ function getActiveSections(obs) {
     }
 
     // =========================================================================
-    // PILAR 7: Resolução do Bimestre Corrente do Ano Letivo (Patos/PB)
+    // PILAR 7 & 15: Resolução do Bimestre Corrente do Ano Letivo via SSOT (Patos/PB)
     // =========================================================================
     function getCurrentSchoolBimester(referenceDate = new Date()) {
       const d = (referenceDate instanceof Date && !isNaN(referenceDate)) ? referenceDate : new Date(referenceDate);
-      const month = d.getMonth() + 1; // 1 a 12
-      // Calendário Escolar Oficial da Educação Infantil:
-      // 1º Bimestre: Fevereiro a Abril (meses 2, 3, 4)
-      // 2º Bimestre: Maio a Julho (meses 5, 6, 7)
-      // 3º Bimestre: Agosto a Outubro (meses 8, 9, 10)
-      // 4º Bimestre: Novembro a Janeiro (meses 11, 12, 1)
-      if (month >= 2 && month <= 4) return '1º Bimestre';
-      if (month >= 5 && month <= 7) return '2º Bimestre';
-      if (month >= 8 && month <= 10) return '3º Bimestre';
+      const periods = (appState && appState.bimesterPeriods) ? appState.bimesterPeriods : DEFAULT_BIMESTER_PERIODS;
+      const BIMESTERS_CANONICAL = ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'];
+
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const refDateStr = `${year}-${month}-${day}`;
+
+      // 1. Procura se a data coincide diretamente com a janela de algum dos 4 bimestres
+      for (const bName of BIMESTERS_CANONICAL) {
+        const p = periods[bName];
+        if (p && p.startDate && p.endDate) {
+          if (refDateStr >= p.startDate && refDateStr <= p.endDate) {
+            return bName;
+          }
+        }
+      }
+
+      // 2. Se a data de referência for anterior ao 1º Bimestre oficial:
+      const firstBim = periods['1º Bimestre'];
+      if (firstBim && firstBim.startDate && refDateStr < firstBim.startDate) {
+        return '1º Bimestre';
+      }
+
+      // 3. Se a data estiver em janela de recesso/transição entre bimestres, aponta para o próximo
+      for (let i = 0; i < BIMESTERS_CANONICAL.length - 1; i++) {
+        const curBim = periods[BIMESTERS_CANONICAL[i]];
+        const nextBim = periods[BIMESTERS_CANONICAL[i + 1]];
+        if (curBim && nextBim && curBim.endDate && nextBim.startDate) {
+          if (refDateStr > curBim.endDate && refDateStr < nextBim.startDate) {
+            return BIMESTERS_CANONICAL[i + 1];
+          }
+        }
+      }
+
+      // 4. Se for posterior ao encerramento do ano letivo oficial:
       return '4º Bimestre';
+    }
+
+    /**
+     * Retorna o período oficial formatado de um bimestre para exibição em tabelas (ex: "02/02 a 30/04")
+     */
+    function getBimesterPeriodDisplay(bName) {
+      const periods = (appState && appState.bimesterPeriods) ? appState.bimesterPeriods : DEFAULT_BIMESTER_PERIODS;
+      const p = periods[bName];
+      if (!p || !p.startDate || !p.endDate) return '';
+
+      const fmt = (isoStr) => {
+        if (!isoStr || isoStr.length < 10) return '';
+        const parts = isoStr.split('-');
+        return `${parts[2]}/${parts[1]}`;
+      };
+
+      const s = fmt(p.startDate);
+      const e = fmt(p.endDate);
+      return (s && e) ? `${s} a ${e}` : '';
     }
 
     // PILAR 1: Retorna o próximo bimestre necessário no ciclo longitudinal da TURMA
@@ -13723,6 +13902,43 @@ function getActiveSections(obs) {
       renderHistoryScreen();
     }
 
+    function populateHistoryClassFilter() {
+      const classSelect = document.getElementById('histFilterClass');
+      if (!classSelect) return;
+      const currentVal = classSelect.value || 'ALL';
+      const user = getCurrentUser();
+
+      let availableClasses = [];
+      if (user.roleKey === 'coordenador') {
+        availableClasses = getClassesForSchool(user.school);
+      } else if (user.roleKey === 'formador') {
+        const poloUnits = (appState.units || []).filter(u => u.polo === user.school).map(u => u.name);
+        poloUnits.forEach(uName => {
+          availableClasses = availableClasses.concat(getClassesForSchool(uName));
+        });
+      } else {
+        availableClasses = appState.classes || [];
+      }
+
+      let html = `<option value="ALL">Todas as Turmas</option>`;
+      if (availableClasses.length > 0) {
+        const uniqueNames = Array.from(new Set(availableClasses.map(c => c.name))).sort();
+        uniqueNames.forEach(cName => {
+          html += `<option value="${cName}">${cName}</option>`;
+        });
+      } else {
+        ['Berçário I', 'Berçário II', 'Maternal I', 'Maternal II', 'Infantil I', 'Infantil II'].forEach(etapa => {
+          html += `<option value="${etapa}">${etapa}</option>`;
+        });
+      }
+      classSelect.innerHTML = html;
+      if (Array.from(classSelect.options).some(o => o.value === currentVal)) {
+        classSelect.value = currentVal;
+      } else {
+        classSelect.value = 'ALL';
+      }
+    }
+
     function resetHistoryFilters() {
       document.getElementById('histFilterName').value = '';
       document.getElementById('histFilterStartDate').value = '';
@@ -13739,6 +13955,7 @@ function getActiveSections(obs) {
 
     function renderHistoryScreen() {
       checkAndAutoArchive(true);
+      populateHistoryClassFilter();
       const user = getCurrentUser();
       const scopedObs = getScopedObservations();
       let items = scopedObs.filter(o => o.status === appState.historyFilter);
@@ -13768,7 +13985,14 @@ function getActiveSections(obs) {
       }
 
       if (nameQuery) {
-        items = items.filter(o => o.teacherName.toLowerCase().includes(nameQuery) || o.schoolName.toLowerCase().includes(nameQuery));
+        items = items.filter(o => {
+          const classMatch = (o.className || '').toLowerCase().includes(nameQuery);
+          const schoolMatch = (o.schoolName || '').toLowerCase().includes(nameQuery);
+          const teacherMatch = (o.teacherName || '').toLowerCase().includes(nameQuery);
+          const evaluatorMatch = (o.evaluatedBy || '').toLowerCase().includes(nameQuery);
+          const regentsMatch = Array.isArray(o.teachers) && o.teachers.some(t => (t || '').toLowerCase().includes(nameQuery));
+          return classMatch || schoolMatch || teacherMatch || evaluatorMatch || regentsMatch;
+        });
       }
       
       // Filtro flexível por período: início opcional, fim opcional ou ambos
@@ -14311,6 +14535,15 @@ function getActiveSections(obs) {
           const targetMember = (appState.teamMembers || []).find(m => m.name === nextVisit.targetName || resolveCanonicalUserName(m.name) === resolveCanonicalUserName(nextVisit.targetName));
           const isTargetTeacher = targetMember ? (targetMember.roleKey === 'professora') : true;
 
+          const isNextClass = nextVisit.targetType === 'turma' || user.roleKey === 'coordenador';
+          const nextTitle = isNextClass ? `📚 ${nextVisit.className || nextVisit.targetName}` : `👤 ${nextVisit.targetName}`;
+          const nextTeachersArr = Array.isArray(nextVisit.teachers) && nextVisit.teachers.length > 0 
+            ? nextVisit.teachers 
+            : (nextVisit.targetName && nextVisit.targetName !== nextVisit.className ? [nextVisit.targetName] : []);
+          const nextSub = isNextClass 
+            ? (nextTeachersArr.length > 0 ? `👩‍🏫 Regência: ${nextTeachersArr.join(', ')}` : '<span style="color:#DC2626; font-style:italic;">⚠️ Sem regente atribuída</span>')
+            : (nextVisit.className || 'Coordenação Pedagógica');
+
           const canStartVisit = (user.roleKey === 'coordenador' && isTargetTeacher && nextVisit.schoolName === user.school) ||
                                 (user.roleKey === 'formador' && !isTargetTeacher);
 
@@ -14329,9 +14562,9 @@ function getActiveSections(obs) {
 
               <div class="next-visit-hero-body">
                 <div>
-                  <h3 class="next-visit-target-name">${nextVisit.targetName}</h3>
+                  <h3 class="next-visit-target-name">${nextTitle}</h3>
                   <div class="next-visit-target-sub">
-                    <span style="font-weight:700; color:var(--primary);">${nextVisit.className || 'Coordenação Pedagógica'}</span>
+                    <span style="font-weight:700; color:var(--primary);">${nextSub}</span>
                     <span>·</span>
                     <span class="schedule-bimester-tag">${nextVisit.bimester}</span>
                   </div>
@@ -14578,14 +14811,34 @@ function getActiveSections(obs) {
 
         const nextTagHtml = isThisNextVisit ? '<span class="badge-next-inline">Próxima</span>' : '';
 
+        // Prioridade da Turma como eixo central nos agendamentos escolares
+        const isClassSchedule = s.targetType === 'turma' || user.roleKey === 'coordenador';
+        const displayTitle = isClassSchedule ? `📚 ${s.className || s.targetName}` : `👤 ${s.targetName}`;
+        let displaySub = '';
+
+        if (isClassSchedule) {
+          const teachersArr = Array.isArray(s.teachers) && s.teachers.length > 0 
+            ? s.teachers 
+            : (s.targetName && s.targetName !== s.className ? [s.targetName] : []);
+          displaySub = teachersArr.length > 0 
+            ? `👩‍🏫 Regência: ${teachersArr.join(', ')}` 
+            : `<span style="color:#DC2626; font-style:italic;">⚠️ Sem regente atribuída</span>`;
+        } else {
+          displaySub = s.className || 'Coordenação Pedagógica';
+        }
+
         // 1. Tabela Desktop
         if (tbody) {
           const tr = document.createElement('tr');
           if (isThisNextVisit) tr.style.backgroundColor = '#F0FDF4';
           tr.innerHTML = `
             <td>
-              <strong>${s.targetName}</strong> ${nextTagHtml}<br>
-              <span style="font-size:11px; color:var(--text-secondary);">${s.className}</span>
+              <div style="font-size:14px; font-weight:800; color:var(--text-primary);">
+                ${displayTitle} ${nextTagHtml}
+              </div>
+              <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
+                ${displaySub}
+              </div>
             </td>
             <td>${s.schoolName}</td>
             <td><span style="font-weight:700; color:var(--primary);">${s.bimester}</span></td>
@@ -14613,10 +14866,10 @@ function getActiveSections(obs) {
             <div class="schedule-card-header">
               <div>
                 <div class="schedule-card-target">
-                  ${s.targetName}
+                  ${displayTitle}
                   ${nextTagHtml}
                 </div>
-                <div class="schedule-card-class">${s.className || 'Sem turma especificada'}</div>
+                <div class="schedule-card-class" style="font-size:11px; color:var(--text-secondary); margin-top:2px;">${displaySub}</div>
               </div>
               <span class="status-badge ${badgeClass}" style="flex-shrink:0;">${badgeText}</span>
             </div>
@@ -18382,7 +18635,9 @@ function getActiveSections(obs) {
 
       // 4. Se o bimestre já passou no calendário letivo (bimesterNum < currentBimNum) ➔ 🔴 VERMELHO (ATRASADO)
       if (bimesterNum < currentBimNum) {
-        let sub = 'Prazo expirado sem observação';
+        const bimPeriod = ((appState && appState.bimesterPeriods) ? appState.bimesterPeriods : DEFAULT_BIMESTER_PERIODS)[bimesterName];
+        const deadlineStr = bimPeriod && bimPeriod.endDate ? bimPeriod.endDate.split('-').reverse().slice(0, 2).join('/') : '';
+        let sub = deadlineStr ? `Prazo expirado em ${deadlineStr}` : 'Prazo expirado sem observação';
         if (draftObs) sub = 'Rascunho não finalizado (Expirado)';
         else if (sched) sub = `Agendamento pendente (${schedDateFormatted})`;
 
@@ -18404,7 +18659,9 @@ function getActiveSections(obs) {
 
       // 5. Se o bimestre é o atual (bimesterNum === currentBimNum) ➔ ⚪ CINZA / AZUL (NO PRAZO)
       if (bimesterNum === currentBimNum) {
-        let sub = 'Janela de 2 meses em aberto';
+        const bimPeriod = ((appState && appState.bimesterPeriods) ? appState.bimesterPeriods : DEFAULT_BIMESTER_PERIODS)[bimesterName];
+        const deadlineStr = bimPeriod && bimPeriod.endDate ? bimPeriod.endDate.split('-').reverse().slice(0, 2).join('/') : '';
+        let sub = deadlineStr ? `Prazo vigente até ${deadlineStr}` : 'Período letivo em aberto';
         if (draftObs) sub = 'Rascunho iniciado em andamento';
         else if (sched) sub = `Agendada para ${schedDateFormatted}`;
 
@@ -20372,10 +20629,10 @@ function getActiveSections(obs) {
                 <thead>
                   <tr>
                     <th>Turma da Educação Infantil</th>
-                    <th class="col-bim">1º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Fev - Abr</span></th>
-                    <th class="col-bim">2º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Mai - Jul</span></th>
-                    <th class="col-bim">3º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Ago - Out</span></th>
-                    <th class="col-bim">4º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Nov - Jan</span></th>
+                    <th class="col-bim">1º Bimestre<br><span class="sem-bim-dates" style="font-size:10px; font-weight:normal; opacity:0.8;">${getBimesterPeriodDisplay('1º Bimestre')}</span></th>
+                    <th class="col-bim">2º Bimestre<br><span class="sem-bim-dates" style="font-size:10px; font-weight:normal; opacity:0.8;">${getBimesterPeriodDisplay('2º Bimestre')}</span></th>
+                    <th class="col-bim">3º Bimestre<br><span class="sem-bim-dates" style="font-size:10px; font-weight:normal; opacity:0.8;">${getBimesterPeriodDisplay('3º Bimestre')}</span></th>
+                    <th class="col-bim">4º Bimestre<br><span class="sem-bim-dates" style="font-size:10px; font-weight:normal; opacity:0.8;">${getBimesterPeriodDisplay('4º Bimestre')}</span></th>
                     <th style="width:130px;">Ciclo Anual</th>
                     <th style="width:90px; text-align:center;">Ação</th>
                   </tr>
@@ -20571,10 +20828,10 @@ function getActiveSections(obs) {
                 <thead>
                   <tr>
                     <th>Docente Regente Titular</th>
-                    <th class="col-bim">1º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Fev - Abr</span></th>
-                    <th class="col-bim">2º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Mai - Jul</span></th>
-                    <th class="col-bim">3º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Ago - Out</span></th>
-                    <th class="col-bim">4º Bimestre<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Nov - Jan</span></th>
+                    <th class="col-bim">1º Bimestre<br><span class="sem-bim-dates" style="font-size:10px; font-weight:normal; opacity:0.8;">${getBimesterPeriodDisplay('1º Bimestre')}</span></th>
+                    <th class="col-bim">2º Bimestre<br><span class="sem-bim-dates" style="font-size:10px; font-weight:normal; opacity:0.8;">${getBimesterPeriodDisplay('2º Bimestre')}</span></th>
+                    <th class="col-bim">3º Bimestre<br><span class="sem-bim-dates" style="font-size:10px; font-weight:normal; opacity:0.8;">${getBimesterPeriodDisplay('3º Bimestre')}</span></th>
+                    <th class="col-bim">4º Bimestre<br><span class="sem-bim-dates" style="font-size:10px; font-weight:normal; opacity:0.8;">${getBimesterPeriodDisplay('4º Bimestre')}</span></th>
                     <th style="width:130px;">Ciclo Anual</th>
                     <th style="width:140px; text-align:center;">Ações</th>
                   </tr>
@@ -22187,6 +22444,112 @@ function getActiveSections(obs) {
       document.getElementById('modalChangelog').classList.remove('active');
     }
 
+    // Modal Bimester Periods (SSOT) Controls
+    function openBimesterPeriodsModal() {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Acesso restrito à Coordenadora do Núcleo de EI.');
+        return;
+      }
+      const periods = (appState && appState.bimesterPeriods) ? appState.bimesterPeriods : DEFAULT_BIMESTER_PERIODS;
+      
+      const bimMap = {
+        1: '1º Bimestre',
+        2: '2º Bimestre',
+        3: '3º Bimestre',
+        4: '4º Bimestre'
+      };
+
+      for (let i = 1; i <= 4; i++) {
+        const bName = bimMap[i];
+        const p = periods[bName] || DEFAULT_BIMESTER_PERIODS[bName];
+        const startInput = document.getElementById(`bimPeriodStart_${i}`);
+        const endInput = document.getElementById(`bimPeriodEnd_${i}`);
+        if (startInput) startInput.value = p.startDate || '';
+        if (endInput) endInput.value = p.endDate || '';
+      }
+
+      const modal = document.getElementById('modalBimesterPeriods');
+      if (modal) {
+        modal.classList.add('active');
+        modal.classList.add('show');
+      }
+    }
+
+    function closeBimesterPeriodsModal() {
+      const modal = document.getElementById('modalBimesterPeriods');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.classList.remove('show');
+      }
+    }
+
+    function saveBimesterPeriodsSettings() {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Acesso restrito à Coordenadora do Núcleo de EI.');
+        return;
+      }
+
+      const bimMap = {
+        1: '1º Bimestre',
+        2: '2º Bimestre',
+        3: '3º Bimestre',
+        4: '4º Bimestre'
+      };
+
+      const newPeriods = {};
+
+      for (let i = 1; i <= 4; i++) {
+        const bName = bimMap[i];
+        const startInput = document.getElementById(`bimPeriodStart_${i}`);
+        const endInput = document.getElementById(`bimPeriodEnd_${i}`);
+        const startVal = startInput ? startInput.value : '';
+        const endVal = endInput ? endInput.value : '';
+
+        if (!startVal || !endVal) {
+          alert(`Por favor, preencha as datas de início e fim do ${bName}.`);
+          return;
+        }
+
+        if (startVal > endVal) {
+          alert(`A data inicial do ${bName} não pode ser posterior à data final.`);
+          return;
+        }
+
+        newPeriods[bName] = {
+          startDate: startVal,
+          endDate: endVal,
+          label: bName
+        };
+      }
+
+      appState.bimesterPeriods = newPeriods;
+      saveState();
+      closeBimesterPeriodsModal();
+      showToast('Períodos oficiais dos ciclos avaliativos atualizados com sucesso na SSOT!');
+
+      // Re-renderiza indicadores se a tela estiver aberta
+      const screenInd = document.getElementById('screenIndicators');
+      if (screenInd && screenInd.classList.contains('active')) {
+        renderIndicatorsScreen();
+      }
+    }
+
+    function restoreDefaultBimesterPeriodsPrompt() {
+      if (!confirm('Deseja restaurar os períodos oficiais padrão do município para os 4 bimestres?')) {
+        return;
+      }
+      appState.bimesterPeriods = JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS));
+      saveState();
+      openBimesterPeriodsModal(); // Recarrega os inputs no modal
+      showToast('Padrões municipais restaurados com sucesso na SSOT!');
+      const screenInd = document.getElementById('screenIndicators');
+      if (screenInd && screenInd.classList.contains('active')) {
+        renderIndicatorsScreen();
+      }
+    }
+
     // Modal Reference Docs Controls
     function openRefDocsModal() {
       navigateToTab('refDocs');
@@ -22195,6 +22558,24 @@ function getActiveSections(obs) {
       const modal = document.getElementById('modalRefDocs');
       if (modal) modal.classList.remove('active');
     }
+
+    // Sincronização reativa e imediata de dados da SSOT entre abas abertas no navegador
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'SERTAO_CRIANCA_APP_STATE_V6') {
+        try {
+          const updated = JSON.parse(e.newValue);
+          if (updated && updated.bimesterPeriods) {
+            appState.bimesterPeriods = updated.bimesterPeriods;
+            const screenInd = document.getElementById('screenIndicators');
+            if (screenInd && screenInd.classList.contains('active')) {
+              renderIndicatorsScreen();
+            }
+          }
+        } catch (err) {
+          console.warn('Sincronização SSOT inter-abas ignorada:', err);
+        }
+      }
+    });
 
     // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
@@ -22549,6 +22930,12 @@ function getActiveSections(obs) {
 
               saveState();
               logger.log('Persistência e integridade do estado global (saveState / appState)', true);
+
+              // PILAR 15: Integridade relacional de bimesterPeriods na SSOT
+              if (!appState.bimesterPeriods || !appState.bimesterPeriods['1º Bimestre'] || !appState.bimesterPeriods['4º Bimestre']) {
+                throw new Error('Falha SSOT: appState.bimesterPeriods ausente ou incompleto no catálogo');
+              }
+              logger.log('Presença e integridade relacional de bimesterPeriods na SSOT unificada', true);
 
               // 4. CICLO COMPLETO DE ADIÇÃO DE PROFISSIONAL VIA MODAL COM SELEÇÃO INTERATIVA
               openAddMemberModal();
@@ -24287,6 +24674,43 @@ function getActiveSections(obs) {
                 throw new Error('Seletor de diagnóstico deve adotar chevron padronizado ou appearance: none');
               }
               logger.log('Validação de Presença e Alinhamento do Chevron nos Seletores de Diagnóstico', true);
+
+              // 21. PILAR 15: ASSERÇÃO NEGATIVA ESTRITA CONTRA RÓTULOS ESTIMADOS NO SEMÁFORO
+              const semTable = document.getElementById('bimesterSemaphoreSection');
+              if (semTable) {
+                const semHtml = semTable.innerHTML;
+                if (semHtml.includes('Fev - Abr') || semHtml.includes('Mai - Jul') || semHtml.includes('Ago - Out') || semHtml.includes('Nov - Jan')) {
+                  throw new Error('Falha Pilar 15: Períodos estimados ("Fev - Abr", etc.) ainda presentes no cabeçalho do Semáforo');
+                }
+                if (semHtml.includes('Janela de 2 meses')) {
+                  throw new Error('Falha Pilar 15: Estimativa arbitrária "Janela de 2 meses" ainda presente no Semáforo');
+                }
+                logger.log('Extinção confirmada de períodos estimados ("Fev - Abr" e "Janela de 2 meses") no DOM', true);
+              }
+
+              // 22. PILAR 15: TESTE DE PARAMETRIZAÇÃO AUTÔNOMA PELA COORDENADORA DA EI (SSOT)
+              const previousUserInd = appState.currentUserKey;
+              try {
+                appState.currentUserKey = 'helena';
+                const testPeriods = JSON.parse(JSON.stringify(appState.bimesterPeriods));
+                testPeriods['1º Bimestre'].startDate = '2026-02-10';
+                testPeriods['1º Bimestre'].endDate = '2026-04-20';
+                appState.bimesterPeriods = testPeriods;
+                saveState();
+                renderIndicatorsScreen();
+
+                const periodHeader = getBimesterPeriodDisplay('1º Bimestre');
+                if (periodHeader !== '10/02 a 20/04') {
+                  throw new Error(`Falha Pilar 15: Esperado período "10/02 a 20/04", obtido "${periodHeader}"`);
+                }
+                logger.log('Parametrização autônoma de períodos de ciclos pela Coordenadora da EI e reflexo imediato no Semáforo', true, periodHeader);
+              } finally {
+                // Restaura períodos canônicos e usuário após o teste
+                appState.bimesterPeriods = JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS));
+                saveState();
+                appState.currentUserKey = previousUserInd || 'mariana';
+                renderIndicatorsScreen();
+              }
             } catch (e) {
               logger.log('Erro de execução no módulo indicadores_decisao', false, e.message);
             }
@@ -24611,14 +25035,14 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.22
-              if (!btnChangelog.textContent.includes('Versão 1.22')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.23
+              if (!btnChangelog.textContent.includes('Versão 1.23')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.22')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.22');
+              if (!modalChg.innerHTML.includes('Versão 1.23')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.23');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.22 (v8.00)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.23 (v8.00)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
