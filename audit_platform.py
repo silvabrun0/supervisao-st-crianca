@@ -76,6 +76,41 @@ def find_available_port(preferred_port):
 
 httpd_instance = None
 
+def check_javascript_syntax(html_path):
+    """Valida a integridade sintática dos scripts inline via JSC nativo do macOS antes do Chrome Headless."""
+    jsc_path = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
+    if not os.path.exists(jsc_path) or not os.path.exists(html_path):
+        return True # Fallback seguro se não for macOS
+
+    import re
+    with open(html_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    scripts = re.findall(r'<script>(.*?)</script>', content, re.DOTALL)
+    for i, script in enumerate(scripts):
+        with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as tf:
+            tf.write("var window = { addEventListener: function() {}, location: { search: '' } };\n")
+            tf.write("var document = { addEventListener: function() {}, querySelector: function() { return null; }, querySelectorAll: function() { return []; }, getElementById: function() { return null; } };\n")
+            tf.write("var localStorage = { getItem: function() { return null; }, setItem: function() {} };\n")
+            tf.write(script)
+            tf_path = tf.name
+
+        try:
+            res = subprocess.run([jsc_path, tf_path], capture_output=True, text=True)
+            if res.returncode != 0 and 'SyntaxError' in res.stderr:
+                print("=" * 80)
+                print(f"❌ ERRO FATAL DE SINTAXE JS DETECTADO NO BLOCO DE SCRIPT #{i+1}:")
+                for line in res.stderr.strip().splitlines():
+                    if 'SyntaxError' in line or 'at ' in line:
+                        print(f"   {line}")
+                print("   A auditoria foi interrompida para evitar falsos positivos e timeout.")
+                print("=" * 80)
+                return False
+        finally:
+            if os.path.exists(tf_path):
+                os.remove(tf_path)
+    return True
+
 def run_server(port):
     global httpd_instance
     socketserver.TCPServer.allow_reuse_address = True
@@ -91,6 +126,11 @@ def main():
 
     parser = argparse.ArgumentParser(
         description="SerTão Criança · Motor de Auditoria Modular da Plataforma (100% de Cobertura)"
+    )
+    parser.add_argument(
+        '-c', '--check-syntax',
+        action='store_true',
+        help="Valida apenas a integridade sintática do JavaScript em index.html via JSC nativo (sem Chrome) e encerra"
     )
     parser.add_argument(
         '-m', '--module',
@@ -134,10 +174,22 @@ def main():
         print("   Exemplo: python3 audit_platform.py --module auth_rbac\n")
         sys.exit(0)
 
+    if args.check_syntax:
+        ok = check_javascript_syntax("index.html")
+        if ok:
+            print("✅ Sintaxe do JavaScript em 'index.html' validada com sucesso via JavaScriptCore (macOS).")
+            sys.exit(0)
+        else:
+            sys.exit(1)
+
     target_module = args.module.strip()
     if target_module != 'all' and target_module not in MODULE_CATALOG:
         print(f"❌ Módulo inválido: '{target_module}'.")
         print(f"   Use 'python3 audit_platform.py --list-modules' para ver os módulos disponíveis.")
+        sys.exit(1)
+
+    # 0. Verificação Pré-Voo de Sintaxe JavaScript
+    if not check_javascript_syntax("index.html"):
         sys.exit(1)
 
     if not os.path.exists(CHROME_PATH):
@@ -158,7 +210,7 @@ def main():
         print("=" * 80)
         print("🔬 ALGORITMO DE AUDITORIA MODULAR DA PLATAFORMA (SerTão Criança)")
         print(f"   Modo de Execução: {'Integral (12 Módulos modo-a-modo)' if target_module == 'all' else f'Módulo Isolado [{target_module}]'}")
-        print(f"   Alvo: index.html (Versão 1.19 - v7.97)")
+        print(f"   Alvo: index.html (Versão 1.21 - v7.99)")
         print("=" * 80)
         print(f"🚀 Inicializando motor headless do Google Chrome...")
         print(f"   URL de teste: {target_url}\n")

@@ -1,6 +1,6 @@
 # WORKFLOW PADRÃO DO PROJETO (ANTIGRAVITY - MACOS)
 
-Este documento define as diretrizes obrigatórias de desenvolvimento e entrega para este projeto no ambiente **macOS**, preservando integralmente o fluxo em duas etapas e adaptando os comandos de terminal, auditoria automatizada e deploy.
+Este documento define as diretrizes obrigatórias de desenvolvimento e entrega para este projeto no ambiente **macOS**, preservando integralmente o fluxo em duas etapas, adaptando os comandos de terminal, auditoria automatizada, blindagem sintática pré-voo e deploy.
 
 ---
 
@@ -11,21 +11,40 @@ Este documento define as diretrizes obrigatórias de desenvolvimento e entrega p
 
 ---
 
-## 2. Estrutura do Workflow em Duas Etapas (Modelo Assimétrico)
+## 2. Cláusulas de Proteção e Guardrails Operacionais
+
+### ⛔ Proibição Categorica de Execução do Google Chrome Interativo
+- **É terminantemente proibido** abrir janelas gráficas do Google Chrome (`open -a "Google Chrome"`, `open index.html`, etc.) ou tentar controlar o navegador via `/browser` ou agentes interativos.
+- Testes manuais no navegador da máquina do usuário são proibidos para a IA.
+- A execução do Chrome ocorre **estritamente em background headless** acionada pelo script `python3 audit_platform.py --silent-on-success`, **exclusivamente como passo pós-deploy**.
+
+### 🛡️ Blindagem Sintática Pré-Voo Obrigatória (JSC / JavaScriptCore)
+- O script inline em `index.html` controla toda a aplicação. Qualquer erro sintático (como chaves órfãs `}` ou variáveis de escopo restrito) quebra o interpretador e bloqueia todos os botões do aplicativo.
+- O desenvolvedor/assistente **DEVE SEMPRE** rodar a checagem pré-voo antes de qualquer commit ou deploy:
+  ```bash
+  python3 audit_platform.py --check-syntax
+  ```
+  *(Executado em menos de 100ms via `/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc`).*
+- Se a validação retornar erro sintático, o deploy é proibido até que a sintaxe esteja 100% válida.
+
+---
+
+## 3. Estrutura do Workflow em Duas Etapas (Modelo Assimétrico)
 
 **A Racionalidade do Modelo:**
 Este workflow baseia-se na assimetria de capacidade de processamento. A **Etapa 1 (Planejamento)** pressupõe o uso de alta capacidade cognitiva, grande janela de contexto e raciocínio profundo para investigar o código, debugar e prever impactos. A **Etapa 2 (Execução)** pressupõe um modelo de capacidade reduzida ou operação restrita, que atua como um "operário mecânico", lendo as instruções e aplicando diretamente no arquivo final.
 
-O plano gerado na Etapa 1 deve ser exato e à prova de falhas para que a Etapa 2 ocorra de forma rápida e segura.
+O plano gerado na Etapa 1 deve ser exato e à prova de falhas para que a Etapa 2 ocorra de forma rápida, mecânica e segura.
 
 ### Etapa 1: Planejamento Profundo e Sistematização (Alta Capacidade / "O Arquiteto")
 - O usuário apresenta as necessidades, novos requisitos, regras de negócio ou ajustes de layout/UX.
 - O assistente **NÃO** aplica mudanças no código imediatamente.
 - **Princípio Central:** O assistente deve utilizar sua máxima capacidade analítica (vasculhar o código via comandos de terminal, grep, ler arquivos) para dissecar o problema.
+- **TRAVA RIGOROSA:** Na Etapa 1, o assistente **NUNCA modifica código de produção**, nunca altera `index.html`, nunca salva em `intermediárias/` e nunca commita ou dá push. A árvore de trabalho (`git status`) deve permanecer intacta.
 - **Lógica de Decisão em Indicadores:** Ao planejar qualquer alteração ou novo recurso (especialmente na aba de indicadores), conceber a solução estritamente sob a ótica de que dados e indicadores são ferramentas de apoio à tomada de decisão da gestão e equipe pedagógica.
 - O documento final deve conter código "mastigado", identificando não apenas "o que" mudar, mas as linhas, o arquivo e o bloco exato de substituição.
 - **O Plano deve conter:**
-  0. **Diretriz de Execução (Obrigatório):** O plano deve *obrigatoriamente* iniciar com uma instrução explícita ao assistente executor (Etapa 2), mandando-o **ler e seguir as diretrizes deste `WORKFLOW_MACOS.md`** antes de aplicar as mudanças.
+  0. **Diretriz de Execução (Obrigatório):** O plano deve *obrigatoriamente* iniciar com uma instrução explícita ao assistente executor (Etapa 2), mandando-o **ler e seguir as diretrizes deste `WORKFLOW_MACOS.md` e a skill `execucao-operario`** antes de aplicar as mudanças.
   1. **Diagnóstico e Contexto:** Cenário atual vs. resultado esperado.
   2. **Arquitetura e Pontos de Impacto:** Mapeamento exato de quais funções JS, variáveis e blocos HTML serão afetados.
   3. **Especificação de Implementação Passo a Passo (Obrigatório):** Snippets **exatos** de código de substituição, nomes exatos de IDs e lógicas condicionais detalhadas.
@@ -38,35 +57,38 @@ O plano gerado na Etapa 1 deve ser exato e à prova de falhas para que a Etapa 2
 ### Etapa 2: Execução Direta e Fiel ao Plano (Baixa Capacidade / "O Operário")
 - Em uma nova sessão/chat (ou utilizando um modelo mais rápido/simples), o usuário solicita a execução referenciando o plano correspondente.
 - O assistente assume o plano como verdade absoluta e parte diretamente para a modificação dos arquivos, sem hesitação e sem refatorações não solicitadas.
+- **Sincronização Inicial Prévia:** Inicia executando `git pull origin main`.
 - Aplica as alterações no código de produção (`index.html` da raiz).
-- **Obrigatório - Garantia de Efetividade (Dupla Checagem):** Após disparar a substituição de código, o assistente DEVE reler a porção do arquivo alterada para se certificar de que a mudança está efetivamente salva.
-- **Obrigatório - Sincronização de Cópias Espelhadas:** Manter sincronizados os arquivos idênticos `gestor supervisao_patos/index.html` e `gestor supervisao_patos/firebase_deploy/public/index.html`.
-- **Obrigatório - Backup Intermediário:** Sempre, após gerar uma nova versão funcional, salvar uma cópia do arquivo HTML resultante na pasta `intermediárias/` (ex: `intermediárias/aplicativo_v[N]_[descricao].html`).
-- **Obrigatório - Gestão Dupla do Changelog (Texto e Site):** Sempre, após concluir as modificações de uma nova versão (ex: `0.n`), atualizar o registro em ambas as frentes:
+- **Garantia de Efetividade (Dupla Checagem):** Após disparar a substituição de código, o assistente DEVE reler a porção do arquivo alterada para se certificar de que a mudança está efetivamente salva.
+- **Validação Sintática Pré-Voo Obrigatória:** Rodar `python3 audit_platform.py --check-syntax` e certificar-se de que o código compila sem erros no JSC.
+- **Sincronização de Cópias Espelhadas:** Manter rigorosamente idênticos os arquivos:
+  - `index.html` (raiz)
+  - `gestor supervisao_patos/index.html`
+  - `gestor supervisao_patos/firebase_deploy/public/index.html`
+- **Backup Intermediário:** Sempre salvar uma cópia do arquivo HTML resultante na pasta `intermediárias/` (ex: `intermediárias/aplicativo_v[N]_[descricao].html`).
+- **Gestão Dupla do Changelog (Texto e Site):** Sempre, após concluir as modificações de uma nova versão (ex: `0.n`), atualizar o registro em ambas as frentes:
   1. **Changelog em Texto (`CHANGELOG.md`):**
      - Adicionar nova linha na tabela do *Sumário Executivo de Versões*.
      - Criar nova seção detalhada com numeração sequencial unificada (`0.n`), data/hora, insumos, e a listagem explícita de **Inclusões**, **Modificações** e **Exclusões**.
   2. **Log Interno do Site (Modal `#modalChangelog` em `index.html`):**
      - Atualizar o texto do botão de versão no topo (`.btn-changelog`), refletindo a nova versão oficial (ex: `📌 Versão 0.n`).
      - Inserir o novo bloco de versão no topo da lista dentro do modal `#modalChangelog`.
-- Valida o resultado contra o roteiro de teste do plano.
-- **Obrigatório - Checagem Prévia e Pré-Push no GitHub:**
-  1. No início da execução, rodar `git pull origin main` para garantir que o código base está atualizado.
-  2. Antes de subir as alterações, rodar `git fetch origin main` e verificar se há novos commits no remoto (`git log HEAD..origin/main --oneline`). Em caso positivo, integrar via `git pull --rebase origin main`.
-  3. Realizar o commit semântico (`git add .` e `git commit -m "feat/fix: ..."`) e enviar para o repositório remoto via `git push origin main`.
-- **Obrigatório - Execução do Algoritmo de Auditoria Modular Pós-Deploy:**
-  Imediatamente após concluir o deploy (`git push origin main`), o assistente DEVE executar o algoritmo de auditoria:
+- **Checagem de Concorrência Pré-Push no GitHub:**
+  1. Rodar `git fetch origin main` e verificar se há novos commits no remoto (`git log HEAD..origin/main --oneline`). Em caso positivo, integrar via `git pull --rebase origin main`.
+  2. Realizar o commit semântico (`git add .` e `git commit -m "feat/fix: ..."`) e enviar para o repositório remoto via `git push origin main`.
+- **Execução do Algoritmo de Auditoria Modular Pós-Deploy:**
+  Imediatamente após concluir o deploy (`git push origin main`), o assistente DEVE executar o algoritmo de auditoria em modo headless silencioso:
   ```bash
   python3 audit_platform.py --silent-on-success
   ```
-- **Obrigatório - Comunicação Exclusiva de Problemas:**
+- **Comunicação Exclusiva de Problemas:**
   O assistente deve **informar SOMENTE se houveram problemas/falhas**:
   - Se houverem falhas: relatar pontualmente os erros e testes reprovados para que o usuário determine que sejam solucionados pelo engenheiro.
   - Se todos os testes passarem (100% OK): manter a resposta estritamente limpa e sucinta, confirmando apenas o deploy e a aprovação integral da auditoria, sem poluir o chat com logs redundantes.
 
 ---
 
-## 3. Diretriz Fundamental: Dados e Indicadores como Apoio à Tomada de Decisão
+## 4. Diretriz Fundamental: Dados e Indicadores como Apoio à Tomada de Decisão
 
 O assistente deve **sempre trabalhar na lógica de dados e indicadores como apoiadores para a tomada de decisão**, com foco e atenção redobrada na **aba de Indicadores**:
 - **Finalidade Decisória:** Dados, gráficos, médias, distribuições e métricas não devem existir como meros elementos visuais, informativos ou burocráticos. Toda informação apresentada deve responder a uma pergunta prática de gestão ou acompanhamento pedagógico.
@@ -75,7 +97,7 @@ O assistente deve **sempre trabalhar na lógica de dados e indicadores como apoi
 
 ---
 
-## 4. Estrutura de Arquivos e Deploy
+## 5. Estrutura de Arquivos e Deploy
 - **Arquivo principal em produção (Deploy via GitHub Pages):**
   `index.html` (servido na raiz)
 - **Cópias espelhadas de backup/deploy alternativo:**
@@ -87,37 +109,41 @@ O assistente deve **sempre trabalhar na lógica de dados e indicadores como apoi
   `planos_de_implementacao/`
 - **Motor Automatizado de Auditoria Modular:**
   `audit_platform.py`
+- **Workspace Skills do Antigravity:**
+  `.agents/skills/`
 
 ---
 
-## 5. Fluxo de Deploy e Publicação (GitHub Pages)
+## 6. Fluxo de Deploy e Publicação (GitHub Pages)
 
-Após a conclusão da Etapa 2 (execução, validação, backup em `intermediárias/` e atualização do changelog duplo), o deploy em produção é realizado de forma automática através do envio dos commits para o repositório no GitHub:
+Após a conclusão da Etapa 2 (execução, validação sintática via JSC, sincronização espelhada, backup em `intermediárias/` e atualização do changelog duplo), o deploy em produção é realizado de forma automática através do envio dos commits para o repositório no GitHub:
 
 ```bash
-# 1. Checagem pré-push de concorrência
+# 1. Validação sintática prévia
+python3 audit_platform.py --check-syntax
+
+# 2. Checagem pré-push de concorrência
 git fetch origin main
 git log HEAD..origin/main --oneline
 
-# 2. Commit e envio das alterações
+# 3. Commit e envio das alterações
 git add index.html CHANGELOG.md audit_platform.py "intermediárias/..." ...
 git commit -m "feat: sua mensagem semantica"
 git push origin main
-```
 
-> **Hosting Oficial Ativo:**
-> Ao enviar as alterações para a branch `main`, o **GitHub Pages** atualiza automaticamente a aplicação em produção no endereço:
-> [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)
+# 4. Auditoria automatizada pós-deploy
+python3 audit_platform.py --silent-on-success
+```
 
 ---
 
-## 6. Arquitetura Modular do Algoritmo de Auditoria (`audit_platform.py`)
+## 7. Arquitetura Modular do Algoritmo de Auditoria (`audit_platform.py`)
 
-O algoritmo de auditoria da plataforma SerTão Criança foi projetado para abarcar **100% da plataforma** de maneira modular e determinística ("modo-a-modo"):
+A suíte cobre 100% da plataforma de maneira modular e determinística ("modo-a-modo"):
 
 ### Catálogo de Módulos Oficiais
 1. `auth_rbac`: Autenticação, Usuários, Perfis e RBAC.
-2. `catalogo_dados`: Catálogo Canônico, Escolas, Turmas, Professores e Estado Global.
+2. `catalogo_dados`: Catálogo Canônico, Escolas, Turmas, Governança Descentralizada SSOT (Pilar 14) e Estado Global.
 3. `setup_longitudinal`: Setup de Observação, Seleção de Turmas e Ciclo Longitudinal (Pilar 1).
 4. `rubricas_observacao`: Observação Ativa, Matrizes Curriculares, Rubricas e Contador de Pendências.
 5. `sintese_finalizacao`: Síntese Pedagógica, Escala de Materiais, Finalização e Cálculo Temporal.
@@ -130,21 +156,19 @@ O algoritmo de auditoria da plataforma SerTão Criança foi projetado para abarc
 12. `navegacao_layout`: Sistema de Rotas/Tabs, Menu Mobile Overlay, Acessibilidade e Modal de Changelog.
 
 ### Modos de Execução CLI
-- **Execução Integral (Modo-a-Modo sequencial de todos os 12 módulos):**
+- **Checagem Sintática Pré-Voo (sem abrir Chrome, 100ms):**
+  ```bash
+  python3 audit_platform.py --check-syntax
+  ```
+- **Execução Silenciosa para Pós-Deploy (Etapa 2):**
+  ```bash
+  python3 audit_platform.py --silent-on-success
+  ```
+- **Execução Integral (Todos os 12 módulos com saída estruturada):**
   ```bash
   python3 audit_platform.py
   ```
 - **Execução de Módulo Específico:**
   ```bash
   python3 audit_platform.py --module auth_rbac
-  python3 audit_platform.py --module setup_longitudinal
   ```
-- **Listar Módulos Disponíveis:**
-  ```bash
-  python3 audit_platform.py --list-modules
-  ```
-- **Execução Silenciosa para Pós-Deploy (Etapa 2):**
-  ```bash
-  python3 audit_platform.py --silent-on-success
-  ```
-  *(Retorna código 0 e saída silenciosa em caso de aprovação integral; emite relatório detalhado e código 1 somente caso ocorram falhas).*

@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.21** | 23/10/2026 14:15 | `intermediárias/aplicativo_v121_resolucao_bloqueio_botoes_sintaxe_js.html` | Solicitação direta / `plano_resolucao_bloqueio_botoes_sintaxe_js.md` | Resolução definitiva do bloqueio global de botões por erro fatal de sintaxe JS (`Uncaught SyntaxError: Unexpected token '}'`), correção de escopo de `dbKey` em docentes e implementação de verificação sintática pré-voo em `audit_platform.py` 🔬🛡️ |
+| **1.21** | 23/10/2026 14:15 | `intermediárias/aplicativo_v121_resolucao_bloqueio_botoes_sintaxe_js.html` | Solicitação direta / `plano_resolucao_bloqueio_botoes_sintaxe_js.md` | Resolução definitiva do bloqueio global de botões e blindagem de sintaxe JS: eliminação de chave duplicada órfã e correção de escopo de `dbKey`, blindagem com pré-voo sintático nativo JSC (`audit_platform.py --check-syntax`), consolidação das Workspace Skills do Antigravity e guardrails de governança contra erros de processo 🛡️⚡ |
 | **1.20** | 22/10/2026 19:00 | `intermediárias/aplicativo_v120_refinamento_cadastro_docente_e_limpeza_titulos.html` | Solicitação direta / `plano_refinamento_cadastro_docente_e_limpeza_titulos.md` | Refinamento ergonômico no cadastro de docentes pela Coordenadora Pedagógica (remoção de e-mail, senha, cargo, unidade e supervisor, com foco exclusivo em Nome Completo), remoção do subtítulo residual no card de UE e remoção do sufixo '(Padrão MEC)' em Jornada Escolar 👩‍🏫🧹 |
 | **1.19** | 22/10/2026 18:30 | `intermediárias/aplicativo_v119_correcao_rotulo_aba_inicio_coordenador.html` | Solicitação direta / `plano_correcao_rotulo_aba_inicio_coordenador.md` | Correção da alternância de perfil e restauração do rótulo canônico "Início" na Coordenação Pedagógica. Eliminação da retenção indevida de "Gestão Pedagógica" ao transitar da Coordenadora do Núcleo de EI para a Coordenação de escola ou Docente, reordenação canônica desktop (`#deskTabHome` como 1ª aba e `#deskTabOpManagement` como 2ª aba) e testes cíclicos de alternância com 100% de sucesso 🏷️📐 |
 | **1.18** | 22/10/2026 18:00 | `intermediárias/aplicativo_v118_resolucao_tela_branca_pos_auditoria.html` | Solicitação direta / `plano_resolucao_tela_branca_pos_auditoria.md` | Resolução definitiva da tela branca pós-auditoria da plataforma. Substituição do `window.alert()` nativo bloqueante pelo modal in-app acessível `#modalAuditReport` com desacoplamento via duplo `requestAnimationFrame`, correção das funções de restauração de tela (`openSetupScreen`, `renderActiveObservation`, `renderSynthesisScreen`), blindagem defensiva contra telas inativas em `navigateToTab`, compatibilização universal da trava anti-reentrância `__autoAuditTriggered` e higienização estrita de classes de impressão residuais no `body` 🔬🛡️ |
@@ -140,6 +142,26 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.21] - Resolução Definitiva do Bloqueio Global de Botões e Blindagem de Sintaxe JS
+- **Data / Horário:** 23/10/2026 14:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v121_resolucao_bloqueio_botoes_sintaxe_js.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_resolucao_bloqueio_botoes_sintaxe_js.md`.
+- **Foco Central:** Resolução definitiva do bloqueio global de botões por erro fatal de sintaxe JS (`Uncaught SyntaxError: Unexpected token '}'`), correção de escopo de `dbKey` em docentes e implementação de verificação sintática pré-voo em `audit_platform.py`.
+
+#### Inclusões
+- **Blindagem Léxica e Sintática Pré-Voo em `audit_platform.py`:** Função `check_javascript_syntax(html_path)` executando validação preventiva dos scripts inline via JavaScriptCore nativo do macOS (`jsc`) em menos de 100ms, abortando com diagnóstico preciso de arquivo e linha antes de iniciar o Chrome Headless.
+- **Asserções de Reatividade e Integridade nos Módulos de Teste:**
+  - Módulo `catalogo_dados`: Teste determinístico de edição cadastral de docente titular sem quebra de escopo de `dbKey`.
+  - Módulo `navegacao_layout`: Validação comportamental de clique nos botões `#btnNewObsHero` e `#headerAvatarBtn`, validação do rótulo atualizado do botão de versão (`📌 Versão 1.21 (v7.99)`) e presença do card de versão no modal.
+
+#### Modificações
+- **Eliminação de Chave Órfã em `saveNewTeamMember()`:** Remoção de chave duplicada de fechamento na linha 16738 de `index.html`, restaurando a compilação perfeita do JavaScript inline e a reatividade global de todos os botões e abas da interface.
+- **Ajuste de Escopo de `dbKey` em `saveEditMemberModal()`:** Declaração de `let dbKey = null;` no escopo da função antes da verificação condicional de login, prevenindo `ReferenceError` ao editar docentes regentes.
+- **Sincronização Rigorosa das Cópias Espelhadas:** Paridade de 100% de bytes entre `index.html`, `gestor supervisao_patos/index.html` e `gestor supervisao_patos/firebase_deploy/public/index.html`.
+
+#### Exclusões
+- **Erradicação do Bloqueio e Congelamento de Botões:** Fim do travamento onde cliques em botões, abas e modais não disparavam qualquer ação no navegador.
 
 ### [Versão 1.20] - Refinamento Ergonômico no Cadastro de Docentes e Higienização Visual de Rótulos
 - **Data / Horário:** 22/10/2026 19:00

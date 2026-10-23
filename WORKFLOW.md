@@ -11,21 +11,37 @@ Este documento define as diretrizes obrigatórias de desenvolvimento e entrega p
 
 ---
 
-## 2. Estrutura do Workflow em Duas Etapas (Modelo Assimétrico)
+## 2. Cláusulas de Proteção Absoluta
+
+### ⛔ Proibição do Google Chrome Interativo
+- Proibido abrir o Google Chrome de forma visual/gráfica (`open -a "Google Chrome"`, subagentes de browser ou `/browser`).
+- O Chrome é acionado exclusivamente de forma headless pelo script automatizado `python3 audit_platform.py --silent-on-success` após o deploy.
+
+### 🛡️ Blindagem Sintática Pré-Voo
+- Antes de qualquer commit ou deploy, é obrigatório validar a integridade sintática dos scripts de `index.html`:
+  ```bash
+  python3 audit_platform.py --check-syntax
+  ```
+- Nenhum código com erro de parsing léxico ou chave duplicada deve ser comitado.
+
+---
+
+## 3. Estrutura do Workflow em Duas Etapas (Modelo Assimétrico)
 
 **A Racionalidade do Modelo:**
-Este workflow baseia-se na assimetria de capacidade de processamento. A **Etapa 1 (Planejamento)** pressupõe o uso de alta capacidade cognitiva, grande janela de contexto e raciocínio profundo para investigar o código, debugar e prever impactos. A **Etapa 2 (Execução)** pressupõe um modelo de capacidade reduzida ou operação restrita, que não deve gastar tokens ou tempo "pensando" na arquitetura, mas sim atuar como um "operário mecânico" que apenas lê as instruções e aplica no arquivo final. 
+Este workflow baseia-se na assimetria de capacidade de processamento. A **Etapa 1 (Planejamento)** pressupõe o uso de alta capacidade cognitiva, grande janela de contexto e raciocínio profundo para investigar o código, debugar e prever impactos. A **Etapa 2 (Execução)** pressupõe um modelo de capacidade reduzida ou operação restrita, que não deve gastar tokens ou tempo "pensando" na arquitetura, mas sim atuar como um "operário mecânico" que apenas lê as instruções e aplica no arquivo final.
 
-Portanto, o plano de implementação gerado na Etapa 1 deve ser tão exato e à prova de falhas que a Etapa 2 possa ser executada quase de "olhos fechados".
+O plano gerado na Etapa 1 deve ser tão exato e à prova de falhas que a Etapa 2 possa ser executada mecanicamente e com segurança.
 
 ### Etapa 1: Planejamento Profundo e Sistematização (Alta Capacidade / "O Arquiteto")
 - O usuário apresenta as necessidades, novos requisitos, regras de negócio ou ajustes de layout/UX.
 - O assistente **NÃO** aplica mudanças no código imediatamente.
 - **Princípio Central:** O assistente deve utilizar sua máxima capacidade analítica (vasculhar o código via comandos de terminal, grep, ler arquivos) para dissecar o problema.
+- **TRAVA RIGOROSA:** Na Etapa 1, o assistente **NUNCA modifica código de produção**, nunca altera `index.html`, nunca salva em `intermediárias/` e nunca commita ou dá push. A árvore de trabalho (`git status`) deve permanecer intacta.
 - **Lógica de Decisão em Indicadores:** Ao planejar qualquer alteração ou novo recurso (especialmente na aba de indicadores), conceber a solução estritamente sob a ótica de que dados e indicadores são ferramentas de apoio à tomada de decisão da gestão e equipe pedagógica.
 - O documento final deve conter código "mastigado", identificando não apenas "o que" mudar, mas as linhas, o arquivo e o bloco exato de substituição.
 - **O Plano deve conter:**
-  0. **Diretriz de Execução (Obrigatório):** O plano deve *obrigatoriamente* iniciar com uma instrução explícita ao assistente que irá executá-lo (Etapa 2), mandando ele **ler e seguir as diretrizes deste `WORKFLOW.md` (ou `WORKFLOW_MACOS.md`)** antes de começar a aplicar as mudanças.
+  0. **Diretriz de Execução (Obrigatório):** O plano deve *obrigatoriamente* iniciar com uma instrução explícita ao assistente executor (Etapa 2), mandando-o **ler e seguir as diretrizes deste `WORKFLOW.md` e a skill `execucao-operario`** antes de começar a aplicar as mudanças.
   1. **Diagnóstico e Contexto:** Cenário atual vs. resultado esperado.
   2. **Arquitetura e Pontos de Impacto:** Mapeamento exato de quais funções JS, variáveis e blocos HTML serão afetados.
   3. **Especificação de Implementação Passo a Passo (Obrigatório):** Snippets **exatos** de código de substituição, nomes exatos de IDs e lógicas condicionais detalhadas. Nada deve ser deixado para a imaginação do executor.
@@ -38,69 +54,34 @@ Portanto, o plano de implementação gerado na Etapa 1 deve ser tão exato e à 
 ### Etapa 2: Execução Direta e Fiel ao Plano (Baixa Capacidade / "O Operário")
 - Em uma nova sessão/chat (ou utilizando um agente mais rápido/simples), o usuário solicita a execução referenciando o plano correspondente.
 - O assistente assume o plano como verdade absoluta e parte diretamente para a modificação dos arquivos, sem hesitação, sem tentar refatorar ou repensar o código.
+- Inicia com `git pull origin main`.
 - Aplica as alterações no código de produção (`index.html` da raiz).
-- **Obrigatório - Garantia de Efetividade (Dupla Checagem):** É estritamente proibido reportar que "as alterações foram feitas" sem de fato validar. Após disparar a substituição de código, o assistente DEVE reler a porção do arquivo alterada para se certificar de que a mudança está efetivamente salva.
-- **Obrigatório - Sincronização de Cópias Espelhadas:** Sincronizar simultaneamente as cópias `gestor supervisao_patos/index.html` e `gestor supervisao_patos/firebase_deploy/public/index.html`.
-- **Obrigatório - Backup Intermediário:** Sempre, após gerar uma nova versão funcional, salvar uma cópia do arquivo HTML resultante na pasta `intermediárias/` (ex: `intermediárias/aplicativo_v[N]_[descricao].html`).
-- **Obrigatório - Gestão Dupla do Changelog (Texto e Site):** Sempre, após concluir as modificações de uma nova versão (ex: `0.n`), o assistente deve atualizar o registro histórico em **ambas as frentes**:
-  1. **Changelog em Texto (`CHANGELOG.md`):**
-     - Adicionar uma nova linha na tabela do *Sumário Executivo de Versões*.
-     - Criar uma nova seção detalhada com numeração sequencial unificada (`0.n`), data/hora, insumos, e a listagem explícita de **Inclusões**, **Modificações** e **Exclusões**.
-  2. **Log Interno do Site (Modal `#modalChangelog` em `index.html`):**
-     - Atualizar o texto do botão de versão na barra de navegação/topo (`.btn-changelog`), refletindo a nova versão oficial (ex: `📌 Versão 0.n`).
-     - Inserir o novo bloco de versão no topo da lista dentro do modal `#modalChangelog`.
-- Valida o resultado contra o roteiro de teste do plano.
-- **Obrigatório - Checagem Prévia e Pré-Push no GitHub:**
-  1. Iniciar com `git pull origin main`.
-  2. Antes de subir, rodar `git fetch origin main` e verificar `git log HEAD..origin/main --oneline`. Integrar com rebase se necessário.
-  3. Realizar o commit semântico e enviar com `git push origin main`.
-- **Obrigatório - Execução do Algoritmo de Auditoria Modular Pós-Deploy:**
+- **Garantia de Efetividade (Dupla Checagem):** Releitura obrigatória da porção do arquivo alterada para certificar-se de que a mudança está efetivamente salva.
+- **Validação Sintática Pré-Voo:** Executar `python3 audit_platform.py --check-syntax`.
+- **Sincronização de Cópias Espelhadas:** Sincronizar simultaneamente as cópias `gestor supervisao_patos/index.html` e `gestor supervisao_patos/firebase_deploy/public/index.html`.
+- **Backup Intermediário:** Salvar cópia do arquivo resultante na pasta `intermediárias/` (ex: `intermediárias/aplicativo_v[N]_[descricao].html`).
+- **Gestão Dupla do Changelog (Texto e Site):**
+  1. **Changelog em Texto (`CHANGELOG.md`):** Nova linha na tabela e seção detalhada da versão `0.n` com inclusões, modificações e exclusões.
+  2. **Log Interno do Site (Modal `#modalChangelog` em `index.html`):** Atualizar texto do botão de versão (`.btn-changelog`) e inserir o novo bloco de versão no topo do modal.
+- **Checagem de Concorrência Pré-Push no GitHub:**
+  1. `git fetch origin main`
+  2. `git log HEAD..origin/main --oneline` (se houver novidade, rodar `git pull --rebase origin main`).
+  3. `git add .`, commit semântico e `git push origin main`.
+- **Execução do Algoritmo de Auditoria Modular Pós-Deploy:**
   Imediatamente após o deploy, rodar:
   ```bash
   python3 audit_platform.py --silent-on-success
   ```
-- **Obrigatório - Comunicação Exclusiva de Problemas:**
+- **Comunicação Exclusiva de Problemas:**
   O assistente deve **informar SOMENTE se houveram problemas/falhas**:
   - Em falhas: listar as baterias/módulos reprovados e detalhes do erro para que o usuário determine a resolução pelo engenheiro.
   - Em 100% de sucesso: informar objetivamente o sucesso do deploy e da auditoria, sem poluir a resposta.
 
 ---
 
-## 3. Diretriz Fundamental: Dados e Indicadores como Apoio à Tomada de Decisão
+## 4. Diretriz Fundamental: Dados e Indicadores como Apoio à Tomada de Decisão
 
 O assistente deve **sempre trabalhar na lógica de dados e indicadores como apoiadores para a tomada de decisão**, com foco e atenção redobrada na **aba de Indicadores**:
-- **Finalidade Decisória:** Dados, gráficos, médias, distribuições e métricas não devem existir como meros elementos visuais, informativos ou burocráticos. Toda informação apresentada deve responder a uma pergunta prática de gestão ou acompanhamento pedagógico.
-- **Diagnóstico e Clareza:** As visualizações e relatórios (especialmente na aba de Indicadores) devem permitir a identificação ágil de gargalos, padrões, evoluções e pontos de intervenção prioritária.
-- **Instrumentalização dos Usuários:** Ao conceber ou implementar novos filtros, agregações temporais/longitudinais, cartões informativos ou exportações, a prioridade deve ser capacitar gestores, formadores e equipe técnica a tomar decisões embasadas, rápidas e orientadas a resultados concretos.
-
----
-
-## 4. Estrutura de Arquivos e Deploy
-- **Arquivo principal em produção (Deploy via GitHub Pages):**
-  `index.html` (servido na raiz)
-- **Cópias espelhadas de backup/deploy alternativo:**
-  `gestor supervisao_patos/index.html`
-  `gestor supervisao_patos/firebase_deploy/public/index.html`
-- **Histórico/Versões intermediárias:**
-  `intermediárias/`
-- **Planos de Implementação:**
-  `planos_de_implementacao/`
-- **Motor Automatizado de Auditoria Modular:**
-  `audit_platform.py`
-
----
-
-## 5. Fluxo de Deploy e Publicação (GitHub Pages)
-
-Após a conclusão da Etapa 2 (execução, validação, backup em `intermediárias/` e atualização do changelog duplo), o deploy em produção é realizado de forma automática através do envio dos commits para o repositório no GitHub:
-
-```bash
-# 1. Checagem pré-push de concorrência
-git fetch origin main
-git log HEAD..origin/main --oneline
-
-# 2. Commit e envio das alterações
-git add index.html CHANGELOG.md audit_platform.py "intermediárias/..."
-git commit -m "feat: sua mensagem semantica"
-git push origin main
-```
+- **Finalidade Decisória:** Toda informação apresentada deve responder a uma pergunta prática de gestão ou acompanhamento pedagógico.
+- **Diagnóstico e Clareza:** Permitir identificação ágil de gargalos, padrões, evoluções e pontos de intervenção prioritária.
+- **Instrumentalização dos Usuários:** Capacitar gestores, formadores e equipe técnica a tomar decisões embasadas, rápidas e orientadas a resultados concretos.

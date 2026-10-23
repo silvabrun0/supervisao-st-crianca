@@ -3295,7 +3295,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.20 (v7.98)
+          📌 Versão 1.21 (v7.99)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4869,6 +4869,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.21 - RESOLUÇÃO DEFINITIVA DO BLOQUEIO GLOBAL DE BOTÕES E BLINDAGEM DE SINTAXE JS -->
+      <div style="margin-bottom:20px; border-left:3px solid #10B981; padding-left:14px; background:#ECFDF5; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#047857;">Versão 1.21 · v7.99 (Oficial)</span>
+          <span style="font-size:11px; background:#D1FAE5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">23/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Resolução Definitiva do Bloqueio Global de Botões e Blindagem de Sintaxe JS:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🛡️ <strong>Eliminação de Chave Órfã e Desbloqueio Global:</strong> Remoção de chave duplicada de fechamento em <code>saveNewTeamMember()</code> que causava <code>SyntaxError</code> fatal de compilação JS no carregamento da página, impedindo a exposição de funções globais e travando todos os botões e abas da plataforma.</li>
+          <li>🎯 <strong>Correção de Escopo de Variável em Docentes:</strong> Ajuste do escopo de <code>dbKey</code> em <code>saveEditMemberModal()</code> para evitar falha de runtime (<code>ReferenceError</code>) ao salvar edição cadastral de docentes regentes.</li>
+          <li>🔬 <strong>Validação Sintática Pré-Voo no Motor de Auditoria:</strong> Implementação de verificação de sintaxe JS ultrarrápida via JavaScriptCore nativo em <code>audit_platform.py</code> para detecção preventiva instantânea antes do disparo do Chrome Headless.</li>
+          <li>✅ <strong>Auditoria Contínua com 100% de Aprovação:</strong> Adição de asserções nos módulos <code>catalogo_dados</code> e <code>navegacao_layout</code> garantindo edição segura de docentes sem quebra de escopo e reatividade total de cliques em botões centrais.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.20 - REFINAMENTO ERGONÔMICO NO CADASTRO DE DOCENTES E HIGIENIZAÇÃO VISUAL -->
@@ -16736,7 +16753,6 @@ function getActiveSections(obs) {
       renderTeamScreen();
       showToast(user.roleKey === 'coordenador' ? 'Docente cadastrada com sucesso!' : 'Profissional cadastrado com sucesso!');
     }
-    }
 
     function openEditMemberModal(id) {
       const user = getCurrentUser();
@@ -17028,8 +17044,9 @@ function getActiveSections(obs) {
       };
 
       // 3. Sincronização com USERS_DB e customUsers apenas para usuários com login (não docentes)
+      let dbKey = null;
       if (roleKey !== 'professora') {
-        const dbKey = Object.keys(USERS_DB).find(k => 
+        dbKey = Object.keys(USERS_DB).find(k => 
           k === id || 
           USERS_DB[k].id === id || 
           (USERS_DB[k].name && USERS_DB[k].name.toLowerCase() === oldName.toLowerCase()) ||
@@ -22702,6 +22719,20 @@ function getActiveSections(obs) {
                 }
                 logger.log('Padronização limpa de "Jornada Escolar" sem sufixo residual', true);
 
+                // Asserção de Edição Segura de Docente Titular sem Quebra de Escopo (dbKey)
+                const docenteTitular = (appState.teamMembers || []).find(m => m.roleKey === 'professora' && m.school === 'CEI Professora Maria de Lourdes');
+                if (docenteTitular) {
+                  openEditMemberModal(docenteTitular.id);
+                  const editDocenteNameInp = document.getElementById('editMemberName');
+                  const oldDocenteName = editDocenteNameInp ? editDocenteNameInp.value : docenteTitular.name;
+                  const originalConfirm = window.confirm;
+                  window.confirm = () => true;
+                  saveEditTeamMember();
+                  window.confirm = originalConfirm;
+                  closeEditMemberModal();
+                  logger.log('Edição segura de docente titular sem erro de escopo de dbKey', true, docenteTitular.name);
+                }
+
                 // Simula Formadora (Clarice Barbosa)
                 selectUserAccount('clarice');
                 renderUnitsScreen();
@@ -24532,6 +24563,42 @@ function getActiveSections(obs) {
                 throw new Error(`Ordem incorreta de abas: #deskTabHome (${idxHome}) deve preceder #deskTabOpManagement (${idxOp})`);
               }
               logger.log('Validação da Ordem Canônica de Abas no Desktop (#deskTabHome precede #deskTabOpManagement)', true);
+
+              // 15. VALIDAÇÃO DE REATIVIDADE DE BOTÕES E DESPACHO DE EVENTOS (VERSÃO 1.21)
+              const btnNewObs = document.getElementById('btnNewObsHero');
+              const headerAvatarBtn = document.getElementById('headerAvatarBtn');
+              if (!btnNewObs || !headerAvatarBtn) {
+                throw new Error('Botões críticos de ação (#btnNewObsHero ou #headerAvatarBtn) não localizados no DOM');
+              }
+              if (typeof window.navigateToTab !== 'function' || typeof window.openProfileModal !== 'function') {
+                throw new Error('Funções globais de manipulação de cliques não expostas no escopo window');
+              }
+              // Testa despacho de clique em botão de nova observação
+              btnNewObs.click();
+              const setupScreen = document.getElementById('screenSetup');
+              if (!setupScreen || !setupScreen.classList.contains('active')) {
+                throw new Error('Clique em #btnNewObsHero não ativou a tela #screenSetup');
+              }
+              // Restaura tela home
+              navigateToTab('home');
+
+              // Testa despacho de clique no avatar do perfil
+              headerAvatarBtn.click();
+              const modalProf = document.getElementById('modalProfile');
+              if (!modalProf || !modalProf.classList.contains('active')) {
+                throw new Error('Clique em #headerAvatarBtn não abriu o modal #modalProfile');
+              }
+              closeProfileModal();
+              logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
+
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.21
+              if (!btnChangelog.textContent.includes('Versão 1.21')) {
+                throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
+              }
+              if (!modalChg.innerHTML.includes('Versão 1.21')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.21');
+              }
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.21 (v7.99)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

@@ -7,30 +7,30 @@ Este documento define o fluxo operacional oficial de trabalho conjunto no projet
 ## 1. Dados do Projeto e Repositório Oficial
 - **Repositório GitHub:** [https://github.com/silvabrun0/supervisao-st-crianca](https://github.com/silvabrun0/supervisao-st-crianca)
 - **Branch Principal de Produção:** `main`
-- **Firebase Project ID:** `supervisao-st-crianca`
-- **Hosting URL (Produção):** [https://supervisao-st-crianca.web.app](https://supervisao-st-crianca.web.app)
+- **Hosting URL Oficial (GitHub Pages):** [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)
+- **Hosting URL Alternativo (Firebase):** [https://supervisao-st-crianca.web.app](https://supervisao-st-crianca.web.app)
 
 ---
 
 ## 2. A Regra de Ouro da Colaboração (Pré e Pós Ação)
 
-Para que dois desenvolvedores trabalhem ao mesmo tempo sem sobrescrever alterações do outro:
-1. **SEMPRE PUXAR ANTES DE COMEÇAR (`git pull`):** Antes de planejar ou aplicar código novo, sincronize com o repositório para garantir que você está trabalhando sobre a versão mais recente enviada pelo colega.
-2. **SEMPRE CHECAR ANTES DE ENVIAR (`git fetch` / `git status`):** Antes de enviar as suas alterações locais, verifique se o colega subiu algo novo enquanto você programava.
-3. **SEMPRE ENVIAR AO CONCLUIR (`git commit` + `git push`):** Nunca deixe código funcional acumulado apenas localmente; suba para que o colega tenha acesso imediato.
+Para que múltiplos desenvolvedores e agentes trabalhem com segurança sem sobrescrever alterações do outro:
+1. **SEMPRE PUXAR ANTES DE COMEÇAR (`git pull origin main`):** Antes de planejar ou aplicar código novo, sincronize com o repositório remoto para garantir base atualizada.
+2. **SEMPRE CHECAR ANTES DE ENVIAR (`git fetch` + checagem de concorrência):** Antes de enviar alterações locais, verifique se foram subidos novos commits remotamente.
+3. **SEMPRE VALIDAR SINTAXE ANTES DO COMMIT (`python3 audit_platform.py --check-syntax`):** Garantir que o JavaScript inline esteja 100% livre de erros léxicos/sintáticos.
+4. **SEMPRE ENVIAR AO CONCLUIR (`git commit` + `git push origin main`):** Nunca deixe código funcional acumulado apenas localmente; suba para que todos tenham acesso imediato.
 
 ---
 
 ## 3. Fluxo de Trabalho Integrado no Antigravity
 
-O ciclo de desenvolvimento com o Antigravity opera em **4 Fases Racionalizadas**:
-
 ```mermaid
 flowchart TD
-    A["Fase 1: Sincronização Prévia<br/>(git pull origin main)"] --> B["Fase 2: Planejamento / Execução<br/>(Antigravity: Código + Teste + Backup)"]
-    B --> C["Fase 3: Verificação Pré-Push<br/>(git fetch + verificação de conflitos)"]
-    C --> D["Fase 4: Lançamento e Envio<br/>(Commit semântico + git push)"]
-    D --> E["(Opcional) Deploy de Produção<br/>(firebase deploy)"]
+    A["Fase 1: Sincronização Prévia<br/>(git pull origin main)"] --> B["Fase 2: Implementação / Dupla Checagem<br/>(Código + Backup + Changelog Duplo)"]
+    B --> C["Fase 3: Validação Sintática Pré-Voo<br/>(python3 audit_platform.py --check-syntax)"]
+    C --> D["Fase 4: Verificação Pré-Push<br/>(git fetch + verificação de conflitos)"]
+    D --> E["Fase 5: Commit Semântico & Push<br/>(Deploy automático no GitHub Pages)"]
+    E --> F["Fase 6: Auditoria Silenciosa Pós-Deploy<br/>(python3 audit_platform.py --silent-on-success)"]
 ```
 
 ### Fase 1: Sincronização Prévia (Início de Qualquer Tarefa)
@@ -38,69 +38,51 @@ Antes de analisar ou editar qualquer código:
 ```bash
 git pull origin main
 ```
-- Se o colega subiu mudanças, elas serão mescladas imediatamente.
-- Se houver conflito não resolvido, o assistente ajuda a resolver antes de criar código novo.
+- Se houverem mudanças remotas, elas serão integradas imediatamente.
+- Se houver conflito pendente, resolver antes de prosseguir.
 
-### Fase 2: Implementação e Dupla Checagem (O Trabalho com a IA)
-1. **Desenvolvimento:** O assistente aplica e testa as alterações diretamente no código (`index.html`, scripts, assets, etc.).
-2. **Dupla Checagem:** Releitura do arquivo para garantir integridade.
-3. **Gestão de Versões e Changelog (Obrigatório):**
-   - Atualizar `CHANGELOG.md` com a nova versão (`0.n`), data, itens incluídos, modificados e excluídos.
+### Fase 2: Implementação e Dupla Checagem
+1. **Desenvolvimento:** O assistente aplica as alterações em `index.html`.
+2. **Dupla Checagem:** Releitura do trecho alterado no arquivo para garantir integridade.
+3. **Sincronização de Cópias Espelhadas:**
+   - `gestor supervisao_patos/index.html`
+   - `gestor supervisao_patos/firebase_deploy/public/index.html`
+4. **Backup Intermediário:**
+   - Salvar cópia em `intermediárias/aplicativo_v[N]_[descrição].html`.
+5. **Gestão Dupla do Changelog (Obrigatório):**
+   - Atualizar `CHANGELOG.md` com a nova versão sequencial, data e itens incluídos, modificados e excluídos.
    - Atualizar a indicação de versão no topo e no modal `#modalChangelog` do `index.html`.
 
-### Fase 3: Checagem de Concorrência Pré-Push (Verificação do Colega)
-Antes de disparar o push, o assistente ou desenvolvedor roda:
+### Fase 3: Validação Sintática Pré-Voo (macOS JSC)
+Executar antes de commitar:
+```bash
+python3 audit_platform.py --check-syntax
+```
+Garante que o motor JavaScriptCore valide a compilação de todo o script inline sem requerer Chrome.
+
+### Fase 4: Checagem de Concorrência Pré-Push
+Antes de disparar o push:
 ```bash
 git fetch origin main
 git log HEAD..origin/main --oneline
 ```
-- **Se a saída estiver vazia:** O colega não subiu nada enquanto você trabalhava. É seguro enviar diretamente!
-- **Se aparecerem commits na lista:** O colega subiu alterações enquanto você programava. Execute:
+- **Se a saída estiver vazia:** Nenhum commit novo no remoto. Seguro prosseguir!
+- **Se aparecerem commits:** Outro desenvolvedor enviou código. Execute:
   ```bash
   git pull --rebase origin main
-  # ou git pull origin main
   ```
-  Assim suas mudanças são organizadas em cima do que o colega acabou de subir, garantindo histórico linear e sem perdas.
 
-### Fase 4: Registro e Envio ao GitHub
-Com tudo validado e verificado:
+### Fase 5: Registro e Envio ao GitHub
 ```bash
-git add .
-git commit -m "feat(ou fix): [descrição clara do que foi feito]"
+git add index.html CHANGELOG.md audit_platform.py "intermediárias/..." ...
+git commit -m "feat(ou fix): descrição clara do que foi feito"
 git push origin main
 ```
 
----
-
-## 4. Como Pedir ao Antigravity no Chat (Exemplos Rápidos)
-
-Você pode simplesmente usar comandos naturais no chat com o assistente:
-
-| O que você quer fazer | O que dizer ao Antigravity | O que o assistente fará |
-| :--- | :--- | :--- |
-| **Começar uma tarefa** | *"Verifique se meu colega subiu algo novo e puxe as alterações."* | Executa `git pull origin main` e reporta os últimos commits. |
-| **Programar normalmente** | *"Adicione o filtro de escolas na tabela de visitas."* | Desenvolve, testa localmente e valida a lógica. |
-| **Concluir e subir tudo** | *"Finalize a versão, atualize o changelog, verifique se há algo novo no remoto e dê push no GitHub."* | Executa a checagem com `git fetch`, atualiza o `CHANGELOG.md`, faz o `git commit` e dá o `git push`. |
-
----
-
-## 5. Diretrizes para Branches (Quando o trabalho for grande ou complexo)
-
-Para tarefas que demorem mais de 1 dia ou sejam reformas pesadas na interface:
-1. Criar branch de trabalho:
-   ```bash
-   git checkout -b feature/nome-da-funcionalidade
-   ```
-2. Programar e subir para a branch remota:
-   ```bash
-   git push -u origin feature/nome-da-funcionalidade
-   ```
-3. Abrir um **Pull Request (PR)** no GitHub para o colega revisar antes de integrar à `main`.
-
----
-
-## 6. Publicação em Produção (GitHub Pages)
-
-O deploy da aplicação em produção é realizado de forma automática e integrada pelo GitHub Pages:
-- Cada envio para a branch `main` (`git push origin main`) com o arquivo `index.html` na raiz atualiza o site de produção.
-- URL oficial atualizada: [https://silvabrun0.github.io/supervisao-st-crianca/](https://silvabrun0.github.io/supervisao-st-crianca/)
+### Fase 6: Auditoria Automatizada Pós-Deploy
+Imediatamente após o push:
+```bash
+python3 audit_platform.py --silent-on-success
+```
+- Em caso de aprovação integral: silêncio de logs, apenas confirmação do deploy e do status verde.
+- Em caso de erro: comunicar pontualmente as falhas para correção imediata.
