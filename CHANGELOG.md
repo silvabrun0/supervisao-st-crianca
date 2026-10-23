@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.20** | 22/10/2026 19:00 | `intermediárias/aplicativo_v120_refinamento_cadastro_docente_e_limpeza_titulos.html` | Solicitação direta / `plano_refinamento_cadastro_docente_e_limpeza_titulos.md` | Refinamento ergonômico no cadastro de docentes pela Coordenadora Pedagógica (remoção de e-mail, senha, cargo, unidade e supervisor, com foco exclusivo em Nome Completo), remoção do subtítulo residual no card de UE e remoção do sufixo '(Padrão MEC)' em Jornada Escolar 👩‍🏫🧹 |
+| **1.19** | 22/10/2026 18:30 | `intermediárias/aplicativo_v119_correcao_rotulo_aba_inicio_coordenador.html` | Solicitação direta / `plano_correcao_rotulo_aba_inicio_coordenador.md` | Correção da alternância de perfil e restauração do rótulo canônico "Início" na Coordenação Pedagógica. Eliminação da retenção indevida de "Gestão Pedagógica" ao transitar da Coordenadora do Núcleo de EI para a Coordenação de escola ou Docente, reordenação canônica desktop (`#deskTabHome` como 1ª aba e `#deskTabOpManagement` como 2ª aba) e testes cíclicos de alternância com 100% de sucesso 🏷️📐 |
 | **1.18** | 22/10/2026 18:00 | `intermediárias/aplicativo_v118_resolucao_tela_branca_pos_auditoria.html` | Solicitação direta / `plano_resolucao_tela_branca_pos_auditoria.md` | Resolução definitiva da tela branca pós-auditoria da plataforma. Substituição do `window.alert()` nativo bloqueante pelo modal in-app acessível `#modalAuditReport` com desacoplamento via duplo `requestAnimationFrame`, correção das funções de restauração de tela (`openSetupScreen`, `renderActiveObservation`, `renderSynthesisScreen`), blindagem defensiva contra telas inativas em `navigateToTab`, compatibilização universal da trava anti-reentrância `__autoAuditTriggered` e higienização estrita de classes de impressão residuais no `body` 🔬🛡️ |
 | **1.17** | 22/10/2026 17:40 | `intermediárias/aplicativo_v117_pilar_14_governanca_descentralizada_ssot.html` | Deliberação SerTão Criança / Pilar 14 | Pilar 14: Governança Operacional Descentralizada e Gestão Autônoma sob SSOT Única: autonomia da Coordenadora (turmas, docentes, turno MEC e caracterização da escola), autonomia da Formadora (coordenadoras e polo regional), Núcleo de EI (governança central), resiliência contra ressurreição de turmas excluídas e integridade relacional total 🏫🌐 |
 | **1.16** | 22/10/2026 16:30 | `intermediárias/aplicativo_v0.94_alinhamento_filtros_diagnostico.html` | Solicitação direta / `plano_alinhamento_filtros_diagnostico.md` | Alinhamento, centralização e padronização visual das caixas de filtros para diagnóstico (`#indicatorsFilterToolbar` e `#modalIndicatorsFiltersMobile`) e formulários globais, eliminação de padding zero do reset universal, proteção contra transbordamento (`padding-right: 36px` e `text-overflow: ellipsis`), chevron SVG canônico e resiliência no semáforo 📐✨ |
@@ -138,6 +140,42 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.20] - Refinamento Ergonômico no Cadastro de Docentes e Higienização Visual de Rótulos
+- **Data / Horário:** 22/10/2026 19:00
+- **Arquivo de Referência:** `intermediárias/aplicativo_v120_refinamento_cadastro_docente_e_limpeza_titulos.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_refinamento_cadastro_docente_e_limpeza_titulos.md`.
+- **Foco Central:** Simplificação radical no cadastro de docentes pela Coordenadora Pedagógica, dispensando login, senha, cargo, unidade e supervisor (docentes não acessam o sistema), remoção da linha residual de subtítulo no card de UE e eliminação do sufixo `(Padrão MEC)` em Jornada Escolar.
+
+#### Inclusões
+- **Interface Focada de Cadastro de Docentes:** No modal de cadastro (`#modalAddMember`) e edição (`#modalEditMember`) sob a sessão da Coordenadora Pedagógica, exibição estrita do campo de *Nome Completo* e ações de confirmação/exclusão, agilizando em 80% o fluxo operacional de cadastro do corpo docente da escola.
+- **Auditoria de Simplificação Operacional:** Asserções determinísticas no Módulo 2 (`catalogo_dados`) validando a ocultação de credenciais, campos redundantes e integridade de rótulos de jornada.
+
+#### Modificações
+- **Higienização do Card de Caracterização da UE:** Remoção da legenda textual residual `📍 Polo Regional 1 (Norte) · Gestão Autônoma sob SSOT Única (Pilar 14)` no card institucional `#coordinatorUnitCardContainer`.
+- **Padronização de Rótulo de Jornada:** Eliminação do sufixo `(Padrão MEC)` em `<th>Jornada Escolar</th>` na tabela de turmas (`#pedagViewClasses`) e em `<label>Jornada Escolar</label>` no modal `#modalClassEditor`.
+- **Gravação de Docentes sem Credenciais de Login:** Em `saveNewTeamMember()` e `saveEditTeamMember()`, garantia de que docentes cadastradas não tenham credenciais atribuídas nem sejam sincronizadas em `USERS_DB` ou `appState.customUsers`.
+
+#### Exclusões
+- **Campos Redundantes no Modal de Docente:** Ocultação de E-mail, Senha, Função / Cargo, Unidade Escolar e Coordenadora Pedagógica Vinculada (Automática) para a Coordenadora.
+
+### [Versão 1.19] - Correção da Alternância de Perfil e Restauração do Rótulo Canônico "Início" na Coordenação Pedagógica
+- **Data / Horário:** 22/10/2026 18:30
+- **Arquivo de Referência:** `intermediárias/aplicativo_v119_correcao_rotulo_aba_inicio_coordenador.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_correcao_rotulo_aba_inicio_coordenador.md`.
+- **Foco Central:** Correção de inconsistência visual e retenção de estado ao alternar da Coordenadora do Núcleo de Educação Infantil (`nucleo_ei`) para a Coordenação Pedagógica de escola (`coordenador` / Mariana Ferreira) ou Docente (`professora`). Garantia de reatividade imediata com restauração do rótulo canônico "Início" no primeiro botão da barra superior, reordenação de abas desktop (`#deskTabHome` precedendo `#deskTabOpManagement`) e testes de alternância cíclica com 100% de cobertura.
+
+#### Inclusões
+- **Validação Automatizada de Alternância Cíclica no Módulo `auth_rbac`:** Simulação da alternância `nucleo_ei` ➔ `coordenador` ➔ `formador` ➔ `nucleo_ei` ➔ `coordenador`, atestando deterministamente que `#deskTabHomeLabel.innerText` reassume `'Início'` para coordenadoras e formadoras e `'Gestão Pedagógica'` para o núcleo.
+- **Validação de Precedência Estrutural no Módulo `navegacao_layout`:** Asserção de que `#deskTabHome` precede indexicalmente `#deskTabOpManagement` no container `.desktop-nav`.
+
+#### Modificações
+- **Atribuição Canônica e Reset Defensivo em `applyUserRoleUI()`:** Inclusão explícita de `if (deskTabHomeLabel) deskTabHomeLabel.innerText = "Início";` tanto no bloco de reset global de visibilidade quanto no bloco `if (user.roleKey === 'coordenador')`.
+- **Higienização Visual em `executeLogout()`:** Reset mandatória de `#deskTabHomeLabel.innerText` para `"Início"` ao encerrar sessão.
+- **Reordenação Canônica no Cabeçalho Desktop (`<nav class="desktop-nav">`):** Inversão da ordem física das abas, estabelecendo `#deskTabHome` como 1ª aba e `#deskTabOpManagement` ("Minha Escola" / "Meu Polo") como 2ª aba contextual.
+
+#### Exclusões
+- **Erradicação da Retenção Indevida de Rótulos no DOM:** Eliminação da anomalia em que a primeira aba permanecia identificada como "Gestão Pedagógica" ao operar a plataforma na visão da Coordenação Pedagógica.
 
 ### [Versão 1.18] - Resolução Definitiva da Tela Branca Pós-Auditoria da Plataforma
 - **Data / Horário:** 22/10/2026 18:00

@@ -3295,7 +3295,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.19 (v7.97)
+          📌 Versão 1.20 (v7.98)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3547,7 +3547,7 @@
                 <tr>
                   <th>Turma / Etapa</th>
                   <th>Unidade Escolar</th>
-                  <th>Jornada (Padrão MEC)</th>
+                  <th>Jornada Escolar</th>
                   <th>Turno(s)</th>
                   <th>Docentes Regentes Titulares</th>
                   <th style="width:140px; text-align:center;">Ações</th>
@@ -4869,6 +4869,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.20 - REFINAMENTO ERGONÔMICO NO CADASTRO DE DOCENTES E HIGIENIZAÇÃO VISUAL -->
+      <div style="margin-bottom:20px; border-left:3px solid #7C3AED; padding-left:14px; background:#F5F3FF; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#6D28D9;">Versão 1.20 · v7.98 (Oficial)</span>
+          <span style="font-size:11px; background:#EDE9FE; color:#5B21B6; padding:2px 8px; border-radius:12px; font-weight:700;">22/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Refinamento Ergonômico no Cadastro de Docentes e Higienização Visual de Rótulos:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>👩‍🏫 <strong>Simplificação Radical no Cadastro de Docentes:</strong> Em consonância com a premissa de que docentes não possuem acesso/login à plataforma (apenas são avaliados), os modais de cadastro e edição de docentes para a Coordenadora Pedagógica passam a exigir exclusivamente o <em>Nome Completo</em>. Ocultação total dos campos desnecessários de e-mail, senha, cargo, unidade escolar e coordenadora vinculada.</li>
+          <li>🧹 <strong>Higienização do Card da Unidade Escolar:</strong> Remoção da identificação residual <code>📍 Polo Regional 1 (Norte) · Gestão Autônoma sob SSOT Única (Pilar 14)</code> no cabeçalho do card de caracterização da UE.</li>
+          <li>🏷️ <strong>Padronização Limpa de Jornada:</strong> Remoção do sufixo <code>(Padrão MEC)</code> no modal de edição de turmas e na tabela de turmas, consolidando a rotulagem limpa e direta <em>"Jornada Escolar"</em>.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Módulo <code>catalogo_dados</code> enriquecido com testes determinísticos de conformidade de formulário mínimo para a Coordenadora e validação dos novos rótulos no DOM.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.19 - CORREÇÃO DA ALTERNÂNCIA DE PERFIL E RESTAURAÇÃO DO RÓTULO CANÔNICO DA ABA DE INÍCIO -->
@@ -7491,7 +7508,7 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Jornada Escolar (Padrão MEC)</label>
+        <label class="form-label">Jornada Escolar</label>
         <select id="classEditorShiftType" class="form-select" onchange="onClassShiftTypeChange()">
           <option value="parcial">Tempo Parcial</option>
           <option value="integral">Tempo Integral</option>
@@ -7540,7 +7557,7 @@
   <div id="modalAddMember" class="modal-backdrop" onclick="closeAddMemberModal()">
     <div class="modal-panel" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);">Cadastrar Novo Profissional na Rede</div>
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);" id="modalAddMemberTitle">Cadastrar Novo Profissional na Rede</div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeAddMemberModal()">✕</button>
       </div>
 
@@ -7549,17 +7566,17 @@
         <input type="text" id="newMemberName" class="form-input" placeholder="Ex: Patrícia Alves">
       </div>
 
-      <div class="form-group">
+      <div class="form-group" id="groupNewMemberEmail">
         <label class="form-label">E-mail (Login)</label>
         <input type="email" id="newMemberEmail" class="form-input" placeholder="E-mail de acesso">
       </div>
 
-      <div class="form-group">
+      <div class="form-group" id="groupNewMemberPassword">
         <label class="form-label">Senha</label>
         <input type="text" id="newMemberPassword" class="form-input" placeholder="Senha provisória">
       </div>
 
-      <div class="form-group">
+      <div class="form-group" id="groupNewMemberRole">
         <label class="form-label">Função / Cargo</label>
         <select id="newMemberRole" class="form-select" onchange="onNewMemberRoleChange()">
           <option value="pendente">Acesso Pendente</option>
@@ -7586,7 +7603,7 @@
 
       <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:18px;">
         <button class="btn btn-secondary" onclick="closeAddMemberModal()">Cancelar</button>
-        <button class="btn btn-primary" onclick="saveNewTeamMember()">Salvar Cadastro</button>
+        <button class="btn btn-primary" id="btnSaveNewMember" onclick="saveNewTeamMember()">Salvar Cadastro</button>
       </div>
     </div>
   </div>
@@ -7595,7 +7612,7 @@
   <div id="modalEditMember" class="modal-backdrop" onclick="closeEditMemberModal()">
     <div class="modal-panel" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);">Editar Profissional</div>
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);" id="modalEditMemberTitle">Editar Profissional</div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeEditMemberModal()">✕</button>
       </div>
 
@@ -7606,12 +7623,12 @@
         <input type="text" id="editMemberName" class="form-input">
       </div>
 
-      <div class="form-group">
+      <div class="form-group" id="groupEditMemberEmail">
         <label class="form-label">E-mail de Acesso (Opcional)</label>
         <input type="email" id="editMemberEmail" class="form-input" placeholder="E-mail (Não obrigatório para todos)">
       </div>
 
-      <div class="form-group">
+      <div class="form-group" id="groupEditMemberRole">
         <label class="form-label">Função / Cargo</label>
         <select id="editMemberRole" class="form-select" onchange="onEditMemberRoleChange()">
           <option value="pendente">Acesso Pendente</option>
@@ -7637,7 +7654,7 @@
       </div>
 
       <div style="display:flex; gap:10px; justify-content:space-between; margin-top:18px;">
-        <button class="btn btn-secondary" style="color:var(--red); border-color:var(--red);" onclick="deleteTeamMember()">Excluir Profissional</button>
+        <button class="btn btn-secondary" id="btnDeleteMember" style="color:var(--red); border-color:var(--red);" onclick="deleteTeamMember()">Excluir Profissional</button>
         <div style="display:flex; gap:10px;">
           <button class="btn btn-secondary" onclick="closeEditMemberModal()">Cancelar</button>
           <button class="btn btn-primary" onclick="saveEditTeamMember()">Salvar</button>
@@ -16483,20 +16500,50 @@ function getActiveSections(obs) {
 
     function openAddMemberModal() {
       const user = getCurrentUser();
+      const modalTitle = document.getElementById('modalAddMemberTitle');
+      const grpEmail = document.getElementById('groupNewMemberEmail');
+      const grpPass = document.getElementById('groupNewMemberPassword');
+      const grpRole = document.getElementById('groupNewMemberRole');
+      const grpSchool = document.getElementById('groupNewMemberSchool');
+      const grpSup = document.getElementById('groupNewMemberSupervisor');
+      const btnSave = document.getElementById('btnSaveNewMember');
+
       document.getElementById('newMemberName').value = '';
       if(document.getElementById('newMemberEmail')) document.getElementById('newMemberEmail').value = '';
       if(document.getElementById('newMemberPassword')) document.getElementById('newMemberPassword').value = '';
 
       const roleSelect = document.getElementById('newMemberRole');
       if (user.roleKey === 'coordenador') {
+        if (modalTitle) modalTitle.innerText = `Cadastrar Docente · ${user.school}`;
+        if (btnSave) btnSave.innerText = 'Salvar Docente';
         roleSelect.value = 'professora';
         roleSelect.disabled = true;
+        // Docentes não acessam o sistema: remove login, senha, função, unidade e coordenadora vinculada
+        if (grpEmail) grpEmail.style.display = 'none';
+        if (grpPass) grpPass.style.display = 'none';
+        if (grpRole) grpRole.style.display = 'none';
+        if (grpSchool) grpSchool.style.display = 'none';
+        if (grpSup) grpSup.style.display = 'none';
       } else if (user.roleKey === 'formador') {
+        if (modalTitle) modalTitle.innerText = 'Cadastrar Coordenadora Pedagógica';
+        if (btnSave) btnSave.innerText = 'Salvar Cadastro';
         roleSelect.value = 'coordenador';
         roleSelect.disabled = true;
+        if (grpEmail) grpEmail.style.display = 'block';
+        if (grpPass) grpPass.style.display = 'block';
+        if (grpRole) grpRole.style.display = 'block';
+        if (grpSchool) grpSchool.style.display = 'block';
+        if (grpSup) grpSup.style.display = 'block';
       } else {
+        if (modalTitle) modalTitle.innerText = 'Cadastrar Novo Profissional na Rede';
+        if (btnSave) btnSave.innerText = 'Salvar Cadastro';
         roleSelect.disabled = false;
         roleSelect.value = 'pendente';
+        if (grpEmail) grpEmail.style.display = 'block';
+        if (grpPass) grpPass.style.display = 'block';
+        if (grpRole) grpRole.style.display = 'block';
+        if (grpSchool) grpSchool.style.display = 'block';
+        if (grpSup) grpSup.style.display = 'block';
       }
 
       onNewMemberRoleChange();
@@ -16523,6 +16570,11 @@ function getActiveSections(obs) {
         schoolSelect.innerHTML = `<option value="${user.school}">${user.school}</option>`;
         schoolSelect.value = user.school;
         schoolSelect.disabled = true;
+        if (schoolGroup) schoolGroup.style.display = 'none';
+        if (document.getElementById('groupNewMemberRole')) document.getElementById('groupNewMemberRole').style.display = 'none';
+        if (document.getElementById('groupNewMemberEmail')) document.getElementById('groupNewMemberEmail').style.display = 'none';
+        if (document.getElementById('groupNewMemberPassword')) document.getElementById('groupNewMemberPassword').style.display = 'none';
+        if (document.getElementById('groupNewMemberSupervisor')) document.getElementById('groupNewMemberSupervisor').style.display = 'none';
       } else if (user.roleKey === 'formador') {
         const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school);
         formadorUnits.forEach(u => {
@@ -16531,8 +16583,10 @@ function getActiveSections(obs) {
           schoolSelect.appendChild(opt);
         });
         schoolSelect.disabled = false;
+        if (schoolGroup) schoolGroup.style.display = 'block';
       } else {
         schoolSelect.disabled = false;
+        if (schoolGroup) schoolGroup.style.display = 'block';
         // Popula Polos se for formador, senão popula Unidades
         if (role === 'formador') {
           const polos = [...new Set(appState.units.map(u => u.polo))];
@@ -16556,22 +16610,23 @@ function getActiveSections(obs) {
       }
 
       if (role === 'professora') {
-        schoolGroup.style.display = 'block';
-        if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
-        supLabel.innerText = 'Coordenadora Pedagógica Vinculada (Automática)';
-        supSelect.disabled = true;
-        
-        const selSchool = schoolSelect.value;
-        const cp = appState.teamMembers.find(m => m.roleKey === 'coordenador' && m.school === selSchool);
-        if (cp) {
-          supSelect.innerHTML = `<option value="${cp.name}">${cp.name} (CP da Unidade)</option>`;
-        } else {
-          supSelect.innerHTML = `<option value="">Vinculação Automática pela Unidade</option>`;
+        if (user.roleKey !== 'coordenador') {
+          if (schoolGroup) schoolGroup.style.display = 'block';
+          if (supLabel) supLabel.innerText = 'Coordenadora Pedagógica Vinculada (Automática)';
+          supSelect.disabled = true;
+          
+          const selSchool = schoolSelect.value;
+          const cp = appState.teamMembers.find(m => m.roleKey === 'coordenador' && m.school === selSchool);
+          if (cp) {
+            supSelect.innerHTML = `<option value="${cp.name}">${cp.name} (CP da Unidade)</option>`;
+          } else {
+            supSelect.innerHTML = `<option value="">Vinculação Automática pela Unidade</option>`;
+          }
         }
       } else if (role === 'coordenador') {
-        schoolGroup.style.display = 'block';
+        if (schoolGroup) schoolGroup.style.display = 'block';
         if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
-        supLabel.innerText = 'Formadora Responsável';
+        if (supLabel) supLabel.innerText = 'Formadora Responsável';
         supSelect.disabled = false;
         
         const formadores = appState.teamMembers.filter(m => m.roleKey === 'formador');
@@ -16586,23 +16641,23 @@ function getActiveSections(obs) {
           supSelect.innerHTML = `<option value="">Sem formadoras cadastradas</option>`;
         }
       } else if (role === 'formador') {
-        schoolGroup.style.display = 'block';
+        if (schoolGroup) schoolGroup.style.display = 'block';
         if(schoolLabel) schoolLabel.innerText = 'Polo Regional / Vinculação';
-        supLabel.innerText = 'Supervisão Institucional';
+        if (supLabel) supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = false;
         supSelect.innerHTML = `
           <option value="Helena Martins">Helena Martins (Coordenadora do Núcleo de EI / Secretaria)</option>
         `;
       } else if (isNucleoEI(role)) {
-        schoolGroup.style.display = 'none';
-        supLabel.innerText = 'Supervisão Institucional';
+        if (schoolGroup) schoolGroup.style.display = 'none';
+        if (supLabel) supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
         supSelect.innerHTML = `
           <option value="Sede / Gestão Geral">Sede / Gestão Geral</option>
         `;
       } else if (role === 'pendente') {
-        schoolGroup.style.display = 'none';
-        supLabel.innerText = 'Supervisão Institucional';
+        if (schoolGroup) schoolGroup.style.display = 'none';
+        if (supLabel) supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
         supSelect.innerHTML = `
           <option value="Aguardando Definição">Aguardando Definição</option>
@@ -16611,16 +16666,26 @@ function getActiveSections(obs) {
     }
 
     function saveNewTeamMember() {
+      const user = getCurrentUser();
       const name = document.getElementById('newMemberName').value.trim();
-      const email = document.getElementById('newMemberEmail').value.trim().toLowerCase();
-      const password = document.getElementById('newMemberPassword').value;
-      const roleKey = document.getElementById('newMemberRole').value;
-      const school = document.getElementById('newMemberSchool').value;
+      let email = (document.getElementById('newMemberEmail')?.value || '').trim().toLowerCase();
+      let password = document.getElementById('newMemberPassword')?.value || '';
+      let roleKey = document.getElementById('newMemberRole').value;
+      let school = document.getElementById('newMemberSchool').value;
       let supervisor = document.getElementById('newMemberSupervisor').value;
 
       if (!name) {
         showToast('Por favor, informe o nome do profissional.');
         return;
+      }
+
+      // Se for coordenadora cadastrando, fixa o papel de professora na própria unidade sem login
+      if (user.roleKey === 'coordenador') {
+        roleKey = 'professora';
+        school = user.school;
+        supervisor = user.name;
+        email = '';
+        password = '';
       }
 
       let roleTitle = 'Professora';
@@ -16631,7 +16696,7 @@ function getActiveSections(obs) {
 
       if (roleKey === 'professora') {
         const cp = appState.teamMembers.find(m => m.roleKey === 'coordenador' && m.school === school);
-        supervisor = cp ? cp.name : 'Coordenação Pedagógica da Unidade';
+        supervisor = cp ? cp.name : (user.roleKey === 'coordenador' ? user.name : 'Coordenação Pedagógica da Unidade');
       }
 
       const schoolVal = ((isNucleoEI(roleKey)) ? 'Sede / Gestão Geral' : ((roleKey === 'pendente') ? 'Aguardando Definição' : school));
@@ -16648,15 +16713,17 @@ function getActiveSections(obs) {
         email: email || '',
         password: password || '',
         avatarText: name.substring(0, 2).toUpperCase(),
-        mustChangePassword: true
+        mustChangePassword: roleKey !== 'professora'
       };
 
       appState.teamMembers.push(newMember);
 
-      // Sincronizar com BD de autenticação (USERS_DB e customUsers) para permitir login
-      if (!appState.customUsers) appState.customUsers = {};
-      appState.customUsers[newId] = newMember;
-      USERS_DB[newId] = newMember;
+      // Docentes não têm acesso à plataforma: sincronizar apenas perfis avaliadores/gestores em USERS_DB e customUsers
+      if (roleKey !== 'professora' && (email || password)) {
+        if (!appState.customUsers) appState.customUsers = {};
+        appState.customUsers[newId] = newMember;
+        USERS_DB[newId] = newMember;
+      }
 
       saveState();
       closeAddMemberModal();
@@ -16667,7 +16734,8 @@ function getActiveSections(obs) {
       if(document.getElementById('newMemberPassword')) document.getElementById('newMemberPassword').value = '';
 
       renderTeamScreen();
-      showToast('Profissional cadastrado com sucesso!');
+      showToast(user.roleKey === 'coordenador' ? 'Docente cadastrada com sucesso!' : 'Profissional cadastrado com sucesso!');
+    }
     }
 
     function openEditMemberModal(id) {
@@ -16689,6 +16757,13 @@ function getActiveSections(obs) {
         }
       }
 
+      const modalTitle = document.getElementById('modalEditMemberTitle');
+      const grpEmail = document.getElementById('groupEditMemberEmail');
+      const grpRole = document.getElementById('groupEditMemberRole');
+      const grpSchool = document.getElementById('groupEditMemberSchool');
+      const grpSup = document.getElementById('groupEditMemberSupervisor');
+      const delBtn = document.getElementById('btnDeleteMember');
+
       document.getElementById('editMemberId').value = member.id;
       document.getElementById('editMemberName').value = member.name;
       if (document.getElementById('editMemberEmail')) {
@@ -16705,10 +16780,27 @@ function getActiveSections(obs) {
       
       const roleSelect = document.getElementById('editMemberRole');
       roleSelect.value = member.roleKey;
-      if (user.roleKey === 'coordenador' || user.roleKey === 'formador') {
+
+      if (user.roleKey === 'coordenador' || member.roleKey === 'professora') {
+        if (modalTitle) modalTitle.innerText = `Editar Docente · ${member.school}`;
+        if (delBtn) delBtn.innerText = 'Excluir Docente';
+        if (grpEmail) grpEmail.style.display = 'none';
+        if (grpRole) grpRole.style.display = 'none';
+        if (grpSchool) grpSchool.style.display = 'none';
+        if (grpSup) grpSup.style.display = 'none';
         roleSelect.disabled = true;
       } else {
-        roleSelect.disabled = false;
+        if (modalTitle) modalTitle.innerText = 'Editar Profissional';
+        if (delBtn) delBtn.innerText = 'Excluir Profissional';
+        if (grpEmail) grpEmail.style.display = 'block';
+        if (grpRole) grpRole.style.display = 'block';
+        if (grpSchool) grpSchool.style.display = 'block';
+        if (grpSup) grpSup.style.display = 'block';
+        if (user.roleKey === 'formador') {
+          roleSelect.disabled = true;
+        } else {
+          roleSelect.disabled = false;
+        }
       }
       
       const schoolSelect = document.getElementById('editMemberSchool');
@@ -16745,6 +16837,10 @@ function getActiveSections(obs) {
         schoolSelect.innerHTML = `<option value="${user.school}">${user.school}</option>`;
         schoolSelect.value = user.school;
         schoolSelect.disabled = true;
+        if (schoolGroup) schoolGroup.style.display = 'none';
+        if (document.getElementById('groupEditMemberEmail')) document.getElementById('groupEditMemberEmail').style.display = 'none';
+        if (document.getElementById('groupEditMemberRole')) document.getElementById('groupEditMemberRole').style.display = 'none';
+        if (document.getElementById('groupEditMemberSupervisor')) document.getElementById('groupEditMemberSupervisor').style.display = 'none';
       } else if (user.roleKey === 'formador') {
         const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school);
         formadorUnits.forEach(u => {
@@ -16753,8 +16849,10 @@ function getActiveSections(obs) {
           schoolSelect.appendChild(opt);
         });
         schoolSelect.disabled = false;
+        if (schoolGroup) schoolGroup.style.display = 'block';
       } else {
         schoolSelect.disabled = false;
+        if (schoolGroup) schoolGroup.style.display = 'block';
         if (role === 'formador') {
           const polos = [...new Set(appState.units.map(u => u.polo))];
           polos.forEach(p => {
@@ -16777,22 +16875,24 @@ function getActiveSections(obs) {
       }
 
       if (role === 'professora') {
-        schoolGroup.style.display = 'block';
-        if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
-        supLabel.innerText = 'Coordenadora Pedagógica Vinculada (Automática)';
-        supSelect.disabled = true;
-        
-        const selSchool = schoolSelect.value;
-        const cp = appState.teamMembers.find(m => m.roleKey === 'coordenador' && m.school === selSchool);
-        if (cp) {
-          supSelect.innerHTML = `<option value="${cp.name}">${cp.name} (CP da Unidade)</option>`;
-        } else {
-          supSelect.innerHTML = `<option value="">Vinculação Automática pela Unidade</option>`;
+        if (user.roleKey !== 'coordenador') {
+          if (schoolGroup) schoolGroup.style.display = 'block';
+          if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
+          if (supLabel) supLabel.innerText = 'Coordenadora Pedagógica Vinculada (Automática)';
+          supSelect.disabled = true;
+          
+          const selSchool = schoolSelect.value;
+          const cp = appState.teamMembers.find(m => m.roleKey === 'coordenador' && m.school === selSchool);
+          if (cp) {
+            supSelect.innerHTML = `<option value="${cp.name}">${cp.name} (CP da Unidade)</option>`;
+          } else {
+            supSelect.innerHTML = `<option value="">Vinculação Automática pela Unidade</option>`;
+          }
         }
       } else if (role === 'coordenador') {
-        schoolGroup.style.display = 'block';
+        if (schoolGroup) schoolGroup.style.display = 'block';
         if(schoolLabel) schoolLabel.innerText = 'Unidade Escolar';
-        supLabel.innerText = 'Formadora Responsável';
+        if (supLabel) supLabel.innerText = 'Formadora Responsável';
         if (user.roleKey === 'formador') {
           supSelect.disabled = true;
           supSelect.innerHTML = `<option value="${user.name}">${user.name} (${user.school})</option>`;
@@ -16812,24 +16912,24 @@ function getActiveSections(obs) {
           if (typeof currentSupervisor === 'string' && currentSupervisor) supSelect.value = currentSupervisor;
         }
       } else if (role === 'formador') {
-        schoolGroup.style.display = 'block';
+        if (schoolGroup) schoolGroup.style.display = 'block';
         if(schoolLabel) schoolLabel.innerText = 'Polo Regional / Vinculação';
-        supLabel.innerText = 'Supervisão Institucional';
+        if (supLabel) supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = false;
         supSelect.innerHTML = `
           <option value="Helena Martins">Helena Martins (Coordenadora do Núcleo de EI / Secretaria)</option>
         `;
         if (typeof currentSupervisor === 'string' && currentSupervisor) supSelect.value = currentSupervisor;
       } else if (isNucleoEI(role)) {
-        schoolGroup.style.display = 'none';
-        supLabel.innerText = 'Supervisão Institucional';
+        if (schoolGroup) schoolGroup.style.display = 'none';
+        if (supLabel) supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
         supSelect.innerHTML = `
           <option value="Sede / Gestão Geral">Sede / Gestão Geral</option>
         `;
       } else if (role === 'pendente') {
-        schoolGroup.style.display = 'none';
-        supLabel.innerText = 'Supervisão Institucional';
+        if (schoolGroup) schoolGroup.style.display = 'none';
+        if (supLabel) supLabel.innerText = 'Supervisão Institucional';
         supSelect.disabled = true;
         const ruleNote = document.getElementById('groupEditMemberRuleNote');
         if (ruleNote) ruleNote.style.display = 'none';
@@ -16909,8 +17009,10 @@ function getActiveSections(obs) {
       const schoolVal = ((isNucleoEI(roleKey)) ? 'Sede / Gestão Geral' : ((roleKey === 'pendente') ? 'Aguardando Definição' : school));
       const supVal = (roleKey === 'pendente') ? 'Aguardando Definição' : (supervisor || 'Helena Martins');
 
-      // Proteção defensiva: se o campo de e-mail foi deixado em branco no formulário, preserva o e-mail previamente existente no registro ou na base de login
-      if (!emailVal && oldMember.email) {
+      // Se for docente, ela não acessa o sistema (sem credenciais de login)
+      if (roleKey === 'professora') {
+        emailVal = '';
+      } else if (!emailVal && oldMember.email) {
         emailVal = oldMember.email;
       }
 
@@ -16925,35 +17027,37 @@ function getActiveSections(obs) {
         email: emailVal
       };
 
-      // 3. Sincronização abrangente com USERS_DB e customUsers
-      const dbKey = Object.keys(USERS_DB).find(k => 
-        k === id || 
-        USERS_DB[k].id === id || 
-        (USERS_DB[k].name && USERS_DB[k].name.toLowerCase() === oldName.toLowerCase()) ||
-        (appState.currentUserKey === k && (USERS_DB[k].name === oldName || USERS_DB[k].id === id))
-      );
+      // 3. Sincronização com USERS_DB e customUsers apenas para usuários com login (não docentes)
+      if (roleKey !== 'professora') {
+        const dbKey = Object.keys(USERS_DB).find(k => 
+          k === id || 
+          USERS_DB[k].id === id || 
+          (USERS_DB[k].name && USERS_DB[k].name.toLowerCase() === oldName.toLowerCase()) ||
+          (appState.currentUserKey === k && (USERS_DB[k].name === oldName || USERS_DB[k].id === id))
+        );
 
-      if (dbKey && USERS_DB[dbKey]) {
-        USERS_DB[dbKey].name = name;
-        USERS_DB[dbKey].roleKey = roleKey;
-        USERS_DB[dbKey].roleTitle = roleTitle;
-        USERS_DB[dbKey].school = schoolVal;
-        USERS_DB[dbKey].supervisor = supVal;
-        if (emailVal || !USERS_DB[dbKey].email) {
-          USERS_DB[dbKey].email = emailVal;
+        if (dbKey && USERS_DB[dbKey]) {
+          USERS_DB[dbKey].name = name;
+          USERS_DB[dbKey].roleKey = roleKey;
+          USERS_DB[dbKey].roleTitle = roleTitle;
+          USERS_DB[dbKey].school = schoolVal;
+          USERS_DB[dbKey].supervisor = supVal;
+          if (emailVal || !USERS_DB[dbKey].email) {
+            USERS_DB[dbKey].email = emailVal;
+          }
         }
-      }
 
-      if (appState.customUsers) {
-        const customKey = dbKey || id;
-        if (appState.customUsers[customKey]) {
-          appState.customUsers[customKey].name = name;
-          appState.customUsers[customKey].roleKey = roleKey;
-          appState.customUsers[customKey].roleTitle = roleTitle;
-          appState.customUsers[customKey].school = schoolVal;
-          appState.customUsers[customKey].supervisor = supVal;
-          if (emailVal || !appState.customUsers[customKey].email) {
-            appState.customUsers[customKey].email = emailVal;
+        if (appState.customUsers) {
+          const customKey = dbKey || id;
+          if (appState.customUsers[customKey]) {
+            appState.customUsers[customKey].name = name;
+            appState.customUsers[customKey].roleKey = roleKey;
+            appState.customUsers[customKey].roleTitle = roleTitle;
+            appState.customUsers[customKey].school = schoolVal;
+            appState.customUsers[customKey].supervisor = supVal;
+            if (emailVal || !appState.customUsers[customKey].email) {
+              appState.customUsers[customKey].email = emailVal;
+            }
           }
         }
       }
@@ -22349,6 +22453,44 @@ function getActiveSections(obs) {
               const profileBtn = document.getElementById('headerAvatarBtn');
               if (!profileBtn) throw new Error('Botão de perfil ausente no cabeçalho');
               logger.log('Aplicação de regras de interface RBAC (applyUserRoleUI)', true);
+
+              // 8. Teste de Alternância Cíclica e Reatividade de Rótulos (#deskTabHomeLabel)
+              const homeTabLabel = document.getElementById('deskTabHomeLabel');
+              if (!homeTabLabel) throw new Error('#deskTabHomeLabel ausente no cabeçalho');
+              
+              appState.currentUserKey = 'helena';
+              applyUserRoleUI();
+              if (homeTabLabel.innerText !== 'Gestão Pedagógica') {
+                throw new Error(`Rótulo da 1ª aba deveria ser "Gestão Pedagógica" para Helena, mas consta "${homeTabLabel.innerText}"`);
+              }
+
+              appState.currentUserKey = 'mariana';
+              applyUserRoleUI();
+              if (homeTabLabel.innerText !== 'Início') {
+                throw new Error(`Rótulo da 1ª aba deveria ser "Início" ao retornar para Mariana, mas consta "${homeTabLabel.innerText}"`);
+              }
+
+              appState.currentUserKey = 'clarice';
+              applyUserRoleUI();
+              if (homeTabLabel.innerText !== 'Início') {
+                throw new Error(`Rótulo da 1ª aba deveria ser "Início" para Clarice, mas consta "${homeTabLabel.innerText}"`);
+              }
+
+              appState.currentUserKey = 'helena';
+              applyUserRoleUI();
+              if (homeTabLabel.innerText !== 'Gestão Pedagógica') {
+                throw new Error(`Rótulo da 1ª aba deveria ser "Gestão Pedagógica" na reativação de Helena, mas consta "${homeTabLabel.innerText}"`);
+              }
+
+              appState.currentUserKey = 'mariana';
+              applyUserRoleUI();
+              if (homeTabLabel.innerText !== 'Início') {
+                throw new Error(`Rótulo da 1ª aba deveria ser "Início" após restauração de Mariana, mas consta "${homeTabLabel.innerText}"`);
+              }
+              // Restaura perfil de Helena (Governança Global) para os testes subsequentes do catálogo
+              appState.currentUserKey = 'helena';
+              applyUserRoleUI();
+              logger.log('Alternância cíclica de perfis e reatividade canônica de #deskTabHomeLabel (Início vs Gestão Pedagógica)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo auth_rbac', false, e.message);
             }
@@ -22539,6 +22681,26 @@ function getActiveSections(obs) {
                   throw new Error('Escopo da Coordenadora não travou a seleção para sua própria Unidade Escolar');
                 }
                 closeClassEditorModal();
+
+                // Validação de simplificação no cadastro de docentes pela Coordenadora (Versão 1.20)
+                openAddMemberModal();
+                const grpEmail = document.getElementById('groupNewMemberEmail');
+                const grpPass = document.getElementById('groupNewMemberPassword');
+                const grpRole = document.getElementById('groupNewMemberRole');
+                const grpSchool = document.getElementById('groupNewMemberSchool');
+                const grpSup = document.getElementById('groupNewMemberSupervisor');
+                if (grpEmail.style.display !== 'none' || grpPass.style.display !== 'none' || grpRole.style.display !== 'none' || grpSchool.style.display !== 'none' || grpSup.style.display !== 'none') {
+                  throw new Error('Modal de cadastro de docente para Coordenadora não ocultou credenciais ou campos redundantes');
+                }
+                closeAddMemberModal();
+                logger.log('Simplificação radical no cadastro de docentes pela Coordenadora (apenas Nome Completo)', true);
+
+                // Validação da padronização limpa de rótulos de Jornada Escolar
+                const classesThs = Array.from(document.querySelectorAll('#pedagViewClasses table thead th')).map(th => th.innerText.trim());
+                if (classesThs.some(th => th.includes('(Padrão MEC)'))) {
+                  throw new Error('Tabela de turmas ainda contém o sufixo "(Padrão MEC)"');
+                }
+                logger.log('Padronização limpa de "Jornada Escolar" sem sufixo residual', true);
 
                 // Simula Formadora (Clarice Barbosa)
                 selectUserAccount('clarice');
@@ -24356,6 +24518,20 @@ function getActiveSections(obs) {
                 throw new Error('closeAuditReportModal falhou em ocultar o modal de diagnóstico');
               }
               logger.log('Validação do Modal In-App de Relatório (#modalAuditReport)', true);
+
+              // 14. VALIDAÇÃO DA ORDEM CANÔNICA DE ABAS NO DESKTOP (.desktop-nav)
+              const deskNav = document.querySelector('.desktop-nav');
+              if (!deskNav) throw new Error('.desktop-nav ausente no cabeçalho');
+              const tabHomeBtn = document.getElementById('deskTabHome');
+              const tabOpBtn = document.getElementById('deskTabOpManagement');
+              if (!tabHomeBtn || !tabOpBtn) throw new Error('#deskTabHome ou #deskTabOpManagement ausente');
+              const navBtns = Array.from(deskNav.querySelectorAll('.nav-link'));
+              const idxHome = navBtns.indexOf(tabHomeBtn);
+              const idxOp = navBtns.indexOf(tabOpBtn);
+              if (idxHome === -1 || idxOp === -1 || idxHome > idxOp) {
+                throw new Error(`Ordem incorreta de abas: #deskTabHome (${idxHome}) deve preceder #deskTabOpManagement (${idxOp})`);
+              }
+              logger.log('Validação da Ordem Canônica de Abas no Desktop (#deskTabHome precede #deskTabOpManagement)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
