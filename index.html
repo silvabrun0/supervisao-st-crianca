@@ -4393,9 +4393,6 @@
           <div class="page-title">Ocorrências de Campo</div>
           <div class="page-subtitle">Anotações qualitativas para subsidiar a devolutiva final e intervenções pedagógicas</div>
         </div>
-        <button class="btn btn-primary btn-add-note" id="btnNewQualitativeNote" onclick="openQualitativeNoteModal()">
-          + Nova Ocorrência de Campo
-        </button>
       </div>
 
       <!-- Toolbar de Filtros e Ações do Bloco de Notas Justificado no Bloco -->
@@ -4871,20 +4868,20 @@
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
       </div>
 
-      <!-- VERSÃO 1.22 - SIMPLIFICAÇÃO RADICAL DO CADASTRO DE DOCENTES, HIGIENIZAÇÃO DE JORNADA E ORDENAÇÃO CANÔNICA DE ABAS -->
-      <div style="margin-bottom:20px; border-left:3px solid #10B981; padding-left:14px; background:#ECFDF5; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:14px; font-weight:800; color:#047857;">Versão 1.22 · v8.00 (Oficial)</span>
-          <span style="font-size:11px; background:#D1FAE5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">23/10/2026</span>
+      <!-- VERSÃO 1.22 - REMOÇÃO DO BOTÃO INCONSISTENTE DE NOVA OCORRÊNCIA EM REGISTROS FORMATIVOS -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #0066CC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; font-weight:800; color:#0066CC;">Versão 1.22 · v8.00 (Oficial)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:#1E40AF; padding:2px 8px; border-radius:12px; font-weight:700;">23/10/2026</span>
         </div>
-        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
-          Simplificação Radical no Cadastro de Docentes, Higienização Visual de Jornada e Ordenação Canônica de Abas:
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Remoção do Botão de Nova Ocorrência da Tela de Registros Formativos e Alinhamento Estrito aos Pilares 1 e 13:
         </div>
-        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
-          <li>👩‍🏫 <strong>Docentes sem Acesso/Login e Foco Exclusivo em Nome Completo:</strong> Ocultação definitiva de campos de e-mail, senha, cargo, unidade escolar e coordenadora vinculada para cadastro e edição pela Coordenadora Pedagógica. Não inclusão de docentes na base de autenticação (<code>USERS_DB</code> / <code>customUsers</code>).</li>
-          <li>🧹 <strong>Higienização Definitiva de Rótulos Burocráticos:</strong> Supressão da frase residual no subtítulo de turmas (<code>#classesViewSubtitle</code>), higienização de menção a 'jornada MEC' no card da Home e eliminação completa de resquícios de Polo/SSOT em cabeçalhos de escola.</li>
-          <li>🏷️ <strong>Nomenclatura Limpa 'Jornada Escolar':</strong> Remoção de qualquer sufixo residual burocrático <code>(Padrão MEC)</code> na gestão de turmas.</li>
-          <li>📐 <strong>Garantia Canônica de Ordem de Abas:</strong> Posicionamento prioritário absoluto da aba <em>Início</em> (1ª) e <em>Minha Escola</em> (2ª), com destino inicial sempre em <code>home</code>.</li>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🚫 <strong>Eliminação de Ponto Cego e Bloqueio Enganoso:</strong> Remoção física do botão <code>+ Nova Ocorrência de Campo</code> (<code>#btnNewQualitativeNote</code>) do módulo de Registros Formativos (<code>screenNotes</code>), que disparava bloqueio orientador por não haver observação em andamento.</li>
+          <li>🎯 <strong>Aderência Estrita à Regra de Negócio Canônica (Pilares 1 e 13):</strong> Ocorrências de campo são geradas com contexto integral (escola, turma e regentes) exclusivamente durante a observação pedagógica ativa via menu de opções flutuante (FAB). A tela de registros preserva com integridade seu papel de consulta, acompanhamento de diálogos ("Marcar como Conversado"), arquivamento e exportação.</li>
+          <li>🛡️ <strong>Higienização de Código e Asserção Automatizada:</strong> Limpeza completa das referências em <code>applyUserRoleUI()</code> e inclusão de verificação no módulo <code>travas_seguranca</code> da auditoria da plataforma.</li>
+          <li>👩‍🏫 <strong>Simplificação no Cadastro de Docentes e Ordem de Abas:</strong> Foco exclusivo em Nome Completo para docentes regentes (sem criação de login/acesso), rotulagem limpa 'Jornada Escolar' e ordenação canônica desktop.</li>
         </ul>
       </div>
 
@@ -9479,7 +9476,6 @@ function getActiveSections(obs) {
       const scheduleNavTab = document.getElementById('deskTabSchedule');
       const homeDraftsHeader = document.getElementById('homeDraftsHeader');
       const homeDraftsContainer = document.getElementById('homeDraftsContainer');
-      const btnNewQualitativeNote = document.getElementById('btnNewQualitativeNote');
       const homeScheduleBanner = document.getElementById('homeScheduleBanner');
 
       const scopeTitle = document.getElementById('roleScopeTitle');
@@ -9505,7 +9501,6 @@ function getActiveSections(obs) {
         homeDraftsContainer.style.display = 'flex';
         homeDraftsContainer.style.flexDirection = 'column';
       }
-      if (btnNewQualitativeNote) btnNewQualitativeNote.style.display = 'inline-flex';
 
       if (user.roleKey === 'coordenador') {
         if (scopeTitle) scopeTitle.innerText = 'Coordenação Pedagógica:';
@@ -9563,7 +9558,6 @@ function getActiveSections(obs) {
         if (homeScheduleBanner) homeScheduleBanner.style.display = 'none';
         if (homeDraftsHeader) homeDraftsHeader.style.display = 'none';
         if (homeDraftsContainer) homeDraftsContainer.style.display = 'none';
-        if (btnNewQualitativeNote) btnNewQualitativeNote.style.display = 'none';
       } else if (user.roleKey === 'pendente') {
         if (scopeTitle) scopeTitle.innerText = 'Acesso Pendente:';
         if (scopeDesc) scopeDesc.innerText = 'Sua conta foi criada e está aguardando liberação de acesso pela Coordenadora do Núcleo de EI.';
@@ -9580,7 +9574,6 @@ function getActiveSections(obs) {
         if (homeScheduleBanner) homeScheduleBanner.style.display = 'none';
         if (homeDraftsHeader) homeDraftsHeader.style.display = 'none';
         if (homeDraftsContainer) homeDraftsContainer.style.display = 'none';
-        if (btnNewQualitativeNote) btnNewQualitativeNote.style.display = 'none';
       } else if (user.roleKey === 'professora') {
         if (scopeTitle) scopeTitle.innerText = 'Docente:';
         if (scopeDesc) scopeDesc.innerText = 'Visualização do próprio painel e observações.';
@@ -9604,7 +9597,6 @@ function getActiveSections(obs) {
         if (homeScheduleBanner) homeScheduleBanner.style.display = 'none';
         if (homeDraftsHeader) homeDraftsHeader.style.display = 'none';
         if (homeDraftsContainer) homeDraftsContainer.style.display = 'none';
-        if (btnNewQualitativeNote) btnNewQualitativeNote.style.display = 'none';
       }
 
       const mobRubricsBtn = document.getElementById('mobMenuRubricsBtn');
@@ -23545,7 +23537,7 @@ function getActiveSections(obs) {
               if (!blocked) throw new Error('Trava de duplo lançamento para a mesma turma/bimestre não disparou bloqueio');
               logger.log('Bloqueio estrito de duplicidade de observação no mesmo bimestre', true);
 
-              // TESTE PILAR 1 REESTRUTURADO (VERSÃO 0.97): Validação Estrita do Modal de Ocorrências
+              // TESTE PILAR 1 REESTRUTURADO: Validação Estrita do Modal e Gestão de Ocorrências
               // 1. Teste de Ausência Física dos Elementos Removidos no DOM
               if (document.getElementById('noteSchool') !== null ||
                   document.getElementById('noteClass') !== null ||
@@ -23553,7 +23545,11 @@ function getActiveSections(obs) {
                   document.getElementById('noteObsContextAlert') !== null) {
                 throw new Error('Elementos suprimidos do modal de ocorrência continuam presentes no DOM');
               }
-              logger.log('Supressão confirmada de campos redundantes no modal de ocorrência', true, 'noteSchool, noteClass, noteTopic e noteObsContextAlert removidos');
+              // Validação da Supressão do Botão de Nova Ocorrência na Tela de Registros Formativos (v1.22)
+              if (document.getElementById('btnNewQualitativeNote') !== null) {
+                throw new Error('Botão de nova ocorrência (#btnNewQualitativeNote) continua indevidamente presente no DOM da tela de registros formativos');
+              }
+              logger.log('Supressão confirmada de campos redundantes e do botão #btnNewQualitativeNote em registros formativos', true);
 
               // 2. Teste do Guardião: Bloqueio sem Observação Ativa
               appState.currentObs = null;

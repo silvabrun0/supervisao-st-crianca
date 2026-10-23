@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.22** | 23/10/2026 14:35 | `intermediárias/aplicativo_v122_remocao_botao_nova_ocorrencia_registros.html` | Solicitação direta / `plano_remocao_botao_nova_ocorrencia_registros.md` | Remoção do botão de nova ocorrência (#btnNewQualitativeNote) no módulo de Registros Formativos, alinhando a interface à regra canônica dos Pilares 1 e 13 (ocorrências vinculadas estritamente à observação ativa via menu FAB), higienização de referências no RBAC e asserção no módulo travas_seguranca 📝🚫 |
 | **1.22** | 23/10/2026 14:35 | `intermediárias/aplicativo_v122_simplificacao_cadastro_docente_jornada_e_ordem_abas.html` | Solicitação direta / `plano_simplificacao_cadastro_docente_jornada_e_ordem_abas.md` | Simplificação radical no cadastro de docentes pela Coordenadora (apenas Nome Completo, sem login ou base de autenticação), higienização visual de subtítulo de turmas e card da UE, rotulagem limpa 'Jornada Escolar' e ordenação canônica de abas desktop 👩‍🏫📐 |
 | **1.21** | 23/10/2026 14:15 | `intermediárias/aplicativo_v121_resolucao_bloqueio_botoes_sintaxe_js.html` | Solicitação direta / `plano_resolucao_bloqueio_botoes_sintaxe_js.md` | Resolução definitiva do bloqueio global de botões por erro fatal de sintaxe JS (`Uncaught SyntaxError: Unexpected token '}'`), correção de escopo de `dbKey` em docentes e implementação de verificação sintática pré-voo em `audit_platform.py` 🔬🛡️ |
 | **1.21** | 23/10/2026 14:15 | `intermediárias/aplicativo_v121_resolucao_bloqueio_botoes_sintaxe_js.html` | Solicitação direta / `plano_resolucao_bloqueio_botoes_sintaxe_js.md` | Resolução definitiva do bloqueio global de botões e blindagem de sintaxe JS: eliminação de chave duplicada órfã e correção de escopo de `dbKey`, blindagem com pré-voo sintático nativo JSC (`audit_platform.py --check-syntax`), consolidação das Workspace Skills do Antigravity e guardrails de governança contra erros de processo 🛡️⚡ |
@@ -143,6 +144,18 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.22] - Remoção do Botão de Nova Ocorrência em Registros Formativos
+- **Data / Horário:** 23/10/2026 14:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v122_remocao_botao_nova_ocorrencia_registros.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_remocao_botao_nova_ocorrencia_registros.md`.
+- **Foco Central:** Remoção do botão inconsistente `+ Nova Ocorrência de Campo` (`#btnNewQualitativeNote`) do módulo de Registros Formativos (`screenNotes`), alinhando a interface à regra canônica dos Pilares 1 e 13 (ocorrências vinculadas estritamente à observação ativa via menu FAB), higienização de referências no RBAC e asserção no módulo `travas_seguranca`.
+
+#### Inclusões
+- **Asserção no Módulo `travas_seguranca`:** Verificação estrita de ausência física do botão `#btnNewQualitativeNote` no DOM, prevenindo reinserção indevida e garantindo integridade visual e funcional.
+
+#### Exclusões
+- **Remoção do Botão `#btnNewQualitativeNote`:** Eliminação do elemento HTML na tela `#screenNotes` e higienização completa de suas manipulações em `applyUserRoleUI()` (declaração, reset de visibilidade e regras de ocultação por perfil).
 
 ### [Versão 1.22] - Simplificação Radical do Cadastro de Docentes, Higienização de Jornada e Ordenação Canônica de Abas
 - **Data / Horário:** 23/10/2026 14:35
