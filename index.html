@@ -3295,7 +3295,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.21 (v7.99)
+          📌 Versão 1.22 (v8.00)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3389,7 +3389,7 @@
               <div style="font-size:28px;" id="homeOpManagementIcon">🏫</div>
               <div>
                 <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark); margin:0;" id="homeOpManagementTitle">Gestão da Unidade Escolar</h4>
-                <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;" id="homeOpManagementSubtitle">Gerencie as turmas, jornada MEC, docentes regentes titulares e caracterização da sua escola.</p>
+                <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;" id="homeOpManagementSubtitle">Gerencie as turmas, docentes regentes titulares e caracterização da sua escola.</p>
               </div>
             </div>
             <button class="btn btn-primary" onclick="navigateToTab('opManagement')" id="homeOpManagementBtn" style="font-size:12px; padding:8px 14px; white-space:nowrap;">
@@ -3523,7 +3523,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
           <div>
             <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark);" id="classesViewTitle">Turmas & Regência Titular</h3>
-            <p style="font-size:12px; color:var(--text-secondary);" id="classesViewSubtitle">Gestão descentralizada de turmas, jornada MEC e alocação nominal de docentes regentes</p>
+            <p style="font-size:12px; color:var(--text-secondary); display:none;" id="classesViewSubtitle"></p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <button class="btn btn-primary" onclick="openAddClassModal()">+ Cadastrar Nova Turma</button>
@@ -4869,6 +4869,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.22 - SIMPLIFICAÇÃO RADICAL DO CADASTRO DE DOCENTES, HIGIENIZAÇÃO DE JORNADA E ORDENAÇÃO CANÔNICA DE ABAS -->
+      <div style="margin-bottom:20px; border-left:3px solid #10B981; padding-left:14px; background:#ECFDF5; padding-top:10px; padding-bottom:10px; border-radius:0 8px 8px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:#047857;">Versão 1.22 · v8.00 (Oficial)</span>
+          <span style="font-size:11px; background:#D1FAE5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">23/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px; font-weight:700;">
+          Simplificação Radical no Cadastro de Docentes, Higienização Visual de Jornada e Ordenação Canônica de Abas:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>👩‍🏫 <strong>Docentes sem Acesso/Login e Foco Exclusivo em Nome Completo:</strong> Ocultação definitiva de campos de e-mail, senha, cargo, unidade escolar e coordenadora vinculada para cadastro e edição pela Coordenadora Pedagógica. Não inclusão de docentes na base de autenticação (<code>USERS_DB</code> / <code>customUsers</code>).</li>
+          <li>🧹 <strong>Higienização Definitiva de Rótulos Burocráticos:</strong> Supressão da frase residual no subtítulo de turmas (<code>#classesViewSubtitle</code>), higienização de menção a 'jornada MEC' no card da Home e eliminação completa de resquícios de Polo/SSOT em cabeçalhos de escola.</li>
+          <li>🏷️ <strong>Nomenclatura Limpa 'Jornada Escolar':</strong> Remoção de qualquer sufixo residual burocrático <code>(Padrão MEC)</code> na gestão de turmas.</li>
+          <li>📐 <strong>Garantia Canônica de Ordem de Abas:</strong> Posicionamento prioritário absoluto da aba <em>Início</em> (1ª) e <em>Minha Escola</em> (2ª), com destino inicial sempre em <code>home</code>.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.21 - RESOLUÇÃO DEFINITIVA DO BLOQUEIO GLOBAL DE BOTÕES E BLINDAGEM DE SINTAXE JS -->
@@ -9619,7 +9636,7 @@ function getActiveSections(obs) {
         if (homeOpCard) {
           homeOpCard.style.display = 'block';
           if (homeOpTitle) homeOpTitle.innerText = 'Gestão da Minha Escola';
-          if (homeOpSubtitle) homeOpSubtitle.innerText = `Gerencie as turmas, jornada MEC, docentes regentes titulares e caracterização de ${user.school}.`;
+          if (homeOpSubtitle) homeOpSubtitle.innerText = `Gerencie as turmas, docentes regentes titulares e caracterização de ${user.school}.`;
           if (homeOpBtn) homeOpBtn.innerText = 'Acessar Gestão da Escola →';
         }
         if (mobMenuOpBtn) {
@@ -15957,7 +15974,10 @@ function getActiveSections(obs) {
         const title = document.getElementById('classesViewTitle');
         const subtitle = document.getElementById('classesViewSubtitle');
         if (title) title.innerText = `Turmas & Regência · ${user.school}`;
-        if (subtitle) subtitle.innerText = `Gestão descentralizada de turmas, jornada MEC e alocação nominal de docentes da sua escola.`;
+        if (subtitle) {
+          subtitle.innerText = '';
+          subtitle.style.display = 'none';
+        }
       } else if (user.roleKey === 'formador') {
         if (filterCard) filterCard.style.display = 'block';
         const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school).map(u => u.name);
@@ -22717,7 +22737,11 @@ function getActiveSections(obs) {
                 if (classesThs.some(th => th.includes('(Padrão MEC)'))) {
                   throw new Error('Tabela de turmas ainda contém o sufixo "(Padrão MEC)"');
                 }
-                logger.log('Padronização limpa de "Jornada Escolar" sem sufixo residual', true);
+                const classesSubtitleEl = document.getElementById('classesViewSubtitle');
+                if (classesSubtitleEl && classesSubtitleEl.innerText.includes('jornada MEC')) {
+                  throw new Error('Subtítulo de turmas ainda contém texto residual burocrático de jornada MEC');
+                }
+                logger.log('Padronização limpa de "Jornada Escolar" sem sufixo residual e higienização de subtítulos', true);
 
                 // Asserção de Edição Segura de Docente Titular sem Quebra de Escopo (dbKey)
                 const docenteTitular = (appState.teamMembers || []).find(m => m.roleKey === 'professora' && m.school === 'CEI Professora Maria de Lourdes');

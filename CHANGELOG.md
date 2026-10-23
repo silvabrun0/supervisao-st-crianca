@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.22** | 23/10/2026 14:35 | `intermediárias/aplicativo_v122_simplificacao_cadastro_docente_jornada_e_ordem_abas.html` | Solicitação direta / `plano_simplificacao_cadastro_docente_jornada_e_ordem_abas.md` | Simplificação radical no cadastro de docentes pela Coordenadora (apenas Nome Completo, sem login ou base de autenticação), higienização visual de subtítulo de turmas e card da UE, rotulagem limpa 'Jornada Escolar' e ordenação canônica de abas desktop 👩‍🏫📐 |
 | **1.21** | 23/10/2026 14:15 | `intermediárias/aplicativo_v121_resolucao_bloqueio_botoes_sintaxe_js.html` | Solicitação direta / `plano_resolucao_bloqueio_botoes_sintaxe_js.md` | Resolução definitiva do bloqueio global de botões por erro fatal de sintaxe JS (`Uncaught SyntaxError: Unexpected token '}'`), correção de escopo de `dbKey` em docentes e implementação de verificação sintática pré-voo em `audit_platform.py` 🔬🛡️ |
 | **1.21** | 23/10/2026 14:15 | `intermediárias/aplicativo_v121_resolucao_bloqueio_botoes_sintaxe_js.html` | Solicitação direta / `plano_resolucao_bloqueio_botoes_sintaxe_js.md` | Resolução definitiva do bloqueio global de botões e blindagem de sintaxe JS: eliminação de chave duplicada órfã e correção de escopo de `dbKey`, blindagem com pré-voo sintático nativo JSC (`audit_platform.py --check-syntax`), consolidação das Workspace Skills do Antigravity e guardrails de governança contra erros de processo 🛡️⚡ |
 | **1.20** | 22/10/2026 19:00 | `intermediárias/aplicativo_v120_refinamento_cadastro_docente_e_limpeza_titulos.html` | Solicitação direta / `plano_refinamento_cadastro_docente_e_limpeza_titulos.md` | Refinamento ergonômico no cadastro de docentes pela Coordenadora Pedagógica (remoção de e-mail, senha, cargo, unidade e supervisor, com foco exclusivo em Nome Completo), remoção do subtítulo residual no card de UE e remoção do sufixo '(Padrão MEC)' em Jornada Escolar 👩‍🏫🧹 |
@@ -142,6 +143,22 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.22] - Simplificação Radical do Cadastro de Docentes, Higienização de Jornada e Ordenação Canônica de Abas
+- **Data / Horário:** 23/10/2026 14:35
+- **Arquivo de Referência:** `intermediárias/aplicativo_v122_simplificacao_cadastro_docente_jornada_e_ordem_abas.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_simplificacao_cadastro_docente_jornada_e_ordem_abas.md`.
+- **Foco Central:** Simplificação radical no cadastro de docentes pela Coordenadora (exclusivamente Nome Completo, sem login ou base de autenticação `USERS_DB`), higienização de subtítulo de turmas e card da UE, rotulagem limpa 'Jornada Escolar' sem sufixo residual burocrático e garantia de ordenação canônica de abas desktop (`#deskTabHome` em 1º e `#deskTabOpManagement` em 2º).
+
+#### Inclusões
+- **Garantia de Isolamento de Cadastro de Docentes:** Professores(as) de Educação Infantil não possuem credenciais ou login, sendo unicamente sujeitos pedagógicos de supervisão formativa; os dados são gravados em `appState.teamMembers` sem poluição de `USERS_DB` ou `customUsers`.
+- **Validação Automatizada no Módulo `catalogo_dados`:** Asserções de ausência de texto burocrático de jornada MEC no subtítulo de turmas e higienização completa dos rótulos de jornada e UEs.
+
+#### Modificações
+- **Higienização Visual do Subtítulo de Turmas:** Supressão da frase técnica `"Gestão descentralizada de turmas, jornada MEC e alocação nominal de docentes da sua escola."` no HTML estático e na função `renderClassesScreen()`.
+- **Higienização do Card de Gestão na Home:** Remoção do termo técnico `jornada MEC` no card estático e no manipulador `applyUserRoleUI()`.
+- **Consolidação de "Jornada Escolar":** Rotulagem limpa e direta na tabela de turmas e no modal de edição, sem sufixo burocrático `(Padrão MEC)`.
+- **Ordem Canônica de Abas no Desktop:** Posicionamento de `#deskTabHome` ("Início") como primeiro botão da barra superior e `#deskTabOpManagement` ("Minha Escola") como segundo botão, com destino inicial sempre direcionado para a Home.
 
 ### [Versão 1.21] - Resolução Definitiva do Bloqueio Global de Botões e Blindagem de Sintaxe JS
 - **Data / Horário:** 23/10/2026 14:15
