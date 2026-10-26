@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.26** | 26/10/2026 16:45 | `intermediárias/aplicativo_v126_remocao_setas_matrizes_referencia.html` | Solicitação direta / Higienização visual | Remoção das setas (↗️) dos botões de acesso direto "Matriz Docente" e "Matriz Coordenadores" no cabeçalho das Matrizes de Referência Oficiais 🧹 |
+| **1.26** | 26/10/2026 16:45 | `intermediárias/aplicativo_v126_visualizacao_por_dimensao.html` | Solicitação direta / `planos_de_implementacao/plano_modificacao_afunilamento_para_visualizacao_por_dimensao.md` | Transição terminológica estrita substituindo 'Afunilamento por Dimensão' por 'Visualização por Dimensão' na sub-aba do painel de indicadores (`#pillIndDrilldown`), cabeçalho de seção (`#indicatorsSectionDrilldown`), deep-linking de gargalos e modal de filtros mobile 🔍 |
 | **1.26** | 26/10/2026 16:40 | `intermediárias/aplicativo_v126_remocao_emojis_trofeu_longitudinal.html` | Solicitação direta / Higienização visual | Remoção dos emojis de troféu dos cards de Avanço do Ciclo e filtros de Ciclo 100% na tela de Acompanhamento Longitudinal 🧹 |
 | **1.26** | 26/10/2026 16:20 | `intermediárias/aplicativo_v126_remocao_aviso_autoridade_ciclos_ssot.html` | Solicitação direta / Limpeza de interface | Remoção da caixa informativa de autoridade municipal da Coordenadora da EI no modal `#modalBimesterPeriods` (Ciclos Avaliativos & Prazos Oficiais), simplificando a interface sem alterar regras de negócio ou SSOT 🧹 |
 | **1.25** | 26/10/2026 10:45 | `intermediárias/aplicativo_v125_edicao_e_gestao_autonoma_polos_regionais_ssot.html` | Solicitação direta / `plano_edicao_e_gestao_autonoma_polos_regionais_ssot.md` | Edição e gestão autônoma de Polos Regionais sob a SSOT única (`appState.polos`), ações na Matriz de Cobertura, modais dedicados de edição (`#modalEditPolo`) e cadastro (`#modalAddPolo`), propagação em cascata nas UEs e equipe, dinamização universal de dropdowns (`getAllPolosList`), governança pelo Núcleo de EI e arquitetura multi-ano 🗺️✏️ |
@@ -150,6 +152,32 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.26] - Remoção das Setas das Matrizes de Referência Oficiais
+- **Data / Horário:** 26/10/2026 16:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v126_remocao_setas_matrizes_referencia.html`
+- **Origem / Insumos Principais:** Solicitação direta / Higienização visual de interface.
+- **Foco Central:** Remoção dos emojis de seta (`↗️`) dos botões de cabeçalho "Matriz Docente" e "Matriz Coordenadores" na tela de Matrizes de Referência Oficiais (`#screenRefDocs`), preservando integralmente suas ações funcionais de abertura em nova aba.
+
+#### Exclusões
+- **Setas no Cabeçalho de Matrizes de Referência (`#screenRefDocs`):** Supressão das setas `↗️ ` dos rótulos dos botões de acesso rápido às matrizes oficiais em PDF, passando a exibir estritamente "Matriz Docente" e "Matriz Coordenadores".
+
+---
+
+### [Versão 1.26] - Transição Terminológica: Visualização por Dimensão
+- **Data / Horário:** 26/10/2026 16:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v126_visualizacao_por_dimensao.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_modificacao_afunilamento_para_visualizacao_por_dimensao.md`.
+- **Foco Central:** Transição terminológica estrita substituindo a denominação técnica "Afunilamento por Dimensão" por "Visualização por Dimensão" no painel de indicadores pedagógicos, aprimorando a clareza e a apropriação formativa da ferramenta por gestoras, formadoras e coordenadoras escolares.
+
+#### Alterações
+- **Sub-aba de Navegação Segmentada (`#pillIndDrilldown`):** Atualização dos atributos `title="Visualização por Dimensão"`, `aria-label="Visualização por Dimensão"` e do rótulo textual `#pillIndDrilldownLabel` para "Visualização por Dimensão" tanto no DOM estático quanto na sincronização dinâmica de `renderIndicatorsScreen()` sob o escopo geral (`ALL`).
+- **Cabeçalho da Seção Drilldown (`#indicatorsSectionDrilldown`):** Atualização do título principal para "Visualização por Dimensão dos Indicadores Pedagógicos (Docência / Coordenação)".
+- **Deep-Linking e Notificações (Pilar 8):** Rótulo do botão de ação rápida nos cards de gargalos atualizado para `🔍 Ver na Visualização por Dimensão` e texto de notificação toast atualizado para `Critério [...] expandido na Visualização por Dimensão.`
+- **Modal de Filtros Mobile (`#modalMobileIndicatorsFilters`):** Atualização do texto explicativo de recálculo dinâmico.
+- **Auditoria Automatizada In-App (Módulo `indicadores_decisao`):** Inclusão de asserção estrita validando `#pillIndDrilldownLabel.innerText === 'Visualização por Dimensão'` e atualização das mensagens de erro e logs descritivos.
+
+---
 
 ### [Versão 1.26] - Remoção dos Emojis de Troféu no Acompanhamento Longitudinal
 - **Data / Horário:** 26/10/2026 16:40
