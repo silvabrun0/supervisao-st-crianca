@@ -348,6 +348,37 @@
     .btn-warning:hover { background: #b45309; }
     .btn-full { width: 100%; }
 
+    .btn-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .btn-icon-sm {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .btn-icon-lg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -2115,6 +2146,16 @@
       font-size: 20px;
       line-height: 1;
     }
+    .indicators-icon-tab-btn .tab-icon-svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
     .indicators-icon-tab-btn:hover {
       color: var(--primary);
       background: rgba(255, 255, 255, 0.5);
@@ -2139,6 +2180,10 @@
       }
       .indicators-icon-tab-btn .tab-icon {
         font-size: 24px;
+      }
+      .indicators-icon-tab-btn .tab-icon-svg {
+        width: 22px;
+        height: 22px;
       }
     }
     .export-card-grid {
@@ -3482,6 +3527,14 @@
 
       <!-- Right Header Actions -->
       <div class="navbar-actions">
+        <!-- Seletor Global de Ano Letivo (SSOT Multi-Ano) -->
+        <div class="academic-year-selector-wrapper" id="headerAcademicYearWrapper" style="display:flex; align-items:center; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:2px 8px; gap:6px;">
+          <span style="font-size:12px;" title="Ano Letivo Ativo">📅</span>
+          <select id="headerAcademicYearSelect" class="form-select" onchange="onGlobalAcademicYearChange(this.value)" style="border:none; background:transparent; font-size:12px; font-weight:800; color:var(--text-primary); cursor:pointer; padding:2px 4px; outline:none;" title="Alternar Ano Letivo em Visualização">
+            <!-- Populado dinamicamente via renderGlobalAcademicYearSelector() -->
+          </select>
+        </div>
+
         <button class="role-badge-btn" onclick="openRoleModal()" id="headerRoleBadge" title="Alternar usuário e cargo ativo">
           <span id="headerRoleText">Coordenação Pedagógica</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -3489,11 +3542,13 @@
 
         <!-- Reference Documents Download Button (Oculto em favor da aba permanente) -->
         <button class="btn-ref-docs" onclick="navigateToTab('refDocs')" id="headerRefDocsBtn" style="display:none;" title="Arquivos de Referência das Rubricas Oficiais (PDF)">
-          📑 <span class="btn-ref-docs-text">Matrizes (PDF)</span>
+          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span class="btn-ref-docs-text">Matrizes (PDF)</span>
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.30 (v8.1.6)
+          <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <span>Versão 1.30 (v8.1.6)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3505,6 +3560,16 @@
       </div>
     </div>
   </header>
+
+  <!-- Banner Informativo de Ano Letivo Anterior (Modo Consulta Histórica) -->
+  <div id="historicalYearWarningBanner" style="display:none; background:#FFFBEB; border-bottom:1px solid #FDE68A; padding:8px 20px; font-size:12px; font-weight:600; color:#92400E; justify-content:space-between; align-items:center;">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span>⚠️ <strong>Atenção:</strong> Você está visualizando o histórico do <strong>Ano Letivo <span id="historicalYearBannerLabel">2025</span></strong>. Novos lançamentos devem ser efetuados preferencialmente no ano letivo vigente.</span>
+    </div>
+    <button class="btn btn-secondary" style="padding:2px 8px; font-size:11px; font-weight:700; background:#FFFFFF; border:1px solid #D97706; color:#92400E;" onclick="returnToCurrentAcademicYear()">
+      Voltar ao Ano Vigente
+    </button>
+  </div>
 
   <!-- Read-Only Banner com Ação de Retorno Contextual -->
   <div id="readOnlyWarning" class="readonly-bar" style="display:none; justify-content:space-between; align-items:center; padding:8px 16px;">
@@ -3607,6 +3672,9 @@
           <div class="page-subtitle" id="homeGestaoSubtitle" style="display:none;"></div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;" id="homeGestaoActionsCentral">
+          <button class="btn btn-secondary" onclick="openCreateNewAcademicYearModal()" style="color:#0284C7; font-weight:700; background:#F0F9FF; border-color:#BAE6FD;" title="Iniciar um novo ano letivo na rede municipal">
+            🌟 Iniciar Novo Ano Letivo
+          </button>
           <button class="btn btn-secondary" onclick="openBimesterPeriodsModal()" style="color:#0284C7; font-weight:700;" title="Definir os períodos e prazos dos 4 bimestres letivos">
             📅 Ciclos Avaliativos & Calendário
           </button>
@@ -3623,16 +3691,20 @@
       <!-- Segmented Navigation for Operational Modules -->
       <div style="display:flex; gap:8px; margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:12px; overflow-x:auto;">
         <button class="btn pedag-subtab-btn active" id="pedagTabUnits" onclick="switchPedagSubTab('units')">
-          <span id="pedagTabUnitsLabel">🏢 Unidades Escolares & Polos</span>
+          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7l9-4 9 4v14M9 21V9h6v12"/></svg>
+          <span id="pedagTabUnitsLabel">Unidades Escolares & Polos</span>
         </button>
         <button class="btn pedag-subtab-btn" id="pedagTabClasses" onclick="switchPedagSubTab('classes')">
-          <span id="pedagTabClassesLabel">🏫 Turmas & Regência Titular</span>
+          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          <span id="pedagTabClassesLabel">Turmas & Regência Titular</span>
         </button>
         <button class="btn pedag-subtab-btn" id="pedagTabTeam" onclick="switchPedagSubTab('team')">
-          <span id="pedagTabTeamLabel">👥 Equipes & Servidores da Rede</span>
+          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span id="pedagTabTeamLabel">Equipes & Servidores da Rede</span>
         </button>
         <button class="btn pedag-subtab-btn" id="pedagTabExports" onclick="switchPedagSubTab('exports')">
-          📊 Extrações & Relatórios SSOT
+          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Extrações & Relatórios SSOT</span>
         </button>
       </div>
 
@@ -3648,10 +3720,22 @@
               <p style="font-size:12px; color:var(--text-secondary);" id="unitsViewSubtitle">Estrutura territorial, lotação de profissionais e cobertura pedagógica</p>
             </div>
             <div style="display:flex; gap:8px; flex-wrap:wrap;" id="unitsActionsButtons">
-              <button class="btn btn-secondary" onclick="exportUnitsCSV()">💾 Exportar UEs (CSV)</button>
-              <button class="btn btn-secondary" onclick="exportUnitsJSON()">📄 Exportar UEs (JSON)</button>
-              <button class="btn btn-secondary" onclick="downloadUnitsCsvTemplate()">📥 Baixar Modelo (CSV)</button>
-              <button class="btn btn-secondary" onclick="triggerUnitsCsvImport()">📤 Importar CSV</button>
+              <button class="btn btn-secondary" onclick="exportUnitsCSV()">
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Exportar UEs (CSV)
+              </button>
+              <button class="btn btn-secondary" onclick="exportUnitsJSON()">
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Exportar UEs (JSON)
+              </button>
+              <button class="btn btn-secondary" onclick="downloadUnitsCsvTemplate()">
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Baixar Modelo (CSV)
+              </button>
+              <button class="btn btn-secondary" onclick="triggerUnitsCsvImport()">
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Importar CSV
+              </button>
               <button class="btn btn-primary" id="btnAddUnitMain" onclick="openAddUnitModal()">+ Cadastrar Nova UE</button>
             </div>
           </div>
@@ -3776,10 +3860,22 @@
             <p style="font-size:12px; color:var(--text-secondary);">Gestão de docentes, coordenadoras pedagógicas e formadoras</p>
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button class="btn btn-secondary" onclick="exportTeamMembersCSV()">💾 Exportar Servidores (CSV)</button>
-            <button class="btn btn-secondary" onclick="exportTeamMembersJSON()">📄 Exportar Servidores (JSON)</button>
-            <button class="btn btn-secondary" onclick="downloadTeamCsvTemplate()">📥 Baixar Modelo (CSV)</button>
-            <button class="btn btn-secondary" onclick="triggerTeamCsvImport()">📤 Importar CSV</button>
+            <button class="btn btn-secondary" onclick="exportTeamMembersCSV()">
+              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Exportar Servidores (CSV)
+            </button>
+            <button class="btn btn-secondary" onclick="exportTeamMembersJSON()">
+              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Exportar Servidores (JSON)
+            </button>
+            <button class="btn btn-secondary" onclick="downloadTeamCsvTemplate()">
+              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Baixar Modelo (CSV)
+            </button>
+            <button class="btn btn-secondary" onclick="triggerTeamCsvImport()">
+              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Importar CSV
+            </button>
             <button class="btn btn-primary" id="btnNewTeacher" onclick="openAddTeacherModal()">+ Novo Professor</button>
             <button class="btn btn-secondary" id="btnNewUser" onclick="openAddUserModal()">+ Novo Usuário</button>
           </div>
@@ -3850,10 +3946,12 @@
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn" style="background:#166534; color:#fff;" onclick="exportFullBaseJSON()">
-                💾 Exportar Base Completa (.JSON)
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Exportar Base Completa (.JSON)
               </button>
               <button class="btn" style="background:#DC2626; color:#fff;" onclick="triggerImportFullBase()">
-                📂 Importar / Sobrescrever (.JSON)
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Importar / Sobrescrever (.JSON)
               </button>
             </div>
           </div>
@@ -4457,15 +4555,15 @@
       <!-- Segmented Navigation (Sub-abas Humanizadas do Painel de Indicadores) -->
       <div class="indicators-subtabs-nav" id="indicatorsSubTabsNav">
         <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill active" id="pillIndKpis" onclick="switchIndicatorsSubTab('kpis')" title="Visão Geral & Prioridades Formativas" aria-label="Visão Geral">
-          <span class="tab-icon">📊</span>
+          <svg class="tab-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           <span class="tab-text" id="pillIndKpisLabel">Visão Geral & Prioridades</span>
         </button>
         <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill" id="pillIndLongitudinal" onclick="switchIndicatorsSubTab('longitudinal')" title="Prazos & Turmas (Semáforo Bimestral)" aria-label="Prazos e Semáforo">
-          <span class="tab-icon">🚦</span>
+          <svg class="tab-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           <span class="tab-text" id="pillIndLongitudinalLabel">Prazos & Turmas (Semáforo)</span>
         </button>
         <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill" id="pillIndDrilldown" onclick="switchIndicatorsSubTab('drilldown')" title="Visualização por Dimensão" aria-label="Visualização por Dimensão">
-          <span class="tab-icon">🔍</span>
+          <svg class="tab-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <span class="tab-text" id="pillIndDrilldownLabel">Visualização por Dimensão</span>
         </button>
       </div>
@@ -4504,13 +4602,16 @@
           </div>
           <div class="history-actions-grid">
             <button class="btn btn-secondary history-action-btn" onclick="exportHistoryFilteredCSV()" title="Exportar observações visíveis em CSV">
-              📥 CSV
+              <svg class="btn-icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              CSV
             </button>
             <button class="btn btn-secondary history-action-btn" onclick="exportHistoryFilteredPDF()" title="Imprimir ou salvar observações visíveis em PDF">
-              📄 PDF
+              <svg class="btn-icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              PDF
             </button>
             <button class="btn btn-secondary history-action-btn history-archive-btn" onclick="archiveAllOldObservations()" id="btnArchiveOldObs" title="Arquivar observações concluídas registradas há 4 dias ou mais">
-              📦 Auto-Arquivar
+              <svg class="btn-icon-sm" viewBox="0 0 24 24"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              Auto-Arquivar
             </button>
           </div>
         </div>
@@ -4582,7 +4683,8 @@
         </div>
         <div class="filter-field-full">
           <button class="btn btn-secondary" style="width:100%; padding:10px; font-weight:700;" onclick="resetHistoryFilters()">
-            🔄 Limpar Filtros
+            <svg class="btn-icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            Limpar Filtros
           </button>
         </div>
       </div>
@@ -4617,13 +4719,16 @@
           </div>
           <div class="notes-actions-grid">
             <button class="btn btn-secondary notes-action-btn" onclick="exportNotesFilteredCSV()" title="Exportar registros filtrados em CSV">
-              📥 CSV
+              <svg class="btn-icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              CSV
             </button>
             <button class="btn btn-secondary notes-action-btn" onclick="exportNotesFilteredPDF()" title="Imprimir ou salvar registros filtrados em PDF">
-              📄 PDF
+              <svg class="btn-icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              PDF
             </button>
             <button class="btn btn-secondary notes-action-btn notes-archive-btn" onclick="archiveAllResolvedNotes()" title="Arquivar todas as ocorrências resolvidas deste escopo">
-              📦 Arquivar Resolvidas
+              <svg class="btn-icon-sm" viewBox="0 0 24 24"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              Arquivar Resolvidas
             </button>
           </div>
         </div>
@@ -4819,12 +4924,30 @@
             <option value="teacher">👩‍🏫 Matriz de Professores</option>
             <option value="coordinator">👔 Matriz de Coordenadores</option>
           </select>
-          <button class="btn btn-secondary" onclick="openRefDocsModal()" title="Consultar, baixar ou atualizar as matrizes oficiais em PDF">📑 Matrizes Oficiais (PDF / Upload)</button>
-          <button class="btn btn-secondary" onclick="exportRubricsCSV()">💾 Exportar (CSV)</button>
-          <button class="btn btn-secondary" onclick="exportRubricsJSON()">📄 Exportar (JSON)</button>
-          <button class="btn btn-secondary" onclick="triggerImportRubricsJSON()" title="Importar arquivo JSON com nova estrutura de rubricas">📥 Importar (JSON)</button>
-          <button class="btn btn-secondary" onclick="setCustomDefaultRubricsPrompt()" id="btnSetNewDefaultRubrics" title="Salvar as rubricas atuais como o padrão oficial da rede">⭐ Definir Novo Padrão</button>
-          <button class="btn btn-secondary" onclick="restoreDefaultRubricsPrompt()" id="btnRestoreRubrics" title="Restaurar parâmetros da rede ou de fábrica">↺ Restaurar Padrão</button>
+          <button class="btn btn-secondary" onclick="openRefDocsModal()" title="Consultar, baixar ou atualizar as matrizes oficiais em PDF">
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Matrizes Oficiais (PDF / Upload)
+          </button>
+          <button class="btn btn-secondary" onclick="exportRubricsCSV()">
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exportar (CSV)
+          </button>
+          <button class="btn btn-secondary" onclick="exportRubricsJSON()">
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Exportar (JSON)
+          </button>
+          <button class="btn btn-secondary" onclick="triggerImportRubricsJSON()" title="Importar arquivo JSON com nova estrutura de rubricas">
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Importar (JSON)
+          </button>
+          <button class="btn btn-secondary" onclick="setCustomDefaultRubricsPrompt()" id="btnSetNewDefaultRubrics" title="Salvar as rubricas atuais como o padrão oficial da rede">
+            <svg class="btn-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Definir Novo Padrão
+          </button>
+          <button class="btn btn-secondary" onclick="restoreDefaultRubricsPrompt()" id="btnRestoreRubrics" title="Restaurar parâmetros da rede ou de fábrica">
+            <svg class="btn-icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            Restaurar Padrão
+          </button>
           <input type="file" id="importRubricsFileInput" accept="application/json" style="display:none;" onchange="importRubricsJSON(event)">
         </div>
       </div>
@@ -4912,21 +5035,27 @@
         <button class="fab-menu-close" onclick="toggleFabMenu(false)">✕</button>
       </div>
       <button class="fab-menu-item" onclick="handleFabSaveDraft()">
-        <span class="fab-menu-icon" style="background:#EFF6FF; color:#2563EB;">💾</span>
+        <span class="fab-menu-icon" style="background:#EFF6FF; color:#2563EB;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        </span>
         <div>
           <div class="fab-menu-title">Salvar Rascunho</div>
           <div class="fab-menu-desc">Salva o progresso e retorna à tela inicial</div>
         </div>
       </button>
       <button class="fab-menu-item" onclick="handleFabNote()">
-        <span class="fab-menu-icon" style="background:#FEF3C7; color:#D97706;">📝</span>
+        <span class="fab-menu-icon" style="background:#FEF3C7; color:#D97706;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </span>
         <div>
           <div class="fab-menu-title">Ocorrência de Campo</div>
           <div class="fab-menu-desc">Registrar apontamento qualitativo desta observação</div>
         </div>
       </button>
       <button class="fab-menu-item danger" onclick="handleFabExitWithoutSaving()">
-        <span class="fab-menu-icon" style="background:#FEE2E2; color:#DC2626;">🚪</span>
+        <span class="fab-menu-icon" style="background:#FEE2E2; color:#DC2626;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </span>
         <div>
           <div class="fab-menu-title" style="color:#DC2626;">Sair sem Salvar</div>
           <div class="fab-menu-desc">Descarta alterações não salvas desta sessão</div>
@@ -7804,7 +7933,10 @@
       </div>
 
       <div style="display:flex; gap:10px; justify-content:flex-end; align-items:center; margin-top:14px;">
-        <button type="button" id="btnDeleteScheduleModal" class="btn btn-secondary" style="display:none; color:var(--red); border-color:var(--red); margin-right:auto;" onclick="confirmDeleteSchedule(editingScheduleId)">🗑️ Excluir Agendamento</button>
+        <button type="button" id="btnDeleteScheduleModal" class="btn btn-secondary" style="display:none; color:var(--red); border-color:var(--red); margin-right:auto;" onclick="confirmDeleteSchedule(editingScheduleId)">
+          <svg class="btn-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Excluir Agendamento
+        </button>
         <button type="button" class="btn btn-secondary" onclick="closeAddScheduleModal()">Cancelar</button>
         <button type="button" class="btn btn-primary" onclick="saveNewSchedule()">Salvar no Cronograma</button>
       </div>
@@ -8238,6 +8370,21 @@
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeBimesterPeriodsModal()">✕</button>
       </div>
 
+      <!-- Seletor de Ano Letivo para Configuração SSOT -->
+      <div style="display:flex; justify-content:space-between; align-items:center; background:#F8FAFC; border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:16px;">
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Ano Letivo em Configuração:</label>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+            <select id="modalBimesterPeriodYearSelect" class="form-select" onchange="onModalBimesterYearChange(this.value)" style="font-weight:700; font-size:14px; padding:4px 10px; border-radius:6px;">
+              <!-- Preenchido dinamicamente com appState.academicYears -->
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="openCreateNewAcademicYearModal()" style="color:#0284C7; font-weight:700; border-color:#BAE6FD; background:#F0F9FF;">
+          ➕ Novo Ano Letivo
+        </button>
+      </div>
+
       <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:18px;">
         <!-- 1º Bimestre -->
         <div class="card" style="padding:12px; margin-bottom:0; background:#F8FAFC; border:1px solid #E2E8F0;">
@@ -8308,6 +8455,47 @@
           <button type="button" class="btn btn-secondary" onclick="closeBimesterPeriodsModal()">Cancelar</button>
           <button type="button" class="btn btn-primary" onclick="saveBimesterPeriodsSettings()">Salvar Prazos</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CRIAR NOVO ANO LETIVO (TRANSIÇÃO DE CICLO) ================= -->
+  <div id="modalCreateAcademicYear" class="modal-backdrop" onclick="if(event.target===this)closeCreateNewAcademicYearModal()">
+    <div class="modal-panel" style="max-width:480px;" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:8px;">
+          <span>🌟</span> Iniciar Novo Ano Letivo
+        </div>
+        <button class="btn btn-secondary" style="padding:4px 8px;" onclick="closeCreateNewAcademicYearModal()">✕</button>
+      </div>
+      <div style="padding:4px 0 16px 0;">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label" style="font-weight:700;">Ano Letivo:</label>
+          <input type="number" id="inputNewAcademicYear" class="form-input" style="font-size:16px; font-weight:700;" min="2024" max="2035" placeholder="Ex: 2027" />
+        </div>
+        
+        <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:12px; margin-bottom:14px;">
+          <div style="font-size:12px; font-weight:700; color:#166534; margin-bottom:4px;">🛡️ Patrimônio Municipal Preservado:</div>
+          <div style="font-size:11px; color:#15803D; line-height:1.4;">
+            As <strong>Unidades Escolares</strong>, a <strong>Equipe de Servidores (Professores e Usuários)</strong> e os <strong>Polos Regionais</strong> são integralmente mantidos e continuam disponíveis.
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:16px;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-primary); display:block; margin-bottom:6px;">Matriz de Turmas e Atribuições:</label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; margin-bottom:6px;">
+            <input type="radio" name="newYearClassesOption" value="clone" checked />
+            <span><strong>Clonar turmas do ano anterior</strong> (Reaproveita turmas, turnos e docentes atribuídos como ponto de partida)</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+            <input type="radio" name="newYearClassesOption" value="clean" />
+            <span><strong>Iniciar sem turmas</strong> (Cadastrar ou importar nova enturmação do zero)</span>
+          </label>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn btn-secondary" onclick="closeCreateNewAcademicYearModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="confirmCreateNewAcademicYear()">Confirmar e Abrir Ano</button>
       </div>
     </div>
   </div>
