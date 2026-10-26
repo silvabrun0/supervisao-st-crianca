@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.29** | 26/10/2026 17:20 | `intermediárias/aplicativo_v129_ajuste_rotulo_salvar_prazos.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_rotulo_botao_salvar_prazos.md` | Higienização do rótulo do botão de gravação no modal de Ciclos Avaliativos (`#modalBimesterPeriods`), substituindo '💾 Salvar Prazos na SSOT' por 'Salvar Prazos', eliminando termos técnicos internos e emojis da interface pedagógica 🧹🏷️ |
 | **1.28** | 26/10/2026 17:15 | `intermediárias/aplicativo_v128_botao_novo_ano_letivo_plurianual_ssot.html` | Solicitação direta / `planos_de_implementacao/plano_arquitetura_plurianual_ciclos_letivos.md` | Disponibilização do botão 'Iniciar Novo Ano Letivo' na Gestão da Rede e no modal de Ciclos Avaliativos, assistente de criação (`#modalCreateAcademicYear`), seletor global multi-ano, prazos independentes por ano e preservação patrimonial total 🌟📅 |
 | **1.27** | 26/10/2026 16:55 | `intermediárias/aplicativo_v127_correcao_filtro_status_atrasadas_pilar10.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_filtro_status_atrasadas_semaforo_pilar10.md` | Correção do filtro de status atrasadas no Semáforo do Pilar 10, garantia de idempotência no alternador de visão de turmas/docentes e isolamento hermético do teste no módulo `indicadores_decisao` 🚦🛡️ |
 | **1.26** | 26/10/2026 16:45 | `intermediárias/aplicativo_v126_remocao_setas_matrizes_referencia.html` | Solicitação direta / Higienização visual | Remoção das setas (↗️) dos botões de acesso direto "Matriz Docente" e "Matriz Coordenadores" no cabeçalho das Matrizes de Referência Oficiais 🧹 |
@@ -154,6 +155,32 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.29] - Higienização do Rótulo Salvar Prazos (Ciclos Avaliativos)
+- **Data / Horário:** 26/10/2026 17:20
+- **Arquivo de Referência:** `intermediárias/aplicativo_v129_ajuste_rotulo_salvar_prazos.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_ajuste_rotulo_botao_salvar_prazos.md`.
+- **Foco Central:** Higienização de interface no modal de Ciclos Avaliativos (`#modalBimesterPeriods`), substituindo o texto `💾 Salvar Prazos na SSOT` por `Salvar Prazos`, com eliminação de jargão técnico interno e harmonização visual com os demais botões da aplicação.
+
+#### Modificações
+- **Rótulo de Submissão (`#modalBimesterPeriods`):** Alteração do texto do botão primário de gravação de prazos bimestrais para `Salvar Prazos`, eliminando o emoji de disquete (`💾`) e a sigla técnica `SSOT`.
+- **Preservação de Regras de Negócio:** Mantida intacta a rotina de validação cronológica das datas, escrita em `appState.bimesterPeriods` e sincronização reativa dos indicadores.
+- **Auditoria e Versão:** Atualização do badge superior para `Versão 1.29 (v8.1.5)`, inclusão do card no `#modalChangelog` e atualização das asserções no módulo de testes `navegacao_layout`.
+
+---
+
+### [Versão 1.28] - Arquitetura Plurianual, Botão Iniciar Novo Ano Letivo e Gestão de Ciclos Multi-Ano
+- **Data / Horário:** 26/10/2026 17:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v128_botao_novo_ano_letivo_plurianual_ssot.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_arquitetura_plurianual_ciclos_letivos.md`.
+- **Foco Central:** Disponibilização do botão "Iniciar Novo Ano Letivo" na Gestão da Rede e no modal de Ciclos Avaliativos, assistente de criação (`#modalCreateAcademicYear`), seletor global multi-ano, prazos independentes por ano e preservação patrimonial total.
+
+#### Inclusões e Alterações
+- **Botão Iniciar Novo Ano Letivo:** Disponibilizado na barra central de ações da Gestão Pedagógica e no modal de prazos bimestrais.
+- **Seletor Global de Ano Letivo:** Adicionado seletor multi-ano no cabeçalho superior (`#headerAcademicYearSelect`).
+- **Preservação Patrimonial da Rede:** Isolamento determinístico por ano letivo de turmas e observações, mantendo 100% compartilhadas as Unidades Escolares, Servidores e Polos Regionais.
+
+---
 
 ### [Versão 1.27] - Correção do Filtro de Status Atrasadas e Idempotência Semafórica (Pilar 10)
 - **Data / Horário:** 26/10/2026 16:55

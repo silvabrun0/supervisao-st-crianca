@@ -3493,7 +3493,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.28 (v8.1.4)
+          📌 Versão 1.29 (v8.1.5)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -5074,6 +5074,21 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.29 - HIGIENIZAÇÃO DO RÓTULO DO BOTÃO SALVAR PRAZOS DOS CICLOS AVALIATIVOS -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; font-weight:800; color:#10B981;">Versão 1.29 · v8.1.5 (Oficial)</span>
+          <span style="font-size:11px; background:#ECFDF5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Higienização de Interface no Modal de Ciclos Avaliativos:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🏷️ <strong>Higienização do Rótulo de Gravação:</strong> Substituição do texto <code>💾 Salvar Prazos na SSOT</code> por <code>Salvar Prazos</code> no modal de Ciclos Avaliativos (<code>#modalBimesterPeriods</code>), eliminando emojis e o termo técnico interno "SSOT", com capitalização harmonizada aos demais controles da aplicação.</li>
+          <li>🛡️ <strong>Preservação Funcional:</strong> Garantia integral de execução do motor de persistência em <code>appState.bimesterPeriods</code> e atualização imediata do semáforo e indicadores sem regressões.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.28 - ARQUITETURA PLURIANUAL, BOTÃO INICIAR NOVO ANO LETIVO E GESTÃO DE CICLOS MULTI-ANO -->
@@ -8275,7 +8290,7 @@
         </button>
         <div style="display:flex; gap:8px;">
           <button type="button" class="btn btn-secondary" onclick="closeBimesterPeriodsModal()">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="saveBimesterPeriodsSettings()">💾 Salvar Prazos na SSOT</button>
+          <button type="button" class="btn btn-primary" onclick="saveBimesterPeriodsSettings()">Salvar Prazos</button>
         </div>
       </div>
     </div>
@@ -26162,14 +26177,14 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.28
-              if (!btnChangelog.textContent.includes('Versão 1.28')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.29
+              if (!btnChangelog.textContent.includes('Versão 1.29')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.28')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.28');
+              if (!modalChg.innerHTML.includes('Versão 1.29')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.29');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.28 (v8.1.4)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.29 (v8.1.5)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
