@@ -23448,6 +23448,7 @@ function getActiveSections(obs) {
           name: 'Catálogo Canônico, Escolas, Turmas, Professores e Estado Global',
           run: function(logger) {
             try {
+              selectUserAccount('helena');
               if (!Array.isArray(INITIAL_CLASSES) || INITIAL_CLASSES.length === 0) throw new Error('INITIAL_CLASSES vazio');
               if (!Array.isArray(INITIAL_UNITS) || INITIAL_UNITS.length === 0) throw new Error('INITIAL_UNITS vazio');
               if (!Array.isArray(INITIAL_TEAM) || INITIAL_TEAM.length === 0) throw new Error('INITIAL_TEAM vazio');
@@ -23747,10 +23748,10 @@ function getActiveSections(obs) {
               const tempEditedPoloName = 'Polo Regional 1 (Norte - Teste Auditoria)';
               UI.type(editPoloInp, tempEditedPoloName);
 
-              const originalConfirm = window.confirm;
+              const oldConfirm = window.confirm;
               window.confirm = () => true;
               saveEditPolo();
-              window.confirm = originalConfirm;
+              window.confirm = oldConfirm;
 
               if (!getAllPolosList().includes(tempEditedPoloName)) {
                 throw new Error('Novo nome do polo não foi persistido em appState.polos');
@@ -23766,7 +23767,7 @@ function getActiveSections(obs) {
               UI.type(document.getElementById('editPoloName'), targetPolo);
               window.confirm = () => true;
               saveEditPolo();
-              window.confirm = originalConfirm;
+              window.confirm = oldConfirm;
               logger.log('Restauração idempotente do Polo canônico concluída com sucesso', true, targetPolo);
             } catch (e) {
               logger.log('Erro de execução no módulo catalogo_dados', false, e.message);
