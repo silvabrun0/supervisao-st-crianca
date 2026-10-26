@@ -3548,7 +3548,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.32 (v8.1.8)</span>
+          <span>Versão 1.33 (v8.2.0)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -5207,6 +5207,25 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.33 - APRESENTAÇÃO DE DADOS ORIENTADA AO PROCESSO DECISÓRIO DOS GESTORES -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.33</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Apresentação de Dados Orientada ao Apoio à Decisão dos Gestores (Núcleo de EI, Formadoras e Coordenação):
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🗺️ <strong>Governança Territorial por Polos:</strong> Agrupamento semântico por Polo Regional (<code>&lt;optgroup&gt;</code>) no seletor de Unidades Escolares para o Núcleo de EI.</li>
+          <li>🏫 <strong>Tabela Executiva de UEs:</strong> Acompanhamento consolidado de Cobertura no Bimestre e Consistência Geral por Unidade Escolar com botão direto "Focar UE ➔" para o Núcleo de EI e Formadoras.</li>
+          <li>📊 <strong>Régua de Grandes Dimensões da Matriz:</strong> Mini-painel horizontal comparando o desempenho por grande dimensão curricular com a Rede Municipal de Patos.</li>
+          <li>🎨 <strong>Distribuição Agregada da Escala de Materiais:</strong> Síntese formativa visual dos 4 níveis de uso de materiais (Nível 1 folhas xerox até Nível 4 tridimensional autônomo).</li>
+          <li>⭐ <strong>Alternador Balanceado de Critérios:</strong> Apoio à reflexão pedagógica com alternância entre Menor Consistência (Fragilidades), Maior Desvio vs. Rede e Maior Consistência (Práticas Consolidadas).</li>
+          <li>🔍 <strong>Busca Instantânea e Controles Globais na Matriz:</strong> Campo de busca por código/texto, filtro por chips de consistência e botões globais de expansão e recolhimento.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.32 - ADEQUAÇÃO CONTEXTUAL DO BANNER DA REDE CONSOLIDADA -->
@@ -18810,6 +18829,200 @@ function getActiveSections(obs) {
     }
 
     // --- 12. DRILL-DOWN DASHBOARD & INDICATORS ---
+    
+    /**
+     * Ação Rápida: Focar filtro de Unidade Escolar a partir da Tabela Executiva
+     */
+    function focusUnitFilter(uName) {
+      const unitSelect = document.getElementById('indicatorsUnitFilter');
+      if (unitSelect) {
+        unitSelect.value = uName;
+        const memberSelect = document.getElementById('indicatorsMemberFilter');
+        if (memberSelect) memberSelect.value = 'ALL';
+        renderIndicatorsScreen();
+        // Rola suavemente até o topo dos indicadores
+        const toolbar = document.getElementById('indicatorsFilterToolbar');
+        if (toolbar) toolbar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    /**
+     * Alterna a gaveta retrátil de turmas pendentes no Card 2 de Cobertura Bimestral
+     */
+    function togglePendingClassesDrawer() {
+      const drawer = document.getElementById('pendingClassesDrawer');
+      if (drawer) {
+        drawer.style.display = (drawer.style.display === 'none' || drawer.style.display === '') ? 'block' : 'none';
+      }
+    }
+
+    /**
+     * Expande todos os nós (Dimensões e Subdimensões) na Matriz de Critérios
+     */
+    function expandAllDrilldown() {
+      if (!appState.expandedDrilldowns) appState.expandedDrilldowns = {};
+      const groups = document.querySelectorAll('.drilldown-group');
+      groups.forEach((g, idx) => {
+        appState.expandedDrilldowns[`dim_${idx}`] = true;
+      });
+      const subHeaders = document.querySelectorAll('.drilldown-subheader');
+      subHeaders.forEach(sh => {
+        const onclickAttr = sh.getAttribute('onclick') || '';
+        const match = onclickAttr.match(/toggleDrilldown\('([^']+)'\)/);
+        if (match && match[1]) {
+          appState.expandedDrilldowns[match[1]] = true;
+        }
+      });
+      renderIndicatorsScreen();
+      switchIndicatorsSubTab('drilldown');
+    }
+
+    /**
+     * Recolhe todos os nós na Matriz de Critérios
+     */
+    function collapseAllDrilldown() {
+      appState.expandedDrilldowns = {};
+      renderIndicatorsScreen();
+      switchIndicatorsSubTab('drilldown');
+    }
+
+    /**
+     * Busca instantânea por texto ou código de critério na Matriz de Critérios
+     */
+    function onDrilldownSearch(query) {
+      appState._drilldownSearchQuery = (query || '').trim().toLowerCase();
+      const q = appState._drilldownSearchQuery;
+      const items = document.querySelectorAll('.drilldown-sub-item');
+      let matchCount = 0;
+
+      items.forEach(item => {
+        const text = (item.innerText || '').toLowerCase();
+        if (!q || text.includes(q)) {
+          item.style.display = '';
+          matchCount++;
+          // Se estiver pesquisando termo ativo, expande os ancestrais automaticamente
+          if (q) {
+            const subgroup = item.closest('.drilldown-subgroup');
+            if (subgroup) {
+              const subContent = subgroup.querySelector('.drilldown-content');
+              if (subContent) subContent.classList.add('show');
+              const subHeader = subgroup.querySelector('.drilldown-subheader');
+              if (subHeader) subHeader.classList.add('expanded');
+            }
+            const group = item.closest('.drilldown-group');
+            if (group) {
+              const groupContent = group.querySelector('.drilldown-content');
+              if (groupContent) groupContent.classList.add('show');
+              const groupHeader = group.querySelector('.drilldown-header');
+              if (groupHeader) groupHeader.classList.add('expanded');
+            }
+          }
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    /**
+     * Filtro rápido por chips de faixa percentual de consistência na Matriz
+     */
+    function filterDrilldownByScore(range) {
+      appState._drilldownScoreFilter = range; // 'all', 'low', 'med', 'high'
+      const items = document.querySelectorAll('.drilldown-sub-item');
+      items.forEach(item => {
+        const scoreAttr = item.getAttribute('data-score');
+        const score = scoreAttr !== null && scoreAttr !== '' ? parseInt(scoreAttr, 10) : null;
+        if (range === 'all' || score === null) {
+          item.style.display = '';
+        } else if (range === 'low' && score < 60) {
+          item.style.display = '';
+        } else if (range === 'med' && score >= 60 && score < 80) {
+          item.style.display = '';
+        } else if (range === 'high' && score >= 80) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      // Atualiza botões de chip
+      document.querySelectorAll('.drilldown-chip-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-range') === range);
+      });
+    }
+
+    /**
+     * Motor Universal de Ranqueamento de Critérios (Fragilidades e Práticas Consolidadas)
+     * @param {Object} scopeHierarchy Estatísticas da UE/Polo/Rede
+     * @param {Object} redeHierarchy Estatísticas consolidadas da Rede de Patos
+     * @param {String} mode 'lowest' (menor consistência), 'delta' (maior desvio vs rede), 'highest' (pontos fortes)
+     * @param {Number} count Quantidade de registros a retornar (padrão: 3)
+     */
+    function calculateTopCriteria(scopeHierarchy, redeHierarchy, mode, count) {
+      const allCriteria = [];
+      if (!scopeHierarchy || !scopeHierarchy.dims) return [];
+
+      scopeHierarchy.dims.forEach((dim, dIdx) => {
+        const dimTitle = (dim.title || '').replace(/^Dimens[aã]o\s*\d*\s*[:\.\-]?\s*/i, '').trim();
+        (dim.subSections || []).forEach((sub, sIdx) => {
+          const subTitle = (sub.title || '').replace(/^Subdimens[aã]o\s*[\d\.]*\s*[:\.\-]?\s*/i, '').trim();
+          const subKey = `sub_${dIdx}_${sIdx}`;
+          (sub.criteria || []).forEach((crit, cIdx) => {
+            if (crit.validTotal > 0) {
+              const pts = crit.consistent * 1.0 + crit.partial * 0.5;
+              const score = Math.round((pts / crit.validTotal) * 100);
+
+              let redeScore = null;
+              if (redeHierarchy && redeHierarchy.dims && redeHierarchy.dims[dIdx]) {
+                const rDim = redeHierarchy.dims[dIdx];
+                if (rDim.subSections && rDim.subSections[sIdx] && rDim.subSections[sIdx].criteria && rDim.subSections[sIdx].criteria[cIdx]) {
+                  const rCrit = rDim.subSections[sIdx].criteria[cIdx];
+                  if (rCrit.validTotal > 0) {
+                    redeScore = Math.round(((rCrit.consistent * 1.0 + rCrit.partial * 0.5) / rCrit.validTotal) * 100);
+                  }
+                }
+              }
+
+              const delta = (redeScore !== null) ? (score - redeScore) : 0;
+
+              allCriteria.push({
+                critId: crit.id,
+                critText: crit.text,
+                dimIndex: dIdx,
+                dimTitle: `${dIdx + 1}. ${dimTitle}`,
+                subKey: subKey,
+                subId: sub.id,
+                subTitle: `${sub.id} ${subTitle}`,
+                score: score,
+                redeScore: redeScore,
+                delta: delta,
+                consistent: crit.consistent,
+                partial: crit.partial,
+                notDone: crit.notDone,
+                na: crit.na || 0,
+                validTotal: crit.validTotal,
+                severity: score < 60 ? 'critical' : (score < 80 ? 'warning' : 'stable')
+              });
+            }
+          });
+        });
+      });
+
+      if (allCriteria.length === 0) return [];
+
+      if (mode === 'highest') {
+        // Ordena pelos maiores scores (decrescente)
+        allCriteria.sort((a, b) => b.score - a.score || b.validTotal - a.validTotal);
+      } else if (mode === 'delta') {
+        // Ordena pela maior defasagem negativa em relação à rede
+        allCriteria.sort((a, b) => a.delta - b.delta || a.score - b.score);
+      } else {
+        // mode === 'lowest' (padrão)
+        allCriteria.sort((a, b) => a.score - b.score || a.delta - b.delta);
+      }
+
+      return allCriteria.slice(0, count || 3);
+    }
+
     function toggleDrilldown(key) {
       appState.expandedDrilldowns[key] = !appState.expandedDrilldowns[key];
       renderIndicatorsScreen();
@@ -19244,7 +19457,8 @@ function getActiveSections(obs) {
      */
     function renderBottlenecksPrioritySection(scopeHierarchy, redeHierarchy, scopeLabelText, targetType) {
       const sortMode = appState.bottlenecksSortMode || 'absolute';
-      const bottlenecks = calculateTopBottlenecks(scopeHierarchy, redeHierarchy, sortMode, 3);
+      const criteriaMode = sortMode === 'highest' ? 'highest' : (sortMode === 'delta' ? 'delta' : 'lowest');
+      const bottlenecks = calculateTopCriteria(scopeHierarchy, redeHierarchy, criteriaMode, 3);
       appState._lastComputedBottlenecks = bottlenecks;
 
       const isCoord = targetType === 'coordenador';
@@ -19376,6 +19590,9 @@ function getActiveSections(obs) {
                 </button>
                 <button type="button" class="bottlenecks-toggle-btn ${sortMode === 'delta' ? 'active' : ''}" onclick="toggleBottlenecksSortMode('delta')" title="Ordenar pela maior defasagem negativa em relação à Rede de Patos">
                   🔻 Maior Desvio vs. Rede
+                </button>
+                <button type="button" class="bottlenecks-toggle-btn ${sortMode === 'highest' ? 'active' : ''}" onclick="toggleBottlenecksSortMode('highest')" title="Ordenar pelas práticas com maior consistência consolidada na escola">
+                  ⭐ Maior Consistência
                 </button>
               </div>
 
@@ -20161,9 +20378,29 @@ function getActiveSections(obs) {
         if (user.roleKey !== 'coordenador') {
           unitOptionsHtml += `<option value="ALL">Todas as Unidades do Escopo (${availableUnits.length})</option>`;
         }
-        availableUnits.forEach(uName => {
-          unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
-        });
+
+        // Agrupamento semântico por Polo para o Núcleo de Educação Infantil
+        if (isNucleoEI(user)) {
+          const unitsByPolo = {};
+          (appState.units || []).forEach(u => {
+            const pName = u.polo || 'Sem Polo Definido';
+            if (!unitsByPolo[pName]) unitsByPolo[pName] = [];
+            unitsByPolo[pName].push(u.name);
+          });
+
+          const sortedPolos = Object.keys(unitsByPolo).sort();
+          sortedPolos.forEach(pName => {
+            unitOptionsHtml += `<optgroup label="📍 ${pName}">`;
+            unitsByPolo[pName].sort().forEach(uName => {
+              unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
+            });
+            unitOptionsHtml += `</optgroup>`;
+          });
+        } else {
+          availableUnits.forEach(uName => {
+            unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
+          });
+        }
 
         unitSelect.innerHTML = unitOptionsHtml;
         if (user.roleKey === 'coordenador') {
@@ -20417,6 +20654,19 @@ function getActiveSections(obs) {
 
         let indHtml = `
           <div id="indicatorsSectionKPIs" style="display:${currentSubTab === 'kpis' ? 'block' : 'none'};">
+            <!-- Barra de Contexto do Dossiê Individual -->
+            <div class="individual-context-banner">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:16px;">👤</span>
+                <span style="font-size:13px; font-weight:700; color:#1E3A8A;">
+                  Análise Individual do Profissional: <strong>${activeMemberFilter}</strong> (${memberSchool})
+                </span>
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="clearTeacherLongitudinalFilter()" style="font-size:11px; padding:4px 10px; font-weight:700; background:#FFFFFF;">
+                ✕ Voltar para Visão Geral
+              </button>
+            </div>
+
             <!-- Dossiê do Profissional -->
           <div class="card" style="margin-top:4px; margin-bottom:20px; border-left:5px solid var(--primary); background:#FFFFFF; padding:16px 20px;">
             <div style="display:flex; align-items:center; gap:8px;">
@@ -21088,9 +21338,244 @@ function getActiveSections(obs) {
         scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Rede Consolidada';
       }
 
+      // Renderiza Tabela Executiva de UEs quando escopo consolidado para Núcleo ou Formadora
+      let executiveUETableHtml = '';
+      if (activeUnitFilter === 'ALL' && (isNucleoEI(user) || user.roleKey === 'formador')) {
+        const uesList = (user.roleKey === 'formador')
+          ? availableUnits
+          : (appState.units || []).map(u => u.name);
+
+        const currentBim = getCurrentSchoolBimester();
+        const currentBimNum = parseInt((currentBim.match(/([1-4])/) || [null, '1'])[1], 10);
+
+        let rowsHtml = '';
+        uesList.forEach(uName => {
+          const uClasses = getClassesForSchool(uName);
+          const uObs = (appState.observations || []).filter(o => 
+            (o.status === 'finalized' || o.status === 'concluida') && o.schoolName === uName
+          );
+
+          // Turmas avaliadas no bimestre corrente
+          const evalCurrentBim = uClasses.filter(cls => {
+            const cleanClassName = (cls.name || '').trim().toLowerCase();
+            return uObs.some(o => {
+              if (!o.className || o.className.trim().toLowerCase() !== cleanClassName) return false;
+              const bMatch = (o.bimester || '').match(/([1-4])/);
+              return bMatch && parseInt(bMatch[1], 10) === currentBimNum;
+            });
+          }).length;
+
+          const covPct = uClasses.length > 0 ? Math.round((evalCurrentBim / uClasses.length) * 100) : 0;
+          const covColor = covPct >= 80 ? 'var(--green)' : (covPct >= 50 ? 'var(--yellow)' : 'var(--red)');
+
+          // Consistência da UE
+          const uHierarchy = calculateHierarchyStats(uObs, activeSections);
+          const uScore = uHierarchy.totalValid > 0 ? Math.round((uHierarchy.totalPts / uHierarchy.totalValid) * 100) : null;
+          const uScoreColor = uScore === null ? 'var(--text-secondary)' : (uScore >= 80 ? 'var(--green)' : uScore >= 60 ? 'var(--yellow)' : 'var(--red)');
+
+          const uObj = (appState.units || []).find(u => u.name === uName);
+          const uPolo = uObj?.polo || '—';
+
+          rowsHtml += `
+            <tr>
+              <td>
+                <strong style="color:var(--primary-dark); font-size:13px;">${uName}</strong>
+                <div style="font-size:11px; color:var(--text-secondary);">Polo: ${uPolo}</div>
+              </td>
+              <td>${uClasses.length} turmas</td>
+              <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <strong style="color:${covColor}; font-size:13px;">${evalCurrentBim} de ${uClasses.length} (${covPct}%)</strong>
+                  <div style="width:50px; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden;">
+                    <div style="width:${covPct}%; height:100%; background:${covColor};"></div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <strong style="color:${uScoreColor}; font-size:13px;">${uScore !== null ? uScore + '%' : '—'}</strong>
+                <span style="font-size:11px; color:var(--text-secondary);">(${uObs.length} obs.)</span>
+              </td>
+              <td style="text-align:right;">
+                <button type="button" class="btn btn-secondary" style="font-size:11px; padding:4px 8px; font-weight:700;" onclick="focusUnitFilter('${uName.replace(/'/g, "\\'")}')">
+                  Focar UE ➔
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+
+        executiveUETableHtml = `
+          <div class="ue-executive-table-wrap">
+            <div class="ue-executive-table-header">
+              <div>
+                <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark); margin:0;">
+                  🏫 Cobertura e Consistência por Unidade Escolar · ${currentBim}
+                </h4>
+                <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;">
+                  Acompanhamento consolidado para priorização de suporte e visitas de campo
+                </p>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="ue-executive-table">
+                <thead>
+                  <tr>
+                    <th>Unidade Escolar</th>
+                    <th>Turmas</th>
+                    <th>Cobertura no Bimestre</th>
+                    <th>Consistência Geral</th>
+                    <th style="text-align:right;">Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rowsHtml}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      // Montagem do Painel Síntese das Dimensões
+      let dimensionsSummaryHtml = '';
+      if (scopeHierarchy.dims && scopeHierarchy.dims.length > 0) {
+        let dimCardsHtml = '';
+        scopeHierarchy.dims.forEach((d, idx) => {
+          const dPts = d.consistent * 1.0 + d.partial * 0.5;
+          const dScore = d.validTotal > 0 ? Math.round((dPts / d.validTotal) * 100) : null;
+          const dColor = dScore === null ? 'var(--text-secondary)' : (dScore >= 80 ? 'var(--green)' : dScore >= 60 ? 'var(--yellow)' : 'var(--red)');
+
+          const redeD = (redeHierarchy.dims && redeHierarchy.dims[idx]) ? redeHierarchy.dims[idx] : null;
+          const redePts = redeD ? (redeD.consistent * 1.0 + redeD.partial * 0.5) : 0;
+          const redeScore = (redeD && redeD.validTotal > 0) ? Math.round((redePts / redeD.validTotal) * 100) : null;
+          const delta = (dScore !== null && redeScore !== null) ? (dScore - redeScore) : null;
+
+          const cleanTitle = (d.title || '').replace(/^Dimens[aã]o\s*\d*\s*[:\.\-]?\s*/i, '').trim();
+
+          dimCardsHtml += `
+            <div class="dim-summary-card">
+              <div>
+                <div class="dim-summary-header">
+                  <span class="dim-summary-title">${idx + 1}. ${cleanTitle}</span>
+                  <span class="dim-summary-score" style="color:${dColor};">${dScore !== null ? dScore + '%' : '—'}</span>
+                </div>
+                <div class="dim-summary-track">
+                  <div class="dim-summary-fill" style="width:${dScore || 0}%; background:${dColor};"></div>
+                </div>
+              </div>
+              <div class="dim-summary-meta">
+                <span>${d.validTotal} respostas</span>
+                <span>${delta !== null ? formatBenchmarkDelta(delta, false) : ''}</span>
+              </div>
+            </div>
+          `;
+        });
+
+        dimensionsSummaryHtml = `
+          <div style="margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span style="font-size:12px; font-weight:800; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">
+                Desempenho por Dimensão da Matriz
+              </span>
+              <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer;" onclick="switchIndicatorsSubTab('drilldown')">
+                Ver Detalhes Item a Item ➔
+              </button>
+            </div>
+            <div class="dimensions-summary-grid">
+              ${dimCardsHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      // Computação dos 4 Níveis da Escala de Materiais no escopo ativo
+      let materialsDistributionHtml = '';
+      if (targetType === 'professora') {
+        const matCounts = { 1: 0, 2: 0, 3: 0, 4: 0 };
+        let matTotal = 0;
+
+        scopedObs.forEach(o => {
+          if (o.synthesisMaterialDimension && matCounts[o.synthesisMaterialDimension] !== undefined) {
+            matCounts[o.synthesisMaterialDimension]++;
+            matTotal++;
+          }
+        });
+
+        const matConfigs = [
+          { level: 1, title: 'Nível 1 · Pré-prontas', desc: 'Folhas xerox / apostiladas estruturadas', color: 'var(--red)', bg: '#FEF2F2' },
+          { level: 2, title: 'Nível 2 · Folhas Estruturadas', desc: 'Predomínio de folhas com raras livres', color: 'var(--yellow)', bg: '#FFFBEB' },
+          { level: 3, title: 'Nível 3 · Diversificados', desc: 'Acesso regular a papéis, tintas e colagens', color: '#0284C7', bg: '#F0F9FF' },
+          { level: 4, title: 'Nível 4 · Autônomo e Tridimensional', desc: 'Argila, madeira, elementos naturais', color: 'var(--green)', bg: '#F0FDF4' }
+        ];
+
+        let matBarsHtml = '';
+        matConfigs.forEach(cfg => {
+          const count = matCounts[cfg.level];
+          const pct = matTotal > 0 ? Math.round((count / matTotal) * 100) : 0;
+
+          matBarsHtml += `
+            <div class="mat-bar-box" style="border-top:3px solid ${cfg.color};">
+              <div>
+                <div class="mat-bar-level" style="color:${cfg.color};">${cfg.title}</div>
+                <div class="mat-bar-desc">${cfg.desc}</div>
+              </div>
+              <div class="mat-bar-stat" style="color:${cfg.color};">
+                <span>${pct}%</span>
+                <span style="font-size:12px; font-weight:600; color:var(--text-secondary);">(${count} obs)</span>
+              </div>
+            </div>
+          `;
+        });
+
+        materialsDistributionHtml = `
+          <div class="materials-aggregate-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <div>
+                <h4 style="font-size:14px; font-weight:800; color:var(--primary-dark); margin:0;">
+                  🎨 Distribuição do Uso de Materiais (Síntese Pedagógica)
+                </h4>
+                <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;">
+                  Proporção de observações registradas em cada nível de materiais na Educação Infantil (${matTotal} registros com escala)
+                </p>
+              </div>
+            </div>
+            <div class="materials-grid-bars">
+              ${matBarsHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      // Lista de turmas pendentes para a gaveta retrátil do Card 2
+      let pendingListItemsHtml = '';
+      if (targetType === 'professora') {
+        const pendingClassesList = scopedClasses.filter(cls => {
+          const cleanClassName = (cls.name || '').trim().toLowerCase();
+          return !scopedObs.some(o => {
+            if (o.status !== 'finalized' && o.status !== 'concluida') return false;
+            if (!o.className || o.className.trim().toLowerCase() !== cleanClassName) return false;
+            const obsBimMatch = (o.bimester || '').match(/([1-4])/);
+            return obsBimMatch && obsBimMatch[1] === currentBimNum;
+          });
+        });
+
+        pendingListItemsHtml = pendingClassesList.map(cls => `
+          <div class="pending-class-item">
+            <div>
+              <strong>${cls.name}</strong>
+              <span style="font-size:11px; color:var(--text-secondary); margin-left:6px;">(${cls.school || activeUnitFilter})</span>
+            </div>
+            <button type="button" class="btn btn-primary" style="font-size:11px; padding:3px 8px;" onclick="quickScheduleForClass('${cls.name.replace(/'/g, "\\'")}', '${(cls.school || activeUnitFilter).replace(/'/g, "\\'")}', '${currentBimester}')">
+              Agendar ➔
+            </button>
+          </div>
+        `).join('');
+      }
+
       // 1. Linha de KPIs Superiores Decisórios (Grid de 4 Colunas do Pilar 7)
       let html = `
         <div id="indicatorsSectionKPIs" style="display:${currentSubTab === 'kpis' ? 'block' : 'none'};">
+          ${executiveUETableHtml}
           <div class="kpi-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:16px; margin-bottom:20px;">
             
             <!-- CARD 1: QUALIDADE FORMATIVA (ÍNDICE DE CONSISTÊNCIA) -->
@@ -21114,10 +21599,21 @@ function getActiveSections(obs) {
               <div style="font-size:12px; font-weight:600; color:${pendingEntitiesCurrentBim === 0 && totalEntitiesCount > 0 ? 'var(--green)' : 'var(--text-secondary)'}; line-height:1.3;">
                 ${kpiCoverageSubtitle}
               </div>
-              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed rgba(0,0,0,0.08);">
+              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed rgba(0,0,0,0.08); display:flex; justify-content:space-between; align-items:center;">
                 <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Abrir o Quadro de Controle Bimestral de Turmas">
-                  🚦 Ver Quadro Semáforo ↓
+                  🚦 Semáforo ↓
                 </button>
+                ${pendingEntitiesCurrentBim > 0 && targetType === 'professora' ? `
+                  <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:#D97706; background:none; border:none; padding:0; cursor:pointer;" onclick="togglePendingClassesDrawer()" title="Exibir ou ocultar turmas pendentes no bimestre">
+                    📋 Ver Pendentes
+                  </button>
+                ` : ''}
+              </div>
+              <div id="pendingClassesDrawer" class="pending-classes-drawer" style="display:none;">
+                <div style="font-weight:800; color:#92400E; margin-bottom:4px;">Turmas Pendentes neste Bimestre:</div>
+                <div class="pending-classes-list">
+                  ${pendingListItemsHtml || '<div style="color:var(--text-secondary);">Nenhuma turma pendente</div>'}
+                </div>
               </div>
             </div>
 
@@ -21161,6 +21657,12 @@ function getActiveSections(obs) {
 
           </div>
 
+          <!-- Régua Horizontal das Grandes Dimensões da Matriz Pedagógica -->
+          ${dimensionsSummaryHtml}
+
+          <!-- Distribuição Agregada da Escala de Materiais -->
+          ${materialsDistributionHtml}
+
           <!-- PILAR 8: BLOCO DE DIAGNÓSTICO DE PRIORIDADES FORMATIVAS: FOCO NOS MENORES ÍNDICES (GARGALOS) -->
           ${renderBottlenecksPrioritySection(scopeHierarchy, redeHierarchy, scopeLabelText, targetType)}
 
@@ -21203,6 +21705,28 @@ function getActiveSections(obs) {
                 </span>
               </div>
             `}
+          </div>
+
+                    <!-- Controles Rápidos: Busca Instantânea, Filtro de Consistência e Expansão Global -->
+          <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:240px;">
+              <input type="search" id="drilldownSearchInput" class="form-control" placeholder="🔍 Buscar critério por código ou texto..." oninput="onDrilldownSearch(this.value)" style="height:38px; font-size:12px; width:100%; max-width:380px;">
+            </div>
+
+            <!-- Chips de Faixa de Consistência -->
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <span style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Filtrar:</span>
+              <button type="button" class="btn btn-secondary drilldown-chip-btn active" data-range="all" onclick="filterDrilldownByScore('all')" style="font-size:11px; padding:4px 8px; font-weight:700;">Todos</button>
+              <button type="button" class="btn btn-secondary drilldown-chip-btn" data-range="low" onclick="filterDrilldownByScore('low')" style="font-size:11px; padding:4px 8px; font-weight:700; color:var(--red);">🔴 &lt; 60%</button>
+              <button type="button" class="btn btn-secondary drilldown-chip-btn" data-range="med" onclick="filterDrilldownByScore('med')" style="font-size:11px; padding:4px 8px; font-weight:700; color:var(--yellow);">🟡 60-79%</button>
+              <button type="button" class="btn btn-secondary drilldown-chip-btn" data-range="high" onclick="filterDrilldownByScore('high')" style="font-size:11px; padding:4px 8px; font-weight:700; color:var(--green);">🟢 ≥ 80%</button>
+            </div>
+
+            <!-- Botões Globais de Expansão -->
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button type="button" class="btn btn-secondary" onclick="expandAllDrilldown()" style="font-size:11px; padding:5px 10px; font-weight:700;" title="Expandir todas as dimensões e subdimensões">+ Expandir Tudo</button>
+              <button type="button" class="btn btn-secondary" onclick="collapseAllDrilldown()" style="font-size:11px; padding:5px 10px; font-weight:700;" title="Recolher todas as dimensões">- Recolher Tudo</button>
+            </div>
           </div>
       `;
 
@@ -21348,7 +21872,7 @@ function getActiveSections(obs) {
               const critDomId = `drilldownCrit_${crit.id.replace(/\./g, '_')}`;
 
               html += `
-                <div class="drilldown-sub-item" id="${critDomId}">
+                <div class="drilldown-sub-item" id="${critDomId}" data-score="${critPct !== null ? critPct : ''}">
                   <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
                     <div style="font-size:13px; color:var(--text-primary); flex:1; line-height:1.4;">
                       <strong>[${crit.id}]</strong> ${crit.text}
@@ -25879,6 +26403,72 @@ function getActiveSections(obs) {
               }
               logger.log('Alternância e renderização interativa da aba Longitudinal de Indicadores', true);
 
+              // 9.3 TESTES DECISÓRIOS DE GESTÃO (PLANO DE APRESENTAÇÃO DE DADOS DECISÓRIOS)
+              // 9.3.1 Teste de Agrupamento por Polo no Seletor de Unidades (Helena / Núcleo de EI)
+              const previousUserDec = appState.currentUserKey;
+              try {
+                appState.currentUserKey = 'helena';
+                renderIndicatorsScreen();
+                const unitSelEl = document.getElementById('indicatorsUnitFilter');
+                if (!unitSelEl) throw new Error('Seletor #indicatorsUnitFilter ausente no DOM');
+                const optgroups = unitSelEl.querySelectorAll('optgroup');
+                if (!optgroups || optgroups.length === 0) {
+                  throw new Error('Falha Governança Territorial: Elementos <optgroup> de Polos ausentes no seletor de Unidades para o Núcleo de EI');
+                }
+                logger.log('Agrupamento territorial semântico por Polo (<optgroup>) validado no seletor de UEs do Núcleo', true, `${optgroups.length} polos mapeados`);
+
+                // 9.3.2 Teste da Tabela Executiva de Cobertura e Consistência por UE
+                const execTable = document.querySelector('.ue-executive-table');
+                if (!execTable) {
+                  throw new Error('Falha Visão Executiva: Tabela .ue-executive-table ausente na visão consolidada do Núcleo de EI');
+                }
+                const focusBtn = execTable.querySelector('button[onclick*="focusUnitFilter"]');
+                if (!focusBtn) {
+                  throw new Error('Falha Visão Executiva: Botão de ação "Focar UE" ausente na tabela executiva');
+                }
+                logger.log('Renderização da Tabela Executiva de UEs e botão de foco direto (Núcleo de EI/Formadoras)', true);
+
+                // 9.3.3 Teste da Régua de Grandes Dimensões da Matriz
+                const dimCards = document.querySelectorAll('.dim-summary-card');
+                if (!dimCards || dimCards.length === 0) {
+                  throw new Error('Falha Régua Dimensional: Cards .dim-summary-card ausentes na Visão Geral');
+                }
+                logger.log('Mini-Painel das Grandes Dimensões da Matriz Pedagógica renderizado no DOM', true, `${dimCards.length} dimensões`);
+
+                // 9.3.4 Teste da Distribuição Agregada da Escala de Materiais
+                const matCard = document.querySelector('.materials-aggregate-card');
+                if (!matCard) {
+                  throw new Error('Falha Escala de Materiais: Card .materials-aggregate-card ausente na visão geral docente');
+                }
+                logger.log('Distribuição agregada dos 4 níveis da Escala de Materiais validada no DOM', true);
+
+                // 9.3.5 Teste do Algoritmo calculateTopCriteria em modo "highest" (Pontos Fortes)
+                const mockCritCriteria = calculateTopCriteria(ueResult, redeResult, 'highest', 3);
+                if (!mockCritCriteria || mockCritCriteria.length === 0) {
+                  throw new Error('calculateTopCriteria retornou conjunto vazio em modo highest');
+                }
+                for (let i = 0; i < mockCritCriteria.length - 1; i++) {
+                  if (mockCritCriteria[i].score < mockCritCriteria[i+1].score) {
+                    throw new Error('calculateTopCriteria não ordenou critérios em ordem decrescente de consistência');
+                  }
+                }
+                logger.log('Motor de ranqueamento de Práticas Consolidadas (calculateTopCriteria em modo highest) validado com sucesso', true);
+
+                // 9.3.6 Teste de Busca Instantânea e Controles Globais na Matriz de Critérios
+                switchIndicatorsSubTab('drilldown');
+                const searchInp = document.getElementById('drilldownSearchInput');
+                if (!searchInp) throw new Error('#drilldownSearchInput ausente na Matriz de Critérios');
+                expandAllDrilldown();
+                const expandedGroup = document.querySelector('.drilldown-header.expanded');
+                if (!expandedGroup) throw new Error('expandAllDrilldown não expandiu cabeçalhos de dimensões');
+                collapseAllDrilldown();
+                logger.log('Controles rápidos de busca e expansão/recolhimento na Matriz de Critérios validados com sucesso', true);
+              } finally {
+                appState.currentUserKey = previousUserDec || 'mariana';
+                switchIndicatorsSubTab('kpis');
+                renderIndicatorsScreen();
+              }
+
               // 10. PILAR 10: VALIDAÇÃO DO QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE TURMAS)
               const semaphoreSection = document.getElementById('bimesterSemaphoreSection');
               if (!semaphoreSection) throw new Error('Falha Pilar 10: Contêiner #bimesterSemaphoreSection ausente no DOM');
@@ -26438,13 +27028,13 @@ function getActiveSections(obs) {
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.32
-              if (!btnChangelog.textContent.includes('Versão 1.32')) {
+              if (!btnChangelog.textContent.includes('Versão 1.33')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.32')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.32');
+              if (!modalChg.innerHTML.includes('Versão 1.33')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.33');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.32 (v8.1.8)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.33 (v8.2.0)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

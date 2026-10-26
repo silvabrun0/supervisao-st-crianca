@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.33** | 26/10/2026 17:55 | `intermediárias/aplicativo_v133_apresentacao_dados_decisao_gestores.html` | Solicitação direta / `planos_de_implementacao/plano_apresentacao_dados_processo_decisorio_gestores.md` | Apresentação de dados orientada ao processo decisório dos gestores: governança territorial por polos (`<optgroup>`), tabela executiva de UEs, régua das grandes dimensões, síntese agregada da escala de materiais, prioridades balanceadas (fragilidades e práticas consolidadas) e busca na matriz 🗺️🏫📊 |
 | **1.32** | 26/10/2026 17:45 | `intermediárias/aplicativo_v132_adequacao_banner_rede_consolidada.html` | Solicitação direta / `planos_de_implementacao/plano_adequacao_banner_rede_consolidada.md` | Adequação contextual do banner na Visualização por Dimensão: eliminação da redundância comparativa em 'Rede Consolidada' em favor do panorama consolidado da rede municipal com badge orientador, e preservação da comparação ativa por Escola/Polo 🏛️🎯 |
 | **1.31** | 26/10/2026 17:40 | `intermediárias/aplicativo_v131_substituicao_emojis_botoes_por_pictogramas.html` | Solicitação direta / `planos_de_implementacao/plano_substituicao_emojis_botoes_por_pictogramas.md` | Substituição sistemática de emojis nos botões principais e sub-abas por pictogramas vetoriais (SVGs inline padronizados com classes `.btn-icon`, `.btn-icon-sm`, `.tab-icon-svg`), garantindo consistência visual entre dispositivos e sobriedade institucional 🎨✨ |
 | **1.30** | 26/10/2026 17:30 | `intermediárias/aplicativo_v130_substituicao_benchmark_por_referencial_rede.html` | Solicitação direta / `planos_de_implementacao/plano_substituicao_benchmark_por_referencial_rede.md` | Higienização terminológica pedagógica na Visualização por Dimensão, substituindo o termo corporativo 'Benchmark' por 'Referencial da Rede Municipal' no banner contextual, subtítulo e pauta diagnóstica, preservando fórmulas de Delta e auditoria com asserções estritas 🏛️🧹 |
@@ -158,6 +159,24 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.33] - Apresentação de Dados Orientada ao Processo Decisório dos Gestores
+- **Data / Horário:** 26/10/2026 17:55
+- **Arquivo de Referência:** `intermediárias/aplicativo_v133_apresentacao_dados_decisao_gestores.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_apresentacao_dados_processo_decisorio_gestores.md`.
+- **Foco Central:** Reorganização e enriquecimento da apresentação de dados para apoio à decisão nos três níveis de gestão (Núcleo de EI, Formadoras e Coordenação Pedagógica), garantindo apresentação pura de dados matemáticos sem juízos de valor artificiais.
+
+#### Modificações
+- **Governança Territorial por Polos:** Agrupamento semântico por Polo Regional (`<optgroup>`) no seletor de Unidades Escolares (`#indicatorsUnitFilter`) para a perspectiva do Núcleo de EI.
+- **Tabela Executiva de UEs:** Apresentação comparativa consolidada de Cobertura Bimestral e Consistência Geral por Unidade Escolar (`.ue-executive-table`) com ação rápida "Focar UE ➔" para o Núcleo e Formadoras.
+- **Régua Horizontal das Grandes Dimensões:** Mini-painel visual (`.dim-summary-card`) sintetizando a consistência das grandes dimensões curriculares versus o Referencial da Rede Municipal.
+- **Síntese Agregada da Escala de Materiais:** Distribuição dos 4 níveis de materiais pedagógicos (`.materials-aggregate-card`) visível na visão geral docente da escola/rede.
+- **Prioridades Formativas Balanceadas:** Alternador em 3 modos (`calculateTopCriteria`): Menor Consistência (Prioridades), Maior Desvio vs. Rede e Maior Consistência (Práticas Consolidadas/Pontos Fortes).
+- **Gaveta Retrátil de Turmas Pendentes:** Lista rápida de turmas pendentes no Card 2 de Cobertura com botão de agendamento direto (`quickScheduleForClass`).
+- **Navegação Eficiente na Matriz de Critérios:** Campo de busca textual instantânea (`#drilldownSearchInput`), botões de expansão/recolhimento global e chips de filtro por consistência.
+- **Auditoria Modular Aprimorada:** Inclusão de 6 novos testes automatizados no módulo `indicadores_decisao` com 100% de conformidade.
+
+---
 
 ### [Versão 1.32] - Adequação Contextual do Banner na Visualização por Dimensão (Rede Consolidada)
 - **Data / Horário:** 26/10/2026 17:45
