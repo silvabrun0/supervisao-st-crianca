@@ -226,7 +226,7 @@ def main():
         target_url
     ]
 
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     start = time.time()
     while test_result is None and (time.time() - start) < args.timeout:
