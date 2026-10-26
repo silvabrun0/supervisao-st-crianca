@@ -3493,7 +3493,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.27 (v8.1.2)
+          📌 Versão 1.28 (v8.1.4)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -5074,6 +5074,22 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.28 - ARQUITETURA PLURIANUAL, BOTÃO INICIAR NOVO ANO LETIVO E GESTÃO DE CICLOS MULTI-ANO -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; font-weight:800; color:#10B981;">Versão 1.28 · v8.1.4 (Oficial)</span>
+          <span style="font-size:11px; background:#ECFDF5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Arquitetura Plurianual, Botão Iniciar Novo Ano Letivo e Gestão de Ciclos Multi-Ano SSOT:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🌟 <strong>Disponibilização do Botão "Iniciar Novo Ano Letivo":</strong> Implementação direta na barra de ações da Gestão da Rede (<code>#homeGestaoActionsCentral</code>) e no modal de Ciclos Avaliativos (<code>#modalBimesterPeriods</code>), permitindo à Coordenadora do Núcleo de EI disparar com 1 toque o assistente de abertura de novo ciclo letivo.</li>
+          <li>📅 <strong>Gestão de Anos Letivos Multi-Ano SSOT:</strong> Suporte integral a múltiplos anos com seletor no cabeçalho (<code>#headerAcademicYearSelect</code>), banner informativo em modo histórico, clonagem automatizada ou início limpo de turmas e prazos bimestrais independentes por ano letivo.</li>
+          <li>🛡️ <strong>Preservação Patrimonial Absoluta:</strong> Garantia intransponível de manutenção de todas as Unidades Escolares, Servidores/Usuários e Polos Regionais ao transitar entre anos letivos.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.27 - CORREÇÃO DO FILTRO DE STATUS ATRASADAS NO SEMÁFORO (PILAR 10) -->
@@ -9668,12 +9684,16 @@ function getActiveSections(obs) {
       return [];
     }
 
-    // STRICT DRAFT VISIBILITY E VÍNCULO DETERMINÍSTICO DE AVALIANDOS ATIVOS:
-    function getScopedObservations() {
+    // STRICT DRAFT VISIBILITY E VÍNCULO DETERMINÍSTICO DE AVALIANDOS ATIVOS (COM ESCOPO DE ANO LETIVO):
+    function getScopedObservations(targetYear = null) {
       const user = getCurrentUser();
       if (!appState.observations) return [];
+      const activeYear = targetYear || (appState && appState.selectedAcademicYear) || '2026';
 
       return appState.observations.filter(obs => {
+        // Filtro estrito de Ano Letivo
+        if ((obs.academicYear || '2026') !== activeYear) return false;
+
         // Se a observação for da TURMA (Pilar 1), valida se a escola e turma pertencem ao escopo
         if (obs.evaluatedType === 'turma') {
           if (obs.status === 'draft') {
@@ -10316,6 +10336,9 @@ function getActiveSections(obs) {
         if (btnNewTeacher) btnNewTeacher.style.display = 'inline-flex';
         if (btnNewUser) btnNewUser.style.display = 'inline-flex';
       }
+
+      // Renderiza Seletor Global de Ano Letivo
+      renderGlobalAcademicYearSelector();
     }
 
     // --- 5. NAVIGATION ---
@@ -19314,8 +19337,9 @@ function getActiveSections(obs) {
      * @param {Date|string} referenceDate - Data de referência do calendário
      * @returns {Object} { status, colorKey, label, subLabel, score, date, obsId, hasSchedule, scheduleDate, isDraft, bimesterNum, currentBimNum }
      */
-    function calculateClassBimesterStatus(className, schoolName, bimesterName, referenceDate = new Date()) {
+    function calculateClassBimesterStatus(className, schoolName, bimesterName, referenceDate = new Date(), targetYear = null) {
       if (!className) return { status: 'future', colorKey: 'gray', label: '—' };
+      const activeYear = targetYear || (appState && appState.selectedAcademicYear) || '2026';
       
       const cleanClass = (className || '').trim().toLowerCase();
       const cleanSchool = (schoolName || '').trim().toLowerCase();
@@ -19323,12 +19347,13 @@ function getActiveSections(obs) {
       const bimMatch = (bimesterName || '').match(/([1-4])/);
       const bimesterNum = bimMatch ? parseInt(bimMatch[1], 10) : 1;
       
-      const currentBimStr = getCurrentSchoolBimester(referenceDate);
+      const currentBimStr = getCurrentSchoolBimester(referenceDate, activeYear);
       const currentBimMatch = currentBimStr.match(/([1-4])/);
       const currentBimNum = currentBimMatch ? parseInt(currentBimMatch[1], 10) : 1;
 
-      // 1. Busca observação finalizada para a TURMA neste bimestre
+      // 1. Busca observação finalizada para a TURMA neste bimestre e ano letivo
       const finalizedObs = (appState.observations || []).find(o => {
+        if ((o.academicYear || '2026') !== activeYear) return false;
         if (o.status !== 'finalized' && o.status !== 'concluida') return false;
         if (!o.className) return false;
         const oCls = o.className.trim().toLowerCase();
@@ -19387,6 +19412,7 @@ function getActiveSections(obs) {
 
       // 2. Busca se há observação em Rascunho (draft)
       const draftObs = (appState.observations || []).find(o => {
+        if ((o.academicYear || '2026') !== activeYear) return false;
         if (o.status !== 'draft') return false;
         if (!o.className) return false;
         const oCls = o.className.trim().toLowerCase();
@@ -19395,7 +19421,7 @@ function getActiveSections(obs) {
         const normClean = normalizeClass(cleanClass);
         const normObs = normalizeClass(oCls);
         const matchesClass = normClean === normObs || 
-          (normClean.length > 5 && normObs.length > 5 && (new RegExp('\b' + normClean + '\b').test(normObs) || new RegExp('\b' + normObs + '\b').test(normClean)));
+          (normClean.length > 5 && normObs.length > 5 && (new RegExp('\\b' + normClean + '\\b').test(normObs) || new RegExp('\\b' + normObs + '\\b').test(normClean)));
         if (!matchesClass) return false;
         if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
         const oBimMatch = (o.bimester || '').match(/([1-4])/);
@@ -19404,6 +19430,7 @@ function getActiveSections(obs) {
 
       // 3. Busca se há agendamento planejado no cronograma
       const sched = (appState.schedules || []).find(s => {
+        if ((s.academicYear || '2026') !== activeYear) return false;
         if (s.archived || s.status === 'realizado') return false;
         const sTarget = (s.className || s.targetName || '').trim().toLowerCase();
         if (!sTarget) return false;
@@ -19571,8 +19598,9 @@ function getActiveSections(obs) {
      * Considera observações diretas do professor, observações da turma onde atua e agendamentos no cronograma.
      * Retorna objeto canônico: { status, colorKey, label, score, obsId, obsDate, className, scheduleId, bimesterNum, currentBimNum }
      */
-    function calculateTeacherBimesterStatus(teacherName, schoolName, bimesterName, referenceDate = new Date()) {
+    function calculateTeacherBimesterStatus(teacherName, schoolName, bimesterName, referenceDate = new Date(), targetYear = null) {
       if (!teacherName) return { status: 'future', colorKey: 'gray', label: '—', score: null };
+      const activeYear = targetYear || (appState && appState.selectedAcademicYear) || '2026';
 
       const cleanTeacher = (teacherName || '').trim().toLowerCase();
       const cleanSchool = (schoolName || '').trim().toLowerCase();
@@ -19580,7 +19608,7 @@ function getActiveSections(obs) {
       const bimMatch = (bimesterName || '').match(/([1-4])/);
       const bimesterNum = bimMatch ? parseInt(bimMatch[1], 10) : 1;
 
-      const currentBimStr = getCurrentSchoolBimester(referenceDate);
+      const currentBimStr = getCurrentSchoolBimester(referenceDate, activeYear);
       const currentBimMatch = currentBimStr.match(/([1-4])/);
       const currentBimNum = currentBimMatch ? parseInt(currentBimMatch[1], 10) : 1;
 
@@ -19588,8 +19616,9 @@ function getActiveSections(obs) {
       const member = (appState.teamMembers || []).find(m => (m.name || '').trim().toLowerCase() === cleanTeacher);
       const assignedClassClean = (member?.classAssigned || '').trim().toLowerCase();
 
-      // Localiza as turmas que possuem este docente no catálogo canônico
+      // Localiza as turmas que possuem este docente no catálogo canônico do ano
       const teacherClassNames = (appState.classes || []).filter(c => {
+        if ((c.academicYear || '2026') !== activeYear) return false;
         if (cleanSchool && c.school && c.school.trim().toLowerCase() !== cleanSchool) return false;
         return Array.isArray(c.teachers) && c.teachers.some(t => (t || '').trim().toLowerCase() === cleanTeacher);
       }).map(c => (c.name || '').trim().toLowerCase());
@@ -19600,8 +19629,9 @@ function getActiveSections(obs) {
 
       const defaultClassName = member?.classAssigned || (teacherClassNames.length > 0 ? teacherClassNames[0] : 'Educação Infantil');
 
-      // 1. Busca observação finalizada correspondente ao docente neste bimestre
+      // 1. Busca observação finalizada correspondente ao docente neste bimestre e ano
       const finalizedObs = (appState.observations || []).find(o => {
+        if ((o.academicYear || '2026') !== activeYear) return false;
         if (o.status !== 'finalized' && o.status !== 'concluida') return false;
         if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
 
@@ -19652,6 +19682,7 @@ function getActiveSections(obs) {
 
       // 2. Busca rascunho em andamento
       const draftObs = (appState.observations || []).find(o => {
+        if ((o.academicYear || '2026') !== activeYear) return false;
         if (o.status !== 'draft') return false;
         if (cleanSchool && o.schoolName && o.schoolName.trim().toLowerCase() !== cleanSchool) return false;
         const oBimMatch = (o.bimester || '').match(/([1-4])/);
@@ -19682,6 +19713,7 @@ function getActiveSections(obs) {
 
       // 3. Busca agendamento previsto no cronograma
       const sched = (appState.schedules || []).find(s => {
+        if ((s.academicYear || '2026') !== activeYear) return false;
         if (s.status === 'cancelado' || s.status === 'realizado') return false;
         if (cleanSchool && s.schoolName && s.schoolName.trim().toLowerCase() !== cleanSchool) return false;
         const sBimMatch = (s.bimester || '').match(/([1-4])/);
@@ -23232,6 +23264,70 @@ function getActiveSections(obs) {
       document.getElementById('modalChangelog').classList.remove('active');
     }
 
+    // =========================================================================
+    // PILAR 15: GESTÃO DE CICLOS LETIVOS E ANOS PLURIANUAIS (SSOT)
+    // =========================================================================
+    let activeModalBimesterConfigYear = '2026';
+
+    function renderGlobalAcademicYearSelector() {
+      const select = document.getElementById('headerAcademicYearSelect');
+      const wrapper = document.getElementById('headerAcademicYearWrapper');
+      if (!select) return;
+
+      if (!appState.academicYears || !Array.isArray(appState.academicYears) || appState.academicYears.length === 0) {
+        appState.academicYears = [...DEFAULT_ACADEMIC_YEARS];
+      }
+      if (!appState.selectedAcademicYear) {
+        appState.selectedAcademicYear = DEFAULT_SELECTED_ACADEMIC_YEAR;
+      }
+
+      // Ordena anos decrescente para priorizar o mais recente
+      const sortedYears = [...appState.academicYears].sort((a, b) => b.localeCompare(a));
+      select.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === appState.selectedAcademicYear ? 'selected' : ''}>Ano ${y}</option>`).join('');
+
+      // Banner informativo se estiver visualizando ano anterior ao mais recente
+      const latestYear = sortedYears[0];
+      const banner = document.getElementById('historicalYearWarningBanner');
+      const bannerLabel = document.getElementById('historicalYearBannerLabel');
+      if (banner) {
+        if (appState.selectedAcademicYear !== latestYear) {
+          banner.style.display = 'flex';
+          if (bannerLabel) bannerLabel.innerText = appState.selectedAcademicYear;
+        } else {
+          banner.style.display = 'none';
+        }
+      }
+    }
+
+    function onGlobalAcademicYearChange(selectedYear) {
+      if (!selectedYear) return;
+      appState.selectedAcademicYear = selectedYear;
+      saveState();
+      renderGlobalAcademicYearSelector();
+
+      // Recarrega telas ativas de acordo com a aba visível
+      const screenInd = document.getElementById('screenIndicators');
+      if (screenInd && screenInd.classList.contains('active')) {
+        renderIndicatorsScreen();
+      }
+      const screenHome = document.getElementById('screenHome');
+      if (screenHome && screenHome.classList.contains('active')) {
+        renderHomeScreen();
+      }
+      const screenHist = document.getElementById('screenHistory');
+      if (screenHist && screenHist.classList.contains('active')) {
+        renderHistoryScreen();
+      }
+
+      showToast(`Contexto alterado para o Ano Letivo ${selectedYear}`);
+    }
+
+    function returnToCurrentAcademicYear() {
+      const sortedYears = [...(appState.academicYears || ['2026'])].sort((a, b) => b.localeCompare(a));
+      const latestYear = sortedYears[0] || '2026';
+      onGlobalAcademicYearChange(latestYear);
+    }
+
     // Modal Bimester Periods (SSOT) Controls
     function openBimesterPeriodsModal() {
       const user = getCurrentUser();
@@ -23239,8 +23335,39 @@ function getActiveSections(obs) {
         showToast('Acesso restrito à Coordenadora do Núcleo de EI.');
         return;
       }
-      const periods = (appState && appState.bimesterPeriods) ? appState.bimesterPeriods : DEFAULT_BIMESTER_PERIODS;
-      
+
+      activeModalBimesterConfigYear = appState.selectedAcademicYear || '2026';
+
+      // Popula select de anos no modal
+      const modalYearSelect = document.getElementById('modalBimesterPeriodYearSelect');
+      if (modalYearSelect) {
+        const sortedYears = [...(appState.academicYears || ['2026'])].sort((a, b) => b.localeCompare(a));
+        modalYearSelect.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === activeModalBimesterConfigYear ? 'selected' : ''}>Ano Letivo ${y}</option>`).join('');
+      }
+
+      loadBimesterPeriodsForModalYear(activeModalBimesterConfigYear);
+
+      const modal = document.getElementById('modalBimesterPeriods');
+      if (modal) {
+        modal.classList.add('active');
+        modal.classList.add('show');
+      }
+    }
+
+    function onModalBimesterYearChange(newYear) {
+      activeModalBimesterConfigYear = newYear;
+      loadBimesterPeriodsForModalYear(newYear);
+    }
+
+    function loadBimesterPeriodsForModalYear(year) {
+      let yearPeriods = null;
+      if (appState && appState.bimesterPeriods && appState.bimesterPeriods[year]) {
+        yearPeriods = appState.bimesterPeriods[year];
+      } else if (appState && appState.bimesterPeriods && appState.bimesterPeriods['1º Bimestre']) {
+        yearPeriods = appState.bimesterPeriods;
+      }
+      const periods = yearPeriods || (DEFAULT_BIMESTER_PERIODS_BY_YEAR[year] || DEFAULT_BIMESTER_PERIODS_BY_YEAR['2026']);
+
       const bimMap = {
         1: '1º Bimestre',
         2: '2º Bimestre',
@@ -23250,17 +23377,11 @@ function getActiveSections(obs) {
 
       for (let i = 1; i <= 4; i++) {
         const bName = bimMap[i];
-        const p = periods[bName] || DEFAULT_BIMESTER_PERIODS[bName];
+        const p = periods[bName] || DEFAULT_BIMESTER_PERIODS_BY_YEAR['2026'][bName];
         const startInput = document.getElementById(`bimPeriodStart_${i}`);
         const endInput = document.getElementById(`bimPeriodEnd_${i}`);
-        if (startInput) startInput.value = p.startDate || '';
-        if (endInput) endInput.value = p.endDate || '';
-      }
-
-      const modal = document.getElementById('modalBimesterPeriods');
-      if (modal) {
-        modal.classList.add('active');
-        modal.classList.add('show');
+        if (startInput) startInput.value = (p && p.startDate) ? p.startDate : '';
+        if (endInput) endInput.value = (p && p.endDate) ? p.endDate : '';
       }
     }
 
@@ -23312,12 +23433,12 @@ function getActiveSections(obs) {
         };
       }
 
-      appState.bimesterPeriods = newPeriods;
+      if (!appState.bimesterPeriods) appState.bimesterPeriods = {};
+      appState.bimesterPeriods[activeModalBimesterConfigYear] = newPeriods;
       saveState();
       closeBimesterPeriodsModal();
-      showToast('Períodos oficiais dos ciclos avaliativos atualizados com sucesso na SSOT!');
+      showToast(`Períodos dos ciclos avaliativos do ano ${activeModalBimesterConfigYear} atualizados com sucesso na SSOT!`);
 
-      // Re-renderiza indicadores se a tela estiver aberta
       const screenInd = document.getElementById('screenIndicators');
       if (screenInd && screenInd.classList.contains('active')) {
         renderIndicatorsScreen();
@@ -23325,17 +23446,137 @@ function getActiveSections(obs) {
     }
 
     function restoreDefaultBimesterPeriodsPrompt() {
-      if (!confirm('Deseja restaurar os períodos oficiais padrão do município para os 4 bimestres?')) {
+      if (!confirm(`Deseja restaurar os períodos oficiais padrão do município para os 4 bimestres do ano ${activeModalBimesterConfigYear}?`)) {
         return;
       }
-      appState.bimesterPeriods = JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS));
+      const defaultForYear = DEFAULT_BIMESTER_PERIODS_BY_YEAR[activeModalBimesterConfigYear] || DEFAULT_BIMESTER_PERIODS_BY_YEAR['2026'];
+      if (!appState.bimesterPeriods) appState.bimesterPeriods = {};
+      appState.bimesterPeriods[activeModalBimesterConfigYear] = JSON.parse(JSON.stringify(defaultForYear));
       saveState();
-      openBimesterPeriodsModal(); // Recarrega os inputs no modal
-      showToast('Padrões municipais restaurados com sucesso na SSOT!');
+      loadBimesterPeriodsForModalYear(activeModalBimesterConfigYear);
+      showToast(`Padrões municipais para o ano ${activeModalBimesterConfigYear} restaurados com sucesso na SSOT!`);
       const screenInd = document.getElementById('screenIndicators');
       if (screenInd && screenInd.classList.contains('active')) {
         renderIndicatorsScreen();
       }
+    }
+
+    // Modal Create New Academic Year Controls
+    function openCreateNewAcademicYearModal() {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Apenas a Coordenadora do Núcleo de EI pode iniciar um novo ano letivo.');
+        return;
+      }
+
+      const inputYear = document.getElementById('inputNewAcademicYear');
+      if (inputYear) {
+        const sortedYears = [...(appState.academicYears || ['2026'])].map(y => parseInt(y, 10)).sort((a, b) => b - a);
+        const nextSuggested = (sortedYears[0] || 2026) + 1;
+        inputYear.value = nextSuggested;
+      }
+
+      const modal = document.getElementById('modalCreateAcademicYear');
+      if (modal) {
+        modal.classList.add('active');
+        modal.classList.add('show');
+      }
+    }
+
+    function closeCreateNewAcademicYearModal() {
+      const modal = document.getElementById('modalCreateAcademicYear');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.classList.remove('show');
+      }
+    }
+
+    function confirmCreateNewAcademicYear() {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Acesso negado.');
+        return;
+      }
+
+      const inputYear = document.getElementById('inputNewAcademicYear');
+      const yearVal = inputYear ? inputYear.value.trim() : '';
+
+      if (!yearVal || !/^\d{4}$/.test(yearVal)) {
+        alert('Por favor, informe um ano letivo válido com 4 dígitos (ex: 2027).');
+        return;
+      }
+
+      if (appState.academicYears.includes(yearVal)) {
+        alert(`O Ano Letivo ${yearVal} já está cadastrado no sistema.`);
+        return;
+      }
+
+      const optionEl = document.querySelector('input[name="newYearClassesOption"]:checked');
+      const option = optionEl ? optionEl.value : 'clone';
+
+      // 1. Cadastra o novo ano na lista SSOT
+      appState.academicYears.push(yearVal);
+      appState.academicYears.sort();
+
+      // 2. Inicializa os 4 bimestres do novo ano baseando-se no ano base
+      const templatePeriods = DEFAULT_BIMESTER_PERIODS_BY_YEAR['2026'];
+      const newYearPeriods = {};
+      const yearDiff = parseInt(yearVal, 10) - 2026;
+      ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'].forEach(bName => {
+        const tmpl = templatePeriods[bName];
+        const adjustDate = (isoStr) => {
+          if (!isoStr) return '';
+          const parts = isoStr.split('-');
+          const y = parseInt(parts[0], 10) + yearDiff;
+          return `${y}-${parts[1]}-${parts[2]}`;
+        };
+        newYearPeriods[bName] = {
+          startDate: adjustDate(tmpl.startDate),
+          endDate: adjustDate(tmpl.endDate),
+          label: bName
+        };
+      });
+
+      if (!appState.bimesterPeriods) appState.bimesterPeriods = {};
+      appState.bimesterPeriods[yearVal] = newYearPeriods;
+
+      // 3. Matriz de turmas
+      if (option === 'clone') {
+        const sortedYears = [...appState.academicYears].filter(y => y !== yearVal).sort((a, b) => b.localeCompare(a));
+        const prevYear = sortedYears[0] || '2026';
+        const prevClasses = (appState.classes || []).filter(c => (c.academicYear || '2026') === prevYear);
+
+        prevClasses.forEach((prevC, idx) => {
+          const clonedClass = {
+            id: 'cls-' + yearVal + '-' + Date.now() + '-' + idx,
+            name: prevC.name,
+            school: prevC.school,
+            academicYear: yearVal,
+            stage: prevC.stage,
+            shift: prevC.shift,
+            teachers: [...(prevC.teachers || [])],
+            teachersMorning: [...(prevC.teachersMorning || [])],
+            teachersAfternoon: [...(prevC.teachersAfternoon || [])]
+          };
+          appState.classes.push(clonedClass);
+        });
+      }
+
+      // 4. Define o novo ano como ativo
+      appState.selectedAcademicYear = yearVal;
+      saveState();
+
+      closeCreateNewAcademicYearModal();
+      renderGlobalAcademicYearSelector();
+
+      // Se o modal de bimestres estava aberto ou for necessário atualizar telas:
+      const modalBim = document.getElementById('modalBimesterPeriods');
+      if (modalBim && modalBim.classList.contains('active')) {
+        openBimesterPeriodsModal();
+      }
+
+      showToast(`Ano Letivo ${yearVal} iniciado com sucesso! Todas as UEs e Servidores foram mantidos.`);
+      renderHomeScreen();
     }
 
     // Modal Reference Docs Controls
