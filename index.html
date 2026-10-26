@@ -1396,6 +1396,204 @@
       color: var(--text-primary);
     }
 
+    /* =========================================================================
+       APRESENTAÇÃO DE DADOS DECISÓRIOS (V1.26)
+       ========================================================================= */
+    /* 1. Tabela Executiva de Cobertura por UE (Núcleo de EI & Formadores) */
+    .ue-executive-table-wrap {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .ue-executive-table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ue-executive-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .ue-executive-table th {
+      background: #F8FAFC;
+      color: var(--text-secondary);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.4px;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      text-align: left;
+    }
+    .ue-executive-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-primary);
+    }
+    .ue-executive-table tr:hover {
+      background: #F8FAFC;
+    }
+
+    /* 2. Régua Horizontal das Grandes Dimensões */
+    .dimensions-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .dim-summary-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .dim-summary-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transform: translateY(-1px);
+    }
+    .dim-summary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .dim-summary-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      line-height: 1.3;
+    }
+    .dim-summary-score {
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .dim-summary-track {
+      height: 6px;
+      background: #F1F5F9;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 8px 0 6px 0;
+      display: flex;
+    }
+    .dim-summary-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    .dim-summary-meta {
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* 3. Distribuição Agregada da Escala de Materiais */
+    .materials-aggregate-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .materials-grid-bars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    @media (max-width: 768px) {
+      .materials-grid-bars {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .mat-bar-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .mat-bar-level {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 4px;
+    }
+    .mat-bar-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.25;
+      margin-bottom: 8px;
+      min-height: 28px;
+    }
+    .mat-bar-stat {
+      font-size: 18px;
+      font-weight: 900;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    /* 4. Barra de Ação Imediata: Turmas Pendentes no Bimestre Corrente */
+    .pending-classes-drawer {
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+    .pending-classes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .pending-class-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FFFFFF;
+      border: 1px solid #FEF3C7;
+      border-radius: 6px;
+      padding: 6px 10px;
+    }
+
+    /* 5. Barra de Contexto do Dossiê Individual */
+    .individual-context-banner {
+      background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+      border: 1px solid #BFDBFE;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
     /* Synthesis Levels */
     .level-box {
       border: 1px solid var(--border);
@@ -4256,19 +4454,19 @@
         </div>
       </div>
 
-      <!-- Segmented Navigation (Sub-abas do Painel de Indicadores com Ícones) -->
+      <!-- Segmented Navigation (Sub-abas Humanizadas do Painel de Indicadores) -->
       <div class="indicators-subtabs-nav" id="indicatorsSubTabsNav">
-        <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill active" id="pillIndKpis" onclick="switchIndicatorsSubTab('kpis')" title="Índices Gerais & KPIs" aria-label="Índices Gerais">
+        <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill active" id="pillIndKpis" onclick="switchIndicatorsSubTab('kpis')" title="Visão Geral & Prioridades Formativas" aria-label="Visão Geral">
           <span class="tab-icon">📊</span>
-          <span class="tab-text" id="pillIndKpisLabel">Índices Gerais</span>
+          <span class="tab-text" id="pillIndKpisLabel">Visão Geral & Prioridades</span>
         </button>
-        <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill" id="pillIndDrilldown" onclick="switchIndicatorsSubTab('drilldown')" title="Afunilamento por Dimensão" aria-label="Afunilamento">
+        <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill" id="pillIndLongitudinal" onclick="switchIndicatorsSubTab('longitudinal')" title="Prazos & Turmas (Semáforo Bimestral)" aria-label="Prazos e Semáforo">
+          <span class="tab-icon">🚦</span>
+          <span class="tab-text" id="pillIndLongitudinalLabel">Prazos & Turmas (Semáforo)</span>
+        </button>
+        <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill" id="pillIndDrilldown" onclick="switchIndicatorsSubTab('drilldown')" title="Matriz de Critérios Item a Item" aria-label="Matriz de Critérios">
           <span class="tab-icon">🔍</span>
-          <span class="tab-text" id="pillIndDrilldownLabel">Afunilamento</span>
-        </button>
-        <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill" id="pillIndLongitudinal" onclick="switchIndicatorsSubTab('longitudinal')" title="Acompanhamento Longitudinal" aria-label="Acompanhamento Longitudinal">
-          <span class="tab-icon">📈</span>
-          <span class="tab-text" id="pillIndLongitudinalLabel">Longitudinal</span>
+          <span class="tab-text" id="pillIndDrilldownLabel">Matriz de Critérios</span>
         </button>
       </div>
 
@@ -25663,14 +25861,14 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.25
-              if (!btnChangelog.textContent.includes('Versão 1.25')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.26
+              if (!btnChangelog.textContent.includes('Versão 1.26')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.25')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.25');
+              if (!modalChg.innerHTML.includes('Versão 1.26')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.26');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.25 (v8.1.0)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.26 (v8.1.1)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
