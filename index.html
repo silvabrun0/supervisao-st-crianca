@@ -3295,7 +3295,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.24 (v8.00)
+          📌 Versão 1.25 (v8.1.0)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3405,8 +3405,8 @@
         
       <div class="page-title-row">
         <div>
-          <div class="page-title" id="homeGestaoTitle">Gestão Pedagógica</div>
-          <div class="page-subtitle" id="homeGestaoSubtitle">Administração unificada de Unidades Escolares, Polos Regionais, Servidores e Base Integral</div>
+          <div class="page-title" id="homeGestaoTitle">Gestão da Rede</div>
+          <div class="page-subtitle" id="homeGestaoSubtitle" style="display:none;"></div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;" id="homeGestaoActionsCentral">
           <button class="btn btn-secondary" onclick="openBimesterPeriodsModal()" style="color:#0284C7; font-weight:700;" title="Definir os períodos e prazos dos 4 bimestres letivos">
@@ -3460,8 +3460,13 @@
 
           <!-- Matriz de Cobertura por Polo Regional (Requisito 7) -->
           <div class="card" id="networkCoverageCard" style="margin-bottom:20px; border-left:4px solid var(--primary);">
-            <div style="font-size:15px; font-weight:800; color:var(--primary-dark); margin-bottom:6px;">
-              🗺️ Matriz de Distribuição e Cobertura da Rede por Polo Regional
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap; gap:10px;">
+              <div style="font-size:15px; font-weight:800; color:var(--primary-dark);">
+                🗺️ Matriz de Distribuição e Cobertura da Rede por Polo Regional
+              </div>
+              <button class="btn btn-secondary" id="btnAddPoloMain" onclick="openAddPoloModal()" style="font-size:12px; padding:6px 12px; font-weight:700;">
+                + Cadastrar Novo Polo
+              </button>
             </div>
             <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
               Mapeamento consolidado das Coordenadoras Pedagógicas e Unidades Escolares alocadas em cada Polo da Rede Municipal.
@@ -3476,6 +3481,7 @@
                     <th>Coordenadoras Pedagógicas Atuantes</th>
                     <th>Docentes Atendidos</th>
                     <th>Status de Cobertura</th>
+                    <th style="width:130px; text-align:center;">Ações</th>
                   </tr>
                 </thead>
                 <tbody id="networkCoverageTableBody">
@@ -4870,6 +4876,25 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.25 - ARQUITETURA PLURIANUAL E GESTÃO DE CICLOS LETIVOS (MULTI-ANO SSOT) -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #0284C7;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; font-weight:800; color:#0284C7;">Versão 1.25 · v8.1.0 (Oficial)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:#1E40AF; padding:2px 8px; border-radius:12px; font-weight:700;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Arquitetura Plurianual, Gestão Autônoma de Ciclos Letivos e Preservação Patrimonial Absoluta da Rede:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🏛️ <strong>Atualização do Título para Gestão da Rede:</strong> Onde constava "Gestão Pedagógica Central" com subtítulo longo, substituição pelo rótulo enxuto e direto <code>Gestão da Rede</code>, sem subtítulo.</li>
+          <li>📅 <strong>Seletor Global de Ano Letivo no Header (#headerAcademicYearSelect):</strong> Alternância instantânea de contexto temporal entre anos letivos cadastrados com banner contextual de aviso em modo histórico para anos anteriores.</li>
+          <li>🏛️ <strong>Preservação Absoluta do Patrimônio Municipal:</strong> Unidades Escolares (<code>units</code>), Equipes/Docentes (<code>teamMembers</code> e <code>USERS_DB</code>) e Polos Regionais permanecem perenes, intactos e compartilhados entre todos os anos letivos.</li>
+          <li>🌟 <strong>Assistente de Transição de Ciclo Letivo:</strong> Modal exclusivo para a Coordenadora da EI (<code>#modalCreateAcademicYear</code>) permitindo criar novos anos letivos com opção de clonagem da matriz de turmas e atribuições docentes do ano anterior.</li>
+          <li>🚦 <strong>Isolamento Temporal do Semáforo Longitudinal:</strong> Motores algorítmicos (<code>calculateClassBimesterStatus</code>, <code>calculateTeacherBimesterStatus</code> e <code>getNextEligibleBimesterForClass</code>) escopados estritamente por ano letivo, impedindo contaminação entre anos.</li>
+          <li>🌐 <strong>SSOT Multi-Ano e Autocura Transparente:</strong> Parametrização independente de prazos bimestrais por ano letivo em <code>appState.bimesterPeriods</code> com migração automática sem perda de dados para bases legadas.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.24 - BOTÕES ESPECIALIZADOS "+ NOVO PROFESSOR" E "+ NOVO USUÁRIO" NA GESTÃO PEDAGÓGICA (SSOT E BLINDAGEM) -->
@@ -7465,6 +7490,82 @@
     </div>
   </div>
 
+  <!-- ================= MODAL: EDITAR POLO REGIONAL ================= -->
+  <div id="modalEditPolo" class="modal-backdrop" onclick="closeEditPoloModal()">
+    <div class="modal-panel" onclick="event.stopPropagation()" style="max-width:550px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);" id="modalEditPoloTitle">Editar Polo Regional</div>
+        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeEditPoloModal()">✕</button>
+      </div>
+
+      <input type="hidden" id="editPoloOriginalName">
+
+      <div class="form-group">
+        <label class="form-label">Nome do Polo Regional</label>
+        <input type="text" id="editPoloName" class="form-input" placeholder="Ex: Polo Regional 1 (Norte)">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Formadora Pedagógica Responsável</label>
+        <select id="editPoloFormadora" class="form-select">
+          <!-- Populado dinamicamente -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Região Territorial / Abrangência <span style="font-size:11px; font-weight:normal; color:var(--text-secondary);">(Opcional)</span></label>
+        <input type="text" id="editPoloRegion" class="form-input" placeholder="Ex: Zona Norte e Bairros Adjacentes">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Unidades Escolares Vinculadas</label>
+        <div style="font-size:11px; color:var(--text-secondary); margin-bottom:6px;">
+          Selecione as escolas que integram este Polo Regional:
+        </div>
+        <div id="editPoloUnitsList" style="max-height:160px; overflow-y:auto; border:1px solid var(--border); border-radius:6px; padding:10px; background:var(--bg-light);">
+          <!-- Populado dinamicamente com checkboxes -->
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:16px;">
+        <button class="btn btn-secondary" onclick="closeEditPoloModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveEditPolo()">Salvar Alterações</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CADASTRAR NOVO POLO REGIONAL ================= -->
+  <div id="modalAddPolo" class="modal-backdrop" onclick="closeAddPoloModal()">
+    <div class="modal-panel" onclick="event.stopPropagation()" style="max-width:500px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark);">Cadastrar Novo Polo Regional</div>
+        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeAddPoloModal()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nome do Polo Regional</label>
+        <input type="text" id="newPoloName" class="form-input" placeholder="Ex: Polo Regional 4 (Oeste)">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Formadora Pedagógica Responsável</label>
+        <select id="newPoloFormadora" class="form-select">
+          <!-- Populado dinamicamente -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Região Territorial / Abrangência <span style="font-size:11px; font-weight:normal; color:var(--text-secondary);">(Opcional)</span></label>
+        <input type="text" id="newPoloRegion" class="form-input" placeholder="Ex: Zona Oeste e Área Rural">
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:16px;">
+        <button class="btn btn-secondary" onclick="closeAddPoloModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveNewPolo()">Cadastrar Polo</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= MODAL: ADICIONAR NOVA UE (MANUAL) ================= -->
   <div id="modalAddUnit" class="modal-backdrop" onclick="closeAddUnitModal()">
     <div class="modal-panel" onclick="event.stopPropagation()">
@@ -7481,10 +7582,7 @@
       <div class="form-group">
         <label class="form-label">Polo Regional / Vinculação</label>
         <select id="newUnitPolo" class="form-select">
-          <option value="Polo Regional 1 (Norte)">Polo Regional 1 (Norte)</option>
-          <option value="Polo Regional 2 (Sul)">Polo Regional 2 (Sul)</option>
-          <option value="Polo Regional 3 (Leste)">Polo Regional 3 (Leste)</option>
-          <option value="Sede Central">Sede Central da Educação Infantil</option>
+          <!-- Populado dinamicamente via getAllPolosList() -->
         </select>
       </div>
 
@@ -8539,6 +8637,14 @@ function getActiveSections(obs) {
       return schoolClasses;
     }
 
+    // Initial Polos Regionais (SSOT Territorial)
+    const INITIAL_POLOS = [
+      { id: 'polo-1', name: 'Polo Regional 1 (Norte)', region: 'Região Norte / Bairros Urbanos' },
+      { id: 'polo-2', name: 'Polo Regional 2 (Sul)', region: 'Região Sul / Zona Rural' },
+      { id: 'polo-3', name: 'Polo Regional 3 (Leste)', region: 'Região Leste' },
+      { id: 'polo-4', name: 'Sede Central', region: 'Sede Central da Educação Infantil' }
+    ];
+
     // Initial School Units (UEs) & Polos
     const INITIAL_UNITS = [
       { id: 'ue-1', name: 'CEI Professora Maria de Lourdes', polo: 'Polo Regional 1 (Norte)', address: 'Bairro Alto das Flores', totalStudents: 120, inclusiveStudents: 6, totalClasses: 4 },
@@ -8705,6 +8811,7 @@ function getActiveSections(obs) {
     let appState = {
       currentUserKey: 'mariana',
       activeSectionsTeacher: JSON.parse(JSON.stringify(DEFAULT_SECTIONS_TEACHER)), activeSectionsCoordinator: JSON.parse(JSON.stringify(DEFAULT_SECTIONS_COORDINATOR)),
+      polos: JSON.parse(JSON.stringify(INITIAL_POLOS)), // <-- SSOT POLOS REGIONAIS
       units: JSON.parse(JSON.stringify(INITIAL_UNITS)),
       classes: JSON.parse(JSON.stringify(INITIAL_CLASSES)), // <-- PILAR 1: CATÁLOGO DE TURMAS
       deletedClassIds: [], // <-- PILAR 14: SSOT EXCLUSÕES
@@ -8729,6 +8836,18 @@ function getActiveSections(obs) {
           const parsed = JSON.parse(saved);
           appState = { ...appState, ...parsed };
           if (!appState.units || appState.units.length === 0) appState.units = JSON.parse(JSON.stringify(INITIAL_UNITS));
+          if (!appState.polos || !Array.isArray(appState.polos) || appState.polos.length === 0) {
+            const existingPolosNames = Array.from(new Set((appState.units || []).map(u => u.polo).filter(Boolean)));
+            if (existingPolosNames.length > 0) {
+              appState.polos = existingPolosNames.map((pName, idx) => ({
+                id: 'polo-' + (idx + 1),
+                name: pName,
+                region: ''
+              }));
+            } else {
+              appState.polos = JSON.parse(JSON.stringify(INITIAL_POLOS));
+            }
+          }
           if (!appState.deletedClassIds) appState.deletedClassIds = [];
           if (Array.isArray(appState.units)) {
             appState.units.forEach(u => {
@@ -8924,6 +9043,20 @@ function getActiveSections(obs) {
       }
     }
 
+    // --- SSOT: CONSULTA CANÔNICA DE POLOS REGIONAIS ---
+    function getAllPolosList() {
+      if (Array.isArray(appState.polos) && appState.polos.length > 0) {
+        const list = appState.polos.map(p => (typeof p === 'string' ? p : p.name)).filter(Boolean);
+        // Garante inclusão de qualquer polo registrado em unidades existentes
+        (appState.units || []).forEach(u => {
+          if (u.polo && !list.includes(u.polo)) list.push(u.polo);
+        });
+        return Array.from(new Set(list));
+      }
+      const fromUnits = Array.from(new Set((appState.units || []).map(u => u.polo).filter(Boolean)));
+      return fromUnits.length > 0 ? fromUnits : ['Polo Regional 1 (Norte)', 'Polo Regional 2 (Sul)'];
+    }
+
     function showToast(msg) {
       const toast = document.getElementById('toastMessage');
       document.getElementById('toastText').innerText = msg;
@@ -9034,6 +9167,7 @@ function getActiveSections(obs) {
       if (!appState.customUsers) appState.customUsers = {};
       Object.assign(USERS_DB, appState.customUsers);
       appState.activeSectionsTeacher = JSON.parse(JSON.stringify(DEFAULT_SECTIONS_TEACHER)); appState.activeSectionsCoordinator = JSON.parse(JSON.stringify(DEFAULT_SECTIONS_COORDINATOR));
+      appState.polos = JSON.parse(JSON.stringify(INITIAL_POLOS));
       appState.units = JSON.parse(JSON.stringify(INITIAL_UNITS));
       appState.teamMembers = JSON.parse(JSON.stringify(INITIAL_TEAM));
       appState.notes = JSON.parse(JSON.stringify(INITIAL_NOTES));
@@ -9824,7 +9958,10 @@ function getActiveSections(obs) {
         if (pedagExportsTab) pedagExportsTab.style.display = 'none';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'none';
         if (homeGestaoTitle) homeGestaoTitle.innerText = `Gestão da Unidade Escolar · ${user.school}`;
-        if (homeGestaoSubtitle) homeGestaoSubtitle.innerText = 'Administração autônoma de turmas, docentes e caracterização da escola sob SSOT única.';
+        if (homeGestaoSubtitle) {
+          homeGestaoSubtitle.innerText = 'Administração autônoma de turmas, docentes e caracterização da escola sob SSOT única.';
+          homeGestaoSubtitle.style.display = 'block';
+        }
       } else if (user.roleKey === 'formador') {
         if (opNavTab) {
           opNavTab.style.display = 'flex';
@@ -9846,7 +9983,10 @@ function getActiveSections(obs) {
         if (pedagExportsTab) pedagExportsTab.style.display = 'none';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'none';
         if (homeGestaoTitle) homeGestaoTitle.innerText = `Gestão do Polo Regional · ${user.school}`;
-        if (homeGestaoSubtitle) homeGestaoSubtitle.innerText = 'Supervisão territorial das Unidades Escolares e gestão de coordenações sob SSOT única.';
+        if (homeGestaoSubtitle) {
+          homeGestaoSubtitle.innerText = 'Supervisão territorial das Unidades Escolares e gestão de coordenações sob SSOT única.';
+          homeGestaoSubtitle.style.display = 'block';
+        }
       } else if (isNucleoEI(user)) {
         if (opNavTab) opNavTab.style.display = 'none';
         if (homeOpCard) homeOpCard.style.display = 'none';
@@ -9859,8 +9999,11 @@ function getActiveSections(obs) {
         if (pedagTeamLabel) pedagTeamLabel.innerText = '👥 Equipes & Servidores da Rede';
         if (pedagExportsTab) pedagExportsTab.style.display = 'block';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'flex';
-        if (homeGestaoTitle) homeGestaoTitle.innerText = 'Gestão Pedagógica Central';
-        if (homeGestaoSubtitle) homeGestaoSubtitle.innerText = 'Administração unificada de Unidades Escolares, Polos Regionais, Turmas, Servidores e Base Integral';
+        if (homeGestaoTitle) homeGestaoTitle.innerText = 'Gestão da Rede';
+        if (homeGestaoSubtitle) {
+          homeGestaoSubtitle.innerText = '';
+          homeGestaoSubtitle.style.display = 'none';
+        }
       } else {
         if (opNavTab) opNavTab.style.display = 'none';
         if (homeOpCard) homeOpCard.style.display = 'none';
@@ -15906,13 +16049,15 @@ function getActiveSections(obs) {
 
       // 1. Matriz de Cobertura da Rede por Polo Regional (Requisito 7)
       const covTbody = document.getElementById('networkCoverageTableBody');
+      const addPoloBtn = document.getElementById('btnAddPoloMain');
+      if (addPoloBtn) {
+        addPoloBtn.style.display = isNucleoEI(user) ? 'inline-flex' : 'none';
+      }
+
       if (covTbody) {
         covTbody.innerHTML = '';
         
-        const polosSet = new Set();
-        appState.units.forEach(u => { if (u.polo) polosSet.add(u.polo); });
-        let polos = Array.from(polosSet);
-        if (polos.length === 0) polos.push('Polo Regional 1 (Norte)', 'Polo Regional 2 (Sul)');
+        let polos = getAllPolosList();
 
         if (user.roleKey === 'formador') {
           polos = polos.filter(p => p === user.school || p.toLowerCase().includes(user.school.toLowerCase()));
@@ -15922,24 +16067,31 @@ function getActiveSections(obs) {
           const unitsInPolo = appState.units.filter(u => u.polo === poloName);
           const unitNames = unitsInPolo.map(u => u.name);
           
-          const formadora = appState.teamMembers.find(m => m.roleKey === 'formador' && (m.school === poloName || m.supervisor === 'Helena Martins'));
-          const formadoraName = formadora ? formadora.name : 'A definir / Secretaria';
+          const formadora = appState.teamMembers.find(m => m.roleKey === 'formador' && m.school === poloName);
+          const formadoraName = formadora ? formadora.name : '<span style="color:var(--text-secondary); font-style:italic;">A definir / Secretaria</span>';
 
           const cpsInPolo = appState.teamMembers.filter(m => m.roleKey === 'coordenador' && unitNames.includes(m.school));
           const cpNames = cpsInPolo.length > 0 ? cpsInPolo.map(c => `<strong>${c.name}</strong> (${c.school})`).join('<br>') : '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma CP alocada</span>';
 
           const teachersCount = appState.teamMembers.filter(m => m.roleKey === 'professora' && unitNames.includes(m.school)).length;
 
+          const canEditPolo = isNucleoEI(user) || (user.roleKey === 'formador' && user.school === poloName);
+          const canDeletePolo = isNucleoEI(user) && unitsInPolo.length === 0;
+
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td><strong style="color:var(--primary);">${poloName}</strong></td>
             <td><span style="font-weight:700; color:#1E293B;">${formadoraName}</span></td>
             <td>
-              ${unitsInPolo.map(u => `<div>🏢 ${u.name}</div>`).join('') || '<span style="color:var(--text-secondary);">Nenhuma UE alocada</span>'}
+              ${unitsInPolo.map(u => `<div>🏢 ${u.name}</div>`).join('') || '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma UE alocada</span>'}
             </td>
             <td style="font-size:12px; line-height:1.4;">${cpNames}</td>
             <td><span class="status-badge" style="background:#EFF6FF; color:#1E40AF; font-weight:700;">${teachersCount} Docentes</span></td>
             <td><span class="status-badge" style="background:#DCFCE7; color:#166534; font-weight:700;">Ativo</span></td>
+            <td style="text-align:center; white-space:nowrap;">
+              ${canEditPolo ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditPoloModal('${encodeURIComponent(poloName)}')">✏️ Editar</button>` : '<span style="color:var(--text-secondary); font-size:11px;">Somente Leitura</span>'}
+              ${canDeletePolo ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="removePolo('${encodeURIComponent(poloName)}')">Excluir</button>` : ''}
+            </td>
           `;
           covTbody.appendChild(tr);
         });
@@ -15947,8 +16099,10 @@ function getActiveSections(obs) {
 
       // 2. Popular Dropdown de Filtro por Polo (Requisito 3)
       const filterPoloSelect = document.getElementById('unitsFilterPolo');
-      if (filterPoloSelect && filterPoloSelect.options.length <= 1) {
-        let uniquePolos = Array.from(new Set(appState.units.map(u => u.polo).filter(Boolean)));
+      if (filterPoloSelect) {
+        const curVal = filterPoloSelect.value;
+        filterPoloSelect.innerHTML = '<option value="ALL">Todos os Polos Regionais</option>';
+        let uniquePolos = getAllPolosList();
         if (user.roleKey === 'formador') {
           uniquePolos = uniquePolos.filter(p => p === user.school);
         }
@@ -15956,6 +16110,7 @@ function getActiveSections(obs) {
           const opt = document.createElement('option');
           opt.value = p;
           opt.text = p;
+          if (p === curVal) opt.selected = true;
           filterPoloSelect.appendChild(opt);
         });
       }
@@ -25205,14 +25360,14 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.24
-              if (!btnChangelog.textContent.includes('Versão 1.24')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.25
+              if (!btnChangelog.textContent.includes('Versão 1.25')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.24')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.24');
+              if (!modalChg.innerHTML.includes('Versão 1.25')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.25');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.24 (v8.00)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.25 (v8.1.0)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

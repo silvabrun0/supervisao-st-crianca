@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.25** | 26/10/2026 10:30 | `intermediárias/aplicativo_v125_arquitetura_plurianual_ciclos_letivos.html` | Solicitação direta / `plano_arquitetura_plurianual_ciclos_letivos.md` | Arquitetura Plurianual e Gestão de Ciclos Letivos (Multi-Ano SSOT): seletor global de ano letivo no cabeçalho (`#headerAcademicYearSelect`), banner de alerta em modo consulta histórica, assistente de criação de novo ano com clonagem de turmas/docentes (`#modalCreateAcademicYear`), isolamento temporal determinístico no semáforo longitudinal de turmas e docentes, preservação patrimonial absoluta de Unidades Escolares, Servidores e Polos Regionais, e auditoria 100% aprovada 📅🏛️ |
 | **1.24** | 23/10/2026 15:30 | `intermediárias/aplicativo_v124_botoes_novo_professor_e_novo_usuario_ssot.html` | Solicitação direta / `plano_botoes_novo_professor_e_novo_usuario_ssot.md` | Especialização dos botões da Gestão Pedagógica em `+ Novo Professor` (`#btnNewTeacher`) e `+ Novo Usuário` (`#btnNewUser`), blindagem absoluta contra coleta de e-mail ou senha docente no DOM, escrita na SSOT (`appState.teamMembers`), sincronização seletiva com `USERS_DB` e isolamento RBAC para Coordenadoras 👩‍🏫🔑 |
 | **1.23** | 23/10/2026 15:15 | `intermediárias/aplicativo_v123_definicao_autonoma_periodos_ciclos_ssot.html` | Solicitação direta / `plano_definicao_autonoma_periodos_ciclos_ssot.md` | Definição autônoma dos períodos e prazos dos 4 bimestres letivos pela Coordenadora do Núcleo de EI (Helena Martins) via modal `#modalBimesterPeriods`, persistência e governança na SSOT única (`appState.bimesterPeriods`), motor algorítmico dinâmico em `getCurrentSchoolBimester()`, erradicação de rótulos e prazos estimados no Semáforo (`Fev - Abr`, `Janela de 2 meses em aberto`) em favor de `getBimesterPeriodDisplay()` e sincronização reativa inter-abas 📅🌐 |
 | **1.22** | 23/10/2026 14:35 | `intermediárias/aplicativo_v122_remocao_botao_nova_ocorrencia_registros.html` | Solicitação direta / `plano_remocao_botao_nova_ocorrencia_registros.md` | Remoção do botão de nova ocorrência (#btnNewQualitativeNote) no módulo de Registros Formativos, alinhando a interface à regra canônica dos Pilares 1 e 13 (ocorrências vinculadas estritamente à observação ativa via menu FAB), higienização de referências no RBAC e asserção no módulo travas_seguranca 📝🚫 |
@@ -146,6 +147,31 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.25] - Arquitetura Plurianual e Gestão de Ciclos Letivos (Multi-Ano SSOT)
+- **Data / Horário:** 26/10/2026 10:30
+- **Arquivo de Referência:** `intermediárias/aplicativo_v125_arquitetura_plurianual_ciclos_letivos.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_arquitetura_plurianual_ciclos_letivos.md`.
+- **Foco Central:** Arquitetura Plurianual e Gestão de Ciclos Letivos sob a Single Source of Truth (SSOT Multi-Ano), permitindo a coexistência e governança perene de múltiplos anos letivos no ecossistema SerTão Criança com preservação patrimonial integral de Unidades Escolares, Servidores/Docentes e Polos Regionais, e isolamento rigoroso dos semáforos longitudinais.
+
+#### Inclusões
+- **Seletor Global de Ano Letivo no Header (`#headerAcademicYearSelect`):** Localizado na barra de navegação superior, permite que Coordenadoras, Formadoras e Núcleo de EI alternem instantaneamente o contexto temporal do sistema entre os anos letivos configurados.
+- **Banner de Alerta em Modo Histórico (`#historicalYearWarningBanner`):** Informa com clareza ao usuário quando estiver visualizando o histórico de um ano anterior ao vigente, com botão de atalho `Voltar ao Ano Vigente`.
+- **Assistente de Transição de Ciclo Letivo (`#modalCreateAcademicYear`):** Modal acessível exclusivamente pela Coordenadora da EI para cadastrar novos anos letivos (ex: 2027) com opção inteligente de clonar a matriz de turmas e atribuições docentes do ano anterior como ponto de partida.
+- **Parametrização Multi-Ano de Prazos Bimestrais (`#modalBimesterPeriods`):** Seletor de ano no modal gerencial de prazos para que a Coordenadora da EI defina as janelas de cada ano letivo individualmente.
+- **Auditoria Contínua com 100% de Aprovação:** Novos testes automatizados no módulo `catalogo_dados` validando integridade de persistência multi-ano, não-contaminação de status semafórico entre 2026 e 2027, e teste de presença e interatividade no módulo `indicadores_decisao`.
+
+#### Modificações
+- **Atualização Terminológica para Gestão da Rede:** Substituição de 'Gestão Pedagógica Central' e do subtítulo longo por 'Gestão da Rede' no cabeçalho da visão do Núcleo de EI (`#homeGestaoTitle` e `#homeGestaoSubtitle`), garantindo layout limpo e direto.
+- **Estrutura Canônica de `appState.bimesterPeriods`:** Dicionário indexado por ano letivo (`{ '2026': { '1º Bimestre': ... } }`) com autocura transparente para bases legadas planas.
+- **Motores Semafóricos Escopados por Ano:** Adaptação de `calculateClassBimesterStatus()`, `calculateTeacherBimesterStatus()`, `getNextEligibleBimesterForClass()` e `getCurrentSchoolBimester()` para aceitarem `targetYear` e filtrarem exclusivamente observações e agendamentos do ano sob análise.
+- **Resolução de Turmas por Escola (`getClassesForSchool`):** Filtro reativo para entregar unicamente turmas vinculadas ao ano letivo ativo (`appState.selectedAcademicYear`).
+- **Cabeçalho de Devolutiva Pedagógica para PDF:** Inclusão do indicador `Ano Letivo de Referência` nas emissões impressas oficiais.
+
+#### Exclusões
+- **Extinção de Herança Espúria entre Anos:** Eliminação definitiva de qualquer colisão onde a conclusão de um bimestre em um ano letivo anterior travasse ou marcasse como concluído o bimestre homônimo de anos subsequentes.
+
+---
 
 ### [Versão 1.24] - Botões Especializados "+ Novo Professor" e "+ Novo Usuário" na Gestão Pedagógica (SSOT e Blindagem)
 - **Data / Horário:** 23/10/2026 15:30
