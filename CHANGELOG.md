@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.30** | 26/10/2026 17:30 | `intermediárias/aplicativo_v130_substituicao_benchmark_por_referencial_rede.html` | Solicitação direta / `planos_de_implementacao/plano_substituicao_benchmark_por_referencial_rede.md` | Higienização terminológica pedagógica na Visualização por Dimensão, substituindo o termo corporativo 'Benchmark' por 'Referencial da Rede Municipal' no banner contextual, subtítulo e pauta diagnóstica, preservando fórmulas de Delta e auditoria com asserções estritas 🏛️🧹 |
 | **1.29** | 26/10/2026 17:20 | `intermediárias/aplicativo_v129_ajuste_rotulo_salvar_prazos.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_rotulo_botao_salvar_prazos.md` | Higienização do rótulo do botão de gravação no modal de Ciclos Avaliativos (`#modalBimesterPeriods`), substituindo '💾 Salvar Prazos na SSOT' por 'Salvar Prazos', eliminando termos técnicos internos e emojis da interface pedagógica 🧹🏷️ |
 | **1.28** | 26/10/2026 17:15 | `intermediárias/aplicativo_v128_botao_novo_ano_letivo_plurianual_ssot.html` | Solicitação direta / `planos_de_implementacao/plano_arquitetura_plurianual_ciclos_letivos.md` | Disponibilização do botão 'Iniciar Novo Ano Letivo' na Gestão da Rede e no modal de Ciclos Avaliativos, assistente de criação (`#modalCreateAcademicYear`), seletor global multi-ano, prazos independentes por ano e preservação patrimonial total 🌟📅 |
 | **1.27** | 26/10/2026 16:55 | `intermediárias/aplicativo_v127_correcao_filtro_status_atrasadas_pilar10.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_filtro_status_atrasadas_semaforo_pilar10.md` | Correção do filtro de status atrasadas no Semáforo do Pilar 10, garantia de idempotência no alternador de visão de turmas/docentes e isolamento hermético do teste no módulo `indicadores_decisao` 🚦🛡️ |
@@ -155,6 +156,21 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.30] - Higienização Terminológica: Substituição de "Benchmark" por "Referencial da Rede Municipal"
+- **Data / Horário:** 26/10/2026 17:30
+- **Arquivo de Referência:** `intermediárias/aplicativo_v130_substituicao_benchmark_por_referencial_rede.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_substituicao_benchmark_por_referencial_rede.md`.
+- **Foco Central:** Higienização terminológica pedagógica na sub-aba Visualização por Dimensão e na pauta diagnóstica, substituindo a expressão corporativa em inglês "Benchmark" por "Referencial da Rede Municipal" e "Referencial comparativo", preservando integralmente a matemática dos Deltas ($\Delta \pm\%$), réguas comparativas e asserções estritas de auditoria in-app.
+
+#### Modificações
+- **Subtítulo da Visualização por Dimensão (`#indicatorsSectionDrilldown`):** Substituição de *"Benchmark comparativo..."* por *"Referencial comparativo item a item entre a sua Unidade Escolar e a Média da Rede Municipal de Patos"*.
+- **Banner Informativo Contextual (`.benchmark-info-bar`):** Atualização do texto em destaque para `<strong>Referencial da Rede Municipal:</strong> Comparando <strong>${scopeLabelText}</strong> com a <strong>Média Geral da Rede Municipal...</strong>`.
+- **Fallback na Cópia da Pauta de Reunião (`copyMeetingAgendaToClipboard`):** Substituição da mensagem `'Sem benchmark'` por `'Sem referencial municipal'`.
+- **Auditoria Modular e Asserções Estritas (`indicadores_decisao`):** Inclusão de asserção negativa contra o termo residual 'Benchmark' e asserção positiva para presença de 'Referencial da Rede Municipal' no banner contextual.
+- **Registro Duplo de Versão:** Atualização para a Versão 1.30 no botão `.btn-changelog`, `#modalChangelog` e testes de integridade em `navegacao_layout`.
+
+---
 
 ### [Versão 1.29] - Higienização do Rótulo Salvar Prazos (Ciclos Avaliativos)
 - **Data / Horário:** 26/10/2026 17:20

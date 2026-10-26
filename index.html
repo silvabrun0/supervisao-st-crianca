@@ -3493,7 +3493,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.29 (v8.1.5)
+          📌 Versão 1.30 (v8.1.6)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -5074,6 +5074,22 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.30 - HIGIENIZAÇÃO TERMINOLÓGICA: SUBSTITUIÇÃO DE BENCHMARK POR REFERENCIAL DA REDE MUNICIPAL -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.30</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Higienização Terminológica Pedagógica na Visualização por Dimensão:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🏛️ <strong>Substituição do Termo Corporativo "Benchmark":</strong> Eliminação definitiva da expressão empresarial em inglês no topo da sub-aba Visualização por Dimensão e na pauta diagnóstica, substituindo-a pelos termos canônicos <code>Referencial da Rede Municipal</code> e <code>Referencial comparativo</code>.</li>
+          <li>🎯 <strong>Preservação Integral da Potência Estatística e Decisória:</strong> Manutenção inalterada de todos os cálculos matemáticos do Delta ($\Delta \pm\%$), das réguas comparativas por nível hierárquico e da identificação de prioridades formativas da equipe.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Fortalecimento do módulo <code>indicadores_decisao</code> com asserção negativa contra o termo residual "Benchmark" e validação estrita da nova rotulagem pedagógica.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.29 - HIGIENIZAÇÃO DO RÓTULO DO BOTÃO SALVAR PRAZOS DOS CICLOS AVALIATIVOS -->
@@ -18969,7 +18985,7 @@ function getActiveSections(obs) {
 
       bottlenecks.forEach((b, idx) => {
         const rank = idx + 1;
-        const deltaText = b.delta !== null ? `${b.delta > 0 ? '+' : ''}${b.delta}% vs. Rede Patos` : 'Sem benchmark';
+        const deltaText = b.delta !== null ? `${b.delta > 0 ? '+' : ''}${b.delta}% vs. Rede Patos` : 'Sem referencial municipal';
         text += `${rank}. [${b.critId}] ${b.critText}\n`;
         text += `   • Localização: ${b.dimTitle} · ${b.subTitle}\n`;
         text += `   • Consistência na UE: ${b.score}% (Rede Municipal: ${b.redeScore !== null ? b.redeScore + '%' : '—'} · Δ: ${deltaText})\n`;
@@ -20932,17 +20948,17 @@ function getActiveSections(obs) {
                 Visualização por Dimensão dos Indicadores Pedagógicos (${targetType === 'coordenador' ? 'Coordenação' : 'Docência'})
               </h3>
               <p style="font-size:12px; color:var(--text-secondary);">
-                Benchmark comparativo item a item entre a sua Unidade Escolar e a Média da Rede Municipal de Patos
+                Referencial comparativo item a item entre a sua Unidade Escolar e a Média da Rede Municipal de Patos
               </p>
             </div>
           </div>
 
-          <!-- Banner Informativo de Contexto do Benchmark -->
+          <!-- Banner Informativo de Contexto do Referencial da Rede Municipal -->
           <div class="benchmark-info-bar">
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:16px;">🏛️</span>
               <span>
-                <strong>Benchmark Ativo:</strong> Comparando <strong>${scopeLabelText}</strong> contra a <strong>Média Geral da Rede Municipal (${redeObs.length} observação(ões) na base)</strong>.
+                <strong>Referencial da Rede Municipal:</strong> Comparando <strong>${scopeLabelText}</strong> com a <strong>Média Geral da Rede Municipal (${redeObs.length} observação(ões) na base)</strong>.
               </span>
             </div>
             ${isNucleoEI(user) && activeUnitFilter === 'ALL' ? `
@@ -25513,7 +25529,13 @@ function getActiveSections(obs) {
 
               const infoBar = drillSection.querySelector('.benchmark-info-bar');
               if (!infoBar) throw new Error('.benchmark-info-bar ausente na sub-aba Visualização por Dimensão');
-              logger.log('Renderização da Régua Dupla e Banner de Benchmark no DOM (Pilar 3)', true);
+              if (infoBar.innerText.includes('Benchmark')) {
+                throw new Error("Termo residual 'Benchmark' ainda presente no banner informativo da Visualização por Dimensão");
+              }
+              if (!infoBar.innerText.includes('Referencial da Rede Municipal')) {
+                throw new Error("Rótulo pedagógico 'Referencial da Rede Municipal' não encontrado no banner informativo");
+              }
+              logger.log("Higienização e Renderização do Banner 'Referencial da Rede Municipal' no DOM (Pilar 3)", true);
 
               // 6. PILAR 8: VALIDAÇÃO DO BLOCO DE DIAGNÓSTICO DE PRIORIDADES (GARGALOS PEDAGÓGICOS)
               switchIndicatorsSubTab('kpis');
@@ -26177,14 +26199,14 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.29
-              if (!btnChangelog.textContent.includes('Versão 1.29')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.30
+              if (!btnChangelog.textContent.includes('Versão 1.30')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.29')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.29');
+              if (!modalChg.innerHTML.includes('Versão 1.30')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.30');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.29 (v8.1.5)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.30 (v8.1.6)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
