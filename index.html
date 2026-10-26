@@ -3548,7 +3548,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.30 (v8.1.6)</span>
+          <span>Versão 1.32 (v8.1.8)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3673,16 +3673,20 @@
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;" id="homeGestaoActionsCentral">
           <button class="btn btn-secondary" onclick="openCreateNewAcademicYearModal()" style="color:#0284C7; font-weight:700; background:#F0F9FF; border-color:#BAE6FD;" title="Iniciar um novo ano letivo na rede municipal">
-            🌟 Iniciar Novo Ano Letivo
+            <svg class="btn-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Iniciar Novo Ano Letivo
           </button>
           <button class="btn btn-secondary" onclick="openBimesterPeriodsModal()" style="color:#0284C7; font-weight:700;" title="Definir os períodos e prazos dos 4 bimestres letivos">
-            📅 Ciclos Avaliativos & Calendário
+            <svg class="btn-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Ciclos Avaliativos & Calendário
           </button>
           <button class="btn btn-secondary" onclick="exportFullBaseJSON()" style="color:#059669; font-weight:700;">
-            💾 Exportar Base Completa (JSON)
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Exportar Base Completa (JSON)
           </button>
           <button class="btn btn-secondary" onclick="triggerImportFullBase()" style="color:#DC2626; font-weight:700;">
-            📂 Importar Base Completa (JSON)
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Importar Base Completa (JSON)
           </button>
           <input type="file" id="importFullBaseFileInput" accept=".json" style="display:none;" onchange="importFullBaseJSON(event)" />
         </div>
@@ -5203,6 +5207,38 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.32 - ADEQUAÇÃO CONTEXTUAL DO BANNER DA REDE CONSOLIDADA -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.32</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Adequação Contextual do Banner na Visualização por Dimensão:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🏛️ <strong>Eliminação da Redundância "Rede vs. Rede":</strong> Na visão de Rede Consolidada, o banner agora exibe com clareza <code>Panorama Geral da Rede Municipal: Exibindo a média consolidada de Patos/PB</code> com badge orientador para seleção de escola, eliminando a mensagem confusa de comparação de uma rede com ela mesma.</li>
+          <li>🎯 <strong>Preservação da Comparação Ativa por Escola/Polo:</strong> Mantida a redação <code>Referencial da Rede Municipal: Comparando [Escola] com a Média Geral...</code> quando há uma unidade ou polo em foco.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Atualização das asserções in-app em <code>indicadores_decisao</code> e <code>navegacao_layout</code>.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.31 - SUBSTITUIÇÃO DE EMOJIS NOS BOTÕES PRINCIPAIS POR PICTOGRAMAS VETORIAIS (SVGS) -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.31</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Substituição de Emojis nos Botões Principais por Pictogramas Vetoriais (SVGs):
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🎨 <strong>Pictogramas Vetoriais Padronizados:</strong> Substituição sistemática de emojis Unicode em botões do cabeçalho, sub-abas, painéis de gestão, histórico, rubricas e menu FAB por SVGs inline limpos com classes <code>.btn-icon</code>, <code>.btn-icon-sm</code> e <code>.tab-icon-svg</code>.</li>
+          <li>🏛️ <strong>Sobriedade Institucional & Consistência:</strong> Eliminação das disparidades de renderização de emojis entre navegadores/SO (macOS, Windows e Android) em prol de uma linguagem gráfica monocromática alinhada ao design system SerTão Criança.</li>
+          <li>🔬 <strong>Integridade Operacional e Sintática:</strong> 100% de conformidade léxica via JavaScriptCore e preservação estrita de todos os manipuladores de evento e dados da SSOT.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.30 - HIGIENIZAÇÃO TERMINOLÓGICA: SUBSTITUIÇÃO DE BENCHMARK POR REFERENCIAL DA REDE MUNICIPAL -->
@@ -13451,15 +13487,19 @@ function getActiveSections(obs) {
         const returnTab = appState.returnTab || 'history';
         const returnLabel = returnTab === 'schedule' ? 'Voltar à Agenda' : 'Voltar ao Histórico';
         actions.innerHTML = `
-          <button class="btn btn-secondary" onclick="exportSynthesisToPdf()">🖨️ Exportar em PDF</button>
+          <button class="btn btn-secondary" onclick="exportSynthesisToPdf()">
+            <svg class="btn-icon" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Exportar em PDF
+          </button>
           <button class="btn btn-primary" onclick="navigateToTab('${returnTab}')">${returnLabel}</button>
         `;
       } else if (obs.isIntegral && obs.integralStage === 'matutino') {
         // PILAR 4: Na Etapa 1 (Matutino), o formulário prioriza salvar a etapa matutina para aguardar a tarde
         actions.innerHTML = `
           <button class="btn btn-secondary" onclick="saveDraftAndExit()">Salvar Rascunho Simples</button>
-          <button class="btn btn-primary" style="background:#7C3AED; border-color:#6D28D9; font-weight:700;" onclick="saveMorningStageAndExit()">
-            SALVAR TURNO MATUTINO E AGUARDAR TARDE 🌤️
+          <button class="btn btn-primary" style="background:#7C3AED; border-color:#6D28D9; font-weight:700; display:inline-flex; align-items:center; gap:6px;" onclick="saveMorningStageAndExit()">
+            <svg class="btn-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            SALVAR TURNO MATUTINO E AGUARDAR TARDE
           </button>
         `;
       } else {
@@ -21143,17 +21183,26 @@ function getActiveSections(obs) {
 
           <!-- Banner Informativo de Contexto do Referencial da Rede Municipal -->
           <div class="benchmark-info-bar">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:16px;">🏛️</span>
-              <span>
-                <strong>Referencial da Rede Municipal:</strong> Comparando <strong>${scopeLabelText}</strong> com a <strong>Média Geral da Rede Municipal (${redeObs.length} observação(ões) na base)</strong>.
-              </span>
-            </div>
-            ${isNucleoEI(user) && activeUnitFilter === 'ALL' ? `
-              <span style="font-size:11px; background:#DCFCE7; color:#166534; padding:3px 8px; border-radius:4px; font-weight:700;">
-                💡 Selecione uma UE no filtro para comparar diretamente
-              </span>
-            ` : ''}
+            ${(scopeLabelText === 'Rede Consolidada' || (activeUnitFilter === 'ALL' && !user.schoolKey && user.roleKey !== 'coordenador')) ? `
+              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; width:100%;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:16px;">🏛️</span>
+                  <span>
+                    <strong>Panorama Geral da Rede Municipal:</strong> Exibindo a média consolidada de Patos/PB (${redeObs.length} observação(ões) na base).
+                  </span>
+                </div>
+                <span style="font-size:11px; background:#DCFCE7; color:#166534; padding:3px 8px; border-radius:4px; font-weight:700;">
+                  💡 Selecione uma Escola no filtro para comparar com a Rede
+                </span>
+              </div>
+            ` : `
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:16px;">🏛️</span>
+                <span>
+                  <strong>Referencial da Rede Municipal:</strong> Comparando <strong>${scopeLabelText}</strong> com a <strong>Média Geral da Rede Municipal (${redeObs.length} observação(ões) na base)</strong>.
+                </span>
+              </div>
+            `}
           </div>
       `;
 
@@ -25720,10 +25769,11 @@ function getActiveSections(obs) {
               if (infoBar.innerText.includes('Benchmark')) {
                 throw new Error("Termo residual 'Benchmark' ainda presente no banner informativo da Visualização por Dimensão");
               }
-              if (!infoBar.innerText.includes('Referencial da Rede Municipal')) {
-                throw new Error("Rótulo pedagógico 'Referencial da Rede Municipal' não encontrado no banner informativo");
+              const hasValidBannerText = infoBar.innerText.includes('Referencial da Rede Municipal') || infoBar.innerText.includes('Panorama Geral da Rede Municipal');
+              if (!hasValidBannerText) {
+                throw new Error("Rótulo pedagógico válido ('Referencial da Rede Municipal' ou 'Panorama Geral da Rede Municipal') não encontrado no banner");
               }
-              logger.log("Higienização e Renderização do Banner 'Referencial da Rede Municipal' no DOM (Pilar 3)", true);
+              logger.log("Higienização e Renderização Contextual do Banner de Referencial/Panorama no DOM (Pilar 3)", true);
 
               // 6. PILAR 8: VALIDAÇÃO DO BLOCO DE DIAGNÓSTICO DE PRIORIDADES (GARGALOS PEDAGÓGICOS)
               switchIndicatorsSubTab('kpis');
@@ -26387,14 +26437,14 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.30
-              if (!btnChangelog.textContent.includes('Versão 1.30')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.32
+              if (!btnChangelog.textContent.includes('Versão 1.32')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.30')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.30');
+              if (!modalChg.innerHTML.includes('Versão 1.32')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.32');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.30 (v8.1.6)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.32 (v8.1.8)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

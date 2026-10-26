@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.32** | 26/10/2026 17:45 | `intermediárias/aplicativo_v132_adequacao_banner_rede_consolidada.html` | Solicitação direta / `planos_de_implementacao/plano_adequacao_banner_rede_consolidada.md` | Adequação contextual do banner na Visualização por Dimensão: eliminação da redundância comparativa em 'Rede Consolidada' em favor do panorama consolidado da rede municipal com badge orientador, e preservação da comparação ativa por Escola/Polo 🏛️🎯 |
+| **1.31** | 26/10/2026 17:40 | `intermediárias/aplicativo_v131_substituicao_emojis_botoes_por_pictogramas.html` | Solicitação direta / `planos_de_implementacao/plano_substituicao_emojis_botoes_por_pictogramas.md` | Substituição sistemática de emojis nos botões principais e sub-abas por pictogramas vetoriais (SVGs inline padronizados com classes `.btn-icon`, `.btn-icon-sm`, `.tab-icon-svg`), garantindo consistência visual entre dispositivos e sobriedade institucional 🎨✨ |
 | **1.30** | 26/10/2026 17:30 | `intermediárias/aplicativo_v130_substituicao_benchmark_por_referencial_rede.html` | Solicitação direta / `planos_de_implementacao/plano_substituicao_benchmark_por_referencial_rede.md` | Higienização terminológica pedagógica na Visualização por Dimensão, substituindo o termo corporativo 'Benchmark' por 'Referencial da Rede Municipal' no banner contextual, subtítulo e pauta diagnóstica, preservando fórmulas de Delta e auditoria com asserções estritas 🏛️🧹 |
 | **1.29** | 26/10/2026 17:20 | `intermediárias/aplicativo_v129_ajuste_rotulo_salvar_prazos.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_rotulo_botao_salvar_prazos.md` | Higienização do rótulo do botão de gravação no modal de Ciclos Avaliativos (`#modalBimesterPeriods`), substituindo '💾 Salvar Prazos na SSOT' por 'Salvar Prazos', eliminando termos técnicos internos e emojis da interface pedagógica 🧹🏷️ |
 | **1.28** | 26/10/2026 17:15 | `intermediárias/aplicativo_v128_botao_novo_ano_letivo_plurianual_ssot.html` | Solicitação direta / `planos_de_implementacao/plano_arquitetura_plurianual_ciclos_letivos.md` | Disponibilização do botão 'Iniciar Novo Ano Letivo' na Gestão da Rede e no modal de Ciclos Avaliativos, assistente de criação (`#modalCreateAcademicYear`), seletor global multi-ano, prazos independentes por ano e preservação patrimonial total 🌟📅 |
@@ -156,6 +158,41 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.32] - Adequação Contextual do Banner na Visualização por Dimensão (Rede Consolidada)
+- **Data / Horário:** 26/10/2026 17:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v132_adequacao_banner_rede_consolidada.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_adequacao_banner_rede_consolidada.md`.
+- **Foco Central:** Adequação pedagógica e contextual do banner informativo (`.benchmark-info-bar`) na sub-aba Visualização por Dimensão (`#indicatorsSectionDrilldown`), diferenciando a exibição em Rede Consolidada (eliminando a redundância "comparando rede com rede" em prol do panorama consolidado e badge orientador para seleção de escola) da visualização em Escopo Focal (Unidade Escolar ou Polo), preservando integralmente o cálculo matemático das réguas duplas e dos Deltas ($\Delta \pm\%$).
+
+#### Modificações
+- **Banner Informativo na Visualização por Dimensão (`renderIndicatorsScreen`):**
+  - Quando for visão ampla de *Rede Consolidada*, exibe: `Panorama Geral da Rede Municipal: Exibindo a média consolidada de Patos/PB ([N] observação(ões) na base)` acompanhado de badge orientador `💡 Selecione uma Escola no filtro para comparar com a Rede`.
+  - Quando for escopo específico (Unidade Escolar ou Polo Regional), preserva a redação comparativa ativa: `Referencial da Rede Municipal: Comparando [Escola/Polo] com a Média Geral da Rede Municipal ([N] observação(ões) na base)`.
+- **Auditoria Modular In-App (`indicadores_decisao`):** Validação resiliente que aceita tanto o rótulo focado quanto o de panorama consolidado, com barreira contra termos corporativos residuais.
+- **Registro Duplo de Versão:** Atualização para a Versão 1.32 no botão `.btn-changelog`, `#modalChangelog` e testes de integridade em `navegacao_layout`.
+
+---
+
+### [Versão 1.31] - Substituição de Emojis nos Botões Principais por Pictogramas Vetoriais (SVGs)
+- **Data / Horário:** 26/10/2026 17:40
+- **Arquivo de Referência:** `intermediárias/aplicativo_v131_substituicao_emojis_botoes_por_pictogramas.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_substituicao_emojis_botoes_por_pictogramas.md`.
+- **Foco Central:** Substituição de emojis Unicode nos botões principais, sub-abas de navegação, barras de ferramentas e ações em lote da plataforma por pictogramas vetoriais SVG inline monocromáticos (`viewBox="0 0 24 24" fill="none" stroke="currentColor"`), eliminando disparidades de renderização gráfica entre sistemas operacionais (macOS, Windows, Android) e elevando a sobriedade institucional do sistema de supervisão do Núcleo de EI.
+
+#### Inclusões
+- **Classes Utilitárias de Pictogramas (`.btn-icon`, `.btn-icon-sm`, `.btn-icon-lg`, `.tab-icon-svg`):** Padronização das dimensões (16x16px para botões padrão, 13-14px para botões compactos/badges e 18x18px para botões de destaque/sub-abas) com herança dinâmica de cor via `currentColor`.
+
+#### Modificações
+- **Cabeçalho Principal:** Substituição do emoji 📌 no botão `.btn-changelog` pelo SVG canônico de Tag e do emoji 📑 no `#headerRefDocsBtn` pelo SVG de Livro.
+- **Sub-abas da Gestão da Rede (`#pedagNavSubTabs`):** Transição de emojis (🏢, 🏫, 👥, 📊) para SVGs de Prédio, Grid/Turmas, Usuários e Gráfico de Barras.
+- **Sub-abas do Painel de Indicadores (`#indicatorsSubTabsNav`):** Transição de emojis (📊, 🚦, 🔍) para SVGs de Gráfico, Atividade/Linha e Lupa (`.tab-icon-svg`).
+- **Ações de Dados da Rede e SSOT:** Substituição de emojis (💾, 📄, 📥, 📤, 📂, 📅, 🌟) nos botões de exportação/importação de UEs, Servidores, Base SSOT, Ciclos e Novo Ano Letivo por pictogramas vetoriais.
+- **Histórico e Registros Formativos:** Atualização dos botões de exportação CSV, PDF, Limpar Filtros, Auto-Arquivar e Marcar como Conversado.
+- **Matrizes e Rubricas:** Atualização dos botões de exportação, importação, padrão de rubricas e árvore hierárquica (Inserir Antes, Renomear, Subdimensão, Adicionar Item, Excluir).
+- **Ações da Observação e Cronograma:** Substituição de emojis no menu flutuante FAB (Salvar Rascunho, Ocorrência, Sair), anexo de fotos, salvar turno matutino, exportação de síntese e botões de linha (Devolutiva, Editar, Excluir).
+
+---
 
 ### [Versão 1.30] - Higienização Terminológica: Substituição de "Benchmark" por "Referencial da Rede Municipal"
 - **Data / Horário:** 26/10/2026 17:30
