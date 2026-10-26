@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.27** | 26/10/2026 16:55 | `intermediárias/aplicativo_v127_correcao_filtro_status_atrasadas_pilar10.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_filtro_status_atrasadas_semaforo_pilar10.md` | Correção do filtro de status atrasadas no Semáforo do Pilar 10, garantia de idempotência no alternador de visão de turmas/docentes e isolamento hermético do teste no módulo `indicadores_decisao` 🚦🛡️ |
 | **1.26** | 26/10/2026 16:45 | `intermediárias/aplicativo_v126_remocao_setas_matrizes_referencia.html` | Solicitação direta / Higienização visual | Remoção das setas (↗️) dos botões de acesso direto "Matriz Docente" e "Matriz Coordenadores" no cabeçalho das Matrizes de Referência Oficiais 🧹 |
 | **1.26** | 26/10/2026 16:45 | `intermediárias/aplicativo_v126_visualizacao_por_dimensao.html` | Solicitação direta / `planos_de_implementacao/plano_modificacao_afunilamento_para_visualizacao_por_dimensao.md` | Transição terminológica estrita substituindo 'Afunilamento por Dimensão' por 'Visualização por Dimensão' na sub-aba do painel de indicadores (`#pillIndDrilldown`), cabeçalho de seção (`#indicatorsSectionDrilldown`), deep-linking de gargalos e modal de filtros mobile 🔍 |
 | **1.26** | 26/10/2026 16:40 | `intermediárias/aplicativo_v126_remocao_emojis_trofeu_longitudinal.html` | Solicitação direta / Higienização visual | Remoção dos emojis de troféu dos cards de Avanço do Ciclo e filtros de Ciclo 100% na tela de Acompanhamento Longitudinal 🧹 |
@@ -152,6 +153,23 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.27] - Correção do Filtro de Status Atrasadas e Idempotência Semafórica (Pilar 10)
+- **Data / Horário:** 26/10/2026 16:55
+- **Arquivo de Referência:** `intermediárias/aplicativo_v127_correcao_filtro_status_atrasadas_pilar10.html`
+- **Origem / Insumos Principais:** Diagnóstico da Plataforma / `planos_de_implementacao/plano_correcao_filtro_status_atrasadas_semaforo_pilar10.md`.
+- **Foco Central:** Resolução de falha interativa no Semáforo do Pilar 10 onde o filtro rápido de status atrasadas não refletia no DOM caso o estado global estivesse na visão de docentes, garantindo idempotência operacional e isolamento hermético no módulo de diagnóstico.
+
+#### Inclusões e Alterações
+- **Idempotência no Semáforo de Turmas (`filterSemaphoreByStatus`):** Atribuição mandatória de `appState.longitudinalViewMode = 'classes'` ao acionar qualquer filtro rápido de status de turmas, assegurando determinismo na renderização do DOM.
+- **Idempotência no Semáforo de Docentes (`filterTeacherSemaphoreByStatus`):** Atribuição mandatória de `appState.longitudinalViewMode = 'teachers'` ao acionar filtros de docentes regentes.
+- **Isolamento Hermético do Diagnóstico (`indicadores_decisao`):**
+  - Inicialização estrita resetando `appState.longitudinalViewMode = 'classes'`, `activeSemaphoreStatusFilter = 'all'` e `activeSemaphoreTeacherStatusFilter = 'all'`.
+  - Blindagem ativa no Passo 12 com invocação explícita de `toggleLongitudinalViewMode('classes')` antes da checagem do chip `🔴 Atrasadas`.
+  - Restauração mandatória das variáveis no bloco `finally`.
+- **Auditoria e Changelog:** Atualização das asserções de versão para `Versão 1.27 (v8.1.2)` no módulo `navegacao_layout`, botão `.btn-changelog` e modal `#modalChangelog`.
+
+---
 
 ### [Versão 1.26] - Remoção das Setas das Matrizes de Referência Oficiais
 - **Data / Horário:** 26/10/2026 16:45

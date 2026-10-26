@@ -3493,7 +3493,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.26 (v8.1.3)
+          📌 Versão 1.27 (v8.1.2)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -5074,6 +5074,21 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.27 - CORREÇÃO DO FILTRO DE STATUS ATRASADAS NO SEMÁFORO (PILAR 10) -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; font-weight:800; color:#10B981;">Versão 1.27 · v8.1.2 (Oficial)</span>
+          <span style="font-size:11px; background:#ECFDF5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Correção do Filtro de Status Atrasadas e Idempotência Semafórica (Pilar 10):
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🚦 <strong>Idempotência na Filtragem Rápida:</strong> A função <code>filterSemaphoreByStatus()</code> agora assegura a alternância determinística para a visão de Turmas (<code>appState.longitudinalViewMode = 'classes'</code>), enquanto <code>filterTeacherSemaphoreByStatus()</code> assegura o modo Docentes, impedindo descompassos de DOM.</li>
+          <li>🛡️ <strong>Isolamento Hermético no Diagnóstico da Plataforma:</strong> Inicialização e finalização rigorosas das variáveis de visão no módulo de auditoria <code>indicadores_decisao</code>, blindando o teste contra estados residuais em <code>localStorage</code>.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.26 - REMOÇÃO DAS SETAS DAS MATRIZES DE REFERÊNCIA OFICIAIS -->
@@ -19475,10 +19490,11 @@ function getActiveSections(obs) {
     }
 
     /**
-     * Filtro rápido de status no Semáforo
+     * Filtro rápido de status no Semáforo de Turmas (Pilar 10)
      */
     function filterSemaphoreByStatus(statusKey) {
       appState.activeSemaphoreStatusFilter = statusKey; // 'all', 'overdue', 'in_progress', 'completed_cur', 'completed_all'
+      appState.longitudinalViewMode = 'classes'; // Garante determinismo na exibição do semáforo de turmas
       renderIndicatorsScreen();
     }
 
@@ -19781,10 +19797,11 @@ function getActiveSections(obs) {
     }
 
     /**
-     * Alternador de filtro rápido no Semáforo de Docentes
+     * Alternador de filtro rápido no Semáforo de Docentes (Pilar 10)
      */
     function filterTeacherSemaphoreByStatus(statusKey) {
       appState.activeSemaphoreTeacherStatusFilter = statusKey; // 'all', 'overdue', 'in_progress', 'completed_cur', 'completed_all'
+      appState.longitudinalViewMode = 'teachers'; // Garante determinismo na exibição do semáforo de docentes
       renderIndicatorsScreen();
     }
 
@@ -25139,6 +25156,11 @@ function getActiveSections(obs) {
           run: function(logger) {
             try {
               appState.currentUserKey = 'mariana';
+              appState.longitudinalViewMode = 'classes';
+              appState.activeSemaphoreStatusFilter = 'all';
+              appState.activeSemaphoreTeacherStatusFilter = 'all';
+              const memSelPre = document.getElementById('indicatorsMemberFilter');
+              if (memSelPre) memSelPre.value = 'ALL';
               navigateToTab('indicators');
               renderIndicatorsScreen();
               const kpiSection = document.getElementById('indicatorsSectionKPIs');
@@ -25393,6 +25415,7 @@ function getActiveSections(obs) {
               logger.log('Cálculo algorítmico do Semáforo Docente: ⚪ No Prazo (Bimestre Corrente)', true, teacherStatusCurrent.label);
 
               // 12. PILAR 10: VALIDAÇÃO DOS FILTROS RÁPIDOS E ALTERNADOR DE VISÃO
+              toggleLongitudinalViewMode('classes');
               filterSemaphoreByStatus('overdue');
               const overdueSec = document.getElementById('bimesterSemaphoreSection');
               if (!overdueSec || !overdueSec.innerHTML.includes('🔴 Atrasadas')) {
@@ -25565,8 +25588,11 @@ function getActiveSections(obs) {
                 }
                 logger.log('Parametrização autônoma de períodos de ciclos pela Coordenadora da EI e reflexo imediato no Semáforo', true, periodHeader);
               } finally {
-                // Restaura períodos canônicos e usuário após o teste
+                // Restaura períodos canônicos, modos semafóricos e usuário após o teste
                 appState.bimesterPeriods = JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS));
+                appState.longitudinalViewMode = 'classes';
+                appState.activeSemaphoreStatusFilter = 'all';
+                appState.activeSemaphoreTeacherStatusFilter = 'all';
                 saveState();
                 appState.currentUserKey = previousUserInd || 'mariana';
                 renderIndicatorsScreen();
@@ -25895,14 +25921,14 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.26
-              if (!btnChangelog.textContent.includes('Versão 1.26')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.27
+              if (!btnChangelog.textContent.includes('Versão 1.27')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.26')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.26');
+              if (!modalChg.innerHTML.includes('Versão 1.27')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.27');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.26 (v8.1.1)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.27 (v8.1.2)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
