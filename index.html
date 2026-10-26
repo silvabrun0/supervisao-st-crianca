@@ -3493,7 +3493,7 @@
         </button>
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
-          📌 Versão 1.26 (v8.1.1)
+          📌 Versão 1.26 (v8.1.2)
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4464,9 +4464,9 @@
           <span class="tab-icon">🚦</span>
           <span class="tab-text" id="pillIndLongitudinalLabel">Prazos & Turmas (Semáforo)</span>
         </button>
-        <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill" id="pillIndDrilldown" onclick="switchIndicatorsSubTab('drilldown')" title="Matriz de Critérios Item a Item" aria-label="Matriz de Critérios">
+        <button type="button" class="indicators-icon-tab-btn indicators-subtab-pill" id="pillIndDrilldown" onclick="switchIndicatorsSubTab('drilldown')" title="Visualização por Dimensão" aria-label="Visualização por Dimensão">
           <span class="tab-icon">🔍</span>
-          <span class="tab-text" id="pillIndDrilldownLabel">Matriz de Critérios</span>
+          <span class="tab-text" id="pillIndDrilldownLabel">Visualização por Dimensão</span>
         </button>
       </div>
 
@@ -5074,6 +5074,20 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.26 - TRANSIÇÃO TERMINOLÓGICA PARA VISUALIZAÇÃO POR DIMENSÃO -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; font-weight:800; color:#10B981;">Versão 1.26 · v8.1.2 (Oficial)</span>
+          <span style="font-size:11px; background:#ECFDF5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Transição Terminológica Estrita no Painel de Indicadores:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🔍 <strong>Visualização por Dimensão:</strong> Transição terminológica estrita substituindo "Afunilamento por Dimensão" por "Visualização por Dimensão" na sub-aba de navegação (<code>#pillIndDrilldown</code>), no cabeçalho do bloco comparativo (<code>#indicatorsSectionDrilldown</code>), no botão de deep-linking de gargalos e nos textos de apoio de filtros.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.26 - REMOÇÃO DO AVISO DE AUTORIDADE MUNICIPAL NOS CICLOS AVALIATIVOS -->
@@ -7437,7 +7451,7 @@
         <button type="button" class="btn-close-modal" onclick="closeMobileIndicatorsFiltersModal()" style="background:none; border:none; font-size:20px; font-weight:700; cursor:pointer; color:var(--text-secondary); line-height:1;">&times;</button>
       </div>
       <p style="margin:0 0 16px 0; font-size:12px; color:var(--text-secondary);">
-        Defina a unidade, turma ou docente e o bimestre para recalcular instantaneamente os índices e o afunilamento.
+        Defina a unidade, turma ou docente e o bimestre para recalcular instantaneamente os índices e a visualização por dimensão.
       </p>
 
       <div class="mobile-bottom-sheet-body" style="display:flex; flex-direction:column; gap:14px;">
@@ -18862,7 +18876,7 @@ function getActiveSections(obs) {
           targetEl.classList.add('highlight-bottleneck-pulse');
         } else {
           if (typeof showToast === 'function') {
-            showToast(`Critério [${critId}] expandido no Afunilamento.`);
+            showToast(`Critério [${critId}] expandido na Visualização por Dimensão.`);
           }
         }
       }, 100);
@@ -19007,10 +19021,10 @@ function getActiveSections(obs) {
                 </div>
               </div>
 
-              <!-- BOTÃO DE AÇÃO: LOCALIZAR NO AFUNILAMENTO -->
+              <!-- BOTÃO DE AÇÃO: LOCALIZAR NA VISUALIZAÇÃO POR DIMENSÃO -->
               <div class="bottleneck-actions-row">
-                <button type="button" class="btn btn-secondary" style="font-size:11px; padding:5px 10px; display:inline-flex; align-items:center; gap:4px; font-weight:700;" onclick="locateBottleneckCriterionInDrilldown('${b.critId}', ${b.dimIndex}, '${b.subKey}')" title="Abrir este critério na árvore completa de Afunilamento com régua dupla">
-                  🔍 Ver no Afunilamento
+                <button type="button" class="btn btn-secondary" style="font-size:11px; padding:5px 10px; display:inline-flex; align-items:center; gap:4px; font-weight:700;" onclick="locateBottleneckCriterionInDrilldown('${b.critId}', ${b.dimIndex}, '${b.subKey}')" title="Abrir este critério na árvore completa de Visualização por Dimensão com régua dupla">
+                  🔍 Ver na Visualização por Dimensão
                 </button>
               </div>
             </div>
@@ -19961,7 +19975,7 @@ function getActiveSections(obs) {
         if (pillLongitudinalLabel) pillLongitudinalLabel.innerText = 'Acompanhamento Geral';
       } else {
         if (pillKpisLabel) pillKpisLabel.innerText = 'Índices Gerais & KPIs';
-        if (pillDrilldownLabel) pillDrilldownLabel.innerText = 'Afunilamento por Dimensão';
+        if (pillDrilldownLabel) pillDrilldownLabel.innerText = 'Visualização por Dimensão';
         if (pillLongitudinalLabel) pillLongitudinalLabel.innerText = 'Acompanhamento Longitudinal';
       }
 
@@ -20837,7 +20851,7 @@ function getActiveSections(obs) {
           <div class="page-title-row" style="margin-top:4px; margin-bottom:12px;">
             <div>
               <h3 style="font-size:17px; font-weight:800; color:var(--primary-dark);">
-                Afunilamento de Indicadores Pedagógicos (${targetType === 'coordenador' ? 'Coordenação' : 'Docência'})
+                Visualização por Dimensão dos Indicadores Pedagógicos (${targetType === 'coordenador' ? 'Coordenação' : 'Docência'})
               </h3>
               <p style="font-size:12px; color:var(--text-secondary);">
                 Benchmark comparativo item a item entre a sua Unidade Escolar e a Média da Rede Municipal de Patos
@@ -25191,16 +25205,22 @@ function getActiveSections(obs) {
               const isCritical = deltaHtml.includes('benchmark-delta-critical') && deltaHtml.includes('Atenção Crítica');
               logger.log('Cálculo determinístico do Delta e categorização de Atenção Crítica (Pilar 3)', isCritical && delta112 === -50, `Δ: ${delta112}%`);
 
-              // Alternância interativa de sub-abas
+              // Alternância interativa de sub-abas e validação da nova nomenclatura
               switchIndicatorsSubTab('kpis');
               switchIndicatorsSubTab('drilldown');
               const drillSection = document.getElementById('indicatorsSectionDrilldown');
               if (!drillSection || drillSection.style.display !== 'block') {
-                throw new Error('Sub-aba de Afunilamento não ativada corretamente');
+                throw new Error('Sub-aba de Visualização por Dimensão não ativada corretamente');
               }
 
+              const pillLabel = document.getElementById('pillIndDrilldownLabel');
+              if (!pillLabel || pillLabel.innerText !== 'Visualização por Dimensão') {
+                throw new Error(`Rótulo da sub-aba divergente: esperado 'Visualização por Dimensão', obtido '${pillLabel ? pillLabel.innerText : 'null'}'`);
+              }
+              logger.log("Asserção de Nomenclatura da Sub-aba: 'Visualização por Dimensão' (#pillIndDrilldownLabel)", true);
+
               const infoBar = drillSection.querySelector('.benchmark-info-bar');
-              if (!infoBar) throw new Error('.benchmark-info-bar ausente na sub-aba Afunilamento');
+              if (!infoBar) throw new Error('.benchmark-info-bar ausente na sub-aba Visualização por Dimensão');
               logger.log('Renderização da Régua Dupla e Banner de Benchmark no DOM (Pilar 3)', true);
 
               // 6. PILAR 8: VALIDAÇÃO DO BLOCO DE DIAGNÓSTICO DE PRIORIDADES (GARGALOS PEDAGÓGICOS)
@@ -25228,17 +25248,17 @@ function getActiveSections(obs) {
               }
               logger.log('Cálculo determinístico do Maior Desvio vs. Rede Municipal (Pilar 8)', true, `Δ: ${firstDeltaBottleneck.delta}%`);
 
-              // 9. PILAR 8: DEEP-LINKING E LOCALIZAÇÃO NO AFUNILAMENTO
+              // 9. PILAR 8: DEEP-LINKING E LOCALIZAÇÃO NA VISUALIZAÇÃO POR DIMENSÃO
               locateBottleneckCriterionInDrilldown('1.1.2', 0, 'sub_0_0');
               const drillSecActive = document.getElementById('indicatorsSectionDrilldown');
               if (!drillSecActive || drillSecActive.style.display !== 'block') {
-                throw new Error('Falha Pilar 8: locateBottleneckCriterionInDrilldown não ativou a sub-aba de Afunilamento');
+                throw new Error('Falha Pilar 8: locateBottleneckCriterionInDrilldown não ativou a sub-aba de Visualização por Dimensão');
               }
               const targetCritEl = document.getElementById('drilldownCrit_1_1_2');
               if (!targetCritEl) {
-                throw new Error('Falha Pilar 8: Elemento #drilldownCrit_1_1_2 ausente no DOM do Afunilamento');
+                throw new Error('Falha Pilar 8: Elemento #drilldownCrit_1_1_2 ausente no DOM da Visualização por Dimensão');
               }
-              logger.log('Validação de Deep-Linking e expansão automática de nó no Afunilamento (Pilar 8)', true);
+              logger.log('Validação de Deep-Linking e expansão automática de nó na Visualização por Dimensão (Pilar 8)', true);
 
               // 9.1 PILAR 8 (AUTONOMIA PEDAGÓGICA): AUSÊNCIA DE PAUTAS PRÉ-FABRICADAS
               const hasPromptBox = bottlenecksSection.querySelector('.bottleneck-prompt-box');

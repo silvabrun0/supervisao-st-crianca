@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.26** | 26/10/2026 16:40 | `intermediárias/aplicativo_v126_remocao_emojis_trofeu_longitudinal.html` | Solicitação direta / Higienização visual | Remoção dos emojis de troféu dos cards de Avanço do Ciclo e filtros de Ciclo 100% na tela de Acompanhamento Longitudinal 🧹 |
 | **1.26** | 26/10/2026 16:20 | `intermediárias/aplicativo_v126_remocao_aviso_autoridade_ciclos_ssot.html` | Solicitação direta / Limpeza de interface | Remoção da caixa informativa de autoridade municipal da Coordenadora da EI no modal `#modalBimesterPeriods` (Ciclos Avaliativos & Prazos Oficiais), simplificando a interface sem alterar regras de negócio ou SSOT 🧹 |
 | **1.25** | 26/10/2026 10:45 | `intermediárias/aplicativo_v125_edicao_e_gestao_autonoma_polos_regionais_ssot.html` | Solicitação direta / `plano_edicao_e_gestao_autonoma_polos_regionais_ssot.md` | Edição e gestão autônoma de Polos Regionais sob a SSOT única (`appState.polos`), ações na Matriz de Cobertura, modais dedicados de edição (`#modalEditPolo`) e cadastro (`#modalAddPolo`), propagação em cascata nas UEs e equipe, dinamização universal de dropdowns (`getAllPolosList`), governança pelo Núcleo de EI e arquitetura multi-ano 🗺️✏️ |
 | **1.25** | 26/10/2026 10:30 | `intermediárias/aplicativo_v125_arquitetura_plurianual_ciclos_letivos.html` | Solicitação direta / `plano_arquitetura_plurianual_ciclos_letivos.md` | Arquitetura Plurianual e Gestão de Ciclos Letivos (Multi-Ano SSOT): seletor global de ano letivo no cabeçalho (`#headerAcademicYearSelect`), banner de alerta em modo consulta histórica, assistente de criação de novo ano com clonagem de turmas/docentes (`#modalCreateAcademicYear`), isolamento temporal determinístico no semáforo longitudinal de turmas e docentes, preservação patrimonial absoluta de Unidades Escolares, Servidores e Polos Regionais, e auditoria 100% aprovada 📅🏛️ |
@@ -149,6 +150,17 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.26] - Remoção dos Emojis de Troféu no Acompanhamento Longitudinal
+- **Data / Horário:** 26/10/2026 16:40
+- **Arquivo de Referência:** `intermediárias/aplicativo_v126_remocao_emojis_trofeu_longitudinal.html`
+- **Origem / Insumos Principais:** Solicitação direta / Higienização visual de interface.
+- **Foco Central:** Remoção dos emojis de troféu dos cards de Avanço do Ciclo e dos chips de filtro rápido de Ciclo 100% na tela de Acompanhamento Longitudinal (Quadro de Controle Bimestral de Turmas e Docentes).
+
+#### Exclusões
+- **Emojis de Troféu na Aba Longitudinal:** Supressão dos ícones de troféu nos títulos dos micro-cards ("Avanço do Ciclo Anual" e "Avanço do Ciclo Docente") e nos botões de filtro rápido ("Ciclo 100%").
+
+---
 
 ### [Versão 1.25] - Edição e Gestão Autônoma de Polos Regionais sob a SSOT Única
 - **Data / Horário:** 26/10/2026 10:45
