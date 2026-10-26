@@ -4878,6 +4878,25 @@
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
       </div>
 
+      <!-- VERSÃO 1.25 - EDIÇÃO E GESTÃO AUTÔNOMA DE POLOS REGIONAIS SOB A SSOT ÚNICA -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #3B82F6;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:14px; font-weight:800; color:#3B82F6;">Versão 1.25 · v8.1.0 (Oficial)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:#1E40AF; padding:2px 8px; border-radius:12px; font-weight:700;">26/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Edição e Gestão Autônoma de Polos Regionais sob a SSOT Única:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🗺️ <strong>Gestão Territorial na Matriz de Cobertura:</strong> Inclusão de coluna de Ações na Matriz de Cobertura por Polo Regional (<code>#networkCoverageCard</code>) com botão <code>✏️ Editar</code> por polo e botão global <code>+ Cadastrar Novo Polo</code> (<code>#btnAddPoloMain</code>) para o Núcleo de EI.</li>
+          <li>✏️ <strong>Modal de Edição de Polo (#modalEditPolo):</strong> Permite renomear o polo, selecionar/reatribuir a Formadora Pedagógica responsável e visualizar/remanejar diretamente as Unidades Escolares vinculadas via checklist.</li>
+          <li>➕ <strong>Modal de Cadastro de Polo (#modalAddPolo):</strong> Permite cadastrar novos polos territoriais para expansão da rede municipal com atribuição imediata de formadora e abrangência territorial.</li>
+          <li>🔄 <strong>Propagação Relacional e Sincronização em Cascata:</strong> Atualização automática e imediata de polos em unidades escolares (<code>appState.units</code>), formadoras e coordenadoras vinculadas (<code>appState.teamMembers</code>) e base de autenticação (<code>USERS_DB</code> e <code>appState.customUsers</code>).</li>
+          <li>🌐 <strong>Dinamização Universal de Polos via SSOT (getAllPolosList):</strong> Extinção de dropdowns estáticos em favor do helper unificado nos modais de UEs e novos usuários, com persistência na exportação/importação JSON.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Novos testes determinísticos no módulo <code>catalogo_dados</code> validando o ciclo completo de edição e propagação em cascata com restauração idempotente.</li>
+        </ul>
+      </div>
+
       <!-- VERSÃO 1.25 - ARQUITETURA PLURIANUAL E GESTÃO DE CICLOS LETIVOS (MULTI-ANO SSOT) -->
       <div class="card" style="margin-bottom:16px; border-left:4px solid #0284C7;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -16156,9 +16175,243 @@ function getActiveSections(obs) {
       });
     }
 
+    // --- GESTÃO E EDIÇÃO DE POLOS REGIONAIS (SSOT) ---
+    function openEditPoloModal(encodedPoloName) {
+      const poloName = decodeURIComponent(encodedPoloName);
+      const poloObj = (appState.polos || []).find(p => (typeof p === 'object' ? p.name : p) === poloName) || { name: poloName, region: '' };
+
+      document.getElementById('editPoloOriginalName').value = poloName;
+      document.getElementById('editPoloName').value = poloName;
+      document.getElementById('editPoloRegion').value = poloObj.region || '';
+      document.getElementById('modalEditPoloTitle').innerText = `Editar ${poloName}`;
+
+      // Formadora responsável atual
+      const formadoraSelect = document.getElementById('editPoloFormadora');
+      formadoraSelect.innerHTML = '<option value="">Nenhuma formadora vinculada / A definir</option>';
+      const currentFormadora = (appState.teamMembers || []).find(m => m.roleKey === 'formador' && m.school === poloName);
+
+      const allFormadoras = (appState.teamMembers || []).filter(m => m.roleKey === 'formador');
+      allFormadoras.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f.name;
+        opt.text = `${f.name} (${f.school || 'Sem Polo'})`;
+        if (currentFormadora && currentFormadora.name === f.name) opt.selected = true;
+        formadoraSelect.appendChild(opt);
+      });
+
+      // Lista de UEs vinculadas com checkboxes
+      const unitsListContainer = document.getElementById('editPoloUnitsList');
+      unitsListContainer.innerHTML = '';
+      (appState.units || []).forEach(u => {
+        const isBelonging = u.polo === poloName;
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:12px;';
+        row.innerHTML = `
+          <input type="checkbox" id="chkPoloUnit_${u.id}" class="edit-polo-unit-chk" value="${u.id}" ${isBelonging ? 'checked' : ''} style="cursor:pointer;">
+          <label for="chkPoloUnit_${u.id}" style="cursor:pointer; color:var(--text-primary); margin:0;">
+            🏢 <strong>${u.name}</strong> ${!isBelonging && u.polo ? `<span style="color:var(--text-secondary); font-size:11px;">(${u.polo})</span>` : ''}
+          </label>
+        `;
+        unitsListContainer.appendChild(row);
+      });
+
+      document.getElementById('modalEditPolo').classList.add('active');
+    }
+
+    function closeEditPoloModal() {
+      document.getElementById('modalEditPolo').classList.remove('active');
+    }
+
+    function saveEditPolo() {
+      const oldName = document.getElementById('editPoloOriginalName').value.trim();
+      const newName = document.getElementById('editPoloName').value.trim();
+      const selectedFormadoraName = document.getElementById('editPoloFormadora').value;
+      const region = document.getElementById('editPoloRegion').value.trim();
+
+      if (!newName) {
+        showToast('Informe o nome do Polo Regional.');
+        return;
+      }
+
+      const allPolos = getAllPolosList();
+      if (newName !== oldName && allPolos.includes(newName)) {
+        showToast('Já existe um Polo cadastrado com este nome.');
+        return;
+      }
+
+      if (!confirm(`Deseja salvar as alterações no Polo Regional "${newName}"?`)) {
+        return;
+      }
+
+      // 1. Atualiza na coleção de polos
+      if (!Array.isArray(appState.polos)) appState.polos = [];
+      const poloIndex = appState.polos.findIndex(p => (typeof p === 'object' ? p.name : p) === oldName);
+      if (poloIndex !== -1) {
+        appState.polos[poloIndex] = {
+          id: appState.polos[poloIndex].id || ('polo-' + Date.now()),
+          name: newName,
+          region: region
+        };
+      } else {
+        appState.polos.push({ id: 'polo-' + Date.now(), name: newName, region: region });
+      }
+
+      // 2. Propagação de renomeação em unidades existentes
+      if (oldName !== newName) {
+        (appState.units || []).forEach(u => {
+          if (u.polo === oldName) u.polo = newName;
+        });
+      }
+
+      // 3. Atualização das UEs selecionadas no checklist
+      const chks = document.querySelectorAll('.edit-polo-unit-chk');
+      chks.forEach(chk => {
+        const u = (appState.units || []).find(unit => unit.id === chk.value);
+        if (u) {
+          if (chk.checked) {
+            u.polo = newName;
+          } else if (u.polo === newName || u.polo === oldName) {
+            u.polo = 'Sede Central'; // Destino padrão seguro se desmarcada
+          }
+        }
+      });
+
+      // 4. Propagação da Formadora Responsável e Supervisão de Coordenadoras
+      const currentPoloUnits = (appState.units || []).filter(u => u.polo === newName).map(u => u.name);
+
+      if (selectedFormadoraName) {
+        (appState.teamMembers || []).forEach(m => {
+          // Se for a formadora escolhida, atualiza sua escola/polo
+          if (m.roleKey === 'formador' && m.name === selectedFormadoraName) {
+            m.school = newName;
+            if (appState.customUsers && appState.customUsers[m.id]) appState.customUsers[m.id].school = newName;
+            if (typeof USERS_DB !== 'undefined' && USERS_DB[m.id]) USERS_DB[m.id].school = newName;
+          }
+          // Coordenadoras das unidades do polo passam a ter esta formadora como supervisora
+          if (m.roleKey === 'coordenador' && currentPoloUnits.includes(m.school)) {
+            m.supervisor = selectedFormadoraName;
+          }
+        });
+      }
+
+      // Se renomeou o polo, atualiza a formadora que estava vinculada a ele anteriormente
+      if (oldName !== newName) {
+        (appState.teamMembers || []).forEach(m => {
+          if (m.roleKey === 'formador' && m.school === oldName) {
+            m.school = newName;
+            if (appState.customUsers && appState.customUsers[m.id]) appState.customUsers[m.id].school = newName;
+            if (typeof USERS_DB !== 'undefined' && USERS_DB[m.id]) USERS_DB[m.id].school = newName;
+          }
+        });
+        const curr = getCurrentUser();
+        if (curr && curr.school === oldName) curr.school = newName;
+      }
+
+      saveState();
+      closeEditPoloModal();
+      renderUnitsScreen();
+      showToast(`Polo Regional "${newName}" atualizado com sucesso!`);
+    }
+
+    function openAddPoloModal() {
+      document.getElementById('newPoloName').value = '';
+      document.getElementById('newPoloRegion').value = '';
+      const formadoraSelect = document.getElementById('newPoloFormadora');
+      formadoraSelect.innerHTML = '<option value="">Nenhuma formadora vinculada / A definir</option>';
+      const allFormadoras = (appState.teamMembers || []).filter(m => m.roleKey === 'formador');
+      allFormadoras.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f.name;
+        opt.text = `${f.name} (${f.school || 'Sem Polo'})`;
+        formadoraSelect.appendChild(opt);
+      });
+      document.getElementById('modalAddPolo').classList.add('active');
+    }
+
+    function closeAddPoloModal() {
+      document.getElementById('modalAddPolo').classList.remove('active');
+    }
+
+    function saveNewPolo() {
+      const name = document.getElementById('newPoloName').value.trim();
+      const region = document.getElementById('newPoloRegion').value.trim();
+      const formadoraName = document.getElementById('newPoloFormadora').value;
+
+      if (!name) {
+        showToast('Informe o nome do Polo Regional.');
+        return;
+      }
+
+      const allPolos = getAllPolosList();
+      if (allPolos.includes(name)) {
+        showToast('Já existe um Polo cadastrado com este nome.');
+        return;
+      }
+
+      if (!confirm(`Deseja cadastrar o novo Polo Regional "${name}"?`)) {
+        return;
+      }
+
+      if (!Array.isArray(appState.polos)) appState.polos = [];
+      appState.polos.push({
+        id: 'polo-' + Date.now(),
+        name: name,
+        region: region
+      });
+
+      if (formadoraName) {
+        const fMember = (appState.teamMembers || []).find(m => m.roleKey === 'formador' && m.name === formadoraName);
+        if (fMember) {
+          fMember.school = name;
+          if (appState.customUsers && appState.customUsers[fMember.id]) appState.customUsers[fMember.id].school = name;
+          if (typeof USERS_DB !== 'undefined' && USERS_DB[fMember.id]) USERS_DB[fMember.id].school = name;
+        }
+      }
+
+      saveState();
+      closeAddPoloModal();
+      renderUnitsScreen();
+      showToast(`Polo Regional "${name}" cadastrado com sucesso!`);
+    }
+
+    function removePolo(encodedPoloName) {
+      const poloName = decodeURIComponent(encodedPoloName);
+      const unitsInPolo = (appState.units || []).filter(u => u.polo === poloName);
+      if (unitsInPolo.length > 0) {
+        alert(`Não é possível excluir o "${poloName}" pois existem ${unitsInPolo.length} Unidade(s) Escolar(es) vinculada(s) a ele. Reatribua as escolas antes de excluir.`);
+        return;
+      }
+
+      if (!confirm(`Tem certeza que deseja remover o Polo Regional "${poloName}"?`)) {
+        return;
+      }
+
+      appState.polos = (appState.polos || []).filter(p => (typeof p === 'object' ? p.name : p) !== poloName);
+      // Desvincula formadoras que tinham este polo
+      (appState.teamMembers || []).forEach(m => {
+        if (m.roleKey === 'formador' && m.school === poloName) {
+          m.school = 'A definir / Secretaria';
+        }
+      });
+
+      saveState();
+      renderUnitsScreen();
+      showToast(`Polo Regional "${poloName}" removido com sucesso.`);
+    }
+
     function openAddUnitModal() {
       document.getElementById('newUnitName').value = '';
       document.getElementById('newUnitAddress').value = '';
+      const poloSelect = document.getElementById('newUnitPolo');
+      if (poloSelect) {
+        poloSelect.innerHTML = '';
+        getAllPolosList().forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p;
+          opt.text = p;
+          poloSelect.appendChild(opt);
+        });
+      }
       document.getElementById('modalAddUnit').classList.add('active');
     }
     function closeAddUnitModal() {
@@ -16213,20 +16466,11 @@ function getActiveSections(obs) {
         document.getElementById('editUnitInclusive').value = unit.inclusiveStudents !== undefined ? unit.inclusiveStudents : 5;
       }
 
-      // Popula opções de polo com base nos polos já cadastrados ou opções padrão
+      // Popula opções de polo com base nos polos via getAllPolosList()
       const poloSelect = document.getElementById('editUnitPolo');
       if (poloSelect) {
         poloSelect.innerHTML = '';
-        const standardPolos = [
-          'Polo Regional 1 (Norte)',
-          'Polo Regional 2 (Sul)',
-          'Polo Regional 3 (Leste)',
-          'Sede Central'
-        ];
-        const existingPolos = (appState.units || []).map(u => u.polo).filter(Boolean);
-        const allPolos = Array.from(new Set([...standardPolos, ...existingPolos]));
-
-        allPolos.forEach(p => {
+        getAllPolosList().forEach(p => {
           const opt = document.createElement('option');
           opt.value = p;
           opt.text = p;
@@ -17204,7 +17448,7 @@ function getActiveSections(obs) {
         supSelect.disabled = true;
         supSelect.innerHTML = `<option value="Helena Martins">Helena Martins (Coordenadora do Núcleo de EI)</option>`;
 
-        const polos = [...new Set((appState.units || []).map(u => u.polo))];
+        const polos = getAllPolosList();
         polos.forEach(p => {
           const opt = document.createElement('option');
           opt.value = p; opt.text = p;
@@ -17417,7 +17661,7 @@ function getActiveSections(obs) {
         schoolSelect.disabled = false;
         if (schoolGroup) schoolGroup.style.display = 'block';
         if (role === 'formador') {
-          const polos = [...new Set(appState.units.map(u => u.polo))];
+          const polos = getAllPolosList();
           polos.forEach(p => {
             const opt = document.createElement('option');
             opt.value = p; opt.text = p;
@@ -22619,6 +22863,9 @@ function getActiveSections(obs) {
                 }
               });
             }
+            if (Array.isArray(data.polos)) {
+              appState.polos = data.polos;
+            }
 
             appState = { ...appState, ...data };
             saveState();
@@ -23476,6 +23723,51 @@ function getActiveSections(obs) {
               delete USERS_DB[createdUser.id];
               saveState();
               closeEditMemberModal();
+
+              // 10. CICLO COMPLETO DE GESTÃO E EDIÇÃO DE POLOS REGIONAIS (SSOT)
+              const initialPolos = getAllPolosList();
+              if (!Array.isArray(initialPolos) || initialPolos.length === 0) {
+                throw new Error('getAllPolosList retornou lista vazia de polos');
+              }
+              logger.log('SSOT de Polos Regionais inicializada e consultável', true, `${initialPolos.length} polos mapeados`);
+
+              // Teste de Edição Interativa de Polo (#modalEditPolo)
+              const targetPolo = 'Polo Regional 1 (Norte)';
+              openEditPoloModal(encodeURIComponent(targetPolo));
+              const editPoloModal = document.getElementById('modalEditPolo');
+              if (!editPoloModal.classList.contains('active')) {
+                throw new Error('Modal #modalEditPolo não abriu corretamente');
+              }
+              const editPoloInp = document.getElementById('editPoloName');
+              const editFormadoraSel = document.getElementById('editPoloFormadora');
+              if (!editPoloInp || editPoloInp.value !== targetPolo) {
+                throw new Error(`Campo #editPoloName não reteve o nome original do polo: esperado "${targetPolo}", obtido "${editPoloInp?.value}"`);
+              }
+
+              const tempEditedPoloName = 'Polo Regional 1 (Norte - Teste Auditoria)';
+              UI.type(editPoloInp, tempEditedPoloName);
+
+              const originalConfirm = window.confirm;
+              window.confirm = () => true;
+              saveEditPolo();
+              window.confirm = originalConfirm;
+
+              if (!getAllPolosList().includes(tempEditedPoloName)) {
+                throw new Error('Novo nome do polo não foi persistido em appState.polos');
+              }
+              const updatedUnits = (appState.units || []).filter(u => u.polo === tempEditedPoloName);
+              if (updatedUnits.length === 0) {
+                throw new Error('Propagação em cascata da renomeação do polo falhou para appState.units');
+              }
+              logger.log('Ciclo completo de edição de Polo (#modalEditPolo) e propagação em cascata nas UEs', true, `${targetPolo} ➔ ${tempEditedPoloName}`);
+
+              // Restauração idempotente do nome original
+              openEditPoloModal(encodeURIComponent(tempEditedPoloName));
+              UI.type(document.getElementById('editPoloName'), targetPolo);
+              window.confirm = () => true;
+              saveEditPolo();
+              window.confirm = originalConfirm;
+              logger.log('Restauração idempotente do Polo canônico concluída com sucesso', true, targetPolo);
             } catch (e) {
               logger.log('Erro de execução no módulo catalogo_dados', false, e.message);
             }

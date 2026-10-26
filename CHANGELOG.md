@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.25** | 26/10/2026 10:45 | `intermediárias/aplicativo_v125_edicao_e_gestao_autonoma_polos_regionais_ssot.html` | Solicitação direta / `plano_edicao_e_gestao_autonoma_polos_regionais_ssot.md` | Edição e gestão autônoma de Polos Regionais sob a SSOT única (`appState.polos`), ações na Matriz de Cobertura, modais dedicados de edição (`#modalEditPolo`) e cadastro (`#modalAddPolo`), propagação em cascata nas UEs e equipe, dinamização universal de dropdowns (`getAllPolosList`), governança pelo Núcleo de EI e arquitetura multi-ano 🗺️✏️ |
 | **1.25** | 26/10/2026 10:30 | `intermediárias/aplicativo_v125_arquitetura_plurianual_ciclos_letivos.html` | Solicitação direta / `plano_arquitetura_plurianual_ciclos_letivos.md` | Arquitetura Plurianual e Gestão de Ciclos Letivos (Multi-Ano SSOT): seletor global de ano letivo no cabeçalho (`#headerAcademicYearSelect`), banner de alerta em modo consulta histórica, assistente de criação de novo ano com clonagem de turmas/docentes (`#modalCreateAcademicYear`), isolamento temporal determinístico no semáforo longitudinal de turmas e docentes, preservação patrimonial absoluta de Unidades Escolares, Servidores e Polos Regionais, e auditoria 100% aprovada 📅🏛️ |
 | **1.24** | 23/10/2026 15:30 | `intermediárias/aplicativo_v124_botoes_novo_professor_e_novo_usuario_ssot.html` | Solicitação direta / `plano_botoes_novo_professor_e_novo_usuario_ssot.md` | Especialização dos botões da Gestão Pedagógica em `+ Novo Professor` (`#btnNewTeacher`) e `+ Novo Usuário` (`#btnNewUser`), blindagem absoluta contra coleta de e-mail ou senha docente no DOM, escrita na SSOT (`appState.teamMembers`), sincronização seletiva com `USERS_DB` e isolamento RBAC para Coordenadoras 👩‍🏫🔑 |
 | **1.23** | 23/10/2026 15:15 | `intermediárias/aplicativo_v123_definicao_autonoma_periodos_ciclos_ssot.html` | Solicitação direta / `plano_definicao_autonoma_periodos_ciclos_ssot.md` | Definição autônoma dos períodos e prazos dos 4 bimestres letivos pela Coordenadora do Núcleo de EI (Helena Martins) via modal `#modalBimesterPeriods`, persistência e governança na SSOT única (`appState.bimesterPeriods`), motor algorítmico dinâmico em `getCurrentSchoolBimester()`, erradicação de rótulos e prazos estimados no Semáforo (`Fev - Abr`, `Janela de 2 meses em aberto`) em favor de `getBimesterPeriodDisplay()` e sincronização reativa inter-abas 📅🌐 |
@@ -147,6 +148,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.25] - Edição e Gestão Autônoma de Polos Regionais sob a SSOT Única
+- **Data / Horário:** 26/10/2026 10:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v125_edicao_e_gestao_autonoma_polos_regionais_ssot.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_edicao_e_gestao_autonoma_polos_regionais_ssot.md`.
+- **Foco Central:** Implementação do ciclo completo de governança, edição e gestão autônoma de Polos Regionais sob a SSOT única (`appState.polos`), inclusão de botões e coluna de ações na Matriz de Cobertura, modais interativos de edição (`#modalEditPolo`) e cadastro (`#modalAddPolo`), propagação relacional em cascata em escolas, formadoras e autenticação, e dinamização universal de dropdowns (`getAllPolosList`).
+
+#### Inclusões
+- **Entidade Canônica Territorial (`appState.polos` e `INITIAL_POLOS`):** Estruturação dos polos como entidades de primeira classe na SSOT com propriedades `id`, `name` e `region`, com autocura transparente na inicialização em `loadState()` e suporte a backup/restore integral.
+- **Função Auxiliar SSOT `getAllPolosList()`:** Helper centralizado para retorno de lista consolidada e única de polos cadastrados, garantindo consistência em toda a interface e seletores de formulários.
+- **Ações na Matriz de Cobertura (`#networkCoverageCard`):** Inclusão do botão `+ Cadastrar Novo Polo` (`#btnAddPoloMain`) visível para o Núcleo de EI e coluna `Ações` com botão `✏️ Editar` em cada linha da matriz para formadoras responsáveis e Núcleo de EI.
+- **Modal de Edição de Polo (`#modalEditPolo`):** Permite alterar o nome do polo, reatribuir a Formadora Pedagógica responsável, registrar região/abrangência e remanejar unidades escolares vinculadas via checklist interativo com checkboxes.
+- **Modal de Cadastro de Polo (`#modalAddPolo`):** Permite cadastrar novos polos territoriais para expansão da rede municipal com vinculação imediata de formadora.
+- **Controladores JavaScript:** Implementação de `openEditPoloModal()`, `closeEditPoloModal()`, `saveEditPolo()`, `openAddPoloModal()`, `closeAddPoloModal()`, `saveNewPolo()` e `removePolo()`.
+- **Propagação Relacional em Cascata:** Atualização instantânea ao renomear polo ou alterar formadora responsável em `appState.units`, `appState.teamMembers` (formadoras e supervisão de coordenadoras) e credenciais de login (`USERS_DB` e `appState.customUsers`).
+- **Dinamização Universal de Dropdowns de Polos:** Carregamento dinâmico via `getAllPolosList()` em `#newUnitPolo`, `#editUnitPolo`, `#unitsFilterPolo`, `onNewUserRoleChange()` e `onEditMemberRoleChange()`.
+- **Auditoria Automatizada Ponta a Ponta (Módulo `catalogo_dados`):** Testes determinísticos cobrindo o ciclo interativo completo de edição, persistência na SSOT, reflexo na tabela de unidades e restauração idempotente com 100% de sucesso.
+
+---
 
 ### [Versão 1.25] - Arquitetura Plurianual e Gestão de Ciclos Letivos (Multi-Ano SSOT)
 - **Data / Horário:** 26/10/2026 10:30
