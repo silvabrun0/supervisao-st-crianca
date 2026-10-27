@@ -26674,6 +26674,7 @@ function getActiveSections(obs) {
               // 9.3.1 Teste de Agrupamento por Polo no Seletor de Unidades (Helena / Núcleo de EI)
               const previousUserDec = appState.currentUserKey;
               try {
+                switchIndicatorsSubTab('kpis');
                 appState.currentUserKey = 'helena';
                 renderIndicatorsScreen();
                 const unitSelEl = document.getElementById('indicatorsUnitFilter');
