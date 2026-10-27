@@ -1318,6 +1318,72 @@
       box-shadow: none;
       filter: none;
     }
+
+    /* =========================================================================
+       PICTOGRAMAS VETORIAIS E PONTOS DE STATUS (PAINEL & SEMÁFORO LONGITUDINAL)
+       ========================================================================= */
+    .sem-pill-icon {
+      width: 12px;
+      height: 12px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 4px;
+      margin-top: -2px;
+      flex-shrink: 0;
+    }
+
+    .sem-stat-icon {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+
+    .sem-filter-icon {
+      width: 13px;
+      height: 13px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      margin-top: -1px;
+      flex-shrink: 0;
+    }
+
+    .trend-icon-svg {
+      width: 13px;
+      height: 13px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 4px;
+      margin-top: -2px;
+      flex-shrink: 0;
+    }
+
+    .score-chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+      flex-shrink: 0;
+    }
+    .score-chip-dot.dot-red { background: #EF4444; }
+    .score-chip-dot.dot-yellow { background: #F59E0B; }
+    .score-chip-dot.dot-green { background: #10B981; }
+
+    .picto-status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .picto-status-dot.dot-completed { background: #16A34A; }
+    .picto-status-dot.dot-inprogress { background: #1E40AF; }
+    .picto-status-dot.dot-overdue { background: #DC2626; }
     
     /* Barra de Progresso do Ciclo Anual da Turma */
     .sem-cycle-progress-wrap {
@@ -5250,6 +5316,23 @@
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
       </div>
+
+      <!-- VERSÃO 1.44 - REMOÇÃO DE EMOJIS E PADRONIZAÇÃO DE PICTOGRAMAS NO PAINEL E SEMÁFORO -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.44 (v8.2.11)</span>
+          <span style="font-size:11px; background:#DCFCE7; color:#166534; padding:2px 8px; border-radius:12px; font-weight:700;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Remoção de Emojis e Padronização de Pictogramas no Painel & Indicadores e Quadro de Controle Bimestral
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🎨 <strong>Pictogramas Vetoriais SVG Padronizados:</strong> Substituição integral de emojis soltos (<code>⚠</code>, <code>⏳</code>, <code>○</code>, <code>🏆</code>, <code>🟢</code>, <code>🔴</code>, <code>⚪</code>, <code>🚦</code>) nas pílulas semafóricas bimestrais, micro-cards de resumo e filtros rápidos por SVGs inline nítidos com classes <code>.sem-pill-icon</code>, <code>.sem-stat-icon</code>, <code>.sem-filter-icon</code> e <code>.picto-status-dot</code>.</li>
+          <li>📊 <strong>Harmonia Visual e Decisória:</strong> Atualização dos botões de alternância e atalho nas sub-abas de Visão Geral, Gargalos Pedagógicos, Visualização por Dimensão e Dossiê Individual com pictogramas vetoriais monocromáticos (Feather/Lucide).</li>
+          <li>🛡️ <strong>Asserções Automatizadas no Módulo 10:</strong> Validação de conformidade léxica no Semáforo, atestando a presença obrigatória de <code>.sem-pill-icon</code> e a erradicação de glifos soltos.</li>
+        </ul>
+      </div>
+
 
       <!-- VERSÃO 1.44 - REMOÇÃO DO TEXTO DE MODO DE CONSULTA SSOT NA VISUALIZAÇÃO DA UE -->
       <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981; background:#F8FAFC;">
@@ -19622,6 +19705,42 @@ function getActiveSections(obs) {
     }
 
     // Cálculo da Tendência / Trajetória Pedagógica de um Critério Individual
+    /**
+     * Helper: Retorna o pictograma vetorial SVG para as pílulas de bimestre do Semáforo
+     * Substitui os glifos antigos (✓, ⚠, ⏳, ○) por SVGs inline nítidos e padronizados
+     */
+    function renderSemaphorePillIconSvg(status) {
+      if (status === 'completed') {
+        return `<svg class="sem-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      }
+      if (status === 'overdue') {
+        return `<svg class="sem-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+      }
+      if (status === 'in_progress') {
+        return `<svg class="sem-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+      }
+      return `<svg class="sem-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8" stroke-dasharray="2 3"/></svg>`;
+    }
+
+    /**
+     * Helper: Retorna o pictograma vetorial SVG para as tendências de critérios
+     */
+    function renderTrendIconSvg(cssClass) {
+      if (cssClass === 'badge-trend-up') {
+        return `<svg class="trend-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`;
+      }
+      if (cssClass === 'badge-trend-stable') {
+        return `<svg class="trend-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      }
+      if (cssClass === 'badge-trend-alert') {
+        return `<svg class="trend-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+      }
+      if (cssClass === 'badge-trend-down') {
+        return `<svg class="trend-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+      }
+      return `<svg class="trend-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>`;
+    }
+
     function calculateCriterionTrend(responsesByBimester) {
       // responsesByBimester: { '1º Bimestre': 'partial', '2º Bimestre': 'consistent', ... }
       const bimesters = ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'];
@@ -19637,15 +19756,15 @@ function getActiveSections(obs) {
 
       if (validBims.length === 0) {
         const hasNA = bimesters.some(bim => responsesByBimester[bim] === 'na');
-        if (hasNA) return { text: 'Não se Aplica', cssClass: 'badge-trend-diag', icon: '⚪' };
+        if (hasNA) return { text: 'Não se Aplica', cssClass: 'badge-trend-diag', icon: renderTrendIconSvg('badge-trend-diag') };
         return { text: 'Sem Avaliação', cssClass: 'badge-trend-diag', icon: '—' };
       }
 
       if (validBims.length === 1) {
         const single = validBims[0];
-        if (single.val === 2) return { text: 'Diagnóstico Consistente', cssClass: 'badge-trend-stable', icon: '🟢' };
-        if (single.val === 1) return { text: 'Diagnóstico Parcial', cssClass: 'badge-trend-alert', icon: '🟡' };
-        return { text: 'Diagnóstico Não Realizado', cssClass: 'badge-trend-down', icon: '🔴' };
+        if (single.val === 2) return { text: 'Diagnóstico Consistente', cssClass: 'badge-trend-stable', icon: renderTrendIconSvg('badge-trend-stable') };
+        if (single.val === 1) return { text: 'Diagnóstico Parcial', cssClass: 'badge-trend-alert', icon: renderTrendIconSvg('badge-trend-alert') };
+        return { text: 'Diagnóstico Não Realizado', cssClass: 'badge-trend-down', icon: renderTrendIconSvg('badge-trend-down') };
       }
 
       const first = validBims[0].val;
@@ -19653,17 +19772,17 @@ function getActiveSections(obs) {
       const diff = last - first;
 
       if (diff > 0) {
-        return { text: 'Progrediu (+)', cssClass: 'badge-trend-up', icon: '▲' };
+        return { text: 'Progrediu (+)', cssClass: 'badge-trend-up', icon: renderTrendIconSvg('badge-trend-up') };
       } else if (diff === 0) {
         if (last === 2) {
-          return { text: 'Consolidado (100%)', cssClass: 'badge-trend-stable', icon: '✓' };
+          return { text: 'Consolidado (100%)', cssClass: 'badge-trend-stable', icon: renderTrendIconSvg('badge-trend-stable') };
         } else if (last === 1) {
-          return { text: 'Estável em Parcial', cssClass: 'badge-trend-alert', icon: '⚠️' };
+          return { text: 'Estável em Parcial', cssClass: 'badge-trend-alert', icon: renderTrendIconSvg('badge-trend-alert') };
         } else {
-          return { text: 'Estável em Alerta', cssClass: 'badge-trend-down', icon: '⚠' };
+          return { text: 'Estável em Alerta', cssClass: 'badge-trend-down', icon: renderTrendIconSvg('badge-trend-down') };
         }
       } else {
-        return { text: 'Fragilização (-)', cssClass: 'badge-trend-down', icon: '▼' };
+        return { text: 'Fragilização (-)', cssClass: 'badge-trend-down', icon: renderTrendIconSvg('badge-trend-down') };
       }
     }
 
@@ -19991,7 +20110,13 @@ function getActiveSections(obs) {
       if (bottlenecks.length === 0) {
         cardsHtml = `
           <div style="background:#F8FAFC; border:1px dashed #CBD5E1; border-radius:10px; padding:28px 16px; text-align:center; grid-column: 1 / -1;">
-            <div style="font-size:24px; margin-bottom:8px;">🎯</div>
+            <div style="margin-bottom:8px;">
+              <svg style="width:32px; height:32px; color:var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="6" r="6"></circle>
+                <circle cx="12" cy="2" r="2"></circle>
+              </svg>
+            </div>
             <div style="font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
               Nenhum Critério Avaliado no Escopo
             </div>
@@ -20006,7 +20131,9 @@ function getActiveSections(obs) {
         if (allConsistent) {
           cardsHtml += `
             <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:10px 14px; margin-bottom:12px; grid-column: 1 / -1; display:flex; align-items:center; gap:8px; font-size:12px; color:#166534;">
-              <span>🟢</span>
+              <svg class="btn-icon-sm" style="color:var(--green); flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
               <span><strong>Excelente Desempenho:</strong> Todos os critérios avaliados apresentam Consistência Forte (≥ 80%). Os 3 pontos abaixo representam marcas para manutenção do padrão pedagógico.</span>
             </div>
           `;
@@ -20071,7 +20198,11 @@ function getActiveSections(obs) {
               <!-- BOTÃO DE AÇÃO: LOCALIZAR NA VISUALIZAÇÃO POR DIMENSÃO -->
               <div class="bottleneck-actions-row">
                 <button type="button" class="btn btn-secondary" style="font-size:11px; padding:5px 10px; display:inline-flex; align-items:center; gap:4px; font-weight:700;" onclick="locateBottleneckCriterionInDrilldown('${b.critId}', ${b.dimIndex}, '${b.subKey}')" title="Abrir este critério na árvore completa de Visualização por Dimensão com régua dupla">
-                  🔍 Ver na Visualização por Dimensão
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <span>Ver na Visualização por Dimensão</span>
                 </button>
               </div>
             </div>
@@ -20086,7 +20217,11 @@ function getActiveSections(obs) {
       if (sortMode === 'delta' && isConsolidatedRede) {
         consolidatedNotice = `
           <div style="background:#F0F9FF; border:1px solid #BAE6FD; border-radius:8px; padding:10px 14px; margin-bottom:12px; grid-column: 1 / -1; display:flex; align-items:flex-start; gap:8px; font-size:12px; color:#0369A1; line-height:1.4;">
-            <span style="font-size:14px; margin-top:-1px;">💡</span>
+            <svg class="btn-icon-sm" style="color:#0369A1; flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18h6"></path>
+              <path d="M10 22h4"></path>
+              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path>
+            </svg>
             <span><strong>Visão Consolidada da Rede de Patos:</strong> Neste escopo ampliado, a média avaliada coincide com a própria rede municipal (Δ = 0%). Para verificar quais critérios específicos apresentam maior defasagem comparativa, selecione uma Unidade Escolar específica no filtro superior.</span>
           </div>
         `;
@@ -20096,9 +20231,16 @@ function getActiveSections(obs) {
         <div class="bottlenecks-priority-block" id="indicatorsSectionBottlenecks">
           <div class="bottlenecks-header-row">
             <div class="bottlenecks-title-group">
-              <h3>
-                <span>🎯</span> Foco nos Menores Índices (Gargalos Pedagógicos)
-              </h3>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <svg class="btn-icon-lg" style="color:var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="6" r="6"></circle>
+                  <circle cx="12" cy="2" r="2"></circle>
+                </svg>
+                <h3 style="margin:0;">
+                  Foco nos Menores Índices (Gargalos Pedagógicos)
+                </h3>
+              </div>
               <p>
                 Identificação algorítmica dos 3 critérios mais frágeis ${audienceName} em <strong>${scopeLabelText}</strong> para subsidiar a reflexão pedagógica e o planejamento da equipe.
               </p>
@@ -20107,20 +20249,33 @@ function getActiveSections(obs) {
             <div class="bottlenecks-controls-group">
               <!-- ALTERNADOR DE MODO DE ORDENAÇÃO -->
               <div class="bottlenecks-toggle-pill">
-                <button type="button" class="bottlenecks-toggle-btn ${sortMode === 'absolute' ? 'active' : ''}" onclick="toggleBottlenecksSortMode('absolute')" title="Ordenar pelos menores índices absolutos de consistência na escola">
-                  📉 Menor Consistência
+                <button type="button" class="bottlenecks-toggle-btn ${sortMode === 'absolute' ? 'active' : ''}" onclick="toggleBottlenecksSortMode('absolute')" title="Ordenar pelos menores índices absolutos de consistência na escola" style="display:inline-flex; align-items:center; gap:4px;">
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                  <span>Menor Consistência</span>
                 </button>
-                <button type="button" class="bottlenecks-toggle-btn ${sortMode === 'delta' ? 'active' : ''}" onclick="toggleBottlenecksSortMode('delta')" title="Ordenar pela maior defasagem negativa em relação à Rede de Patos">
-                  🔻 Maior Desvio vs. Rede
+                <button type="button" class="bottlenecks-toggle-btn ${sortMode === 'delta' ? 'active' : ''}" onclick="toggleBottlenecksSortMode('delta')" title="Ordenar pela maior defasagem negativa em relação à Rede de Patos" style="display:inline-flex; align-items:center; gap:4px;">
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 22 22 2 22"></polygon>
+                  </svg>
+                  <span>Maior Desvio vs. Rede</span>
                 </button>
-                <button type="button" class="bottlenecks-toggle-btn ${sortMode === 'highest' ? 'active' : ''}" onclick="toggleBottlenecksSortMode('highest')" title="Ordenar pelas práticas com maior consistência consolidada na escola">
-                  ⭐ Maior Consistência
+                <button type="button" class="bottlenecks-toggle-btn ${sortMode === 'highest' ? 'active' : ''}" onclick="toggleBottlenecksSortMode('highest')" title="Ordenar pelas práticas com maior consistência consolidada na escola" style="display:inline-flex; align-items:center; gap:4px;">
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span>Maior Consistência</span>
                 </button>
               </div>
 
               <!-- BOTÃO DE COPIAR RESUMO DIAGNÓSTICO -->
               <button type="button" class="btn btn-secondary" onclick="copyMeetingAgendaToClipboard('${scopeLabelText}', '${targetType}')" style="font-size:11px; padding:5px 10px; font-weight:700; display:inline-flex; align-items:center; gap:4px;" title="Copiar resumo dos critérios prioritários">
-                📋 Copiar Diagnóstico
+                <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                </svg>
+                <span>Copiar Diagnóstico</span>
               </button>
             </div>
           </div>
@@ -21179,7 +21334,10 @@ function getActiveSections(obs) {
             <!-- Barra de Contexto do Dossiê Individual -->
             <div class="individual-context-banner">
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:16px;">👤</span>
+                <svg class="btn-icon" style="color:#1E3A8A;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
                 <span style="font-size:13px; font-weight:700; color:#1E3A8A;">
                   Análise Individual do Profissional: <strong>${activeMemberFilter}</strong> (${memberSchool})
                 </span>
@@ -21244,9 +21402,18 @@ function getActiveSections(obs) {
             <div class="card" style="margin:0;">
               <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; margin-bottom:8px;">Balanço de Critérios</div>
               <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:8px;">
-                <span class="badge-trend-up" style="display:flex; align-items:center; justify-content:center; width:100%; padding:6px 10px; font-size:12px; font-weight:700; border-radius:6px; box-sizing:border-box;">▲ ${countUp} Progrediram</span>
-                <span class="badge-trend-stable" style="display:flex; align-items:center; justify-content:center; width:100%; padding:6px 10px; font-size:12px; font-weight:700; border-radius:6px; box-sizing:border-box;">✓ ${countStable} Consolidados</span>
-                <span class="badge-trend-down" style="display:flex; align-items:center; justify-content:center; width:100%; padding:6px 10px; font-size:12px; font-weight:700; border-radius:6px; box-sizing:border-box;">⚠ ${countAlert} Atenção</span>
+                <span class="badge-trend-up" style="display:flex; align-items:center; justify-content:center; width:100%; padding:6px 10px; font-size:12px; font-weight:700; border-radius:6px; box-sizing:border-box;">
+                  ${renderTrendIconSvg('badge-trend-up')}
+                  <span>${countUp} Progrediram</span>
+                </span>
+                <span class="badge-trend-stable" style="display:flex; align-items:center; justify-content:center; width:100%; padding:6px 10px; font-size:12px; font-weight:700; border-radius:6px; box-sizing:border-box;">
+                  ${renderTrendIconSvg('badge-trend-stable')}
+                  <span>${countStable} Consolidados</span>
+                </span>
+                <span class="badge-trend-down" style="display:flex; align-items:center; justify-content:center; width:100%; padding:6px 10px; font-size:12px; font-weight:700; border-radius:6px; box-sizing:border-box;">
+                  ${renderTrendIconSvg('badge-trend-alert')}
+                  <span>${countAlert} Atenção</span>
+                </span>
               </div>
               <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${countTotalCriteria} critérios avaliados na matriz</div>
             </div>
@@ -21501,7 +21668,7 @@ function getActiveSections(obs) {
                       <strong style="color:var(--primary-dark);">[${crit.id}]</strong> ${crit.text}
                       ${commentsByBim.length > 0 ? `
                         <div style="margin-top:6px; font-size:11px; background:#FFFBEB; border-left:3px solid #D97706; padding:4px 8px; border-radius:4px; color:#92400E;">
-                          ${commentsByBim.map(cb => `<div>💬 <strong>${cb.bimester} (${formatDateBR(cb.date)}):</strong> "${cb.comment}"</div>`).join('')}
+                          ${commentsByBim.map(cb => `<div style="display:flex; align-items:flex-start; gap:4px;"><svg class="btn-icon-sm" style="flex-shrink:0; margin-top:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span><strong>${cb.bimester} (${formatDateBR(cb.date)}):</strong> "${cb.comment}"</span></div>`).join('')}
                         </div>
                       ` : ''}
                     </td>
@@ -21751,10 +21918,10 @@ function getActiveSections(obs) {
           kpiCoverageSubtitle = 'Nenhuma turma mapeada';
           kpiCoverageBorderColor = 'var(--text-secondary)';
         } else if (pendingEntitiesCurrentBim === 0) {
-          kpiCoverageSubtitle = '✓ 100% das turmas concluídas';
+          kpiCoverageSubtitle = '100% das turmas concluídas';
           kpiCoverageBorderColor = 'var(--green)';
         } else {
-          kpiCoverageSubtitle = `⚠ ${pendingEntitiesCurrentBim} turma(s) pendente(s)`;
+          kpiCoverageSubtitle = `${pendingEntitiesCurrentBim} turma(s) pendente(s)`;
           kpiCoverageBorderColor = coverageCurrentBimPct >= 50 ? 'var(--yellow)' : 'var(--red)';
         }
 
@@ -21930,9 +22097,19 @@ function getActiveSections(obs) {
           <div class="ue-executive-table-wrap">
             <div class="ue-executive-table-header">
               <div>
-                <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark); margin:0;">
-                  🏫 Cobertura e Consistência por Unidade Escolar · ${currentBim}
-                </h4>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <svg class="btn-icon-sm" style="color:var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21h18"></path>
+                    <path d="M5 21V7l8-4v18"></path>
+                    <path d="M19 21V11l-6-4"></path>
+                    <line x1="9" y1="9" x2="9" y2="9.01"></line>
+                    <line x1="9" y1="13" x2="9" y2="13.01"></line>
+                    <line x1="9" y1="17" x2="9" y2="17.01"></line>
+                  </svg>
+                  <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark); margin:0;">
+                    Cobertura e Consistência por Unidade Escolar · ${currentBim}
+                  </h4>
+                </div>
                 <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;">
                   Acompanhamento consolidado para priorização de suporte e visitas de campo
                 </p>
@@ -22053,9 +22230,16 @@ function getActiveSections(obs) {
           <div class="materials-aggregate-card">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
               <div>
-                <h4 style="font-size:14px; font-weight:800; color:var(--primary-dark); margin:0;">
-                  🎨 Distribuição do Uso de Materiais (Síntese Pedagógica)
-                </h4>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <svg class="btn-icon-sm" style="color:var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                  </svg>
+                  <h4 style="font-size:14px; font-weight:800; color:var(--primary-dark); margin:0;">
+                    Distribuição do Uso de Materiais (Síntese Pedagógica)
+                  </h4>
+                </div>
                 <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;">
                   Proporção de observações registradas em cada nível de materiais na Educação Infantil (${matTotal} registros com escala)
                 </p>
@@ -22122,12 +22306,22 @@ function getActiveSections(obs) {
                 ${kpiCoverageSubtitle}
               </div>
               <div style="margin-top:8px; padding-top:6px; border-top:1px dashed rgba(0,0,0,0.08); display:flex; justify-content:space-between; align-items:center;">
-                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Abrir o Quadro de Controle Bimestral de Turmas">
-                  🚦 Semáforo ↓
+                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Abrir o Quadro de Controle Bimestral de Turmas" style="display:inline-flex; align-items:center; gap:4px;">
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <span>Semáforo ↓</span>
                 </button>
                 ${pendingEntitiesCurrentBim > 0 && targetType === 'professora' ? `
-                  <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:#D97706; background:none; border:none; padding:0; cursor:pointer;" onclick="togglePendingClassesDrawer()" title="Exibir ou ocultar turmas pendentes no bimestre">
-                    📋 Ver Pendentes
+                  <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:#D97706; background:none; border:none; padding:0; cursor:pointer;" onclick="togglePendingClassesDrawer()" title="Exibir ou ocultar turmas pendentes no bimestre" style="display:inline-flex; align-items:center; gap:4px;">
+                    <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                    </svg>
+                    <span>Ver Pendentes</span>
                   </button>
                 ` : ''}
               </div>
@@ -22150,8 +22344,13 @@ function getActiveSections(obs) {
               </div>
               <div style="font-size:12px; color:var(--text-secondary); line-height:1.3;">● ${kpiCycleSubtitle}</div>
               <div style="margin-top:8px; padding-top:6px; border-top:1px dashed rgba(0,0,0,0.08);">
-                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Visualizar avanço do ciclo longitudinal das 4 observações anuais">
-                  📈 Ver Semáforo do Ciclo ↓
+                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Visualizar avanço do ciclo longitudinal das 4 observações anuais" style="display:inline-flex; align-items:center; gap:4px;">
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                  </svg>
+                  <span>Ver Semáforo do Ciclo ↓</span>
                 </button>
               </div>
             </div>
@@ -22172,7 +22371,12 @@ function getActiveSections(obs) {
               </div>
               <div style="margin-top:8px;">
                 <a href="javascript:void(0)" onclick="scrollToBottlenecksBlock()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Rolar para os 3 critérios prioritários de intervenção">
-                  🎯 Ver os 3 Critérios Críticos ↓
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="6" r="6"></circle>
+                    <circle cx="12" cy="2" r="2"></circle>
+                  </svg>
+                  <span>Ver os 3 Critérios Críticos ↓</span>
                 </a>
               </div>
             </div>
@@ -22239,9 +22443,15 @@ function getActiveSections(obs) {
             <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
               <span style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Filtrar:</span>
               <button type="button" class="btn btn-secondary drilldown-chip-btn active" data-range="all" onclick="filterDrilldownByScore('all')" style="font-size:11px; padding:4px 8px; font-weight:700;">Todos</button>
-              <button type="button" class="btn btn-secondary drilldown-chip-btn" data-range="low" onclick="filterDrilldownByScore('low')" style="font-size:11px; padding:4px 8px; font-weight:700; color:var(--red);">🔴 &lt; 60%</button>
-              <button type="button" class="btn btn-secondary drilldown-chip-btn" data-range="med" onclick="filterDrilldownByScore('med')" style="font-size:11px; padding:4px 8px; font-weight:700; color:var(--yellow);">🟡 60-79%</button>
-              <button type="button" class="btn btn-secondary drilldown-chip-btn" data-range="high" onclick="filterDrilldownByScore('high')" style="font-size:11px; padding:4px 8px; font-weight:700; color:var(--green);">🟢 ≥ 80%</button>
+              <button type="button" class="btn btn-secondary drilldown-chip-btn" data-range="low" onclick="filterDrilldownByScore('low')" style="font-size:11px; padding:4px 8px; font-weight:700; color:var(--red); display:inline-flex; align-items:center;">
+                <span class="score-chip-dot dot-red"></span> &lt; 60%
+              </button>
+              <button type="button" class="btn btn-secondary drilldown-chip-btn" data-range="med" onclick="filterDrilldownByScore('med')" style="font-size:11px; padding:4px 8px; font-weight:700; color:var(--yellow); display:inline-flex; align-items:center;">
+                <span class="score-chip-dot dot-yellow"></span> 60-79%
+              </button>
+              <button type="button" class="btn btn-secondary drilldown-chip-btn" data-range="high" onclick="filterDrilldownByScore('high')" style="font-size:11px; padding:4px 8px; font-weight:700; color:var(--green); display:inline-flex; align-items:center;">
+                <span class="score-chip-dot dot-green"></span> ≥ 80%
+              </button>
             </div>
 
             <!-- Botões Globais de Expansão -->
@@ -22570,24 +22780,43 @@ function getActiveSections(obs) {
             <!-- Cabeçalho e Alternador de Visão -->
             <div class="semaphore-header-row">
               <div class="semaphore-title-group">
-                <h3>
-                  Quadro de Controle Bimestral
-                </h3>
-                <p>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <svg class="btn-icon-lg" style="color:var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <h3 style="margin:0;">
+                    Quadro de Controle Bimestral
+                  </h3>
+                </div>
+                <p style="margin-top:4px;">
                   Acompanhamento matricial do cumprimento das 4 observações obrigatórias organizado por <strong>${viewMode === 'classes' ? 'TURMA' : 'DOCENTE REGENTE TITULAR'}</strong>: 
-                  <strong style="color:#16A34A;">🟢 Concluída</strong> · 
-                  <strong style="color:#1E40AF;">⚪ No Prazo</strong> · 
-                  <strong style="color:#DC2626;">🔴 Atrasada</strong>.
+                  <strong style="color:#16A34A; display:inline-flex; align-items:center;"><span class="picto-status-dot dot-completed"></span> Concluída</strong> · 
+                  <strong style="color:#1E40AF; display:inline-flex; align-items:center;"><span class="picto-status-dot dot-inprogress"></span> No Prazo</strong> · 
+                  <strong style="color:#DC2626; display:inline-flex; align-items:center;"><span class="picto-status-dot dot-overdue"></span> Atrasada</strong>.
                 </p>
               </div>
 
               <!-- Alternador Turmas vs Docentes -->
               <div class="semaphore-view-toggle">
                 <button type="button" class="semaphore-view-btn ${viewMode === 'classes' ? 'active' : ''}" onclick="toggleLongitudinalViewMode('classes')">
-                  🏫 Turmas (${scopedClasses.length})
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                  </svg>
+                  <span>Turmas (${scopedClasses.length})</span>
                 </button>
                 <button type="button" class="semaphore-view-btn ${viewMode === 'teachers' ? 'active' : ''}" onclick="toggleLongitudinalViewMode('teachers')">
-                  👥 Docentes Regentes (${scopedAvaliandos.length})
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                  <span>Docentes Regentes (${scopedAvaliandos.length})</span>
                 </button>
               </div>
             </div>
@@ -22599,7 +22828,18 @@ function getActiveSections(obs) {
             <div class="semaphore-stats-grid">
               <div class="sem-stat-card ${semOverdueClassesCount > 0 ? 'alert-card' : ''}">
                 <div class="sem-stat-label">
-                  <span>${semOverdueClassesCount > 0 ? '⚠' : '🛡️'}</span> Turmas em Atraso
+                  ${semOverdueClassesCount > 0 ? `
+                    <svg class="sem-stat-icon" style="color:var(--red);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                      <line x1="12" y1="9" x2="12" y2="13"></line>
+                      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                  ` : `
+                    <svg class="sem-stat-icon" style="color:var(--green);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                  `}
+                  <span>Turmas em Atraso</span>
                 </div>
                 <div class="sem-stat-value">${semOverdueClassesCount}</div>
                 <div class="sem-stat-desc">${semOverdueClassesCount === 0 ? 'Nenhum atraso acumulado' : 'Requer intervenção imediata'}</div>
@@ -22607,7 +22847,11 @@ function getActiveSections(obs) {
 
               <div class="sem-stat-card">
                 <div class="sem-stat-label">
-                  <span>⏳</span> Pendentes no ${curBim}
+                  <svg class="sem-stat-icon" style="color:#1E40AF;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span>Pendentes no ${curBim}</span>
                 </div>
                 <div class="sem-stat-value">${semInProgressPendingCount}</div>
                 <div class="sem-stat-desc">Dentro do prazo regulamentar</div>
@@ -22615,7 +22859,11 @@ function getActiveSections(obs) {
 
               <div class="sem-stat-card">
                 <div class="sem-stat-label">
-                  <span>🟢</span> Concluídas no ${curBim}
+                  <svg class="sem-stat-icon" style="color:var(--green);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                  <span>Concluídas no ${curBim}</span>
                 </div>
                 <div class="sem-stat-value">${semCompletedCurrentBimCount} <span style="font-size:14px; font-weight:700; color:var(--text-secondary);">/ ${scopedClasses.length}</span></div>
                 <div class="sem-stat-desc">${scopedClasses.length > 0 ? Math.round((semCompletedCurrentBimCount / scopedClasses.length) * 100) : 0}% de cobertura bimestral</div>
@@ -22623,7 +22871,13 @@ function getActiveSections(obs) {
 
               <div class="sem-stat-card">
                 <div class="sem-stat-label">
-                  <span>🏆</span> Avanço do Ciclo Anual
+                  <svg class="sem-stat-icon" style="color:#D97706;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path>
+                    <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path>
+                    <path d="M4 22h16"></path>
+                    <path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34c3.27-.79 5-3.32 5-6.66V3H4v8c0 3.34 1.73 5.87 5 6.66z"></path>
+                  </svg>
+                  <span>Avanço do Ciclo Anual</span>
                 </div>
                 <div class="sem-stat-value">${overallCyclePct}%</div>
                 <div class="sem-stat-desc">${totalCompletedObsInCycle} de ${totalAnnualTarget} observações anuais</div>
@@ -22637,16 +22891,34 @@ function getActiveSections(obs) {
                 Todas (${scopedClasses.length})
               </button>
               <button type="button" class="sem-filter-chip chip-red ${statusFilter === 'overdue' ? 'active' : ''}" onclick="filterSemaphoreByStatus('overdue')">
-                🔴 Atrasadas (${semOverdueClassesCount})
+                <svg class="sem-filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>Atrasadas (${semOverdueClassesCount})</span>
               </button>
               <button type="button" class="sem-filter-chip ${statusFilter === 'in_progress' ? 'active' : ''}" onclick="filterSemaphoreByStatus('in_progress')">
-                ⚪ No Prazo (${semInProgressPendingCount})
+                <svg class="sem-filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>No Prazo (${semInProgressPendingCount})</span>
               </button>
               <button type="button" class="sem-filter-chip chip-green ${statusFilter === 'completed_cur' ? 'active' : ''}" onclick="filterSemaphoreByStatus('completed_cur')">
-                🟢 Concluídas (${semCompletedCurrentBimCount})
+                <svg class="sem-filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Concluídas (${semCompletedCurrentBimCount})</span>
               </button>
               <button type="button" class="sem-filter-chip ${statusFilter === 'completed_all' ? 'active' : ''}" onclick="filterSemaphoreByStatus('completed_all')">
-                🏆 Ciclo 100% (${semCycleCompletedClassesCount})
+                <svg class="sem-filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path>
+                  <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path>
+                  <path d="M4 22h16"></path>
+                  <path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34c3.27-.79 5-3.32 5-6.66V3H4v8c0 3.34 1.73 5.87 5 6.66z"></path>
+                </svg>
+                <span>Ciclo 100% (${semCycleCompletedClassesCount})</span>
               </button>
             </div>
         `;
@@ -22674,7 +22946,10 @@ function getActiveSections(obs) {
                 <td style="text-align:center; padding:8px 6px;">
                   <div class="sem-status-pill status-${st.status}" onclick="handleSemaphoreCellClick('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${bName}', ${JSON.stringify(st).replace(/"/g, '&quot;')})" title="Clique para detalhes ou ações imediatas">
                     <div class="pill-top">
-                      <span>${st.status === 'completed' ? '✓' : st.status === 'overdue' ? '⚠' : st.status === 'in_progress' ? '⏳' : '○'} ${bName.replace(' Bimestre', 'º')}</span>
+                      <span style="display:inline-flex; align-items:center;">
+                        ${renderSemaphorePillIconSvg(st.status)}
+                        <span>${bName.replace(' Bimestre', 'º')}</span>
+                      </span>
                       ${st.score !== null ? `<span style="font-weight:900;">${st.score}%</span>` : ''}
                     </div>
                     <div class="pill-sub">${st.label}</div>
@@ -22689,7 +22964,10 @@ function getActiveSections(obs) {
               return `
                 <div class="sem-status-pill status-${st.status}" onclick="handleSemaphoreCellClick('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${bName}', ${JSON.stringify(st).replace(/"/g, '&quot;')})">
                   <div class="pill-top">
-                    <span>${st.status === 'completed' ? '✓' : st.status === 'overdue' ? '⚠' : st.status === 'in_progress' ? '⏳' : '○'} ${bName.replace(' Bimestre', 'º')}</span>
+                    <span style="display:inline-flex; align-items:center;">
+                        ${renderSemaphorePillIconSvg(st.status)}
+                        <span>${bName.replace(' Bimestre', 'º')}</span>
+                      </span>
                     ${st.score !== null ? `<span>${st.score}%</span>` : ''}
                   </div>
                   <div class="pill-sub">${st.label}</div>
@@ -22722,8 +23000,14 @@ function getActiveSections(obs) {
                 ${bimesterCellsHtml}
                 <td>${cycleProgressHtml}</td>
                 <td style="text-align:center; white-space:nowrap;">
-                  <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px;" onclick="quickScheduleForClass('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${getNextEligibleBimesterForClass(cls.name, cls.school)}')">
-                    📅 Agendar
+                  <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px; display:inline-flex; align-items:center; gap:4px;" onclick="quickScheduleForClass('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${getNextEligibleBimesterForClass(cls.name, cls.school)}')">
+                    <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Agendar</span>
                   </button>
                 </td>
               </tr>
@@ -22745,8 +23029,14 @@ function getActiveSections(obs) {
                 </div>
 
                 <div style="display:flex; gap:8px; margin-top:8px;">
-                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center;" onclick="quickScheduleForClass('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${getNextEligibleBimesterForClass(cls.name, cls.school)}')">
-                    📅 Agendar Próxima Observação
+                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center; display:inline-flex; align-items:center; gap:4px;" onclick="quickScheduleForClass('${cls.name.replace(/'/g, "\\'")}', '${cls.school.replace(/'/g, "\\'")}', '${getNextEligibleBimesterForClass(cls.name, cls.school)}')">
+                    <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Agendar Próxima Observação</span>
                   </button>
                 </div>
               </div>
@@ -22789,7 +23079,18 @@ function getActiveSections(obs) {
           <div class="semaphore-stats-grid">
             <div class="sem-stat-card ${semOverdueTeachersCount > 0 ? 'alert-card' : ''}">
               <div class="sem-stat-label">
-                <span>${semOverdueTeachersCount > 0 ? '⚠' : '🛡️'}</span> Docentes em Atraso
+                ${semOverdueTeachersCount > 0 ? `
+                  <svg class="sem-stat-icon" style="color:var(--red);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                ` : `
+                  <svg class="sem-stat-icon" style="color:var(--green);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                `}
+                <span>Docentes em Atraso</span>
               </div>
               <div class="sem-stat-value">${semOverdueTeachersCount}</div>
               <div class="sem-stat-desc">${semOverdueTeachersCount === 0 ? 'Nenhum atraso acumulado' : 'Requer intervenção imediata'}</div>
@@ -22797,7 +23098,11 @@ function getActiveSections(obs) {
 
             <div class="sem-stat-card">
               <div class="sem-stat-label">
-                <span>⏳</span> Pendentes no ${curBim}
+                <svg class="sem-stat-icon" style="color:#1E40AF;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Pendentes no ${curBim}</span>
               </div>
               <div class="sem-stat-value">${semInProgressPendingTeachersCount}</div>
               <div class="sem-stat-desc">Dentro do prazo regulamentar</div>
@@ -22805,7 +23110,11 @@ function getActiveSections(obs) {
 
             <div class="sem-stat-card">
               <div class="sem-stat-label">
-                <span>🟢</span> Cobertos no ${curBim}
+                <svg class="sem-stat-icon" style="color:var(--green);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>Cobertos no ${curBim}</span>
               </div>
               <div class="sem-stat-value">${semCompletedCurrentBimTeachersCount} <span style="font-size:14px; font-weight:700; color:var(--text-secondary);">/ ${scopedAvaliandos.length}</span></div>
               <div class="sem-stat-desc">${scopedAvaliandos.length > 0 ? Math.round((semCompletedCurrentBimTeachersCount / scopedAvaliandos.length) * 100) : 0}% de cobertura docente</div>
@@ -22813,7 +23122,13 @@ function getActiveSections(obs) {
 
             <div class="sem-stat-card">
               <div class="sem-stat-label">
-                <span>🏆</span> Avanço do Ciclo Docente
+                <svg class="sem-stat-icon" style="color:#D97706;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path>
+                  <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path>
+                  <path d="M4 22h16"></path>
+                  <path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34c3.27-.79 5-3.32 5-6.66V3H4v8c0 3.34 1.73 5.87 5 6.66z"></path>
+                </svg>
+                <span>Avanço do Ciclo Docente</span>
               </div>
               <div class="sem-stat-value">${overallTeacherCyclePct}%</div>
               <div class="sem-stat-desc">${totalCompletedTeacherObsInCycle} de ${totalTeacherAnnualTarget} observações anuais</div>
@@ -22827,16 +23142,34 @@ function getActiveSections(obs) {
               Todos (${scopedAvaliandos.length})
             </button>
             <button type="button" class="sem-filter-chip chip-red ${teacherStatusFilter === 'overdue' ? 'active' : ''}" onclick="filterTeacherSemaphoreByStatus('overdue')">
-              🔴 Com Atraso (${semOverdueTeachersCount})
+              <svg class="sem-filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span>Com Atraso (${semOverdueTeachersCount})</span>
             </button>
             <button type="button" class="sem-filter-chip ${teacherStatusFilter === 'in_progress' ? 'active' : ''}" onclick="filterTeacherSemaphoreByStatus('in_progress')">
-              ⚪ No Prazo (${semInProgressPendingTeachersCount})
+              <svg class="sem-filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>No Prazo (${semInProgressPendingTeachersCount})</span>
             </button>
             <button type="button" class="sem-filter-chip chip-green ${teacherStatusFilter === 'completed_cur' ? 'active' : ''}" onclick="filterTeacherSemaphoreByStatus('completed_cur')">
-              🟢 Cobertos (${semCompletedCurrentBimTeachersCount})
+              <svg class="sem-filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Cobertos (${semCompletedCurrentBimTeachersCount})</span>
             </button>
             <button type="button" class="sem-filter-chip ${teacherStatusFilter === 'completed_all' ? 'active' : ''}" onclick="filterTeacherSemaphoreByStatus('completed_all')">
-              🏆 Ciclo 100% (${semCycleCompletedTeachersCount})
+              <svg class="sem-filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path>
+                <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path>
+                <path d="M4 22h16"></path>
+                <path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34c3.27-.79 5-3.32 5-6.66V3H4v8c0 3.34 1.73 5.87 5 6.66z"></path>
+              </svg>
+              <span>Ciclo 100% (${semCycleCompletedTeachersCount})</span>
             </button>
           </div>
         `;
@@ -22865,7 +23198,10 @@ function getActiveSections(obs) {
                 <td style="text-align:center; padding:8px 6px;">
                   <div class="sem-status-pill status-${st.status}" onclick="handleTeacherSemaphoreCellClick('${member.name.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${bName}', ${JSON.stringify(st).replace(/"/g, '&quot;')})" title="Clique para detalhes ou ações imediatas">
                     <div class="pill-top">
-                      <span>${st.status === 'completed' ? '✓' : st.status === 'overdue' ? '⚠' : st.status === 'in_progress' ? '⏳' : '○'} ${bName.replace(' Bimestre', 'º')}</span>
+                      <span style="display:inline-flex; align-items:center;">
+                        ${renderSemaphorePillIconSvg(st.status)}
+                        <span>${bName.replace(' Bimestre', 'º')}</span>
+                      </span>
                       ${st.score !== null ? `<span style="font-weight:900;">${st.score}%</span>` : ''}
                     </div>
                     <div class="pill-sub">${st.label}</div>
@@ -22880,7 +23216,10 @@ function getActiveSections(obs) {
               return `
                 <div class="sem-status-pill status-${st.status}" onclick="handleTeacherSemaphoreCellClick('${member.name.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${bName}', ${JSON.stringify(st).replace(/"/g, '&quot;')})">
                   <div class="pill-top">
-                    <span>${st.status === 'completed' ? '✓' : st.status === 'overdue' ? '⚠' : st.status === 'in_progress' ? '⏳' : '○'} ${bName.replace(' Bimestre', 'º')}</span>
+                    <span style="display:inline-flex; align-items:center;">
+                        ${renderSemaphorePillIconSvg(st.status)}
+                        <span>${bName.replace(' Bimestre', 'º')}</span>
+                      </span>
                     ${st.score !== null ? `<span>${st.score}%</span>` : ''}
                   </div>
                   <div class="pill-sub">${st.label}</div>
@@ -22914,11 +23253,21 @@ function getActiveSections(obs) {
                 <td>${cycleProgressHtml}</td>
                 <td style="text-align:center; white-space:nowrap;">
                   <div style="display:flex; gap:6px; justify-content:center;">
-                    <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px;" onclick="quickScheduleForClass('${targetClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')" title="Agendar observação para a turma desta docente">
-                      📅 Agendar
+                    <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px; display:inline-flex; align-items:center; gap:4px;" onclick="quickScheduleForClass('${targetClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')" title="Agendar observação para a turma desta docente">
+                      <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      <span>Agendar</span>
                     </button>
-                    <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')" title="Abrir Raio-X individual da docente">
-                      🔍 Raio-X
+                    <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px; display:inline-flex; align-items:center; gap:4px;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')" title="Abrir Raio-X individual da docente">
+                      <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <span>Raio-X</span>
                     </button>
                   </div>
                 </td>
@@ -22941,11 +23290,21 @@ function getActiveSections(obs) {
                 </div>
 
                 <div style="display:flex; gap:8px; margin-top:8px;">
-                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center;" onclick="quickScheduleForClass('${targetClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')">
-                    📅 Agendar Turma
+                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center; display:inline-flex; align-items:center; gap:4px;" onclick="quickScheduleForClass('${targetClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')">
+                    <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Agendar Turma</span>
                   </button>
-                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')">
-                    🔍 Raio-X Item a Item
+                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center; display:inline-flex; align-items:center; gap:4px;" onclick="selectTeacherForLongitudinalAnalysis('${member.name.replace(/'/g, "\\'")}')">
+                    <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <span>Raio-X Item a Item</span>
                   </button>
                 </div>
               </div>
@@ -27369,8 +27728,9 @@ function getActiveSections(obs) {
               toggleLongitudinalViewMode('classes');
               filterSemaphoreByStatus('overdue');
               const overdueSec = document.getElementById('bimesterSemaphoreSection');
-              if (!overdueSec || !overdueSec.innerHTML.includes('🔴 Atrasadas')) {
-                throw new Error('Falha Pilar 10: Filtro de status atrasadas não refletiu no DOM');
+              const activeChip = overdueSec ? overdueSec.querySelector('.sem-filter-chip.chip-red.active') : null;
+              if (!overdueSec || !activeChip || !overdueSec.innerHTML.includes('Atrasadas')) {
+                throw new Error('Falha Pilar 10: Filtro de status atrasadas não refletiu no DOM ou chip ativo ausente');
               }
               filterSemaphoreByStatus('all');
               logger.log('Validação interativa dos Filtros Rápidos de Status no Semáforo (Pilar 10)', true);
@@ -27392,11 +27752,30 @@ function getActiveSections(obs) {
               // Validação do Filtro Rápido de Docentes
               filterTeacherSemaphoreByStatus('overdue');
               const overdueTeacherDom = document.getElementById('bimesterSemaphoreSection');
-              if (!overdueTeacherDom || !overdueTeacherDom.innerHTML.includes('🔴 Com Atraso')) {
-                throw new Error('Falha Pilar 10: Filtro rápido de docentes com atraso não refletiu no DOM');
+              const activeTeacherChip = overdueTeacherDom ? overdueTeacherDom.querySelector('.sem-filter-chip.chip-red.active') : null;
+              if (!overdueTeacherDom || !activeTeacherChip || !overdueTeacherDom.innerHTML.includes('Com Atraso')) {
+                throw new Error('Falha Pilar 10: Filtro rápido de docentes com atraso não refletiu no DOM ou chip ativo ausente');
               }
               filterTeacherSemaphoreByStatus('all');
               logger.log('Validação dos Filtros Rápidos de Status no Semáforo de Docentes (Pilar 10)', true);
+
+              // ASSERÇÃO DE PICTOGRAMAS VETORIAIS (SUBSTITUIÇÃO DE EMOJIS NO SEMÁFORO E INDICADORES)
+              const semContainerTest = document.getElementById('bimesterSemaphoreSection');
+              if (semContainerTest) {
+                // 1. Asserção Positiva: Presença de pictogramas vetoriais nas pílulas semafóricas
+                const semPillIcons = semContainerTest.querySelectorAll('.sem-pill-icon');
+                if (!semPillIcons || semPillIcons.length === 0) {
+                  throw new Error('Falha Pictogramas: Pílulas semafóricas não contêm ícones vetoriais SVG (.sem-pill-icon)');
+                }
+                logger.log('Validação de Pictogramas Vetoriais nas Pílulas Semafóricas (.sem-pill-icon)', true, `${semPillIcons.length} pílulas vetoriais`);
+
+                // 2. Asserção Negativa: Ausência de emojis soltos no cabeçalho e filtros do Semáforo
+                const hasRawEmojis = /[⚠⏳○🏆🟢🔴⚪]/.test(semContainerTest.querySelector('.semaphore-filters-bar')?.innerHTML || '');
+                if (hasRawEmojis) {
+                  throw new Error('Falha Pictogramas: Emojis soltos residuais detectados na barra de filtros do Semáforo');
+                }
+                logger.log('Erradicação confirmada de emojis nos controles do Quadro Longitudinal', true);
+              }
 
               // Restaura a visão de turmas padrão
               toggleLongitudinalViewMode('classes');
