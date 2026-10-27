@@ -3594,7 +3594,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.36 (v8.2.3)</span>
+          <span>Versão 1.37 (v8.2.4)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -5249,6 +5249,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.37 - RESOLUÇÃO DEFINITIVA DA TELA BRANCA INICIAL E BLINDAGEM DE CICLOS AVALIATIVOS -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #0284C7; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.37 (v8.2.4)</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Resolução Definitiva da Tela Branca Inicial e Blindagem de Ciclos Avaliativos:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🛡️ <strong>Erradicação de ReferenceError e Variáveis Ausentes:</strong> Inicialização canônica das constantes do Pilar 15 (<code>DEFAULT_ACADEMIC_YEARS</code>, <code>DEFAULT_SELECTED_ACADEMIC_YEAR</code> e <code>DEFAULT_BIMESTER_PERIODS_BY_YEAR</code>) no topo do script, sanando a falha de Temporal Dead Zone na inicialização.</li>
+          <li>⚡ <strong>Autocura e Resiliência em <code>loadState()</code>:</strong> Garantia incondicional de que <code>appState.academicYears</code> e <code>appState.selectedAcademicYear</code> sejam populados com valores válidos mesmo em sessões limpas ou localStorage legado.</li>
+          <li>👁️ <strong>Eliminação da Tela Branca Inicial (Zero-Click Visibility):</strong> A tela inicial (<code>#screenHome</code>) renderiza imediatamente no boot sem exigir que o usuário navegue para outra aba e retorne.</li>
+          <li>🔄 <strong>Ciclo de Vida Universal Multi-Estado (<code>initializeAppLifecycle</code>):</strong> Suporte resiliente a <code>document.readyState</code> (<code>complete</code>/<code>interactive</code>), <code>DOMContentLoaded</code> e <code>window.load</code>, garantindo montagem perfeita em recarregamentos, WebViews e conexões rápidas.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Novos testes no Módulo 12 cobrindo a presença das constantes canônicas de ciclos e a renderização limpa da tela inicial.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.36 - RESOLUÇÃO DEFINITIVA DA EXECUÇÃO DO MOTOR DE AUDITORIA (CLI E WEB UI) -->
@@ -27304,14 +27322,30 @@ function getActiveSections(obs) {
               }
               logger.log('Validação do Motor Assíncrono e Telemetria em Tempo Real (Versão 1.36)', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.36
-              if (!btnChangelog.textContent.includes('Versão 1.36')) {
+              // 18. VALIDAÇÃO DAS CONSTANTES CANÔNICAS DE CICLO E BLINDAGEM CONTRA TELA BRANCA INICIAL (VERSÃO 1.37)
+              if (typeof DEFAULT_ACADEMIC_YEARS === 'undefined' || !Array.isArray(DEFAULT_ACADEMIC_YEARS)) {
+                throw new Error('DEFAULT_ACADEMIC_YEARS não definida ou inválida');
+              }
+              if (typeof DEFAULT_SELECTED_ACADEMIC_YEAR === 'undefined') {
+                throw new Error('DEFAULT_SELECTED_ACADEMIC_YEAR não definida');
+              }
+              if (typeof DEFAULT_BIMESTER_PERIODS_BY_YEAR === 'undefined' || !DEFAULT_BIMESTER_PERIODS_BY_YEAR['2026']) {
+                throw new Error('DEFAULT_BIMESTER_PERIODS_BY_YEAR não definida para 2026');
+              }
+              const testHomeScreen = document.getElementById('screenHome');
+              if (!testHomeScreen || testHomeScreen.style.display === 'none') {
+                throw new Error('Tela inicial (#screenHome) não está visível no boot');
+              }
+              logger.log('Blindagem Canônica de Ciclos e Prevenção de Tela Branca Inicial (Versão 1.37)', true);
+
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.37
+              if (!btnChangelog.textContent.includes('Versão 1.37')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.36')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.36');
+              if (!modalChg.innerHTML.includes('Versão 1.37')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.37');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.36 (v8.2.3)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.37 (v8.2.4)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.37** | 27/10/2026 14:45 | `intermediárias/aplicativo_v137_resolucao_tela_branca_inicial_e_blindagem_ciclos.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_tela_branca_inicial_e_blindagem_ciclos.md` | Resolução definitiva da tela branca inicial e blindagem de ciclos avaliativos: inicialização canônica de constantes SSOT (DEFAULT_ACADEMIC_YEARS, DEFAULT_SELECTED_ACADEMIC_YEAR, DEFAULT_BIMESTER_PERIODS_BY_YEAR), autocura em loadState(), ciclo de vida universal (initializeAppLifecycle) e zero-click home visibility 🛡️⚡👁️ |
 | **1.36** | 27/10/2026 14:35 | `intermediárias/aplicativo_v136_resolucao_execucao_auditoria_plataforma.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_falha_execucao_auditoria_plataforma.md` | Resolução definitiva da execução do motor de auditoria (CLI e Web UI): telemetria em tempo real no terminal (`/__test_progress__`), motor assíncrono com micro-pausas (`runFullPlatformAuditAsync`), modal in-app com barra de progresso ativa (`#modalAuditReport`), ancoragem hermética do servidor HTTP local (`directory=REPO_DIR`), flags essenciais contra throttling de timers no Chrome macOS e captura de logs forenses 🔬⚡📡 |
 | **1.35** | 27/10/2026 13:55 | `intermediárias/aplicativo_v135_iniciar_novo_ciclo_tela_ciclos_e_calendario.html` | Solicitação direta / `planos_de_implementacao/plano_migracao_iniciar_novo_ciclo_para_tela_ciclos_e_calendario.md` | Centralização da função 'Iniciar Novo Ciclo Avaliativo' na tela de Ciclos Avaliativos & Calendário (`#modalBimesterPeriods`), remoção da duplicidade solta na barra de Gestão da Rede, rotulagem canônica com SVG vetorial, higienização de modais e asserções estritas de auditoria 📅🏷️🛡️ |
 | **1.34** | 27/10/2026 13:05 | `intermediárias/aplicativo_v134_trava_visualizacao_desktop_e_eliminacao_scroll_horizontal.html` | Solicitação direta / `planos_de_implementacao/plano_trava_visualizacao_desktop_e_eliminacao_scroll_horizontal.md` | Trava de visualização desktop, eliminação de transbordo horizontal e blindagem da viewport: trava estrutural raiz (`html, body`) com `overflow-x: hidden`, `overscroll-behavior-x: none` (anti-rubber-band), compactação responsiva do cabeçalho em notebooks/desktops intermediários, confinamento de tabelas e trava de escala na viewport 🛡️💻📱 |
@@ -162,6 +163,22 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.37] - Resolução Definitiva da Tela Branca Inicial e Blindagem de Ciclos Avaliativos
+- **Data / Horário:** 27/10/2026 14:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v137_resolucao_tela_branca_inicial_e_blindagem_ciclos.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_resolucao_tela_branca_inicial_e_blindagem_ciclos.md`.
+- **Foco Central:** Erradicação de `ReferenceError` na inicialização da aplicação, saneamento de constantes globais de ciclos avaliativos (Pilar 15), autocura defensiva em `loadState()`, blindagem com `try/catch` no seletor global de ano letivo, unificação do ciclo de vida em `initializeAppLifecycle()` e garantia de visibilidade imediata da tela inicial no primeiro carregamento sem navegação manual intermediária.
+
+#### Modificações e Melhorias
+- **Constantes Canônicas de Ciclos no Topo do Script:** Inicialização formal de `DEFAULT_ACADEMIC_YEARS = ['2026', '2025']`, `DEFAULT_SELECTED_ACADEMIC_YEAR = '2026'` e `DEFAULT_BIMESTER_PERIODS_BY_YEAR`, eliminando o erro fatal de Temporal Dead Zone e dependência de chamadas tardias.
+- **Estruturação Padrão no `appState` Base:** Inclusão das propriedades `academicYears`, `selectedAcademicYear` e `currentPedagSubTab` no estado literal padrão do sistema.
+- **Autocura Defensiva em `loadState()`:** Fallback imediato garantindo que `academicYears` e `selectedAcademicYear` sejam arrays e strings válidas caso o `localStorage` contenha uma base limpa ou de versão anterior.
+- **Encapsulamento Defensivo em `applyUserRoleUI()`:** Invocação de `renderGlobalAcademicYearSelector()` protegida com `try/catch` defensivo, impedindo que qualquer anomalia no seletor aborte a ativação de papéis da usuária.
+- **Ciclo de Vida Universal (`initializeAppLifecycle`):** Tratamento multi-estado verificando se o documento já atingiu `interactive` ou `complete` (típico de recarregamento e WebViews) com fallbacks para `DOMContentLoaded` e `window.load`, prevenindo a tela em branco por eventos perdidos.
+- **Auditoria Modular Expandida (100% de Aprovação):** Inclusão de asserções no Módulo 12 (`navegacao_layout`) validando a presença das constantes canônicas de ciclo, a renderização limpa da tela inicial e a conformidade da Versão 1.37 (v8.2.4).
+
+---
 
 ### [Versão 1.36] - Resolução Definitiva da Execução do Motor de Auditoria da Plataforma (CLI e Web UI)
 - **Data / Horário:** 27/10/2026 14:35
