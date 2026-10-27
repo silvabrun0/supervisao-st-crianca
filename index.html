@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SerTão Criança · Supervisão Pedagógica</title>
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,7 +37,7 @@
       --tabbar-height: 62px;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -45,12 +45,33 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      overscroll-behavior-x: none;
+      touch-action: pan-y;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
       background: var(--bg);
       color: var(--text-primary);
       min-height: 100vh;
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      overscroll-behavior-x: none;
+      touch-action: pan-y;
       display: flex;
       flex-direction: column;
+      position: relative;
+    }
+
+    /* Prevenção de arraste acidental de elementos gráficos no desktop */
+    img, svg, .navbar, .mobile-tabbar {
+      -webkit-user-drag: none;
+      user-select: none;
     }
 
     /* Top App Navigation Header */
@@ -64,16 +85,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 20px;
+      padding: 0 16px;
       box-shadow: var(--shadow-sm);
+      width: 100%;
+      max-width: 100vw;
+      overflow: hidden;
+      box-sizing: border-box;
     }
     .navbar-container {
       width: 100%;
-      max-width: 1240px;
+      max-width: 1360px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
+      box-sizing: border-box;
     }
     .navbar-brand {
       display: flex;
@@ -312,15 +338,31 @@
     }
 
     @media (min-width: 860px) {
-      .desktop-nav { display: flex; }
+      .desktop-nav { display: flex; align-items: center; gap: 3px; }
       .mobile-tabbar { display: none !important; }
-      .main-wrapper { padding-bottom: 40px; max-width: 1320px; }
+      .main-wrapper { padding-bottom: 40px; max-width: 1320px; width: 100%; box-sizing: border-box; }
       .grid-2col { grid-template-columns: 1.25fr 0.75fr; }
       .grid-3col { grid-template-columns: repeat(3, 1fr); }
       .card { padding: 24px; }
       .form-textarea { font-size: 14px; }
       .data-table { font-size: 14px; }
       .filter-panel { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+    }
+
+    /* Adaptação Ergonômica de Alta Densidade para Laptops e MacBooks (860px - 1400px) */
+    @media (min-width: 860px) and (max-width: 1400px) {
+      .navbar-container { gap: 6px; padding: 0 4px; }
+      .navbar-brand { gap: 6px; }
+      .brand-logo-img { height: 34px; max-height: 34px; }
+      .brand-text span { font-size: 10px; }
+      .desktop-nav { gap: 2px; }
+      .nav-link { padding: 6px 8px; font-size: 12px; gap: 4px; }
+      .nav-link svg { width: 15px; height: 15px; }
+      .navbar-actions { gap: 6px; }
+      .role-badge-btn { padding: 5px 8px; font-size: 11px; max-width: 145px; }
+      .role-badge-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .btn-changelog { padding: 5px 8px; font-size: 11px; }
+      .academic-year-selector-wrapper { padding: 2px 6px; font-size: 11px; }
     }
 
     /* Buttons & Cards */
@@ -1306,7 +1348,11 @@
     
     /* Tabela Matricial (Desktop) */
     .semaphore-table-view {
+      width: 100%;
+      max-width: 100%;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
       margin-top: 10px;
     }
     .semaphore-table {
@@ -3548,7 +3594,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.33 (v8.2.0)</span>
+          <span>Versão 1.34 (v8.2.1)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -5207,6 +5253,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.34 - TRAVA DE VISUALIZAÇÃO DESKTOP, ELIMINAÇÃO DE TRANSBORDO HORIZONTAL E BLINDAGEM DA VIEWPORT -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.34</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Trava de Visualização Desktop, Eliminação de Transbordo Horizontal e Blindagem da Viewport:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🛡️ <strong>Trava Absoluta Raiz (<code>html, body</code>):</strong> Aplicação de <code>overflow-x: hidden</code>, <code>width: 100%</code>, <code>max-width: 100vw</code> e <code>overscroll-behavior-x: none</code>, eliminando por completo o deslocamento lateral indesejado da página no computador e o efeito elástico (rubber-band bounce) em trackpads do macOS e navegadores desktop.</li>
+          <li>💻 <strong>Compactação Ergonômica do Cabeçalho Desktop:</strong> Ajuste responsivo para telas de 860px a 1400px (notebooks e MacBooks), impedindo que as 8 abas de navegação e botões de ação ultrapassem a largura do monitor e forcem rolagem na janela.</li>
+          <li>📱 <strong>Blindagem da Viewport contra Zoom Gestual:</strong> Adição de <code>maximum-scale=1.0, user-scalable=no, viewport-fit=cover</code> e <code>touch-action: pan-y</code> para evitar ampliação desordenada que torne a tela arrastável em 2D.</li>
+          <li>🚫 <strong>Prevenção de Arraste Indesejado de Elementos:</strong> Bloqueio de drag nativo em imagens de logotipo e barras de navegação (<code>-webkit-user-drag: none</code> e <code>user-select: none</code>).</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.33 - APRESENTAÇÃO DE DADOS ORIENTADA AO PROCESSO DECISÓRIO DOS GESTORES -->
@@ -27027,14 +27090,33 @@ function getActiveSections(obs) {
               closeProfileModal();
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.32
-              if (!btnChangelog.textContent.includes('Versão 1.33')) {
+              // 16. BLINDAGEM E TRAVA DE VISUALIZAÇÃO DESKTOP (ELIMINAÇÃO DE SCROLL LATERAL E ZOOM INDESEJADO)
+              const docEl = document.documentElement;
+              const htmlStyle = window.getComputedStyle(docEl);
+              const bodyStyle = window.getComputedStyle(document.body);
+
+              if (htmlStyle.overflowX !== 'hidden' && bodyStyle.overflowX !== 'hidden') {
+                throw new Error(`Trava de visualização violada: html e body devem conter overflow-x: hidden (html: ${htmlStyle.overflowX}, body: ${bodyStyle.overflowX})`);
+              }
+
+              if (docEl.scrollWidth > window.innerWidth + 2) {
+                throw new Error(`Transbordo horizontal detectado no computador: scrollWidth (${docEl.scrollWidth}px) > innerWidth (${window.innerWidth}px)`);
+              }
+
+              const metaVp = document.querySelector('meta[name="viewport"]');
+              if (!metaVp || !metaVp.content.includes('user-scalable=no') || !metaVp.content.includes('maximum-scale=1.0')) {
+                throw new Error('Meta viewport deve conter maximum-scale=1.0 e user-scalable=no para blindagem da tela');
+              }
+              logger.log('Blindagem e Trava de Visualização Desktop (Eliminação de Scroll Lateral e Zoom Indesejado)', true);
+
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.34
+              if (!btnChangelog.textContent.includes('Versão 1.34')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.33')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.33');
+              if (!modalChg.innerHTML.includes('Versão 1.34')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.34');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.33 (v8.2.0)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.34 (v8.2.1)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

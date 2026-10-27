@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.34** | 27/10/2026 13:05 | `intermediárias/aplicativo_v134_trava_visualizacao_desktop_e_eliminacao_scroll_horizontal.html` | Solicitação direta / `planos_de_implementacao/plano_trava_visualizacao_desktop_e_eliminacao_scroll_horizontal.md` | Trava de visualização desktop, eliminação de transbordo horizontal e blindagem da viewport: trava estrutural raiz (`html, body`) com `overflow-x: hidden`, `overscroll-behavior-x: none` (anti-rubber-band), compactação responsiva do cabeçalho em notebooks/desktops intermediários, confinamento de tabelas e trava de escala na viewport 🛡️💻📱 |
 | **1.33** | 26/10/2026 17:55 | `intermediárias/aplicativo_v133_apresentacao_dados_decisao_gestores.html` | Solicitação direta / `planos_de_implementacao/plano_apresentacao_dados_processo_decisorio_gestores.md` | Apresentação de dados orientada ao processo decisório dos gestores: governança territorial por polos (`<optgroup>`), tabela executiva de UEs, régua das grandes dimensões, síntese agregada da escala de materiais, prioridades balanceadas (fragilidades e práticas consolidadas) e busca na matriz 🗺️🏫📊 |
 | **1.32** | 26/10/2026 17:45 | `intermediárias/aplicativo_v132_adequacao_banner_rede_consolidada.html` | Solicitação direta / `planos_de_implementacao/plano_adequacao_banner_rede_consolidada.md` | Adequação contextual do banner na Visualização por Dimensão: eliminação da redundância comparativa em 'Rede Consolidada' em favor do panorama consolidado da rede municipal com badge orientador, e preservação da comparação ativa por Escola/Polo 🏛️🎯 |
 | **1.31** | 26/10/2026 17:40 | `intermediárias/aplicativo_v131_substituicao_emojis_botoes_por_pictogramas.html` | Solicitação direta / `planos_de_implementacao/plano_substituicao_emojis_botoes_por_pictogramas.md` | Substituição sistemática de emojis nos botões principais e sub-abas por pictogramas vetoriais (SVGs inline padronizados com classes `.btn-icon`, `.btn-icon-sm`, `.tab-icon-svg`), garantindo consistência visual entre dispositivos e sobriedade institucional 🎨✨ |
@@ -159,6 +160,22 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.34] - Trava de Visualização Desktop, Eliminação de Transbordo Horizontal e Blindagem da Viewport
+- **Data / Horário:** 27/10/2026 13:05
+- **Arquivo de Referência:** `intermediárias/aplicativo_v134_trava_visualizacao_desktop_e_eliminacao_scroll_horizontal.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_trava_visualizacao_desktop_e_eliminacao_scroll_horizontal.md`.
+- **Foco Central:** Resolução definitiva da mobilidade e destravamento visual da página no computador. Aplicação de trava absoluta na raiz (`html, body`), eliminação do efeito elástico (*rubber-band bounce*) no macOS/trackpad, compactação ergonômica da barra superior desktop em telas de 860px a 1400px e blindagem da tag `<meta name="viewport">` contra zoom livre.
+
+#### Inclusões e Blindagens
+- **Trava Estrutural Raiz (`html, body`):** Definição estrita de `width: 100%`, `max-width: 100vw`, `overflow-x: hidden`, `overscroll-behavior-x: none` e `touch-action: pan-y`, garantindo estabilidade milimétrica do viewport em computadores pessoais e portáteis.
+- **Compactação Ergonômica do Cabeçalho Desktop (860px a 1400px):** Regras de mídia de alta densidade reduzindo padding e gaps das abas `.nav-link`, redimensionando harmoniosamente a marca e truncando rótulos longos de perfil (`.role-badge-btn`), impedindo que a barra superior extrapole os limites horizontais da tela.
+- **Blindagem da Viewport contra Zoom Gestual:** Inclusão de `maximum-scale=1.0, user-scalable=no, viewport-fit=cover` na tag `<meta name="viewport">`, impedindo desencaixe da interface em gestos acidentais de pinça no trackpad.
+- **Prevenção de Arraste de Elementos:** Aplicação de `-webkit-user-drag: none; user-select: none;` no logotipo e barras de navegação.
+- **Confinamento de Tabelas Matriciais:** Estrita contenção de rolagem lateral nas visualizações matriciais desktop (`.semaphore-table-view`, `.schedule-table-view`).
+- **Auditoria Modular In-App (`navegacao_layout`):** Asserções automáticas determinísticas conferindo ausência de transbordo (`scrollWidth <= innerWidth + 2`), estilos computados de trava e integridade do registro da Versão 1.34.
+
+---
 
 ### [Versão 1.33] - Apresentação de Dados Orientada ao Processo Decisório dos Gestores
 - **Data / Horário:** 26/10/2026 17:55
