@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.38** | 27/10/2026 15:45 | `intermediárias/aplicativo_v138_remocao_emojis_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_gestao_pedagogica.md` | Remoção de emojis das sub-abas da Gestão Pedagógica/Rede e cards de exportação SSOT: dinamização limpa em renderNavBar() para Coordenador, Formador e Núcleo EI, preservação de SVGs vetoriais (.btn-icon) e sobriedade institucional 🧹🏛️✨ |
 | **1.37** | 27/10/2026 14:45 | `intermediárias/aplicativo_v137_resolucao_tela_branca_inicial_e_blindagem_ciclos.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_tela_branca_inicial_e_blindagem_ciclos.md` | Resolução definitiva da tela branca inicial e blindagem de ciclos avaliativos: inicialização canônica de constantes SSOT (DEFAULT_ACADEMIC_YEARS, DEFAULT_SELECTED_ACADEMIC_YEAR, DEFAULT_BIMESTER_PERIODS_BY_YEAR), autocura em loadState(), ciclo de vida universal (initializeAppLifecycle) e zero-click home visibility 🛡️⚡👁️ |
 | **1.36** | 27/10/2026 14:35 | `intermediárias/aplicativo_v136_resolucao_execucao_auditoria_plataforma.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_falha_execucao_auditoria_plataforma.md` | Resolução definitiva da execução do motor de auditoria (CLI e Web UI): telemetria em tempo real no terminal (`/__test_progress__`), motor assíncrono com micro-pausas (`runFullPlatformAuditAsync`), modal in-app com barra de progresso ativa (`#modalAuditReport`), ancoragem hermética do servidor HTTP local (`directory=REPO_DIR`), flags essenciais contra throttling de timers no Chrome macOS e captura de logs forenses 🔬⚡📡 |
 | **1.35** | 27/10/2026 13:55 | `intermediárias/aplicativo_v135_iniciar_novo_ciclo_tela_ciclos_e_calendario.html` | Solicitação direta / `planos_de_implementacao/plano_migracao_iniciar_novo_ciclo_para_tela_ciclos_e_calendario.md` | Centralização da função 'Iniciar Novo Ciclo Avaliativo' na tela de Ciclos Avaliativos & Calendário (`#modalBimesterPeriods`), remoção da duplicidade solta na barra de Gestão da Rede, rotulagem canônica com SVG vetorial, higienização de modais e asserções estritas de auditoria 📅🏷️🛡️ |
@@ -163,6 +164,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.38] - Remoção de Emojis das Sub-abas da Gestão Pedagógica e Higienização Visual
+- **Data / Horário:** 27/10/2026 15:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v138_remocao_emojis_gestao_pedagogica.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_gestao_pedagogica.md`.
+- **Foco Central:** Remoção de emojis redundantes nas sub-abas da Gestão Pedagógica (Gestão da Rede / Gestão Operacional) e nos cards de exportação de dados brutos da SSOT (`#pedagViewExports`), garantindo sobriedade institucional e preservando a soberania dos pictogramas vetoriais SVG (`.btn-icon`).
+
+#### Modificações e Melhorias
+- **Higienização Dinâmica dos Rótulos em `renderNavBar()`:**
+  - Perfil Coordenador: `Minha Escola`, `Turmas & Regência`, `Docentes da UE` (eliminados emojis prediais, escolares e de pessoas).
+  - Perfil Formador: `Escolas do Polo`, `Turmas do Polo`, `Coordenações Pedagógicas` (eliminados emojis prediais, escolares e de pessoas).
+  - Perfil Núcleo EI: `Unidades Escolares & Polos`, `Turmas da Rede Municipal`, `Equipes & Servidores da Rede` (eliminados emojis prediais, escolares e de pessoas).
+- **Higienização dos Cards de Exportação (`#pedagViewExports`):**
+  - Removidos emojis redundantes dos títulos em `.export-card-title`: `Backup & Restauração Completa da Base (JSON)`, `Servidores & Membros da Rede`, `Unidades Escolares & Polos`, `Matriz de Rubricas & Critérios`, `Registros Formativos & Ocorrências` e `Observações Realizadas`.
+- **Preservação Estrutural e Vetorial:**
+  - Mantidos todos os ícones vetoriais SVG oficiais das sub-abas e cards.
+  - Auditoria modular e integridade sintática 100% preservadas.
+
+---
 
 ### [Versão 1.37] - Resolução Definitiva da Tela Branca Inicial e Blindagem de Ciclos Avaliativos
 - **Data / Horário:** 27/10/2026 14:45

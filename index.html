@@ -3594,7 +3594,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.37 (v8.2.4)</span>
+          <span>Versão 1.38 (v8.2.5)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3985,7 +3985,7 @@
         <div class="card" style="background:#F0FDF4; border:1px solid #BBF7D0; margin-bottom:18px;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
-              <div style="font-size:15px; font-weight:800; color:#166534;">📦 Backup & Restauração Completa da Base (JSON)</div>
+              <div style="font-size:15px; font-weight:800; color:#166534;">Backup & Restauração Completa da Base (JSON)</div>
               <div style="font-size:12px; color:#15803D; margin-top:4px;">
                 Exporta ou sobrescreve integralmente todas as entidades do sistema: Servidores, UEs, Polos, Rubricas, Registros e Avaliações.
               </div>
@@ -4007,7 +4007,7 @@
           <!-- Card Servidores -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">👥 Servidores & Membros da Rede</div>
+              <div class="export-card-title">Servidores & Membros da Rede</div>
               <div class="export-card-desc">Lista completa de profissionais: docentes, coordenadoras pedagógicas, formadoras e lotações.</div>
             </div>
             <div style="display:flex; gap:8px;">
@@ -4019,7 +4019,7 @@
           <!-- Card UEs e Polos -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">🏢 Unidades Escolares & Polos</div>
+              <div class="export-card-title">Unidades Escolares & Polos</div>
               <div class="export-card-desc">Relação cadastral de escolas infantis, polos territoriais vinculados e endereços.</div>
             </div>
             <div style="display:flex; gap:8px;">
@@ -4031,7 +4031,7 @@
           <!-- Card Rubricas -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">📋 Matriz de Rubricas & Critérios</div>
+              <div class="export-card-title">Matriz de Rubricas & Critérios</div>
               <div class="export-card-desc">Estrutura completa das 5 dimensões diagnósticas, subdimensões e descritores pedagógicos.</div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
@@ -4049,7 +4049,7 @@
           <!-- Card Registros Formativos -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">📝 Registros Formativos & Ocorrências</div>
+              <div class="export-card-title">Registros Formativos & Ocorrências</div>
               <div class="export-card-desc">Todas as anotações qualitativas de campo registradas pela supervisão pedagógica.</div>
             </div>
             <div style="display:flex; gap:8px;">
@@ -4061,7 +4061,7 @@
           <!-- Card Observações Pedagógicas -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">📈 Observações Realizadas</div>
+              <div class="export-card-title">Observações Realizadas</div>
               <div class="export-card-desc">Base de acompanhamentos pedagógicos, sínteses, níveis de materiais e metadados.</div>
             </div>
             <div style="display:flex; gap:8px;">
@@ -5251,8 +5251,24 @@
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
       </div>
 
-      <!-- VERSÃO 1.37 - RESOLUÇÃO DEFINITIVA DA TELA BRANCA INICIAL E BLINDAGEM DE CICLOS AVALIATIVOS -->
+      <!-- VERSÃO 1.38 - REMOÇÃO DE EMOJIS DAS SUB-ABAS DA GESTÃO PEDAGÓGICA -->
       <div class="card" style="margin-bottom:16px; border-left:4px solid #0284C7; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.38 (v8.2.5)</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Remoção de Emojis das Sub-abas da Gestão Pedagógica e Higienização Visual:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🧹 <strong>Padronização Visual das Sub-abas:</strong> Eliminação dos emojis atribuídos dinamicamente em <code>renderNavBar()</code> para Coordenadores, Formadores e Núcleo EI (<code>Minha Escola</code>, <code>Turmas & Regência</code>, <code>Docentes da UE</code>, <code>Escolas do Polo</code>, <code>Turmas do Polo</code>, <code>Coordenações Pedagógicas</code>, <code>Unidades Escolares & Polos</code>, <code>Turmas da Rede Municipal</code>, <code>Equipes & Servidores da Rede</code>).</li>
+          <li>🏛️ <strong>Sobriedade Institucional nas Extrações:</strong> Higienização dos títulos dos cards de exportação em <code>#pedagViewExports</code> (<code>Backup & Restauração</code>, <code>Servidores & Membros</code>, <code>Unidades Escolares & Polos</code>, <code>Matriz de Rubricas</code>, <code>Registros Formativos</code> e <code>Observações Realizadas</code>).</li>
+          <li>🎨 <strong>Soberania dos Ícones Vetoriais:</strong> Preservação exclusiva dos pictogramas SVG estruturais (<code>.btn-icon</code>) em harmonia com as diretrizes de design do sistema.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.37 - RESOLUÇÃO DEFINITIVA DA TELA BRANCA INICIAL E BLINDAGEM DE CICLOS AVALIATIVOS -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #64748B; background:#F8FAFC;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.37 (v8.2.4)</span>
           <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">27/10/2026</span>
@@ -10648,9 +10664,9 @@ function getActiveSections(obs) {
           mobMenuOpBtn.style.display = 'flex';
           if (mobMenuOpText) mobMenuOpText.innerText = '🏫 Gestão da Minha Escola';
         }
-        if (pedagUnitsLabel) pedagUnitsLabel.innerText = '🏢 Minha Escola';
-        if (pedagClassesLabel) pedagClassesLabel.innerText = '🏫 Turmas & Regência';
-        if (pedagTeamLabel) pedagTeamLabel.innerText = '👩‍🏫 Docentes da UE';
+        if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Minha Escola';
+        if (pedagClassesLabel) pedagClassesLabel.innerText = 'Turmas & Regência';
+        if (pedagTeamLabel) pedagTeamLabel.innerText = 'Docentes da UE';
         if (pedagExportsTab) pedagExportsTab.style.display = 'none';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'none';
         if (homeGestaoTitle) homeGestaoTitle.innerText = `Gestão da Unidade Escolar · ${user.school}`;
@@ -10673,9 +10689,9 @@ function getActiveSections(obs) {
           mobMenuOpBtn.style.display = 'flex';
           if (mobMenuOpText) mobMenuOpText.innerText = '🗺️ Gestão do Polo Regional';
         }
-        if (pedagUnitsLabel) pedagUnitsLabel.innerText = '🏢 Escolas do Polo';
-        if (pedagClassesLabel) pedagClassesLabel.innerText = '🏫 Turmas do Polo';
-        if (pedagTeamLabel) pedagTeamLabel.innerText = '👥 Coordenações Pedagógicas';
+        if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Escolas do Polo';
+        if (pedagClassesLabel) pedagClassesLabel.innerText = 'Turmas do Polo';
+        if (pedagTeamLabel) pedagTeamLabel.innerText = 'Coordenações Pedagógicas';
         if (pedagExportsTab) pedagExportsTab.style.display = 'none';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'none';
         if (homeGestaoTitle) homeGestaoTitle.innerText = `Gestão do Polo Regional · ${user.school}`;
@@ -10690,9 +10706,9 @@ function getActiveSections(obs) {
           mobMenuOpBtn.style.display = 'flex';
           if (mobMenuOpText) mobMenuOpText.innerText = '🏛️ Gestão da Rede Municipal';
         }
-        if (pedagUnitsLabel) pedagUnitsLabel.innerText = '🏢 Unidades Escolares & Polos';
-        if (pedagClassesLabel) pedagClassesLabel.innerText = '🏫 Turmas da Rede Municipal';
-        if (pedagTeamLabel) pedagTeamLabel.innerText = '👥 Equipes & Servidores da Rede';
+        if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Unidades Escolares & Polos';
+        if (pedagClassesLabel) pedagClassesLabel.innerText = 'Turmas da Rede Municipal';
+        if (pedagTeamLabel) pedagTeamLabel.innerText = 'Equipes & Servidores da Rede';
         if (pedagExportsTab) pedagExportsTab.style.display = 'block';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'flex';
         if (homeGestaoTitle) homeGestaoTitle.innerText = 'Gestão da Rede';
@@ -27341,14 +27357,14 @@ function getActiveSections(obs) {
               }
               logger.log('Blindagem Canônica de Ciclos e Prevenção de Tela Branca Inicial (Versão 1.37)', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.37
-              if (!btnChangelog.textContent.includes('Versão 1.37')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.38
+              if (!btnChangelog.textContent.includes('Versão 1.38')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.37')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.37');
+              if (!modalChg.innerHTML.includes('Versão 1.38')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.38');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.37 (v8.2.4)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.38 (v8.2.5)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

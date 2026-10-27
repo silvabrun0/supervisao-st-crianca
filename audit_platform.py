@@ -244,7 +244,7 @@ def main():
         print("=" * 80)
         print("🔬 ALGORITMO DE AUDITORIA MODULAR DA PLATAFORMA (SerTão Criança)")
         print(f"   Modo de Execução: {'Integral (12 Módulos modo-a-modo)' if target_module == 'all' else f'Módulo Isolado [{target_module}]'}")
-        print(f"   Alvo: index.html (Versão 1.37 - v8.2.4)")
+        print(f"   Alvo: index.html (Versão 1.38 - v8.2.5)")
         print("=" * 80)
         print(f"🚀 Inicializando motor headless do Google Chrome...")
         print(f"   URL de teste: {target_url}\n")
