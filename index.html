@@ -24555,11 +24555,66 @@ function getActiveSections(obs) {
     // =========================================================================
     let activeModalBimesterConfigYear = '2026';
 
-    function renderGlobalAcademicYearSelector() {
-      const select = document.getElementById('headerAcademicYearSelect');
-      const wrapper = document.getElementById('headerAcademicYearWrapper');
-      if (!select) return;
+    function openSelectAcademicYearModal() {
+      renderAcademicYearBoxes();
+      const m = document.getElementById('modalSelectAcademicYear');
+      if (m) m.classList.add('active');
+    }
 
+    function closeSelectAcademicYearModal() {
+      const m = document.getElementById('modalSelectAcademicYear');
+      if (m) m.classList.remove('active');
+    }
+
+    function renderAcademicYearBoxes() {
+      const container = document.getElementById('academicYearBoxesContainer');
+      if (!container) return;
+
+      const defaultYears = (typeof DEFAULT_ACADEMIC_YEARS !== 'undefined' && Array.isArray(DEFAULT_ACADEMIC_YEARS)) ? DEFAULT_ACADEMIC_YEARS : ['2026', '2025'];
+      const defaultSelected = (typeof DEFAULT_SELECTED_ACADEMIC_YEAR !== 'undefined') ? DEFAULT_SELECTED_ACADEMIC_YEAR : '2026';
+
+      if (!appState.academicYears || !Array.isArray(appState.academicYears) || appState.academicYears.length === 0) {
+        appState.academicYears = [...defaultYears];
+      }
+      if (!appState.selectedAcademicYear) {
+        appState.selectedAcademicYear = defaultSelected;
+      }
+
+      const sortedYears = [...appState.academicYears].sort((a, b) => b.localeCompare(a));
+      const latestYear = sortedYears[0];
+      const currentSelected = appState.selectedAcademicYear || latestYear;
+
+      container.innerHTML = sortedYears.map(y => {
+        const isSelected = (y === currentSelected);
+        const isVigente = (y === latestYear);
+        const tagBadge = isVigente
+          ? '<span style="background:#DCFCE7; color:#15803D; font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; text-transform:uppercase;">Vigente</span>'
+          : '<span style="background:#FEF3C7; color:#B45309; font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; text-transform:uppercase;">Histórico</span>';
+        const descText = isVigente
+          ? 'Ano letivo em andamento. Lançamentos, acompanhamentos e observações regulares.'
+          : 'Modo de consulta histórica dos registros e indicadores consolidados deste período.';
+
+        return `
+          <div class="level-box ${isSelected ? 'selected' : ''}" onclick="selectAcademicYear('${y}')" style="cursor:pointer;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <div class="level-box-title" style="display:flex; align-items:center; gap:8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>Ano Letivo ${y}</span>
+              </div>
+              ${tagBadge}
+            </div>
+            <div class="level-box-desc">${descText}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectAcademicYear(year) {
+      closeSelectAcademicYearModal();
+      onGlobalAcademicYearChange(year);
+    }
+
+    function renderGlobalAcademicYearSelector() {
       try {
         const defaultYears = (typeof DEFAULT_ACADEMIC_YEARS !== 'undefined' && Array.isArray(DEFAULT_ACADEMIC_YEARS)) ? DEFAULT_ACADEMIC_YEARS : ['2026', '2025'];
         const defaultSelected = (typeof DEFAULT_SELECTED_ACADEMIC_YEAR !== 'undefined') ? DEFAULT_SELECTED_ACADEMIC_YEAR : '2026';
@@ -24571,12 +24626,28 @@ function getActiveSections(obs) {
           appState.selectedAcademicYear = defaultSelected;
         }
 
-        // Ordena anos decrescente para priorizar o mais recente
         const sortedYears = [...appState.academicYears].sort((a, b) => b.localeCompare(a));
-        select.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === appState.selectedAcademicYear ? 'selected' : ''}>Ano ${y}</option>`).join('');
+        const latestYear = sortedYears[0];
+
+        // Atualiza rótulo no botão do modal de perfil se presente
+        const profileLabel = document.getElementById('userProfileAcademicYearLabel');
+        if (profileLabel) {
+          profileLabel.innerText = appState.selectedAcademicYear;
+        }
+
+        // Suporte defensivo caso o select ainda exista em algum contexto
+        const select = document.getElementById('headerAcademicYearSelect');
+        if (select) {
+          select.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === appState.selectedAcademicYear ? 'selected' : ''}>Ano ${y}</option>`).join('');
+        }
+
+        // Se o modal de seleção estiver aberto, sincroniza seus cards
+        const modalSel = document.getElementById('modalSelectAcademicYear');
+        if (modalSel && modalSel.classList.contains('active')) {
+          renderAcademicYearBoxes();
+        }
 
         // Banner informativo se estiver visualizando ano anterior ao mais recente
-        const latestYear = sortedYears[0];
         const banner = document.getElementById('historicalYearWarningBanner');
         const bannerLabel = document.getElementById('historicalYearBannerLabel');
         if (banner) {
