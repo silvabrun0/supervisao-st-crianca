@@ -3594,7 +3594,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.38 (v8.2.5)</span>
+          <span>Versão 1.39 (v8.2.6)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3723,11 +3723,11 @@
             Ciclos Avaliativos & Calendário
           </button>
           <button class="btn btn-secondary" onclick="exportFullBaseJSON()" style="color:#059669; font-weight:700;">
-            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             Exportar Base Completa (JSON)
           </button>
           <button class="btn btn-secondary" onclick="triggerImportFullBase()" style="color:#DC2626; font-weight:700;">
-            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Importar Base Completa (JSON)
           </button>
           <input type="file" id="importFullBaseFileInput" accept=".json" style="display:none;" onchange="importFullBaseJSON(event)" />
@@ -3992,11 +3992,11 @@
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn" style="background:#166534; color:#fff;" onclick="exportFullBaseJSON()">
-                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 Exportar Base Completa (.JSON)
               </button>
               <button class="btn" style="background:#DC2626; color:#fff;" onclick="triggerImportFullBase()">
-                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Importar / Sobrescrever (.JSON)
               </button>
             </div>
@@ -5249,6 +5249,22 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.39 - MODIFICAÇÃO DOS PICTOGRAMAS DE EXPORTAR E IMPORTAR JSON -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.39 (v8.2.6)</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Harmonização Semiótica dos Pictogramas de Exportação e Importação de Backup JSON:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>📤 <strong>Pictograma de Exportação (Seta para Cima):</strong> Atualização visual do botão <code>Exportar Base Completa (JSON)</code> em <code>#homeGestaoActionsCentral</code> e <code>#exportView</code>, substituindo o disquete tradicional pela metáfora semiótica da bandeja com seta para cima (extração de dados do sistema para fora).</li>
+          <li>📥 <strong>Pictograma de Importação (Seta para Baixo):</strong> Padronização do botão <code>Importar Base Completa (JSON)</code> com o mesmo receptáculo/bandeja, exibindo agora a seta apontando para baixo (inserção de dados de fora para dentro do sistema).</li>
+          <li>🛡️ <strong>Blindagem e Auditoria Integrada:</strong> Adição de asserções léxico-estruturais dos SVGs no Módulo 11 da suíte de testes in-app, garantindo preservação visual contínua sem quebras de layout.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.38 - REMOÇÃO DE EMOJIS DAS SUB-ABAS DA GESTÃO PEDAGÓGICA -->
@@ -27067,6 +27083,26 @@ function getActiveSections(obs) {
               }
               logger.log('Geração e integridade da Ficha Formativa Individual do Docente (sem disparo de hardware)', true);
               appState.currentObs = null;
+
+              // Validação semiótica dos pictogramas dos botões de exportação e importação da base completa JSON
+              const exportFullBtns = document.querySelectorAll('button[onclick*="exportFullBaseJSON()"]');
+              if (exportFullBtns.length === 0) throw new Error('Nenhum botão de exportFullBaseJSON encontrado no DOM');
+              exportFullBtns.forEach(btn => {
+                const svgContent = btn.querySelector('svg')?.innerHTML || '';
+                if (!svgContent.includes('17 8 12 3 7 8') || !svgContent.includes('y1="3"')) {
+                  throw new Error('Botão exportFullBaseJSON deve possuir pictograma de bandeja com seta para cima');
+                }
+              });
+
+              const importFullBtns = document.querySelectorAll('button[onclick*="triggerImportFullBase()"]');
+              if (importFullBtns.length === 0) throw new Error('Nenhum botão de triggerImportFullBase encontrado no DOM');
+              importFullBtns.forEach(btn => {
+                const svgContent = btn.querySelector('svg')?.innerHTML || '';
+                if (!svgContent.includes('7 10 12 15 17 10') || !svgContent.includes('y1="15"')) {
+                  throw new Error('Botão triggerImportFullBase deve possuir pictograma de bandeja com seta para baixo');
+                }
+              });
+              logger.log('Pictogramas vetoriais de Exportação (seta para cima) e Importação da Base Completa JSON (seta para baixo)', true, `${exportFullBtns.length} de exportação e ${importFullBtns.length} de importação validados`);
             } catch (e) {
               logger.log('Erro de execução no módulo backup_exportacao', false, e.message);
             }
@@ -27357,14 +27393,14 @@ function getActiveSections(obs) {
               }
               logger.log('Blindagem Canônica de Ciclos e Prevenção de Tela Branca Inicial (Versão 1.37)', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.38
-              if (!btnChangelog.textContent.includes('Versão 1.38')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.39
+              if (!btnChangelog.textContent.includes('Versão 1.39')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.38')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.38');
+              if (!modalChg.innerHTML.includes('Versão 1.39')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.39');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.38 (v8.2.5)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.39 (v8.2.6)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.39** | 27/10/2026 15:50 | `intermediárias/aplicativo_v139_modificacao_pictogramas_exportar_importar_json.html` | Solicitação direta / `planos_de_implementacao/plano_modificacao_pictogramas_exportar_importar_json.md` | Harmonização semiótica dos pictogramas vetoriais de backup e restauração JSON: bandeja com seta para cima para exportação e bandeja com seta para baixo para importação em Gestão da Rede e Exportações, com asserções estritas no Módulo 11 da auditoria 📤📥🛡️ |
 | **1.38** | 27/10/2026 15:45 | `intermediárias/aplicativo_v138_remocao_emojis_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_gestao_pedagogica.md` | Remoção de emojis das sub-abas da Gestão Pedagógica/Rede e cards de exportação SSOT: dinamização limpa em renderNavBar() para Coordenador, Formador e Núcleo EI, preservação de SVGs vetoriais (.btn-icon) e sobriedade institucional 🧹🏛️✨ |
 | **1.37** | 27/10/2026 14:45 | `intermediárias/aplicativo_v137_resolucao_tela_branca_inicial_e_blindagem_ciclos.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_tela_branca_inicial_e_blindagem_ciclos.md` | Resolução definitiva da tela branca inicial e blindagem de ciclos avaliativos: inicialização canônica de constantes SSOT (DEFAULT_ACADEMIC_YEARS, DEFAULT_SELECTED_ACADEMIC_YEAR, DEFAULT_BIMESTER_PERIODS_BY_YEAR), autocura em loadState(), ciclo de vida universal (initializeAppLifecycle) e zero-click home visibility 🛡️⚡👁️ |
 | **1.36** | 27/10/2026 14:35 | `intermediárias/aplicativo_v136_resolucao_execucao_auditoria_plataforma.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_falha_execucao_auditoria_plataforma.md` | Resolução definitiva da execução do motor de auditoria (CLI e Web UI): telemetria em tempo real no terminal (`/__test_progress__`), motor assíncrono com micro-pausas (`runFullPlatformAuditAsync`), modal in-app com barra de progresso ativa (`#modalAuditReport`), ancoragem hermética do servidor HTTP local (`directory=REPO_DIR`), flags essenciais contra throttling de timers no Chrome macOS e captura de logs forenses 🔬⚡📡 |
@@ -164,6 +165,25 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.39] - Harmonização Semiótica dos Pictogramas de Exportar e Importar JSON
+- **Data / Horário:** 27/10/2026 15:50
+- **Arquivo de Referência:** `intermediárias/aplicativo_v139_modificacao_pictogramas_exportar_importar_json.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_modificacao_pictogramas_exportar_importar_json.md`.
+- **Foco Central:** Harmonização semiótica e usabilidade dos pictogramas vetoriais (SVGs) dos botões de exportação e importação integral da base em formato JSON (`exportFullBaseJSON()` e `triggerImportFullBase()`).
+
+#### Modificações e Melhorias
+- **Pictograma de Exportação de Dados (Bandeja com Seta para Cima):**
+  - Substituição do ícone de disquete tradicional pelo SVG com bandeja e seta vertical apontando para cima (`polyline points="17 8 12 3 7 8"` e `line x1="12" y1="3" x2="12" y2="15"`), representando a extração de dados do sistema para um arquivo externo.
+  - Aplicado nas duas instâncias da interface: Gestão da Rede (`#homeGestaoActionsCentral`) e Card de Backup da tela de Exportação Geral (`#exportView`).
+- **Pictograma de Importação de Dados (Bandeja com Seta para Baixo):**
+  - Atualização do botão de importação para utilizar o mesmo formato de receptáculo/bandeja, porém com a seta apontando para baixo (`polyline points="7 10 12 15 17 10"` e `line x1="12" y1="15" x2="12" y2="3"`), simbolizando a inserção e despejo de dados externos para dentro da plataforma.
+  - Aplicado nas duas instâncias da interface: Gestão da Rede (`#homeGestaoActionsCentral`) e Card de Backup da tela de Exportação Geral (`#exportView`).
+- **Blindagem e Asserções da Suíte de Testes (Módulo 11):**
+  - Inclusão de testes automatizados no Módulo 11 da suíte in-app validando via DOM a presença dos caminhos e coordenadas SVG correspondentes em todos os botões de exportação e importação da base completa JSON.
+  - Atualização dos testes de cabeçalho e integridade da versão 1.39 (v8.2.6) no Módulo 12.
+
+---
 
 ### [Versão 1.38] - Remoção de Emojis das Sub-abas da Gestão Pedagógica e Higienização Visual
 - **Data / Horário:** 27/10/2026 15:45
