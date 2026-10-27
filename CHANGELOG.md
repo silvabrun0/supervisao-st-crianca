@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.41** | 27/10/2026 16:15 | `intermediárias/aplicativo_v141_resolucao_exclusividade_docente_catalogo_dados.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_alocacao_exclusiva_docente_catalogo_dados.md` | Resolução definitiva da exclusividade docente no Módulo Catálogo de Dados (`catalogo_dados`): alinhamento de INITIAL_TEAM com INITIAL_CLASSES, deduplicação em loadState(), limpeza em seedSampleData(), trava anti-dupla alocação parcial em saveClassEditor() e asserção temporal escopada por ano letivo 👩‍🏫🛡️ |
 | **1.40** | 27/10/2026 15:58 | `intermediárias/aplicativo_v140_ajuste_titulo_quadro_controle_bimestral.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_titulo_quadro_controle_bimestral.md` | Higienização visual do título da sub-aba Longitudinal: simplificação para 'Quadro de Controle Bimestral', eliminação do emoji de semáforo e parênteses redundantes, com asserção estrita no Módulo 10 da auditoria 🧹📊 |
 | **1.39** | 27/10/2026 15:50 | `intermediárias/aplicativo_v139_modificacao_pictogramas_exportar_importar_json.html` | Solicitação direta / `planos_de_implementacao/plano_modificacao_pictogramas_exportar_importar_json.md` | Harmonização semiótica dos pictogramas vetoriais de backup e restauração JSON: bandeja com seta para cima para exportação e bandeja com seta para baixo para importação em Gestão da Rede e Exportações, com asserções estritas no Módulo 11 da auditoria 📤📥🛡️ |
 | **1.38** | 27/10/2026 15:45 | `intermediárias/aplicativo_v138_remocao_emojis_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_gestao_pedagogica.md` | Remoção de emojis das sub-abas da Gestão Pedagógica/Rede e cards de exportação SSOT: dinamização limpa em renderNavBar() para Coordenador, Formador e Núcleo EI, preservação de SVGs vetoriais (.btn-icon) e sobriedade institucional 🧹🏛️✨ |
@@ -166,6 +167,30 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.41] - Resolução Definitiva da Exclusividade Docente no Catálogo de Dados
+- **Data / Horário:** 27/10/2026 16:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v141_resolucao_exclusividade_docente_catalogo_dados.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_resolucao_alocacao_exclusiva_docente_catalogo_dados.md`.
+- **Foco Central:** Resolução sistêmica e definitiva da exclusividade docente no Módulo Catálogo de Dados (`catalogo_dados`), saneando divergências semânticas entre `INITIAL_TEAM` e `INITIAL_CLASSES`, blindando o motor multi-ano contra duplicidades de ciclo letivo e inserindo travas de negócio no modal de edição de turmas.
+
+#### Inclusões
+- Trava de negócio em `saveClassEditor()` que impede a alocação de uma mesma docente em múltiplas turmas de tempo parcial na mesma escola dentro do mesmo ano letivo, com notificação impeditiva via `showToast`.
+- Verificação de integridade canônica primária em `INITIAL_CLASSES` na suíte de testes in-app (`catalogo_dados`).
+- Diagnóstico detalhado de turmas localizadas (ID e ano letivo) na mensagem de erro da asserção de exclusividade docente.
+
+#### Alterações
+- Alinhamento de `INITIAL_TEAM` com as turmas oficiais canônicas de `INITIAL_CLASSES`: `Ana Carolina Silva` vinculada a `Infantil I - Turma A`, `Carla Beatriz Mendes` a `Berçário II - Turma Única`, etc.
+- Inclusão da restauração de `appState.classes = INITIAL_CLASSES` e reset de `deletedClassIds = []` em `seedSampleData()`.
+- Deduplicação defensiva de turmas por ID em `loadState()`.
+- Filtro anti-sombra em `getClassesForSchool()` que impede a criação de turmas automáticas para docentes já alocadas em turmas existentes.
+- Escopo temporal da asserção de auditoria docente delimitado ao ano letivo ativo (`appState.selectedAcademicYear || '2026'`), garantindo convivência harmoniosa em cenários multi-ano.
+- Atualização do botão `.btn-changelog` para `Versão 1.41 (v8.2.8)` e inclusão do card descritivo no `#modalChangelog`.
+
+#### Exclusões
+- Erradicação de designações genéricas de etapa (`Infantil I`, `Berçário II`) na equipe docente inicial em favor das turmas canônicas.
+
+---
 
 ### [Versão 1.40] - Higienização Visual do Título do Quadro de Controle Bimestral
 - **Data / Horário:** 27/10/2026 15:58

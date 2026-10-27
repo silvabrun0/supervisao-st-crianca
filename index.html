@@ -7868,12 +7868,37 @@
         Trocar de Usuário / Cargo
       </button>
 
+      <button class="btn btn-secondary btn-full" id="btnProfileChangeAcademicYear" onclick="openSelectAcademicYearModal(); closeProfileModal();" style="margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Alterar Ano Letivo (<strong id="userProfileAcademicYearLabel">2026</strong>)</span>
+      </button>
+
       <button class="btn btn-secondary btn-full" onclick="triggerPlatformAuditUI()" style="margin-bottom:10px; font-weight:700; color:var(--primary);">
         🔬 Executar Diagnóstico da Plataforma
       </button>
       <button class="btn btn-danger btn-full" onclick="executeLogout()">
         Sair da Conta (Logout)
       </button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ALTERAR ANO LETIVO ================= -->
+  <div id="modalSelectAcademicYear" class="modal-backdrop" onclick="closeSelectAcademicYearModal()">
+    <div class="modal-panel" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div style="font-size:18px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Alternar Ano Letivo
+        </div>
+        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeSelectAcademicYearModal()">✕</button>
+      </div>
+      <p style="font-size:12px; color:var(--text-secondary); margin-bottom:16px; line-height:1.4;">
+        Selecione o ano letivo para navegação, relatórios, histórico e lançamentos de acompanhamento pedagógico:
+      </p>
+
+      <div id="academicYearBoxesContainer" style="display:flex; flex-direction:column; gap:10px;">
+        <!-- Populado dinamicamente via renderAcademicYearBoxes() -->
+      </div>
     </div>
   </div>
 
@@ -10588,6 +10613,8 @@ function getActiveSections(obs) {
       const heroBtnText = document.getElementById('btnNewObsText');
       const roleFilterGroup = document.getElementById('histFilterRoleGroup');
       const scheduleNavTab = document.getElementById('deskTabSchedule');
+      const histNavTab = document.getElementById('deskTabHist');
+      const mobMenuHistBtn = document.getElementById('mobMenuHistBtn');
       const homeDraftsHeader = document.getElementById('homeDraftsHeader');
       const homeDraftsContainer = document.getElementById('homeDraftsContainer');
       const homeScheduleBanner = document.getElementById('homeScheduleBanner');
@@ -10609,6 +10636,8 @@ function getActiveSections(obs) {
 
       // Reset visibility for these before applying rules
       if (scheduleNavTab) scheduleNavTab.style.display = 'flex';
+      if (histNavTab) histNavTab.style.display = 'flex';
+      if (mobMenuHistBtn) mobMenuHistBtn.style.display = 'flex';
       if (homeScheduleBanner) homeScheduleBanner.style.display = 'none';
       if (homeDraftsHeader) homeDraftsHeader.style.display = 'block';
       if (homeDraftsContainer) {
@@ -22303,7 +22332,7 @@ function getActiveSections(obs) {
             <div class="semaphore-header-row">
               <div class="semaphore-title-group">
                 <h3>
-                  <span>🚦</span> Quadro de Controle Bimestral (Semáforo do Ciclo Anual)
+                  Quadro de Controle Bimestral
                 </h3>
                 <p>
                   Acompanhamento matricial do cumprimento das 4 observações obrigatórias organizado por <strong>${viewMode === 'classes' ? 'TURMA' : 'DOCENTE REGENTE TITULAR'}</strong>: 
@@ -26877,7 +26906,11 @@ function getActiveSections(obs) {
               // 10. PILAR 10: VALIDAÇÃO DO QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE TURMAS)
               const semaphoreSection = document.getElementById('bimesterSemaphoreSection');
               if (!semaphoreSection) throw new Error('Falha Pilar 10: Contêiner #bimesterSemaphoreSection ausente no DOM');
-              logger.log('Renderização do Quadro de Controle Bimestral (Pilar 10)', true);
+              const semTitleElem = semaphoreSection.querySelector('.semaphore-title-group h3');
+              if (!semTitleElem || semTitleElem.textContent.trim() !== 'Quadro de Controle Bimestral') {
+                throw new Error(`Falha Pilar 10: Título esperado "Quadro de Controle Bimestral", obtido "${semTitleElem ? semTitleElem.textContent.trim() : 'ausente'}"`);
+              }
+              logger.log('Renderização e conformidade do título do Quadro de Controle Bimestral (Pilar 10)', true);
 
               // 11. PILAR 10: VALIDAÇÃO DO MOTOR ALGORÍTMICO CALCULATECLASSBIMESTERSTATUS
               // Caso Verde (Concluída): Turma Infantil I no 1º Bimestre com obs-001 finalizada
@@ -27786,7 +27819,7 @@ function getActiveSections(obs) {
         <span id="mobMenuOpManagementText">Gestão Operacional</span>
       </button>
 
-      <button class="btn btn-secondary" style="width: 100%; margin-bottom: 14px; display:flex; align-items:center; gap:12px; padding: 14px;" onclick="navigateToFromMenu('history')">
+      <button class="btn btn-secondary" id="mobMenuHistBtn" style="width: 100%; margin-bottom: 14px; display:flex; align-items:center; gap:12px; padding: 14px;" onclick="navigateToFromMenu('history')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 
         Acessar Histórico
       </button>
