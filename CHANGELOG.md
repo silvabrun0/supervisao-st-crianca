@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.40** | 27/10/2026 15:58 | `intermediárias/aplicativo_v140_ajuste_titulo_quadro_controle_bimestral.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_titulo_quadro_controle_bimestral.md` | Higienização visual do título da sub-aba Longitudinal: simplificação para 'Quadro de Controle Bimestral', eliminação do emoji de semáforo e parênteses redundantes, com asserção estrita no Módulo 10 da auditoria 🧹📊 |
 | **1.39** | 27/10/2026 15:50 | `intermediárias/aplicativo_v139_modificacao_pictogramas_exportar_importar_json.html` | Solicitação direta / `planos_de_implementacao/plano_modificacao_pictogramas_exportar_importar_json.md` | Harmonização semiótica dos pictogramas vetoriais de backup e restauração JSON: bandeja com seta para cima para exportação e bandeja com seta para baixo para importação em Gestão da Rede e Exportações, com asserções estritas no Módulo 11 da auditoria 📤📥🛡️ |
 | **1.38** | 27/10/2026 15:45 | `intermediárias/aplicativo_v138_remocao_emojis_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_gestao_pedagogica.md` | Remoção de emojis das sub-abas da Gestão Pedagógica/Rede e cards de exportação SSOT: dinamização limpa em renderNavBar() para Coordenador, Formador e Núcleo EI, preservação de SVGs vetoriais (.btn-icon) e sobriedade institucional 🧹🏛️✨ |
 | **1.37** | 27/10/2026 14:45 | `intermediárias/aplicativo_v137_resolucao_tela_branca_inicial_e_blindagem_ciclos.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_tela_branca_inicial_e_blindagem_ciclos.md` | Resolução definitiva da tela branca inicial e blindagem de ciclos avaliativos: inicialização canônica de constantes SSOT (DEFAULT_ACADEMIC_YEARS, DEFAULT_SELECTED_ACADEMIC_YEAR, DEFAULT_BIMESTER_PERIODS_BY_YEAR), autocura em loadState(), ciclo de vida universal (initializeAppLifecycle) e zero-click home visibility 🛡️⚡👁️ |
@@ -165,6 +166,24 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.40] - Higienização Visual do Título do Quadro de Controle Bimestral
+- **Data / Horário:** 27/10/2026 15:58
+- **Arquivo de Referência:** `intermediárias/aplicativo_v140_ajuste_titulo_quadro_controle_bimestral.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_ajuste_titulo_quadro_controle_bimestral.md`.
+- **Foco Central:** Simplificação textual e sobriedade visual no cabeçalho do Quadro de Controle Bimestral na aba de Indicadores.
+
+#### Inclusões
+- Asserção léxica rigorosa no teste in-app do Pilar 10 (`runFullPlatformAuditAsync`) assegurando a integridade e exatidão da string `'Quadro de Controle Bimestral'`.
+
+#### Alterações
+- Substituição de `<span>🚦</span> Quadro de Controle Bimestral (Semáforo do Ciclo Anual)` por `Quadro de Controle Bimestral` no cabeçalho de `#bimesterSemaphoreSection`.
+- Atualização da versão do sistema para 1.40 (v8.2.7) no cabeçalho e modal de changelog.
+
+#### Exclusões
+- Remoção do emoji `🚦` e do subtítulo explicativo entre parênteses `(Semáforo do Ciclo Anual)`.
+
+---
 
 ### [Versão 1.39] - Harmonização Semiótica dos Pictogramas de Exportar e Importar JSON
 - **Data / Horário:** 27/10/2026 15:50

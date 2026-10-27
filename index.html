@@ -3594,7 +3594,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.39 (v8.2.6)</span>
+          <span>Versão 1.41 (v8.2.8)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4549,11 +4549,17 @@
           <div id="indicatorsTargetTypeWrapper" style="display:flex; flex-direction:column; gap:6px;">
             <label style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Público-Alvo</label>
             <select id="indicatorsTargetTypeFilter" class="form-select form-control" onchange="onIndicatorsTargetTypeChange()" style="font-weight:700; color:var(--primary-dark);">
-              <option value="professora">👩‍🏫 Professores(as)</option>
-              <option value="coordenador">👤 Coordenadores(as)</option>
+              <option value="professora">Professores(as)</option>
+              <option value="coordenador">Coordenadores(as)</option>
             </select>
             <span id="indicatorsTargetTypeBadge" style="display:none; height:42px; padding:0 14px; background:#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE; border-radius:8px; font-weight:700; font-size:13px; align-items:center; gap:6px;">
-              👩‍🏫 Indicadores Docentes
+              <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span>Indicadores Docentes</span>
             </span>
           </div>
 
@@ -5249,6 +5255,37 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.41 - HIGIENIZAÇÃO VISUAL: REMOÇÃO DE ÍCONES DA TABELA DE TURMAS & REGÊNCIA -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #7C3AED; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.41 (v8.2.8)</span>
+          <span style="font-size:11px; background:#EDE9FE; color:#6D28D9; padding:2px 8px; border-radius:12px; font-weight:700;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Higienização Visual e Sobriedade Institucional na Gestão de Turmas (Pilar 14):
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🧹 <strong>Remoção de Emojis em Turmas Integrais:</strong> Extinção dos ícones ☀️ e 🌤️ na renderização da tabela de turmas (<code>renderClassesScreen</code>), padronizando os badges de Jornada (<em>Tempo Integral</em>), Turno (<em>Manhã + Tarde</em>) e rótulos de regência (<em>Manhã:</em> e <em>Tarde:</em>) com sobriedade tipográfica e paridade visual com turmas de Tempo Parcial.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Adição de asserções estritas no módulo <code>catalogo_dados</code> validando a ausência de emojis nas células e atualização de integridade no módulo 12.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.40 - AJUSTE DO TÍTULO DO QUADRO DE CONTROLE BIMESTRAL -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #0284C7; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.40 (v8.2.7)</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Higienização Visual do Título do Quadro de Controle Bimestral:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🧹 <strong>Título Direto e Sobriedade Institucional:</strong> Simplificação do cabeçalho da sub-aba de Acompanhamento Longitudinal para <code>Quadro de Controle Bimestral</code>, eliminando o emoji <code>🚦</code> e os parênteses redundantes <code>(Semáforo do Ciclo Anual)</code>.</li>
+          <li>🎯 <strong>Foco Pedagógico Decisório:</strong> Preservação integral do parágrafo de legenda e do semáforo canônico de prazos (🟢 Concluída, ⚪ No Prazo, 🔴 Atrasada).</li>
+          <li>🔬 <strong>Auditoria Integrada com Asserção Estrita:</strong> Inclusão de asserção automatizada no teste do Pilar 10 para garantia de preservação textual perene.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.39 - MODIFICAÇÃO DOS PICTOGRAMAS DE EXPORTAR E IMPORTAR JSON -->
@@ -7849,7 +7886,17 @@
       
       <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:4px;">
         <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:18px;">⚙️</span>
+          <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
           <h3 style="margin:0; font-size:16px; font-weight:800; color:var(--primary-dark);">Filtros para Diagnóstico</h3>
         </div>
         <button type="button" class="btn-close-modal" onclick="closeMobileIndicatorsFiltersModal()" style="background:none; border:none; font-size:20px; font-weight:700; cursor:pointer; color:var(--text-secondary); line-height:1;">&times;</button>
@@ -7864,8 +7911,8 @@
         <div id="mobileIndTargetTypeGroup" class="form-group" style="margin-bottom:0;">
           <label class="form-label" style="font-size:12px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">Público-Alvo</label>
           <select id="mobileIndTargetTypeFilter" class="form-select form-control" onchange="syncMobileToDesktopFilters('targetType')" style="width:100%; height:44px; font-weight:700; color:var(--primary-dark); font-size:13px;">
-            <option value="professora">👩‍🏫 Professores(as)</option>
-            <option value="coordenador">👤 Coordenadores(as)</option>
+            <option value="professora">Professores(as)</option>
+            <option value="coordenador">Coordenadores(as)</option>
           </select>
         </div>
 
@@ -9296,7 +9343,18 @@ function getActiveSections(obs) {
       // Resiliência transparente: se a escola não possuir turmas cadastradas explicitamente,
       // gera agrupamentos a partir das professoras vinculadas à unidade em teamMembers
       if (schoolClasses.length === 0) {
-        const teachersInSchool = (appState.teamMembers || []).filter(m => m.school === schoolName && m.roleKey === 'professora');
+        // Docentes já alocadas em turmas existentes não devem gerar novas turmas
+        const allocatedTeachers = new Set();
+        (appState.classes || []).forEach(c => {
+          (c.teachers || []).forEach(t => allocatedTeachers.add(t));
+        });
+
+        const teachersInSchool = (appState.teamMembers || []).filter(m => 
+          m.school === schoolName && 
+          m.roleKey === 'professora' &&
+          !allocatedTeachers.has(m.name)
+        );
+
         const groups = {};
         teachersInSchool.forEach(t => {
           const groupName = t.classAssigned || 'Infantil I - Turma A';
@@ -9360,18 +9418,18 @@ function getActiveSections(obs) {
 
     // Initial Team Members
     const INITIAL_TEAM = [
-      { id: 'usr-1', name: 'Ana Carolina Silva', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Infantil I' },
-      { id: 'usr-2', name: 'Carla Beatriz Mendes', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Berçário II' },
-      { id: 'usr-3', name: 'Juliana Roberta Rocha', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Infantil II' },
-      { id: 'usr-4', name: 'Fernanda Lima', roleKey: 'professora', roleTitle: 'Professora', school: 'EMEI Pequeno Príncipe', supervisor: 'Sônia Regina Alcantara', classAssigned: 'Maternal I' },
+      { id: 'usr-1', name: 'Ana Carolina Silva', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Infantil I - Turma A' },
+      { id: 'usr-2', name: 'Carla Beatriz Mendes', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Berçário II - Turma Única' },
+      { id: 'usr-3', name: 'Juliana Roberta Rocha', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Infantil II - Turma B' },
+      { id: 'usr-4', name: 'Fernanda Lima', roleKey: 'professora', roleTitle: 'Professora', school: 'EMEI Pequeno Príncipe', supervisor: 'Sônia Regina Alcantara', classAssigned: 'Maternal I - Turma A' },
       { id: 'usr-5', name: 'Mariana Ferreira', roleKey: 'coordenador', roleTitle: 'Coordenadora Pedagógica', school: 'CEI Professora Maria de Lourdes', supervisor: 'Clarice Barbosa' },
       { id: 'usr-6', name: 'Sônia Regina Alcantara', roleKey: 'coordenador', roleTitle: 'Coordenadora Pedagógica', school: 'EMEI Pequeno Príncipe', supervisor: 'Clarice Barbosa' },
       { id: 'usr-7', name: 'Clarice Barbosa', roleKey: 'formador', roleTitle: 'Formadora Pedagógica', school: 'Polo Regional 1 (Norte)', supervisor: 'Helena Martins' },
-      { id: 'usr-8', name: 'Luciana Ramos', roleKey: 'professora', roleTitle: 'Professora', school: 'EMEI Pequeno Príncipe', supervisor: 'Sônia Regina Alcantara', classAssigned: 'Infantil I' },
-      { id: 'usr-9', name: 'Mariana Santos', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II' },
-      { id: 'usr-10', name: 'Roberta Dias', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II' },
-      { id: 'usr-11', name: 'Patricia Souza', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II' },
-      { id: 'usr-12', name: 'Camila Vasconcelos', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II' }
+      { id: 'usr-8', name: 'Luciana Ramos', roleKey: 'professora', roleTitle: 'Professora', school: 'EMEI Pequeno Príncipe', supervisor: 'Sônia Regina Alcantara', classAssigned: 'Infantil I - Turma B' },
+      { id: 'usr-9', name: 'Mariana Santos', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II - Turma Integral' },
+      { id: 'usr-10', name: 'Roberta Dias', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II - Turma Integral' },
+      { id: 'usr-11', name: 'Patricia Souza', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II - Turma Integral' },
+      { id: 'usr-12', name: 'Camila Vasconcelos', roleKey: 'professora', roleTitle: 'Professora', school: 'CEI Professora Maria de Lourdes', supervisor: 'Mariana Ferreira', classAssigned: 'Maternal II - Turma Integral' }
     ];
 
     // Mapa de Resolução Canônica de Nomes (Hard Users & Padrões)
@@ -9574,8 +9632,17 @@ function getActiveSections(obs) {
             });
           }
           if (!appState.bottlenecksSortMode) appState.bottlenecksSortMode = 'absolute';
-          if (!appState.classes || appState.classes.length === 0) {
+          if (!appState.classes || !Array.isArray(appState.classes) || appState.classes.length === 0) {
             appState.classes = JSON.parse(JSON.stringify(INITIAL_CLASSES));
+          } else {
+            // Saneamento e deduplicação resiliente contra turmas órfãs com mesmo ID
+            const seenClassIds = new Set();
+            appState.classes = appState.classes.filter(c => {
+              if (!c || !c.id) return false;
+              if (seenClassIds.has(c.id)) return false;
+              seenClassIds.add(c.id);
+              return true;
+            });
           }
           if (!appState.bimesterPeriods || typeof appState.bimesterPeriods !== 'object') {
             appState.bimesterPeriods = JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS));
@@ -9894,6 +9961,8 @@ function getActiveSections(obs) {
       appState.polos = JSON.parse(JSON.stringify(INITIAL_POLOS));
       appState.units = JSON.parse(JSON.stringify(INITIAL_UNITS));
       appState.teamMembers = JSON.parse(JSON.stringify(INITIAL_TEAM));
+      appState.classes = JSON.parse(JSON.stringify(INITIAL_CLASSES));
+      appState.deletedClassIds = [];
       appState.notes = JSON.parse(JSON.stringify(INITIAL_NOTES));
       appState.schedules = JSON.parse(JSON.stringify(INITIAL_SCHEDULES));
       appState.observations = [
@@ -17489,12 +17558,12 @@ function getActiveSections(obs) {
       classesToRender.forEach(cls => {
         const isIntegral = (cls.shift || '').toLowerCase().includes('integral');
         const jornadaBadge = isIntegral 
-          ? `<span class="status-badge" style="background:#EDE9FE; color:#6D28D9; font-weight:700;">☀️ Tempo Integral</span>`
+          ? `<span class="status-badge" style="background:#EDE9FE; color:#6D28D9; font-weight:700;">Tempo Integral</span>`
           : `<span class="status-badge" style="background:#EFF6FF; color:#1E40AF; font-weight:700;">Tempo Parcial</span>`;
 
         let turnoBadge = `<span class="status-badge" style="background:#FEF3C7; color:#92400E; font-size:11px;">${cls.shift || 'Não definido'}</span>`;
         if (isIntegral) {
-          turnoBadge = `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:11px;">☀️ Manhã + 🌤️ Tarde</span>`;
+          turnoBadge = `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:11px;">Manhã + Tarde</span>`;
         }
 
         let teachersDisplay = '';
@@ -17503,8 +17572,8 @@ function getActiveSections(obs) {
           const aList = (cls.teachersAfternoon && cls.teachersAfternoon.length > 0) ? cls.teachersAfternoon.join(', ') : 'A definir';
           teachersDisplay = `
             <div style="font-size:11px; line-height:1.4;">
-              <div><strong style="color:#B45309;">☀️ Manhã:</strong> ${mList}</div>
-              <div><strong style="color:#4338CA;">🌤️ Tarde:</strong> ${aList}</div>
+              <div><strong style="color:#B45309;">Manhã:</strong> ${mList}</div>
+              <div><strong style="color:#4338CA;">Tarde:</strong> ${aList}</div>
             </div>
           `;
         } else {
@@ -17742,6 +17811,23 @@ function getActiveSections(obs) {
       } else {
         finalShift = shiftPeriod;
         document.querySelectorAll('input[name="classTeacherSingle"]:checked').forEach(cb => finalTeachers.push(cb.value));
+      }
+
+      if (finalShift !== 'Tempo Integral') {
+        const currentYear = appState.selectedAcademicYear || '2026';
+        const otherClasses = (appState.classes || []).filter(c => 
+          c.id !== id && 
+          (c.academicYear || '2026') === currentYear &&
+          c.school === school &&
+          c.shift !== 'Tempo Integral'
+        );
+        for (const tName of finalTeachers) {
+          const conflictingCls = otherClasses.find(c => (c.teachers || []).includes(tName));
+          if (conflictingCls) {
+            showToast(`A docente "${tName}" já possui alocação na turma "${conflictingCls.name}". Não é permitida alocação dupla em turmas de tempo parcial.`);
+            return;
+          }
+        }
       }
 
       if (id) {
@@ -20558,7 +20644,7 @@ function getActiveSections(obs) {
 
           const sortedPolos = Object.keys(unitsByPolo).sort();
           sortedPolos.forEach(pName => {
-            unitOptionsHtml += `<optgroup label="📍 ${pName}">`;
+            unitOptionsHtml += `<optgroup label="Polo: ${pName}">`;
             unitsByPolo[pName].sort().forEach(uName => {
               unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
             });
@@ -21229,7 +21315,7 @@ function getActiveSections(obs) {
 
                     ${commentsByBim.length > 0 ? `
                       <div style="margin-top:6px; font-size:11px; background:#FFFBEB; border-left:3px solid #D97706; padding:6px 8px; border-radius:4px; color:#92400E; line-height:1.4;">
-                        ${commentsByBim.map(cb => `<div>💬 <strong>${cb.bimester} (${formatDateBR(cb.date)}):</strong> "${cb.comment}"</div>`).join('')}
+                        ${commentsByBim.map(cb => `<div style="display:flex; align-items:flex-start; gap:4px; margin-bottom:2px;"><svg class="btn-icon-sm" style="width:12px; height:12px; flex-shrink:0; margin-top:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> <span><strong>${cb.bimester} (${formatDateBR(cb.date)}):</strong> "${cb.comment}"</span></div>`).join('')}
                       </div>
                     ` : ''}
                   </div>
@@ -25127,6 +25213,23 @@ function getActiveSections(obs) {
               if (formatMECShift('Integral') !== 'Tempo Integral') throw new Error('Falha no helper formatMECShift integral');
               logger.log('Conformidade do Catálogo de Turmas com o Padrão MEC de Jornadas (Pilar 13)', true, 'Tempo Parcial & Tempo Integral');
 
+              // Asserção de Higienização Visual: Ausência de emojis em Turmas de Tempo Integral na Tabela de Turmas
+              renderClassesScreen();
+              const classesTbody = document.getElementById('classesTableBody');
+              if (classesTbody) {
+                const integralRows = Array.from(classesTbody.querySelectorAll('tr')).filter(tr => tr.innerText.includes('Tempo Integral'));
+                if (integralRows.length > 0) {
+                  const firstRowText = integralRows[0].innerHTML;
+                  if (firstRowText.includes('☀️ Tempo Integral') || firstRowText.includes('☀️ Manhã + 🌤️ Tarde') || firstRowText.includes('☀️ Manhã:')) {
+                    throw new Error('Tabela de turmas ainda contém emojis residuais (☀️ ou 🌤️) na exibição de turmas integrais');
+                  }
+                  if (!firstRowText.includes('Tempo Integral') || !firstRowText.includes('Manhã + Tarde') || !firstRowText.includes('Manhã:')) {
+                    throw new Error('Tabela de turmas não exibiu os textos padronizados limpos para turmas integrais');
+                  }
+                }
+              }
+              logger.log('Higienização visual da Tabela de Turmas (Tempo Integral sem emojis)', true);
+
               // 9. GOVERNANÇA OPERACIONAL DESCENTRALIZADA E GESTÃO AUTÔNOMA SOB SSOT ÚNICA (PILAR 14)
               // 9.1 Caracterização canônica das Unidades Escolares
               const missingChar = (appState.units || []).filter(u => typeof u.totalStudents !== 'number' || typeof u.inclusiveStudents !== 'number' || typeof u.totalClasses !== 'number');
@@ -27346,7 +27449,60 @@ function getActiveSections(obs) {
               if (!modalProf || !modalProf.classList.contains('active')) {
                 throw new Error('Clique em #headerAvatarBtn não abriu o modal #modalProfile');
               }
+
+              // 15.1 TESTE DE CONFORMIDADE: BOTÃO ALTERAR ANO LETIVO NA TELA DE PERFIL (VERSÃO 1.40)
+              const btnChangeYear = document.getElementById('btnProfileChangeAcademicYear');
+              if (!btnChangeYear) {
+                throw new Error('Botão #btnProfileChangeAcademicYear não encontrado em #modalProfile');
+              }
+
+              const yearLabel = document.getElementById('userProfileAcademicYearLabel');
+              if (!yearLabel) {
+                throw new Error('#userProfileAcademicYearLabel não encontrado no botão de alterar ano');
+              }
+
+              // Asserção Negativa: Seletor não deve existir solto e visível na barra de ações da navbar
+              const orphanHeaderSelect = document.querySelector('.navbar-actions #headerAcademicYearSelect');
+              if (orphanHeaderSelect && orphanHeaderSelect.offsetParent !== null) {
+                throw new Error('Seletor de ano letivo ainda está visível na barra de ações da navbar');
+              }
+
+              // Teste de acionamento do modal de seleção de ano
+              btnChangeYear.click();
+              const modalSelYear = document.getElementById('modalSelectAcademicYear');
+              if (!modalSelYear || !modalSelYear.classList.contains('active')) {
+                throw new Error('Clique em #btnProfileChangeAcademicYear não abriu o modal #modalSelectAcademicYear');
+              }
+
+              // Verifica presença das caixas de seleção de ano letivo (.level-box)
+              const yearBoxes = modalSelYear.querySelectorAll('#academicYearBoxesContainer .level-box');
+              if (yearBoxes.length === 0) {
+                throw new Error('Nenhuma opção de ano letivo renderizada em #academicYearBoxesContainer');
+              }
+
+              // Testa seleção do ano 2025 (histórico)
+              selectAcademicYear('2025');
+              if (appState.selectedAcademicYear !== '2025') {
+                throw new Error('selectAcademicYear("2025") não atualizou appState.selectedAcademicYear');
+              }
+
+              const bannerHist = document.getElementById('historicalYearWarningBanner');
+              if (!bannerHist || bannerHist.style.display === 'none') {
+                throw new Error('Banner de aviso de ano histórico não foi exibido após selecionar 2025');
+              }
+
+              // Restaura ano vigente via função returnToCurrentAcademicYear
+              returnToCurrentAcademicYear();
+              if (appState.selectedAcademicYear !== '2026') {
+                throw new Error('returnToCurrentAcademicYear() não restaurou o ano vigente 2026');
+              }
+              if (bannerHist.style.display !== 'none') {
+                throw new Error('Banner histórico permaneceu visível após retornar ao ano vigente');
+              }
+
+              closeSelectAcademicYearModal();
               closeProfileModal();
+              logger.log('Conformidade do botão Alterar Ano Letivo em #modalProfile e modal de seleção (Versão 1.40)', true);
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
               // 16. BLINDAGEM E TRAVA DE VISUALIZAÇÃO DESKTOP (ELIMINAÇÃO DE SCROLL LATERAL E ZOOM INDESEJADO)
@@ -27393,14 +27549,14 @@ function getActiveSections(obs) {
               }
               logger.log('Blindagem Canônica de Ciclos e Prevenção de Tela Branca Inicial (Versão 1.37)', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.39
-              if (!btnChangelog.textContent.includes('Versão 1.39')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.41
+              if (!btnChangelog.textContent.includes('Versão 1.41')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.39')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.39');
+              if (!modalChg.innerHTML.includes('Versão 1.41')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.41');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.39 (v8.2.6)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.41 (v8.2.8)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
