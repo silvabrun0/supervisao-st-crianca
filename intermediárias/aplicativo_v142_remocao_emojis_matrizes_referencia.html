@@ -3573,13 +3573,7 @@
 
       <!-- Right Header Actions -->
       <div class="navbar-actions">
-        <!-- Seletor Global de Ano Letivo (SSOT Multi-Ano) -->
-        <div class="academic-year-selector-wrapper" id="headerAcademicYearWrapper" style="display:flex; align-items:center; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:2px 8px; gap:6px;">
-          <span style="font-size:12px;" title="Ano Letivo Ativo">📅</span>
-          <select id="headerAcademicYearSelect" class="form-select" onchange="onGlobalAcademicYearChange(this.value)" style="border:none; background:transparent; font-size:12px; font-weight:800; color:var(--text-primary); cursor:pointer; padding:2px 4px; outline:none;" title="Alternar Ano Letivo em Visualização">
-            <!-- Populado dinamicamente via renderGlobalAcademicYearSelector() -->
-          </select>
-        </div>
+
 
         <button class="role-badge-btn" onclick="openRoleModal()" id="headerRoleBadge" title="Alternar usuário e cargo ativo">
           <span id="headerRoleText">Coordenação Pedagógica</span>
@@ -3594,7 +3588,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.42 (v8.2.9)</span>
+          <span>Versão 1.43 (v8.2.10)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -5257,19 +5251,37 @@
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
       </div>
 
+      <!-- VERSÃO 1.43 - GOVERNANÇA DE POLOS PELO NÚCLEO DE EI E CONSULTA DE TURMAS POR UE -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.43 (v8.2.10)</span>
+          <span style="font-size:11px; background:#DCFCE7; color:#166534; padding:2px 8px; border-radius:12px; font-weight:700;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Governança Territorial de Polos pelo Núcleo de EI e Acesso Somente Leitura às Turmas por UE:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🏛️ <strong>Supressão da Tela de Turmas da Rede:</strong> Ocultação da sub-aba <em>Turmas da Rede Municipal</em> (<code>#pedagTabClasses</code>) para a Coordenadora do Núcleo de EI, preservando a autonomia descentralizada das Coordenações Pedagógicas das UEs.</li>
+          <li>🗺️ <strong>Governança de Polos Regionais:</strong> O Núcleo de EI mantém gestão territorial total sobre os Polos Regionais (criação, edição e vinculação de UEs), com bloqueio de ações de mutação direta sobre turmas de escolas (<code>openAddClassModal</code>, <code>openEditClassModal</code>, <code>saveClassEditor</code>, <code>deleteClass</code>).</li>
+          <li>👁️ <strong>Consulta Reativa Conectada à SSOT:</strong> Ao clicar no nome de uma escola ou no botão <em>"👁️ Ver Turmas"</em>, abre-se o modal especializado (<code>#modalViewUnitClasses</code>) com visão somente leitura de turmas, etapas, turnos e docentes titulares atribuídos (incluindo Manhã/Tarde para turmas integrais).</li>
+          <li>🔬 <strong>Auditoria Automatizada:</strong> Validação léxica/sintática JSC e asserções determinísticas de RBAC e integridade SSOT no motor de testes.</li>
+        </ul>
+      </div>
+
       <!-- VERSÃO 1.42 - REMOÇÃO DE EMOJIS E PADRONIZAÇÃO VISUAL NA TELA DE MATRIZES DE REFERÊNCIA -->
-      <div class="card" style="margin-bottom:16px; border-left:4px solid var(--primary); background:#F8FAFC;">
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #0066CC; background:#F8FAFC;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.42 (v8.2.9)</span>
-          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">27/10/2026</span>
+          <span style="font-size:11px; background:#EFF6FF; color:#1D4ED8; padding:2px 8px; border-radius:12px; font-weight:700;">27/10/2026</span>
         </div>
         <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
           Remoção de Emojis e Padronização Visual na Tela de Matrizes de Referência:
         </div>
         <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
-          <li>🧹 <strong>Sobriedade Visual Institucional:</strong> Eliminação de todos os emojis residuais (<code>📑</code>, <code>👩‍🏫</code>, <code>👔</code>, <code>🟢</code>, <code>👁️</code>, <code>↗️</code>, <code>📥</code>, <code>📤</code>, <code>↺</code>, <code>📖</code>, <code>🔄</code>) da tela de Matrizes de Referência Oficiais (<code>#screenRefDocs</code>) e modal de referência (<code>#modalRefDocs</code>).</li>
-          <li>🎨 <strong>Pictogramas Vetoriais Padronizados:</strong> Substituição por ícones vetoriais SVG monocromáticos (<em>Feather/Lucide</em>) com classes <code>.btn-icon</code> e <code>.btn-icon-sm</code> com <code>stroke="currentColor"</code>.</li>
-          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Adição de asserção estrita no Módulo 12 (<code>navegacao_layout</code>) assegurando ausência de emojis e presença dos pictogramas SVG na tela.</li>
+          <li>📑 <strong>Sobriedade Institucional:</strong> Extinção total de emojis Unicode residuais na tela de Matrizes de Referência (<code>#screenRefDocs</code>) e modal (<code>#modalRefDocs</code>).</li>
+          <li>✨ <strong>Pictogramas Vetoriais SVG:</strong> Substituição por ícones SVG padronizados (<em>Feather/Lucide</em>) nos botões de ação (Ver no Painel, Nova Aba, Baixar PDF, Atualizar PDF, Restaurar Original, Alternar Documento e Fechar) e no banner institucional.</li>
+          <li>🛡️ <strong>Preservação Funcional Absoluta:</strong> Manutenção integral das rotinas de abertura/download de PDF, persistência local e integridade de IDs.</li>
+          <li>🔬 <strong>Auditoria Automatizada:</strong> Asserção determinística no Módulo 12 validando a higienização visual completa da tela de Matrizes de Referência.</li>
         </ul>
       </div>
 
@@ -10252,6 +10264,8 @@ function getActiveSections(obs) {
       if (isNucleoEI(user)) {
         return appState.teamMembers.filter(m => m.roleKey === type);
       } else if (user.roleKey === 'formador') {
+        const pedagTabClassesEl = document.getElementById('pedagTabClasses');
+        if (pedagTabClassesEl) pedagTabClassesEl.style.display = 'inline-flex';
         // Unidades vinculadas ao Polo Regional da Formadora ou às Coordenadoras sob sua supervisão
         const userPolo = (user.school || '').trim().toLowerCase();
         const poloUnits = (appState.units || []).filter(u => {
@@ -10726,6 +10740,8 @@ function getActiveSections(obs) {
       }
 
       if (user.roleKey === 'coordenador') {
+        const pedagTabClassesEl = document.getElementById('pedagTabClasses');
+        if (pedagTabClassesEl) pedagTabClassesEl.style.display = 'inline-flex';
         if (scopeTitle) scopeTitle.innerText = 'Coordenação Pedagógica:';
         if (scopeDesc) scopeDesc.innerText = `Você avalia as professoras da sua Unidade Escolar (${user.school}). Seus rascunhos são estritamente privados.`;
         if (unitsNavTab) unitsNavTab.style.display = 'none';
@@ -10772,9 +10788,6 @@ function getActiveSections(obs) {
         if (teamNavTab) teamNavTab.style.display = 'none';
         if (adminNavTab) adminNavTab.style.display = 'flex';
 
-        if (histNavTab) histNavTab.style.display = 'none';
-        if (mobMenuHistBtn) mobMenuHistBtn.style.display = 'none';
-
         roleFilterGroup.style.display = 'block';
         if (indicatorsTargetFilter) indicatorsTargetFilter.style.display = 'inline-block';
         if (indicatorsTargetBadge) indicatorsTargetBadge.style.display = 'none';
@@ -10784,11 +10797,6 @@ function getActiveSections(obs) {
         if (homeScheduleBanner) homeScheduleBanner.style.display = 'none';
         if (homeDraftsHeader) homeDraftsHeader.style.display = 'none';
         if (homeDraftsContainer) homeDraftsContainer.style.display = 'none';
-
-        // Redirecionamento defensivo caso o usuário estivesse na tela de Histórico
-        if (document.getElementById('screenHistory')?.classList.contains('active')) {
-          navigateToTab('home');
-        }
       } else if (user.roleKey === 'pendente') {
         if (scopeTitle) scopeTitle.innerText = 'Acesso Pendente:';
         if (scopeDesc) scopeDesc.innerText = 'Sua conta foi criada e está aguardando liberação de acesso pela Coordenadora do Núcleo de EI.';
@@ -10796,8 +10804,6 @@ function getActiveSections(obs) {
         if (unitsNavTab) unitsNavTab.style.display = 'none';
         if (teamNavTab) teamNavTab.style.display = 'none';
         if (adminNavTab) adminNavTab.style.display = 'none';
-        if (histNavTab) histNavTab.style.display = 'none';
-        if (mobMenuHistBtn) mobMenuHistBtn.style.display = 'none';
         roleFilterGroup.style.display = 'none';
         if (indicatorsTargetFilter) indicatorsTargetFilter.style.display = 'none';
         if (indicatorsTargetBadge) indicatorsTargetBadge.style.display = 'none';
@@ -10854,8 +10860,6 @@ function getActiveSections(obs) {
       const homeGestaoSubtitle = document.getElementById('homeGestaoSubtitle');
 
       if (user.roleKey === 'coordenador') {
-        const pedagTabClassesEl = document.getElementById('pedagTabClasses');
-        if (pedagTabClassesEl) pedagTabClassesEl.style.display = 'inline-flex';
         if (opNavTab) {
           opNavTab.style.display = 'flex';
           if (opNavLabel) opNavLabel.innerText = 'Minha Escola';
@@ -10881,8 +10885,6 @@ function getActiveSections(obs) {
           homeGestaoSubtitle.style.display = 'block';
         }
       } else if (user.roleKey === 'formador') {
-        const pedagTabClassesEl = document.getElementById('pedagTabClasses');
-        if (pedagTabClassesEl) pedagTabClassesEl.style.display = 'inline-flex';
         if (opNavTab) {
           opNavTab.style.display = 'flex';
           if (opNavLabel) opNavLabel.innerText = 'Meu Polo';
@@ -17086,17 +17088,120 @@ function getActiveSections(obs) {
         const canDelete = isNucleoEI(user);
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${u.name}</strong></td>
+          <td>
+            <span style="cursor:pointer; color:var(--primary); font-weight:700;" onclick="openViewUnitClassesModal('${u.id}')" title="Clique para visualizar turmas e docentes atribuídos">
+              ${u.name}
+            </span>
+          </td>
           <td><span class="status-badge" style="background:#DCFCE7; color:#166534; font-weight:700; font-size:11px;">📍 ${u.polo}</span></td>
           <td>${u.address || 'Não informado'}</td>
           <td><span class="status-badge" style="background:#EFF6FF; color:#1E40AF;">${teachersCount} Profissionais</span></td>
           <td style="text-align:center; white-space:nowrap;">
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openViewUnitClassesModal('${u.id}')" title="Visualizar turmas e regentes titulares desta UE">👁️ Ver Turmas</button>
             <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditUnitModal('${u.id}')">Editar</button>
             ${canDelete ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="removeUnit('${u.id}')">Excluir</button>` : ''}
           </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    // --- VISUALIZAÇÃO DE TURMAS E DOCENTES DA UE (SOMENTE LEITURA SSOT) ---
+    function openViewUnitClassesModal(unitId) {
+      const unit = (appState.units || []).find(u => u.id === unitId || u.name === unitId);
+      if (!unit) {
+        showToast('Unidade Escolar não localizada.');
+        return;
+      }
+
+      // Preenchimento de Metadados
+      const titleEl = document.getElementById('viewUnitModalTitle');
+      const poloEl = document.getElementById('viewUnitModalPolo');
+      const addrEl = document.getElementById('viewUnitModalAddress');
+      const coordEl = document.getElementById('viewUnitModalCoord');
+      const classesCountEl = document.getElementById('viewUnitModalClassesCount');
+      const teachersCountEl = document.getElementById('viewUnitModalTeachersCount');
+      const studentsEl = document.getElementById('viewUnitModalStudents');
+
+      if (titleEl) titleEl.innerText = unit.name;
+      if (poloEl) poloEl.innerText = `📍 ${unit.polo || 'Polo Regional'}`;
+      if (addrEl) addrEl.innerText = unit.address || 'Endereço não informado';
+
+      const cp = (appState.teamMembers || []).find(m => m.roleKey === 'coordenador' && m.school === unit.name);
+      if (coordEl) coordEl.innerText = cp ? cp.name : 'A definir / Sem CP';
+
+      const unitClasses = getClassesForSchool(unit.name);
+      const unitTeachers = (appState.teamMembers || []).filter(m => m.school === unit.name && m.roleKey === 'professora');
+
+      if (classesCountEl) classesCountEl.innerText = `${unitClasses.length} turma(s)`;
+      if (teachersCountEl) teachersCountEl.innerText = `${unitTeachers.length} docente(s)`;
+      if (studentsEl) {
+        const tot = unit.totalStudents !== undefined ? unit.totalStudents : 120;
+        const inc = unit.inclusiveStudents !== undefined ? unit.inclusiveStudents : 5;
+        studentsEl.innerText = `${tot} (${inc} AEE)`;
+      }
+
+      // Renderização da Tabela de Turmas & Docentes Atribuídos
+      const tbody = document.getElementById('viewUnitClassesTableBody');
+      if (tbody) {
+        tbody.innerHTML = '';
+
+        if (unitClasses.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="4" style="text-align:center; padding:24px; color:var(--text-secondary); font-style:italic;">
+                Nenhuma turma cadastrada no momento pela Coordenação Pedagógica desta Unidade Escolar.
+              </td>
+            </tr>
+          `;
+        } else {
+          unitClasses.forEach(cls => {
+            const isIntegral = (cls.shift || '').toLowerCase().includes('integral');
+            const jornadaBadge = isIntegral 
+              ? `<span class="status-badge" style="background:#EDE9FE; color:#6D28D9; font-weight:700;">Tempo Integral</span>`
+              : `<span class="status-badge" style="background:#EFF6FF; color:#1E40AF; font-weight:700;">Tempo Parcial</span>`;
+
+            let turnoBadge = `<span class="status-badge" style="background:#FEF3C7; color:#92400E; font-size:11px;">${cls.shift || 'Parcial'}</span>`;
+            if (isIntegral) {
+              turnoBadge = `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:11px;">Manhã + Tarde</span>`;
+            }
+
+            let teachersDisplay = '';
+            if (isIntegral && (cls.teachersMorning || cls.teachersAfternoon)) {
+              const mList = (Array.isArray(cls.teachersMorning) && cls.teachersMorning.length > 0) ? cls.teachersMorning.join(', ') : 'A definir';
+              const aList = (Array.isArray(cls.teachersAfternoon) && cls.teachersAfternoon.length > 0) ? cls.teachersAfternoon.join(', ') : 'A definir';
+              teachersDisplay = `
+                <div style="font-size:11px; line-height:1.4;">
+                  <div><strong style="color:#B45309;">Manhã:</strong> ${mList}</div>
+                  <div><strong style="color:#4338CA;">Tarde:</strong> ${aList}</div>
+                </div>
+              `;
+            } else {
+              const tList = (Array.isArray(cls.teachers) && cls.teachers.length > 0) ? cls.teachers.join(', ') : '<span style="color:var(--text-secondary); font-style:italic;">Aguardando atribuição de regente</span>';
+              teachersDisplay = `<div style="font-size:12px; font-weight:600; color:#1E293B;">${tList}</div>`;
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>
+                <strong style="color:var(--primary-dark); font-size:13px;">${cls.name}</strong><br>
+                <span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:10px;">${cls.stage || 'Educação Infantil'}</span>
+              </td>
+              <td>${jornadaBadge}</td>
+              <td>${turnoBadge}</td>
+              <td>${teachersDisplay}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      }
+
+      document.getElementById('modalViewUnitClasses').classList.add('active');
+    }
+
+    function closeViewUnitClassesModal() {
+      const modal = document.getElementById('modalViewUnitClasses');
+      if (modal) modal.classList.remove('active');
     }
 
     // --- GESTÃO E EDIÇÃO DE POLOS REGIONAIS (SSOT) ---
@@ -17737,6 +17842,10 @@ function getActiveSections(obs) {
 
     function openAddClassModal() {
       const user = getCurrentUser();
+      if (isNucleoEI(user)) {
+        showToast('Acesso restrito: A coordenadora do Núcleo de EI não gerencia turmas de UEs diretamente. A gestão de turmas é descentralizada na Coordenadora Pedagógica da unidade.');
+        return;
+      }
       document.getElementById('modalClassEditorTitle').innerText = 'Cadastrar Nova Turma';
       document.getElementById('editClassId').value = '';
       document.getElementById('classEditorName').value = '';
@@ -17782,6 +17891,10 @@ function getActiveSections(obs) {
 
     function openEditClassModal(classId) {
       const user = getCurrentUser();
+      if (isNucleoEI(user)) {
+        showToast('Acesso restrito: A coordenadora do Núcleo de EI não gerencia turmas de UEs diretamente. A gestão de turmas é descentralizada na Coordenadora Pedagógica da unidade.');
+        return;
+      }
       const cls = (appState.classes || []).find(c => c.id === classId);
       if (!cls) {
         showToast('Turma não encontrada.');
@@ -17921,6 +18034,11 @@ function getActiveSections(obs) {
     }
 
     function saveClassEditor() {
+      const user = getCurrentUser();
+      if (isNucleoEI(user)) {
+        showToast('Acesso restrito: Apenas a Coordenadora Pedagógica da Unidade Escolar pode cadastrar ou alterar turmas.');
+        return;
+      }
       const id = document.getElementById('editClassId').value;
       const school = document.getElementById('classEditorSchool').value;
       const name = document.getElementById('classEditorName').value.trim();
@@ -18038,6 +18156,10 @@ function getActiveSections(obs) {
       if (!cls) return;
 
       const user = getCurrentUser();
+      if (isNucleoEI(user)) {
+        showToast('Acesso restrito: Apenas a Coordenadora Pedagógica da Unidade Escolar pode excluir turmas.');
+        return;
+      }
       if (user.roleKey === 'coordenador' && cls.school !== user.school) {
         showToast('Acesso negado: você só pode excluir turmas da sua escola.');
         return;
@@ -24450,11 +24572,66 @@ function getActiveSections(obs) {
     // =========================================================================
     let activeModalBimesterConfigYear = '2026';
 
-    function renderGlobalAcademicYearSelector() {
-      const select = document.getElementById('headerAcademicYearSelect');
-      const wrapper = document.getElementById('headerAcademicYearWrapper');
-      if (!select) return;
+    function openSelectAcademicYearModal() {
+      renderAcademicYearBoxes();
+      const m = document.getElementById('modalSelectAcademicYear');
+      if (m) m.classList.add('active');
+    }
 
+    function closeSelectAcademicYearModal() {
+      const m = document.getElementById('modalSelectAcademicYear');
+      if (m) m.classList.remove('active');
+    }
+
+    function renderAcademicYearBoxes() {
+      const container = document.getElementById('academicYearBoxesContainer');
+      if (!container) return;
+
+      const defaultYears = (typeof DEFAULT_ACADEMIC_YEARS !== 'undefined' && Array.isArray(DEFAULT_ACADEMIC_YEARS)) ? DEFAULT_ACADEMIC_YEARS : ['2026', '2025'];
+      const defaultSelected = (typeof DEFAULT_SELECTED_ACADEMIC_YEAR !== 'undefined') ? DEFAULT_SELECTED_ACADEMIC_YEAR : '2026';
+
+      if (!appState.academicYears || !Array.isArray(appState.academicYears) || appState.academicYears.length === 0) {
+        appState.academicYears = [...defaultYears];
+      }
+      if (!appState.selectedAcademicYear) {
+        appState.selectedAcademicYear = defaultSelected;
+      }
+
+      const sortedYears = [...appState.academicYears].sort((a, b) => b.localeCompare(a));
+      const latestYear = sortedYears[0];
+      const currentSelected = appState.selectedAcademicYear || latestYear;
+
+      container.innerHTML = sortedYears.map(y => {
+        const isSelected = (y === currentSelected);
+        const isVigente = (y === latestYear);
+        const tagBadge = isVigente
+          ? '<span style="background:#DCFCE7; color:#15803D; font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; text-transform:uppercase;">Vigente</span>'
+          : '<span style="background:#FEF3C7; color:#B45309; font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; text-transform:uppercase;">Histórico</span>';
+        const descText = isVigente
+          ? 'Ano letivo em andamento. Lançamentos, acompanhamentos e observações regulares.'
+          : 'Modo de consulta histórica dos registros e indicadores consolidados deste período.';
+
+        return `
+          <div class="level-box ${isSelected ? 'selected' : ''}" onclick="selectAcademicYear('${y}')" style="cursor:pointer;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <div class="level-box-title" style="display:flex; align-items:center; gap:8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>Ano Letivo ${y}</span>
+              </div>
+              ${tagBadge}
+            </div>
+            <div class="level-box-desc">${descText}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectAcademicYear(year) {
+      closeSelectAcademicYearModal();
+      onGlobalAcademicYearChange(year);
+    }
+
+    function renderGlobalAcademicYearSelector() {
       try {
         const defaultYears = (typeof DEFAULT_ACADEMIC_YEARS !== 'undefined' && Array.isArray(DEFAULT_ACADEMIC_YEARS)) ? DEFAULT_ACADEMIC_YEARS : ['2026', '2025'];
         const defaultSelected = (typeof DEFAULT_SELECTED_ACADEMIC_YEAR !== 'undefined') ? DEFAULT_SELECTED_ACADEMIC_YEAR : '2026';
@@ -24466,12 +24643,28 @@ function getActiveSections(obs) {
           appState.selectedAcademicYear = defaultSelected;
         }
 
-        // Ordena anos decrescente para priorizar o mais recente
         const sortedYears = [...appState.academicYears].sort((a, b) => b.localeCompare(a));
-        select.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === appState.selectedAcademicYear ? 'selected' : ''}>Ano ${y}</option>`).join('');
+        const latestYear = sortedYears[0];
+
+        // Atualiza rótulo no botão do modal de perfil se presente
+        const profileLabel = document.getElementById('userProfileAcademicYearLabel');
+        if (profileLabel) {
+          profileLabel.innerText = appState.selectedAcademicYear;
+        }
+
+        // Suporte defensivo caso o select ainda exista em algum contexto
+        const select = document.getElementById('headerAcademicYearSelect');
+        if (select) {
+          select.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === appState.selectedAcademicYear ? 'selected' : ''}>Ano ${y}</option>`).join('');
+        }
+
+        // Se o modal de seleção estiver aberto, sincroniza seus cards
+        const modalSel = document.getElementById('modalSelectAcademicYear');
+        if (modalSel && modalSel.classList.contains('active')) {
+          renderAcademicYearBoxes();
+        }
 
         // Banner informativo se estiver visualizando ano anterior ao mais recente
-        const latestYear = sortedYears[0];
         const banner = document.getElementById('historicalYearWarningBanner');
         const bannerLabel = document.getElementById('historicalYearBannerLabel');
         if (banner) {
@@ -25592,6 +25785,103 @@ function getActiveSections(obs) {
               closeCreateNewAcademicYearModal();
               closeBimesterPeriodsModal();
               logger.log('Fluxo interativo completo de abertura do assistente de novo ciclo a partir de #modalBimesterPeriods', true);
+
+              // 12. GOVERNANÇA DE POLOS PELO NÚCLEO DE EI E VISUALIZAÇÃO DE TURMAS POR UE (VERSÃO 1.43)
+              // 12.1 Validação de Ocultação da Sub-aba Turmas da Rede (#pedagTabClasses) para Núcleo de EI
+              selectUserAccount('helena');
+              renderHomeScreen();
+              const pedagTabClassesEl = document.getElementById('pedagTabClasses');
+              if (pedagTabClassesEl && pedagTabClassesEl.style.display !== 'none') {
+                throw new Error('Sub-aba #pedagTabClasses deve estar estritamente oculta (display: none) para a Coordenadora do Núcleo de EI');
+              }
+
+              // Teste de Desvio Defensivo de Navegação
+              switchPedagSubTab('classes');
+              if (appState.currentPedagSubTab === 'classes') {
+                throw new Error('switchPedagSubTab("classes") não desviou para "units" no perfil do Núcleo de EI');
+              }
+              logger.log('Supressão da tela de turmas da rede e desvio defensivo de navegação para o Núcleo de EI', true);
+
+              // 12.2 Validação de Bloqueio RBAC contra modificação direta de turmas pelo Núcleo de EI
+              const originalToast = window.showToast;
+              let toastTriggered = false;
+              window.showToast = function(msg) {
+                toastTriggered = true;
+              };
+
+              // Tentativa de adicionar turma pelo Núcleo de EI
+              openAddClassModal();
+              const modalClassEditorEl = document.getElementById('modalClassEditor');
+              if (modalClassEditorEl && modalClassEditorEl.classList.contains('active')) {
+                closeClassEditorModal();
+                throw new Error('openAddClassModal abriu indevidamente o editor de turma para o Núcleo de EI');
+              }
+              if (!toastTriggered) {
+                throw new Error('openAddClassModal não emitiu toast educativo de bloqueio RBAC para o Núcleo de EI');
+              }
+
+              // Tentativa de salvar turma pelo Núcleo de EI
+              toastTriggered = false;
+              saveClassEditor();
+              if (!toastTriggered) {
+                throw new Error('saveClassEditor não emitiu toast educativo de bloqueio RBAC para o Núcleo de EI');
+              }
+
+              // Tentativa de excluir turma pelo Núcleo de EI
+              toastTriggered = false;
+              const sampleClass = (appState.classes || [])[0];
+              if (sampleClass) {
+                deleteClass(sampleClass.id);
+                if (!toastTriggered) {
+                  throw new Error('deleteClass não emitiu toast educativo de bloqueio RBAC para o Núcleo de EI');
+                }
+              }
+              window.showToast = originalToast;
+              logger.log('Blindagem RBAC em ações de mutação de turmas pelo Núcleo de EI (bloqueio com toast)', true);
+
+              // 12.3 Validação do Modal de Visualização de Turmas e Regências da UE (#modalViewUnitClasses)
+              const sampleUnit = (appState.units || []).find(u => u.name === 'CEI Professora Maria de Lourdes') || (appState.units || [])[0];
+              if (!sampleUnit) throw new Error('Nenhuma Unidade Escolar encontrada para teste de visualização');
+
+              openViewUnitClassesModal(sampleUnit.id);
+              const modalViewUnitEl = document.getElementById('modalViewUnitClasses');
+              if (!modalViewUnitEl || !modalViewUnitEl.classList.contains('active')) {
+                throw new Error('openViewUnitClassesModal não ativou o modal #modalViewUnitClasses');
+              }
+
+              const viewUnitTitle = document.getElementById('viewUnitModalTitle')?.innerText;
+              if (viewUnitTitle !== sampleUnit.name) {
+                throw new Error(`Título da unidade incorreto no modal: esperado "${sampleUnit.name}", obtido "${viewUnitTitle}"`);
+              }
+
+              const viewUnitTableRows = modalViewUnitEl.querySelectorAll('#viewUnitClassesTableBody tr');
+              const expectedClassesCount = getClassesForSchool(sampleUnit.name).length;
+              if (expectedClassesCount > 0 && viewUnitTableRows.length !== expectedClassesCount) {
+                throw new Error(`Quantidade de turmas divergente na visualização da UE: esperado ${expectedClassesCount}, obtido ${viewUnitTableRows.length}`);
+              }
+
+              // Garantir ausência absoluta de botões de edição ou exclusão no modal de visualização
+              const mutableButtons = modalViewUnitEl.querySelectorAll('#viewUnitClassesTableBody button, #viewUnitClassesTableBody input');
+              if (mutableButtons.length > 0) {
+                throw new Error('Modal de visualização de turmas da UE contém botões ou inputs de mutação');
+              }
+
+              closeViewUnitClassesModal();
+              if (modalViewUnitEl.classList.contains('active')) {
+                throw new Error('closeViewUnitClassesModal falhou em fechar o modal #modalViewUnitClasses');
+              }
+              logger.log('Validação do Modal de Visualização de Turmas da UE (#modalViewUnitClasses, somente leitura SSOT)', true, `${sampleUnit.name} (${expectedClassesCount} turmas)`);
+
+              // 12.4 Validação de Preservação da Sub-aba para Coordenação Pedagógica
+              selectUserAccount('mariana');
+              renderHomeScreen();
+              if (pedagTabClassesEl && pedagTabClassesEl.style.display === 'none') {
+                throw new Error('Sub-aba #pedagTabClasses deve estar visível para a Coordenadora Mariana Ferreira');
+              }
+              logger.log('Preservação da sub-aba Turmas & Regência para a Coordenadora da UE', true);
+
+              // Restaura conta padrão
+              selectUserAccount('helena');
             } catch (e) {
               logger.log('Erro de execução no módulo catalogo_dados', false, e.message);
             }
@@ -27711,14 +28001,19 @@ function getActiveSections(obs) {
               logger.log('Higienização visual de Matrizes de Referência (ausência de emojis e presença de SVGs vetoriais)', true, 'Tela screenRefDocs 100% higienizada');
               navigateToTab('home');
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.42
-              if (!btnChangelog.textContent.includes('Versão 1.42')) {
-                throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
-              }
               if (!modalChg.innerHTML.includes('Versão 1.42')) {
                 throw new Error('#modalChangelog não contém o card descritivo da Versão 1.42');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.42 (v8.2.9)', true);
+              logger.log('Asserção de Integridade do Registro da Versão 1.42 (v8.2.9) no Modal de Changelog', true);
+
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.43
+              if (!btnChangelog.textContent.includes('Versão 1.43')) {
+                throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
+              }
+              if (!modalChg.innerHTML.includes('Versão 1.43')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.43');
+              }
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.43 (v8.2.10)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
