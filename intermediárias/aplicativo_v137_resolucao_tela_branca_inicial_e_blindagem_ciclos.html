@@ -26676,6 +26676,8 @@ function getActiveSections(obs) {
               try {
                 switchIndicatorsSubTab('kpis');
                 appState.currentUserKey = 'helena';
+                const unitSelPre = document.getElementById('indicatorsUnitFilter');
+                if (unitSelPre) unitSelPre.value = 'ALL';
                 renderIndicatorsScreen();
                 const unitSelEl = document.getElementById('indicatorsUnitFilter');
                 if (!unitSelEl) throw new Error('Seletor #indicatorsUnitFilter ausente no DOM');
