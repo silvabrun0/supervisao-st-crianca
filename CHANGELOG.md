@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.45** | 27/10/2026 17:40 | `intermediárias/aplicativo_v145_modularizacao_e_divisao_index_html.html` | Solicitação direta / `planos_de_implementacao/plano_modularizacao_e_divisao_index_html.md` | Modularização arquitetural e divisão do arquivo principal monolítico: desacoplamento em 6 folhas de estilo CSS (`css/`) e 14 módulos JavaScript (`js/`), redução de ~28.600 linhas para ~5.500 linhas no `index.html`, preservação integral de estado, regras pedagógicas e expansão do motor de blindagem sintática JSC em `audit_platform.py` 🏗️⚡🛡️ |
 | **1.44** | 27/10/2026 17:15 | `intermediárias/aplicativo_v144_remocao_emojis_painel_indicadores_pictogramas.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_painel_indicadores_pictogramas.md` | Remoção completa de emojis soltos no Painel & Indicadores e Quadro de Controle Bimestral (`#screenIndicators` e `#bimesterSemaphoreSection`): substituição por pictogramas vetoriais SVG padronizados (.sem-pill-icon, .sem-stat-icon, .sem-filter-icon, .trend-icon-svg, .score-chip-dot, .picto-status-dot) e asserções estritas no Módulo 10 da auditoria 📊🎨🛡️ |
 | **1.44** | 27/10/2026 17:15 | `intermediárias/aplicativo_v144_remocao_texto_consulta_ssot_visualizacao_ue.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_texto_consulta_ssot_visualizacao_ue.md` | Remoção do texto informativo de Modo de Consulta SSOT no modal de visualização de turmas da escola (`#modalViewUnitClasses`), preservando a sobriedade institucional e alinhando o botão de fechamento à direita 🧹🏛️ |
 | **1.43** | 27/10/2026 16:30 | `intermediárias/aplicativo_v143_gestao_polos_e_visualizacao_turmas_ue_nucleo_ei.html` | Solicitação direta / `planos_de_implementacao/plano_gestao_polos_e_visualizacao_turmas_ue_nucleo_ei.md` | Governança territorial de Polos Regionais pelo Núcleo de EI, supressão da tela de turmas da rede municipal (`#pedagTabClasses`) para preservação da autonomia escolar da CP, bloqueio RBAC com toast em criação/edição/exclusão direta de turmas, e acesso somente leitura às turmas e regências via clique na UE ou botão '👁️ Ver Turmas' conectado à SSOT (`#modalViewUnitClasses`) 🏛️🗺️👁️ |
@@ -171,6 +172,28 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.45] - Modularização Arquitetural e Desacoplamento do Monólito Principal em Camadas CSS e JS
+- **Data / Horário:** 27/10/2026 17:40
+- **Arquivo de Referência:** `intermediárias/aplicativo_v145_modularizacao_e_divisao_index_html.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_modularizacao_e_divisao_index_html.md`.
+- **Foco Central:** Desacoplamento arquitetural e divisão do arquivo monolítico de 28.668 linhas em módulos limpos, manuteníveis e especializados:
+  1. **Redução Dimensional:** `index.html` passa de ~28.600 linhas para ~5.500 linhas de HTML semântico limpo contendo cabeçalho, esqueleto, telas, modais e chamadas ordenadas.
+  2. **Camada CSS Desacoplada (`css/`):** Organizada em 6 folhas de estilo (`01_variables.css`, `02_layout.css`, `03_components.css`, `04_screens.css`, `05_modals.css`, `06_print.css`).
+  3. **Camada JS Desacoplada (`js/`):** Organizada em 14 módulos funcionais com carregamento topológico sequencial preservando compatibilidade com handlers inline (`onclick`), reatividade de estado (`appState`, `localStorage`), catálogos canônicos e motor de auditoria.
+  4. **Blindagem Sintática Pré-Voo JSC:** Atualização de `audit_platform.py` para inspecionar tanto scripts inline quanto cada um dos 14 arquivos `.js` externos antes do deploy headless.
+
+### [Versão 1.44] - Remoção de Emojis e Padronização de Pictogramas no Painel & Indicadores e Quadro de Controle Bimestral
+- **Data / Horário:** 27/10/2026 17:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v144_remocao_emojis_painel_indicadores_pictogramas.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_painel_indicadores_pictogramas.md`.
+- **Foco Central:** Remoção de emojis soltos no Painel & Indicadores e Quadro de Controle Bimestral (`#screenIndicators` e `#bimesterSemaphoreSection`): substituição por pictogramas vetoriais SVG padronizados (`.sem-pill-icon`, `.sem-stat-icon`, `.sem-filter-icon`, `.picto-status-dot`) e asserções estritas no Módulo 10 da auditoria.
+
+### [Versão 1.44] - Remoção do Texto Informativo de Modo de Consulta SSOT na Visualização de Turmas da UE
+- **Data / Horário:** 27/10/2026 17:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v144_remocao_texto_consulta_ssot_visualizacao_ue.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_remocao_texto_consulta_ssot_visualizacao_ue.md`.
+- **Foco Central:** Remoção do texto informativo de Modo de Consulta SSOT no modal de visualização de turmas da escola (`#modalViewUnitClasses`), preservando a sobriedade institucional e alinhando o botão de fechamento à direita.
 
 ### [Versão 1.43] - Governança de Polos pelo Núcleo de EI, Supressão da Tela de Turmas da Rede e Acesso Somente Leitura às Turmas por UE
 - **Data / Horário:** 27/10/2026 16:30

@@ -109,7 +109,7 @@ def find_available_port(preferred_port):
 httpd_instance = None
 
 def check_javascript_syntax(html_path):
-    """Valida a integridade sintática dos scripts inline via JSC nativo do macOS antes do Chrome Headless."""
+    """Valida a integridade sintática dos scripts inline e externos (.js) via JSC nativo do macOS antes do Chrome Headless."""
     jsc_path = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
     if not os.path.exists(jsc_path) or not os.path.exists(html_path):
         return True # Fallback seguro se não for macOS
@@ -118,12 +118,52 @@ def check_javascript_syntax(html_path):
     with open(html_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    scripts = re.findall(r'<script>(.*?)</script>', content, re.DOTALL)
-    for i, script in enumerate(scripts):
+    # Mocks básicos do ambiente browser para o motor headless JSC
+    mock_env = (
+        "var window = { addEventListener: function() {}, location: { search: '' } };\n"
+        "var document = { addEventListener: function() {}, querySelector: function() { return null; }, querySelectorAll: function() { return []; }, getElementById: function() { return null; } };\n"
+        "var localStorage = { getItem: function() { return null; }, setItem: function() {} };\n"
+    )
+
+    # 1. Validação de arquivos externos <script src="...">
+    script_srcs = re.findall(r'<script\s+src=["\']([^"\']+)["\']\s*></script>', content)
+    base_dir = os.path.dirname(os.path.abspath(html_path))
+
+    for src in script_srcs:
+        src_path = os.path.normpath(os.path.join(base_dir, src))
+        if not os.path.exists(src_path):
+            print(f"❌ ERRO: Arquivo referenciado no index.html não encontrado: {src}")
+            return False
+
+        with open(src_path, 'r', encoding='utf-8') as sf:
+            script_code = sf.read()
+
         with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as tf:
-            tf.write("var window = { addEventListener: function() {}, location: { search: '' } };\n")
-            tf.write("var document = { addEventListener: function() {}, querySelector: function() { return null; }, querySelectorAll: function() { return []; }, getElementById: function() { return null; } };\n")
-            tf.write("var localStorage = { getItem: function() { return null; }, setItem: function() {} };\n")
+            tf.write(mock_env)
+            tf.write(script_code)
+            tf_path = tf.name
+
+        try:
+            res = subprocess.run([jsc_path, tf_path], capture_output=True, text=True)
+            if res.returncode != 0 and 'SyntaxError' in res.stderr:
+                print("=" * 80)
+                print(f"❌ ERRO FATAL DE SINTAXE JS DETECTADO NO ARQUIVO: {src}")
+                for line in res.stderr.strip().splitlines():
+                    if 'SyntaxError' in line or 'at ' in line:
+                        print(f"   {line}")
+                print("=" * 80)
+                return False
+        finally:
+            if os.path.exists(tf_path):
+                os.remove(tf_path)
+
+    # 2. Validação de blocos inline remanescentes
+    inline_scripts = re.findall(r'<script(?![^>]*\bsrc\b)[^>]*>(.*?)</script>', content, re.DOTALL)
+    for i, script in enumerate(inline_scripts):
+        if not script.strip():
+            continue
+        with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as tf:
+            tf.write(mock_env)
             tf.write(script)
             tf_path = tf.name
 
@@ -131,16 +171,16 @@ def check_javascript_syntax(html_path):
             res = subprocess.run([jsc_path, tf_path], capture_output=True, text=True)
             if res.returncode != 0 and 'SyntaxError' in res.stderr:
                 print("=" * 80)
-                print(f"❌ ERRO FATAL DE SINTAXE JS DETECTADO NO BLOCO DE SCRIPT #{i+1}:")
+                print(f"❌ ERRO FATAL DE SINTAXE JS DETECTADO NO BLOCO INLINE #{i+1}")
                 for line in res.stderr.strip().splitlines():
                     if 'SyntaxError' in line or 'at ' in line:
                         print(f"   {line}")
-                print("   A auditoria foi interrompida para evitar falsos positivos e timeout.")
                 print("=" * 80)
                 return False
         finally:
             if os.path.exists(tf_path):
                 os.remove(tf_path)
+
     return True
 
 def run_server(port):
