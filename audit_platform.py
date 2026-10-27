@@ -34,22 +34,54 @@ MODULE_CATALOG = {
     'navegacao_layout': 'Sistema de Rotas/Tabs, Menu Mobile Overlay, Acessibilidade e Changelog'
 }
 
+REPO_DIR = os.path.dirname(os.path.abspath(__file__))
+
 test_result = None
+last_progress_time = None
 server_running = True
 
 class AuditHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=REPO_DIR, **kwargs)
+
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
         self.send_header('Pragma', 'no-cache')
         self.send_header('Expires', '0')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         super().end_headers()
 
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.end_headers()
+
     def do_POST(self):
-        global test_result
+        global test_result, last_progress_time
         if self.path == '/__test_report__':
             content_length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(content_length).decode('utf-8')
             test_result = json.loads(body)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(b'{"status":"ok"}')
+        elif self.path == '/__test_progress__':
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length).decode('utf-8')
+            data = json.loads(body)
+            last_progress_time = time.time()
+            if not getattr(self, 'silent_mode', False) and not getattr(AuditHandler, 'global_silent_mode', False):
+                idx = data.get('index', 0)
+                total_mods = data.get('totalModules', 12)
+                m_id = data.get('module', '')
+                m_passed = data.get('passed', 0)
+                m_total = data.get('total', 0)
+                m_success = data.get('success', False)
+                dur = data.get('durationMs', 0)
+                tag = "\033[92m✔ PASS\033[0m" if m_success else "\033[91m✖ FAIL\033[0m"
+                print(f"   [{idx:02d}/{total_mods:02d}] 📦 {m_id:<22} ({m_passed}/{m_total} testes em {dur}ms) {tag}")
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
@@ -196,6 +228,8 @@ def main():
         print(f"❌ Google Chrome não encontrado em {CHROME_PATH}")
         sys.exit(1)
 
+    AuditHandler.global_silent_mode = args.silent_on_success
+
     # Determina porta livre dinamicamente
     actual_port = find_available_port(args.port)
 
@@ -210,23 +244,33 @@ def main():
         print("=" * 80)
         print("🔬 ALGORITMO DE AUDITORIA MODULAR DA PLATAFORMA (SerTão Criança)")
         print(f"   Modo de Execução: {'Integral (12 Módulos modo-a-modo)' if target_module == 'all' else f'Módulo Isolado [{target_module}]'}")
-        print(f"   Alvo: index.html (Versão 1.21 - v7.99)")
+        print(f"   Alvo: index.html (Versão 1.36 - v8.2.3)")
         print("=" * 80)
         print(f"🚀 Inicializando motor headless do Google Chrome...")
         print(f"   URL de teste: {target_url}\n")
 
     temp_profile = tempfile.mkdtemp(prefix='chrome_audit_')
+    chrome_log_path = os.path.join(tempfile.gettempdir(), 'chrome_audit_debug.log')
+    chrome_log_file = open(chrome_log_path, 'w', encoding='utf-8')
 
     cmd = [
         CHROME_PATH,
         "--headless=new",
         "--disable-gpu",
         "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-background-timer-throttling",
+        "--disable-backgrounding-occluded-windows",
+        "--disable-renderer-backgrounding",
+        "--window-size=1440,900",
+        "--remote-debugging-port=0",
+        "--enable-logging=stderr",
+        "--v=1",
         f"--user-data-dir={temp_profile}",
         target_url
     ]
 
-    proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    proc = subprocess.Popen(cmd, stdout=chrome_log_file, stderr=chrome_log_file)
 
     start = time.time()
     while test_result is None and (time.time() - start) < args.timeout:
@@ -244,8 +288,29 @@ def main():
     except Exception:
         proc.kill()
 
+    chrome_log_file.close()
+
     if test_result is None:
-        print("❌ TIMEOUT: O relatório de testes não foi recebido dentro do tempo limite.")
+        print("\n" + "=" * 80)
+        print("❌ TIMEOUT: O relatório de testes não foi recebido dentro do tempo limite (35s).")
+        print(f"   Porta utilizada: {actual_port}")
+        print(f"   URL chamada: {target_url}")
+        print(f"   Diretório servido: {REPO_DIR}")
+        print("-" * 80)
+        print("📋 DIAGNÓSTICO FORENSE (ÚLTIMAS LINHAS DO LOG DO CHROME):")
+        try:
+            if os.path.exists(chrome_log_path):
+                with open(chrome_log_path, 'r', encoding='utf-8', errors='ignore') as lf:
+                    lines = lf.readlines()
+                    last_lines = lines[-25:] if len(lines) > 25 else lines
+                    if last_lines:
+                        for l in last_lines:
+                            print(f"   {l.rstrip()}")
+                    else:
+                        print("   (Nenhum erro registrado no log do Chrome)")
+        except Exception as eDiag:
+            print(f"   Erro ao ler log do Chrome: {eDiag}")
+        print("=" * 80)
         sys.exit(1)
 
     total = test_result.get('total', 0)

@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.36** | 27/10/2026 14:35 | `intermediárias/aplicativo_v136_resolucao_execucao_auditoria_plataforma.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_falha_execucao_auditoria_plataforma.md` | Resolução definitiva da execução do motor de auditoria (CLI e Web UI): telemetria em tempo real no terminal (`/__test_progress__`), motor assíncrono com micro-pausas (`runFullPlatformAuditAsync`), modal in-app com barra de progresso ativa (`#modalAuditReport`), ancoragem hermética do servidor HTTP local (`directory=REPO_DIR`), flags essenciais contra throttling de timers no Chrome macOS e captura de logs forenses 🔬⚡📡 |
 | **1.35** | 27/10/2026 13:55 | `intermediárias/aplicativo_v135_iniciar_novo_ciclo_tela_ciclos_e_calendario.html` | Solicitação direta / `planos_de_implementacao/plano_migracao_iniciar_novo_ciclo_para_tela_ciclos_e_calendario.md` | Centralização da função 'Iniciar Novo Ciclo Avaliativo' na tela de Ciclos Avaliativos & Calendário (`#modalBimesterPeriods`), remoção da duplicidade solta na barra de Gestão da Rede, rotulagem canônica com SVG vetorial, higienização de modais e asserções estritas de auditoria 📅🏷️🛡️ |
 | **1.34** | 27/10/2026 13:05 | `intermediárias/aplicativo_v134_trava_visualizacao_desktop_e_eliminacao_scroll_horizontal.html` | Solicitação direta / `planos_de_implementacao/plano_trava_visualizacao_desktop_e_eliminacao_scroll_horizontal.md` | Trava de visualização desktop, eliminação de transbordo horizontal e blindagem da viewport: trava estrutural raiz (`html, body`) com `overflow-x: hidden`, `overscroll-behavior-x: none` (anti-rubber-band), compactação responsiva do cabeçalho em notebooks/desktops intermediários, confinamento de tabelas e trava de escala na viewport 🛡️💻📱 |
 | **1.33** | 26/10/2026 17:55 | `intermediárias/aplicativo_v133_apresentacao_dados_decisao_gestores.html` | Solicitação direta / `planos_de_implementacao/plano_apresentacao_dados_processo_decisorio_gestores.md` | Apresentação de dados orientada ao processo decisório dos gestores: governança territorial por polos (`<optgroup>`), tabela executiva de UEs, régua das grandes dimensões, síntese agregada da escala de materiais, prioridades balanceadas (fragilidades e práticas consolidadas) e busca na matriz 🗺️🏫📊 |
@@ -161,6 +162,23 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.36] - Resolução Definitiva da Execução do Motor de Auditoria da Plataforma (CLI e Web UI)
+- **Data / Horário:** 27/10/2026 14:35
+- **Arquivo de Referência:** `intermediárias/aplicativo_v136_resolucao_execucao_auditoria_plataforma.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_resolucao_falha_execucao_auditoria_plataforma.md`.
+- **Foco Central:** Eliminação definitiva dos travamentos ("ele roda e não faz nada") tanto no terminal CLI (`audit_platform.py`) quanto na interface web in-app (botão "🔬 Executar Diagnóstico da Plataforma"), implementando telemetria em tempo real, motor assíncrono com micro-pausas de repaint, barra de progresso ativa no modal, ancoragem hermética de diretório no servidor HTTP e blindagem do Chrome headless no macOS.
+
+#### Modificações e Melhorias
+- **Feedback Visual Imediato no Modal In-App (`#modalAuditReport`):** Abertura instantânea do modal em estado de carregamento reativo (`openAuditProgressModal`), exibindo barra percentual e indicação sequencial do módulo avaliado.
+- **Desacoplamento Assíncrono com Micro-Pausas de Renderização (`runFullPlatformAuditAsync`):** Transição do motor de auditoria de monolítico síncrono para assíncrono com `await new Promise(r => setTimeout(r, 10))`, liberando o loop do navegador para renderizar o avanço dos 12 módulos sem congelar a UI.
+- **Telemetria Módulo a Módulo no Terminal CLI (`POST /__test_progress__`):** O servidor HTTP local agora recebe telemetria em tempo real a cada módulo concluído, imprimindo o resultado e duração imediatamente no terminal.
+- **Ancoragem Hermética do Servidor HTTP (`directory=REPO_DIR`):** O servidor passa a servir expressamente a partir do diretório onde o script está alocado, evitando erros 404 caso seja invocado a partir de outro caminho de terminal.
+- **Flags de Estabilidade do Chrome Headless no macOS:** Adição de `--disable-background-timer-throttling`, `--disable-backgrounding-occluded-windows`, `--disable-renderer-backgrounding`, `--window-size=1440,900`, e captura de logs em buffer para diagnóstico forense detalhado em caso de timeout.
+- **Tratamento Transparente de Exceções (`openAuditFailureModal`):** Em caso de falha crítica não tratada, o modal exibe o stack trace detalhado em vez de um toast efêmero com redirecionamento cego.
+- **Auditoria Modular Expandida (100% de Aprovação):** Inclusão de asserções no módulo 12 (`navegacao_layout`) validando a exposição de `window.runFullPlatformAuditAsync`, `openAuditProgressModal`, `openAuditFailureModal` e a integridade da Versão 1.36 (v8.2.3).
+
+---
 
 ### [Versão 1.35] - Centralização da Função "Iniciar Novo Ciclo Avaliativo" na Tela de Ciclos & Calendário
 - **Data / Horário:** 27/10/2026 13:55

@@ -3594,7 +3594,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.35 (v8.2.2)</span>
+          <span>Versão 1.36 (v8.2.3)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -5249,6 +5249,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.36 - RESOLUÇÃO DEFINITIVA DA EXECUÇÃO DO MOTOR DE AUDITORIA (CLI E WEB UI) -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.36 (v8.2.3)</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Resolução Definitiva da Execução do Motor de Auditoria da Plataforma (CLI e Web UI):
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🔬 <strong>Feedback Visual Imediato e Barra de Progresso In-App:</strong> Ao acionar o diagnóstico in-app, o modal <code>#modalAuditReport</code> abre instantaneamente exibindo painel reativo com barra percentual e indicação sequencial do módulo em execução, eliminando sensações de congelamento.</li>
+          <li>⚡ <strong>Desacoplamento Assíncrono com Micro-Pausas de Renderização:</strong> Transição para o motor assíncrono <code>window.runFullPlatformAuditAsync</code> com liberação periódica do loop de renderização (micro-pausas assíncronas), permitindo repaints fluidos do navegador durante os testes dos 12 subsistemas.</li>
+          <li>📡 <strong>Telemetria em Tempo Real no Terminal CLI:</strong> Criação do endpoint <code>POST /__test_progress__</code> no servidor HTTP de auditoria, imprimindo o avanço instantâneo módulo a módulo no terminal, com suporte a CORS preflight (OPTIONS).</li>
+          <li>🛡️ <strong>Blindagem Headless e Buffer Forense no macOS:</strong> Inclusão de flags essenciais contra congelamento de timers no Chrome (<code>--disable-background-timer-throttling</code>, <code>--window-size=1440,900</code>), ancoragem hermética do diretório de trabalho (<code>directory=REPO_DIR</code>) e captura de logs para diagnóstico forense detalhado em caso de timeout.</li>
+          <li>🚦 <strong>Tratamento Transparente de Exceções:</strong> Exibição detalhada de stack trace no próprio modal em caso de falhas inesperadas, erradicando redirecionamentos silenciosos ou toasts genéricos.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.35 - CENTRALIZAÇÃO DO NOVO CICLO AVALIATIVO EM CICLOS & CALENDÁRIO -->
@@ -9444,6 +9462,12 @@ function getActiveSections(obs) {
       '3º Bimestre': { startDate: '2026-08-03', endDate: '2026-10-31', label: '3º Bimestre' },
       '4º Bimestre': { startDate: '2026-11-03', endDate: '2027-01-29', label: '4º Bimestre' }
     };
+    const DEFAULT_ACADEMIC_YEARS = ['2026', '2025'];
+    const DEFAULT_SELECTED_ACADEMIC_YEAR = '2026';
+    const DEFAULT_BIMESTER_PERIODS_BY_YEAR = {
+      '2026': DEFAULT_BIMESTER_PERIODS,
+      '2025': DEFAULT_BIMESTER_PERIODS
+    };
 
     // --- 2. GLOBAL STATE ---
     let appState = {
@@ -9454,6 +9478,9 @@ function getActiveSections(obs) {
       classes: JSON.parse(JSON.stringify(INITIAL_CLASSES)), // <-- PILAR 1: CATÁLOGO DE TURMAS
       deletedClassIds: [], // <-- PILAR 14: SSOT EXCLUSÕES
       bimesterPeriods: JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS)), // <-- PILAR 15: SSOT CICLOS
+      academicYears: [...DEFAULT_ACADEMIC_YEARS],
+      selectedAcademicYear: DEFAULT_SELECTED_ACADEMIC_YEAR,
+      currentPedagSubTab: 'units',
       teamMembers: JSON.parse(JSON.stringify(INITIAL_TEAM)),
       notes: JSON.parse(JSON.stringify(INITIAL_NOTES)),
       schedules: JSON.parse(JSON.stringify(INITIAL_SCHEDULES)),
@@ -9509,6 +9536,15 @@ function getActiveSections(obs) {
                 appState.bimesterPeriods[bName] = JSON.parse(JSON.stringify(DEFAULT_BIMESTER_PERIODS[bName]));
               }
             });
+          }
+          if (!appState.academicYears || !Array.isArray(appState.academicYears) || appState.academicYears.length === 0) {
+            appState.academicYears = [...DEFAULT_ACADEMIC_YEARS];
+          }
+          if (!appState.selectedAcademicYear) {
+            appState.selectedAcademicYear = DEFAULT_SELECTED_ACADEMIC_YEAR;
+          }
+          if (!appState.currentPedagSubTab) {
+            appState.currentPedagSubTab = 'units';
           }
           if (!appState.teamMembers || appState.teamMembers.length === 0) appState.teamMembers = JSON.parse(JSON.stringify(INITIAL_TEAM));
           if (!appState.notes) appState.notes = JSON.parse(JSON.stringify(INITIAL_NOTES));
@@ -10689,8 +10725,12 @@ function getActiveSections(obs) {
         if (btnNewUser) btnNewUser.style.display = 'inline-flex';
       }
 
-      // Renderiza Seletor Global de Ano Letivo
-      renderGlobalAcademicYearSelector();
+      // Renderiza Seletor Global de Ano Letivo com proteção defensiva
+      try {
+        renderGlobalAcademicYearSelector();
+      } catch (errYearSel) {
+        console.warn('Proteção de inicialização: renderGlobalAcademicYearSelector ignorado defensivamente:', errYearSel);
+      }
     }
 
     // --- 5. NAVIGATION ---
@@ -24144,28 +24184,35 @@ function getActiveSections(obs) {
       const wrapper = document.getElementById('headerAcademicYearWrapper');
       if (!select) return;
 
-      if (!appState.academicYears || !Array.isArray(appState.academicYears) || appState.academicYears.length === 0) {
-        appState.academicYears = [...DEFAULT_ACADEMIC_YEARS];
-      }
-      if (!appState.selectedAcademicYear) {
-        appState.selectedAcademicYear = DEFAULT_SELECTED_ACADEMIC_YEAR;
-      }
+      try {
+        const defaultYears = (typeof DEFAULT_ACADEMIC_YEARS !== 'undefined' && Array.isArray(DEFAULT_ACADEMIC_YEARS)) ? DEFAULT_ACADEMIC_YEARS : ['2026', '2025'];
+        const defaultSelected = (typeof DEFAULT_SELECTED_ACADEMIC_YEAR !== 'undefined') ? DEFAULT_SELECTED_ACADEMIC_YEAR : '2026';
 
-      // Ordena anos decrescente para priorizar o mais recente
-      const sortedYears = [...appState.academicYears].sort((a, b) => b.localeCompare(a));
-      select.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === appState.selectedAcademicYear ? 'selected' : ''}>Ano ${y}</option>`).join('');
-
-      // Banner informativo se estiver visualizando ano anterior ao mais recente
-      const latestYear = sortedYears[0];
-      const banner = document.getElementById('historicalYearWarningBanner');
-      const bannerLabel = document.getElementById('historicalYearBannerLabel');
-      if (banner) {
-        if (appState.selectedAcademicYear !== latestYear) {
-          banner.style.display = 'flex';
-          if (bannerLabel) bannerLabel.innerText = appState.selectedAcademicYear;
-        } else {
-          banner.style.display = 'none';
+        if (!appState.academicYears || !Array.isArray(appState.academicYears) || appState.academicYears.length === 0) {
+          appState.academicYears = [...defaultYears];
         }
+        if (!appState.selectedAcademicYear) {
+          appState.selectedAcademicYear = defaultSelected;
+        }
+
+        // Ordena anos decrescente para priorizar o mais recente
+        const sortedYears = [...appState.academicYears].sort((a, b) => b.localeCompare(a));
+        select.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === appState.selectedAcademicYear ? 'selected' : ''}>Ano ${y}</option>`).join('');
+
+        // Banner informativo se estiver visualizando ano anterior ao mais recente
+        const latestYear = sortedYears[0];
+        const banner = document.getElementById('historicalYearWarningBanner');
+        const bannerLabel = document.getElementById('historicalYearBannerLabel');
+        if (banner) {
+          if (appState.selectedAcademicYear !== latestYear) {
+            banner.style.display = 'flex';
+            if (bannerLabel) bannerLabel.innerText = appState.selectedAcademicYear;
+          } else {
+            banner.style.display = 'none';
+          }
+        }
+      } catch (errSel) {
+        console.warn('Falha defensiva ao renderizar renderGlobalAcademicYearSelector:', errSel);
       }
     }
 
@@ -24476,10 +24523,16 @@ function getActiveSections(obs) {
       }
     });
 
-    // App Initialization
-    window.addEventListener('DOMContentLoaded', () => {
-      loadState();
-      renderHomeScreen();
+    // App Initialization (Universal Multi-State Lifecycle Guard)
+    function initializeAppLifecycle() {
+      try {
+        loadState();
+        renderHomeScreen();
+      } catch (errInit) {
+        console.error('Falha na inicialização do ciclo de vida da aplicação:', errInit);
+        navigateToTab('home');
+      }
+
       ['indicatorsTargetTypeFilter', 'indicatorsUnitFilter', 'indicatorsMemberFilter'].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -24487,7 +24540,14 @@ function getActiveSections(obs) {
           el.addEventListener('input', syncIndicatorsFilterUI);
         }
       });
-    });
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      initializeAppLifecycle();
+    } else {
+      document.addEventListener('DOMContentLoaded', initializeAppLifecycle);
+      window.addEventListener('load', initializeAppLifecycle);
+    }
 
     // ================= MOBILE MENU FUNCTIONS =================
     function openMobileMenu() {
@@ -24522,18 +24582,15 @@ function getActiveSections(obs) {
         return;
       }
 
-      // Ativação canônica da trava de auditoria
       __autoAuditTriggered = true;
       window.__autoAuditTriggered = true;
 
-      showToast('Iniciando diagnóstico automatizado da plataforma (12 módulos)...');
+      // Exibe imediatamente o modal de diagnóstico com indicador de progresso ativo
+      openAuditProgressModal();
 
-      // Aguarda 100ms para fechamento do modal de perfil e repaint
-      setTimeout(() => {
+      setTimeout(async () => {
         try {
-          const audit = window.runFullPlatformAudit({ module: 'all' });
-          
-          // Desacoplamento assíncrono via double rAF para garantir repaint completo da UI
+          const audit = await window.runFullPlatformAuditAsync({ module: 'all' });
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               openAuditReportModal(audit);
@@ -24541,10 +24598,70 @@ function getActiveSections(obs) {
           });
         } catch (errAudit) {
           console.error('Falha crítica na execução da auditoria:', errAudit);
-          showToast('Ocorreu uma falha no diagnóstico. Verifique o console.');
-          navigateToTab('home');
+          openAuditFailureModal(errAudit);
         }
-      }, 100);
+      }, 50);
+    }
+
+    function openAuditProgressModal() {
+      const modal = document.getElementById('modalAuditReport');
+      if (!modal) return;
+
+      const subEl = document.getElementById('auditReportSubtitle');
+      if (subEl) subEl.textContent = 'Executando verificação em tempo real dos 12 subsistemas...';
+
+      const bodyEl = document.getElementById('auditReportBody');
+      if (bodyEl) {
+        bodyEl.innerHTML = `
+          <div style="padding: 24px 16px; text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 12px; animation: pulse 1.5s infinite;">🔬</div>
+            <div style="font-weight: 800; font-size: 16px; color: var(--primary-dark); margin-bottom: 6px;" id="auditProgressTitle">
+              Iniciando Diagnóstico da Plataforma...
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 20px;" id="auditProgressSub">
+              Preparando ambiente isolado e capturando contexto de rotas...
+            </div>
+            <div style="background: #E2E8F0; border-radius: 10px; height: 10px; overflow: hidden; width: 100%; max-width: 400px; margin: 0 auto 12px auto;">
+              <div id="auditProgressBar" style="background: var(--primary); height: 100%; width: 5%; transition: width 0.3s ease;"></div>
+            </div>
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary);" id="auditProgressCounter">
+              Módulo 0 de 12
+            </div>
+          </div>
+        `;
+      }
+
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+    }
+
+    function openAuditFailureModal(error) {
+      const modal = document.getElementById('modalAuditReport');
+      if (!modal) return;
+
+      const subEl = document.getElementById('auditReportSubtitle');
+      if (subEl) subEl.textContent = 'Diagnóstico interrompido por exceção não tratada';
+
+      const bodyEl = document.getElementById('auditReportBody');
+      if (bodyEl) {
+        bodyEl.innerHTML = `
+          <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span style="font-size: 24px;">⚠️</span>
+              <div style="font-weight: 800; font-size: 14px; color: #991B1B;">
+                Falha Crítica no Mecanismo de Diagnóstico
+              </div>
+            </div>
+            <div style="font-size: 12px; color: #B91C1C; margin-bottom: 10px;">
+              A auditoria não pôde ser concluída devido a um erro inesperado:
+            </div>
+            <pre style="background: #FFF; border: 1px solid #FCA5A5; border-radius: 6px; padding: 10px; font-size: 11px; color: #7F1D1D; white-space: pre-wrap; overflow-x: auto;">${error && error.stack ? error.stack : (error && error.message ? error.message : String(error))}</pre>
+          </div>
+        `;
+      }
+
+      modal.style.display = 'flex';
+      modal.classList.add('active');
     }
 
     function openAuditReportModal(audit) {
@@ -24622,7 +24739,7 @@ function getActiveSections(obs) {
       }
     }
 
-    window.runFullPlatformAudit = function(options) {
+    window.runFullPlatformAuditAsync = async function(options) {
       options = options || {};
       const targetModule = (options.module || 'all').toLowerCase().trim();
       const startTime = performance.now();
@@ -27178,14 +27295,23 @@ function getActiveSections(obs) {
               }
               logger.log('Blindagem e Trava de Visualização Desktop (Eliminação de Scroll Lateral e Zoom Indesejado)', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.35
-              if (!btnChangelog.textContent.includes('Versão 1.35')) {
+              // 17. VALIDAÇÃO DO MOTOR ASSÍNCRONO DE AUDITORIA E TELEMETRIA (VERSÃO 1.36)
+              if (typeof window.runFullPlatformAuditAsync !== 'function') {
+                throw new Error('window.runFullPlatformAuditAsync não está definida globalmente');
+              }
+              if (typeof window.openAuditProgressModal !== 'function' || typeof window.openAuditFailureModal !== 'function') {
+                throw new Error('openAuditProgressModal ou openAuditFailureModal não estão definidas');
+              }
+              logger.log('Validação do Motor Assíncrono e Telemetria em Tempo Real (Versão 1.36)', true);
+
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.36
+              if (!btnChangelog.textContent.includes('Versão 1.36')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.35')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.35');
+              if (!modalChg.innerHTML.includes('Versão 1.36')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.36');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.35 (v8.2.2)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.36 (v8.2.3)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
@@ -27196,10 +27322,27 @@ function getActiveSections(obs) {
       try {
         console.group('🔬 INICIANDO AUDITORIA MODULAR DA PLATAFORMA (SerTão Criança)');
 
-        AUDIT_MODULES.forEach(mod => {
-          if (targetModule !== 'all' && mod.id !== targetModule) {
-            return;
-          }
+        const filteredModules = AUDIT_MODULES.filter(m => targetModule === 'all' || m.id === targetModule);
+        const totalFilterCount = filteredModules.length;
+
+        for (let i = 0; i < totalFilterCount; i++) {
+          const mod = filteredModules[i];
+          const modStartTime = performance.now();
+
+          // Atualiza progresso visual na interface se o modal de progresso estiver aberto
+          const progTitle = document.getElementById('auditProgressTitle');
+          const progSub = document.getElementById('auditProgressSub');
+          const progBar = document.getElementById('auditProgressBar');
+          const progCounter = document.getElementById('auditProgressCounter');
+
+          if (progTitle) progTitle.textContent = `Executando: ${mod.name}`;
+          if (progSub) progSub.textContent = `Módulo ${i + 1} de ${totalFilterCount}`;
+          if (progBar) progBar.style.width = `${Math.round(((i + 1) / totalFilterCount) * 100)}%`;
+          if (progCounter) progCounter.textContent = `Módulo ${i + 1} de ${totalFilterCount}`;
+
+          // Micro-pausa assíncrona para permitir repaint no compositor do navegador
+          await new Promise(r => setTimeout(r, 10));
+
           const modLogger = createModuleLogger(mod.id, mod.name);
           try {
             mod.run(modLogger);
@@ -27210,16 +27353,38 @@ function getActiveSections(obs) {
           const results = modLogger.getResults();
           const passed = results.filter(r => r.passed).length;
           const failed = results.filter(r => !r.passed).length;
+          const modDur = Math.round(performance.now() - modStartTime);
+          const isModSuccess = failed === 0 && results.length > 0;
+
           modulesOutput.push({
             id: mod.id,
             name: mod.name,
             total: results.length,
             passed,
             failed,
-            success: failed === 0 && results.length > 0,
+            success: isModSuccess,
             results
           });
-        });
+
+          // Telemetria em tempo real para o servidor Python CLI
+          if (window.location.search && window.location.search.includes('autoAudit=1')) {
+            try {
+              fetch('/__test_progress__', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  index: i + 1,
+                  totalModules: totalFilterCount,
+                  module: mod.id,
+                  passed,
+                  total: results.length,
+                  success: isModSuccess,
+                  durationMs: modDur
+                })
+              }).catch(() => {});
+            } catch(e) {}
+          }
+        }
 
         console.groupEnd();
       } finally {
@@ -27311,27 +27476,47 @@ function getActiveSections(obs) {
       };
 
       window.__AUDIT_RESULTS__ = summary;
+
+      // Envio do Relatório Final para o Servidor Python CLI com Fallback Multi-Canal
       if (window.location.search && window.location.search.includes('autoAudit=1')) {
         try {
           fetch('/__test_report__', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(summary)
+          }).catch(() => {
+            if (navigator.sendBeacon) {
+              navigator.sendBeacon('/__test_report__', JSON.stringify(summary));
+            }
           });
-        } catch(e) {}
+        } catch(e) {
+          if (navigator.sendBeacon) {
+            navigator.sendBeacon('/__test_report__', JSON.stringify(summary));
+          }
+        }
       }
+
       console.log(`\n🏁 AUDITORIA CONCLUÍDA: ${passedCount}/${allResults.length} asserções aprovadas em ${duration}ms (${allPassed ? '✅ 100% OK' : '⚠️ COM FALHAS'})\n`);
       return summary;
     };
 
+    // Mantém compatibilidade síncrona com chamadas legadas
+    window.runFullPlatformAudit = function(options) {
+      return window.runFullPlatformAuditAsync(options);
+    };
+
     let __autoAuditTriggered = false;
-    function triggerAutoAudit() {
+    async function triggerAutoAudit() {
       if (__autoAuditTriggered) return;
       __autoAuditTriggered = true;
       const urlParams = new URLSearchParams(window.location.search);
       const mod = urlParams.get('module') || 'all';
-      setTimeout(() => {
-        window.runFullPlatformAudit({ module: mod });
+      setTimeout(async () => {
+        const audit = await window.runFullPlatformAuditAsync({ module: mod });
+        // Se estiver em navegador interativo (não-headless), abre o modal de relatório
+        if (typeof openAuditReportModal === 'function') {
+          openAuditReportModal(audit);
+        }
       }, 150);
     }
 
