@@ -2987,14 +2987,14 @@
               }
               logger.log('Asserção de Integridade do Registro da Versão 1.42 (v8.2.9) no Modal de Changelog', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.44
-              if (!btnChangelog.textContent.includes('Versão 1.44')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.45
+              if (!btnChangelog.textContent.includes('Versão 1.45')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.44')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.44');
+              if (!modalChg.innerHTML.includes('Versão 1.45')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.45');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.44 (v8.2.11)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.45 (v8.2.12)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
