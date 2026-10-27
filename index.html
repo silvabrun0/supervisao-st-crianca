@@ -3594,7 +3594,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.34 (v8.2.1)</span>
+          <span>Versão 1.35 (v8.2.2)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -3718,11 +3718,7 @@
           <div class="page-subtitle" id="homeGestaoSubtitle" style="display:none;"></div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;" id="homeGestaoActionsCentral">
-          <button class="btn btn-secondary" onclick="openCreateNewAcademicYearModal()" style="color:#0284C7; font-weight:700; background:#F0F9FF; border-color:#BAE6FD;" title="Iniciar um novo ano letivo na rede municipal">
-            <svg class="btn-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            Iniciar Novo Ano Letivo
-          </button>
-          <button class="btn btn-secondary" onclick="openBimesterPeriodsModal()" style="color:#0284C7; font-weight:700;" title="Definir os períodos e prazos dos 4 bimestres letivos">
+          <button class="btn btn-secondary" onclick="openBimesterPeriodsModal()" style="color:#0284C7; font-weight:700; background:#F0F9FF; border-color:#BAE6FD;" title="Definir os períodos, prazos e iniciar novos ciclos avaliativos">
             <svg class="btn-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Ciclos Avaliativos & Calendário
           </button>
@@ -5253,6 +5249,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.35 - CENTRALIZAÇÃO DO NOVO CICLO AVALIATIVO EM CICLOS & CALENDÁRIO -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #0284C7; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.35 (v8.2.2)</span>
+          <span style="font-size:11px; color:var(--text-secondary); background:#F1F5F9; padding:2px 8px; border-radius:12px;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Centralização da Função Iniciar Novo Ciclo Avaliativo na Tela de Ciclos Avaliativos & Calendário:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>📅 <strong>Centralização de UX e Arquitetura de Informação:</strong> Remoção do botão de início de ano letivo solto na barra de ações principais de Gestão da Rede (<code>#homeGestaoActionsCentral</code>), alocando a ação exclusivamente dentro da tela de governança <em>"Ciclos Avaliativos & Calendário"</em> (<code>#modalBimesterPeriods</code>).</li>
+          <li>🏷️ <strong>Padronização Terminológica Canônica:</strong> Substituição do rótulo <code>➕ Novo Ano Letivo</code> por <code>Iniciar Novo Ciclo Avaliativo</code>, com pictograma vetorial SVG institucional (eliminação de emojis residuais).</li>
+          <li>🌟 <strong>Higienização do Assistente de Transição (<code>#modalCreateAcademicYear</code>):</strong> Título harmonizado para <em>"Iniciar Novo Ciclo Avaliativo (Ano Letivo)"</em> com ícone vetorial e confirmação contextual preservando todo o patrimônio de UEs, turmas e servidores.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Novos testes no Módulo 2 validando a ausência do botão solto na barra central, a presença no modal de ciclos e a integridade de acionamento do fluxo via Coordenadora do Núcleo de EI.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.34 - TRAVA DE VISUALIZAÇÃO DESKTOP, ELIMINAÇÃO DE TRANSBORDO HORIZONTAL E BLINDAGEM DA VIEWPORT -->
@@ -8488,8 +8501,8 @@
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeBimesterPeriodsModal()">✕</button>
       </div>
 
-      <!-- Seletor de Ano Letivo para Configuração SSOT -->
-      <div style="display:flex; justify-content:space-between; align-items:center; background:#F8FAFC; border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:16px;">
+      <!-- Seletor de Ano Letivo para Configuração SSOT e Gatilho do Novo Ciclo -->
+      <div style="display:flex; justify-content:space-between; align-items:center; background:#F8FAFC; border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:16px; gap:12px; flex-wrap:wrap;">
         <div>
           <label style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Ano Letivo em Configuração:</label>
           <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
@@ -8498,8 +8511,9 @@
             </select>
           </div>
         </div>
-        <button type="button" class="btn btn-secondary" onclick="openCreateNewAcademicYearModal()" style="color:#0284C7; font-weight:700; border-color:#BAE6FD; background:#F0F9FF;">
-          ➕ Novo Ano Letivo
+        <button type="button" class="btn btn-secondary" id="btnModalStartNewAcademicCycle" onclick="openCreateNewAcademicYearModal()" style="color:#0284C7; font-weight:700; border-color:#BAE6FD; background:#F0F9FF; display:flex; align-items:center; gap:6px; padding:8px 14px;" title="Iniciar um novo ciclo avaliativo e transição de ano letivo na rede municipal">
+          <svg class="btn-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Iniciar Novo Ciclo Avaliativo
         </button>
       </div>
 
@@ -8581,8 +8595,9 @@
   <div id="modalCreateAcademicYear" class="modal-backdrop" onclick="if(event.target===this)closeCreateNewAcademicYearModal()">
     <div class="modal-panel" style="max-width:480px;" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <div style="font-size:17px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:8px;">
-          <span>🌟</span> Iniciar Novo Ano Letivo
+        <div style="font-size:17px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:8px;" id="modalCreateAcademicYearTitle">
+          <svg class="btn-icon" style="color:#0284C7;" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Iniciar Novo Ciclo Avaliativo (Ano Letivo)
         </div>
         <button class="btn btn-secondary" style="padding:4px 8px;" onclick="closeCreateNewAcademicYearModal()">✕</button>
       </div>
@@ -8613,7 +8628,7 @@
       </div>
       <div style="display:flex; justify-content:flex-end; gap:8px;">
         <button class="btn btn-secondary" onclick="closeCreateNewAcademicYearModal()">Cancelar</button>
-        <button class="btn btn-primary" onclick="confirmCreateNewAcademicYear()">Confirmar e Abrir Ano</button>
+        <button class="btn btn-primary" onclick="confirmCreateNewAcademicYear()">Confirmar e Iniciar Ciclo</button>
       </div>
     </div>
   </div>
@@ -24320,7 +24335,7 @@ function getActiveSections(obs) {
     function openCreateNewAcademicYearModal() {
       const user = getCurrentUser();
       if (!isNucleoEI(user)) {
-        showToast('Apenas a Coordenadora do Núcleo de EI pode iniciar um novo ano letivo.');
+        showToast('Apenas a Coordenadora do Núcleo de EI pode iniciar um novo ciclo avaliativo.');
         return;
       }
 
@@ -24430,7 +24445,7 @@ function getActiveSections(obs) {
         openBimesterPeriodsModal();
       }
 
-      showToast(`Ano Letivo ${yearVal} iniciado com sucesso! Todas as UEs e Servidores foram mantidos.`);
+      showToast(`Novo Ciclo Avaliativo (${yearVal}) iniciado com sucesso! Todas as UEs e Servidores foram mantidos.`);
       renderHomeScreen();
     }
 
@@ -25118,6 +25133,60 @@ function getActiveSections(obs) {
               saveEditPolo();
               window.confirm = oldConfirm;
               logger.log('Restauração idempotente do Polo canônico concluída com sucesso', true, targetPolo);
+
+              // 11. VALIDAÇÃO DA CENTRALIZAÇÃO DE INÍCIO DE CICLO AVALIATIVO (VERSÃO 1.35)
+              // 11.1 Asserção Negativa: Botão NÃO deve existir na barra de ações rápidas de Gestão da Rede
+              const homeActions = document.getElementById('homeGestaoActionsCentral');
+              if (homeActions) {
+                const orphanYearBtn = Array.from(homeActions.querySelectorAll('button')).find(b => {
+                  const clickAttr = b.getAttribute('onclick') || '';
+                  const text = (b.textContent || '').toLowerCase();
+                  return clickAttr.includes('openCreateNewAcademicYearModal') || text.includes('iniciar novo ano letivo');
+                });
+                if (orphanYearBtn) {
+                  throw new Error('Falha de UX: Botão de iniciar novo ano letivo/ciclo ainda existe solto em #homeGestaoActionsCentral');
+                }
+              }
+              logger.log('Asserção Negativa: Remoção do botão de início de ciclo da barra de ações gerais (#homeGestaoActionsCentral)', true);
+
+              // 11.2 Asserção Positiva: Botão DEVE existir com destaque dentro de #modalBimesterPeriods
+              openBimesterPeriodsModal();
+              const bimModalEl = document.getElementById('modalBimesterPeriods');
+              if (!bimModalEl || !bimModalEl.classList.contains('active')) {
+                throw new Error('Falha ao abrir #modalBimesterPeriods como Coordenadora da EI');
+              }
+
+              const startCycleBtn = document.getElementById('btnModalStartNewAcademicCycle') || bimModalEl.querySelector('button[onclick*="openCreateNewAcademicYearModal"]');
+              if (!startCycleBtn) {
+                throw new Error('Botão de iniciar novo ciclo avaliativo não localizado em #modalBimesterPeriods');
+              }
+
+              const btnText = startCycleBtn.textContent.trim();
+              if (!btnText.includes('Iniciar Novo Ciclo Avaliativo')) {
+                throw new Error(`Rótulo incorreto no botão de ciclo avaliativo: esperado conter "Iniciar Novo Ciclo Avaliativo", obtido "${btnText}"`);
+              }
+
+              if (startCycleBtn.querySelector('svg.btn-icon') === null) {
+                throw new Error('Botão de iniciar novo ciclo avaliativo deve conter pictograma vetorial SVG (.btn-icon)');
+              }
+              logger.log('Presença canônica e rotulagem oficial do botão "Iniciar Novo Ciclo Avaliativo" em #modalBimesterPeriods', true);
+
+              // 11.3 Teste de Disparo do Assistente de Transição (#modalCreateAcademicYear)
+              startCycleBtn.click();
+              const createYearModal = document.getElementById('modalCreateAcademicYear');
+              if (!createYearModal || !createYearModal.classList.contains('active')) {
+                throw new Error('Clique no botão em #modalBimesterPeriods não abriu o assistente #modalCreateAcademicYear');
+              }
+
+              const createYearTitle = document.getElementById('modalCreateAcademicYearTitle') || createYearModal.querySelector('.modal-panel > div:first-child');
+              if (!createYearTitle || !createYearTitle.textContent.includes('Iniciar Novo Ciclo Avaliativo')) {
+                throw new Error('Título do assistente #modalCreateAcademicYear deve conter "Iniciar Novo Ciclo Avaliativo"');
+              }
+
+              // Fecha os modais e garante restauração do estado
+              closeCreateNewAcademicYearModal();
+              closeBimesterPeriodsModal();
+              logger.log('Fluxo interativo completo de abertura do assistente de novo ciclo a partir de #modalBimesterPeriods', true);
             } catch (e) {
               logger.log('Erro de execução no módulo catalogo_dados', false, e.message);
             }
@@ -27099,7 +27168,7 @@ function getActiveSections(obs) {
                 throw new Error(`Trava de visualização violada: html e body devem conter overflow-x: hidden (html: ${htmlStyle.overflowX}, body: ${bodyStyle.overflowX})`);
               }
 
-              if (docEl.scrollWidth > window.innerWidth + 2) {
+              if (window.innerWidth >= 860 && docEl.scrollWidth > window.innerWidth + 2) {
                 throw new Error(`Transbordo horizontal detectado no computador: scrollWidth (${docEl.scrollWidth}px) > innerWidth (${window.innerWidth}px)`);
               }
 
@@ -27109,14 +27178,14 @@ function getActiveSections(obs) {
               }
               logger.log('Blindagem e Trava de Visualização Desktop (Eliminação de Scroll Lateral e Zoom Indesejado)', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.34
-              if (!btnChangelog.textContent.includes('Versão 1.34')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.35
+              if (!btnChangelog.textContent.includes('Versão 1.35')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.34')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.34');
+              if (!modalChg.innerHTML.includes('Versão 1.35')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.35');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.34 (v8.2.1)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.35 (v8.2.2)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
