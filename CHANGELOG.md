@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.42** | 27/10/2026 16:20 | `intermediárias/aplicativo_v142_remocao_emojis_matrizes_referencia.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_tela_matrizes_referencia.md` | Remoção completa de emojis e padronização visual na tela de Matrizes de Referência Oficiais (`#screenRefDocs`) e modal (`#modalRefDocs`): substituição por pictogramas vetoriais SVG monocromáticos (Feather/Lucide) com classes `.btn-icon` e `.btn-icon-sm`, e asserção no Módulo 12 da auditoria 📑🧹✨ |
 | **1.41** | 27/10/2026 16:15 | `intermediárias/aplicativo_v141_resolucao_exclusividade_docente_catalogo_dados.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_alocacao_exclusiva_docente_catalogo_dados.md` | Resolução definitiva da exclusividade docente no Módulo Catálogo de Dados (`catalogo_dados`): alinhamento de INITIAL_TEAM com INITIAL_CLASSES, deduplicação em loadState(), limpeza em seedSampleData(), trava anti-dupla alocação parcial em saveClassEditor() e asserção temporal escopada por ano letivo 👩‍🏫🛡️ |
 | **1.40** | 27/10/2026 15:58 | `intermediárias/aplicativo_v140_ajuste_titulo_quadro_controle_bimestral.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_titulo_quadro_controle_bimestral.md` | Higienização visual do título da sub-aba Longitudinal: simplificação para 'Quadro de Controle Bimestral', eliminação do emoji de semáforo e parênteses redundantes, com asserção estrita no Módulo 10 da auditoria 🧹📊 |
 | **1.39** | 27/10/2026 15:50 | `intermediárias/aplicativo_v139_modificacao_pictogramas_exportar_importar_json.html` | Solicitação direta / `planos_de_implementacao/plano_modificacao_pictogramas_exportar_importar_json.md` | Harmonização semiótica dos pictogramas vetoriais de backup e restauração JSON: bandeja com seta para cima para exportação e bandeja com seta para baixo para importação em Gestão da Rede e Exportações, com asserções estritas no Módulo 11 da auditoria 📤📥🛡️ |
@@ -167,6 +168,30 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.42] - Remoção de Emojis e Padronização Visual na Tela de Matrizes de Referência
+- **Data / Horário:** 27/10/2026 16:20
+- **Arquivo de Referência:** `intermediárias/aplicativo_v142_remocao_emojis_matrizes_referencia.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_tela_matrizes_referencia.md`.
+- **Foco Central:** Higienização visual completa e sobriedade institucional na tela de Matrizes de Referência Oficiais (`#screenRefDocs`) e no modal de referência (`#modalRefDocs`), eliminando todos os emojis residuais (`📑`, `👩‍🏫`, `👔`, `🟢`, `👁️`, `↗️`, `📥`, `📤`, `↺`, `📖`, `🔄`) e substituindo-os por pictogramas vetoriais SVG (*Feather/Lucide*) padronizados com classes `.btn-icon`, `.btn-icon-sm` e `stroke="currentColor"`.
+
+#### Inclusões
+- Asserção estrita no Módulo 12 (`navegacao_layout`) da suíte in-app garantindo ausência total de emojis residuais em `.ref-doc-btn`, `.ref-doc-btn-admin`, `.page-title`, `#refDocsPreviewTitle` e botões do `#refDocsPreviewContainer`, além de validar a presença de pictogramas SVG no botão principal de visualização integrada.
+- Pictogramas vetoriais SVG monocromáticos padronizados em todos os botões de ação das Matrizes de Referência: Documento/Diretrizes, Ver no Painel, Nova Aba, Baixar PDF, Atualizar PDF, Restaurar Original, Alternar Documento e Fechar.
+
+#### Alterações
+- Banner informativo da rede municipal higienizado com pictograma vetorial SVG institucional.
+- Badges de público-alvo e status nos Cards 1 e 2 desprovidos de emojis: `Professores` (sem `👩‍🏫`), `Coordenadores` (sem `👔`) e badge `#pdfTeacherMetaBadgeTab` / `#pdfCoordinatorMetaBadgeTab` com ícone checkmark SVG suave (sem `🟢`).
+- Visualizador Integrado no Painel (`#refDocsPreviewContainer`) atualizado com pictograma vetorial de livro aberto e botões de ação e fechamento com SVGs.
+- Higienização nas funções JS dinâmicas: `previewPDFInTab()` (remoção de `👔` e `👩‍🏫` do título do documento) e `updateRefDocsUI()` (substituição de `🟢` por SVG checkmark nos badges dinâmicos).
+- Seletor de matrizes em `#screenRubricsAdmin` padronizado sem emojis nas tags `<option>`.
+- Modal auxiliar `#modalRefDocs` 100% alinhado ao padrão vetorial.
+- Atualização da versão do sistema para 1.42 (v8.2.9) no cabeçalho, `.btn-changelog` e `#modalChangelog`.
+
+#### Exclusões
+- Extinção total de emojis gráficos Unicode (`📑`, `👩‍🏫`, `👔`, `🟢`, `👁️`, `↗️`, `📥`, `📤`, `↺`, `📖`, `🔄`) na tela e no modal de Matrizes de Referência Oficiais.
+
+---
 
 ### [Versão 1.41] - Resolução Definitiva da Exclusividade Docente no Catálogo de Dados
 - **Data / Horário:** 27/10/2026 16:15

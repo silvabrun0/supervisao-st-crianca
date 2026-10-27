@@ -3594,7 +3594,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.41 (v8.2.8)</span>
+          <span>Versão 1.42 (v8.2.9)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -4812,7 +4812,7 @@
       <!-- Banner Informativo da Rede -->
       <div class="card" style="background:#F8FAFC; border:1px solid #E2E8F0; margin-bottom:20px; border-left:4px solid var(--primary);">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
-          <span style="font-size:20px;">📑</span>
+          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
           <div style="font-size:14px; font-weight:800; color:var(--primary-dark);">Diretrizes e Instrumentos Oficiais da Rede Municipal</div>
         </div>
         <p style="font-size:12px; color:#475569; margin:0; line-height:1.5;">
@@ -4828,8 +4828,8 @@
           <div>
             <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px;">
               <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:3px 10px; border-radius:12px; font-weight:700;">👩‍🏫 Professores</span>
-                <span id="pdfTeacherMetaBadgeTab" class="pdf-meta-badge" style="display:none;">🟢 Atualizado pelo Município</span>
+                <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:3px 10px; border-radius:12px; font-weight:700;">Professores</span>
+                <span id="pdfTeacherMetaBadgeTab" class="pdf-meta-badge" style="display:none;"><svg class="btn-icon-sm" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Atualizado pelo Município</span>
               </div>
               <span id="pdfTeacherInfoTab" style="font-size:11px; color:#64748B; font-weight:600;">PDF de Fábrica · 925 KB</span>
             </div>
@@ -4853,22 +4853,22 @@
           <div class="ref-doc-actions-container" style="border-top:1px solid #F1F5F9; padding-top:14px;">
             <div class="ref-doc-primary-actions">
               <button class="btn btn-secondary ref-doc-btn" onclick="previewPDFInTab('teacher')" title="Visualizar documento integrado no painel">
-                👁️ Ver no Painel
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Ver no Painel
               </button>
               <button class="btn btn-secondary ref-doc-btn" onclick="openOrDownloadPDF('teacher', false)" title="Abrir PDF em nova aba">
-                ↗️ Nova Aba
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Nova Aba
               </button>
               <button class="btn btn-primary ref-doc-btn" onclick="openOrDownloadPDF('teacher', true)" title="Baixar arquivo PDF completo">
-                📥 Baixar PDF
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Baixar PDF
               </button>
             </div>
             <div class="ref-doc-admin-actions">
               <input type="file" id="uploadPdfTeacherInputTab" accept="application/pdf" style="display:none;" onchange="handlePDFUpload('teacher', this)">
               <button class="btn btn-secondary ref-doc-btn-admin" onclick="triggerPDFUploadTab('teacher')" title="Fazer upload de nova versão oficial do PDF">
-                📤 Atualizar PDF
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Atualizar PDF
               </button>
               <button id="btnRestorePdfTeacherTab" class="btn btn-secondary ref-doc-btn-admin" onclick="restoreDefaultPDF('teacher')" style="display:none;" title="Voltar ao PDF original de fábrica">
-                ↺ Restaurar Original
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Restaurar Original
               </button>
             </div>
           </div>
@@ -4879,8 +4879,8 @@
           <div>
             <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px;">
               <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                <span style="font-size:11px; background:#F5F3FF; color:var(--purple); padding:3px 10px; border-radius:12px; font-weight:700;">👔 Coordenadores</span>
-                <span id="pdfCoordinatorMetaBadgeTab" class="pdf-meta-badge" style="display:none;">🟢 Atualizado pelo Município</span>
+                <span style="font-size:11px; background:#F5F3FF; color:var(--purple); padding:3px 10px; border-radius:12px; font-weight:700;">Coordenadores</span>
+                <span id="pdfCoordinatorMetaBadgeTab" class="pdf-meta-badge" style="display:none;"><svg class="btn-icon-sm" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Atualizado pelo Município</span>
               </div>
               <span id="pdfCoordinatorInfoTab" style="font-size:11px; color:#64748B; font-weight:600;">PDF de Fábrica · 170 KB</span>
             </div>
@@ -4903,22 +4903,22 @@
           <div class="ref-doc-actions-container" style="border-top:1px solid #F1F5F9; padding-top:14px;">
             <div class="ref-doc-primary-actions">
               <button class="btn btn-secondary ref-doc-btn" onclick="previewPDFInTab('coordinator')" title="Visualizar documento integrado no painel">
-                👁️ Ver no Painel
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Ver no Painel
               </button>
               <button class="btn btn-secondary ref-doc-btn" onclick="openOrDownloadPDF('coordinator', false)" title="Abrir PDF em nova aba">
-                ↗️ Nova Aba
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Nova Aba
               </button>
               <button class="btn btn-primary ref-doc-btn" onclick="openOrDownloadPDF('coordinator', true)" title="Baixar arquivo PDF completo">
-                📥 Baixar PDF
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Baixar PDF
               </button>
             </div>
             <div class="ref-doc-admin-actions">
               <input type="file" id="uploadPdfCoordinatorInputTab" accept="application/pdf" style="display:none;" onchange="handlePDFUpload('coordinator', this)">
               <button class="btn btn-secondary ref-doc-btn-admin" onclick="triggerPDFUploadTab('coordinator')" title="Fazer upload de nova versão oficial do PDF">
-                📤 Atualizar PDF
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Atualizar PDF
               </button>
               <button id="btnRestorePdfCoordinatorTab" class="btn btn-secondary ref-doc-btn-admin" onclick="restoreDefaultPDF('coordinator')" style="display:none;" title="Voltar ao PDF original de fábrica">
-                ↺ Restaurar Original
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Restaurar Original
               </button>
             </div>
           </div>
@@ -4930,21 +4930,21 @@
       <div id="refDocsPreviewContainer" class="card" style="display:none; margin-top:20px; padding:16px; background:#FFFFFF; border:1px solid #CBD5E1; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.06);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px; border-bottom:1px solid #E2E8F0; padding-bottom:10px;">
           <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:18px;">📖</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
             <div id="refDocsPreviewTitle" style="font-size:14px; font-weight:800; color:var(--primary-dark);">Visualizador Integrado</div>
           </div>
           <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;" onclick="togglePreviewDocument()" title="Alternar entre Matriz de Professores e Coordenadores">
-              🔄 Alternar Documento
+              <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> Alternar Documento
             </button>
             <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;" onclick="openOrDownloadPDF(window.activePreviewMatrixType || 'teacher', false)" title="Abrir em tela cheia / nova aba">
-              ↗️ Nova Aba
+              <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Nova Aba
             </button>
             <button class="btn btn-primary" style="font-size:11px; padding:5px 10px;" onclick="openOrDownloadPDF(window.activePreviewMatrixType || 'teacher', true)" title="Baixar este PDF">
-              📥 Baixar
+              <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Baixar
             </button>
             <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px; color:#64748B;" onclick="closePDFPreviewInTab()" title="Fechar visualizador">
-              ✕ Fechar
+              <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Fechar
             </button>
           </div>
         </div>
@@ -4973,8 +4973,8 @@
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
           <select id="rubricMatrixSelect" class="form-select" style="width: auto; display: inline-block; margin-right: 8px; font-weight:700;" onchange="syncRubricMatrixSelect(this.value)">
-            <option value="teacher">👩‍🏫 Matriz de Professores</option>
-            <option value="coordinator">👔 Matriz de Coordenadores</option>
+            <option value="teacher">Matriz de Professores</option>
+            <option value="coordinator">Matriz de Coordenadores</option>
           </select>
           <button class="btn btn-secondary" onclick="openRefDocsModal()" title="Consultar, baixar ou atualizar as matrizes oficiais em PDF">
             <svg class="btn-icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -5149,7 +5149,7 @@
     <div class="modal-panel" style="max-width:680px;" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
         <div style="display:flex; align-items:center; gap:10px;">
-          <div style="width:38px; height:38px; border-radius:8px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:20px;">📑</div>
+          <div style="width:38px; height:38px; border-radius:8px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center;"><svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
           <div>
             <div style="font-size:17px; font-weight:800; color:var(--primary-dark);">Matrizes de Referência Oficiais (PDF)</div>
             <div style="font-size:12px; color:var(--text-secondary);">Instrumentos de acompanhamento, consulta e upload de atualizações da rede</div>
@@ -5170,7 +5170,7 @@
             <div style="flex:1;">
               <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">Professores</span>
-                <span id="pdfTeacherMetaBadge" class="pdf-meta-badge" style="display:none;">🟢 Atualizado pelo Município</span>
+                <span id="pdfTeacherMetaBadge" class="pdf-meta-badge" style="display:none;"><svg class="btn-icon-sm" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Atualizado pelo Município</span>
                 <span id="pdfTeacherInfo" style="font-size:11px; color:#64748B;">PDF de Fábrica · 925 KB</span>
               </div>
               <h4 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-top:6px;">Matriz de Observação da Prática Docente (Seção III)</h4>
@@ -5183,19 +5183,19 @@
           <div class="ref-doc-actions-container">
             <div class="ref-doc-primary-actions">
               <button class="btn btn-secondary ref-doc-btn" onclick="openOrDownloadPDF('teacher', false)" title="Visualizar documento em nova aba">
-                👁️ Visualizar
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Visualizar
               </button>
               <button class="btn btn-primary ref-doc-btn" onclick="openOrDownloadPDF('teacher', true)" title="Baixar arquivo PDF completo">
-                📥 PDF
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> PDF
               </button>
             </div>
             <div class="ref-doc-admin-actions">
               <input type="file" id="uploadPdfTeacherInput" accept="application/pdf" style="display:none;" onchange="handlePDFUpload('teacher', this)">
               <button class="btn btn-secondary ref-doc-btn-admin" onclick="triggerPDFUpload('teacher')" title="Fazer upload de nova versão oficial do PDF">
-                📤 Atualizar PDF
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Atualizar PDF
               </button>
               <button id="btnRestorePdfTeacher" class="btn btn-secondary ref-doc-btn-admin" onclick="restoreDefaultPDF('teacher')" style="display:none;" title="Voltar ao PDF original de fábrica">
-                ↺ Restaurar Original
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Restaurar Original
               </button>
             </div>
           </div>
@@ -5207,7 +5207,7 @@
             <div style="flex:1;">
               <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <span style="font-size:11px; background:#F5F3FF; color:var(--purple); padding:2px 8px; border-radius:12px; font-weight:700;">Coordenadores</span>
-                <span id="pdfCoordinatorMetaBadge" class="pdf-meta-badge" style="display:none;">🟢 Atualizado pelo Município</span>
+                <span id="pdfCoordinatorMetaBadge" class="pdf-meta-badge" style="display:none;"><svg class="btn-icon-sm" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Atualizado pelo Município</span>
                 <span id="pdfCoordinatorInfo" style="font-size:11px; color:#64748B;">PDF de Fábrica · 170 KB</span>
               </div>
               <h4 style="font-size:14px; font-weight:800; color:var(--text-primary); margin-top:6px;">Instrumento de Acompanhamento das Observações Pedagógicas</h4>
@@ -5220,19 +5220,19 @@
           <div class="ref-doc-actions-container">
             <div class="ref-doc-primary-actions">
               <button class="btn btn-secondary ref-doc-btn" onclick="openOrDownloadPDF('coordinator', false)" title="Visualizar documento em nova aba">
-                👁️ Visualizar
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Visualizar
               </button>
               <button class="btn btn-primary ref-doc-btn" onclick="openOrDownloadPDF('coordinator', true)" title="Baixar arquivo PDF completo">
-                📥 PDF
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> PDF
               </button>
             </div>
             <div class="ref-doc-admin-actions">
               <input type="file" id="uploadPdfCoordinatorInput" accept="application/pdf" style="display:none;" onchange="handlePDFUpload('coordinator', this)">
               <button class="btn btn-secondary ref-doc-btn-admin" onclick="triggerPDFUpload('coordinator')" title="Fazer upload de nova versão oficial do PDF">
-                📤 Atualizar PDF
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Atualizar PDF
               </button>
               <button id="btnRestorePdfCoordinator" class="btn btn-secondary ref-doc-btn-admin" onclick="restoreDefaultPDF('coordinator')" style="display:none;" title="Voltar ao PDF original de fábrica">
-                ↺ Restaurar Original
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Restaurar Original
               </button>
             </div>
           </div>
@@ -5255,6 +5255,22 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.42 - REMOÇÃO DE EMOJIS E PADRONIZAÇÃO VISUAL NA TELA DE MATRIZES DE REFERÊNCIA -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid var(--primary); background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.42 (v8.2.9)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">27/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Remoção de Emojis e Padronização Visual na Tela de Matrizes de Referência:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🧹 <strong>Sobriedade Visual Institucional:</strong> Eliminação de todos os emojis residuais (<code>📑</code>, <code>👩‍🏫</code>, <code>👔</code>, <code>🟢</code>, <code>👁️</code>, <code>↗️</code>, <code>📥</code>, <code>📤</code>, <code>↺</code>, <code>📖</code>, <code>🔄</code>) da tela de Matrizes de Referência Oficiais (<code>#screenRefDocs</code>) e modal de referência (<code>#modalRefDocs</code>).</li>
+          <li>🎨 <strong>Pictogramas Vetoriais Padronizados:</strong> Substituição por ícones vetoriais SVG monocromáticos (<em>Feather/Lucide</em>) com classes <code>.btn-icon</code> e <code>.btn-icon-sm</code> com <code>stroke="currentColor"</code>.</li>
+          <li>🔬 <strong>Auditoria Contínua com 100% de Aprovação:</strong> Adição de asserção estrita no Módulo 12 (<code>navegacao_layout</code>) assegurando ausência de emojis e presença dos pictogramas SVG na tela.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.41 - HIGIENIZAÇÃO VISUAL: REMOÇÃO DE ÍCONES DA TABELA DE TURMAS & REGÊNCIA -->
@@ -7868,12 +7884,37 @@
         Trocar de Usuário / Cargo
       </button>
 
+      <button class="btn btn-secondary btn-full" id="btnProfileChangeAcademicYear" onclick="openSelectAcademicYearModal(); closeProfileModal();" style="margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Alterar Ano Letivo (<strong id="userProfileAcademicYearLabel">2026</strong>)</span>
+      </button>
+
       <button class="btn btn-secondary btn-full" onclick="triggerPlatformAuditUI()" style="margin-bottom:10px; font-weight:700; color:var(--primary);">
         🔬 Executar Diagnóstico da Plataforma
       </button>
       <button class="btn btn-danger btn-full" onclick="executeLogout()">
         Sair da Conta (Logout)
       </button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ALTERAR ANO LETIVO ================= -->
+  <div id="modalSelectAcademicYear" class="modal-backdrop" onclick="closeSelectAcademicYearModal()">
+    <div class="modal-panel" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div style="font-size:18px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Alternar Ano Letivo
+        </div>
+        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeSelectAcademicYearModal()">✕</button>
+      </div>
+      <p style="font-size:12px; color:var(--text-secondary); margin-bottom:16px; line-height:1.4;">
+        Selecione o ano letivo para navegação, relatórios, histórico e lançamentos de acompanhamento pedagógico:
+      </p>
+
+      <div id="academicYearBoxesContainer" style="display:flex; flex-direction:column; gap:10px;">
+        <!-- Populado dinamicamente via renderAcademicYearBoxes() -->
+      </div>
     </div>
   </div>
 
@@ -8338,6 +8379,70 @@
       <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:14px;">
         <button class="btn btn-secondary" onclick="closeEditUnitModal()">Cancelar</button>
         <button class="btn btn-primary" onclick="saveEditUnit()">Salvar Alterações</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: VISUALIZAR TURMAS & DOCENTES DA UE (NÚCLEO DE EI - SOMENTE LEITURA) ================= -->
+  <div id="modalViewUnitClasses" class="modal-backdrop" onclick="closeViewUnitClassesModal()">
+    <div class="modal-panel" onclick="event.stopPropagation()" style="max-width:750px; max-height:90vh; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:12px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:22px;">🏢</span>
+            <h3 style="font-size:17px; font-weight:800; color:var(--primary-dark); margin:0;" id="viewUnitModalTitle">Unidade Escolar</h3>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-top:6px; flex-wrap:wrap;">
+            <span class="status-badge" style="background:#DCFCE7; color:#166534; font-weight:700; font-size:11px;" id="viewUnitModalPolo">Polo Regional</span>
+            <span style="font-size:12px; color:var(--text-secondary);" id="viewUnitModalAddress">Endereço da Unidade</span>
+          </div>
+        </div>
+        <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeViewUnitClassesModal()">✕</button>
+      </div>
+
+      <!-- Resumo Rápido da Unidade Escolar -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-bottom:16px;">
+        <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:8px; padding:10px;">
+          <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Coordenação da UE</div>
+          <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-top:4px;" id="viewUnitModalCoord">A definir</div>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:8px; padding:10px;">
+          <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas em Atividade</div>
+          <div style="font-size:15px; font-weight:800; color:#6D28D9; margin-top:2px;" id="viewUnitModalClassesCount">0</div>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:8px; padding:10px;">
+          <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Docentes Lotação</div>
+          <div style="font-size:15px; font-weight:800; color:#1E40AF; margin-top:2px;" id="viewUnitModalTeachersCount">0</div>
+        </div>
+        <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:8px; padding:10px;">
+          <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos / Inclusão</div>
+          <div style="font-size:13px; font-weight:700; color:#059669; margin-top:3px;" id="viewUnitModalStudents">120 (5 AEE)</div>
+        </div>
+      </div>
+
+      <!-- Container Rolável das Turmas e Docentes Atribuídos -->
+      <div style="flex:1; overflow-y:auto; margin-bottom:14px; border:1px solid var(--border); border-radius:8px; background:#FFFFFF;">
+        <table class="data-table" style="margin:0;">
+          <thead>
+            <tr>
+              <th>Turma & Etapa</th>
+              <th>Jornada Escolar</th>
+              <th>Turno</th>
+              <th>Professores Regentes Atribuídos</th>
+            </tr>
+          </thead>
+          <tbody id="viewUnitClassesTableBody">
+            <!-- Populado dinamicamente via openViewUnitClassesModal -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Rodapé com Badge de Governança Institucional e Botão de Fechar -->
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-top:1px solid var(--border); padding-top:12px;">
+        <div style="font-size:11px; color:var(--text-secondary); max-width:540px; line-height:1.4;">
+          🔒 <strong>Modo de Consulta SSOT:</strong> Visualização centralizada de turmas e regências conectadas em tempo real. A enturmação e gestão de turmas são de autonomia exclusiva da Coordenação Pedagógica da escola.
+        </div>
+        <button class="btn btn-secondary" onclick="closeViewUnitClassesModal()">Fechar Visualização</button>
       </div>
     </div>
   </div>
@@ -10588,6 +10693,8 @@ function getActiveSections(obs) {
       const heroBtnText = document.getElementById('btnNewObsText');
       const roleFilterGroup = document.getElementById('histFilterRoleGroup');
       const scheduleNavTab = document.getElementById('deskTabSchedule');
+      const histNavTab = document.getElementById('deskTabHist');
+      const mobMenuHistBtn = document.getElementById('mobMenuHistBtn');
       const homeDraftsHeader = document.getElementById('homeDraftsHeader');
       const homeDraftsContainer = document.getElementById('homeDraftsContainer');
       const homeScheduleBanner = document.getElementById('homeScheduleBanner');
@@ -10609,6 +10716,8 @@ function getActiveSections(obs) {
 
       // Reset visibility for these before applying rules
       if (scheduleNavTab) scheduleNavTab.style.display = 'flex';
+      if (histNavTab) histNavTab.style.display = 'flex';
+      if (mobMenuHistBtn) mobMenuHistBtn.style.display = 'flex';
       if (homeScheduleBanner) homeScheduleBanner.style.display = 'none';
       if (homeDraftsHeader) homeDraftsHeader.style.display = 'block';
       if (homeDraftsContainer) {
@@ -10663,6 +10772,9 @@ function getActiveSections(obs) {
         if (teamNavTab) teamNavTab.style.display = 'none';
         if (adminNavTab) adminNavTab.style.display = 'flex';
 
+        if (histNavTab) histNavTab.style.display = 'none';
+        if (mobMenuHistBtn) mobMenuHistBtn.style.display = 'none';
+
         roleFilterGroup.style.display = 'block';
         if (indicatorsTargetFilter) indicatorsTargetFilter.style.display = 'inline-block';
         if (indicatorsTargetBadge) indicatorsTargetBadge.style.display = 'none';
@@ -10672,6 +10784,11 @@ function getActiveSections(obs) {
         if (homeScheduleBanner) homeScheduleBanner.style.display = 'none';
         if (homeDraftsHeader) homeDraftsHeader.style.display = 'none';
         if (homeDraftsContainer) homeDraftsContainer.style.display = 'none';
+
+        // Redirecionamento defensivo caso o usuário estivesse na tela de Histórico
+        if (document.getElementById('screenHistory')?.classList.contains('active')) {
+          navigateToTab('home');
+        }
       } else if (user.roleKey === 'pendente') {
         if (scopeTitle) scopeTitle.innerText = 'Acesso Pendente:';
         if (scopeDesc) scopeDesc.innerText = 'Sua conta foi criada e está aguardando liberação de acesso pela Coordenadora do Núcleo de EI.';
@@ -10679,6 +10796,8 @@ function getActiveSections(obs) {
         if (unitsNavTab) unitsNavTab.style.display = 'none';
         if (teamNavTab) teamNavTab.style.display = 'none';
         if (adminNavTab) adminNavTab.style.display = 'none';
+        if (histNavTab) histNavTab.style.display = 'none';
+        if (mobMenuHistBtn) mobMenuHistBtn.style.display = 'none';
         roleFilterGroup.style.display = 'none';
         if (indicatorsTargetFilter) indicatorsTargetFilter.style.display = 'none';
         if (indicatorsTargetBadge) indicatorsTargetBadge.style.display = 'none';
@@ -10735,6 +10854,8 @@ function getActiveSections(obs) {
       const homeGestaoSubtitle = document.getElementById('homeGestaoSubtitle');
 
       if (user.roleKey === 'coordenador') {
+        const pedagTabClassesEl = document.getElementById('pedagTabClasses');
+        if (pedagTabClassesEl) pedagTabClassesEl.style.display = 'inline-flex';
         if (opNavTab) {
           opNavTab.style.display = 'flex';
           if (opNavLabel) opNavLabel.innerText = 'Minha Escola';
@@ -10760,6 +10881,8 @@ function getActiveSections(obs) {
           homeGestaoSubtitle.style.display = 'block';
         }
       } else if (user.roleKey === 'formador') {
+        const pedagTabClassesEl = document.getElementById('pedagTabClasses');
+        if (pedagTabClassesEl) pedagTabClassesEl.style.display = 'inline-flex';
         if (opNavTab) {
           opNavTab.style.display = 'flex';
           if (opNavLabel) opNavLabel.innerText = 'Meu Polo';
@@ -10792,7 +10915,10 @@ function getActiveSections(obs) {
           if (mobMenuOpText) mobMenuOpText.innerText = '🏛️ Gestão da Rede Municipal';
         }
         if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Unidades Escolares & Polos';
-        if (pedagClassesLabel) pedagClassesLabel.innerText = 'Turmas da Rede Municipal';
+        // A Coordenadora do Núcleo de EI gerencia somente os polos; a tela de turmas da rede é retirada
+        const pedagTabClassesEl = document.getElementById('pedagTabClasses');
+        if (pedagTabClassesEl) pedagTabClassesEl.style.display = 'none';
+        if (pedagClassesLabel) pedagClassesLabel.innerText = '';
         if (pedagTeamLabel) pedagTeamLabel.innerText = 'Equipes & Servidores da Rede';
         if (pedagExportsTab) pedagExportsTab.style.display = 'block';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'flex';
@@ -14750,8 +14876,13 @@ function getActiveSections(obs) {
     // --- 8. HOME & HISTORY SCREENS ---
     
     function switchPedagSubTab(tabName) {
+      const user = getCurrentUser();
       // Se for referenciada sub-aba legada 'rubrics', direciona para 'units'
       if (tabName === 'rubrics') tabName = 'units';
+      // Núcleo de EI não possui a tela de turmas da rede municipal: direciona suavemente para 'units'
+      if (isNucleoEI(user) && tabName === 'classes') {
+        tabName = 'units';
+      }
       appState.currentPedagSubTab = tabName;
       document.querySelectorAll('.pedag-subtab-btn').forEach(btn => btn.classList.remove('active'));
       const activeBtn = document.getElementById('pedagTab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
@@ -16891,7 +17022,11 @@ function getActiveSections(obs) {
             <td><strong style="color:var(--primary);">${poloName}</strong></td>
             <td><span style="font-weight:700; color:#1E293B;">${formadoraName}</span></td>
             <td>
-              ${unitsInPolo.map(u => `<div>🏢 ${u.name}</div>`).join('') || '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma UE alocada</span>'}
+              ${unitsInPolo.map(u => `
+                <div style="cursor:pointer; color:var(--primary); font-weight:600; margin-bottom:3px; display:inline-block;" onclick="openViewUnitClassesModal('${u.id}')" title="Clique para visualizar turmas e docentes atribuídos em ${u.name}">
+                  🏢 ${u.name}
+                </div>
+              `).join('<br>') || '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma UE alocada</span>'}
             </td>
             <td style="font-size:12px; line-height:1.4;">${cpNames}</td>
             <td><span class="status-badge" style="background:#EFF6FF; color:#1E40AF; font-weight:700;">${teachersCount} Docentes</span></td>
@@ -22303,7 +22438,7 @@ function getActiveSections(obs) {
             <div class="semaphore-header-row">
               <div class="semaphore-title-group">
                 <h3>
-                  <span>🚦</span> Quadro de Controle Bimestral (Semáforo do Ciclo Anual)
+                  Quadro de Controle Bimestral
                 </h3>
                 <p>
                   Acompanhamento matricial do cumprimento das 4 observações obrigatórias organizado por <strong>${viewMode === 'classes' ? 'TURMA' : 'DOCENTE REGENTE TITULAR'}</strong>: 
@@ -23221,7 +23356,7 @@ function getActiveSections(obs) {
           const el = document.getElementById(id);
           if (el) {
             el.style.display = teacherDoc ? 'inline-flex' : 'none';
-            if (teacherDoc) el.innerText = '🟢 Atualizado pelo Município';
+            if (teacherDoc) el.innerHTML = '<svg class="btn-icon-sm" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Atualizado pelo Município';
           }
         });
         ['pdfTeacherInfo', 'pdfTeacherInfoTab'].forEach(id => {
@@ -23247,7 +23382,7 @@ function getActiveSections(obs) {
           const el = document.getElementById(id);
           if (el) {
             el.style.display = coordDoc ? 'inline-flex' : 'none';
-            if (coordDoc) el.innerText = '🟢 Atualizado pelo Município';
+            if (coordDoc) el.innerHTML = '<svg class="btn-icon-sm" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Atualizado pelo Município';
           }
         });
         ['pdfCoordinatorInfo', 'pdfCoordinatorInfoTab'].forEach(id => {
@@ -23291,8 +23426,8 @@ function getActiveSections(obs) {
 
       if (title) {
         title.innerHTML = matrixType === 'coordinator' 
-          ? '👔 <strong>Visualização:</strong> Instrumento de Acompanhamento das Observações Pedagógicas (Coordenadores)'
-          : '👩‍🏫 <strong>Visualização:</strong> Matriz de Observação da Prática Docente (Professores)';
+          ? '<strong>Visualização:</strong> Instrumento de Acompanhamento das Observações Pedagógicas (Coordenadores)'
+          : '<strong>Visualização:</strong> Matriz de Observação da Prática Docente (Professores)';
       }
 
       try {
@@ -26877,7 +27012,11 @@ function getActiveSections(obs) {
               // 10. PILAR 10: VALIDAÇÃO DO QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE TURMAS)
               const semaphoreSection = document.getElementById('bimesterSemaphoreSection');
               if (!semaphoreSection) throw new Error('Falha Pilar 10: Contêiner #bimesterSemaphoreSection ausente no DOM');
-              logger.log('Renderização do Quadro de Controle Bimestral (Pilar 10)', true);
+              const semTitleElem = semaphoreSection.querySelector('.semaphore-title-group h3');
+              if (!semTitleElem || semTitleElem.textContent.trim() !== 'Quadro de Controle Bimestral') {
+                throw new Error(`Falha Pilar 10: Título esperado "Quadro de Controle Bimestral", obtido "${semTitleElem ? semTitleElem.textContent.trim() : 'ausente'}"`);
+              }
+              logger.log('Renderização e conformidade do título do Quadro de Controle Bimestral (Pilar 10)', true);
 
               // 11. PILAR 10: VALIDAÇÃO DO MOTOR ALGORÍTMICO CALCULATECLASSBIMESTERSTATUS
               // Caso Verde (Concluída): Turma Infantil I no 1º Bimestre com obs-001 finalizada
@@ -27549,14 +27688,37 @@ function getActiveSections(obs) {
               }
               logger.log('Blindagem Canônica de Ciclos e Prevenção de Tela Branca Inicial (Versão 1.37)', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.41
-              if (!btnChangelog.textContent.includes('Versão 1.41')) {
+              // 19. VALIDAÇÃO DA HIGIENIZAÇÃO VISUAL NA TELA DE MATRIZES DE REFERÊNCIA OFICIAIS (VERSÃO 1.42)
+              navigateToTab('refDocs');
+              const screenRefDocsEl = document.getElementById('screenRefDocs');
+              if (!screenRefDocsEl) throw new Error('Tela screenRefDocs não encontrada no DOM');
+
+              // Regex para detecção de emojis comuns na tela
+              const emojiRegex = /[\u{1F300}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u;
+
+              const refButtons = screenRefDocsEl.querySelectorAll('.ref-doc-btn, .ref-doc-btn-admin, .page-title, #refDocsPreviewTitle, #refDocsPreviewContainer button');
+              refButtons.forEach(el => {
+                if (emojiRegex.test(el.innerText)) {
+                  throw new Error(`Emoji residual detectado no elemento de Matrizes de Referência: "${el.innerText.trim()}"`);
+                }
+              });
+
+              // Validação de presença dos pictogramas SVG nos botões principais
+              const previewBtn = screenRefDocsEl.querySelector("button[onclick*=\"previewPDFInTab('teacher')\"]");
+              if (!previewBtn || !previewBtn.querySelector('svg')) {
+                throw new Error('Botão Ver no Painel da Matriz Docente deve conter pictograma SVG');
+              }
+              logger.log('Higienização visual de Matrizes de Referência (ausência de emojis e presença de SVGs vetoriais)', true, 'Tela screenRefDocs 100% higienizada');
+              navigateToTab('home');
+
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.42
+              if (!btnChangelog.textContent.includes('Versão 1.42')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.41')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.41');
+              if (!modalChg.innerHTML.includes('Versão 1.42')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.42');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.41 (v8.2.8)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.42 (v8.2.9)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
