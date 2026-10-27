@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.43** | 27/10/2026 16:30 | `intermediárias/aplicativo_v143_gestao_polos_e_visualizacao_turmas_ue_nucleo_ei.html` | Solicitação direta / `planos_de_implementacao/plano_gestao_polos_e_visualizacao_turmas_ue_nucleo_ei.md` | Governança territorial de Polos Regionais pelo Núcleo de EI, supressão da tela de turmas da rede municipal (`#pedagTabClasses`) para preservação da autonomia escolar da CP, bloqueio RBAC com toast em criação/edição/exclusão direta de turmas, e acesso somente leitura às turmas e regências via clique na UE ou botão '👁️ Ver Turmas' conectado à SSOT (`#modalViewUnitClasses`) 🏛️🗺️👁️ |
 | **1.42** | 27/10/2026 16:20 | `intermediárias/aplicativo_v142_remocao_emojis_matrizes_referencia.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_tela_matrizes_referencia.md` | Remoção completa de emojis e padronização visual na tela de Matrizes de Referência Oficiais (`#screenRefDocs`) e modal (`#modalRefDocs`): substituição por pictogramas vetoriais SVG monocromáticos (Feather/Lucide) com classes `.btn-icon` e `.btn-icon-sm`, e asserção no Módulo 12 da auditoria 📑🧹✨ |
 | **1.41** | 27/10/2026 16:15 | `intermediárias/aplicativo_v141_resolucao_exclusividade_docente_catalogo_dados.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_alocacao_exclusiva_docente_catalogo_dados.md` | Resolução definitiva da exclusividade docente no Módulo Catálogo de Dados (`catalogo_dados`): alinhamento de INITIAL_TEAM com INITIAL_CLASSES, deduplicação em loadState(), limpeza em seedSampleData(), trava anti-dupla alocação parcial em saveClassEditor() e asserção temporal escopada por ano letivo 👩‍🏫🛡️ |
 | **1.40** | 27/10/2026 15:58 | `intermediárias/aplicativo_v140_ajuste_titulo_quadro_controle_bimestral.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_titulo_quadro_controle_bimestral.md` | Higienização visual do título da sub-aba Longitudinal: simplificação para 'Quadro de Controle Bimestral', eliminação do emoji de semáforo e parênteses redundantes, com asserção estrita no Módulo 10 da auditoria 🧹📊 |
@@ -168,6 +169,34 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.43] - Governança de Polos pelo Núcleo de EI, Supressão da Tela de Turmas da Rede e Acesso Somente Leitura às Turmas por UE
+- **Data / Horário:** 27/10/2026 16:30
+- **Arquivo de Referência:** `intermediárias/aplicativo_v143_gestao_polos_e_visualizacao_turmas_ue_nucleo_ei.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_gestao_polos_e_visualizacao_turmas_ue_nucleo_ei.md`.
+- **Foco Central:** Governança territorial de Polos Regionais pelo Núcleo de Educação Infantil, com preservação da autonomia pedagógica e escolar das Unidades Escolares:
+  1. Supressão estrita da sub-aba *Turmas da Rede Municipal* (`#pedagTabClasses`) para a Coordenadora do Núcleo de EI.
+  2. Preservação integral do gerenciamento dos Polos Regionais (criação, edição e vinculação de UEs) pelo Núcleo de EI.
+  3. Acesso à consulta reativa e instantânea das turmas e docentes regentes titulares de qualquer UE ao clicar no nome da escola ou no botão *"👁️ Ver Turmas"*, através do novo modal institucional `#modalViewUnitClasses` (em modo somente leitura e 100% conectado à SSOT via `getClassesForSchool`).
+  4. Blindagem RBAC defensiva em `openAddClassModal()`, `openEditClassModal()`, `saveClassEditor()` e `deleteClass()` bloqueando modificações diretas de turmas de UEs por parte do Núcleo de EI com toast educativo orientando a competência exclusiva da Coordenação Pedagógica da escola.
+
+#### Inclusões
+- Novo Modal Institucional de Consulta: `#modalViewUnitClasses`, contendo metadados da escola (nome, polo, endereço, CP titular), KPIs de turmas, docentes e matrículas/AEE, tabela rolável de turmas com jornadas (Tempo Integral vs Parcial), turnos e docentes atribuídos (com discriminação de Manhã e Tarde para turmas integrais), e badge de segurança SSOT.
+- Funções controladoras `openViewUnitClassesModal(unitId)` e `closeViewUnitClassesModal()`.
+- Botão *"👁️ Ver Turmas"* e estilização clicável do nome da unidade na Tabela de Unidades Escolares (`unitsTableBody`) e na Matriz de Cobertura por Polo Regional (`networkCoverageTableBody`).
+- Bateria de testes determinísticos no Módulo 2 (`catalogo_dados`) validando a ocultação da sub-aba, desvio defensivo de navegação, bloqueios de mutação com toast, abertura e renderização do modal `#modalViewUnitClasses`, ausência de inputs mutatórios e preservação da aba para a Coordenação Pedagógica.
+
+#### Alterações
+- `applyUserRoleUI()`: Ocultação estrita de `#pedagTabClasses` (`display: 'none'`) quando `isNucleoEI(user)` for verdadeiro; garantia de visibilidade ativa (`display: 'inline-flex'`) para `coordenador` e `formador`.
+- `switchPedagSubTab()`: Desvio suave para a aba `'units'` caso usuário do Núcleo de EI tente acessar `'classes'`.
+- Travas RBAC em `openAddClassModal()`, `openEditClassModal()`, `saveClassEditor()` e `deleteClass()` emitindo `showToast` educativo para perfis do Núcleo de EI.
+- Atualização da versão do sistema para 1.43 (v8.2.10) no cabeçalho institucional (`.btn-changelog`), no modal de versões (`#modalChangelog`) e asserções da suíte de testes.
+
+#### Exclusões
+- Remoção da tela de gerenciamento de turmas da rede municipal para o perfil da Coordenadora do Núcleo de Educação Infantil.
+
+---
+
 
 ### [Versão 1.42] - Remoção de Emojis e Padronização Visual na Tela de Matrizes de Referência
 - **Data / Horário:** 27/10/2026 16:20
