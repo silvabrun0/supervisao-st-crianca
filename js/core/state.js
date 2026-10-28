@@ -165,7 +165,7 @@
               }
 
               // Sincroniza dados com USERS_DB resolvendo por id canônico ou nome
-              const dbKey = Object.keys(USERS_DB).find(k => 
+              const dbKey = (typeof findUserDbKey === 'function' ? findUserDbKey(m.id) || findUserDbKey(m.name) || findUserDbKey(m.email) : null) || Object.keys(USERS_DB).find(k => 
                 k === m.id || 
                 USERS_DB[k].id === m.id || 
                 (USERS_DB[k].name && USERS_DB[k].name.toLowerCase() === m.name.toLowerCase())
@@ -195,7 +195,11 @@
                   m.avatarText = USERS_DB[dbKey].avatarText;
                   sanitized = true;
                 }
-                if (appState.customUsers && appState.customUsers[dbKey]) {
+                if (!appState.customUsers) appState.customUsers = {};
+                if (!appState.customUsers[dbKey]) {
+                  appState.customUsers[dbKey] = { ...USERS_DB[dbKey] };
+                  sanitized = true;
+                } else {
                   appState.customUsers[dbKey].school = m.school;
                   appState.customUsers[dbKey].supervisor = m.supervisor;
                   appState.customUsers[dbKey].roleKey = m.roleKey;

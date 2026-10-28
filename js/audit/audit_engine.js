@@ -342,6 +342,68 @@
               appState.currentUserKey = 'helena';
               applyUserRoleUI();
               logger.log('Alternância cíclica de perfis e reatividade canônica de #deskTabHomeLabel (Início vs Gestão Pedagógica)', true);
+
+              // 10. Teste Automatizado de Dinamicidade SSOT de Escopo (Formadora ➔ Polo / Coordenadora ➔ UE e Turmas)
+              (function testScopeDynamism() {
+                const origCurrentUser = appState.currentUserKey;
+                
+                // 1. Teste Dinâmico de Polo da Formadora
+                const clariceMember = (appState.teamMembers || []).find(m => m.name === 'Clarice Barbosa');
+                if (!clariceMember) throw new Error('Clarice Barbosa não encontrada em teamMembers');
+                
+                const origPolo = clariceMember.school;
+                const targetTestPolo = 'Polo Regional 2 (Sul)';
+                
+                // Modifica o polo na SSOT de equipe
+                clariceMember.school = targetTestPolo;
+                syncUserToAuthDb(clariceMember);
+                
+                appState.currentUserKey = 'clarice';
+                const clariceResolved = getCurrentUser();
+                if (clariceResolved.school !== targetTestPolo) {
+                  throw new Error(`Falha de dinamicidade: getCurrentUser().school de Clarice esperado "${targetTestPolo}", obtido "${clariceResolved.school}"`);
+                }
+                
+                // Valida que o escopo de unidades de Clarice mudou dinamicamente
+                const formadorUnits = (appState.units || []).filter(u => u.polo === clariceResolved.school).map(u => u.name);
+                if (!formadorUnits.includes('CEI Vovó Zezé')) {
+                  throw new Error('Unidade CEI Vovó Zezé não detectada dinamicamente no novo polo de Clarice');
+                }
+                logger.log('Dinamicidade SSOT de alteração de Polo da Formadora validada com sucesso', true, `${targetTestPolo} ➔ ${formadorUnits.join(', ')}`);
+                
+                // Restaura polo original de Clarice
+                clariceMember.school = origPolo;
+                syncUserToAuthDb(clariceMember);
+                
+                // 2. Teste Dinâmico de UE e Turmas da Coordenadora
+                const marianaMember = (appState.teamMembers || []).find(m => m.name === 'Mariana Ferreira');
+                if (!marianaMember) throw new Error('Mariana Ferreira não encontrada em teamMembers');
+                
+                const origSchool = marianaMember.school;
+                const targetTestSchool = 'EMEI Pequeno Príncipe';
+                
+                marianaMember.school = targetTestSchool;
+                syncUserToAuthDb(marianaMember);
+                
+                appState.currentUserKey = 'mariana';
+                const marianaResolved = getCurrentUser();
+                if (marianaResolved.school !== targetTestSchool) {
+                  throw new Error(`Falha de dinamicidade: getCurrentUser().school de Mariana esperado "${targetTestSchool}", obtido "${marianaResolved.school}"`);
+                }
+                
+                // Valida que as turmas resolvidas para Mariana passaram a ser as da nova escola
+                const marianaClasses = getClassesForSchool(marianaResolved.school);
+                if (!marianaClasses.some(c => c.school === targetTestSchool)) {
+                  throw new Error(`Turmas da nova UE (${targetTestSchool}) não foram resolvidas para Mariana`);
+                }
+                logger.log('Dinamicidade SSOT de alteração de UE e Turmas da Coordenadora validada com sucesso', true, `${targetTestSchool} (${marianaClasses.length} turmas)`);
+                
+                // Restaura escola original de Mariana
+                marianaMember.school = origSchool;
+                syncUserToAuthDb(marianaMember);
+                
+                appState.currentUserKey = origCurrentUser;
+              })();
             } catch (e) {
               logger.log('Erro de execução no módulo auth_rbac', false, e.message);
             }
@@ -898,6 +960,31 @@
                 throw new Error('closeViewUnitClassesModal falhou em fechar o modal #modalViewUnitClasses');
               }
               logger.log('Validação do Modal de Visualização de Turmas da UE (#modalViewUnitClasses, somente leitura SSOT)', true, `${sampleUnit.name} (${expectedClassesCount} turmas)`);
+
+              // Validação da Ausência Estrita de Emojis nos Badges de Polos Regionais
+              const viewUnitPolo = document.getElementById('viewUnitModalPolo')?.innerText;
+              if (viewUnitPolo && viewUnitPolo.includes('📍')) {
+                throw new Error(`Badge de Polo no modal de visualização ainda contém emoji: "${viewUnitPolo}"`);
+              }
+
+              // Renderiza a tela de unidades e de servidores para validar os badges gerados
+              if (typeof renderUnitsScreen === 'function') renderUnitsScreen();
+              const unitPoloBadges = document.querySelectorAll('#unitsTableBody tr td:nth-child(2) .status-badge');
+              unitPoloBadges.forEach(b => {
+                if (b.innerText.includes('📍')) {
+                  throw new Error(`Badge de Polo na tabela de UEs contém emoji residual: "${b.innerText}"`);
+                }
+              });
+
+              if (typeof renderTeamScreen === 'function') renderTeamScreen();
+              const teamPoloBadges = document.querySelectorAll('#teamTableBody tr td:nth-child(4) .status-badge');
+              teamPoloBadges.forEach(b => {
+                if (b.innerText.includes('📍')) {
+                  throw new Error(`Badge de Polo no quadro de servidores contém emoji residual: "${b.innerText}"`);
+                }
+              });
+
+              logger.log('Erradicação completa do emoji 📍 nos badges de Polos Regionais (UEs, Equipes e Modal)', true);
 
               // 12.4 Validação de Preservação da Sub-aba para Coordenação Pedagógica
               selectUserAccount('mariana');
@@ -3162,14 +3249,14 @@
                 logger.log('Erradicação completa de emojis na tela de Gestão Pedagógica e adoção de pictogramas SVG', true);
               }
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.51
-              if (!btnChangelog.textContent.includes('Versão 1.51')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.52
+              if (!btnChangelog.textContent.includes('Versão 1.52')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.51')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.51');
+              if (!modalChg.innerHTML.includes('Versão 1.52')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.52');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.51 (v8.2.18)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.52 (v8.2.19)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

@@ -28,7 +28,9 @@
         school: 'CEI Professora Maria de Lourdes',
         stage: 'Infantil I',
         shift: 'Tempo Parcial (Matutino)',
-        teachers: ['Ana Carolina Silva']
+        teachers: ['Ana Carolina Silva'],
+        totalStudents: 25,
+        inclusiveStudents: 1
       },
       {
         id: 'cls-pml-02',
@@ -36,7 +38,9 @@
         school: 'CEI Professora Maria de Lourdes',
         stage: 'Berçário II',
         shift: 'Tempo Parcial (Matutino)',
-        teachers: ['Carla Beatriz Mendes']
+        teachers: ['Carla Beatriz Mendes'],
+        totalStudents: 15,
+        inclusiveStudents: 0
       },
       {
         id: 'cls-pml-03',
@@ -44,7 +48,9 @@
         school: 'CEI Professora Maria de Lourdes',
         stage: 'Infantil II',
         shift: 'Tempo Parcial (Vespertino)',
-        teachers: ['Juliana Roberta Rocha']
+        teachers: ['Juliana Roberta Rocha'],
+        totalStudents: 24,
+        inclusiveStudents: 2
       },
       {
         id: 'cls-pml-04',
@@ -54,7 +60,9 @@
         shift: 'Tempo Integral',
         teachersMorning: ['Mariana Santos', 'Roberta Dias'],
         teachersAfternoon: ['Patricia Souza', 'Camila Vasconcelos'],
-        teachers: ['Mariana Santos', 'Roberta Dias', 'Patricia Souza', 'Camila Vasconcelos']
+        teachers: ['Mariana Santos', 'Roberta Dias', 'Patricia Souza', 'Camila Vasconcelos'],
+        totalStudents: 20,
+        inclusiveStudents: 1
       },
       {
         id: 'cls-pp-01',
@@ -62,7 +70,9 @@
         school: 'EMEI Pequeno Príncipe',
         stage: 'Maternal I',
         shift: 'Tempo Parcial (Matutino)',
-        teachers: ['Fernanda Lima']
+        teachers: ['Fernanda Lima'],
+        totalStudents: 22,
+        inclusiveStudents: 1
       },
       {
         id: 'cls-pp-02',
@@ -70,7 +80,9 @@
         school: 'EMEI Pequeno Príncipe',
         stage: 'Infantil I',
         shift: 'Tempo Parcial (Vespertino)',
-        teachers: ['Luciana Ramos']
+        teachers: ['Luciana Ramos'],
+        totalStudents: 26,
+        inclusiveStudents: 0
       },
       {
         id: 'cls-vz-01',
@@ -80,7 +92,9 @@
         shift: 'Tempo Integral',
         teachersMorning: [],
         teachersAfternoon: [],
-        teachers: []
+        teachers: [],
+        totalStudents: 18,
+        inclusiveStudents: 1
       }
     ];
 
@@ -139,7 +153,9 @@
             school: schoolName,
             stage: grpName.includes('Berçário') ? 'Berçário' : grpName.includes('Maternal') ? 'Maternal' : 'Infantil I',
             shift: 'Tempo Parcial (Matutino)',
-            teachers: groups[grpName]
+            teachers: groups[grpName],
+            totalStudents: 22,
+            inclusiveStudents: 1
           };
           appState.classes.push(autoCls);
           schoolClasses.push(autoCls);
@@ -161,7 +177,9 @@
             school: schoolName,
             stage: st.stage,
             shift: 'Tempo Parcial (Matutino)',
-            teachers: []
+            teachers: [],
+            totalStudents: 20,
+            inclusiveStudents: 1
           };
           appState.classes.push(autoCls);
           schoolClasses.push(autoCls);

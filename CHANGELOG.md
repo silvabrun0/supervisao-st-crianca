@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.52** | 28/10/2026 15:20 | `intermediárias/aplicativo_v152_remocao_emojis_alfinete_polos.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_alfinete_polos.md` | Higienização visual institucional e erradicação definitiva dos emojis de alfinete (📍) nos badges de Polos Regionais vinculados na Tabela de UEs (`#unitsTableBody`), Modal de Visualização da UE (`#viewUnitModalPolo`) e Quadro de Servidores (`#teamTableBody`), preservando a integridade SSOT e asserções estritas no Módulo 12 da auditoria 🧹🏛️✨ |
+| **1.52** | 28/10/2026 15:15 | `intermediárias/aplicativo_v152_sincronizacao_dinamica_visoes_formadora_coordenadora.html` | Solicitação direta / `planos_de_implementacao/plano_sincronizacao_dinamica_visoes_formadora_coordenadora.md` | Sincronização dinâmica em tempo real das visões de Formadora (Polo) e Coordenadora (UE e Turmas): resolução SSOT em `getCurrentUser()`, reconciliação bidirecional com `appState.teamMembers`, persistência universal em `appState.customUsers` / `USERS_DB`, propagação relacional de vínculos, reatividade imediata na alternância de perfil (`selectUserAccount`) e asserções estritas no Módulo 1 da auditoria 🔄🏫🗺️ |
 | **1.51** | 28/10/2026 15:00 | `intermediárias/aplicativo_v151_destaque_proxima_observacao_cronograma.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_destaque_proxima_observacao_cronograma.md` | Correção e restauração plena do destaque da próxima observação no Cronograma: reinserção de `#nextScheduleHighlightContainer`, estilos CSS do Hero Card (`.next-visit-hero-card`) e badge inline (`.badge-next-inline`), suporte canônico a turmas em `getActionablePendingSchedules()`, alinhamento do Hero Card ao filtro ativo de bimestre e asserções estritas no Módulo 8 da auditoria 📅🎯🛡️ |
 | **1.50** | 28/10/2026 14:55 | `intermediárias/aplicativo_v150_remocao_emojis_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_tela_gestao_pedagogica.md` | Remoção completa de emojis e padronização visual na Gestão Pedagógica/Rede: substituição por pictogramas vetoriais SVG monocromáticos (Feather/Lucide) em cartões, tabelas, modais e asserções estritas no Módulo 12 da auditoria 🏛️✨🛡️ |
 | **1.49** | 28/10/2026 14:40 | `intermediárias/aplicativo_v149_ajuste_mencoes_semaforo_quadro_controle.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_mencoes_semaforo_quadro_controle.md` | Padronização terminológica do Quadro de Controle Bimestral na aba de Diagnóstico: atualização da pílula de navegação `#pillIndLongitudinal` e botões de atalho nos cards de KPI para "Quadro de Controle", eliminando resquícios coloquiais de "Semáforo" 📊🔍🛡️ |
@@ -177,6 +179,53 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.52] - Higienização Visual Institucional e Remoção dos Emojis de Junto dos Polos
+- **Data / Horário:** 28/10/2026 15:20
+- **Arquivo de Referência:** `intermediárias/aplicativo_v152_remocao_emojis_alfinete_polos.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_alfinete_polos.md`.
+- **Foco Central:** Higienização visual e erradicação definitiva dos emojis de alfinete (📍) exibidos junto aos nomes dos Polos Regionais:
+  1. **Tabela de Unidades Escolares (`renderUnitsScreen`):** Supressão definitiva do prefixo `📍 ` no badge verde de status (`.status-badge`) dos Polos Regionais vinculados em `#unitsTableBody`.
+  2. **Modal de Visualização da UE (`openViewUnitClassesModal`):** Supressão do caractere `📍 ` na injeção do texto do elemento `#viewUnitModalPolo`.
+  3. **Quadro de Equipes & Servidores (`renderTeamScreen`):** Supressão do caractere `📍 ` no badge cinza de status do polo em `#teamTableBody`.
+  4. **Conformidade com o Padrão Hallmark:** Eliminação de emojis de sistema operacional inconsistentes em favor de badges monocromáticos limpos e tipografia institucional sóbria.
+  5. **Auditoria Modular (Módulo 12 e Módulo 14):** Asserções estritas no `audit_engine.js` validando a ausência total de emojis residuais nos badges de polos em UEs, Servidores e Modais de detalhamento.
+
+#### Alterações
+- `js/features/management.js`: Remoção dos emojis `📍` em `renderUnitsScreen()`, `openViewUnitClassesModal()` e `renderTeamScreen()`.
+- `js/audit/audit_engine.js`: Adição de teste específico de validação de ausência de emojis nos badges de polos no módulo `gestao_ue_docentes` e verificação de versão no módulo `navegacao_layout`.
+- `index.html`: Registro descritivo da higienização visual no `#modalChangelog`.
+- `CHANGELOG.md`: Registro detalhado e sumário executivo da versão.
+
+---
+
+### [Versão 1.52] - Sincronização Dinâmica em Tempo Real das Visões de Formadora (Polo) e Coordenadora (UE e Turmas)
+- **Data / Horário:** 28/10/2026 15:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v152_sincronizacao_dinamica_visoes_formadora_coordenadora.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_sincronizacao_dinamica_visoes_formadora_coordenadora.md`.
+- **Foco Central:** Resolução definitiva da estagnação estática de escopo ao transferir servidores e gerenciar polos regionais, assegurando reatividade imediata e persistência integral:
+  1. **Resolução Dinâmica SSOT em `getCurrentUser()` (`js/core/rbac.js`):** Lookup bidirecional em tempo real contra o quadro de servidores (`appState.teamMembers`), sincronizando dinamicamente escola/polo, supervisor e cargo de volta ao objeto de sessão autenticado.
+  2. **Utilitário Universal `findUserDbKey()` e Sincronizador `syncUserToAuthDb()` (`js/features/management.js`):** Resolução canônica de identificadores (`id`, `name`, `email`) e atualização síncrona tanto em memória (`USERS_DB`) quanto no `localStorage` (`appState.customUsers`), impedindo perda de configuração ao recarregar a página (`F5`).
+  3. **Governança Territorial de Polos Regionais (`handleEditPoloSubmit`, `handleCreatePoloSubmit`, `removePolo`):** Desvinculação automática de formadoras anteriores quando um polo é alterado, auto-vinculação da nova formadora selecionada e reatribuição em cascata da supervisão das coordenadoras vinculadas às escolas daquele polo.
+  4. **Propagação Relacional na Mudança de UE da Coordenadora (`saveEditTeamMember`):** Vinculação automática à Formadora do Polo correspondente à nova UE, reatribuição de docentes regentes e garantia de catálogo das turmas da nova escola via `getClassesForSchool(schoolVal)`.
+  5. **Invalidação Reativa de Cache de UEs da Formadora (`renderClassesScreen`):** Adoção de chave composta de identificação (`user.name + '|' + user.school`) para forçar o repovoamento imediato do seletor de escolas de acordo com o polo ativo.
+  6. **Reatividade Reativa na Alternância de Contas (`selectUserAccount`):** Limpeza dos filtros e caches de seletores de tela e re-renderização imediata de telas ativas (`#screenIndicators`, `#screenClasses`, `#screenSchedule`).
+  7. **Autocura e Sincronismo no Carregamento (`loadState` em `js/core/state.js`):** Auto-criação incondicional do perfil em `appState.customUsers[dbKey]` se inexistente.
+  8. **Auditoria Integrada (Módulo 1):** Bateria automatizada testando a dinamicidade da alteração de polo de formadora e alteração de UE/turmas de coordenadora.
+
+#### Inclusões
+- Utilitário `findUserDbKey(identifier)` em `js/core/rbac.js`.
+- Função universal `syncUserToAuthDb(member)` em `js/features/management.js`.
+- Teste de integração automatizado de dinamicidade SSOT de escopo no Módulo 1 (`auth_rbac`) em `js/audit/audit_engine.js`.
+
+#### Alterações
+- `js/core/rbac.js`: Reconciliação dinâmica em `getCurrentUser()` e re-renderização ativa em `selectUserAccount()`.
+- `js/features/management.js`: Propagação bidirecional em `handleEditPoloSubmit()`, `handleCreatePoloSubmit()`, `removePolo()`, `saveEditTeamMember()` e cache de UEs em `renderClassesScreen()`.
+- `js/core/state.js`: Sincronização e autocura de `appState.customUsers` em `loadState()`.
+- `index.html`: Atualização do cabeçalho institucional (`.btn-changelog`) para Versão 1.52 (v8.2.19) e inserção do card no modal `#modalChangelog`.
+- `CHANGELOG.md`: Registro detalhado da versão 1.52.
+
+---
 
 ### [Versão 1.51] - Correção e Restauração Plena do Destaque da Próxima Observação no Cronograma
 - **Data / Horário:** 28/10/2026 15:00

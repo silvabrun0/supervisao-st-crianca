@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.51 (v8.2.18)</span>
+          <span>Versão 1.52 (v8.2.19)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -363,6 +363,10 @@
           </div>
         </div>
 
+        <div id="characterizationFilterPanel" style="margin-bottom:14px;">
+          <!-- Populado dinamicamente via renderClassesScreen() -->
+        </div>
+
         <div class="card" id="classesFilterCard" style="display:none; margin-bottom:14px;">
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
             <label class="form-label" style="margin:0;">Filtrar Unidade Escolar:</label>
@@ -380,6 +384,8 @@
                 <tr>
                   <th>Turma / Etapa</th>
                   <th>Unidade Escolar</th>
+                  <th>Alunos (Total)</th>
+                  <th>Necessidades Especiais (AEE)</th>
                   <th>Jornada Escolar</th>
                   <th>Turno(s)</th>
                   <th>Docentes Regentes Titulares</th>
@@ -1754,6 +1760,40 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.52 - REMOÇÃO DE EMOJIS DOS POLOS REGIONAIS E HIGIENIZAÇÃO VISUAL -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid var(--primary); background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.52 (v8.2.19)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">28/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Higienização Visual Institucional e Remoção dos Emojis de Junto dos Polos:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🧹 <strong>Erradicação do Emoji de Alfinete (📍):</strong> Supressão definitiva do caractere nos badges de status dos Polos Regionais vinculados na Tabela de Unidades Escolares (<code>#unitsTableBody</code>), no Quadro de Equipes &amp; Servidores (<code>#teamTableBody</code>) e no Modal de Consulta da UE (<code>#viewUnitModalPolo</code>).</li>
+          <li>🏛️ <strong>Alinhamento ao Padrão Hallmark:</strong> Substituição da estética informal de emojis de sistema operacional por tipografia limpa em badges monocromáticos padronizados.</li>
+          <li>🛡️ <strong>Preservação Integral da Governança SSOT:</strong> Manutenção rigorosa de todos os relacionamentos de dados territoriais, vínculos de formadoras e filtros por polo.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.52 - SINCRONIZAÇÃO DINÂMICA EM TEMPO REAL DAS VISÕES DE FORMADORA E COORDENADORA -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid var(--primary); background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.52 (v8.2.19)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">28/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Sincronização Dinâmica em Tempo Real das Visões de Formadora (Polo) e Coordenadora (UE e Turmas):
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🔄 <strong>Resolução Dinâmica SSOT em <code>getCurrentUser()</code>:</strong> Reconciliação em tempo real entre a base de autenticação (<code>USERS_DB</code>) e o quadro de servidores (<code>appState.teamMembers</code>), propagando imediatamente qualquer alteração de Polo ou Unidade Escolar para o usuário ativo.</li>
+          <li>🗺️ <strong>Sincronizador Universal <code>syncUserToAuthDb()</code>:</strong> Atualização bidirecional e criação sob demanda em <code>USERS_DB</code> e <code>appState.customUsers</code> nas edições, criações e exclusões de Polos e Servidores, eliminando desencontros de chaves e garantindo persistência no <code>localStorage</code>.</li>
+          <li>🏫 <strong>Propagação Relacional de Vínculos:</strong> Ao alterar a UE da Coordenadora, vincula automaticamente a Formadora do polo correspondente, reatribui docentes regentes e assegura o catálogo das turmas da nova escola; ao alterar o polo da Formadora, propaga a supervisão das coordenadoras e limpa vínculos residuais.</li>
+          <li>⚡ <strong>Invalidação Reativa de Cache de UEs e Telas Ativas:</strong> Atualização dinâmica do dropdown de unidades escolares em Turmas & Regência (chave composta <code>nome|escola</code>) e re-renderização imediata de telas ativas e alternância de contas em <code>selectUserAccount()</code>.</li>
+          <li>🔬 <strong>Auditoria Automatizada (Módulo 1):</strong> Nova bateria de testes unitários e de integração validando a dinamicidade ponta a ponta da alteração de Polo da Formadora e de UE/Turmas da Coordenadora.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.51 - CORREÇÃO E RESTAURAÇÃO PLENA DO DESTAQUE DA PRÓXIMA OBSERVAÇÃO -->
@@ -5032,14 +5072,17 @@
 
       <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
         <div>
-          <label class="form-label">Total de Alunos Matriculados</label>
-          <input type="number" id="editUnitStudents" class="form-input" min="0" placeholder="Ex: 120">
+          <label class="form-label">Total de Alunos Matriculados <span style="font-size:10px; color:var(--text-secondary);">(Soma das turmas)</span></label>
+          <input type="number" id="editUnitStudents" class="form-input" min="0" placeholder="Calculado das turmas" readonly style="background:#F1F5F9; cursor:not-allowed;">
         </div>
         <div>
-          <label class="form-label">Crianças Inclusão / Diversidade</label>
-          <input type="number" id="editUnitInclusive" class="form-input" min="0" placeholder="Ex: 6">
+          <label class="form-label">Crianças Inclusão (AEE) <span style="font-size:10px; color:var(--text-secondary);">(Soma das turmas)</span></label>
+          <input type="number" id="editUnitInclusive" class="form-input" min="0" placeholder="Calculado das turmas" readonly style="background:#F1F5F9; cursor:not-allowed;">
         </div>
       </div>
+      <p style="font-size:11px; color:var(--text-secondary); margin-top:-6px; margin-bottom:12px;">
+        O total de alunos e de crianças com necessidades especiais é calculado reativamente a partir das turmas cadastradas na escola.
+      </p>
 
       <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:14px;">
         <button class="btn btn-secondary" onclick="closeEditUnitModal()">Cancelar</button>
@@ -5091,6 +5134,7 @@
           <thead>
             <tr>
               <th>Turma & Etapa</th>
+              <th>Alunos (Total / AEE)</th>
               <th>Jornada Escolar</th>
               <th>Turno</th>
               <th>Professores Regentes Atribuídos</th>
@@ -5157,6 +5201,21 @@
           <option value="Tempo Parcial (Vespertino)">Vespertino (Tarde)</option>
         </select>
       </div>
+
+      <!-- Bloco de Caracterização da Turma: Alunos e AEE -->
+      <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div>
+          <label class="form-label" for="classEditorTotalStudents">Total de Alunos Matriculados</label>
+          <input type="number" id="classEditorTotalStudents" class="form-input" min="1" max="100" placeholder="Ex: 30" value="25" required>
+        </div>
+        <div>
+          <label class="form-label" for="classEditorInclusiveStudents">Alunos com Necessidades Especiais (AEE)</label>
+          <input type="number" id="classEditorInclusiveStudents" class="form-input" min="0" max="100" placeholder="Ex: 1" value="0">
+        </div>
+      </div>
+      <p style="font-size:11px; color:var(--text-secondary); margin-top:-6px; margin-bottom:14px;">
+        Exemplo: Se a turma possui 30 crianças no total e 1 aluno com necessidade especial, informe 30 e 1 (restando 29 crianças regulares).
+      </p>
 
       <!-- Bloco de Docentes: Tempo Parcial -->
       <div class="form-group" id="groupTeachersSingle">

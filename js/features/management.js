@@ -1,4 +1,139 @@
     // --- 11. UNITS & TEAM MANAGEMENT WITH SPREADSHEET IMPORT ---
+    // =========================================================================
+    // MOTOR DE CARACTERIZAÇÃO QUANTITATIVA E AGREGAÇÃO SSOT
+    // =========================================================================
+
+    // Retorna agregados de uma unidade escolar a partir do somatório de suas turmas
+    function getSchoolClassesAggregates(schoolName) {
+      const classes = (appState.classes || []).filter(c => c.school === schoolName);
+      let totalStudents = 0;
+      let inclusiveStudents = 0;
+
+      classes.forEach(c => {
+        const tot = typeof c.totalStudents === 'number' && !isNaN(c.totalStudents) ? c.totalStudents : 20;
+        const inc = typeof c.inclusiveStudents === 'number' && !isNaN(c.inclusiveStudents) ? c.inclusiveStudents : 0;
+        totalStudents += tot;
+        inclusiveStudents += inc;
+      });
+
+      const regularStudents = Math.max(0, totalStudents - inclusiveStudents);
+      const inclusionRate = totalStudents > 0 ? ((inclusiveStudents / totalStudents) * 100).toFixed(1) : '0.0';
+      const teachersCount = (appState.teamMembers || []).filter(m => m.school === schoolName && m.roleKey === 'professora').length;
+
+      return {
+        schoolName,
+        totalClasses: classes.length,
+        totalStudents,
+        inclusiveStudents,
+        regularStudents,
+        inclusionRate,
+        teachersCount,
+        classes
+      };
+    }
+
+    // Retorna agregados de um polo regional somando as turmas de todas as suas UEs
+    function getPoloClassesAggregates(poloName) {
+      const poloUnits = (appState.units || []).filter(u => u.polo === poloName).map(u => u.name);
+      let totalClasses = 0;
+      let totalStudents = 0;
+      let inclusiveStudents = 0;
+
+      poloUnits.forEach(uName => {
+        const agg = getSchoolClassesAggregates(uName);
+        totalClasses += agg.totalClasses;
+        totalStudents += agg.totalStudents;
+        inclusiveStudents += agg.inclusiveStudents;
+      });
+
+      const regularStudents = Math.max(0, totalStudents - inclusiveStudents);
+      const inclusionRate = totalStudents > 0 ? ((inclusiveStudents / totalStudents) * 100).toFixed(1) : '0.0';
+
+      return {
+        poloName,
+        totalUnits: poloUnits.length,
+        totalClasses,
+        totalStudents,
+        inclusiveStudents,
+        regularStudents,
+        inclusionRate
+      };
+    }
+
+    // Retorna o agregado global da Rede Municipal (soma de todas as turmas)
+    function getNetworkClassesAggregates() {
+      let totalClasses = 0;
+      let totalStudents = 0;
+      let inclusiveStudents = 0;
+
+      const allClasses = appState.classes || [];
+      allClasses.forEach(c => {
+        const tot = typeof c.totalStudents === 'number' && !isNaN(c.totalStudents) ? c.totalStudents : 20;
+        const inc = typeof c.inclusiveStudents === 'number' && !isNaN(c.inclusiveStudents) ? c.inclusiveStudents : 0;
+        totalStudents += tot;
+        inclusiveStudents += inc;
+        totalClasses++;
+      });
+
+      const regularStudents = Math.max(0, totalStudents - inclusiveStudents);
+      const inclusionRate = totalStudents > 0 ? ((inclusiveStudents / totalStudents) * 100).toFixed(1) : '0.0';
+      const totalUnits = (appState.units || []).length;
+
+      return {
+        totalUnits,
+        totalClasses,
+        totalStudents,
+        inclusiveStudents,
+        regularStudents,
+        inclusionRate
+      };
+    }
+
+    // Sincroniza dinamicamente appState.units com o somatório de suas turmas
+    function syncUnitCharacterizationFromClasses() {
+      if (!Array.isArray(appState.units)) return;
+      appState.units.forEach(u => {
+        const agg = getSchoolClassesAggregates(u.name);
+        u.totalClasses = agg.totalClasses;
+        u.totalStudents = agg.totalStudents;
+        u.inclusiveStudents = agg.inclusiveStudents;
+      });
+    }
+
+    // Helpers de controle de visualização da caracterização na Coordenadora
+    function setCoordinatorCharView(mode) {
+      const coordContainer = document.getElementById('coordinatorUnitCardContainer');
+      if (coordContainer) {
+        coordContainer.dataset.viewMode = mode;
+        renderUnitsScreen();
+      }
+    }
+
+    function setCoordinatorCharClass(classId) {
+      const coordContainer = document.getElementById('coordinatorUnitCardContainer');
+      if (coordContainer) {
+        coordContainer.dataset.viewMode = 'class';
+        coordContainer.dataset.selectedClassId = classId;
+        renderUnitsScreen();
+      }
+    }
+
+    function saveSchoolAddressOnly() {
+      const user = getCurrentUser();
+      const schoolName = user.school;
+      const unit = (appState.units || []).find(u => u.name === schoolName);
+      if (!unit) {
+        showToast('Unidade escolar não encontrada.');
+        return;
+      }
+      const address = document.getElementById('coordUnitAddress')?.value.trim();
+      if (address !== undefined) {
+        unit.address = address;
+        saveState();
+        showToast('Endereço da unidade escolar salvo com sucesso!');
+      }
+    }
+
     function renderUnitsScreen() {
       const user = getCurrentUser();
       const coordContainer = document.getElementById('coordinatorUnitCardContainer');
@@ -11,64 +146,127 @@
           const myUnit = (appState.units || []).find(u => u.name === user.school) || {
             name: user.school,
             polo: 'Polo Municipal',
-            address: '',
-            totalStudents: 120,
-            inclusiveStudents: 6,
-            totalClasses: 4
+            address: ''
           };
-          const schoolClasses = getClassesForSchool(user.school);
-          const teachersCount = (appState.teamMembers || []).filter(m => m.school === user.school && m.roleKey === 'professora').length;
+          const agg = getSchoolClassesAggregates(user.school);
+          const schoolClasses = agg.classes;
+
+          // Recupera modo de visualização ativo (consolidado ou turma específica)
+          const activeViewMode = coordContainer.dataset.viewMode || 'aggregated';
+          const selectedClassId = coordContainer.dataset.selectedClassId || (schoolClasses[0] ? schoolClasses[0].id : '');
+          const currentClass = schoolClasses.find(c => c.id === selectedClassId) || schoolClasses[0];
+
+          let detailHtml = '';
+          if (activeViewMode === 'class' && currentClass) {
+            const clsTot = typeof currentClass.totalStudents === 'number' ? currentClass.totalStudents : 20;
+            const clsInc = typeof currentClass.inclusiveStudents === 'number' ? currentClass.inclusiveStudents : 0;
+            const clsReg = Math.max(0, clsTot - clsInc);
+            const clsTeachers = Array.isArray(currentClass.teachers) && currentClass.teachers.length > 0 ? currentClass.teachers.join(', ') : 'Aguardando atribuição';
+
+            detailHtml = `
+              <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+                  <div>
+                    <h4 style="margin:0; font-size:15px; font-weight:800; color:var(--primary-dark);">${currentClass.name}</h4>
+                    <span style="font-size:12px; color:var(--text-secondary);">${currentClass.stage || 'Educação Infantil'} · ${currentClass.shift || 'Parcial'}</span>
+                  </div>
+                  <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;" onclick="openEditClassModal('${currentClass.id}')">
+                    ✏️ Editar Turma
+                  </button>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">
+                  <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                    <div style="font-size:11px; font-weight:700; color:var(--text-secondary);">Total de Alunos</div>
+                    <div style="font-size:20px; font-weight:800; color:#1E40AF; margin-top:2px;">${clsTot}</div>
+                    <div style="font-size:10px; color:var(--text-secondary);">Crianças matriculadas</div>
+                  </div>
+                  <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                    <div style="font-size:11px; font-weight:700; color:var(--text-secondary);">Necessidades Especiais</div>
+                    <div style="font-size:20px; font-weight:800; color:#059669; margin-top:2px;">${clsInc}</div>
+                    <div style="font-size:10px; color:var(--text-secondary);">${clsInc > 0 ? 'Público AEE nesta turma' : 'Nenhum aluno AEE'}</div>
+                  </div>
+                  <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                    <div style="font-size:11px; font-weight:700; color:var(--text-secondary);">Alunos Regulares</div>
+                    <div style="font-size:20px; font-weight:800; color:#475569; margin-top:2px;">${clsReg}</div>
+                    <div style="font-size:10px; color:var(--text-secondary);">Sem necessidade especial</div>
+                  </div>
+                  <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                    <div style="font-size:11px; font-weight:700; color:var(--text-secondary);">Docentes Regentes</div>
+                    <div style="font-size:12px; font-weight:700; color:#1E293B; margin-top:6px; line-height:1.3;">${clsTeachers}</div>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            detailHtml = `
+              <!-- Grid de Métricas Agregadas da UE -->
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; margin-bottom:20px;">
+                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
+                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Matriculados (Soma)</div>
+                  <div style="font-size:22px; font-weight:800; color:#1E40AF; margin-top:6px;">${agg.totalStudents}</div>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Somatório de todas as ${agg.totalClasses} turmas</div>
+                </div>
+
+                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
+                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva / AEE</div>
+                  <div style="font-size:22px; font-weight:800; color:#059669; margin-top:6px;">${agg.inclusiveStudents} <span style="font-size:13px; font-weight:600; color:var(--text-secondary);">(${agg.inclusionRate}%)</span></div>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Crianças com necessidades especiais</div>
+                </div>
+
+                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
+                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas em Atividade</div>
+                  <div style="font-size:22px; font-weight:800; color:#6D28D9; margin-top:6px;">${agg.totalClasses}</div>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Turmas ativas sob sua gestão</div>
+                </div>
+
+                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
+                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Docentes na UE</div>
+                  <div style="font-size:22px; font-weight:800; color:#D97706; margin-top:6px;">${agg.teachersCount}</div>
+                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Professoras titulares lotadas</div>
+                </div>
+              </div>
+            `;
+          }
 
           coordContainer.innerHTML = `
             <div class="card" style="border-left: 4px solid var(--primary); padding: 20px;">
               <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
                 <div>
                   <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="font-size:24px;">🏢</span>
+                    <svg class="btn-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7l9-4 9 4v14M9 21V9h6v12"/></svg>
                     <h3 style="font-size:18px; font-weight:800; color:var(--primary-dark); margin:0;">${myUnit.name}</h3>
                   </div>
+                  <p style="font-size:12px; color:var(--text-secondary); margin:4px 0 0 0;">Caracterização calculada a partir do somatório canônico de turmas da unidade escolar.</p>
                 </div>
-                <button class="btn btn-primary" onclick="saveSchoolCharacterization()" style="font-size:12px; padding:8px 14px;">
-                  💾 Salvar Caracterização da UE
-                </button>
-              </div>
-
-              <!-- Grid de Métricas da UE -->
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; margin-bottom:20px;">
-                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Matriculados</div>
-                  <div style="margin-top:6px;">
-                    <input type="number" id="coordUnitTotalStudents" class="form-input" min="0" value="${myUnit.totalStudents !== undefined ? myUnit.totalStudents : 120}" style="font-size:18px; font-weight:800; color:#1E40AF;">
+                
+                <!-- Seletor de Modo de Visualização da Coordenadora -->
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  <div class="btn-group" style="display:inline-flex; border:1px solid var(--border); border-radius:8px; overflow:hidden;">
+                    <button class="btn btn-secondary ${activeViewMode === 'aggregated' ? 'active' : ''}" style="font-size:11px; padding:6px 12px; border:none; ${activeViewMode === 'aggregated' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setCoordinatorCharView('aggregated')">
+                      Consolidado da Escola
+                    </button>
+                    <button class="btn btn-secondary ${activeViewMode === 'class' ? 'active' : ''}" style="font-size:11px; padding:6px 12px; border:none; ${activeViewMode === 'class' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setCoordinatorCharView('class')">
+                      Especificar por Turma
+                    </button>
                   </div>
-                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Total de crianças matriculadas no Censo</div>
-                </div>
-
-                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva / Diversidade</div>
-                  <div style="margin-top:6px;">
-                    <input type="number" id="coordUnitInclusiveStudents" class="form-input" min="0" value="${myUnit.inclusiveStudents !== undefined ? myUnit.inclusiveStudents : 6}" style="font-size:18px; font-weight:800; color:#059669;">
-                  </div>
-                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Público-alvo da educação especial (AEE)</div>
-                </div>
-
-                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas em Atividade</div>
-                  <div style="margin-top:6px;">
-                    <input type="number" id="coordUnitTotalClasses" class="form-input" min="0" value="${myUnit.totalClasses !== undefined ? myUnit.totalClasses : schoolClasses.length}" style="font-size:18px; font-weight:800; color:#6D28D9;">
-                  </div>
-                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">${schoolClasses.length} turma(s) ativas no catálogo</div>
-                </div>
-
-                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Docentes na UE</div>
-                  <div style="font-size:22px; font-weight:800; color:#D97706; margin-top:8px;">${teachersCount}</div>
-                  <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Professoras titulares lotadas</div>
+                  ${activeViewMode === 'class' ? `
+                    <select id="coordCharClassSelect" class="form-select" style="font-size:12px; padding:5px 10px; width:auto;" onchange="setCoordinatorCharClass(this.value)">
+                      ${schoolClasses.map(c => `<option value="${c.id}" ${c.id === (currentClass ? currentClass.id : '') ? 'selected' : ''}>${c.name}</option>`).join('')}
+                    </select>
+                  ` : ''}
                 </div>
               </div>
 
-              <div class="form-group" style="margin-bottom:0;">
+              ${detailHtml}
+
+              <div class="form-group" style="margin-bottom:12px;">
                 <label class="form-label" style="font-size:12px;">Endereço / Bairro da Unidade Escolar</label>
-                <input type="text" id="coordUnitAddress" class="form-input" value="${myUnit.address || ''}" placeholder="Ex: Bairro Alto das Flores, Rua das Acácias, nº 120">
+                <div style="display:flex; gap:10px;">
+                  <input type="text" id="coordUnitAddress" class="form-input" value="${myUnit.address || ''}" placeholder="Ex: Bairro Alto das Flores, Rua das Acácias, nº 120">
+                  <button class="btn btn-primary" onclick="saveSchoolAddressOnly()" style="font-size:12px; padding:8px 14px; white-space:nowrap;">
+                    Salvar Endereço
+                  </button>
+                </div>
               </div>
             </div>
           `;
@@ -186,7 +384,7 @@
               ${u.name}
             </span>
           </td>
-          <td><span class="status-badge" style="background:#DCFCE7; color:#166534; font-weight:700; font-size:11px;">📍 ${u.polo}</span></td>
+          <td><span class="status-badge" style="background:#DCFCE7; color:#166534; font-weight:700; font-size:11px;">${u.polo}</span></td>
           <td>${u.address || 'Não informado'}</td>
           <td><span class="status-badge" style="background:#EFF6FF; color:#1E40AF;">${teachersCount} Profissionais</span></td>
           <td style="text-align:center; white-space:nowrap;">
@@ -217,7 +415,7 @@
       const studentsEl = document.getElementById('viewUnitModalStudents');
 
       if (titleEl) titleEl.innerText = unit.name;
-      if (poloEl) poloEl.innerText = `📍 ${unit.polo || 'Polo Regional'}`;
+      if (poloEl) poloEl.innerText = unit.polo || 'Polo Regional';
       if (addrEl) addrEl.innerText = unit.address || 'Endereço não informado';
 
       const cp = (appState.teamMembers || []).find(m => m.roleKey === 'coordenador' && m.school === unit.name);
@@ -799,6 +997,40 @@
     }
 
     // --- GESTÃO DESCENTRALIZADA DE TURMAS (PILAR 14) ---
+    // Helpers de controle de modo do painel analítico de turmas
+    function setClassesCharView(mode) {
+      const panel = document.getElementById('characterizationFilterPanel');
+      if (panel) {
+        panel.dataset.viewMode = mode;
+        renderClassesScreen();
+      }
+    }
+
+    function setClassesCharPolo(poloName) {
+      const panel = document.getElementById('characterizationFilterPanel');
+      if (panel) {
+        panel.dataset.selectedPolo = poloName;
+        renderClassesScreen();
+      }
+    }
+
+    function setClassesCharSchool(schoolName) {
+      const panel = document.getElementById('characterizationFilterPanel');
+      if (panel) {
+        panel.dataset.selectedSchool = schoolName;
+        renderClassesScreen();
+      }
+    }
+
+    function setClassesCharClass(classId) {
+      const panel = document.getElementById('characterizationFilterPanel');
+      if (panel) {
+        panel.dataset.viewMode = 'class';
+        panel.dataset.selectedClassId = classId;
+        renderClassesScreen();
+      }
+    }
+
     function renderClassesScreen() {
       const user = getCurrentUser();
       const tbody = document.getElementById('classesTableBody');
@@ -809,6 +1041,7 @@
       const schoolFilterSelect = document.getElementById('classesFilterSchool');
       const searchInput = document.getElementById('classesFilterSearch');
       const filterSearch = (searchInput ? searchInput.value : '').trim().toLowerCase();
+      const charPanel = document.getElementById('characterizationFilterPanel');
 
       let targetSchool = 'ALL';
 
@@ -856,6 +1089,392 @@
         }
       }
 
+      // --- RENDERIZAÇÃO DO PAINEL ANALÍTICO DE CARACTERIZAÇÃO MULTINÍVEL ---
+      if (charPanel) {
+        const activeViewMode = charPanel.dataset.viewMode || 'aggregated';
+
+        if (user.roleKey === 'coordenador') {
+          const agg = getSchoolClassesAggregates(user.school);
+          const schoolClasses = agg.classes;
+          const selectedClassId = charPanel.dataset.selectedClassId || (schoolClasses[0] ? schoolClasses[0].id : '');
+          const currentClass = schoolClasses.find(c => c.id === selectedClassId) || schoolClasses[0];
+
+          let kpiContent = '';
+          if (activeViewMode === 'class' && currentClass) {
+            const clsTot = typeof currentClass.totalStudents === 'number' ? currentClass.totalStudents : 20;
+            const clsInc = typeof currentClass.inclusiveStudents === 'number' ? currentClass.inclusiveStudents : 0;
+            const clsReg = Math.max(0, clsTot - clsInc);
+
+            kpiContent = `
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na Turma</div>
+                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${clsTot}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Matriculados</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Necessidades Especiais</div>
+                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${clsInc}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${clsInc > 0 ? 'Público AEE' : 'Nenhum AEE'}</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
+                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${clsReg}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Sem necessidade especial</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Jornada / Turno</div>
+                  <div style="font-size:12px; font-weight:700; color:var(--primary-dark); margin-top:6px;">${currentClass.shift || 'Parcial'}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${currentClass.stage || 'Educação Infantil'}</div>
+                </div>
+              </div>
+            `;
+          } else {
+            kpiContent = `
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Matriculados</div>
+                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${agg.totalStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Soma das turmas</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
+                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${agg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${agg.inclusionRate}%)</span></div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
+                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${agg.regularStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas Ativas</div>
+                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${agg.totalClasses}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${agg.teachersCount} docente(s)</div>
+                </div>
+              </div>
+            `;
+          }
+
+          charPanel.innerHTML = `
+            <div class="card" style="padding:14px; background:#F8FAFC; border:1px solid var(--border);">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <strong style="font-size:13px; color:var(--primary-dark);">Caracterização por Turma & Inclusão (AEE) · ${user.school}</strong>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  <div class="btn-group" style="display:inline-flex; border:1px solid var(--border); border-radius:8px; overflow:hidden;">
+                    <button class="btn btn-secondary ${activeViewMode === 'aggregated' ? 'active' : ''}" style="font-size:11px; padding:4px 10px; border:none; ${activeViewMode === 'aggregated' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setClassesCharView('aggregated')">
+                      Consolidado da Escola
+                    </button>
+                    <button class="btn btn-secondary ${activeViewMode === 'class' ? 'active' : ''}" style="font-size:11px; padding:4px 10px; border:none; ${activeViewMode === 'class' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setClassesCharView('class')">
+                      Especificar por Turma
+                    </button>
+                  </div>
+                  ${activeViewMode === 'class' ? `
+                    <select class="form-select" style="font-size:11px; padding:4px 8px; width:auto;" onchange="setClassesCharClass(this.value)">
+                      ${schoolClasses.map(c => `<option value="${c.id}" ${c.id === (currentClass ? currentClass.id : '') ? 'selected' : ''}>${c.name}</option>`).join('')}
+                    </select>
+                  ` : ''}
+                </div>
+              </div>
+              ${kpiContent}
+            </div>
+          `;
+        } else if (user.roleKey === 'formador') {
+          const poloName = user.school;
+          const poloUnits = (appState.units || []).filter(u => u.polo === poloName || u.name === poloName).map(u => u.name);
+          const poloAgg = getPoloClassesAggregates(poloName);
+
+          const selectedSchoolName = charPanel.dataset.selectedSchool || (poloUnits[0] || '');
+          const schoolAgg = getSchoolClassesAggregates(selectedSchoolName);
+          const poloClasses = (appState.classes || []).filter(c => poloUnits.includes(c.school));
+          const selectedClassId = charPanel.dataset.selectedClassId || (poloClasses[0] ? poloClasses[0].id : '');
+          const currentClass = poloClasses.find(c => c.id === selectedClassId) || poloClasses[0];
+
+          let kpiContent = '';
+          if (activeViewMode === 'class' && currentClass) {
+            const clsTot = typeof currentClass.totalStudents === 'number' ? currentClass.totalStudents : 20;
+            const clsInc = typeof currentClass.inclusiveStudents === 'number' ? currentClass.inclusiveStudents : 0;
+            const clsReg = Math.max(0, clsTot - clsInc);
+
+            kpiContent = `
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na Turma</div>
+                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${clsTot}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${currentClass.school}</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Necessidades Especiais</div>
+                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${clsInc}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${clsInc > 0 ? 'Público AEE' : 'Nenhum AEE'}</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
+                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${clsReg}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Regência / Turno</div>
+                  <div style="font-size:12px; font-weight:700; color:var(--primary-dark); margin-top:6px;">${currentClass.shift || 'Parcial'}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${currentClass.stage || 'Educação Infantil'}</div>
+                </div>
+              </div>
+            `;
+          } else if (activeViewMode === 'school') {
+            kpiContent = `
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na UE</div>
+                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${schoolAgg.totalStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Soma de ${schoolAgg.totalClasses} turmas</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
+                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${schoolAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${schoolAgg.inclusionRate}%)</span></div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Alunos com AEE na UE</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
+                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${schoolAgg.regularStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas / Docentes</div>
+                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${schoolAgg.totalClasses}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${schoolAgg.teachersCount} docente(s)</div>
+                </div>
+              </div>
+            `;
+          } else {
+            // Consolidado do Polo
+            kpiContent = `
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Total de Alunos (Polo)</div>
+                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${poloAgg.totalStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Soma das turmas do polo</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
+                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${poloAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.inclusionRate}%)</span></div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Total AEE no Polo</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
+                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${poloAgg.regularStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">UEs / Turmas</div>
+                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${poloAgg.totalUnits} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.totalClasses} turmas)</span></div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Estrutura do Polo</div>
+                </div>
+              </div>
+            `;
+          }
+
+          charPanel.innerHTML = `
+            <div class="card" style="padding:14px; background:#F8FAFC; border:1px solid var(--border);">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <strong style="font-size:13px; color:var(--primary-dark);">Caracterização Multinível · ${poloName}</strong>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  <div class="btn-group" style="display:inline-flex; border:1px solid var(--border); border-radius:8px; overflow:hidden;">
+                    <button class="btn btn-secondary ${activeViewMode === 'aggregated' ? 'active' : ''}" style="font-size:11px; padding:4px 10px; border:none; ${activeViewMode === 'aggregated' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setClassesCharView('aggregated')">
+                      Consolidado do Polo
+                    </button>
+                    <button class="btn btn-secondary ${activeViewMode === 'school' ? 'active' : ''}" style="font-size:11px; padding:4px 10px; border:none; ${activeViewMode === 'school' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setClassesCharView('school')">
+                      Por Unidade Escolar
+                    </button>
+                    <button class="btn btn-secondary ${activeViewMode === 'class' ? 'active' : ''}" style="font-size:11px; padding:4px 10px; border:none; ${activeViewMode === 'class' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setClassesCharView('class')">
+                      Especificar por Turma
+                    </button>
+                  </div>
+                  ${activeViewMode === 'school' ? `
+                    <select class="form-select" style="font-size:11px; padding:4px 8px; width:auto;" onchange="setClassesCharSchool(this.value)">
+                      ${poloUnits.map(u => `<option value="${u}" ${u === selectedSchoolName ? 'selected' : ''}>${u}</option>`).join('')}
+                    </select>
+                  ` : ''}
+                  ${activeViewMode === 'class' ? `
+                    <select class="form-select" style="font-size:11px; padding:4px 8px; width:auto;" onchange="setClassesCharClass(this.value)">
+                      ${poloClasses.map(c => `<option value="${c.id}" ${c.id === (currentClass ? currentClass.id : '') ? 'selected' : ''}>${c.name} (${c.school})</option>`).join('')}
+                    </select>
+                  ` : ''}
+                </div>
+              </div>
+              ${kpiContent}
+            </div>
+          `;
+        } else if (isNucleoEI(user)) {
+          // Núcleo de EI: Agregado da Rede Municipal / Polo / UE / Turma
+          const netAgg = getNetworkClassesAggregates();
+          const allPolos = getAllPolosList();
+          const selectedPolo = charPanel.dataset.selectedPolo || (allPolos[0] || 'Polo Regional 1 (Norte)');
+          const poloAgg = getPoloClassesAggregates(selectedPolo);
+
+          const allUnits = (appState.units || []).map(u => u.name);
+          const selectedSchoolName = charPanel.dataset.selectedSchool || (allUnits[0] || '');
+          const schoolAgg = getSchoolClassesAggregates(selectedSchoolName);
+
+          const allClasses = appState.classes || [];
+          const selectedClassId = charPanel.dataset.selectedClassId || (allClasses[0] ? allClasses[0].id : '');
+          const currentClass = allClasses.find(c => c.id === selectedClassId) || allClasses[0];
+
+          let kpiContent = '';
+          if (activeViewMode === 'class' && currentClass) {
+            const clsTot = typeof currentClass.totalStudents === 'number' ? currentClass.totalStudents : 20;
+            const clsInc = typeof currentClass.inclusiveStudents === 'number' ? currentClass.inclusiveStudents : 0;
+            const clsReg = Math.max(0, clsTot - clsInc);
+
+            kpiContent = `
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na Turma</div>
+                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${clsTot}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${currentClass.school}</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Necessidades Especiais</div>
+                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${clsInc}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${clsInc > 0 ? 'Público AEE' : 'Nenhum AEE'}</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
+                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${clsReg}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Regência / Turno</div>
+                  <div style="font-size:12px; font-weight:700; color:var(--primary-dark); margin-top:6px;">${currentClass.shift || 'Parcial'}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${currentClass.stage || 'Educação Infantil'}</div>
+                </div>
+              </div>
+            `;
+          } else if (activeViewMode === 'school') {
+            kpiContent = `
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na UE</div>
+                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${schoolAgg.totalStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Soma de ${schoolAgg.totalClasses} turmas</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
+                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${schoolAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${schoolAgg.inclusionRate}%)</span></div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Total AEE na escola</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
+                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${schoolAgg.regularStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas / Docentes</div>
+                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${schoolAgg.totalClasses}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">${schoolAgg.teachersCount} docente(s)</div>
+                </div>
+              </div>
+            `;
+          } else if (activeViewMode === 'polo') {
+            kpiContent = `
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos no Polo</div>
+                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${poloAgg.totalStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Soma das turmas</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
+                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${poloAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.inclusionRate}%)</span></div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Total AEE no Polo</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
+                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${poloAgg.regularStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">UEs / Turmas</div>
+                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${poloAgg.totalUnits} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.totalClasses} turmas)</span></div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Estrutura do Polo</div>
+                </div>
+              </div>
+            `;
+          } else {
+            // Agregado da Rede Municipal
+            kpiContent = `
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Total Geral da Rede</div>
+                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${netAgg.totalStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Crianças matriculadas</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
+                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${netAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${netAgg.inclusionRate}%)</span></div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Crianças com necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
+                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${netAgg.regularStudents}</div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
+                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Estrutura da Rede</div>
+                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${netAgg.totalUnits} UEs <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${netAgg.totalClasses} turmas)</span></div>
+                  <div style="font-size:10px; color:var(--text-secondary);">Rede Municipal de Patos</div>
+                </div>
+              </div>
+            `;
+          }
+
+          charPanel.innerHTML = `
+            <div class="card" style="padding:14px; background:#F8FAFC; border:1px solid var(--border);">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <strong style="font-size:13px; color:var(--primary-dark);">Caracterização da Educação Infantil · Visão Agregada da Rede</strong>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  <div class="btn-group" style="display:inline-flex; border:1px solid var(--border); border-radius:8px; overflow:hidden;">
+                    <button class="btn btn-secondary ${activeViewMode === 'aggregated' ? 'active' : ''}" style="font-size:11px; padding:4px 10px; border:none; ${activeViewMode === 'aggregated' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setClassesCharView('aggregated')">
+                      Agregado da Rede
+                    </button>
+                    <button class="btn btn-secondary ${activeViewMode === 'polo' ? 'active' : ''}" style="font-size:11px; padding:4px 10px; border:none; ${activeViewMode === 'polo' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setClassesCharView('polo')">
+                      Por Polo
+                    </button>
+                    <button class="btn btn-secondary ${activeViewMode === 'school' ? 'active' : ''}" style="font-size:11px; padding:4px 10px; border:none; ${activeViewMode === 'school' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setClassesCharView('school')">
+                      Por UE
+                    </button>
+                    <button class="btn btn-secondary ${activeViewMode === 'class' ? 'active' : ''}" style="font-size:11px; padding:4px 10px; border:none; ${activeViewMode === 'class' ? 'background:var(--primary); color:#FFF;' : ''}" onclick="setClassesCharView('class')">
+                      Especificar por Turma
+                    </button>
+                  </div>
+                  ${activeViewMode === 'polo' ? `
+                    <select class="form-select" style="font-size:11px; padding:4px 8px; width:auto;" onchange="setClassesCharPolo(this.value)">
+                      ${allPolos.map(p => `<option value="${p}" ${p === selectedPolo ? 'selected' : ''}>${p}</option>`).join('')}
+                    </select>
+                  ` : ''}
+                  ${activeViewMode === 'school' ? `
+                    <select class="form-select" style="font-size:11px; padding:4px 8px; width:auto;" onchange="setClassesCharSchool(this.value)">
+                      ${allUnits.map(u => `<option value="${u}" ${u === selectedSchoolName ? 'selected' : ''}>${u}</option>`).join('')}
+                    </select>
+                  ` : ''}
+                  ${activeViewMode === 'class' ? `
+                    <select class="form-select" style="font-size:11px; padding:4px 8px; width:auto;" onchange="setClassesCharClass(this.value)">
+                      ${allClasses.map(c => `<option value="${c.id}" ${c.id === (currentClass ? currentClass.id : '') ? 'selected' : ''}>${c.name} (${c.school})</option>`).join('')}
+                    </select>
+                  ` : ''}
+                </div>
+              </div>
+              ${kpiContent}
+            </div>
+          `;
+        }
+      }
+
       // Obter turmas
       let classesToRender = [];
       if (user.roleKey === 'coordenador') {
@@ -897,7 +1516,7 @@
       }
 
       if (classesToRender.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-secondary); padding:24px;">Nenhuma turma encontrada. Clique em "+ Cadastrar Nova Turma" para adicionar.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--text-secondary); padding:24px;">Nenhuma turma encontrada. Clique em "+ Cadastrar Nova Turma" para adicionar.</td></tr>`;
         return;
       }
 
@@ -911,6 +1530,12 @@
         if (isIntegral) {
           turnoBadge = `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:11px;">Manhã + Tarde</span>`;
         }
+
+        const totStudents = typeof cls.totalStudents === 'number' ? cls.totalStudents : 20;
+        const incStudents = typeof cls.inclusiveStudents === 'number' ? cls.inclusiveStudents : 0;
+        const incBadge = incStudents > 0 
+          ? `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-weight:700;">${incStudents} AEE</span>`
+          : `<span style="color:var(--text-secondary); font-size:12px;">0</span>`;
 
         let teachersDisplay = '';
         if (isIntegral && (cls.teachersMorning || cls.teachersAfternoon)) {
@@ -934,6 +1559,8 @@
             <span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:10px;">${cls.stage || 'Educação Infantil'}</span>
           </td>
           <td style="font-size:12px;">${cls.school}</td>
+          <td style="font-size:13px; font-weight:700; color:#1E40AF;">${totStudents} alunos</td>
+          <td>${incBadge}</td>
           <td>${jornadaBadge}</td>
           <td>${turnoBadge}</td>
           <td>${teachersDisplay}</td>
@@ -958,6 +1585,10 @@
       document.getElementById('classEditorStage').value = 'Infantil I';
       document.getElementById('classEditorShiftType').value = 'parcial';
       document.getElementById('classEditorShiftPeriod').value = 'Tempo Parcial (Matutino)';
+      const totInput = document.getElementById('classEditorTotalStudents');
+      const incInput = document.getElementById('classEditorInclusiveStudents');
+      if (totInput) totInput.value = '25';
+      if (incInput) incInput.value = '0';
       document.getElementById('btnDeleteClassEditor').style.display = 'none';
 
       const schoolSelect = document.getElementById('classEditorSchool');
@@ -1403,7 +2034,7 @@
           </td>
           <td><span style="font-size:12px; font-weight:700; color:var(--primary);">${m.roleTitle}</span></td>
           <td>${m.school || 'Rede Municipal'}</td>
-          <td><span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:11px;">📍 ${poloName}</span></td>
+          <td><span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:11px;">${poloName}</span></td>
           <td>${supervisorDisplay}</td>
           <td style="text-align:center;">
             <button class="btn btn-secondary" style="color:var(--primary); padding:4px 8px; font-size:11px;" onclick="openEditMemberModal('${m.id}')">
