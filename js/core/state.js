@@ -214,6 +214,26 @@
                 }
               }
             });
+            if (Array.isArray(appState.classes)) {
+              appState.classes.forEach(c => {
+                if (typeof c.totalStudents !== 'number' || isNaN(c.totalStudents)) {
+                  c.totalStudents = 20;
+                  sanitized = true;
+                }
+                if (typeof c.inclusiveStudents !== 'number' || isNaN(c.inclusiveStudents)) {
+                  c.inclusiveStudents = 0;
+                  sanitized = true;
+                }
+                if (c.inclusiveStudents > c.totalStudents) {
+                  c.inclusiveStudents = c.totalStudents;
+                  sanitized = true;
+                }
+              });
+            }
+            if (typeof syncUnitCharacterizationFromClasses === 'function') {
+              syncUnitCharacterizationFromClasses();
+            }
+
             if (sanitized) saveState();
           }
         } catch (e) {

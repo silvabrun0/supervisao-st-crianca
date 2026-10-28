@@ -159,6 +159,9 @@
           linkedNotes: ['Avanço na autonomia das crianças na hora da roda.']
         }
       ];
+      if (typeof syncUnitCharacterizationFromClasses === 'function') {
+        syncUnitCharacterizationFromClasses();
+      }
       saveState();
       renderHomeScreen();
       showToast('Dados do SerTão Criança recarregados!');
@@ -168,6 +171,9 @@
       appState.observations = [];
       appState.currentObs = null;
       appState.notes = [];
+      if (typeof syncUnitCharacterizationFromClasses === 'function') {
+        syncUnitCharacterizationFromClasses();
+      }
       saveState();
       renderHomeScreen();
       showToast('Banco de dados local reinicializado.');
