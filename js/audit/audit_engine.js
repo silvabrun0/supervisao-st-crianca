@@ -747,6 +747,65 @@
               closeBimesterPeriodsModal();
               logger.log('Fluxo interativo completo de abertura do assistente de novo ciclo a partir de #modalBimesterPeriods', true);
 
+              // 11.4 TESTE DE CONFORMIDADE TEMPORAL: BLOQUEIO DE INÍCIO DE ANOS LETIVOS FUTUROS
+              // 1. Testa bloqueio no modal quando o ano sugerido é futuro
+              startCycleBtn.click();
+              const blockNoticeEl = document.getElementById('futureYearBlockNotice');
+              const confirmBtnEl = document.getElementById('btnConfirmCreateAcademicYear');
+              const inputYearEl = document.getElementById('inputNewAcademicYear');
+              const currentRealYear = new Date().getFullYear();
+
+              if (!blockNoticeEl || blockNoticeEl.style.display === 'none') {
+                throw new Error('Aviso institucional de trava temporal #futureYearBlockNotice não foi exibido para ano futuro');
+              }
+              if (!confirmBtnEl || !confirmBtnEl.disabled) {
+                throw new Error('Botão #btnConfirmCreateAcademicYear deveria estar desabilitado para ano letivo futuro');
+              }
+
+              // 2. Testa rejeição programática de submissão de ano futuro
+              const initialYearsCount = appState.academicYears.length;
+              if (inputYearEl) inputYearEl.value = (currentRealYear + 1).toString();
+              
+              // Simula tentativa de confirmação forçada (bypassing disabled)
+              let alertTriggered = false;
+              const originalAlert = window.alert;
+              window.alert = () => { alertTriggered = true; };
+              try {
+                confirmCreateNewAcademicYear();
+              } finally {
+                window.alert = originalAlert;
+              }
+
+              if (appState.academicYears.includes((currentRealYear + 1).toString())) {
+                throw new Error('Falha de conformidade: Sistema permitiu cadastrar ano letivo futuro que ainda não iniciou efetivamente');
+              }
+              if (appState.academicYears.length !== initialYearsCount) {
+                throw new Error('Tamanho de appState.academicYears foi modificado indevidamente após tentativa de cadastro futuro');
+              }
+
+              // 3. Testa autocura de loadState() contra resíduos de anos futuros
+              appState.academicYears.push('2099');
+              appState.selectedAcademicYear = '2099';
+              if (!appState.bimesterPeriods) appState.bimesterPeriods = {};
+              appState.bimesterPeriods['2099'] = { mock: true };
+              localStorage.setItem('SERTAO_CRIANCA_APP_STATE_V6', JSON.stringify(appState));
+              
+              loadState();
+
+              if (appState.academicYears.includes('2099')) {
+                throw new Error('Autocura de loadState() falhou ao expurgar ano futuro 2099 de academicYears');
+              }
+              if (appState.selectedAcademicYear === '2099') {
+                throw new Error('Autocura de loadState() falhou ao reverter selectedAcademicYear de 2099');
+              }
+              if (appState.bimesterPeriods['2099']) {
+                throw new Error('Autocura de loadState() falhou ao remover bimesterPeriods de 2099');
+              }
+
+              closeCreateNewAcademicYearModal();
+              closeBimesterPeriodsModal();
+              logger.log('Bloqueio impeditivo e autocura contra anos letivos futuros que ainda não iniciaram efetivamente (Versão 1.46)', true);
+
               // 12. GOVERNANÇA DE POLOS PELO NÚCLEO DE EI E VISUALIZAÇÃO DE TURMAS POR UE (VERSÃO 1.43)
               // 12.1 Validação de Ocultação da Sub-aba Turmas da Rede (#pedagTabClasses) para Núcleo de EI
               selectUserAccount('helena');

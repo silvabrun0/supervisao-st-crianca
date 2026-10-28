@@ -576,11 +576,52 @@
         return;
       }
 
+      const currentRealYear = new Date().getFullYear();
       const inputYear = document.getElementById('inputNewAcademicYear');
+      const blockNotice = document.getElementById('futureYearBlockNotice');
+      const confirmBtn = document.getElementById('btnConfirmCreateAcademicYear');
+      const sortedYears = [...(appState.academicYears || ['2026'])].map(y => parseInt(y, 10)).sort((a, b) => b - a);
+      const nextSuggested = (sortedYears[0] || currentRealYear) + 1;
+
       if (inputYear) {
-        const sortedYears = [...(appState.academicYears || ['2026'])].map(y => parseInt(y, 10)).sort((a, b) => b - a);
-        const nextSuggested = (sortedYears[0] || 2026) + 1;
-        inputYear.value = nextSuggested;
+        inputYear.max = currentRealYear;
+      }
+
+      if (nextSuggested > currentRealYear) {
+        // Próximo ano ainda não iniciou efetivamente
+        if (inputYear) {
+          inputYear.value = nextSuggested;
+          inputYear.disabled = true;
+        }
+        if (blockNotice) {
+          blockNotice.style.display = 'block';
+          blockNotice.innerHTML = `
+            <div style="font-size:12px; font-weight:700; color:#991B1B; margin-bottom:4px;">🛡️ Bloqueio de Conformidade Temporal:</div>
+            <div style="font-size:11px; color:#B91C1C; line-height:1.4;">
+              O ciclo do Ano Letivo <strong>${sortedYears[0] || currentRealYear}</strong> está vigente em andamento. O ciclo de <strong>${nextSuggested}</strong> só poderá ser iniciado quando o respectivo ano civil iniciar efetivamente (a partir de <strong>01/01/${nextSuggested}</strong>). Não é permitido iniciar ou planejar ciclos de anos futuros antecipadamente.
+            </div>
+          `;
+        }
+        if (confirmBtn) {
+          confirmBtn.disabled = true;
+          confirmBtn.style.opacity = '0.5';
+          confirmBtn.style.cursor = 'not-allowed';
+          confirmBtn.title = `O ano ${nextSuggested} só poderá ser iniciado em ${nextSuggested}.`;
+        }
+      } else {
+        if (inputYear) {
+          inputYear.value = nextSuggested;
+          inputYear.disabled = false;
+        }
+        if (blockNotice) {
+          blockNotice.style.display = 'none';
+        }
+        if (confirmBtn) {
+          confirmBtn.disabled = false;
+          confirmBtn.style.opacity = '1';
+          confirmBtn.style.cursor = 'pointer';
+          confirmBtn.title = '';
+        }
       }
 
       const modal = document.getElementById('modalCreateAcademicYear');
@@ -609,7 +650,16 @@
       const yearVal = inputYear ? inputYear.value.trim() : '';
 
       if (!yearVal || !/^\d{4}$/.test(yearVal)) {
-        alert('Por favor, informe um ano letivo válido com 4 dígitos (ex: 2027).');
+        alert('Por favor, informe um ano letivo válido com 4 dígitos (ex: 2026).');
+        return;
+      }
+
+      const currentRealYear = new Date().getFullYear();
+      const targetYearNum = parseInt(yearVal, 10);
+
+      // Trava Impeditiva SSOT: Não permitir iniciar anos que não iniciaram efetivamente
+      if (targetYearNum > currentRealYear) {
+        alert(`Não é permitido iniciar o Ano Letivo ${targetYearNum}, pois ele ainda não iniciou efetivamente. O ciclo só poderá ser iniciado a partir de 01/01/${targetYearNum}.`);
         return;
       }
 
@@ -626,11 +676,11 @@
       appState.academicYears.sort();
 
       // 2. Inicializa os 4 bimestres do novo ano baseando-se no ano base
-      const templatePeriods = DEFAULT_BIMESTER_PERIODS_BY_YEAR['2026'];
+      const templatePeriods = DEFAULT_BIMESTER_PERIODS_BY_YEAR['2026'] || DEFAULT_BIMESTER_PERIODS;
       const newYearPeriods = {};
-      const yearDiff = parseInt(yearVal, 10) - 2026;
+      const yearDiff = targetYearNum - 2026;
       ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'].forEach(bName => {
-        const tmpl = templatePeriods[bName];
+        const tmpl = templatePeriods[bName] || DEFAULT_BIMESTER_PERIODS[bName];
         const adjustDate = (isoStr) => {
           if (!isoStr) return '';
           const parts = isoStr.split('-');

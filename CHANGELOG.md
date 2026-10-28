@@ -9,8 +9,9 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 ## 📌 Sumário Executivo de Versões
 
-| Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central❌ |
+| Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.46** | 28/10/2026 13:30 | `intermediárias/aplicativo_v146_bloqueio_inicio_ano_letivo_futuro.html` | Solicitação direta / `planos_de_implementacao/plano_bloqueio_inicio_ano_letivo_futuro.md` | Bloqueio rigoroso de início e planejamento antecipado de anos letivos futuros: trava de conformidade temporal baseada no ano civil atual (`new Date().getFullYear()`), card informativo `#futureYearBlockNotice` e desativação de botões em `#modalCreateAcademicYear`, autocura e saneamento de resíduos futuros em `loadState()`, e subteste 11.4 no motor de auditoria 🛡️🔒🧹 |
 | **1.45** | 27/10/2026 17:40 | `intermediárias/aplicativo_v145_modularizacao_e_divisao_index_html.html` | Solicitação direta / `planos_de_implementacao/plano_modularizacao_e_divisao_index_html.md` | Modularização arquitetural e divisão do arquivo principal monolítico: desacoplamento em 6 folhas de estilo CSS (`css/`) e 14 módulos JavaScript (`js/`), redução de ~28.600 linhas para ~5.500 linhas no `index.html`, preservação integral de estado, regras pedagógicas e expansão do motor de blindagem sintática JSC em `audit_platform.py` 🏗️⚡🛡️ |
 | **1.44** | 27/10/2026 17:15 | `intermediárias/aplicativo_v144_remocao_emojis_painel_indicadores_pictogramas.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_painel_indicadores_pictogramas.md` | Remoção completa de emojis soltos no Painel & Indicadores e Quadro de Controle Bimestral (`#screenIndicators` e `#bimesterSemaphoreSection`): substituição por pictogramas vetoriais SVG padronizados (.sem-pill-icon, .sem-stat-icon, .sem-filter-icon, .trend-icon-svg, .score-chip-dot, .picto-status-dot) e asserções estritas no Módulo 10 da auditoria 📊🎨🛡️ |
 | **1.44** | 27/10/2026 17:15 | `intermediárias/aplicativo_v144_remocao_texto_consulta_ssot_visualizacao_ue.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_texto_consulta_ssot_visualizacao_ue.md` | Remoção do texto informativo de Modo de Consulta SSOT no modal de visualização de turmas da escola (`#modalViewUnitClasses`), preservando a sobriedade institucional e alinhando o botão de fechamento à direita 🧹🏛️ |
@@ -172,6 +173,32 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.46] - Bloqueio Rigoroso de Início e Planejamento Antecipado de Anos Letivos Futuros
+- **Data / Horário:** 28/10/2026 13:30
+- **Arquivo de Referência:** `intermediárias/aplicativo_v146_bloqueio_inicio_ano_letivo_futuro.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_bloqueio_inicio_ano_letivo_futuro.md`.
+- **Foco Central:** Bloqueio rigoroso de início e planejamento antecipado de ciclos avaliativos de anos futuros:
+  1. **Conformidade Temporal Estrita:** Limitação do avanço de novos ciclos ao ano civil oficial em curso (`anoLetivo <= currentRealYear`), vedando expressamente o início ou planejamento de ciclos avaliativos de anos que ainda não começaram no calendário real.
+  2. **Trava e Feedback Visual no Assistente (`#modalCreateAcademicYear`):** Inclusão do card de trava temporal preventiva `#futureYearBlockNotice`, atribuição do ID `#btnConfirmCreateAcademicYear`, desabilitação do input e do botão de ação com mensagem institucional explicativa sempre que o próximo ciclo for futuro.
+  3. **Rejeição Funcional em Camada de Negócio (`confirmCreateNewAcademicYear`):** Trava lógica impeditiva em `js/services/export_backup.js` que aborta a criação com alerta institucional pedagógico caso receba qualquer valor superior ao ano corrente.
+  4. **Autocura e Saneamento Temporal Transparente (`loadState` em `js/core/state.js`):** Expurgador automático de resíduos de anos futuros salvos no `localStorage` (`academicYears`, `bimesterPeriods`, `classes` órfãs e reversão de `selectedAcademicYear`), restaurando a soberania do ano vigente.
+  5. **Bateria de Testes no Motor de Auditoria (`js/audit/audit_engine.js`):** Subteste 11.4 no Módulo 11 certificando bloqueio no modal, rejeição de submissão forçada e resiliência da rotina de autocura.
+
+#### Inclusões
+- Elemento `#futureYearBlockNotice` no modal `#modalCreateAcademicYear` para alertas impeditivos claros.
+- ID canônico `#btnConfirmCreateAcademicYear` no botão de confirmação do assistente de ciclo.
+- Subteste 11.4 no Módulo 11 da suíte in-app de testes automatizados.
+
+#### Alterações
+- `js/services/export_backup.js`: Ajustadas funções `openCreateNewAcademicYearModal` e `confirmCreateNewAcademicYear` com travas temporais contra anos superiores a `new Date().getFullYear()`.
+- `js/core/state.js`: Inclusão da rotina de autocura e saneamento de anos futuros em `loadState()`.
+- Atualização da versão do sistema para 1.46 (v8.2.13) no cabeçalho institucional (`.btn-changelog`), modal `#modalChangelog` e documentação.
+
+#### Exclusões
+- Eliminação da possibilidade de antecipar anos letivos futuros que ainda não iniciaram cronologicamente.
+
+---
 
 ### [Versão 1.45] - Modularização Arquitetural e Desacoplamento do Monólito Principal em Camadas CSS e JS
 - **Data / Horário:** 27/10/2026 17:40

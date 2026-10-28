@@ -78,8 +78,43 @@
           if (!appState.academicYears || !Array.isArray(appState.academicYears) || appState.academicYears.length === 0) {
             appState.academicYears = [...DEFAULT_ACADEMIC_YEARS];
           }
+          // Sanitização e Autocura contra Anos Letivos Futuros que ainda não iniciaram efetivamente
+          const currentRealYear = new Date().getFullYear();
+          if (Array.isArray(appState.academicYears)) {
+            const hasFutureYears = appState.academicYears.some(y => parseInt(y, 10) > currentRealYear);
+            if (hasFutureYears) {
+              appState.academicYears = appState.academicYears.filter(y => {
+                const parsed = parseInt(y, 10);
+                return !isNaN(parsed) && parsed <= currentRealYear;
+              });
+              if (appState.academicYears.length === 0) {
+                appState.academicYears = [...DEFAULT_ACADEMIC_YEARS].filter(y => parseInt(y, 10) <= currentRealYear);
+              }
+              // Expurgar períodos bimestrais de anos futuros
+              if (appState.bimesterPeriods && typeof appState.bimesterPeriods === 'object') {
+                Object.keys(appState.bimesterPeriods).forEach(k => {
+                  if (/^\d{4}$/.test(k) && parseInt(k, 10) > currentRealYear) {
+                    delete appState.bimesterPeriods[k];
+                  }
+                });
+              }
+              // Expurgar turmas vinculadas a anos futuros
+              if (Array.isArray(appState.classes)) {
+                appState.classes = appState.classes.filter(c => {
+                  const clsYear = parseInt(c.academicYear, 10);
+                  return isNaN(clsYear) || clsYear <= currentRealYear;
+                });
+              }
+              saveState();
+            }
+          }
           if (!appState.selectedAcademicYear) {
             appState.selectedAcademicYear = DEFAULT_SELECTED_ACADEMIC_YEAR;
+          }
+          if (appState.selectedAcademicYear && parseInt(appState.selectedAcademicYear, 10) > currentRealYear) {
+            const validSortedYears = [...(appState.academicYears || ['2026'])].map(y => parseInt(y, 10)).sort((a, b) => b - a);
+            appState.selectedAcademicYear = (validSortedYears[0] || currentRealYear).toString();
+            saveState();
           }
           if (!appState.currentPedagSubTab) {
             appState.currentPedagSubTab = 'units';
