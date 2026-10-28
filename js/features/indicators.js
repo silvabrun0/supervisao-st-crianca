@@ -2878,7 +2878,7 @@
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                  <span>Semáforo ↓</span>
+                  <span>Quadro de Controle ↓</span>
                 </button>
                 ${pendingEntitiesCurrentBim > 0 && targetType === 'professora' ? `
                   <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:#D97706; background:none; border:none; padding:0; cursor:pointer;" onclick="togglePendingClassesDrawer()" title="Exibir ou ocultar turmas pendentes no bimestre" style="display:inline-flex; align-items:center; gap:4px;">
@@ -2915,7 +2915,7 @@
                     <line x1="12" y1="20" x2="12" y2="4"></line>
                     <line x1="6" y1="20" x2="6" y2="14"></line>
                   </svg>
-                  <span>Ver Semáforo do Ciclo ↓</span>
+                  <span>Ver Quadro de Controle ↓</span>
                 </button>
               </div>
             </div>

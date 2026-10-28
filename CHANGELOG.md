@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.49** | 28/10/2026 14:40 | `intermediárias/aplicativo_v149_ajuste_mencoes_semaforo_quadro_controle.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_mencoes_semaforo_quadro_controle.md` | Padronização terminológica do Quadro de Controle Bimestral na aba de Diagnóstico: atualização da pílula de navegação `#pillIndLongitudinal` e botões de atalho nos cards de KPI para "Quadro de Controle", eliminando resquícios coloquiais de "Semáforo" 📊🔍🛡️ |
 | **1.48** | 28/10/2026 13:55 | `intermediárias/aplicativo_v148_padronizacao_semiotica_pictogramas_ues_servidores.html` | Solicitação direta / `planos_de_implementacao/plano_padronizacao_semiotica_pictogramas_botoes_ues.md` | Padronização semiótica dos pictogramas dos botões de Unidades Escolares e Servidores: exportação CSV/JSON com seta para cima, gabarito/modelo com pictograma `file-down`, e importação CSV com seta para baixo (harmonização v1.39) 📤📥📄✨ |
 | **1.46** | 28/10/2026 13:45 | `intermediárias/aplicativo_v146_remocao_rotulo_docente_regente_sem_acesso.html` | Solicitação direta / `planos_de_implementacao/plano_bloqueio_inicio_ano_letivo_futuro.md` | Bloqueio rigoroso de início de anos letivos futuros (trava `#futureYearBlockNotice` e autocura) e higienização do Quadro de Servidores com supressão definitiva do rótulo "Docente Regente (Sem acesso)" 🛡️🔒🧹 |
 | **1.45** | 27/10/2026 17:40 | `intermediárias/aplicativo_v145_modularizacao_e_divisao_index_html.html` | Solicitação direta / `planos_de_implementacao/plano_modularizacao_e_divisao_index_html.md` | Modularização arquitetural e divisão do arquivo principal monolítico: desacoplamento em 6 folhas de estilo CSS (`css/`) e 14 módulos JavaScript (`js/`), redução de ~28.600 linhas para ~5.500 linhas no `index.html`, preservação integral de estado, regras pedagógicas e expansão do motor de blindagem sintática JSC em `audit_platform.py` 🏗️⚡🛡️ |
@@ -174,6 +175,23 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.49] - Padronização Terminológica do Quadro de Controle Bimestral na Aba de Diagnóstico
+- **Data / Horário:** 28/10/2026 14:40
+- **Arquivo de Referência:** `intermediárias/aplicativo_v149_ajuste_mencoes_semaforo_quadro_controle.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_ajuste_mencoes_semaforo_quadro_controle.md`.
+- **Foco Central:** Padronização terminológica rigorosa e institucional na tela de Índices para Diagnóstico (`#screenIndicators`), substituindo menções residuais coloquiais ao termo "Semáforo" por "Quadro de Controle Bimestral" ou "Quadro de Controle":
+  1. **Navegação por Sub-abas (`#pillIndLongitudinal`):** Atualização do texto do botão para "Prazos & Turmas (Quadro de Controle)", `title` para "Prazos & Turmas (Quadro de Controle Bimestral)" e `aria-label` para "Prazos e Quadro de Controle".
+  2. **Card 2 (Cobertura no Bimestre Corrente):** Substituição do texto do botão deep-link de atalho de `Semáforo ↓` para `Quadro de Controle ↓`.
+  3. **Card 3 (Meta do Ciclo Anual):** Substituição do texto do botão deep-link de atalho de `Ver Semáforo do Ciclo ↓` para `Ver Quadro de Controle ↓`.
+  4. **Preservação Arquitetural e Não-Regressão:** Manutenção intocada de seletores de DOM (`#bimesterSemaphoreSection`), funções internas (`scrollToBimesterSemaphore`) e compatibilidade total com a suíte de auditoria.
+
+#### Alterações
+- `index.html`: Atualizados `title`, `aria-label` e o texto do elemento `#pillIndLongitudinalLabel`.
+- `js/features/indicators.js`: Atualizados os rótulos visíveis dos botões de deep-link nos Cards 2 e 3 de KPI.
+- Atualização da versão do sistema para 1.49 (v8.2.16) no cabeçalho institucional (`.btn-changelog`), modal `#modalChangelog` e documentação.
+
+---
 
 ### [Versão 1.48] - Padronização Semiótica dos Pictogramas dos Botões de Unidades Escolares e Servidores
 - **Data / Horário:** 28/10/2026 13:55
