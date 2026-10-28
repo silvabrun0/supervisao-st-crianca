@@ -905,6 +905,42 @@
 
               // Restaura conta padrão
               selectUserAccount('helena');
+
+              // 13. VALIDAÇÃO SEMIÓTICA DOS PICTOGRAMAS DOS BOTÕES DE UES E SERVIDORES (VERSÃO 1.48 / PADRÃO V1.39)
+              const btnExportUnitsCSV = document.querySelector('button[onclick*="exportUnitsCSV()"]');
+              const btnExportUnitsJSON = document.querySelector('button[onclick*="exportUnitsJSON()"]');
+              const btnDownloadUnitsTemplate = document.querySelector('button[onclick*="downloadUnitsCsvTemplate()"]');
+              const btnImportUnitsCSV = document.querySelector('button[onclick*="triggerUnitsCsvImport()"]');
+
+              if (!btnExportUnitsCSV || !btnExportUnitsJSON || !btnDownloadUnitsTemplate || !btnImportUnitsCSV) {
+                throw new Error('Botões de ação de Unidades Escolares ausentes no DOM');
+              }
+
+              // Exportação CSV deve ser bandeja com seta para cima
+              const svgExpCSV = btnExportUnitsCSV.querySelector('svg')?.innerHTML || '';
+              if (!svgExpCSV.includes('17 8 12 3 7 8') || !svgExpCSV.includes('y1="3"')) {
+                throw new Error('Botão exportUnitsCSV deve possuir pictograma de bandeja com seta para cima');
+              }
+
+              // Exportação JSON deve ser bandeja com seta para cima (padrão v1.39)
+              const svgExpJSON = btnExportUnitsJSON.querySelector('svg')?.innerHTML || '';
+              if (!svgExpJSON.includes('17 8 12 3 7 8') || !svgExpJSON.includes('y1="3"')) {
+                throw new Error('Botão exportUnitsJSON deve possuir pictograma de bandeja com seta para cima');
+              }
+
+              // Baixar Modelo deve possuir pictograma de modelo de documento baixado (file-down)
+              const svgTpl = btnDownloadUnitsTemplate.querySelector('svg')?.innerHTML || '';
+              if (!svgTpl.includes('M14 2H6') || !svgTpl.includes('9 15 12 18 15 15')) {
+                throw new Error('Botão downloadUnitsCsvTemplate deve possuir pictograma de documento modelo baixado (file-down)');
+              }
+
+              // Importar CSV deve ser bandeja com seta para baixo (padrão v1.39)
+              const svgImpCSV = btnImportUnitsCSV.querySelector('svg')?.innerHTML || '';
+              if (!svgImpCSV.includes('7 10 12 15 17 10') || !svgImpCSV.includes('y1="15"')) {
+                throw new Error('Botão triggerUnitsCsvImport deve possuir pictograma de bandeja com seta para baixo');
+              }
+
+              logger.log('Harmonização Semiótica dos Pictogramas de Unidades Escolares (Padrão Versão 1.39)', true, 'Exportar CSV/JSON (seta cima), Baixar Modelo (file-down) e Importar (seta baixo) validados');
             } catch (e) {
               logger.log('Erro de execução no módulo catalogo_dados', false, e.message);
             }
@@ -3049,14 +3085,14 @@
               }
               logger.log('Asserção de Integridade do Registro da Versão 1.42 (v8.2.9) no Modal de Changelog', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.47
-              if (!btnChangelog.textContent.includes('Versão 1.47')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.48
+              if (!btnChangelog.textContent.includes('Versão 1.48')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.47')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.47');
+              if (!modalChg.innerHTML.includes('Versão 1.48')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.48');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.47 (v8.2.14)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.48 (v8.2.15)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

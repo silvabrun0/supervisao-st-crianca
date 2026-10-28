@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.48** | 28/10/2026 13:55 | `intermediárias/aplicativo_v148_padronizacao_semiotica_pictogramas_ues_servidores.html` | Solicitação direta / `planos_de_implementacao/plano_padronizacao_semiotica_pictogramas_botoes_ues.md` | Padronização semiótica dos pictogramas dos botões de Unidades Escolares e Servidores: exportação CSV/JSON com seta para cima, gabarito/modelo com pictograma `file-down`, e importação CSV com seta para baixo (harmonização v1.39) 📤📥📄✨ |
 | **1.46** | 28/10/2026 13:45 | `intermediárias/aplicativo_v146_remocao_rotulo_docente_regente_sem_acesso.html` | Solicitação direta / `planos_de_implementacao/plano_bloqueio_inicio_ano_letivo_futuro.md` | Bloqueio rigoroso de início de anos letivos futuros (trava `#futureYearBlockNotice` e autocura) e higienização do Quadro de Servidores com supressão definitiva do rótulo "Docente Regente (Sem acesso)" 🛡️🔒🧹 |
 | **1.45** | 27/10/2026 17:40 | `intermediárias/aplicativo_v145_modularizacao_e_divisao_index_html.html` | Solicitação direta / `planos_de_implementacao/plano_modularizacao_e_divisao_index_html.md` | Modularização arquitetural e divisão do arquivo principal monolítico: desacoplamento em 6 folhas de estilo CSS (`css/`) e 14 módulos JavaScript (`js/`), redução de ~28.600 linhas para ~5.500 linhas no `index.html`, preservação integral de estado, regras pedagógicas e expansão do motor de blindagem sintática JSC em `audit_platform.py` 🏗️⚡🛡️ |
 | **1.44** | 27/10/2026 17:15 | `intermediárias/aplicativo_v144_remocao_emojis_painel_indicadores_pictogramas.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_painel_indicadores_pictogramas.md` | Remoção completa de emojis soltos no Painel & Indicadores e Quadro de Controle Bimestral (`#screenIndicators` e `#bimesterSemaphoreSection`): substituição por pictogramas vetoriais SVG padronizados (.sem-pill-icon, .sem-stat-icon, .sem-filter-icon, .trend-icon-svg, .score-chip-dot, .picto-status-dot) e asserções estritas no Módulo 10 da auditoria 📊🎨🛡️ |
@@ -173,6 +174,28 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.48] - Padronização Semiótica dos Pictogramas dos Botões de Unidades Escolares e Servidores
+- **Data / Horário:** 28/10/2026 13:55
+- **Arquivo de Referência:** `intermediárias/aplicativo_v148_padronizacao_semiotica_pictogramas_ues_servidores.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_padronizacao_semiotica_pictogramas_botoes_ues.md`.
+- **Foco Central:** Harmonização semiótica e visual dos pictogramas vetoriais (SVGs) dos botões de ação na sub-aba Unidades Escolares & Polos (`#pedagViewUnits`) e Equipes & Servidores (`#pedagViewTeam`), alinhando-os às convenções canônicas da Versão 1.39:
+  1. **Padronização de Exportação (Seta para Cima):** Alinhamento dos botões de exportação CSV (`exportUnitsCSV`, `exportTeamMembersCSV`) e JSON (`exportUnitsJSON`, `exportTeamMembersJSON`) com o pictograma canônico da bandeja com seta vertical apontando para cima (extração de dados do sistema para arquivo externo).
+  2. **Padronização de Importação (Seta para Baixo):** Correção dos botões `Importar CSV` (`triggerUnitsCsvImport`, `triggerTeamCsvImport`) com a bandeja receptáculo exibindo a seta apontando para baixo (ingestão e despejo de dados de fora para dentro da plataforma).
+  3. **Diferenciação de Template/Modelo (`file-down`):** Aplicação do pictograma vetorial de documento modelo baixado nos botões `Baixar Modelo (CSV)` (`downloadUnitsCsvTemplate`, `downloadTeamCsvTemplate`), eliminando ambiguidade e conflito visual com o botão de importação.
+  4. **Auditoria Integrada e Blindagem Léxica:** Inclusão de asserções automatizadas no Módulo 2 da suíte de testes in-app (`js/audit/audit_engine.js`), garantindo conformidade perene dos caminhos SVG no DOM.
+
+#### Inclusões
+- Asserção semiótica estrutural no Módulo 2 (`catalogo_dados`) para validação contínua dos SVGs de exportação, download de modelo e importação no DOM.
+
+#### Alterações
+- `index.html`: Atualizados os caminhos SVG dos botões de ação em `#unitsActionsButtons` e na barra de Equipes & Servidores (`#pedagViewTeam`).
+- Atualização da versão do sistema para 1.48 (v8.2.15) no cabeçalho institucional (`.btn-changelog`), modal `#modalChangelog` e documentação.
+
+#### Exclusões
+- Erradicação de pictogramas invertidos de importação em botões de exportação e do ícone genérico de documento em exportações JSON.
+
+---
 
 ### [Versão 1.46] - Bloqueio Rigoroso de Início e Planejamento Antecipado de Anos Letivos Futuros
 - **Data / Horário:** 28/10/2026 13:30
