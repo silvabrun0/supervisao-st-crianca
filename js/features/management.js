@@ -1380,14 +1380,13 @@
             m.email = memberEmail;
           }
         }
-        const emailDisplay = (m.roleKey === 'professora') 
-          ? '<span style="font-size:11px; color:var(--text-secondary); font-style:italic;">Docente Regente (Sem acesso)</span>'
-          : (memberEmail ? `✉️ ${memberEmail}` : 'Sem e-mail vinculado');
+        const emailSubtitle = (m.roleKey === 'professora')
+          ? ''
+          : `<br><span style="font-size:11px; color:var(--text-secondary);">${memberEmail ? `✉️ ${memberEmail}` : 'Sem e-mail vinculado'}</span>`;
         
         tr.innerHTML = `
           <td>
-            <strong>${m.name}</strong><br>
-            <span style="font-size:11px; color:var(--text-secondary);">${emailDisplay}</span>
+            <strong>${m.name}</strong>${emailSubtitle}
           </td>
           <td><span style="font-size:12px; font-weight:700; color:var(--primary);">${m.roleTitle}</span></td>
           <td>${m.school || 'Rede Municipal'}</td>

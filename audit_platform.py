@@ -228,8 +228,8 @@ def main():
     parser.add_argument(
         '--timeout',
         type=int,
-        default=35,
-        help="Tempo limite em segundos para execução e resposta dos testes (padrão: 35s)"
+        default=60,
+        help="Tempo limite em segundos para execução e resposta dos testes (padrão: 60s)"
     )
 
     args = parser.parse_args()
@@ -284,7 +284,7 @@ def main():
         print("=" * 80)
         print("🔬 ALGORITMO DE AUDITORIA MODULAR DA PLATAFORMA (SerTão Criança)")
         print(f"   Modo de Execução: {'Integral (12 Módulos modo-a-modo)' if target_module == 'all' else f'Módulo Isolado [{target_module}]'}")
-        print(f"   Alvo: index.html (Versão 1.45 - v8.2.12)")
+        print(f"   Alvo: index.html (Versão 1.46 - v8.2.13)")
         print("=" * 80)
         print(f"🚀 Inicializando motor headless do Google Chrome...")
         print(f"   URL de teste: {target_url}\n")

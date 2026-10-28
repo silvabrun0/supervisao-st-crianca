@@ -4424,7 +4424,7 @@
               const sz = (teacherDoc.fileSize / 1024).toFixed(0);
               el.innerText = `${teacherDoc.fileName} · ${sz} KB · Atualizado em ${dt}`;
             } else {
-              el.innerText = 'PDF de Fábrica · 925 KB';
+              el.innerText = id === 'pdfTeacherInfoTab' ? '' : 'PDF de Fábrica · 925 KB';
             }
           }
         });
@@ -4450,7 +4450,7 @@
               const sz = (coordDoc.fileSize / 1024).toFixed(0);
               el.innerText = `${coordDoc.fileName} · ${sz} KB · Atualizado em ${dt}`;
             } else {
-              el.innerText = 'PDF de Fábrica · 170 KB';
+              el.innerText = id === 'pdfCoordinatorInfoTab' ? '' : 'PDF de Fábrica · 170 KB';
             }
           }
         });

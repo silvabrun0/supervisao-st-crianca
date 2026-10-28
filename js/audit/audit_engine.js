@@ -462,6 +462,9 @@
               if (teamTableBody && teamTableBody.innerHTML.includes('Auto via UE')) {
                 throw new Error('Badge "Auto via UE" ainda está presente na tabela de profissionais');
               }
+              if (teamTableBody && teamTableBody.innerHTML.includes('Docente Regente (Sem acesso)')) {
+                throw new Error('Texto "Docente Regente (Sem acesso)" ainda está presente no quadro de servidores');
+              }
               const newMemberNote = document.getElementById('newMemberTeacherRuleNote');
               const editMemberNote = document.getElementById('editMemberTeacherRuleNote');
               if (newMemberNote || editMemberNote) {
@@ -749,7 +752,7 @@
 
               // 11.4 TESTE DE CONFORMIDADE TEMPORAL: BLOQUEIO DE INÍCIO DE ANOS LETIVOS FUTUROS
               // 1. Testa bloqueio no modal quando o ano sugerido é futuro
-              startCycleBtn.click();
+              openCreateNewAcademicYearModal();
               const blockNoticeEl = document.getElementById('futureYearBlockNotice');
               const confirmBtnEl = document.getElementById('btnConfirmCreateAcademicYear');
               const inputYearEl = document.getElementById('inputNewAcademicYear');
@@ -3046,14 +3049,14 @@
               }
               logger.log('Asserção de Integridade do Registro da Versão 1.42 (v8.2.9) no Modal de Changelog', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.45
-              if (!btnChangelog.textContent.includes('Versão 1.45')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.46
+              if (!btnChangelog.textContent.includes('Versão 1.46')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.45')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.45');
+              if (!modalChg.innerHTML.includes('Versão 1.46')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.46');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.45 (v8.2.12)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.46 (v8.2.13)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
