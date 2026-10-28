@@ -430,9 +430,14 @@
     }
 
     function returnToCurrentAcademicYear() {
-      const sortedYears = [...(appState.academicYears || ['2026'])].sort((a, b) => b.localeCompare(a));
-      const latestYear = sortedYears[0] || '2026';
-      onGlobalAcademicYearChange(latestYear);
+      const currentRealYear = new Date().getFullYear();
+      const validYears = (appState.academicYears || ['2026'])
+        .map(y => parseInt(y, 10))
+        .filter(y => !isNaN(y) && y <= currentRealYear)
+        .sort((a, b) => b - a);
+
+      const targetYear = (validYears[0] || 2026).toString();
+      onGlobalAcademicYearChange(targetYear);
     }
 
     // Modal Bimester Periods (SSOT) Controls

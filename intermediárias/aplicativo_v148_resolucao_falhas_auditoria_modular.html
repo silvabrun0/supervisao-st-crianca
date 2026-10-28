@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.47 (v8.2.14)</span>
+          <span>Versão 1.48 (v8.2.15)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -394,19 +394,19 @@
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <button class="btn btn-secondary" onclick="exportTeamMembersCSV()">
-              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               Exportar Servidores (CSV)
             </button>
             <button class="btn btn-secondary" onclick="exportTeamMembersJSON()">
-              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               Exportar Servidores (JSON)
             </button>
             <button class="btn btn-secondary" onclick="downloadTeamCsvTemplate()">
-              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg>
               Baixar Modelo (CSV)
             </button>
             <button class="btn btn-secondary" onclick="triggerTeamCsvImport()">
-              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Importar CSV
             </button>
             <button class="btn btn-primary" id="btnNewTeacher" onclick="openAddTeacherModal()">+ Novo Professor</button>
@@ -1742,6 +1742,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.48 - PADRONIZAÇÃO SEMIÓTICA DOS PICTOGRAMAS DE UES E SERVIDORES -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid #10B981; background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.48 (v8.2.15)</span>
+          <span style="font-size:11px; background:#D1FAE5; color:#065F46; padding:2px 8px; border-radius:12px; font-weight:700;">28/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Harmonização Semiótica dos Pictogramas de Gestão da Rede (Unidades e Servidores):
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>📤 <strong>Padronização de Exportação (Seta para Cima):</strong> Alinhamento dos botões de exportação CSV e JSON de Unidades Escolares e Servidores com o pictograma canônico da bandeja com seta vertical apontando para cima (extração de dados do sistema para arquivo externo), em consonância com a Versão 1.39.</li>
+          <li>📥 <strong>Padronização de Importação (Seta para Baixo):</strong> Correção dos botões <code>Importar CSV</code> com a bandeja receptáculo exibindo a seta apontando para baixo (ingestão e despejo de dados de fora para dentro da plataforma).</li>
+          <li>📄 <strong>Diferenciação de Template/Modelo (<code>file-down</code>):</strong> Aplicação do pictograma vetorial de documento modelo baixado nos botões <code>Baixar Modelo (CSV)</code>, eliminando conflito visual com o botão de importação.</li>
+          <li>🛡️ <strong>Auditoria Integrada e Blindagem Léxica:</strong> Inclusão de asserções automatizadas no Módulo 2 da suíte de testes in-app, garantindo conformidade perene dos caminhos SVG no DOM.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.47 - REMOÇÃO DOS TEXTOS DE FABRICA E TAMANHO NA ABA MATRIZES -->

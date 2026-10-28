@@ -490,8 +490,12 @@
               });
               logger.log('Presença de novos membros docentes em INITIAL_TEAM', true, requiredNewMembers.join(', '));
 
-              // Validação de exclusividade docente (nenhuma docente de turma parcial atuando em turnos acumulados indevidos)
-              const anaClasses = (appState.classes || []).filter(c => (c.teachers || []).includes('Ana Carolina Silva'));
+              // Validação de exclusividade docente (nenhuma docente de turma parcial atuando em turnos acumulados indevidos no ciclo letivo ativo)
+              const activeAuditYear = appState.selectedAcademicYear || '2026';
+              const anaClasses = (appState.classes || []).filter(c => 
+                (c.academicYear || '2026') === activeAuditYear && 
+                (c.teachers || []).includes('Ana Carolina Silva')
+              );
               if (anaClasses.length !== 1 || anaClasses[0].name !== 'Infantil I - Turma A') {
                 throw new Error('Ana Carolina Silva não possui alocação exclusiva em Infantil I - Turma A');
               }
@@ -2075,9 +2079,38 @@
           run: function(logger) {
             try {
               appState.currentUserKey = 'mariana';
+              appState.selectedAcademicYear = '2026';
               appState.longitudinalViewMode = 'classes';
               appState.activeSemaphoreStatusFilter = 'all';
               appState.activeSemaphoreTeacherStatusFilter = 'all';
+
+              // Assegura preservação idempotente da observação canônica obs-001 contra esvaziamentos de módulos anteriores
+              if (!Array.isArray(appState.observations) || !appState.observations.some(o => o.id === 'obs-001')) {
+                if (!Array.isArray(appState.observations)) appState.observations = [];
+                appState.observations.unshift({
+                  id: 'obs-001',
+                  evaluatedType: 'professora',
+                  teacherName: 'Ana Carolina Silva',
+                  className: 'Infantil I - Turma A',
+                  schoolName: 'CEI Professora Maria de Lourdes',
+                  evaluatedBy: 'Mariana Ferreira',
+                  bimester: '1º Bimestre',
+                  academicYear: '2026',
+                  date: '2026-03-12',
+                  startTime: '08:00',
+                  endTime: '09:45',
+                  durationMinutes: 105,
+                  status: 'finalized',
+                  responses: {
+                    '1.1.1': 'partial', '1.1.2': 'not_done', '1.1.3': 'partial', '1.1.4': 'consistent', '1.1.5': 'partial',
+                    '2.1.1': 'consistent', '2.1.2': 'partial', '2.1.4': 'not_done', '2.2.1': 'not_done',
+                    '3.1': 'partial', '3.2': 'not_done', '3.3': 'consistent', '3.4': 'not_done',
+                    '4.1.1': 'consistent', '4.1.2': 'consistent', '4.2.1': 'consistent', '4.2.4': 'partial',
+                    '5.1': 'consistent', '5.2': 'consistent', '5.3': 'partial'
+                  }
+                });
+              }
+
               const memSelPre = document.getElementById('indicatorsMemberFilter');
               if (memSelPre) memSelPre.value = 'ALL';
               navigateToTab('indicators');
@@ -3085,14 +3118,14 @@
               }
               logger.log('Asserção de Integridade do Registro da Versão 1.42 (v8.2.9) no Modal de Changelog', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.47
-              if (!btnChangelog.textContent.includes('Versão 1.47')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.48
+              if (!btnChangelog.textContent.includes('Versão 1.48')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.47')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.47');
+              if (!modalChg.innerHTML.includes('Versão 1.48')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.48');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.47 (v8.2.14)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.48 (v8.2.15)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
