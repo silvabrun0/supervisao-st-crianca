@@ -1,9 +1,41 @@
     // --- 4. HIERARCHY, USER ROLES & SCOPES ---
+    // Utilitário Canônico de Resolução de Chaves de Autenticação (USERS_DB)
+    function findUserDbKey(identifier) {
+      if (!identifier) return null;
+      const idStr = String(identifier).trim().toLowerCase();
+      return Object.keys(USERS_DB).find(k => 
+        k.toLowerCase() === idStr ||
+        (USERS_DB[k].id && String(USERS_DB[k].id).toLowerCase() === idStr) ||
+        (USERS_DB[k].name && USERS_DB[k].name.toLowerCase() === idStr) ||
+        (USERS_DB[k].email && USERS_DB[k].email.toLowerCase() === idStr)
+      ) || null;
+    }
+
+    // Resolução Dinâmica SSOT em Tempo Real do Usuário Autenticado
     function getCurrentUser() {
-      if (!appState.currentUserKey || !USERS_DB[appState.currentUserKey]) {
-        return {};
+      if (!appState.currentUserKey) return {};
+      const authRecord = USERS_DB[appState.currentUserKey] || (appState.customUsers && appState.customUsers[appState.currentUserKey]);
+      if (!authRecord) return {};
+
+      // Sincronização Dinâmica em Tempo Real contra a SSOT de Equipe (appState.teamMembers)
+      const member = (appState.teamMembers || []).find(m => 
+        m.id === appState.currentUserKey ||
+        (authRecord.id && m.id === authRecord.id) ||
+        (m.name && authRecord.name && m.name.toLowerCase() === authRecord.name.toLowerCase()) ||
+        (m.email && authRecord.email && m.email.toLowerCase() === authRecord.email.toLowerCase())
+      );
+
+      if (member) {
+        authRecord.name = member.name;
+        authRecord.roleKey = member.roleKey;
+        authRecord.roleTitle = member.roleTitle;
+        authRecord.school = member.school;
+        authRecord.supervisor = member.supervisor;
+        if (member.classAssigned) authRecord.classAssigned = member.classAssigned;
+        if (member.email) authRecord.email = member.email;
       }
-      return USERS_DB[appState.currentUserKey];
+
+      return authRecord;
     }
 
     // --- RESOLUÇÃO DINÂMICA DE AVALIANDOS ATIVOS DO ESCOPO ---
@@ -212,8 +244,25 @@
       if (indUnit) indUnit.value = 'ALL';
       const indMember = document.getElementById('indicatorsMemberFilter');
       if (indMember) indMember.value = 'ALL';
+      
+      // Limpeza de caches de seletores de tela
+      const schoolFilterSelect = document.getElementById('classesFilterSchool');
+      if (schoolFilterSelect) delete schoolFilterSelect.dataset.populatedFor;
+      
       applyUserRoleUI();
       saveState();
+      
+      // Re-renderização reativa das telas ativas
+      if (document.getElementById('screenIndicators')?.classList.contains('active')) {
+        renderIndicatorsScreen();
+      }
+      if (document.getElementById('screenClasses')?.classList.contains('active')) {
+        renderClassesScreen();
+      }
+      if (document.getElementById('screenSchedule')?.classList.contains('active')) {
+        renderScheduleScreen();
+      }
+      
       navigateToTab('home');
       showToast(`Sessão ativa: ${getCurrentUser().name} (${getCurrentUser().roleTitle})`);
     }

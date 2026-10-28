@@ -401,17 +401,25 @@
       // 4. Propagação da Formadora Responsável e Supervisão de Coordenadoras
       const currentPoloUnits = (appState.units || []).filter(u => u.polo === newName).map(u => u.name);
 
+      // Desvincula formadora anterior caso uma nova tenha sido selecionada ou caso o polo fique sem formadora
+      (appState.teamMembers || []).forEach(m => {
+        if (m.roleKey === 'formador' && (m.school === oldName || m.school === newName) && m.name !== selectedFormadoraName) {
+          m.school = 'A definir / Secretaria';
+          syncUserToAuthDb(m);
+        }
+      });
+
       if (selectedFormadoraName) {
         (appState.teamMembers || []).forEach(m => {
           // Se for a formadora escolhida, atualiza sua escola/polo
           if (m.roleKey === 'formador' && m.name === selectedFormadoraName) {
             m.school = newName;
-            if (appState.customUsers && appState.customUsers[m.id]) appState.customUsers[m.id].school = newName;
-            if (typeof USERS_DB !== 'undefined' && USERS_DB[m.id]) USERS_DB[m.id].school = newName;
+            syncUserToAuthDb(m);
           }
           // Coordenadoras das unidades do polo passam a ter esta formadora como supervisora
           if (m.roleKey === 'coordenador' && currentPoloUnits.includes(m.school)) {
             m.supervisor = selectedFormadoraName;
+            syncUserToAuthDb(m);
           }
         });
       }
@@ -421,12 +429,16 @@
         (appState.teamMembers || []).forEach(m => {
           if (m.roleKey === 'formador' && m.school === oldName) {
             m.school = newName;
-            if (appState.customUsers && appState.customUsers[m.id]) appState.customUsers[m.id].school = newName;
-            if (typeof USERS_DB !== 'undefined' && USERS_DB[m.id]) USERS_DB[m.id].school = newName;
+            syncUserToAuthDb(m);
           }
         });
-        const curr = getCurrentUser();
-        if (curr && curr.school === oldName) curr.school = newName;
+      }
+
+      // Reatividade imediata de sessão se o usuário ativo for afetado
+      const curr = getCurrentUser();
+      if (curr && (curr.school === oldName || curr.name === selectedFormadoraName)) {
+        curr.school = newName;
+        applyUserRoleUI();
       }
 
       saveState();
@@ -485,8 +497,7 @@
         const fMember = (appState.teamMembers || []).find(m => m.roleKey === 'formador' && m.name === formadoraName);
         if (fMember) {
           fMember.school = name;
-          if (appState.customUsers && appState.customUsers[fMember.id]) appState.customUsers[fMember.id].school = name;
-          if (typeof USERS_DB !== 'undefined' && USERS_DB[fMember.id]) USERS_DB[fMember.id].school = name;
+          syncUserToAuthDb(fMember);
         }
       }
 
@@ -513,6 +524,7 @@
       (appState.teamMembers || []).forEach(m => {
         if (m.roleKey === 'formador' && m.school === poloName) {
           m.school = 'A definir / Secretaria';
+          syncUserToAuthDb(m);
         }
       });
 
@@ -814,7 +826,8 @@
         if (filterCard) filterCard.style.display = 'block';
         const formadorUnits = (appState.units || []).filter(u => u.polo === user.school || u.name === user.school).map(u => u.name);
         if (schoolFilterSelect) {
-          if (schoolFilterSelect.dataset.populatedFor !== user.name) {
+          const userCacheKey = `${user.name}|${user.school}`;
+          if (schoolFilterSelect.dataset.populatedFor !== userCacheKey) {
             schoolFilterSelect.innerHTML = '<option value="ALL">Todas as UEs do Polo</option>';
             formadorUnits.forEach(uName => {
               const opt = document.createElement('option');
@@ -822,7 +835,7 @@
               opt.text = uName;
               schoolFilterSelect.appendChild(opt);
             });
-            schoolFilterSelect.dataset.populatedFor = user.name;
+            schoolFilterSelect.dataset.populatedFor = userCacheKey;
           }
           targetSchool = schoolFilterSelect.value;
         }
@@ -1400,6 +1413,39 @@
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    // =========================================================================
+    // SINCRONIZADOR UNIVERSAL DE AUTENTICAÇÃO E SSOT (USERS_DB & customUsers)
+    // =========================================================================
+    // Sincronizador Bidirecional entre SSOT (teamMembers) e Autenticação (USERS_DB / customUsers)
+    function syncUserToAuthDb(member) {
+      if (!member || member.roleKey === 'professora') return; // Docentes não acessam o sistema
+      const dbKey = (typeof findUserDbKey === 'function' ? findUserDbKey(member.id) || findUserDbKey(member.name) || findUserDbKey(member.email) : null) || member.id;
+      
+      if (!USERS_DB[dbKey]) {
+        USERS_DB[dbKey] = {
+          id: dbKey,
+          name: member.name,
+          roleKey: member.roleKey,
+          roleTitle: member.roleTitle,
+          school: member.school,
+          supervisor: member.supervisor,
+          email: member.email || `${dbKey}@teste.com`,
+          password: '123456',
+          avatarText: member.name.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase()
+        };
+      } else {
+        USERS_DB[dbKey].name = member.name;
+        USERS_DB[dbKey].roleKey = member.roleKey;
+        USERS_DB[dbKey].roleTitle = member.roleTitle;
+        USERS_DB[dbKey].school = member.school;
+        USERS_DB[dbKey].supervisor = member.supervisor;
+        if (member.email) USERS_DB[dbKey].email = member.email;
+      }
+
+      if (!appState.customUsers) appState.customUsers = {};
+      appState.customUsers[dbKey] = { ...USERS_DB[dbKey] };
     }
 
     // =========================================================================
@@ -1992,37 +2038,8 @@
       // 3. Sincronização com USERS_DB e customUsers apenas para usuários com login (não docentes)
       let dbKey = null;
       if (roleKey !== 'professora') {
-        dbKey = Object.keys(USERS_DB).find(k => 
-          k === id || 
-          USERS_DB[k].id === id || 
-          (USERS_DB[k].name && USERS_DB[k].name.toLowerCase() === oldName.toLowerCase()) ||
-          (appState.currentUserKey === k && (USERS_DB[k].name === oldName || USERS_DB[k].id === id))
-        );
-
-        if (dbKey && USERS_DB[dbKey]) {
-          USERS_DB[dbKey].name = name;
-          USERS_DB[dbKey].roleKey = roleKey;
-          USERS_DB[dbKey].roleTitle = roleTitle;
-          USERS_DB[dbKey].school = schoolVal;
-          USERS_DB[dbKey].supervisor = supVal;
-          if (emailVal || !USERS_DB[dbKey].email) {
-            USERS_DB[dbKey].email = emailVal;
-          }
-        }
-
-        if (appState.customUsers) {
-          const customKey = dbKey || id;
-          if (appState.customUsers[customKey]) {
-            appState.customUsers[customKey].name = name;
-            appState.customUsers[customKey].roleKey = roleKey;
-            appState.customUsers[customKey].roleTitle = roleTitle;
-            appState.customUsers[customKey].school = schoolVal;
-            appState.customUsers[customKey].supervisor = supVal;
-            if (emailVal || !appState.customUsers[customKey].email) {
-              appState.customUsers[customKey].email = emailVal;
-            }
-          }
-        }
+        dbKey = (typeof findUserDbKey === 'function' ? findUserDbKey(id) || findUserDbKey(oldName) || findUserDbKey(emailVal) : null) || id;
+        syncUserToAuthDb(appState.teamMembers[memberIndex]);
       }
 
       // 4. PROPAGAÇÃO RELACIONAL AO MUDAR DE UNIDADE ESCOLAR / POLO
@@ -2032,8 +2049,21 @@
       if (unitChanged || nameChanged) {
         // A. Se for COORDENADORA que mudou de unidade escolar
         if (oldRole === 'coordenador' || roleKey === 'coordenador') {
-          // Docentes da unidade antiga: desvincula da coordenadora que saiu
           if (unitChanged) {
+            // Vincula automaticamente à formadora do polo da nova UE
+            const targetUnit = (appState.units || []).find(u => u.name === schoolVal);
+            if (targetUnit && targetUnit.polo) {
+              const targetFormadora = (appState.teamMembers || []).find(m => m.roleKey === 'formador' && m.school === targetUnit.polo);
+              if (targetFormadora) {
+                appState.teamMembers[memberIndex].supervisor = targetFormadora.name;
+                syncUserToAuthDb(appState.teamMembers[memberIndex]);
+              }
+            }
+
+            // Garante que a nova UE tenha suas turmas catalogadas na SSOT
+            getClassesForSchool(schoolVal);
+
+            // Docentes da unidade antiga: desvincula da coordenadora que saiu
             const remainingCpOldSchool = appState.teamMembers.find(m => 
               m.id !== id && m.roleKey === 'coordenador' && m.school === oldSchool
             );
@@ -2052,7 +2082,6 @@
               }
             });
           } else if (nameChanged) {
-            // Apenas renomeou: atualiza o nome do supervisor nas docentes
             appState.teamMembers.forEach(m => {
               if (m.supervisor === oldName) {
                 m.supervisor = name;
@@ -2130,6 +2159,9 @@
       // 6. Atualização reativa imediata das telas ativas se estiverem visíveis
       if (document.getElementById('screenIndicators')?.classList.contains('active')) {
         renderIndicatorsScreen();
+      }
+      if (document.getElementById('screenClasses')?.classList.contains('active')) {
+        renderClassesScreen();
       }
       if (document.getElementById('screenHome')?.classList.contains('active')) {
         renderHomeScreen();
