@@ -29,6 +29,12 @@ Qualquer agente de IA que atue neste repositório **DEVE OBRIGATORIAMENTE** segu
   *(Ou validando via `/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc`).*
 - Se a validação acusar qualquer erro, o commit/push é **bloqueado imediatamente** até que o código esteja sintaticamente perfeito.
 
+### ⛔ TOLERÂNCIA ZERO AO SEQUESTRO DE DEMANDAS E LOOPS DE AUDITORIA
+- **Proibição de Escopo Fantasma:** O assistente deve ater-se **única e exclusivamente** à demanda solicitada pelo usuário (ex: remover texto, alterar botão, ajustar estilo). Tarefas pontuais de interface devem ser executadas mecanicamente em **2 a 3 minutos**.
+- **Proibição de Refatoração Não Autorizada da Suíte de Testes:** Se a auditoria pós-deploy (`audit_platform.py`) reprovar em testes não relacionados à alteração realizada ou acusar divergências pré-existentes na suíte (ex: dados de mock, seletores de módulos alheios), é **TERMINANTEMENTE PROIBIDO** tentar consertar o motor de testes (`js/audit/audit_engine.js`), criar planos não solicitados de resolução de testes ou passar minutos/horas depurando asserções por conta própria.
+- **Protocolo de Reporte Estrito:** Se a alteração pontual foi aplicada e a auditoria acusar erro não correlato, o assistente **DEVE APENAS RELATAR** a situação de forma sucinta e concluir a entrega: *"A alteração solicitada foi publicada com sucesso. A auditoria acusou falha no módulo [X], que é pré-existente e não tem relação com esta mudança. Deseja planejar a correção da auditoria separadamente?"*.
+- **Travamento Anti-Hang no Shell/Git:** Todo comando git/terminal DEVE rodar com flags não-interativas (`--no-pager` ou `GIT_PAGER=cat`), sendo vedado o disparo de processos interativos ou sub-tarefas paralelas desnecessárias.
+
 ---
 
 ## 2. Documentos Oficiais e Skills Normativas

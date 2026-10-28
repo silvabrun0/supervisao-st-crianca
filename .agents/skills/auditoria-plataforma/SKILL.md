@@ -11,6 +11,7 @@ Esta skill rege a execução de testes automatizados e validações de integrida
 1. **NUNCA abra o Google Chrome gráfico** na máquina do usuário.
 2. **NUNCA execute a suíte headless antes de validar a sintaxe** (`--check-syntax`).
 3. **No pós-deploy, utilize SEMPRE `--silent-on-success`** e reporte SOMENTE problemas.
+4. **PROIBIDO entrar em loop de refatoração autônoma da auditoria:** Se um teste falhar e for de módulo não relacionado à alteração pontual do usuário, registre apenas o relatório de falha para o usuário. NUNCA gaste tempo alterando `audit_engine.js` ou criando novos planos de teste sem autorização expressa.
 
 ## Comandos Oficiais da Suíte
 

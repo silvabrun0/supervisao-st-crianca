@@ -12,6 +12,8 @@ Esta skill orienta o assistente durante a **Etapa 2** do workflow, aplicando fie
 2. **NÃO abra o Google Chrome gráfico.**
 3. **NUNCA faça commit antes da validação sintática (`python3 audit_platform.py --check-syntax`).**
 4. **NUNCA esqueça a sincronização espelhada, o backup intermediário e o changelog duplo.**
+5. **NUNCA sequestre a demanda entrando em loops de correção de auditoria:** Se a auditoria acusar erro não correlato à alteração (ex: teste pré-existente de outro módulo), NUNCA passe horas consertando a suíte. Reporte pontualmente ao usuário e finalize a entrega pontual em 2 a 3 minutos.
+6. **NUNCA use comandos Git/shell interativos:** Use sempre `--no-pager` para evitar travamentos de background.
 
 ## Checklist Passo a Passo Obrigatório
 
