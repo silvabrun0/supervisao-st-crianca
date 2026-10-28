@@ -423,13 +423,12 @@
 
       const unitClasses = getClassesForSchool(unit.name);
       const unitTeachers = (appState.teamMembers || []).filter(m => m.school === unit.name && m.roleKey === 'professora');
+      const unitAgg = getSchoolClassesAggregates(unit.name);
 
       if (classesCountEl) classesCountEl.innerText = `${unitClasses.length} turma(s)`;
       if (teachersCountEl) teachersCountEl.innerText = `${unitTeachers.length} docente(s)`;
       if (studentsEl) {
-        const tot = unit.totalStudents !== undefined ? unit.totalStudents : 120;
-        const inc = unit.inclusiveStudents !== undefined ? unit.inclusiveStudents : 5;
-        studentsEl.innerText = `${tot} (${inc} AEE)`;
+        studentsEl.innerText = `${unitAgg.totalStudents} (${unitAgg.inclusiveStudents} AEE)`;
       }
 
       // Renderização da Tabela de Turmas & Docentes Atribuídos
@@ -440,7 +439,7 @@
         if (unitClasses.length === 0) {
           tbody.innerHTML = `
             <tr>
-              <td colspan="4" style="text-align:center; padding:24px; color:var(--text-secondary); font-style:italic;">
+              <td colspan="5" style="text-align:center; padding:24px; color:var(--text-secondary); font-style:italic;">
                 Nenhuma turma cadastrada no momento pela Coordenação Pedagógica desta Unidade Escolar.
               </td>
             </tr>
@@ -456,6 +455,9 @@
             if (isIntegral) {
               turnoBadge = `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:11px;">Manhã + Tarde</span>`;
             }
+
+            const clsTot = typeof cls.totalStudents === 'number' ? cls.totalStudents : 20;
+            const clsInc = typeof cls.inclusiveStudents === 'number' ? cls.inclusiveStudents : 0;
 
             let teachersDisplay = '';
             if (isIntegral && (cls.teachersMorning || cls.teachersAfternoon)) {
@@ -477,6 +479,10 @@
               <td>
                 <strong style="color:var(--primary-dark); font-size:13px;">${cls.name}</strong><br>
                 <span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:10px;">${cls.stage || 'Educação Infantil'}</span>
+              </td>
+              <td>
+                <strong style="color:#1E40AF;">${clsTot} alunos</strong>
+                ${clsInc > 0 ? `<br><span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:10px; font-weight:700;">${clsInc} com AEE</span>` : ''}
               </td>
               <td>${jornadaBadge}</td>
               <td>${turnoBadge}</td>
@@ -791,11 +797,12 @@
       document.getElementById('editUnitId').value = unit.id;
       document.getElementById('editUnitName').value = unit.name || '';
       document.getElementById('editUnitAddress').value = unit.address || '';
+      const unitAgg = getSchoolClassesAggregates(unit.name);
       if (document.getElementById('editUnitStudents')) {
-        document.getElementById('editUnitStudents').value = unit.totalStudents !== undefined ? unit.totalStudents : 120;
+        document.getElementById('editUnitStudents').value = unitAgg.totalStudents;
       }
       if (document.getElementById('editUnitInclusive')) {
-        document.getElementById('editUnitInclusive').value = unit.inclusiveStudents !== undefined ? unit.inclusiveStudents : 5;
+        document.getElementById('editUnitInclusive').value = unitAgg.inclusiveStudents;
       }
 
       // Popula opções de polo com base nos polos via getAllPolosList()
@@ -844,13 +851,15 @@
       const oldName = appState.units[unitIndex].name;
 
       // Atualiza a unidade escolar
+      const curAgg = getSchoolClassesAggregates(oldName);
       appState.units[unitIndex] = {
         ...appState.units[unitIndex],
         name,
         polo,
         address: address || '',
-        totalStudents: !isNaN(totStudents) ? totStudents : (appState.units[unitIndex].totalStudents || 120),
-        inclusiveStudents: !isNaN(incStudents) ? incStudents : (appState.units[unitIndex].inclusiveStudents || 5)
+        totalStudents: curAgg.totalStudents,
+        inclusiveStudents: curAgg.inclusiveStudents,
+        totalClasses: curAgg.totalClasses
       };
 
       // Propagação de integridade relacional se o nome da unidade mudou
@@ -1655,6 +1664,11 @@
         document.getElementById('classEditorShiftPeriod').value = cls.shift;
       }
 
+      const totInput = document.getElementById('classEditorTotalStudents');
+      const incInput = document.getElementById('classEditorInclusiveStudents');
+      if (totInput) totInput.value = typeof cls.totalStudents === 'number' ? cls.totalStudents : 20;
+      if (incInput) incInput.value = typeof cls.inclusiveStudents === 'number' ? cls.inclusiveStudents : 0;
+
       const schoolSelect = document.getElementById('classEditorSchool');
       const groupSchool = document.getElementById('groupClassSchool');
       schoolSelect.innerHTML = '';
@@ -1782,9 +1796,23 @@
       const stage = document.getElementById('classEditorStage').value;
       const shiftType = document.getElementById('classEditorShiftType').value;
       const shiftPeriod = document.getElementById('classEditorShiftPeriod').value;
+      const totalStudents = parseInt(document.getElementById('classEditorTotalStudents')?.value, 10);
+      const inclusiveStudents = parseInt(document.getElementById('classEditorInclusiveStudents')?.value, 10);
 
       if (!name) {
         showToast('Por favor, informe o nome da turma.');
+        return;
+      }
+      if (isNaN(totalStudents) || totalStudents < 1) {
+        showToast('Informe o total de alunos matriculados na turma (mínimo 1).');
+        return;
+      }
+      if (isNaN(inclusiveStudents) || inclusiveStudents < 0) {
+        showToast('O número de alunos com necessidades especiais deve ser 0 ou superior.');
+        return;
+      }
+      if (inclusiveStudents > totalStudents) {
+        showToast(`Inconsistência: O número de alunos com necessidades especiais (${inclusiveStudents}) não pode ser maior que o total de alunos da turma (${totalStudents}).`);
         return;
       }
 
@@ -1836,7 +1864,9 @@
           shift: finalShift,
           teachers: finalTeachers,
           teachersMorning: finalMorning,
-          teachersAfternoon: finalAfternoon
+          teachersAfternoon: finalAfternoon,
+          totalStudents,
+          inclusiveStudents
         };
 
         // Propagação de integridade relacional SSOT se o nome da turma mudou
@@ -1876,13 +1906,16 @@
           shift: finalShift,
           teachers: finalTeachers,
           teachersMorning: finalMorning,
-          teachersAfternoon: finalAfternoon
+          teachersAfternoon: finalAfternoon,
+          totalStudents,
+          inclusiveStudents
         };
         if (!appState.classes) appState.classes = [];
         appState.classes.push(newClass);
         showToast(`Turma "${name}" cadastrada com sucesso!`);
       }
 
+      syncUnitCharacterizationFromClasses();
       saveState();
       closeClassEditorModal();
       renderClassesScreen();
@@ -1912,6 +1945,7 @@
         appState.deletedClassIds.push(classId);
       }
 
+      syncUnitCharacterizationFromClasses();
       saveState();
       closeClassEditorModal();
       renderClassesScreen();
