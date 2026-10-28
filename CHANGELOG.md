@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.51** | 28/10/2026 15:00 | `intermediárias/aplicativo_v151_destaque_proxima_observacao_cronograma.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_destaque_proxima_observacao_cronograma.md` | Correção e restauração plena do destaque da próxima observação no Cronograma: reinserção de `#nextScheduleHighlightContainer`, estilos CSS do Hero Card (`.next-visit-hero-card`) e badge inline (`.badge-next-inline`), suporte canônico a turmas em `getActionablePendingSchedules()`, alinhamento do Hero Card ao filtro ativo de bimestre e asserções estritas no Módulo 8 da auditoria 📅🎯🛡️ |
+| **1.50** | 28/10/2026 14:55 | `intermediárias/aplicativo_v150_remocao_emojis_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_tela_gestao_pedagogica.md` | Remoção completa de emojis e padronização visual na Gestão Pedagógica/Rede: substituição por pictogramas vetoriais SVG monocromáticos (Feather/Lucide) em cartões, tabelas, modais e asserções estritas no Módulo 12 da auditoria 🏛️✨🛡️ |
 | **1.49** | 28/10/2026 14:40 | `intermediárias/aplicativo_v149_ajuste_mencoes_semaforo_quadro_controle.html` | Solicitação direta / `planos_de_implementacao/plano_ajuste_mencoes_semaforo_quadro_controle.md` | Padronização terminológica do Quadro de Controle Bimestral na aba de Diagnóstico: atualização da pílula de navegação `#pillIndLongitudinal` e botões de atalho nos cards de KPI para "Quadro de Controle", eliminando resquícios coloquiais de "Semáforo" 📊🔍🛡️ |
 | **1.48** | 28/10/2026 13:55 | `intermediárias/aplicativo_v148_padronizacao_semiotica_pictogramas_ues_servidores.html` | Solicitação direta / `planos_de_implementacao/plano_padronizacao_semiotica_pictogramas_botoes_ues.md` | Padronização semiótica dos pictogramas dos botões de Unidades Escolares e Servidores: exportação CSV/JSON com seta para cima, gabarito/modelo com pictograma `file-down`, e importação CSV com seta para baixo (harmonização v1.39) 📤📥📄✨ |
 | **1.46** | 28/10/2026 13:45 | `intermediárias/aplicativo_v146_remocao_rotulo_docente_regente_sem_acesso.html` | Solicitação direta / `planos_de_implementacao/plano_bloqueio_inicio_ano_letivo_futuro.md` | Bloqueio rigoroso de início de anos letivos futuros (trava `#futureYearBlockNotice` e autocura) e higienização do Quadro de Servidores com supressão definitiva do rótulo "Docente Regente (Sem acesso)" 🛡️🔒🧹 |
@@ -175,6 +177,59 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.51] - Correção e Restauração Plena do Destaque da Próxima Observação no Cronograma
+- **Data / Horário:** 28/10/2026 15:00
+- **Arquivo de Referência:** `intermediárias/aplicativo_v151_destaque_proxima_observacao_cronograma.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_correcao_destaque_proxima_observacao_cronograma.md`.
+- **Foco Central:** Correção arquitetural e restauração visual completa do recurso de destaque imediato da próxima observação agendada no Cronograma de Acompanhamento (`#screenSchedule`) e fluxos associados:
+  1. **Container Dinâmico do Hero Card (`#nextScheduleHighlightContainer`):** Restauração do elemento no DOM em `index.html`, posicionado logo abaixo do cabeçalho da Agenda.
+  2. **Estilização Completa e Responsiva (`css/04_screens.css`):** Adição das classes de estilo de `.next-visit-hero-card`, badges temporais dinâmicos (`.next-visit-timing-badge` para Hoje, Amanhã, Em X dias e Em atraso), metadados de data/escola/regência, botões de ação contextuais e etiqueta inline `.badge-next-inline` para a tabela desktop e cards móveis.
+  3. **Compatibilidade do Pilar 1 em `getActionablePendingSchedules()`:** Ajuste na resolução de agendamentos pendentes da Coordenadora Pedagógica, suportando observações diretamente atribuídas a Turmas (`s.targetType === 'turma'`), desconsiderando agendamentos já finalizados e filtrando coordenações para Formadoras.
+  4. **Concordância com Filtro de Bimestre em `getNextActionableSchedule(filterBimester)`:** Garantia de que a próxima observação calculada respeite o filtro ativo selecionado na tela de Cronograma.
+  5. **Auditoria Integrada (Módulo 8):** Asserções determinísticas automáticas de presença do container, renderização do Hero Card e presença da tag inline `.badge-next-inline`.
+
+#### Inclusões
+- Container `#nextScheduleHighlightContainer` no `index.html`.
+- Classes CSS de Hero Card, badges e destaques inline em `css/04_screens.css`.
+- Testes automatizados determinísticos de renderização do Hero Card e badges no Módulo 8 (`agenda_cronograma`) de `js/audit/audit_engine.js`.
+
+#### Alterações
+- `index.html`: Inclusão do container `#nextScheduleHighlightContainer` e atualização da versão para 1.51 (v8.2.18).
+- `css/04_screens.css`: Declaração de estilos do Hero Card e badges.
+- `js/core/navigation.js`: Ajuste resiliente em `getActionablePendingSchedules()` para suporte a turmas.
+- `js/features/schedule.js`: `getNextActionableSchedule()` contextualizada por bimestre e destaque de borda na tabela desktop.
+- `js/audit/audit_engine.js`: Asserções do Hero Card e atualização dos testes de versão para 1.51.
+
+---
+
+### [Versão 1.50] - Remoção de Emojis e Padronização Visual na Tela de Gestão Pedagógica
+- **Data / Horário:** 28/10/2026 14:55
+- **Arquivo de Referência:** `intermediárias/aplicativo_v150_remocao_emojis_gestao_pedagogica.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_tela_gestao_pedagogica.md`.
+- **Foco Central:** Erradicação completa de emojis Unicode coloridos residuais (`🏫`, `🗺️`, `🏢`, `💾`, `✏️`, `📍`, `👁️`, `✉️`, `☀️`, `🌤️`, `🗑️`, `⚠️`, `📅`, `🛡️`, `🏛️`) na tela de Gestão Pedagógica/Rede (`#homeGestaoView`), tela inicial e modais associados, substituindo-os por pictogramas vetoriais SVG monocromáticos limpos (Feather / Lucide com classe `.btn-icon` e `stroke="currentColor"`):
+  1. **Card de Acesso na Tela Inicial (`#homeOpManagementCard`):** Substituição do emoji `🏫` por SVG institucional padronizado.
+  2. **Matriz de Distribuição e Cobertura da Rede:** Substituição do emoji `🗺️` por SVG de mapa/território.
+  3. **Caracterização da Unidade Escolar:** Substituição dos emojis `🏢` e `💾` por pictogramas vetoriais de prédio escolar e salvar.
+  4. **Tabelas de Polos e UEs:** Erradicação de emojis em links, botões ("Editar", "Ver Turmas") e badges territoriais.
+  5. **Modais da Gestão:** Limpeza semiótica nos modais `#modalViewUnitClasses`, `#modalEditPolo`, `#modalClassEditor`, `#modalConfirmDeleteDraft`, `#modalBimesterPeriods` e `#modalCreateAcademicYear`.
+  6. **Menu Drawer Mobile e Bloqueio Temporal:** Remoção de emojis em textos dinâmicos do drawer mobile (`mobMenuOpText`) e substituição por SVG no aviso de conformidade temporal.
+  7. **Auditoria Integrada e Blindagem Léxica:** Inclusão de asserção automatizada determinística no Módulo 12 da suíte in-app garantindo ausência perene de emojis na Gestão Pedagógica.
+
+#### Inclusões
+- Asserção semiótica estrutural no Módulo 12 (`navegacao_layout`) para validação contínua de ausência de emojis nos cartões e tabelas da Gestão Pedagógica.
+
+#### Alterações
+- `index.html`: Substituição de emojis por pictogramas SVG nos cards, tabelas e modais da Gestão Pedagógica.
+- `js/features/management.js`: Substituição de emojis por ícones SVG e tipografia limpa nas tabelas de polos, UEs e servidores.
+- `js/core/rbac.js`: Higienização dos textos dinâmicos do drawer mobile.
+- `js/services/export_backup.js`: Substituição do emoji de bloqueio temporal por pictograma SVG.
+- Atualização da versão do sistema para 1.50 (v8.2.17) no cabeçalho institucional (`.btn-changelog`), modal `#modalChangelog` e documentação.
+
+#### Exclusões
+- Erradicação de todos os emojis residuais na Gestão Pedagógica e modais associados.
+
+---
 
 ### [Versão 1.49] - Padronização Terminológica do Quadro de Controle Bimestral na Aba de Diagnóstico
 - **Data / Horário:** 28/10/2026 14:40

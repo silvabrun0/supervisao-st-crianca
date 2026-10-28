@@ -2036,6 +2036,30 @@
               const obsStillInDb = (appState.observations || []).some(o => o.id === simObs.id);
               if (!obsStillInDb) throw new Error('Observação foi deletada indevidamente ao remover o agendamento');
               logger.log('Exclusão segura de agendamento com desvinculação relacional e preservação de observação no histórico', true);
+
+              // 4. Verificação Estrutural e Funcional do Destaque da Próxima Observação (Hero Card e Inline)
+              const highlightContainer = document.getElementById('nextScheduleHighlightContainer');
+              if (!highlightContainer) {
+                throw new Error('Elemento obrigatório #nextScheduleHighlightContainer não foi localizado em screenSchedule');
+              }
+              logger.log('Presença estrutural do container de destaque #nextScheduleHighlightContainer no DOM', true);
+
+              renderScheduleScreen();
+              const heroCard = highlightContainer.querySelector('.next-visit-hero-card');
+              if (!heroCard) {
+                throw new Error('O Hero Card de próxima observação (.next-visit-hero-card) não foi renderizado em #nextScheduleHighlightContainer');
+              }
+              const heroTimingBadge = highlightContainer.querySelector('.next-visit-timing-badge');
+              if (!heroTimingBadge) {
+                throw new Error('Badge de urgência temporal (.next-visit-timing-badge) ausente no Hero Card');
+              }
+              logger.log('Renderização com sucesso do Hero Card da Próxima Observação e badges temporais', true);
+
+              const inlineBadge = document.querySelector('.badge-next-inline');
+              if (!inlineBadge) {
+                throw new Error('Badge inline .badge-next-inline não foi localizado na tabela ou cards da Agenda');
+              }
+              logger.log('Identificação inline (.badge-next-inline) presente na linha da próxima observação', true);
             } catch (e) {
               logger.log('Erro de execução no módulo agenda_cronograma', false, e.message);
             }
@@ -3118,14 +3142,34 @@
               }
               logger.log('Asserção de Integridade do Registro da Versão 1.42 (v8.2.9) no Modal de Changelog', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.48
-              if (!btnChangelog.textContent.includes('Versão 1.48')) {
+              // 20. VALIDAÇÃO DA ERRADICAÇÃO DE EMOJIS NA TELA DE GESTÃO PEDAGÓGICA (VERSÃO 1.50)
+              const gestaoEl = document.getElementById('homeGestaoView');
+              if (gestaoEl) {
+                const rawEmojisRegex = /[🏫🗺🏢💾✏📍👁✉☀️🌤🗑⚠️📅🛡🏛]/;
+                const networkCoverage = document.getElementById('networkCoverageCard');
+                const unitsDetailed = document.getElementById('unitsDetailedCard');
+                const teamCard = document.querySelector('#pedagViewTeam .card');
+                
+                if (networkCoverage && rawEmojisRegex.test(networkCoverage.innerText)) {
+                  throw new Error('Matriz de Cobertura da Rede ainda contém emojis residuais');
+                }
+                if (unitsDetailed && rawEmojisRegex.test(unitsDetailed.innerText)) {
+                  throw new Error('Tabela de Unidades Escolares ainda contém emojis residuais');
+                }
+                if (teamCard && rawEmojisRegex.test(teamCard.innerText)) {
+                  throw new Error('Quadro de Servidores ainda contém emojis residuais');
+                }
+                logger.log('Erradicação completa de emojis na tela de Gestão Pedagógica e adoção de pictogramas SVG', true);
+              }
+
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.51
+              if (!btnChangelog.textContent.includes('Versão 1.51')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.48')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.48');
+              if (!modalChg.innerHTML.includes('Versão 1.51')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.51');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.48 (v8.2.15)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.51 (v8.2.18)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

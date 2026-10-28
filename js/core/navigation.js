@@ -134,19 +134,33 @@
     function getActionablePendingSchedules() {
       const user = getCurrentUser();
       const scopedSchedules = getScopedSchedules();
-      const pending = scopedSchedules.filter(s => s.status !== 'realizado' && !s.archived);
+      const pending = scopedSchedules.filter(s => {
+        if (s.archived || s.status === 'realizado') return false;
+        // Blindagem resiliente: se já houver observação finalizada vinculada, desconsidera
+        if (typeof findObservationForSchedule === 'function') {
+          const obs = findObservationForSchedule(s);
+          if (obs && (obs.status === 'finalized' || obs.status === 'concluida')) return false;
+        }
+        return true;
+      });
 
       if (user.roleKey === 'formador') {
-        // Formadora observa unicamente Coordenadoras
+        // Formadora observa unicamente Coordenadoras do seu polo
         return pending.filter(s => {
-          const tm = (appState.teamMembers || []).find(m => m.name === s.targetName);
-          return tm && tm.roleKey === 'coordenador';
+          const isCoordTarget = s.targetType === 'coordenador' || (s.className && s.className.toLowerCase().includes('coord'));
+          const tm = (appState.teamMembers || []).find(m => 
+            m.name === s.targetName || 
+            (typeof resolveCanonicalUserName === 'function' && resolveCanonicalUserName(m.name) === resolveCanonicalUserName(s.targetName))
+          );
+          return isCoordTarget || (tm && tm.roleKey === 'coordenador');
         });
       } else if (user.roleKey === 'coordenador') {
-        // Coordenadora observa unicamente Professoras da sua unidade
+        // Coordenadora observa Turmas e Docentes da sua unidade escolar (Pilar 1)
         return pending.filter(s => {
-          const tm = (appState.teamMembers || []).find(m => m.name === s.targetName);
-          return tm && tm.roleKey === 'professora' && s.schoolName === user.school;
+          if (s.schoolName !== user.school) return false;
+          // Exclui observações de coordenação pedagógica (que cabem à formadora)
+          if (s.targetType === 'coordenador' || (s.className && s.className.toLowerCase().includes('coord'))) return false;
+          return true;
         });
       }
       return [];

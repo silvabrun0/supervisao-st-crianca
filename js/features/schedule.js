@@ -32,7 +32,7 @@
       }
     }
 
-    function getNextActionableSchedule() {
+    function getNextActionableSchedule(filterBimester) {
       const user = getCurrentUser();
       let candidates = [];
       
@@ -42,7 +42,19 @@
       
       if (!candidates || candidates.length === 0) {
         const scoped = typeof getScopedSchedules === 'function' ? getScopedSchedules() : [];
-        candidates = scoped.filter(s => s.status !== 'realizado' && !s.archived);
+        candidates = scoped.filter(s => {
+          if (s.archived || s.status === 'realizado') return false;
+          if (typeof findObservationForSchedule === 'function') {
+            const obs = findObservationForSchedule(s);
+            if (obs && (obs.status === 'finalized' || obs.status === 'concluida')) return false;
+          }
+          return true;
+        });
+      }
+
+      // Aplica filtro contextual de bimestre caso especificado
+      if (filterBimester && filterBimester !== 'ALL') {
+        candidates = candidates.filter(s => s.bimester === filterBimester);
       }
 
       if (!candidates || candidates.length === 0) return null;
@@ -134,8 +146,8 @@
       if (tbody) tbody.innerHTML = '';
       if (cardsContainer) cardsContainer.innerHTML = '';
 
-      // 1. Identificação e Renderização do Card de Próxima Observação
-      const nextVisit = getNextActionableSchedule();
+      // 1. Identificação e Renderização do Card de Próxima Observação (em sintonia com o filtro de bimestre)
+      const nextVisit = getNextActionableSchedule(filterBim);
 
       if (highlightContainer) {
         if (nextVisit && filterStatus !== 'archived') {
@@ -441,7 +453,10 @@
         // 1. Tabela Desktop
         if (tbody) {
           const tr = document.createElement('tr');
-          if (isThisNextVisit) tr.style.backgroundColor = '#F0FDF4';
+          if (isThisNextVisit) {
+            tr.style.backgroundColor = '#F0FDF4';
+            tr.style.boxShadow = 'inset 4px 0 0 #2563EB';
+          }
           tr.innerHTML = `
             <td>
               <div style="font-size:14px; font-weight:800; color:var(--text-primary);">

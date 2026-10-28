@@ -847,6 +847,157 @@
       align-items: center;
       gap: 5px;
     }
+    /* ================= DESTAQUE DA PRÓXIMA OBSERVAÇÃO (HERO CARD & BADGES) ================= */
+    .next-visit-hero-card {
+      background: linear-gradient(135deg, #FFFFFF 0%, #F0F7FF 100%);
+      border: 1px solid #BFDBFE;
+      border-left: 6px solid #2563EB;
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+      position: relative;
+    }
+    .next-visit-hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .next-visit-title-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #1D4ED8;
+      background: #DBEAFE;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+    .next-visit-timing-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .next-visit-timing-badge.today {
+      background: #DCFCE7;
+      color: #15803D;
+      border: 1px solid #86EFAC;
+    }
+    .next-visit-timing-badge.tomorrow {
+      background: #FEF3C7;
+      color: #B45309;
+      border: 1px solid #FDE68A;
+    }
+    .next-visit-timing-badge.upcoming {
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+    }
+    .next-visit-timing-badge.overdue {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #FCA5A5;
+    }
+    .next-visit-hero-body {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+    .next-visit-target-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0F172A;
+      margin: 0 0 4px 0;
+      line-height: 1.3;
+    }
+    .next-visit-target-sub {
+      font-size: 13px;
+      color: #475569;
+      font-weight: 500;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .next-visit-school-row {
+      font-size: 12px;
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .next-visit-meta-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      text-align: right;
+      min-width: 170px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .next-visit-date-highlight {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1E3A8A;
+      margin-bottom: 2px;
+    }
+    .next-visit-weekday-label {
+      font-size: 11px;
+      color: #64748B;
+      font-weight: 600;
+    }
+    .next-visit-actions-bar {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed #BFDBFE;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .badge-next-inline {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      background: #DBEAFE;
+      color: #1E40AF;
+      border: 1px solid #93C5FD;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-left: 6px;
+      vertical-align: middle;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    @media (max-width: 640px) {
+      .next-visit-hero-body {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .next-visit-meta-card {
+        text-align: left;
+        width: 100%;
+        background: #F8FAFC;
+      }
+      .next-visit-actions-bar {
+        justify-content: stretch;
+      }
+      .next-visit-actions-bar .btn {
+        flex: 1;
+      }
+    }
     /* ================= HISTÓRICO, BLOCO DE NOTAS & MATRIZES (DESKTOP & MOBILE) ================= */
     .history-header-row {
       display: flex;
