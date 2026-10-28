@@ -1032,6 +1032,65 @@
               }
 
               logger.log('Harmonização Semiótica dos Pictogramas de Unidades Escolares (Padrão Versão 1.39)', true, 'Exportar CSV/JSON (seta cima), Baixar Modelo (file-down) e Importar (seta baixo) validados');
+
+              // 14. VALIDAÇÃO DA CARACTERIZAÇÃO QUANTITATIVA POR TURMA E VISÃO AGREGADA MULTINÍVEL (VERSÃO 1.52)
+              // 14.1 Integridade canônica de totalStudents e inclusiveStudents em todas as turmas
+              const classesState = appState.classes || [];
+              if (classesState.length === 0) throw new Error('Nenhuma turma cadastrada em appState.classes');
+              classesState.forEach(c => {
+                if (typeof c.totalStudents !== 'number' || isNaN(c.totalStudents)) {
+                  throw new Error(`Turma "${c.name}" sem totalStudents numérico`);
+                }
+                if (typeof c.inclusiveStudents !== 'number' || isNaN(c.inclusiveStudents)) {
+                  throw new Error(`Turma "${c.name}" sem inclusiveStudents numérico`);
+                }
+                if (c.inclusiveStudents > c.totalStudents) {
+                  throw new Error(`Invariante violada na turma "${c.name}": inclusiveStudents (${c.inclusiveStudents}) > totalStudents (${c.totalStudents})`);
+                }
+              });
+              logger.log('Caracterização por Turma: presença de totalStudents e inclusiveStudents numéricos com inclusive <= total em 100% das turmas', true, `${classesState.length} turmas validadas`);
+
+              // 14.2 Fidelidade aritmética da agregação multinível (UE / Polo / Rede)
+              if (typeof syncUnitCharacterizationFromClasses === 'function') {
+                syncUnitCharacterizationFromClasses();
+              }
+              const sampleSchoolAgg = getSchoolClassesAggregates('CEI Professora Maria de Lourdes');
+              const lourdesUnit = (appState.units || []).find(u => u.name === 'CEI Professora Maria de Lourdes');
+              if (!lourdesUnit || lourdesUnit.totalStudents !== sampleSchoolAgg.totalStudents || lourdesUnit.inclusiveStudents !== sampleSchoolAgg.inclusiveStudents) {
+                throw new Error(`Fidelidade de agregação da UE CEI Maria de Lourdes divergente: unit=(${lourdesUnit?.totalStudents}, ${lourdesUnit?.inclusiveStudents}) vs agg=(${sampleSchoolAgg.totalStudents}, ${sampleSchoolAgg.inclusiveStudents})`);
+              }
+              logger.log('Fidelidade aritmética da agregação reativa da UE a partir de suas turmas', true, `${lourdesUnit.totalStudents} alunos (${lourdesUnit.inclusiveStudents} AEE) em ${sampleSchoolAgg.totalClasses} turmas`);
+
+              // Teste do Agregado da Rede
+              const netAgg = getNetworkClassesAggregates();
+              const sumTotalClasses = classesState.reduce((acc, c) => acc + (typeof c.totalStudents === 'number' ? c.totalStudents : 20), 0);
+              const sumIncClasses = classesState.reduce((acc, c) => acc + (typeof c.inclusiveStudents === 'number' ? c.inclusiveStudents : 0), 0);
+              if (netAgg.totalStudents !== sumTotalClasses || netAgg.inclusiveStudents !== sumIncClasses) {
+                throw new Error(`Agregado da Rede divergente da soma das turmas: netAgg=(${netAgg.totalStudents}, ${netAgg.inclusiveStudents}) vs soma=(${sumTotalClasses}, ${sumIncClasses})`);
+              }
+              logger.log('Fidelidade aritmética do Agregado da Rede Municipal', true, `${netAgg.totalStudents} alunos (${netAgg.inclusiveStudents} AEE) em ${netAgg.totalClasses} turmas de ${netAgg.totalUnits} UEs`);
+
+              // 14.3 Validação dos seletores de exibição no DOM da Coordenadora da UE
+              const origUserForChar = appState.currentUserKey;
+              try {
+                selectUserAccount('mariana');
+                renderUnitsScreen();
+                const coordCharViewBtns = document.querySelectorAll('#coordinatorUnitCardContainer button');
+                const hasCharButtons = Array.from(coordCharViewBtns).some(b => b.textContent.includes('Consolidado da Escola') || b.textContent.includes('Especificar por Turma'));
+                if (!hasCharButtons) {
+                  throw new Error('Seletores "Consolidado da Escola" e "Especificar por Turma" não encontrados no card da UE da Coordenadora');
+                }
+
+                // Testa alternância de modo
+                setCoordinatorCharView('class');
+                const classSelect = document.getElementById('coordCharClassSelect');
+                if (!classSelect) {
+                  throw new Error('Dropdown #coordCharClassSelect não foi exibido no modo "Especificar por Turma" da Coordenadora');
+                }
+                logger.log('Alternância de visualização da Coordenadora (Consolidado vs Especificar por Turma)', true);
+              } finally {
+                if (origUserForChar) selectUserAccount(origUserForChar);
+              }
             } catch (e) {
               logger.log('Erro de execução no módulo catalogo_dados', false, e.message);
             }

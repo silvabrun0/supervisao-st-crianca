@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.52 (v8.2.19)</span>
+          <span>Versão 1.53 (v8.2.20)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -1760,6 +1760,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.53 - CARACTERIZAÇÃO QUANTITATIVA POR TURMA E VISÃO AGREGADA MULTINÍVEL -->
+      <div class="card" style="margin-bottom:16px; border-left:4px solid var(--primary); background:#F8FAFC;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.53 (v8.2.20)</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">28/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Caracterização Quantitativa por Turma com Suporte a Necessidades Especiais (AEE) e Visão Agregada Multinível:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🏫 <strong>Caracterização Canônica Centrada na Turma:</strong> Cada turma passa a registrar seu contingente total de alunos e a quantidade de crianças com necessidades especiais (AEE), com validação de consistência estrita (<code>inclusiveStudents &le; totalStudents</code>).</li>
+          <li>🔄 <strong>Agregação Dinâmica e Reativa (SSOT):</strong> Os totais das Unidades Escolares, Polos Regionais e Rede Municipal são calculados reativamente como somatório exato das turmas cadastradas.</li>
+          <li>📊 <strong>Visualização Multinível por Papel da Tríade:</strong> A Coordenadora alterna entre Consolidado da Escola e Especificar por Turma; a Formadora entre Consolidado do Polo, por UE e Especificar por Turma; e o Núcleo de EI dispõe do Agregado Geral da Rede, por Polo, por UE e por Turma.</li>
+          <li>🛡️ <strong>Asserções Estritas de Auditoria:</strong> Validação de 100% das turmas e integridade aritmética no Módulo 9 (<code>catalogo_dados</code>) com blindagem sintática pré-voo JSC.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.52 - REMOÇÃO DE EMOJIS DOS POLOS REGIONAIS E HIGIENIZAÇÃO VISUAL -->
