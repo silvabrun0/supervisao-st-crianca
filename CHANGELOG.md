@@ -11,7 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
-| **1.55** | 29/10/2026 16:30 | `intermediárias/aplicativo_v1.55_resolucao_ativacao_setup_hero_button.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_ativacao_setup_hero_button.md` | Resolução definitiva da asserção de reatividade do botão hero (`#btnNewObsHero`) no módulo `navegacao_layout` da auditoria: suporte ao fluxo canônico com modal de observações planejadas (`#modalSelectScheduledObs`), avanço determinístico para a tela de setup (`#screenSetup`) e conformidade plena de 100% dos testes modulares 🎯🛡️✨ |
+| **1.55** | 29/10/2026 16:30 | `intermediárias/aplicativo_v1.55_gestao_pedagogica_sobria_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_gestao_pedagogica_sobria_mobile.md` | Redesign Hallmark da aba de Gestão Pedagógica (sobriedade visual e acessibilidade mobile): erradicação de cores saturadas no card de exportação/backup, navegação responsiva de sub-abas (`.pedag-subtabs-nav`), transformação de tabelas operacionais em cartões mobile-friendly (`.responsive-mobile-table`) com alvos de toque de 44px (`--touch-target-min`), proteção contra zoom no Safari iOS e preservação integral da SSOT 🏛️📱🛡️ |
 | **1.54** | 28/10/2026 16:45 | `intermediárias/aplicativo_v1.54_revisao_hallmark_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_revisao_hallmark_gestao_pedagogica.md` | Revisão e adequação Hallmark da aba de Gestão Pedagógica/Rede: erradicação total de cores hexadecimais inline soltas e AI-slop, aplanamento de cards aninhados (single-layer containment), remoção definitiva de emojis residuais nos cards e tabelas, substituição por pictogramas vetoriais SVG monocromáticos, tipografia em sentence case desprovida de `text-transform: uppercase` forçado, botões segmentados `.pedag-subtab-btn`, suporte pleno a `:focus-visible`, `minmax(0, 1fr)` e `prefers-reduced-motion` 🏛️✨🛡️ |
 | **1.53** | 28/10/2026 15:30 | `intermediárias/aplicativo_v152_caracterizacao_turmas_e_visao_agregada_rede.html` | Solicitação direta / `planos_de_implementacao/plano_caracterizacao_turmas_e_visao_agregada_rede.md` | Caracterização quantitativa por turma com suporte a necessidades especiais (AEE) e visão agregada multinível (UE / Polo / Rede): registro de total de alunos e público AEE no nível da turma (`appState.classes`), validação pedagógica estrita (`inclusiveStudents <= totalStudents`), agregação reativa e automática em `appState.units`, seletores multinível no card da UE e painel analítico de turmas, e asserções estritas no Módulo 9 (`catalogo_dados`) da auditoria 🏫📊🛡️ |
 | **1.52** | 28/10/2026 15:20 | `intermediárias/aplicativo_v152_remocao_emojis_alfinete_polos.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_alfinete_polos.md` | Higienização visual institucional e erradicação definitiva dos emojis de alfinete (📍) nos badges de Polos Regionais vinculados na Tabela de UEs (`#unitsTableBody`), Modal de Visualização da UE (`#viewUnitModalPolo`) e Quadro de Servidores (`#teamTableBody`), preservando a integridade SSOT e asserções estritas no Módulo 12 da auditoria 🧹🏛️✨ |
@@ -183,19 +183,24 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 ## Detalhamento Integral das Versões
 
-### [Versão 1.55] - Resolução da Reatividade do Botão Hero e Transição para Setup na Auditoria
+### [Versão 1.55] - Redesign Hallmark da Aba de Gestão Pedagógica (Sobriedade Visual & Acessibilidade Mobile)
 - **Data / Horário:** 29/10/2026 16:30
-- **Arquivo de Referência:** `intermediárias/aplicativo_v1.55_resolucao_ativacao_setup_hero_button.html`
-- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_resolucao_ativacao_setup_hero_button.md`.
-- **Foco Central:** Resolução definitiva da asserção de reatividade do botão hero (`#btnNewObsHero`) no módulo `navegacao_layout` da auditoria:
-  1. **Harmonização com o Fluxo de Agendamentos (Pilar 1):** Adequação da asserção 15 do Módulo 12 no motor de testes determinísticos (`js/audit/audit_engine.js`) para reconhecer o fluxo em que há observações pendentes sob supervisão da Coordenadora, abrindo legitimamente o modal de escolha `#modalSelectScheduledObs`.
-  2. **Transição Determinística para Setup:** Simulação canônica de início de observação avulsa via `startBlankObsFromModal()`, garantindo a ativação de `#screenSetup` (`.active`) e o fechamento do modal residual sem quebra de testes.
-  3. **Conformidade Modular:** 100% dos testes aprovados na auditoria modular (`audit_platform.py`).
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.55_gestao_pedagogica_sobria_mobile.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_gestao_pedagogica_sobria_mobile.md`.
+- **Foco Central:** Redesign visual sóbrio institucional e acessibilidade mobile na Gestão Pedagógica:
+  1. **Sobriedade Visual & Descluttering:** Higienização de cores saturadas no card de exportação/backup, centralização dos botões de exportação/importação JSON e harmonização de stat-boxes e badges sob tokens institucionais contidos (`--gestao-ground`, `--gestao-surface`, `--gestao-border`).
+  2. **Acessibilidade & Ergonomia Mobile (Table-to-Card):** Transformação responsiva de tabelas operacionais em cartões verticais fluídos legíveis através de `data-label` em telas <= 768px (`.responsive-mobile-table`), eliminando a rolagem horizontal cega em smartphones.
+  3. **Touch Targets e Sub-abas Otimizadas:** Sub-abas compactas com rótulos responsivos (`.pedag-tab-full-text` e `.pedag-tab-mobile-text`), campos de filtro e botões com alvos de toque de 44px (`--touch-target-min`) e prevenção de auto-zoom no Safari iOS (`font-size: 14px`).
+  4. **Preservação Integral da Auditoria:** Compatibilidade absoluta com as asserções de governança e semiose de pictogramas, mantendo 100% de aprovação na auditoria modular.
 
 #### Alterações
-- `js/audit/audit_engine.js`: Atualização da asserção 15 do módulo `navegacao_layout` e inclusão da validação da Versão 1.55 (v8.2.22).
-- `index.html` e `firebase_deploy/public/index.html`: Atualização do cabeçalho `.btn-changelog` e inserção do card no `#modalChangelog`.
-- `CHANGELOG.md`: Registro da Versão 1.55 na tabela sumária e na seção detalhada de versões.
+- `css/01_variables.css`: Definição de token `--touch-target-min: 44px`.
+- `css/03_components.css`: Estilização de `.pedag-subtabs-nav`, foco `:focus-visible` em controles e unificação sóbria de `.stat-box-hallmark`.
+- `css/04_screens.css`: Regras responsivas mobile (<= 768px) para transformação de tabelas em cartões verticais, botões de largura total e alvos de toque de 44px.
+- `index.html`: Descluttering do cabeçalho da gestão, adoção de rótulos responsivos nas sub-abas, neutralização do card de backup JSON e aplicação de `.responsive-mobile-table`.
+- `js/features/management.js`: Inclusão de atributos `data-label` nas tabelas de Polos, Unidades Escolares, Turmas e Servidores.
+- `js/audit/audit_engine.js`: Novas asserções de validação de responsividade de sub-abas e tabelas mobile.
+- `CHANGELOG.md` e `#modalChangelog`: Registro e atualização da Versão 1.55 (v8.2.22).
 
 ### [Versão 1.54] - Adequação Hallmark da Gestão Pedagógica, Descluttering e Erradicação de AI-Slop
 - **Data / Horário:** 28/10/2026 16:45

@@ -3323,12 +3323,24 @@
                 logger.log('Erradicação completa de emojis na tela de Gestão Pedagógica e adoção de pictogramas SVG', true);
               }
 
+              // 21. VALIDAÇÃO DOS COMPONENTES E TOKENS HALLMARK NA GESTÃO PEDAGÓGICA (VERSÃO 1.55)
+              const tabUnitsFull = document.querySelector('#pedagTabUnits .pedag-tab-full-text');
+              const tabUnitsMob = document.querySelector('#pedagTabUnits .pedag-tab-mobile-text');
+              if (!tabUnitsFull || !tabUnitsMob) {
+                throw new Error('Sub-aba #pedagTabUnits deve possuir rótulos responsivos .pedag-tab-full-text e .pedag-tab-mobile-text');
+              }
+              const responsiveTables = document.querySelectorAll('.responsive-mobile-table');
+              if (responsiveTables.length < 3) {
+                throw new Error('Tabelas operacionais da Gestão Pedagógica devem possuir a classe .responsive-mobile-table');
+              }
+              logger.log('Validação dos Rótulos Responsivos e Tabelas Mobile-to-Card na Gestão Pedagógica (Versão 1.55)', true);
+
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.55
-              if (!btnChangelog.textContent.includes('Versão 1.55') && !btnChangelog.textContent.includes('Versão 1.54')) {
+              if (!btnChangelog.textContent.includes('Versão 1.55')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.55') && !modalChg.innerHTML.includes('Versão 1.54')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.55 ou 1.54');
+              if (!modalChg.innerHTML.includes('Versão 1.55')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.55');
               }
               logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.55 (v8.2.22)', true);
             } catch (e) {
