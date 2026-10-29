@@ -47,6 +47,7 @@
       
       /* Botões e Foco Acessível Instantâneo */
       --btn-focus-ring: #0066CC;
+      --touch-target-min: 44px;
     }
 
     ::selection {

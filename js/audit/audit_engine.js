@@ -3147,11 +3147,26 @@
               }
               // Testa despacho de clique em botão de nova observação
               btnNewObs.click();
+              const modalSchedChoice = document.getElementById('modalSelectScheduledObs');
+              if (modalSchedChoice && modalSchedChoice.classList.contains('active')) {
+                // Caso existam agendamentos pendentes sob supervisão direta (Pilar 1 / v0.55),
+                // o sistema exibe legitimamente o modal de escolha prévia.
+                // Dispara o início de observação avulsa para transicionar à tela de setup:
+                if (typeof startBlankObsFromModal === 'function') {
+                  startBlankObsFromModal();
+                } else {
+                  closeSelectScheduledObsModal();
+                  openSetupScreen(null);
+                }
+              }
               const setupScreen = document.getElementById('screenSetup');
               if (!setupScreen || !setupScreen.classList.contains('active')) {
                 throw new Error('Clique em #btnNewObsHero não ativou a tela #screenSetup');
               }
-              // Restaura tela home
+              // Restaura tela home e fecha eventuais modais residuais
+              if (modalSchedChoice && modalSchedChoice.classList.contains('active')) {
+                closeSelectScheduledObsModal();
+              }
               navigateToTab('home');
 
               // Testa despacho de clique no avatar do perfil
@@ -3308,14 +3323,14 @@
                 logger.log('Erradicação completa de emojis na tela de Gestão Pedagógica e adoção de pictogramas SVG', true);
               }
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.54
-              if (!btnChangelog.textContent.includes('Versão 1.54') && !btnChangelog.textContent.includes('Versão 1.53') && !btnChangelog.textContent.includes('Versão 1.52')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.55
+              if (!btnChangelog.textContent.includes('Versão 1.55') && !btnChangelog.textContent.includes('Versão 1.54')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.54') && !modalChg.innerHTML.includes('Versão 1.52')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.54 ou 1.52');
+              if (!modalChg.innerHTML.includes('Versão 1.55') && !modalChg.innerHTML.includes('Versão 1.54')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.55 ou 1.54');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.54 (v8.2.21)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.55 (v8.2.22)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

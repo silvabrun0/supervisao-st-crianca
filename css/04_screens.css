@@ -1691,3 +1691,141 @@
       }
     }
 
+    /* =====================================================================
+       HALLMARK RESPONSIVIDADE MOBILE — GESTÃO PEDAGÓGICA (Telas <= 768px)
+       ===================================================================== */
+    @media (max-width: 768px) {
+      /* 1. Header e Ações Principais no Celular */
+      #homeGestaoView .page-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      #homeGestaoActionsCentral {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+      }
+      #homeGestaoActionsCentral .btn {
+        width: 100%;
+        justify-content: center;
+        min-height: var(--touch-target-min);
+      }
+
+      /* 2. Sub-abas Otimizadas para Celular (Pills com Rótulos Compactos) */
+      .pedag-subtabs-nav {
+        display: flex;
+        overflow-x: auto;
+        gap: 6px;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+        scroll-snap-type: x mandatory;
+      }
+      .pedag-subtab-btn {
+        min-height: var(--touch-target-min);
+        padding: 8px 12px;
+        font-size: 12px;
+        scroll-snap-align: start;
+        flex-shrink: 0;
+      }
+      /* Ocultação de termos redundantes no mobile mantendo significado */
+      .pedag-tab-full-text { display: none; }
+      .pedag-tab-mobile-text { display: inline; }
+
+      /* 3. Filtros Empilhados com Largura Total no Celular */
+      .gestao-filters-container {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 10px !important;
+        width: 100%;
+      }
+      .gestao-filters-container .form-select,
+      .gestao-filters-container .form-input {
+        width: 100% !important;
+        min-height: var(--touch-target-min);
+        font-size: 14px !important; /* Previne zoom forçado no Safari iOS */
+      }
+
+      /* 4. Transformação Responsiva de Tabelas em Cartões Móveis (Table-to-Card) */
+      .responsive-mobile-table thead {
+        display: none; /* Oculta cabeçalho tabular em telas pequenas */
+      }
+      .responsive-mobile-table, 
+      .responsive-mobile-table tbody, 
+      .responsive-mobile-table tr, 
+      .responsive-mobile-table td {
+        display: block;
+        width: 100%;
+      }
+      .responsive-mobile-table tr {
+        margin-bottom: 14px;
+        background: var(--gestao-surface);
+        border: 1px solid var(--gestao-border);
+        border-radius: 10px;
+        padding: 14px;
+        box-shadow: var(--shadow-sm);
+        box-sizing: border-box;
+      }
+      .responsive-mobile-table td {
+        padding: 6px 0;
+        border-bottom: 1px solid var(--gestao-border-subtle);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        text-align: right;
+        box-sizing: border-box;
+      }
+      .responsive-mobile-table td:last-child {
+        border-bottom: none;
+        padding-top: 10px;
+        justify-content: flex-end;
+      }
+      .responsive-mobile-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 12px;
+        text-align: left;
+        margin-right: 12px;
+        flex-shrink: 0;
+      }
+      /* Primeira célula (Nome da Entidade) destacada no topo do cartão */
+      .responsive-mobile-table td:first-child {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-primary);
+        border-bottom: 1px solid var(--gestao-border);
+        padding-bottom: 8px;
+        margin-bottom: 4px;
+        display: block;
+        text-align: left;
+      }
+      .responsive-mobile-table td:first-child::before {
+        display: none;
+      }
+      
+      /* Botões de Ação na Linha/Cartão Mobile */
+      .responsive-mobile-table .btn {
+        min-height: var(--touch-target-min);
+        padding: 8px 16px;
+        font-size: 13px;
+        width: 100%;
+      }
+
+      /* 5. Grid de Stat-Boxes em 2 Colunas no Mobile */
+      .stat-grid-hallmark {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .pedag-tab-full-text { display: inline; }
+      .pedag-tab-mobile-text { display: none; }
+      .stat-grid-hallmark {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+

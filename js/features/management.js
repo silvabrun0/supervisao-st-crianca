@@ -313,19 +313,19 @@
 
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td><strong style="color:var(--primary);">${poloName}</strong></td>
-            <td><span style="font-weight:700; color:#1E293B;">${formadoraName}</span></td>
-            <td>
+            <td data-label="Polo Regional"><strong style="color:var(--primary);">${poloName}</strong></td>
+            <td data-label="Formadora"><span style="font-weight:700; color:var(--text-primary);">${formadoraName}</span></td>
+            <td data-label="Unidades Vinculadas">
               ${unitsInPolo.map(u => `
                 <div style="cursor:pointer; color:var(--primary); font-weight:600; margin-bottom:3px; display:inline-block;" onclick="openViewUnitClassesModal('${u.id}')" title="Clique para visualizar turmas e docentes atribuídos em ${u.name}">
                   ${u.name}
                 </div>
               `).join('<br>') || '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma UE alocada</span>'}
             </td>
-            <td style="font-size:12px; line-height:1.4;">${cpNames}</td>
-            <td><span class="badge-hallmark-accent">${teachersCount} Docentes</span></td>
-            <td><span class="badge-hallmark-active">Ativo</span></td>
-            <td style="text-align:center; white-space:nowrap;">
+            <td data-label="Coordenadoras" style="font-size:12px; line-height:1.4;">${cpNames}</td>
+            <td data-label="Docentes Atendidos"><span class="badge-hallmark-accent">${teachersCount} Docentes</span></td>
+            <td data-label="Status"><span class="badge-hallmark-active">Ativo</span></td>
+            <td data-label="Ações" style="text-align:center; white-space:nowrap;">
               ${canEditPolo ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditPoloModal('${encodeURIComponent(poloName)}')">Editar</button>` : '<span style="color:var(--text-secondary); font-size:11px;">Somente Leitura</span>'}
               ${canDeletePolo ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="removePolo('${encodeURIComponent(poloName)}')">Excluir</button>` : ''}
             </td>
@@ -380,15 +380,15 @@
         const canDelete = isNucleoEI(user);
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>
+          <td data-label="Unidade Escolar">
             <span style="cursor:pointer; color:var(--primary); font-weight:700;" onclick="openViewUnitClassesModal('${u.id}')" title="Clique para visualizar turmas e docentes atribuídos">
               ${u.name}
             </span>
           </td>
-          <td><span class="badge-hallmark-active">${u.polo}</span></td>
-          <td>${u.address || 'Não informado'}</td>
-          <td><span class="badge-hallmark-accent">${teachersCount} Profissionais</span></td>
-          <td style="text-align:center; white-space:nowrap;">
+          <td data-label="Polo Regional"><span class="badge-hallmark-active">${u.polo}</span></td>
+          <td data-label="Endereço / Bairro">${u.address || 'Não informado'}</td>
+          <td data-label="Docentes na Unidade"><span class="badge-hallmark-accent">${teachersCount} Profissionais</span></td>
+          <td data-label="Ações" style="text-align:center; white-space:nowrap;">
             <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openViewUnitClassesModal('${u.id}')" title="Visualizar turmas e regentes titulares desta UE">
               <svg class="btn-icon-sm" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:3px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               Ver Turmas
@@ -1567,17 +1567,17 @@
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>
+          <td data-label="Turma / Etapa">
             <strong style="color:var(--primary-dark); font-size:13px;">${cls.name}</strong><br>
             <span class="badge-hallmark-neutral">${cls.stage || 'Educação Infantil'}</span>
           </td>
-          <td style="font-size:12px;">${cls.school}</td>
-          <td style="font-size:13px; font-weight:700; color:var(--badge-accent-ink);">${totStudents} alunos</td>
-          <td>${incBadge}</td>
-          <td>${jornadaBadge}</td>
-          <td>${turnoBadge}</td>
-          <td>${teachersDisplay}</td>
-          <td style="text-align:center; white-space:nowrap;">
+          <td data-label="Unidade Escolar" style="font-size:12px;">${cls.school}</td>
+          <td data-label="Alunos (Total)" style="font-size:13px; font-weight:700; color:var(--badge-accent-ink);">${totStudents} alunos</td>
+          <td data-label="Necessidades Especiais">${incBadge}</td>
+          <td data-label="Jornada Escolar">${jornadaBadge}</td>
+          <td data-label="Turno">${turnoBadge}</td>
+          <td data-label="Docentes Regentes">${teachersDisplay}</td>
+          <td data-label="Ações" style="text-align:center; white-space:nowrap;">
             <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditClassModal('${cls.id}')">Editar</button>
             <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="deleteClass('${cls.id}')">Excluir</button>
           </td>
@@ -2067,14 +2067,14 @@
           : `<br><span style="font-size:11px; color:var(--text-secondary);">${memberEmail ? memberEmail : 'Sem e-mail vinculado'}</span>`;
         
         tr.innerHTML = `
-          <td>
+          <td data-label="Nome do Servidor">
             <strong>${m.name}</strong>${emailSubtitle}
           </td>
-          <td><span style="font-size:12px; font-weight:700; color:var(--primary);">${m.roleTitle}</span></td>
-          <td>${m.school || 'Rede Municipal'}</td>
-          <td><span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:11px;">${poloName}</span></td>
-          <td>${supervisorDisplay}</td>
-          <td style="text-align:center;">
+          <td data-label="Cargo / Função"><span style="font-size:12px; font-weight:700; color:var(--primary);">${m.roleTitle}</span></td>
+          <td data-label="Unidade de Lotação">${m.school || 'Rede Municipal'}</td>
+          <td data-label="Polo Vinculado"><span class="badge-hallmark-neutral">${poloName}</span></td>
+          <td data-label="Superior / Vinculação">${supervisorDisplay}</td>
+          <td data-label="Ações" style="text-align:center;">
             <button class="btn btn-secondary" style="color:var(--primary); padding:4px 8px; font-size:11px;" onclick="openEditMemberModal('${m.id}')">
               Editar
             </button>

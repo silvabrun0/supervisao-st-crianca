@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.55** | 29/10/2026 16:30 | `intermediárias/aplicativo_v1.55_resolucao_ativacao_setup_hero_button.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_ativacao_setup_hero_button.md` | Resolução definitiva da asserção de reatividade do botão hero (`#btnNewObsHero`) no módulo `navegacao_layout` da auditoria: suporte ao fluxo canônico com modal de observações planejadas (`#modalSelectScheduledObs`), avanço determinístico para a tela de setup (`#screenSetup`) e conformidade plena de 100% dos testes modulares 🎯🛡️✨ |
 | **1.54** | 28/10/2026 16:45 | `intermediárias/aplicativo_v1.54_revisao_hallmark_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_revisao_hallmark_gestao_pedagogica.md` | Revisão e adequação Hallmark da aba de Gestão Pedagógica/Rede: erradicação total de cores hexadecimais inline soltas e AI-slop, aplanamento de cards aninhados (single-layer containment), remoção definitiva de emojis residuais nos cards e tabelas, substituição por pictogramas vetoriais SVG monocromáticos, tipografia em sentence case desprovida de `text-transform: uppercase` forçado, botões segmentados `.pedag-subtab-btn`, suporte pleno a `:focus-visible`, `minmax(0, 1fr)` e `prefers-reduced-motion` 🏛️✨🛡️ |
 | **1.53** | 28/10/2026 15:30 | `intermediárias/aplicativo_v152_caracterizacao_turmas_e_visao_agregada_rede.html` | Solicitação direta / `planos_de_implementacao/plano_caracterizacao_turmas_e_visao_agregada_rede.md` | Caracterização quantitativa por turma com suporte a necessidades especiais (AEE) e visão agregada multinível (UE / Polo / Rede): registro de total de alunos e público AEE no nível da turma (`appState.classes`), validação pedagógica estrita (`inclusiveStudents <= totalStudents`), agregação reativa e automática em `appState.units`, seletores multinível no card da UE e painel analítico de turmas, e asserções estritas no Módulo 9 (`catalogo_dados`) da auditoria 🏫📊🛡️ |
 | **1.52** | 28/10/2026 15:20 | `intermediárias/aplicativo_v152_remocao_emojis_alfinete_polos.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_alfinete_polos.md` | Higienização visual institucional e erradicação definitiva dos emojis de alfinete (📍) nos badges de Polos Regionais vinculados na Tabela de UEs (`#unitsTableBody`), Modal de Visualização da UE (`#viewUnitModalPolo`) e Quadro de Servidores (`#teamTableBody`), preservando a integridade SSOT e asserções estritas no Módulo 12 da auditoria 🧹🏛️✨ |
@@ -181,6 +182,32 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.55] - Resolução da Reatividade do Botão Hero e Transição para Setup na Auditoria
+- **Data / Horário:** 29/10/2026 16:30
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.55_resolucao_ativacao_setup_hero_button.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_resolucao_ativacao_setup_hero_button.md`.
+- **Foco Central:** Resolução definitiva da asserção de reatividade do botão hero (`#btnNewObsHero`) no módulo `navegacao_layout` da auditoria:
+  1. **Harmonização com o Fluxo de Agendamentos (Pilar 1):** Adequação da asserção 15 do Módulo 12 no motor de testes determinísticos (`js/audit/audit_engine.js`) para reconhecer o fluxo em que há observações pendentes sob supervisão da Coordenadora, abrindo legitimamente o modal de escolha `#modalSelectScheduledObs`.
+  2. **Transição Determinística para Setup:** Simulação canônica de início de observação avulsa via `startBlankObsFromModal()`, garantindo a ativação de `#screenSetup` (`.active`) e o fechamento do modal residual sem quebra de testes.
+  3. **Conformidade Modular:** 100% dos testes aprovados na auditoria modular (`audit_platform.py`).
+
+#### Alterações
+- `js/audit/audit_engine.js`: Atualização da asserção 15 do módulo `navegacao_layout` e inclusão da validação da Versão 1.55 (v8.2.22).
+- `index.html` e `firebase_deploy/public/index.html`: Atualização do cabeçalho `.btn-changelog` e inserção do card no `#modalChangelog`.
+- `CHANGELOG.md`: Registro da Versão 1.55 na tabela sumária e na seção detalhada de versões.
+
+### [Versão 1.54] - Adequação Hallmark da Gestão Pedagógica, Descluttering e Erradicação de AI-Slop
+- **Data / Horário:** 28/10/2026 16:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.54_revisao_hallmark_gestao_pedagogica.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_revisao_hallmark_gestao_pedagogica.md`.
+- **Foco Central:** Revisão e adequação Hallmark da aba de Gestão Pedagógica/Rede, erradicação de AI-slop e contenção em camada única.
+
+### [Versão 1.53] - Caracterização Quantitativa por Turma com Suporte a Necessidades Especiais (AEE) e Visão Agregada Multinível
+- **Data / Horário:** 28/10/2026 15:30
+- **Arquivo de Referência:** `intermediárias/aplicativo_v152_caracterizacao_turmas_e_visao_agregada_rede.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_caracterizacao_turmas_e_visao_agregada_rede.md`.
+- **Foco Central:** Caracterização de turmas com alunos e público AEE, validações de consistência e agregação automática na rede.
 
 ### [Versão 1.52] - Higienização Visual Institucional e Remoção dos Emojis de Junto dos Polos
 - **Data / Horário:** 28/10/2026 15:20
