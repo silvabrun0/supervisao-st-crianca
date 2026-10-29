@@ -9,12 +9,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- CSS Modular Desacoplado -->
-  <link rel="stylesheet" href="css/01_variables.css">
-  <link rel="stylesheet" href="css/02_layout.css">
-  <link rel="stylesheet" href="css/03_components.css">
-  <link rel="stylesheet" href="css/04_screens.css">
-  <link rel="stylesheet" href="css/05_modals.css">
-  <link rel="stylesheet" href="css/06_print.css">
+  <link rel="stylesheet" href="css/01_variables.css?v=1.58">
+  <link rel="stylesheet" href="css/02_layout.css?v=1.58">
+  <link rel="stylesheet" href="css/03_components.css?v=1.58">
+  <link rel="stylesheet" href="css/04_screens.css?v=1.58">
+  <link rel="stylesheet" href="css/05_modals.css?v=1.58">
+  <link rel="stylesheet" href="css/06_print.css?v=1.58">
 </head>
 <body>
 
@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.57 (v8.2.24)</span>
+          <span>Versão 1.58 (v8.2.25)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -269,7 +269,7 @@
           </div>
 
           <!-- Matriz de Cobertura por Polo Regional (Requisito 7) -->
-          <div class="card" id="networkCoverageCard" style="margin-bottom:20px; border-left:4px solid var(--primary);">
+          <div class="card" id="networkCoverageCard" style="margin-bottom:20px; border-top:3px solid var(--primary); background:var(--gestao-ground);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap; gap:10px;">
               <div style="font-size:15px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center; gap:8px;">
                 <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);">
@@ -286,8 +286,8 @@
             <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
               Mapeamento consolidado das Coordenadoras Pedagógicas e Unidades Escolares alocadas em cada Polo da Rede Municipal.
             </p>
-            <div style="overflow-x:auto;">
-              <table class="data-table responsive-mobile-table">
+            <div class="network-coverage-wrapper" style="width:100%; overflow-x:auto;">
+              <table class="data-table responsive-mobile-table" style="width:100%;">
                 <thead>
                   <tr>
                     <th>Polo Regional</th>
@@ -1768,6 +1768,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.58 - CORREÇÃO DEFINITIVA E REESTRUTURAÇÃO MOBILE DOS BLOCOS DE POLOS -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.58 · v8.2.25</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">29/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Correção Definitiva e Reestruturação Mobile Hallmark da Matriz de Cobertura por Polo Regional:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🛡️ <strong>Especificidade Máxima Table-to-Card:</strong> Aplicação de regras defensivas estritas (<code>!important</code>) que anulam em telas de smartphone o modelo tabular clássico herdado de <code>.data-table</code>, convertendo a tabela inteiramente em cartões verticais contidos.</li>
+          <li>📱 <strong>Eliminação do Transbordo Horizontal no Safari iOS:</strong> Ajuste de layout e reset estrutural para anular rolagem horizontal forçada e quebra de margens no iPhone (Safari WebKit).</li>
+          <li>🗺️ <strong>Cabeçalho e Pilhas Verticais Alinhadas:</strong> Centralização equilibrada do título do Polo e empilhamento ordenado de Unidades Escolares e Coordenadoras à direita da linha de dados, eliminando colisões de texto.</li>
+          <li>⚡ <strong>Cache-Busting de Folhas de Estilo:</strong> Versionamento das chamadas CSS (<code>?v=1.58</code>) garantindo atualização imediata nos navegadores móveis dos usuários.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.57 - ALINHAMENTO CENTRALIZADO DOS BLOCOS DE POLOS REGIONAIS NO MOBILE -->

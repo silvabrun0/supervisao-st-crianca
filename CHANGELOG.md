@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.58** | 29/10/2026 17:25 | `intermediárias/aplicativo_v1.58_correcao_definitiva_polos_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_definitiva_polos_mobile.md` | Correção Definitiva e Reestruturação Mobile Hallmark da Matriz de Cobertura por Polo Regional (`#networkCoverageCard`): especificidade máxima defensiva (`!important`) anulando modelo tabular clássico herdado no WebKit/Safari iOS, eliminação do transbordo horizontal e quebra de margens, alinhamento simétrico sem colisão de textos e cache-busting de estilos (`?v=1.58`) 🛡️📱🏛️ |
 | **1.57** | 29/10/2026 17:00 | `intermediárias/aplicativo_v1.57_alinhamento_blocos_polos_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_alinhamento_centralizado_blocos_polos_mobile.md` | Alinhamento Centralizado e Reestruturação Mobile dos Blocos de Polos Regionais (`#networkCoverageCard`): cabeçalho do polo 100% centralizado, eliminação da dispersão flexbox com `.coverage-cell-value`, pilhas verticais alinhadas de UEs (`.coverage-units-stack`) e CPs (`.coverage-cps-stack`), e rodapé de ações centralizado com botões de 44px 🗺️📱🏛️ |
 | **1.56** | 29/10/2026 16:45 | `intermediárias/aplicativo_v1.56_painel_indicadores_sobrio_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_painel_indicadores_sobrio_mobile.md` | Redesign Hallmark da aba Painel e Indicadores (sobriedade visual e acessibilidade mobile): unificação dos 4 cards decisórios de KPI superiores sob tokens calmos (`--ind-ground`, `--ind-surface`, `--ind-border`), restauração dos rótulos de texto no celular com rótulos responsivos duplos (`.tab-text-full` e `.tab-text-mobile`), erradicação de `transition: all`, remoção total de emojis residuais (`📄`, `🏛️`, `💡`, `🔍`), touch targets mínimos de 44px (`--touch-target-min`) e proteção contra zoom no Safari iOS 📊📱🏛️ |
 | **1.55** | 29/10/2026 16:30 | `intermediárias/aplicativo_v1.55_gestao_pedagogica_sobria_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_gestao_pedagogica_sobria_mobile.md` | Redesign Hallmark da aba de Gestão Pedagógica (sobriedade visual e acessibilidade mobile): erradicação de cores saturadas no card de exportação/backup, navegação responsiva de sub-abas (`.pedag-subtabs-nav`), transformação de tabelas operacionais em cartões mobile-friendly (`.responsive-mobile-table`) com alvos de toque de 44px (`--touch-target-min`), proteção contra zoom no Safari iOS e preservação integral da SSOT 🏛️📱🛡️ |
@@ -184,6 +185,29 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.58] - Correção Definitiva e Reestruturação Mobile Hallmark da Matriz de Cobertura por Polo Regional
+- **Data / Horário:** 29/10/2026 17:25
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.58_correcao_definitiva_polos_mobile.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_correcao_definitiva_polos_mobile.md`.
+- **Foco Central:** Correção definitiva do modelo tabular clássico no Safari iOS (WebKit) e reestruturação Mobile Hallmark dos blocos de Polos Regionais na Matriz de Cobertura (`#networkCoverageCard`):
+  1. **Especificidade Máxima Table-to-Card:** Aplicação de seletores de alta especificidade com declarações `!important` defensivas em `#networkCoverageCard .responsive-mobile-table`, garantindo a transformação mandatória da tabela tabular em cartões verticais contidos em smartphones (<= 768px).
+  2. **Eliminação do Transbordo Horizontal no Mobile:** Resolução do estouramento de viewport e rolagem horizontal indesejada no iPhone (Safari), contendo a largura em 100% sem quebra de bordas.
+  3. **Higienização Visual Institucional Hallmark:** Substituição da borda lateral azul solta (`border-left: 4px solid var(--primary);`) por acabamento sóbrio e simétrico (`border-top: 3px solid var(--primary); background: var(--gestao-ground);`), respeitando os tokens institucionais e o padrão Hallmark.
+  4. **Empilhamento Perfeito sem Colisão de Textos:** Linhas internas com alinhamento vertical `flex-start`, rótulo semântico à esquerda (`data-label`) e container de valor à direita (`.coverage-cell-value`) empilhando unidades vinculadas e coordenadoras sem sobreposição de fontes.
+  5. **Cache-Busting de Folhas de Estilo:** Atualização das referências aos arquivos CSS no `index.html` com versionamento explícito `?v=1.58`, garantindo carregamento imediato das correções em navegadores móveis sem retenção de cache.
+
+#### Alterações
+- **Estilos (`css/04_screens.css`):**
+  - Implementação de regras com especificidade máxima `#networkCoverageCard .responsive-mobile-table` com `display: block !important` e anulação de bordas/cabeçalhos tabulares no mobile.
+  - Alinhamento de células com `align-items: flex-start !important` e espaçamento otimizado para toque e leitura móvel.
+- **Estrutura (`index.html`):**
+  - Higienização do cartão `#networkCoverageCard`, adição de wrapper responsivo sem atritos.
+  - Atualização dos links de CSS com query string de versão `?v=1.58`.
+  - Atualização do botão `.btn-changelog` para `Versão 1.58 (v8.2.25)`.
+  - Inserção do card da Versão 1.58 no modal `#modalChangelog`.
+- **Auditoria (`js/audit/audit_engine.js`):**
+  - Atualização das asserções da Matriz de Cobertura e da Versão 1.58 no Módulo 12 (`navegacao_layout`).
 
 ### [Versão 1.57] - Alinhamento Centralizado e Reestruturação Mobile dos Blocos de Polos Regionais
 - **Data / Horário:** 29/10/2026 17:00
