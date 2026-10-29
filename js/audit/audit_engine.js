@@ -3410,14 +3410,14 @@
               }
               logger.log('Validação da Estruturação e Alinhamento dos Blocos de Polos na Matriz de Cobertura (Versão 1.58)', true, `${coveragePoloTitles.length} blocos validados`);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.59
-              if (!btnChangelog.textContent.includes('Versão 1.59')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.60
+              if (!btnChangelog.textContent.includes('Versão 1.60')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.59')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.59');
+              if (!modalChg.innerHTML.includes('Versão 1.60')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.60');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.59 (v8.2.26)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.60 (v8.2.27)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
