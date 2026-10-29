@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.53 (v8.2.20)</span>
+          <span>Versão 1.54 (v8.2.21)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -193,7 +193,7 @@
               </div>
             </div>
             <button class="btn btn-primary" onclick="navigateToTab('opManagement')" id="homeOpManagementBtn" style="font-size:12px; padding:8px 14px; white-space:nowrap;">
-              Acessar Gestão da Escola →
+              Acessar Gestão da Escola
             </button>
           </div>
         </div>
@@ -209,15 +209,15 @@
           <div class="page-subtitle" id="homeGestaoSubtitle" style="display:none;"></div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;" id="homeGestaoActionsCentral">
-          <button class="btn btn-secondary" onclick="openBimesterPeriodsModal()" style="color:#0284C7; font-weight:700; background:#F0F9FF; border-color:#BAE6FD;" title="Definir os períodos, prazos e iniciar novos ciclos avaliativos">
+          <button class="btn btn-secondary" onclick="openBimesterPeriodsModal()" style="color:var(--primary); font-weight:700; background:var(--primary-light); border-color:var(--gestao-border);" title="Definir os períodos, prazos e iniciar novos ciclos avaliativos">
             <svg class="btn-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Ciclos Avaliativos & Calendário
           </button>
-          <button class="btn btn-secondary" onclick="exportFullBaseJSON()" style="color:#059669; font-weight:700;">
+          <button class="btn btn-secondary" onclick="exportFullBaseJSON()" style="color:var(--badge-active-ink); font-weight:700;">
             <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             Exportar Base Completa (JSON)
           </button>
-          <button class="btn btn-secondary" onclick="triggerImportFullBase()" style="color:#DC2626; font-weight:700;">
+          <button class="btn btn-secondary" onclick="triggerImportFullBase()" style="color:var(--badge-danger-ink); font-weight:700;">
             <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Importar Base Completa (JSON)
           </button>
@@ -327,7 +327,7 @@
                   </select>
                 </div>
                 <div>
-                  <input type="text" id="unitsFilterSearch" class="form-input" placeholder="Buscar UE por nome..." style="width:200px; padding:6px 12px; font-size:12px;" oninput="renderUnitsScreen()">
+                  <input type="text" id="unitsFilterSearch" class="form-input" placeholder="Buscar UE por nome…" style="width:200px; padding:6px 12px; font-size:12px;" oninput="renderUnitsScreen()">
                 </div>
               </div>
             </div>
@@ -373,7 +373,7 @@
             <select id="classesFilterSchool" class="form-select" style="width:auto; padding:6px 12px; font-size:12px;" onchange="renderClassesScreen()">
               <!-- Populado dinamicamente -->
             </select>
-            <input type="text" id="classesFilterSearch" class="form-input" placeholder="Buscar turma ou docente..." style="width:220px; padding:6px 12px; font-size:12px;" oninput="renderClassesScreen()">
+            <input type="text" id="classesFilterSearch" class="form-input" placeholder="Buscar turma ou docente…" style="width:220px; padding:6px 12px; font-size:12px;" oninput="renderClassesScreen()">
           </div>
         </div>
 
@@ -450,7 +450,7 @@
                 <option value="ALL">Todas as UEs / Polos</option>
                 <!-- Dynamically populated -->
               </select>
-              <input type="text" id="teamFilterSearch" class="form-input" placeholder="Buscar por nome..." style="width:170px; padding:6px 12px; font-size:12px;" oninput="renderTeamScreen()">
+              <input type="text" id="teamFilterSearch" class="form-input" placeholder="Buscar por nome…" style="width:170px; padding:6px 12px; font-size:12px;" oninput="renderTeamScreen()">
             </div>
           </div>
 
@@ -484,20 +484,20 @@
           </p>
         </div>
 
-        <div class="card" style="background:#F0FDF4; border:1px solid #BBF7D0; margin-bottom:18px;">
+        <div class="card" style="background:var(--badge-active-bg); border:1px solid var(--border); margin-bottom:18px;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
-              <div style="font-size:15px; font-weight:800; color:#166534;">Backup & Restauração Completa da Base (JSON)</div>
-              <div style="font-size:12px; color:#15803D; margin-top:4px;">
+              <div style="font-size:15px; font-weight:800; color:var(--badge-active-ink);">Backup & Restauração Completa da Base (JSON)</div>
+              <div style="font-size:12px; color:var(--badge-active-ink); margin-top:4px;">
                 Exporta ou sobrescreve integralmente todas as entidades do sistema: Servidores, UEs, Polos, Rubricas, Registros e Avaliações.
               </div>
             </div>
             <div style="display:flex; gap:8px;">
-              <button class="btn" style="background:#166534; color:#fff;" onclick="exportFullBaseJSON()">
+              <button class="btn" style="background:var(--badge-active-ink); color:var(--surface);" onclick="exportFullBaseJSON()">
                 <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 Exportar Base Completa (.JSON)
               </button>
-              <button class="btn" style="background:#DC2626; color:#fff;" onclick="triggerImportFullBase()">
+              <button class="btn" style="background:var(--badge-danger-ink); color:var(--surface);" onclick="triggerImportFullBase()">
                 <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Importar / Sobrescrever (.JSON)
               </button>
@@ -1760,6 +1760,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.54 - ADEQUAÇÃO HALLMARK DA GESTÃO PEDAGÓGICA -->
+      <div class="card" style="margin-bottom:16px; border-top:3px solid var(--primary); background:var(--gestao-ground);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-weight:800; font-size:14px; color:var(--text-primary);">📌 Versão 1.54 (v8.2.21)</span>
+          <span style="font-size:11px; background:var(--badge-accent-bg); color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">28/10/2026</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+          Adequação Hallmark da Gestão Pedagógica, Descluttering e Erradicação de AI-Slop:
+        </div>
+        <ul style="font-size:12px; color:var(--text-secondary); margin:0; padding-left:18px; line-height:1.5;">
+          <li>🏛️ <strong>Tokens Semânticos &amp; Eliminação de Cores Inline:</strong> Padronização integral de superfícies, bordas e badges (<code>--badge-active-bg</code>, <code>--badge-accent-bg</code>, <code>--gestao-ground</code>) e erradicação de cores literais hexadecimais soltas no HTML e JS.</li>
+          <li>🧹 <strong>Aplanamento Estrutural e Semiótica Limpa:</strong> Fim do aninhamento repetitivo de cards, remoção de faixas laterais pesadas, substituição de emojis residuais por pictogramas vetoriais SVG monocromáticos e remoção de setas e pontuações de template.</li>
+          <li>📊 <strong>Tipografia Destravada (Sentence Case):</strong> Remoção de <code>text-transform: uppercase</code> forçado em painéis de métricas e caracterização pedagógica, adotando rótulos humanizados e destravados.</li>
+          <li>♿ <strong>Acessibilidade &amp; Hallmark Floor:</strong> Implementação de regras instantâneas de <code>:focus-visible</code>, proteção de trilhas de grid com <code>minmax(0, 1fr)</code>, estilização suave de <code>::selection</code> e suporte a <code>prefers-reduced-motion: reduce</code>.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.53 - CARACTERIZAÇÃO QUANTITATIVA POR TURMA E VISÃO AGREGADA MULTINÍVEL -->

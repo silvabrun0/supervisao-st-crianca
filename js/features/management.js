@@ -164,35 +164,36 @@
             const clsTeachers = Array.isArray(currentClass.teachers) && currentClass.teachers.length > 0 ? currentClass.teachers.join(', ') : 'Aguardando atribuição';
 
             detailHtml = `
-              <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px;">
+              <div style="background:var(--gestao-ground); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
                   <div>
                     <h4 style="margin:0; font-size:15px; font-weight:800; color:var(--primary-dark);">${currentClass.name}</h4>
                     <span style="font-size:12px; color:var(--text-secondary);">${currentClass.stage || 'Educação Infantil'} · ${currentClass.shift || 'Parcial'}</span>
                   </div>
                   <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;" onclick="openEditClassModal('${currentClass.id}')">
-                    ✏️ Editar Turma
+                    <svg class="btn-icon-sm" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:4px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    Editar Turma
                   </button>
                 </div>
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">
-                  <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                    <div style="font-size:11px; font-weight:700; color:var(--text-secondary);">Total de Alunos</div>
-                    <div style="font-size:20px; font-weight:800; color:#1E40AF; margin-top:2px;">${clsTot}</div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px;">
+                  <div class="stat-box-hallmark">
+                    <div class="stat-label-hallmark">Total de alunos</div>
+                    <div class="stat-value-hallmark accent">${clsTot}</div>
                     <div style="font-size:10px; color:var(--text-secondary);">Crianças matriculadas</div>
                   </div>
-                  <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                    <div style="font-size:11px; font-weight:700; color:var(--text-secondary);">Necessidades Especiais</div>
-                    <div style="font-size:20px; font-weight:800; color:#059669; margin-top:2px;">${clsInc}</div>
+                  <div class="stat-box-hallmark">
+                    <div class="stat-label-hallmark">Necessidades especiais</div>
+                    <div class="stat-value-hallmark active">${clsInc}</div>
                     <div style="font-size:10px; color:var(--text-secondary);">${clsInc > 0 ? 'Público AEE nesta turma' : 'Nenhum aluno AEE'}</div>
                   </div>
-                  <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                    <div style="font-size:11px; font-weight:700; color:var(--text-secondary);">Alunos Regulares</div>
-                    <div style="font-size:20px; font-weight:800; color:#475569; margin-top:2px;">${clsReg}</div>
+                  <div class="stat-box-hallmark">
+                    <div class="stat-label-hallmark">Alunos regulares</div>
+                    <div class="stat-value-hallmark" style="color:var(--text-secondary);">${clsReg}</div>
                     <div style="font-size:10px; color:var(--text-secondary);">Sem necessidade especial</div>
                   </div>
-                  <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                    <div style="font-size:11px; font-weight:700; color:var(--text-secondary);">Docentes Regentes</div>
-                    <div style="font-size:12px; font-weight:700; color:#1E293B; margin-top:6px; line-height:1.3;">${clsTeachers}</div>
+                  <div class="stat-box-hallmark">
+                    <div class="stat-label-hallmark">Docentes regentes</div>
+                    <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-top:6px; line-height:1.3;">${clsTeachers}</div>
                   </div>
                 </div>
               </div>
@@ -200,28 +201,28 @@
           } else {
             detailHtml = `
               <!-- Grid de Métricas Agregadas da UE -->
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; margin-bottom:20px;">
-                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Matriculados (Soma)</div>
-                  <div style="font-size:22px; font-weight:800; color:#1E40AF; margin-top:6px;">${agg.totalStudents}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:14px; margin-bottom:20px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos matriculados (soma)</div>
+                  <div class="stat-value-hallmark accent">${agg.totalStudents}</div>
                   <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Somatório de todas as ${agg.totalClasses} turmas</div>
                 </div>
 
-                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva / AEE</div>
-                  <div style="font-size:22px; font-weight:800; color:#059669; margin-top:6px;">${agg.inclusiveStudents} <span style="font-size:13px; font-weight:600; color:var(--text-secondary);">(${agg.inclusionRate}%)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Educação inclusiva / AEE</div>
+                  <div class="stat-value-hallmark active">${agg.inclusiveStudents} <span style="font-size:13px; font-weight:600; color:var(--text-secondary);">(${agg.inclusionRate}%)</span></div>
                   <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Crianças com necessidades especiais</div>
                 </div>
 
-                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas em Atividade</div>
-                  <div style="font-size:22px; font-weight:800; color:#6D28D9; margin-top:6px;">${agg.totalClasses}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Turmas em atividade</div>
+                  <div class="stat-value-hallmark purple">${agg.totalClasses}</div>
                   <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Turmas ativas sob sua gestão</div>
                 </div>
 
-                <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:14px;">
-                  <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Docentes na UE</div>
-                  <div style="font-size:22px; font-weight:800; color:#D97706; margin-top:6px;">${agg.teachersCount}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Docentes na UE</div>
+                  <div class="stat-value-hallmark" style="color:#D97706;">${agg.teachersCount}</div>
                   <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Professoras titulares lotadas</div>
                 </div>
               </div>
@@ -229,7 +230,7 @@
           }
 
           coordContainer.innerHTML = `
-            <div class="card" style="border-left: 4px solid var(--primary); padding: 20px;">
+            <div class="card" style="border-top: 3px solid var(--primary); padding: 20px;">
               <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
                 <div>
                   <div style="display:flex; align-items:center; gap:8px;">
@@ -317,15 +318,15 @@
             <td>
               ${unitsInPolo.map(u => `
                 <div style="cursor:pointer; color:var(--primary); font-weight:600; margin-bottom:3px; display:inline-block;" onclick="openViewUnitClassesModal('${u.id}')" title="Clique para visualizar turmas e docentes atribuídos em ${u.name}">
-                  🏢 ${u.name}
+                  ${u.name}
                 </div>
               `).join('<br>') || '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma UE alocada</span>'}
             </td>
             <td style="font-size:12px; line-height:1.4;">${cpNames}</td>
-            <td><span class="status-badge" style="background:#EFF6FF; color:#1E40AF; font-weight:700;">${teachersCount} Docentes</span></td>
-            <td><span class="status-badge" style="background:#DCFCE7; color:#166534; font-weight:700;">Ativo</span></td>
+            <td><span class="badge-hallmark-accent">${teachersCount} Docentes</span></td>
+            <td><span class="badge-hallmark-active">Ativo</span></td>
             <td style="text-align:center; white-space:nowrap;">
-              ${canEditPolo ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditPoloModal('${encodeURIComponent(poloName)}')">✏️ Editar</button>` : '<span style="color:var(--text-secondary); font-size:11px;">Somente Leitura</span>'}
+              ${canEditPolo ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditPoloModal('${encodeURIComponent(poloName)}')">Editar</button>` : '<span style="color:var(--text-secondary); font-size:11px;">Somente Leitura</span>'}
               ${canDeletePolo ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="removePolo('${encodeURIComponent(poloName)}')">Excluir</button>` : ''}
             </td>
           `;
@@ -384,11 +385,14 @@
               ${u.name}
             </span>
           </td>
-          <td><span class="status-badge" style="background:#DCFCE7; color:#166534; font-weight:700; font-size:11px;">${u.polo}</span></td>
+          <td><span class="badge-hallmark-active">${u.polo}</span></td>
           <td>${u.address || 'Não informado'}</td>
-          <td><span class="status-badge" style="background:#EFF6FF; color:#1E40AF;">${teachersCount} Profissionais</span></td>
+          <td><span class="badge-hallmark-accent">${teachersCount} Profissionais</span></td>
           <td style="text-align:center; white-space:nowrap;">
-            <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openViewUnitClassesModal('${u.id}')" title="Visualizar turmas e regentes titulares desta UE">👁️ Ver Turmas</button>
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openViewUnitClassesModal('${u.id}')" title="Visualizar turmas e regentes titulares desta UE">
+              <svg class="btn-icon-sm" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:3px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Ver Turmas
+            </button>
             <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditUnitModal('${u.id}')">Editar</button>
             ${canDelete ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="removeUnit('${u.id}')">Excluir</button>` : ''}
           </td>
@@ -448,12 +452,12 @@
           unitClasses.forEach(cls => {
             const isIntegral = (cls.shift || '').toLowerCase().includes('integral');
             const jornadaBadge = isIntegral 
-              ? `<span class="status-badge" style="background:#EDE9FE; color:#6D28D9; font-weight:700;">Tempo Integral</span>`
-              : `<span class="status-badge" style="background:#EFF6FF; color:#1E40AF; font-weight:700;">Tempo Parcial</span>`;
+              ? `<span class="badge-hallmark-purple">Tempo Integral</span>`
+              : `<span class="badge-hallmark-accent">Tempo Parcial</span>`;
 
-            let turnoBadge = `<span class="status-badge" style="background:#FEF3C7; color:#92400E; font-size:11px;">${cls.shift || 'Parcial'}</span>`;
+            let turnoBadge = `<span class="badge-hallmark-neutral">${cls.shift || 'Parcial'}</span>`;
             if (isIntegral) {
-              turnoBadge = `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:11px;">Manhã + Tarde</span>`;
+              turnoBadge = `<span class="badge-hallmark-active">Manhã + Tarde</span>`;
             }
 
             const clsTot = typeof cls.totalStudents === 'number' ? cls.totalStudents : 20;
@@ -465,24 +469,24 @@
               const aList = (Array.isArray(cls.teachersAfternoon) && cls.teachersAfternoon.length > 0) ? cls.teachersAfternoon.join(', ') : 'A definir';
               teachersDisplay = `
                 <div style="font-size:11px; line-height:1.4;">
-                  <div><strong style="color:#B45309;">Manhã:</strong> ${mList}</div>
-                  <div><strong style="color:#4338CA;">Tarde:</strong> ${aList}</div>
+                  <div><strong style="color:var(--text-primary);">Manhã:</strong> ${mList}</div>
+                  <div><strong style="color:var(--text-primary);">Tarde:</strong> ${aList}</div>
                 </div>
               `;
             } else {
               const tList = (Array.isArray(cls.teachers) && cls.teachers.length > 0) ? cls.teachers.join(', ') : '<span style="color:var(--text-secondary); font-style:italic;">Aguardando atribuição de regente</span>';
-              teachersDisplay = `<div style="font-size:12px; font-weight:600; color:#1E293B;">${tList}</div>`;
+              teachersDisplay = `<div style="font-size:12px; font-weight:600; color:var(--text-primary);">${tList}</div>`;
             }
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
               <td>
                 <strong style="color:var(--primary-dark); font-size:13px;">${cls.name}</strong><br>
-                <span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:10px;">${cls.stage || 'Educação Infantil'}</span>
+                <span class="badge-hallmark-neutral">${cls.stage || 'Educação Infantil'}</span>
               </td>
               <td>
-                <strong style="color:#1E40AF;">${clsTot} alunos</strong>
-                ${clsInc > 0 ? `<br><span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:10px; font-weight:700;">${clsInc} com AEE</span>` : ''}
+                <strong style="color:var(--badge-accent-ink);">${clsTot} alunos</strong>
+                ${clsInc > 0 ? `<br><span class="badge-hallmark-active">${clsInc} com AEE</span>` : ''}
               </td>
               <td>${jornadaBadge}</td>
               <td>${turnoBadge}</td>
@@ -535,7 +539,7 @@
         row.innerHTML = `
           <input type="checkbox" id="chkPoloUnit_${u.id}" class="edit-polo-unit-chk" value="${u.id}" ${isBelonging ? 'checked' : ''} style="cursor:pointer;">
           <label for="chkPoloUnit_${u.id}" style="cursor:pointer; color:var(--text-primary); margin:0;">
-            🏢 <strong>${u.name}</strong> ${!isBelonging && u.polo ? `<span style="color:var(--text-secondary); font-size:11px;">(${u.polo})</span>` : ''}
+            <strong>${u.name}</strong> ${!isBelonging && u.polo ? `<span style="color:var(--text-secondary); font-size:11px;">(${u.polo})</span>` : ''}
           </label>
         `;
         unitsListContainer.appendChild(row);
@@ -1115,24 +1119,24 @@
             const clsReg = Math.max(0, clsTot - clsInc);
 
             kpiContent = `
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na Turma</div>
-                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${clsTot}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px; margin-top:12px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos na turma</div>
+                  <div class="stat-value-hallmark accent">${clsTot}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Matriculados</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Necessidades Especiais</div>
-                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${clsInc}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Necessidades especiais</div>
+                  <div class="stat-value-hallmark active">${clsInc}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${clsInc > 0 ? 'Público AEE' : 'Nenhum AEE'}</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
-                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${clsReg}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos regulares</div>
+                  <div class="stat-value-hallmark" style="color:var(--text-secondary);">${clsReg}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Sem necessidade especial</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Jornada / Turno</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Jornada / turno</div>
                   <div style="font-size:12px; font-weight:700; color:var(--primary-dark); margin-top:6px;">${currentClass.shift || 'Parcial'}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${currentClass.stage || 'Educação Infantil'}</div>
                 </div>
@@ -1140,25 +1144,25 @@
             `;
           } else {
             kpiContent = `
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Matriculados</div>
-                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${agg.totalStudents}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px; margin-top:12px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos matriculados</div>
+                  <div class="stat-value-hallmark accent">${agg.totalStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Soma das turmas</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
-                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${agg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${agg.inclusionRate}%)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Educação inclusiva (AEE)</div>
+                  <div class="stat-value-hallmark active">${agg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${agg.inclusionRate}%)</span></div>
                   <div style="font-size:10px; color:var(--text-secondary);">Necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
-                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${agg.regularStudents}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos regulares</div>
+                  <div class="stat-value-hallmark" style="color:var(--text-secondary);">${agg.regularStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas Ativas</div>
-                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${agg.totalClasses}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Turmas ativas</div>
+                  <div class="stat-value-hallmark purple">${agg.totalClasses}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${agg.teachersCount} docente(s)</div>
                 </div>
               </div>
@@ -1208,24 +1212,24 @@
             const clsReg = Math.max(0, clsTot - clsInc);
 
             kpiContent = `
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na Turma</div>
-                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${clsTot}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px; margin-top:12px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos na turma</div>
+                  <div class="stat-value-hallmark accent">${clsTot}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${currentClass.school}</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Necessidades Especiais</div>
-                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${clsInc}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Necessidades especiais</div>
+                  <div class="stat-value-hallmark active">${clsInc}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${clsInc > 0 ? 'Público AEE' : 'Nenhum AEE'}</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
-                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${clsReg}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos regulares</div>
+                  <div class="stat-value-hallmark" style="color:var(--text-secondary);">${clsReg}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Regência / Turno</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Regência / turno</div>
                   <div style="font-size:12px; font-weight:700; color:var(--primary-dark); margin-top:6px;">${currentClass.shift || 'Parcial'}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${currentClass.stage || 'Educação Infantil'}</div>
                 </div>
@@ -1233,25 +1237,25 @@
             `;
           } else if (activeViewMode === 'school') {
             kpiContent = `
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na UE</div>
-                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${schoolAgg.totalStudents}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px; margin-top:12px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos na UE</div>
+                  <div class="stat-value-hallmark accent">${schoolAgg.totalStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Soma de ${schoolAgg.totalClasses} turmas</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
-                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${schoolAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${schoolAgg.inclusionRate}%)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Educação inclusiva (AEE)</div>
+                  <div class="stat-value-hallmark active">${schoolAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${schoolAgg.inclusionRate}%)</span></div>
                   <div style="font-size:10px; color:var(--text-secondary);">Alunos com AEE na UE</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
-                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${schoolAgg.regularStudents}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos regulares</div>
+                  <div class="stat-value-hallmark" style="color:var(--text-secondary);">${schoolAgg.regularStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas / Docentes</div>
-                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${schoolAgg.totalClasses}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Turmas / docentes</div>
+                  <div class="stat-value-hallmark purple">${schoolAgg.totalClasses}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${schoolAgg.teachersCount} docente(s)</div>
                 </div>
               </div>
@@ -1259,25 +1263,25 @@
           } else {
             // Consolidado do Polo
             kpiContent = `
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Total de Alunos (Polo)</div>
-                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${poloAgg.totalStudents}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px; margin-top:12px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Total de alunos (polo)</div>
+                  <div class="stat-value-hallmark accent">${poloAgg.totalStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Soma das turmas do polo</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
-                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${poloAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.inclusionRate}%)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Educação inclusiva (AEE)</div>
+                  <div class="stat-value-hallmark active">${poloAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.inclusionRate}%)</span></div>
                   <div style="font-size:10px; color:var(--text-secondary);">Total AEE no Polo</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
-                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${poloAgg.regularStudents}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos regulares</div>
+                  <div class="stat-value-hallmark" style="color:var(--text-secondary);">${poloAgg.regularStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">UEs / Turmas</div>
-                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${poloAgg.totalUnits} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.totalClasses} turmas)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">UEs / turmas</div>
+                  <div class="stat-value-hallmark purple">${poloAgg.totalUnits} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.totalClasses} turmas)</span></div>
                   <div style="font-size:10px; color:var(--text-secondary);">Estrutura do Polo</div>
                 </div>
               </div>
@@ -1339,24 +1343,24 @@
             const clsReg = Math.max(0, clsTot - clsInc);
 
             kpiContent = `
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na Turma</div>
-                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${clsTot}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px; margin-top:12px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos na turma</div>
+                  <div class="stat-value-hallmark accent">${clsTot}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${currentClass.school}</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Necessidades Especiais</div>
-                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${clsInc}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Necessidades especiais</div>
+                  <div class="stat-value-hallmark active">${clsInc}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${clsInc > 0 ? 'Público AEE' : 'Nenhum AEE'}</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
-                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${clsReg}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos regulares</div>
+                  <div class="stat-value-hallmark" style="color:var(--text-secondary);">${clsReg}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Regência / Turno</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Regência / turno</div>
                   <div style="font-size:12px; font-weight:700; color:var(--primary-dark); margin-top:6px;">${currentClass.shift || 'Parcial'}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${currentClass.stage || 'Educação Infantil'}</div>
                 </div>
@@ -1364,50 +1368,50 @@
             `;
           } else if (activeViewMode === 'school') {
             kpiContent = `
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos na UE</div>
-                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${schoolAgg.totalStudents}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px; margin-top:12px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos na UE</div>
+                  <div class="stat-value-hallmark accent">${schoolAgg.totalStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Soma de ${schoolAgg.totalClasses} turmas</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
-                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${schoolAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${schoolAgg.inclusionRate}%)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Educação inclusiva (AEE)</div>
+                  <div class="stat-value-hallmark active">${schoolAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${schoolAgg.inclusionRate}%)</span></div>
                   <div style="font-size:10px; color:var(--text-secondary);">Total AEE na escola</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
-                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${schoolAgg.regularStudents}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos regulares</div>
+                  <div class="stat-value-hallmark" style="color:var(--text-secondary);">${schoolAgg.regularStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Turmas / Docentes</div>
-                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${schoolAgg.totalClasses}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Turmas / docentes</div>
+                  <div class="stat-value-hallmark purple">${schoolAgg.totalClasses}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">${schoolAgg.teachersCount} docente(s)</div>
                 </div>
               </div>
             `;
           } else if (activeViewMode === 'polo') {
             kpiContent = `
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos no Polo</div>
-                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${poloAgg.totalStudents}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px; margin-top:12px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos no polo</div>
+                  <div class="stat-value-hallmark accent">${poloAgg.totalStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Soma das turmas</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
-                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${poloAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.inclusionRate}%)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Educação inclusiva (AEE)</div>
+                  <div class="stat-value-hallmark active">${poloAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.inclusionRate}%)</span></div>
                   <div style="font-size:10px; color:var(--text-secondary);">Total AEE no Polo</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
-                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${poloAgg.regularStudents}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos regulares</div>
+                  <div class="stat-value-hallmark" style="color:var(--text-secondary);">${poloAgg.regularStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">UEs / Turmas</div>
-                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${poloAgg.totalUnits} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.totalClasses} turmas)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">UEs / turmas</div>
+                  <div class="stat-value-hallmark purple">${poloAgg.totalUnits} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${poloAgg.totalClasses} turmas)</span></div>
                   <div style="font-size:10px; color:var(--text-secondary);">Estrutura do Polo</div>
                 </div>
               </div>
@@ -1415,25 +1419,25 @@
           } else {
             // Agregado da Rede Municipal
             kpiContent = `
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:12px;">
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Total Geral da Rede</div>
-                  <div style="font-size:18px; font-weight:800; color:#1E40AF; margin-top:2px;">${netAgg.totalStudents}</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(0, 1fr)); gap:10px; margin-top:12px;">
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Total geral da rede</div>
+                  <div class="stat-value-hallmark accent">${netAgg.totalStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Crianças matriculadas</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Educação Inclusiva (AEE)</div>
-                  <div style="font-size:18px; font-weight:800; color:#059669; margin-top:2px;">${netAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${netAgg.inclusionRate}%)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Educação inclusiva (AEE)</div>
+                  <div class="stat-value-hallmark active">${netAgg.inclusiveStudents} <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${netAgg.inclusionRate}%)</span></div>
                   <div style="font-size:10px; color:var(--text-secondary);">Crianças com necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Alunos Regulares</div>
-                  <div style="font-size:18px; font-weight:800; color:#475569; margin-top:2px;">${netAgg.regularStudents}</div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Alunos regulares</div>
+                  <div class="stat-value-hallmark" style="color:var(--text-secondary);">${netAgg.regularStudents}</div>
                   <div style="font-size:10px; color:var(--text-secondary);">Sem necessidades especiais</div>
                 </div>
-                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:8px; padding:10px;">
-                  <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Estrutura da Rede</div>
-                  <div style="font-size:18px; font-weight:800; color:#6D28D9; margin-top:2px;">${netAgg.totalUnits} UEs <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${netAgg.totalClasses} turmas)</span></div>
+                <div class="stat-box-hallmark">
+                  <div class="stat-label-hallmark">Estrutura da rede</div>
+                  <div class="stat-value-hallmark purple">${netAgg.totalUnits} UEs <span style="font-size:11px; font-weight:600; color:var(--text-secondary);">(${netAgg.totalClasses} turmas)</span></div>
                   <div style="font-size:10px; color:var(--text-secondary);">Rede Municipal de Patos</div>
                 </div>
               </div>
@@ -1532,18 +1536,18 @@
       classesToRender.forEach(cls => {
         const isIntegral = (cls.shift || '').toLowerCase().includes('integral');
         const jornadaBadge = isIntegral 
-          ? `<span class="status-badge" style="background:#EDE9FE; color:#6D28D9; font-weight:700;">Tempo Integral</span>`
-          : `<span class="status-badge" style="background:#EFF6FF; color:#1E40AF; font-weight:700;">Tempo Parcial</span>`;
+          ? `<span class="badge-hallmark-purple">Tempo Integral</span>`
+          : `<span class="badge-hallmark-accent">Tempo Parcial</span>`;
 
-        let turnoBadge = `<span class="status-badge" style="background:#FEF3C7; color:#92400E; font-size:11px;">${cls.shift || 'Não definido'}</span>`;
+        let turnoBadge = `<span class="badge-hallmark-neutral">${cls.shift || 'Não definido'}</span>`;
         if (isIntegral) {
-          turnoBadge = `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-size:11px;">Manhã + Tarde</span>`;
+          turnoBadge = `<span class="badge-hallmark-active">Manhã + Tarde</span>`;
         }
 
         const totStudents = typeof cls.totalStudents === 'number' ? cls.totalStudents : 20;
         const incStudents = typeof cls.inclusiveStudents === 'number' ? cls.inclusiveStudents : 0;
         const incBadge = incStudents > 0 
-          ? `<span class="status-badge" style="background:#DCFCE7; color:#166534; font-weight:700;">${incStudents} AEE</span>`
+          ? `<span class="badge-hallmark-active">${incStudents} AEE</span>`
           : `<span style="color:var(--text-secondary); font-size:12px;">0</span>`;
 
         let teachersDisplay = '';
@@ -1552,23 +1556,23 @@
           const aList = (cls.teachersAfternoon && cls.teachersAfternoon.length > 0) ? cls.teachersAfternoon.join(', ') : 'A definir';
           teachersDisplay = `
             <div style="font-size:11px; line-height:1.4;">
-              <div><strong style="color:#B45309;">Manhã:</strong> ${mList}</div>
-              <div><strong style="color:#4338CA;">Tarde:</strong> ${aList}</div>
+              <div><strong style="color:var(--text-primary);">Manhã:</strong> ${mList}</div>
+              <div><strong style="color:var(--text-primary);">Tarde:</strong> ${aList}</div>
             </div>
           `;
         } else {
           const tList = (Array.isArray(cls.teachers) && cls.teachers.length > 0) ? cls.teachers.join(', ') : '<span style="color:var(--text-secondary); font-style:italic;">Nenhum regente alocado</span>';
-          teachersDisplay = `<div style="font-size:12px; font-weight:600; color:#1E293B;">${tList}</div>`;
+          teachersDisplay = `<div style="font-size:12px; font-weight:600; color:var(--text-primary);">${tList}</div>`;
         }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>
             <strong style="color:var(--primary-dark); font-size:13px;">${cls.name}</strong><br>
-            <span class="status-badge" style="background:#F1F5F9; color:#475569; font-size:10px;">${cls.stage || 'Educação Infantil'}</span>
+            <span class="badge-hallmark-neutral">${cls.stage || 'Educação Infantil'}</span>
           </td>
           <td style="font-size:12px;">${cls.school}</td>
-          <td style="font-size:13px; font-weight:700; color:#1E40AF;">${totStudents} alunos</td>
+          <td style="font-size:13px; font-weight:700; color:var(--badge-accent-ink);">${totStudents} alunos</td>
           <td>${incBadge}</td>
           <td>${jornadaBadge}</td>
           <td>${turnoBadge}</td>
@@ -2060,7 +2064,7 @@
         }
         const emailSubtitle = (m.roleKey === 'professora')
           ? ''
-          : `<br><span style="font-size:11px; color:var(--text-secondary);">${memberEmail ? `✉️ ${memberEmail}` : 'Sem e-mail vinculado'}</span>`;
+          : `<br><span style="font-size:11px; color:var(--text-secondary);">${memberEmail ? memberEmail : 'Sem e-mail vinculado'}</span>`;
         
         tr.innerHTML = `
           <td>

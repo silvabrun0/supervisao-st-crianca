@@ -671,11 +671,11 @@
           homeOpCard.style.display = 'block';
           if (homeOpTitle) homeOpTitle.innerText = 'Gestão da Minha Escola';
           if (homeOpSubtitle) homeOpSubtitle.innerText = `Gerencie as turmas, docentes regentes titulares e caracterização de ${user.school}.`;
-          if (homeOpBtn) homeOpBtn.innerText = 'Acessar Gestão da Escola →';
+          if (homeOpBtn) homeOpBtn.innerText = 'Acessar Gestão da Escola';
         }
         if (mobMenuOpBtn) {
           mobMenuOpBtn.style.display = 'flex';
-          if (mobMenuOpText) mobMenuOpText.innerText = '🏫 Gestão da Minha Escola';
+          if (mobMenuOpText) mobMenuOpText.innerText = 'Gestão da Minha Escola';
         }
         if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Minha Escola';
         if (pedagClassesLabel) pedagClassesLabel.innerText = 'Turmas & Regência';
@@ -696,11 +696,11 @@
           homeOpCard.style.display = 'block';
           if (homeOpTitle) homeOpTitle.innerText = 'Gestão do Polo Regional';
           if (homeOpSubtitle) homeOpSubtitle.innerText = `Supervisão territorial das escolas e coordenações do ${user.school}.`;
-          if (homeOpBtn) homeOpBtn.innerText = 'Acessar Gestão do Polo →';
+          if (homeOpBtn) homeOpBtn.innerText = 'Acessar Gestão do Polo';
         }
         if (mobMenuOpBtn) {
           mobMenuOpBtn.style.display = 'flex';
-          if (mobMenuOpText) mobMenuOpText.innerText = '🗺️ Gestão do Polo Regional';
+          if (mobMenuOpText) mobMenuOpText.innerText = 'Gestão do Polo Regional';
         }
         if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Escolas do Polo';
         if (pedagClassesLabel) pedagClassesLabel.innerText = 'Turmas do Polo';
@@ -717,7 +717,7 @@
         if (homeOpCard) homeOpCard.style.display = 'none';
         if (mobMenuOpBtn) {
           mobMenuOpBtn.style.display = 'flex';
-          if (mobMenuOpText) mobMenuOpText.innerText = '🏛️ Gestão da Rede Municipal';
+          if (mobMenuOpText) mobMenuOpText.innerText = 'Gestão da Rede Municipal';
         }
         if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Unidades Escolares & Polos';
         // A Coordenadora do Núcleo de EI gerencia somente os polos; a tela de turmas da rede é retirada

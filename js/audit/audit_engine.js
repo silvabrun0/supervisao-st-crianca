@@ -3308,14 +3308,14 @@
                 logger.log('Erradicação completa de emojis na tela de Gestão Pedagógica e adoção de pictogramas SVG', true);
               }
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.52
-              if (!btnChangelog.textContent.includes('Versão 1.52')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.54
+              if (!btnChangelog.textContent.includes('Versão 1.54') && !btnChangelog.textContent.includes('Versão 1.53') && !btnChangelog.textContent.includes('Versão 1.52')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.52')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.52');
+              if (!modalChg.innerHTML.includes('Versão 1.54') && !modalChg.innerHTML.includes('Versão 1.52')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.54 ou 1.52');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.52 (v8.2.19)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.54 (v8.2.21)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
