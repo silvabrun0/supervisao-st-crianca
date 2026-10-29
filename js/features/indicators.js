@@ -2968,13 +2968,8 @@
                 <a href="javascript:void(0)" onclick="scrollToBottlenecksBlock()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Rolar para os 3 critérios prioritários de intervenção">
                   <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
-                    <circle cx="12" cy="6" r="6"></circle>
-                    <circle cx="12" cy="2" r="2"></circle>
-                  </svg>
-                  <span>Ver os 3 Critérios Críticos ↓</span>
-                </a>
-                    <circle cx="12" cy="6" r="6"></circle>
-                    <circle cx="12" cy="2" r="2"></circle>
+                    <polyline points="8 12 12 16 16 12"></polyline>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
                   </svg>
                   <span>Ver os 3 Critérios Críticos ↓</span>
                 </a>
