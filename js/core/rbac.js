@@ -677,9 +677,9 @@
           mobMenuOpBtn.style.display = 'flex';
           if (mobMenuOpText) mobMenuOpText.innerText = 'Gestão da Minha Escola';
         }
-        if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Minha Escola';
-        if (pedagClassesLabel) pedagClassesLabel.innerText = 'Turmas & Regência';
-        if (pedagTeamLabel) pedagTeamLabel.innerText = 'Docentes da UE';
+        if (pedagUnitsLabel) pedagUnitsLabel.innerHTML = '<span class="pedag-tab-full-text">Minha Escola</span><span class="pedag-tab-mobile-text">Escola</span>';
+        if (pedagClassesLabel) pedagClassesLabel.innerHTML = '<span class="pedag-tab-full-text">Turmas & Regência</span><span class="pedag-tab-mobile-text">Turmas</span>';
+        if (pedagTeamLabel) pedagTeamLabel.innerHTML = '<span class="pedag-tab-full-text">Docentes da UE</span><span class="pedag-tab-mobile-text">Docentes</span>';
         if (pedagExportsTab) pedagExportsTab.style.display = 'none';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'none';
         if (homeGestaoTitle) homeGestaoTitle.innerText = `Gestão da Unidade Escolar · ${user.school}`;
@@ -702,9 +702,9 @@
           mobMenuOpBtn.style.display = 'flex';
           if (mobMenuOpText) mobMenuOpText.innerText = 'Gestão do Polo Regional';
         }
-        if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Escolas do Polo';
-        if (pedagClassesLabel) pedagClassesLabel.innerText = 'Turmas do Polo';
-        if (pedagTeamLabel) pedagTeamLabel.innerText = 'Coordenações Pedagógicas';
+        if (pedagUnitsLabel) pedagUnitsLabel.innerHTML = '<span class="pedag-tab-full-text">Escolas do Polo</span><span class="pedag-tab-mobile-text">Escolas</span>';
+        if (pedagClassesLabel) pedagClassesLabel.innerHTML = '<span class="pedag-tab-full-text">Turmas do Polo</span><span class="pedag-tab-mobile-text">Turmas</span>';
+        if (pedagTeamLabel) pedagTeamLabel.innerHTML = '<span class="pedag-tab-full-text">Coordenações Pedagógicas</span><span class="pedag-tab-mobile-text">Coordenações</span>';
         if (pedagExportsTab) pedagExportsTab.style.display = 'none';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'none';
         if (homeGestaoTitle) homeGestaoTitle.innerText = `Gestão do Polo Regional · ${user.school}`;
@@ -719,12 +719,12 @@
           mobMenuOpBtn.style.display = 'flex';
           if (mobMenuOpText) mobMenuOpText.innerText = 'Gestão da Rede Municipal';
         }
-        if (pedagUnitsLabel) pedagUnitsLabel.innerText = 'Unidades Escolares & Polos';
+        if (pedagUnitsLabel) pedagUnitsLabel.innerHTML = '<span class="pedag-tab-full-text">Unidades Escolares & Polos</span><span class="pedag-tab-mobile-text">Escolas & Polos</span>';
         // A Coordenadora do Núcleo de EI gerencia somente os polos; a tela de turmas da rede é retirada
         const pedagTabClassesEl = document.getElementById('pedagTabClasses');
         if (pedagTabClassesEl) pedagTabClassesEl.style.display = 'none';
-        if (pedagClassesLabel) pedagClassesLabel.innerText = '';
-        if (pedagTeamLabel) pedagTeamLabel.innerText = 'Equipes & Servidores da Rede';
+        if (pedagClassesLabel) pedagClassesLabel.innerHTML = '';
+        if (pedagTeamLabel) pedagTeamLabel.innerHTML = '<span class="pedag-tab-full-text">Equipes & Servidores da Rede</span><span class="pedag-tab-mobile-text">Servidores</span>';
         if (pedagExportsTab) pedagExportsTab.style.display = 'block';
         if (homeGestaoActionsCentral) homeGestaoActionsCentral.style.display = 'flex';
         if (homeGestaoTitle) homeGestaoTitle.innerText = 'Gestão da Rede';
