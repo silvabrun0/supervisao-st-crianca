@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.56 (v8.2.23)</span>
+          <span>Versão 1.57 (v8.2.24)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -1768,6 +1768,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.57 - ALINHAMENTO CENTRALIZADO DOS BLOCOS DE POLOS REGIONAIS NO MOBILE -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.57 · v8.2.24</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">29/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Alinhamento Centralizado e Reestruturação Mobile dos Blocos de Polos Regionais:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🗺️ <strong>Cabeçalho Centrado de Polos Regionais:</strong> Destaque visual centralizado e simétrico do nome do Polo Regional no topo de cada bloco mobile na Matriz de Cobertura da Rede (<code>#networkCoverageCard</code>).</li>
+          <li>📱 <strong>Eliminação da Dispersão de Flexbox:</strong> Encapsulamento de dados em containers estruturados (<code>.coverage-cell-value</code>), impedindo que escolas e coordenadoras fiquem flutuando fora de centro no celular.</li>
+          <li>🏫 <strong>Pilhas Verticais Alinhadas de UEs e Coordenadoras:</strong> Exibição ordenada em coluna das unidades vinculadas e coordenadoras atuantes (<code>.coverage-units-stack</code> e <code>.coverage-cps-stack</code>).</li>
+          <li>🎯 <strong>Rodapé de Ações Centralizado:</strong> Agrupamento simétrico dos botões de ação (Editar e Excluir) com alvos de toque de 44px para máxima ergonomia ao polegar.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.56 -->

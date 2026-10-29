@@ -1,0 +1,870 @@
+    /* =========================================================================
+       PILAR 3: BENCHMARK AFUNILAMENTO (UE VS. REDE MUNICIPAL)
+       ========================================================================= */
+    .benchmark-info-bar {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #166534;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .benchmark-ruler-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .benchmark-item-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .benchmark-bar-track {
+      width: 75px;
+      height: 7px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .benchmark-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+    .benchmark-delta-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .benchmark-delta-critical {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #FCA5A5;
+    }
+    .benchmark-delta-warning {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+    }
+    .benchmark-delta-neutral {
+      background: #F1F5F9;
+      color: #475569;
+      border: 1px solid #E2E8F0;
+    }
+    .benchmark-delta-success {
+      background: #DCFCE7;
+      color: #166534;
+      border: 1px solid #86EFAC;
+    }
+    .benchmark-delta-highlight {
+      background: #D1FAE5;
+      color: #065F46;
+      border: 1px solid #6EE7B7;
+      box-shadow: 0 1px 2px rgba(6, 95, 70, 0.1);
+    }
+    .benchmark-item-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+    }
+
+    /* =========================================================================
+       PILAR 8: DIAGNÓSTICO DE PRIORIDADES - MENORES ÍNDICES (GARGALOS PEDAGÓGICOS)
+       ========================================================================= */
+    .bottlenecks-priority-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .bottlenecks-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .bottlenecks-title-group h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin: 0 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bottlenecks-title-group p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.4;
+    }
+    .bottlenecks-controls-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .bottlenecks-toggle-pill {
+      display: inline-flex;
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      border-radius: 8px;
+      padding: 2px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .bottlenecks-toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 10px;
+      border-radius: 6px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .bottlenecks-toggle-btn.active {
+      background: #FFFFFF;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+    .bottlenecks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+    }
+    .bottleneck-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .bottleneck-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+    .bottleneck-card-critical {
+      border-left: 5px solid var(--red);
+    }
+    .bottleneck-card-warning {
+      border-left: 5px solid var(--yellow);
+    }
+    .bottleneck-card-stable {
+      border-left: 5px solid var(--green);
+    }
+    .bottleneck-badge-rank {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .bottleneck-rank-1 {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
+    .bottleneck-rank-2 {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+    }
+    .bottleneck-rank-3 {
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+    }
+    .bottleneck-metric-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 12px 0;
+      text-align: center;
+    }
+    .bottleneck-actions-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid #F1F5F9;
+    }
+    @keyframes bottleneckHighlightPulse {
+      0% { background-color: #FEF08A; transform: scale(1.01); }
+      50% { background-color: #FDE047; }
+      100% { background-color: transparent; transform: scale(1); }
+    }
+    .highlight-bottleneck-pulse {
+      animation: bottleneckHighlightPulse 2.5s ease-out;
+      border-radius: 6px;
+    }
+    @media print {
+      .bottlenecks-priority-block {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #94A3B8;
+      }
+      .bottlenecks-controls-group, .bottleneck-actions-row {
+        display: none !important;
+      }
+    }
+
+    /* =========================================================================
+       PILAR 10: QUADRO DE CONTROLE BIMESTRAL (SEMÁFORO DE PRAZOS POR TURMA)
+       ========================================================================= */
+    .bimester-semaphore-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .semaphore-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .semaphore-title-group h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin: 0 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .semaphore-title-group p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.4;
+    }
+    .semaphore-view-toggle {
+      display: inline-flex;
+      background: #F1F5F9;
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      gap: 4px;
+    }
+    .semaphore-view-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ind-text-muted);
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 36px;
+    }
+    .semaphore-view-btn:hover {
+      color: var(--ind-text-strong);
+      background: rgba(255, 255, 255, 0.6);
+    }
+    .semaphore-view-btn.active {
+      background: var(--ind-surface);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+      font-weight: 700;
+    }
+    
+    /* Micro-cards de Resumo Decisório */
+    .semaphore-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .sem-stat-card {
+      background: var(--ind-surface);
+      border: 1px solid var(--ind-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .sem-stat-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    .sem-stat-card.alert-card {
+      background: var(--sem-red-bg);
+      border-color: var(--sem-red-border);
+    }
+    .sem-stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ind-text-muted);
+      text-transform: none; /* Proibido caixa alta forçada */
+      letter-spacing: normal;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sem-stat-card.alert-card .sem-stat-label {
+      color: var(--sem-red-ink);
+    }
+    .sem-stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ind-text-strong);
+      margin-top: 4px;
+      line-height: 1.1;
+    }
+    .sem-stat-card.alert-card .sem-stat-value {
+      color: var(--sem-red-ink);
+    }
+    .sem-stat-desc {
+      font-size: 11px;
+      color: var(--ind-text-muted);
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+    
+    /* Barra de Filtros Rápidos de Status */
+    .semaphore-filters-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      background: var(--ind-ground);
+      border-radius: 8px;
+      border: 1px solid var(--ind-border);
+    }
+    .sem-filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ind-text-muted);
+      text-transform: none;
+      margin-right: 4px;
+    }
+    .sem-filter-chip {
+      background: var(--ind-surface);
+      border: 1px solid var(--ind-border);
+      border-radius: 16px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ind-text-body);
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 32px;
+    }
+    .sem-filter-chip:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .sem-filter-chip.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+    .sem-filter-chip.chip-red.active {
+      background: var(--sem-red-ink);
+      border-color: var(--sem-red-ink);
+      color: #FFFFFF;
+    }
+    .sem-filter-chip.chip-green.active {
+      background: var(--sem-green-ink);
+      border-color: var(--sem-green-ink);
+      color: #FFFFFF;
+    }
+    
+    /* Pílulas Semafóricas Canônicas (Verde / Cinza / Vermelho) */
+    .sem-status-pill {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      line-height: 1.2;
+      width: 100%;
+      box-sizing: border-box;
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      text-align: left;
+      cursor: pointer;
+      position: relative;
+      min-height: 48px;
+    }
+    .sem-status-pill:hover {
+      filter: brightness(0.97);
+      box-shadow: var(--shadow-sm);
+    }
+    .sem-status-pill .pill-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      font-weight: 800;
+      gap: 4px;
+    }
+    .sem-status-pill .pill-sub {
+      font-size: 10px;
+      margin-top: 3px;
+      opacity: 0.85;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    
+    /* 🟢 VERDE: Observação Concluída */
+    .sem-status-pill.status-completed {
+      background: var(--sem-green-bg);
+      border: 1px solid var(--sem-green-border);
+      color: var(--sem-green-ink);
+    }
+    
+    /* 🔴 VERMELHO: Bimestre Expirado sem Observação (Atraso) */
+    .sem-status-pill.status-overdue {
+      background: var(--sem-red-bg);
+      border: 1px solid var(--sem-red-border);
+      color: var(--sem-red-ink);
+      animation: semOverduePulse 3s infinite ease-in-out;
+    }
+    @keyframes semOverduePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0); }
+      50% { box-shadow: 0 0 0 4px rgba(153, 27, 27, 0.15); }
+    }
+    
+    /* ⚪ CINZA / AZUL SUAVE: Bimestre em Andamento (No Prazo) */
+    .sem-status-pill.status-in_progress {
+      background: var(--sem-blue-bg);
+      border: 1px solid var(--sem-blue-border);
+      color: var(--sem-blue-ink);
+    }
+    
+    /* ⚪ CINZA NEUTRO: Ciclo Futuro */
+    .sem-status-pill.status-future {
+      background: var(--sem-future-bg);
+      border: 1px dashed var(--sem-future-border);
+      color: var(--sem-future-ink);
+      cursor: default;
+    }
+    .sem-status-pill.status-future:hover {
+      box-shadow: none;
+      filter: none;
+    }
+
+    /* =========================================================================
+       PICTOGRAMAS VETORIAIS E PONTOS DE STATUS (PAINEL & SEMÁFORO LONGITUDINAL)
+       ========================================================================= */
+    .sem-pill-icon {
+      width: 12px;
+      height: 12px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 4px;
+      margin-top: -2px;
+      flex-shrink: 0;
+    }
+
+    .sem-stat-icon {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+
+    .sem-filter-icon {
+      width: 13px;
+      height: 13px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      margin-top: -1px;
+      flex-shrink: 0;
+    }
+
+    .trend-icon-svg {
+      width: 13px;
+      height: 13px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 4px;
+      margin-top: -2px;
+      flex-shrink: 0;
+    }
+
+    .score-chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+      flex-shrink: 0;
+    }
+    .score-chip-dot.dot-red { background: #EF4444; }
+    .score-chip-dot.dot-yellow { background: #F59E0B; }
+    .score-chip-dot.dot-green { background: #10B981; }
+
+    .picto-status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .picto-status-dot.dot-completed { background: #16A34A; }
+    .picto-status-dot.dot-inprogress { background: #1E40AF; }
+    .picto-status-dot.dot-overdue { background: #DC2626; }
+    
+    /* Barra de Progresso do Ciclo Anual da Turma */
+    .sem-cycle-progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 110px;
+    }
+    .sem-cycle-bar-bg {
+      height: 7px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .sem-cycle-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .sem-cycle-text {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    /* Tabela Matricial (Desktop) */
+    .semaphore-table-view {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
+      margin-top: 10px;
+    }
+    .semaphore-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .semaphore-table th {
+      background: #F8FAFC;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      font-weight: 800;
+      color: var(--primary-dark);
+      white-space: nowrap;
+    }
+    .semaphore-table th.col-bim {
+      width: 16%;
+      text-align: center;
+    }
+    .semaphore-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      vertical-align: middle;
+      background: #FFFFFF;
+    }
+    .semaphore-table tr:hover td {
+      background: #F8FAFC;
+    }
+    
+    /* Cards Mobile Sem Rolagem Horizontal (Smartphone) */
+    .semaphore-cards-view {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .sem-mobile-class-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .sem-mobile-class-card.has-overdue {
+      border-left: 4px solid #DC2626;
+    }
+    .sem-mobile-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .sem-mobile-class-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+    .sem-mobile-class-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+    }
+    .sem-mobile-bimesters-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin: 12px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .semaphore-table-view {
+        display: none !important;
+      }
+      .semaphore-cards-view {
+        display: flex !important;
+      }
+      .semaphore-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .semaphore-view-toggle {
+        width: 100%;
+      }
+      .semaphore-view-btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+    
+    @media print {
+      .semaphore-view-toggle, .semaphore-filters-bar, .sem-filter-chip, .btn-action-sem {
+        display: none !important;
+      }
+      .bimester-semaphore-container {
+        border: 1px solid #CBD5E1 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+      .sem-status-pill.status-overdue {
+        animation: none !important;
+      }
+    }
+
+    .data-table {
+      font-size: 13px;
+    }
+    .data-table th, .data-table td {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    .data-table th {
+      background: #F1F5F9;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Hallmark Sub-abas e Controles da Gestão Pedagógica */
+    .pedag-subtabs-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .pedag-subtabs-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pedag-subtab-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--gestao-ground);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      user-select: none;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .pedag-subtab-btn:hover {
+      background: var(--surface);
+      color: var(--text-primary);
+      border-color: #CBD5E1;
+    }
+    .pedag-subtab-btn.active {
+      background: var(--surface);
+      color: var(--primary);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+      font-weight: 700;
+    }
+    .pedag-subtab-btn:focus-visible,
+    .btn:focus-visible,
+    .form-input:focus-visible,
+    .form-select:focus-visible {
+      outline: 2px solid var(--btn-focus-ring);
+      outline-offset: 2px;
+    }
+
+    /* Hallmark Badges Semânticos Padronizados */
+    .badge-hallmark-active {
+      background: var(--badge-active-bg);
+      color: var(--badge-active-ink);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-hallmark-neutral {
+      background: var(--badge-neutral-bg);
+      color: var(--badge-neutral-ink);
+      font-weight: 600;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-hallmark-accent {
+      background: var(--badge-accent-bg);
+      color: var(--badge-accent-ink);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-hallmark-purple {
+      background: var(--badge-purple-bg);
+      color: var(--badge-purple-ink);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-hallmark-danger {
+      background: var(--badge-danger-bg);
+      color: var(--badge-danger-ink);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Cards de Caracterização e Estatística Hallmark (Single-layer containment) */
+    .stat-box-hallmark {
+      background: var(--gestao-ground);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      text-align: left;
+    }
+    .stat-label-hallmark {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      line-height: 1.3;
+      margin-bottom: 4px;
+      text-transform: none;
+    }
+    .stat-value-hallmark {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+    .stat-value-hallmark.accent { color: var(--badge-accent-ink); }
+    .stat-value-hallmark.active { color: var(--badge-active-ink); }
+    .stat-value-hallmark.purple { color: var(--badge-purple-ink); }
+

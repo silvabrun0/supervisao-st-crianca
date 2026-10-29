@@ -3353,14 +3353,30 @@
               }
               logger.log('Validação dos Rótulos Responsivos e Tabelas Mobile-to-Card na Gestão Pedagógica (Versão 1.55)', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.56
-              if (!btnChangelog.textContent.includes('Versão 1.56')) {
+              // 22. VALIDAÇÃO DO ALINHAMENTO E COMPONENTES DOS BLOCOS DE POLOS NA MATRIZ DE COBERTURA (VERSÃO 1.57)
+              const coveragePoloTitles = document.querySelectorAll('#networkCoverageTableBody .coverage-polo-title');
+              const coverageUnitsStacks = document.querySelectorAll('#networkCoverageTableBody .coverage-units-stack');
+              const coverageActionsGroups = document.querySelectorAll('#networkCoverageTableBody .coverage-actions-group');
+
+              if (coveragePoloTitles.length === 0) {
+                throw new Error('Matriz de Cobertura da Rede deve renderizar títulos com a classe .coverage-polo-title');
+              }
+              if (coverageUnitsStacks.length === 0) {
+                throw new Error('Matriz de Cobertura da Rede deve renderizar pilhas estruturadas .coverage-units-stack');
+              }
+              if (coverageActionsGroups.length === 0) {
+                throw new Error('Matriz de Cobertura da Rede deve renderizar grupo de ações com a classe .coverage-actions-group');
+              }
+              logger.log('Validação da Estruturação e Alinhamento dos Blocos de Polos na Matriz de Cobertura (Versão 1.57)', true, `${coveragePoloTitles.length} blocos validados`);
+
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.57
+              if (!btnChangelog.textContent.includes('Versão 1.57')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.56')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.56');
+              if (!modalChg.innerHTML.includes('Versão 1.57')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.57');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.56 (v8.2.23)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.57 (v8.2.24)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

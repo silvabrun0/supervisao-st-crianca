@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.57** | 29/10/2026 17:00 | `intermediárias/aplicativo_v1.57_alinhamento_blocos_polos_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_alinhamento_centralizado_blocos_polos_mobile.md` | Alinhamento Centralizado e Reestruturação Mobile dos Blocos de Polos Regionais (`#networkCoverageCard`): cabeçalho do polo 100% centralizado, eliminação da dispersão flexbox com `.coverage-cell-value`, pilhas verticais alinhadas de UEs (`.coverage-units-stack`) e CPs (`.coverage-cps-stack`), e rodapé de ações centralizado com botões de 44px 🗺️📱🏛️ |
 | **1.56** | 29/10/2026 16:45 | `intermediárias/aplicativo_v1.56_painel_indicadores_sobrio_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_painel_indicadores_sobrio_mobile.md` | Redesign Hallmark da aba Painel e Indicadores (sobriedade visual e acessibilidade mobile): unificação dos 4 cards decisórios de KPI superiores sob tokens calmos (`--ind-ground`, `--ind-surface`, `--ind-border`), restauração dos rótulos de texto no celular com rótulos responsivos duplos (`.tab-text-full` e `.tab-text-mobile`), erradicação de `transition: all`, remoção total de emojis residuais (`📄`, `🏛️`, `💡`, `🔍`), touch targets mínimos de 44px (`--touch-target-min`) e proteção contra zoom no Safari iOS 📊📱🏛️ |
 | **1.55** | 29/10/2026 16:30 | `intermediárias/aplicativo_v1.55_gestao_pedagogica_sobria_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_gestao_pedagogica_sobria_mobile.md` | Redesign Hallmark da aba de Gestão Pedagógica (sobriedade visual e acessibilidade mobile): erradicação de cores saturadas no card de exportação/backup, navegação responsiva de sub-abas (`.pedag-subtabs-nav`), transformação de tabelas operacionais em cartões mobile-friendly (`.responsive-mobile-table`) com alvos de toque de 44px (`--touch-target-min`), proteção contra zoom no Safari iOS e preservação integral da SSOT 🏛️📱🛡️ |
 | **1.54** | 28/10/2026 16:45 | `intermediárias/aplicativo_v1.54_revisao_hallmark_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_revisao_hallmark_gestao_pedagogica.md` | Revisão e adequação Hallmark da aba de Gestão Pedagógica/Rede: erradicação total de cores hexadecimais inline soltas e AI-slop, aplanamento de cards aninhados (single-layer containment), remoção definitiva de emojis residuais nos cards e tabelas, substituição por pictogramas vetoriais SVG monocromáticos, tipografia em sentence case desprovida de `text-transform: uppercase` forçado, botões segmentados `.pedag-subtab-btn`, suporte pleno a `:focus-visible`, `minmax(0, 1fr)` e `prefers-reduced-motion` 🏛️✨🛡️ |
@@ -183,6 +184,24 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.57] - Alinhamento Centralizado e Reestruturação Mobile dos Blocos de Polos Regionais
+- **Data / Horário:** 29/10/2026 17:00
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.57_alinhamento_blocos_polos_mobile.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_alinhamento_centralizado_blocos_polos_mobile.md`.
+- **Foco Central:** Alinhamento centralizado e reestruturação mobile dos blocos de polos regionais na Matriz de Cobertura da Rede (`#networkCoverageCard`):
+  1. **Cabeçalho Centrado de Polos Regionais:** Destaque visual centralizado e simétrico do nome do Polo Regional no topo de cada bloco mobile na Matriz de Cobertura da Rede (`#networkCoverageCard`).
+  2. **Eliminação da Dispersão de Flexbox:** Encapsulamento de dados em containers estruturados (`.coverage-cell-value`), impedindo que escolas e coordenadoras fiquem flutuando fora de centro no celular.
+  3. **Pilhas Verticais Alinhadas de UEs e Coordenadoras:** Exibição ordenada em coluna das unidades vinculadas e coordenadoras atuantes (`.coverage-units-stack` e `.coverage-cps-stack`).
+  4. **Rodapé de Ações Centralizado:** Agrupamento simétrico dos botões de ação (Editar e Excluir) com alvos de toque de 44px para máxima ergonomia ao polegar.
+  5. **Reset de Bordas Residuais:** Eliminação de bordas herdadas do desktop na visualização móvel para visual limpo de cartão.
+
+#### Alterações
+- `js/features/management.js`: Refatoração da renderização da Matriz de Cobertura da Rede, introduzindo classes semânticas (`.coverage-polo-row`, `.coverage-cell-polo`, `.coverage-polo-title`, `.coverage-cell-value`, `.coverage-units-stack`, `.coverage-cps-stack`, `.coverage-actions-group`).
+- `css/04_screens.css`: Estilização responsiva dos blocos de polos regionais mobile (cabeçalho centralizado, pilhas verticais alinhadas à direita, ações centralizadas de 44px) e estilos consistentes para desktop.
+- `index.html`: Atualização do botão `.btn-changelog` para a Versão 1.57 (v8.2.24) e inserção do card no `#modalChangelog`.
+- `js/audit/audit_engine.js`: Adição de asserções de validação dos blocos de polos estruturados e atualização das asserções de versão para 1.57.
+- `CHANGELOG.md`: Registro da Versão 1.57.
 
 ### [Versão 1.56] - Redesign Hallmark do Painel e Indicadores (Sobriedade Visual & Acessibilidade Mobile)
 - **Data / Horário:** 29/10/2026 16:45

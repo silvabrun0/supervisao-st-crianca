@@ -304,7 +304,20 @@
           const formadoraName = formadora ? formadora.name : '<span style="color:var(--text-secondary); font-style:italic;">A definir / Secretaria</span>';
 
           const cpsInPolo = appState.teamMembers.filter(m => m.roleKey === 'coordenador' && unitNames.includes(m.school));
-          const cpNames = cpsInPolo.length > 0 ? cpsInPolo.map(c => `<strong>${c.name}</strong> (${c.school})`).join('<br>') : '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma CP alocada</span>';
+          
+          // Renderização estruturada de Coordenadoras em container empilhado
+          const cpContent = cpsInPolo.length > 0 
+            ? `<div class="coverage-cps-stack">${cpsInPolo.map(c => `<div class="coverage-cp-item"><strong>${c.name}</strong> <span class="coverage-cp-school">(${c.school})</span></div>`).join('')}</div>`
+            : '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma CP alocada</span>';
+
+          // Renderização estruturada de Unidades Escolares em container empilhado
+          const unitsContent = unitsInPolo.length > 0
+            ? `<div class="coverage-units-stack">${unitsInPolo.map(u => `
+                <div class="coverage-unit-item" onclick="openViewUnitClassesModal('${u.id}')" title="Clique para visualizar turmas e docentes atribuídos em ${u.name}">
+                  ${u.name}
+                </div>
+              `).join('')}</div>`
+            : '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma UE alocada</span>';
 
           const teachersCount = appState.teamMembers.filter(m => m.roleKey === 'professora' && unitNames.includes(m.school)).length;
 
@@ -312,22 +325,31 @@
           const canDeletePolo = isNucleoEI(user) && unitsInPolo.length === 0;
 
           const tr = document.createElement('tr');
+          tr.className = 'coverage-polo-row';
           tr.innerHTML = `
-            <td data-label="Polo Regional"><strong style="color:var(--primary);">${poloName}</strong></td>
-            <td data-label="Formadora"><span style="font-weight:700; color:var(--text-primary);">${formadoraName}</span></td>
-            <td data-label="Unidades Vinculadas">
-              ${unitsInPolo.map(u => `
-                <div style="cursor:pointer; color:var(--primary); font-weight:600; margin-bottom:3px; display:inline-block;" onclick="openViewUnitClassesModal('${u.id}')" title="Clique para visualizar turmas e docentes atribuídos em ${u.name}">
-                  ${u.name}
-                </div>
-              `).join('<br>') || '<span style="color:var(--text-secondary); font-style:italic;">Nenhuma UE alocada</span>'}
+            <td data-label="Polo Regional" class="coverage-cell-polo">
+              <div class="coverage-polo-title">${poloName}</div>
             </td>
-            <td data-label="Coordenadoras" style="font-size:12px; line-height:1.4;">${cpNames}</td>
-            <td data-label="Docentes Atendidos"><span class="badge-hallmark-accent">${teachersCount} Docentes</span></td>
-            <td data-label="Status"><span class="badge-hallmark-active">Ativo</span></td>
-            <td data-label="Ações" style="text-align:center; white-space:nowrap;">
-              ${canEditPolo ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; margin-right:4px;" onclick="openEditPoloModal('${encodeURIComponent(poloName)}')">Editar</button>` : '<span style="color:var(--text-secondary); font-size:11px;">Somente Leitura</span>'}
-              ${canDeletePolo ? `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; color:var(--red);" onclick="removePolo('${encodeURIComponent(poloName)}')">Excluir</button>` : ''}
+            <td data-label="Formadora" class="coverage-cell-formadora">
+              <div class="coverage-cell-value"><span style="font-weight:700; color:var(--text-primary);">${formadoraName}</span></div>
+            </td>
+            <td data-label="Unidades Vinculadas" class="coverage-cell-units">
+              <div class="coverage-cell-value">${unitsContent}</div>
+            </td>
+            <td data-label="Coordenadoras" class="coverage-cell-cps">
+              <div class="coverage-cell-value">${cpContent}</div>
+            </td>
+            <td data-label="Docentes Atendidos" class="coverage-cell-teachers">
+              <div class="coverage-cell-value"><span class="badge-hallmark-accent">${teachersCount} Docentes</span></div>
+            </td>
+            <td data-label="Status" class="coverage-cell-status">
+              <div class="coverage-cell-value"><span class="badge-hallmark-active">Ativo</span></div>
+            </td>
+            <td data-label="Ações" class="coverage-cell-actions">
+              <div class="coverage-actions-group">
+                ${canEditPolo ? `<button class="btn btn-secondary coverage-btn-action" onclick="openEditPoloModal('${encodeURIComponent(poloName)}')">Editar</button>` : '<span style="color:var(--text-secondary); font-size:11px;">Somente Leitura</span>'}
+                ${canDeletePolo ? `<button class="btn btn-secondary coverage-btn-action btn-action-delete" style="color:var(--red);" onclick="removePolo('${encodeURIComponent(poloName)}')">Excluir</button>` : ''}
+              </div>
             </td>
           `;
           covTbody.appendChild(tr);
