@@ -48,6 +48,38 @@
       /* Botões e Foco Acessível Instantâneo */
       --btn-focus-ring: #0066CC;
       --touch-target-min: 44px;
+
+      /* Hallmark UI Tokens — Painel e Indicadores (Sobriedade Institucional) */
+      --ind-ground: #F8FAFC;
+      --ind-surface: #FFFFFF;
+      --ind-border: #E2E8F0;
+      --ind-border-subtle: #F1F5F9;
+
+      /* Textos de Alta Hierarquia e Legibilidade */
+      --ind-text-strong: #0F172A;
+      --ind-text-body: #334155;
+      --ind-text-muted: #64748B;
+
+      /* Semáforo Institucional Contido (Desaturado e Elegante) */
+      --sem-green-bg: #F0FDF4;
+      --sem-green-border: #DCFCE7;
+      --sem-green-ink: #166534;
+
+      --sem-amber-bg: #FEF9C3;
+      --sem-amber-border: #FEF08A;
+      --sem-amber-ink: #854D0E;
+
+      --sem-red-bg: #FEF2F2;
+      --sem-red-border: #FEE2E2;
+      --sem-red-ink: #991B1B;
+
+      --sem-blue-bg: #F0F7FF;
+      --sem-blue-border: #BFDBFE;
+      --sem-blue-ink: #004C99;
+
+      --sem-future-bg: #F8FAFC;
+      --sem-future-border: #E2E8F0;
+      --sem-future-ink: #94A3B8;
     }
 
     ::selection {

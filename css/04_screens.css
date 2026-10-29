@@ -684,13 +684,13 @@
     /* Sub-abas e Segmented Control do Painel de Indicadores (3 Abas com Ícones, 100% Visível) */
     .indicators-subtabs-nav {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
       margin-bottom: 20px;
-      background: #F1F5F9;
+      background: var(--ind-ground);
       padding: 4px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
+      border-radius: 10px;
+      border: 1px solid var(--ind-border);
       box-sizing: border-box;
       width: 100%;
     }
@@ -699,15 +699,16 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      min-height: var(--touch-target-min);
       height: 44px;
       background: transparent;
       border: 1px solid transparent;
       border-radius: 8px;
-      color: var(--text-secondary);
-      font-weight: 700;
+      color: var(--ind-text-muted);
+      font-weight: 600;
       font-size: 13px;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
       white-space: nowrap;
       user-select: none;
       width: 100%;
@@ -728,33 +729,90 @@
       fill: none;
     }
     .indicators-icon-tab-btn:hover {
-      color: var(--primary);
-      background: rgba(255, 255, 255, 0.5);
+      color: var(--ind-text-strong);
+      background: rgba(255, 255, 255, 0.6);
     }
     .indicators-icon-tab-btn.active {
-      background: #FFFFFF;
+      background: var(--ind-surface);
       color: var(--primary);
       border-color: #CBD5E1;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      font-weight: 800;
+      box-shadow: var(--shadow-sm);
+      font-weight: 700;
     }
+    .indicators-icon-tab-btn:focus-visible,
+    .sem-filter-chip:focus-visible,
+    .semaphore-view-btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Rótulos Responsivos Duplos: Desktop vs Mobile */
+    .tab-text-full { display: inline; }
+    .tab-text-mobile { display: none; }
+
     @media (max-width: 640px) {
       .indicators-subtabs-nav {
         gap: 4px;
         padding: 3px;
       }
       .indicators-icon-tab-btn {
-        height: 48px;
+        min-height: 44px;
+        height: 44px;
+        padding: 6px 8px;
+        gap: 6px;
+        font-size: 12px;
       }
-      .indicators-icon-tab-btn .tab-text {
-        display: none !important; /* Oculta texto no mobile: apenas os 3 ícones 100% visíveis sem arrastar */
-      }
+      /* Mostra rótulo conciso no celular em vez de ocultar todo o texto */
+      .tab-text-full { display: none !important; }
+      .tab-text-mobile { display: inline !important; font-weight: 700; }
       .indicators-icon-tab-btn .tab-icon {
-        font-size: 24px;
+        font-size: 20px;
       }
       .indicators-icon-tab-btn .tab-icon-svg {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
+      }
+
+      /* Barra de Filtros Mobile */
+      #indicatorsFilterToolbar {
+        padding: 12px;
+      }
+      #indicatorsFilterToolbar .form-select,
+      #indicatorsFilterToolbar .form-control {
+        font-size: 14px !important; /* Previne auto-zoom no Safari iOS */
+        min-height: var(--touch-target-min);
+      }
+
+      /* Quadro de Controle no Mobile */
+      .semaphore-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .semaphore-view-toggle {
+        width: 100%;
+      }
+      .semaphore-view-btn {
+        flex: 1;
+        justify-content: center;
+        min-height: var(--touch-target-min);
+      }
+      .semaphore-filters-bar {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+        padding-bottom: 10px;
+      }
+      .sem-filter-chip {
+        flex-shrink: 0;
+        min-height: var(--touch-target-min);
+      }
+
+      /* Grid de Cards Decisórios Superiores em 2 Colunas */
+      #indicatorsSectionKPIs .kpi-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
       }
     }
     .export-card-grid {

@@ -2766,10 +2766,10 @@
         });
 
         const matConfigs = [
-          { level: 1, title: 'Nível 1 · Pré-prontas', desc: 'Folhas xerox / apostiladas estruturadas', color: 'var(--red)', bg: '#FEF2F2' },
-          { level: 2, title: 'Nível 2 · Folhas Estruturadas', desc: 'Predomínio de folhas com raras livres', color: 'var(--yellow)', bg: '#FFFBEB' },
-          { level: 3, title: 'Nível 3 · Diversificados', desc: 'Acesso regular a papéis, tintas e colagens', color: '#0284C7', bg: '#F0F9FF' },
-          { level: 4, title: 'Nível 4 · Autônomo e Tridimensional', desc: 'Argila, madeira, elementos naturais', color: 'var(--green)', bg: '#F0FDF4' }
+          { level: 1, title: 'Nível 1 · Pré-prontas', desc: 'Folhas xerox / apostiladas estruturadas', color: 'var(--sem-red-ink)', bg: 'var(--sem-red-bg)', border: 'var(--sem-red-border)' },
+          { level: 2, title: 'Nível 2 · Folhas Estruturadas', desc: 'Predomínio de folhas com raras livres', color: 'var(--sem-amber-ink)', bg: 'var(--sem-amber-bg)', border: 'var(--sem-amber-border)' },
+          { level: 3, title: 'Nível 3 · Diversificados', desc: 'Acesso regular a papéis, tintas e colagens', color: 'var(--sem-blue-ink)', bg: 'var(--sem-blue-bg)', border: 'var(--sem-blue-border)' },
+          { level: 4, title: 'Nível 4 · Autônomo e Tridimensional', desc: 'Argila, madeira, elementos naturais', color: 'var(--sem-green-ink)', bg: 'var(--sem-green-bg)', border: 'var(--sem-green-border)' }
         ];
 
         let matBarsHtml = '';
@@ -2778,14 +2778,14 @@
           const pct = matTotal > 0 ? Math.round((count / matTotal) * 100) : 0;
 
           matBarsHtml += `
-            <div class="mat-bar-box" style="border-top:3px solid ${cfg.color};">
+            <div class="mat-bar-box" style="background:var(--ind-surface); border:1px solid var(--ind-border); border-top:3px solid ${cfg.color}; border-radius:8px; padding:12px;">
               <div>
-                <div class="mat-bar-level" style="color:${cfg.color};">${cfg.title}</div>
-                <div class="mat-bar-desc">${cfg.desc}</div>
+                <div class="mat-bar-level" style="color:${cfg.color}; font-weight:700;">${cfg.title}</div>
+                <div class="mat-bar-desc" style="color:var(--ind-text-muted); font-size:12px; margin-top:2px;">${cfg.desc}</div>
               </div>
-              <div class="mat-bar-stat" style="color:${cfg.color};">
-                <span>${pct}%</span>
-                <span style="font-size:12px; font-weight:600; color:var(--text-secondary);">(${count} obs)</span>
+              <div class="mat-bar-stat" style="color:${cfg.color}; margin-top:8px;">
+                <span style="font-size:18px; font-weight:800;">${pct}%</span>
+                <span style="font-size:12px; font-weight:600; color:var(--ind-text-muted);">(${count} obs)</span>
               </div>
             </div>
           `;
@@ -2850,28 +2850,28 @@
           <div class="kpi-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:16px; margin-bottom:20px;">
             
             <!-- CARD 1: QUALIDADE FORMATIVA (ÍNDICE DE CONSISTÊNCIA) -->
-            <div class="card" style="margin:0; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="card" style="margin:0; background:var(--ind-surface); border:1px solid var(--ind-border); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow-sm);">
               <div>
-                <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Índice de Consistência</div>
+                <div style="font-size:12px; font-weight:600; color:var(--ind-text-muted);">Índice de Consistência</div>
                 <div style="font-size:28px; font-weight:800; color:${overallColor}; margin:4px 0;">${overallDisplay}</div>
               </div>
-              <div style="font-size:12px; color:var(--text-secondary); line-height:1.3;">● ${overallLabel}</div>
+              <div style="font-size:12px; color:var(--ind-text-muted); line-height:1.3;">${overallLabel}</div>
             </div>
 
             <!-- CARD 2: COBERTURA NO BIMESTRE CORRENTE (DESTAQUE MÁXIMO DO PILAR 7) -->
-            <div class="card" style="margin:0; border-left:4px solid ${kpiCoverageBorderColor}; display:flex; flex-direction:column; justify-content:space-between; background:#FFFFFF;">
+            <div class="card" style="margin:0; background:var(--ind-surface); border:1px solid var(--ind-border); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow-sm);">
               <div>
-                <div style="font-size:11px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px;">${kpiCoverageTitle}</div>
-                <div style="font-size:28px; font-weight:800; color:var(--primary-dark); margin:4px 0;">
-                  ${evaluatedEntitiesCurrentBim} <span style="font-size:15px; color:var(--text-secondary); font-weight:600;">de ${totalEntitiesCount}</span>
-                  <span style="font-size:16px; font-weight:800; color:${coverageCurrentBimPct >= 80 ? 'var(--green)' : (coverageCurrentBimPct >= 50 ? 'var(--yellow)' : 'var(--red)')}; margin-left:6px;">(${coverageCurrentBimPct}%)</span>
+                <div style="font-size:12px; font-weight:600; color:var(--ind-text-muted);">${kpiCoverageTitle}</div>
+                <div style="font-size:28px; font-weight:800; color:var(--ind-text-strong); margin:4px 0;">
+                  ${evaluatedEntitiesCurrentBim} <span style="font-size:15px; color:var(--ind-text-muted); font-weight:600;">de ${totalEntitiesCount}</span>
+                  <span style="font-size:16px; font-weight:800; color:${coverageCurrentBimPct >= 80 ? 'var(--sem-green-ink)' : (coverageCurrentBimPct >= 50 ? 'var(--sem-amber-ink)' : 'var(--sem-red-ink)')}; margin-left:6px;">(${coverageCurrentBimPct}%)</span>
                 </div>
               </div>
-              <div style="font-size:12px; font-weight:600; color:${pendingEntitiesCurrentBim === 0 && totalEntitiesCount > 0 ? 'var(--green)' : 'var(--text-secondary)'}; line-height:1.3;">
+              <div style="font-size:12px; font-weight:600; color:${pendingEntitiesCurrentBim === 0 && totalEntitiesCount > 0 ? 'var(--sem-green-ink)' : 'var(--ind-text-muted)'}; line-height:1.3;">
                 ${kpiCoverageSubtitle}
               </div>
-              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed rgba(0,0,0,0.08); display:flex; justify-content:space-between; align-items:center;">
-                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Abrir o Quadro de Controle Bimestral de Turmas" style="display:inline-flex; align-items:center; gap:4px;">
+              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed var(--ind-border); display:flex; justify-content:space-between; align-items:center;">
+                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Abrir o Quadro de Controle Bimestral de Turmas">
                   <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -2881,7 +2881,7 @@
                   <span>Quadro de Controle ↓</span>
                 </button>
                 ${pendingEntitiesCurrentBim > 0 && targetType === 'professora' ? `
-                  <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:#D97706; background:none; border:none; padding:0; cursor:pointer;" onclick="togglePendingClassesDrawer()" title="Exibir ou ocultar turmas pendentes no bimestre" style="display:inline-flex; align-items:center; gap:4px;">
+                  <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--sem-amber-ink); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="togglePendingClassesDrawer()" title="Exibir ou ocultar turmas pendentes no bimestre">
                     <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
                       <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
@@ -2891,25 +2891,25 @@
                 ` : ''}
               </div>
               <div id="pendingClassesDrawer" class="pending-classes-drawer" style="display:none;">
-                <div style="font-weight:800; color:#92400E; margin-bottom:4px;">Turmas Pendentes neste Bimestre:</div>
+                <div style="font-weight:800; color:var(--sem-amber-ink); margin-bottom:4px;">Turmas Pendentes neste Bimestre:</div>
                 <div class="pending-classes-list">
-                  ${pendingListItemsHtml || '<div style="color:var(--text-secondary);">Nenhuma turma pendente</div>'}
+                  ${pendingListItemsHtml || '<div style="color:var(--ind-text-muted);">Nenhuma turma pendente</div>'}
                 </div>
               </div>
             </div>
 
             <!-- CARD 3: META DO CICLO ANUAL (AVANÇO LONGITUDINAL DAS 4 OBSERVAÇÕES) -->
-            <div class="card" style="margin:0; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="card" style="margin:0; background:var(--ind-surface); border:1px solid var(--ind-border); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow-sm);">
               <div>
-                <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">${kpiCycleTitle}</div>
-                <div style="font-size:28px; font-weight:800; color:var(--primary-dark); margin:4px 0;">
-                  ${completedAnnualObs} <span style="font-size:15px; color:var(--text-secondary); font-weight:600;">de ${totalAnnualTargetObs}</span>
+                <div style="font-size:12px; font-weight:600; color:var(--ind-text-muted);">${kpiCycleTitle}</div>
+                <div style="font-size:28px; font-weight:800; color:var(--ind-text-strong); margin:4px 0;">
+                  ${completedAnnualObs} <span style="font-size:15px; color:var(--ind-text-muted); font-weight:600;">de ${totalAnnualTargetObs}</span>
                   <span style="font-size:16px; font-weight:800; color:var(--primary); margin-left:6px;">(${annualCycleProgressPct}%)</span>
                 </div>
               </div>
-              <div style="font-size:12px; color:var(--text-secondary); line-height:1.3;">● ${kpiCycleSubtitle}</div>
-              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed rgba(0,0,0,0.08);">
-                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Visualizar avanço do ciclo longitudinal das 4 observações anuais" style="display:inline-flex; align-items:center; gap:4px;">
+              <div style="font-size:12px; color:var(--ind-text-muted); line-height:1.3;">${kpiCycleSubtitle}</div>
+              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed var(--ind-border);">
+                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Visualizar avanço do ciclo longitudinal das 4 observações anuais">
                   <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="20" x2="18" y2="10"></line>
                     <line x1="12" y1="20" x2="12" y2="4"></line>
@@ -2921,23 +2921,28 @@
             </div>
 
             <!-- CARD 4: DIMENSÃO PRIORITÁRIA DE INTERVENÇÃO (GARGALO DA UE / POLO) -->
-            <div class="card" style="margin:0; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="card" style="margin:0; background:var(--ind-surface); border:1px solid var(--ind-border); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow-sm);">
               <div>
-                <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Dimensão Prioritária</div>
-                <div style="font-size:15px; font-weight:800; color:var(--text-primary); margin:6px 0 2px 0; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${lowestDimTitle}">
+                <div style="font-size:12px; font-weight:600; color:var(--ind-text-muted);">Dimensão Prioritária</div>
+                <div style="font-size:15px; font-weight:800; color:var(--ind-text-strong); margin:6px 0 2px 0; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${lowestDimTitle}">
                   ${lowestDimTitle}
                 </div>
                 <div style="font-size:18px; font-weight:800; color:${lowestDimColor}; margin-bottom:4px;">
                   ${lowestDimPct !== null ? lowestDimPct + '%' : '—'}
                 </div>
               </div>
-              <div style="font-size:12px; color:${lowestDimDelta !== null && lowestDimDelta < 0 ? 'var(--red)' : 'var(--text-secondary)'}; font-weight:600; line-height:1.3;">
-                ● ${lowestDimSubtitle}
+              <div style="font-size:12px; color:${lowestDimDelta !== null && lowestDimDelta < 0 ? 'var(--sem-red-ink)' : 'var(--ind-text-muted)'}; font-weight:600; line-height:1.3;">
+                ${lowestDimSubtitle}
               </div>
               <div style="margin-top:8px;">
                 <a href="javascript:void(0)" onclick="scrollToBottlenecksBlock()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Rolar para os 3 critérios prioritários de intervenção">
                   <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="6" r="6"></circle>
+                    <circle cx="12" cy="2" r="2"></circle>
+                  </svg>
+                  <span>Ver os 3 Critérios Críticos ↓</span>
+                </a>
                     <circle cx="12" cy="6" r="6"></circle>
                     <circle cx="12" cy="2" r="2"></circle>
                   </svg>
@@ -2979,18 +2984,27 @@
             ${(scopeLabelText === 'Rede Consolidada' || (activeUnitFilter === 'ALL' && !user.schoolKey && user.roleKey !== 'coordenador')) ? `
               <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; width:100%;">
                 <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="font-size:16px;">🏛️</span>
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary); flex-shrink:0;">
+                    <path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z"></path>
+                  </svg>
                   <span>
                     <strong>Panorama Geral da Rede Municipal:</strong> Exibindo a média consolidada de Patos/PB (${redeObs.length} observação(ões) na base).
                   </span>
                 </div>
-                <span style="font-size:11px; background:#DCFCE7; color:#166534; padding:3px 8px; border-radius:4px; font-weight:700;">
-                  💡 Selecione uma Escola no filtro para comparar com a Rede
+                <span style="font-size:11px; background:var(--sem-green-bg); color:var(--sem-green-ink); border:1px solid var(--sem-green-border); padding:3px 8px; border-radius:4px; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
+                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px; height:12px;">
+                    <line x1="9" y1="18" x2="15" y2="18"></line>
+                    <line x1="10" y1="22" x2="14" y2="22"></line>
+                    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
+                  </svg>
+                  <span>Selecione uma Escola no filtro para comparar com a Rede</span>
                 </span>
               </div>
             ` : `
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:16px;">🏛️</span>
+                <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary); flex-shrink:0;">
+                  <path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z"></path>
+                </svg>
                 <span>
                   <strong>Referencial da Rede Municipal:</strong> Comparando <strong>${scopeLabelText}</strong> com a <strong>Média Geral da Rede Municipal (${redeObs.length} observação(ões) na base)</strong>.
                 </span>
@@ -3001,7 +3015,7 @@
                     <!-- Controles Rápidos: Busca Instantânea, Filtro de Consistência e Expansão Global -->
           <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:240px;">
-              <input type="search" id="drilldownSearchInput" class="form-control" placeholder="🔍 Buscar critério por código ou texto..." oninput="onDrilldownSearch(this.value)" style="height:38px; font-size:12px; width:100%; max-width:380px;">
+              <input type="search" id="drilldownSearchInput" class="form-control" placeholder="Buscar critério por código ou texto..." oninput="onDrilldownSearch(this.value)" style="height:38px; font-size:12px; width:100%; max-width:380px;">
             </div>
 
             <!-- Chips de Faixa de Consistência -->

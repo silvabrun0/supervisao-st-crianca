@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.56** | 29/10/2026 16:45 | `intermediárias/aplicativo_v1.56_painel_indicadores_sobrio_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_painel_indicadores_sobrio_mobile.md` | Redesign Hallmark da aba Painel e Indicadores (sobriedade visual e acessibilidade mobile): unificação dos 4 cards decisórios de KPI superiores sob tokens calmos (`--ind-ground`, `--ind-surface`, `--ind-border`), restauração dos rótulos de texto no celular com rótulos responsivos duplos (`.tab-text-full` e `.tab-text-mobile`), erradicação de `transition: all`, remoção total de emojis residuais (`📄`, `🏛️`, `💡`, `🔍`), touch targets mínimos de 44px (`--touch-target-min`) e proteção contra zoom no Safari iOS 📊📱🏛️ |
 | **1.55** | 29/10/2026 16:30 | `intermediárias/aplicativo_v1.55_gestao_pedagogica_sobria_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_gestao_pedagogica_sobria_mobile.md` | Redesign Hallmark da aba de Gestão Pedagógica (sobriedade visual e acessibilidade mobile): erradicação de cores saturadas no card de exportação/backup, navegação responsiva de sub-abas (`.pedag-subtabs-nav`), transformação de tabelas operacionais em cartões mobile-friendly (`.responsive-mobile-table`) com alvos de toque de 44px (`--touch-target-min`), proteção contra zoom no Safari iOS e preservação integral da SSOT 🏛️📱🛡️ |
 | **1.54** | 28/10/2026 16:45 | `intermediárias/aplicativo_v1.54_revisao_hallmark_gestao_pedagogica.html` | Solicitação direta / `planos_de_implementacao/plano_revisao_hallmark_gestao_pedagogica.md` | Revisão e adequação Hallmark da aba de Gestão Pedagógica/Rede: erradicação total de cores hexadecimais inline soltas e AI-slop, aplanamento de cards aninhados (single-layer containment), remoção definitiva de emojis residuais nos cards e tabelas, substituição por pictogramas vetoriais SVG monocromáticos, tipografia em sentence case desprovida de `text-transform: uppercase` forçado, botões segmentados `.pedag-subtab-btn`, suporte pleno a `:focus-visible`, `minmax(0, 1fr)` e `prefers-reduced-motion` 🏛️✨🛡️ |
 | **1.53** | 28/10/2026 15:30 | `intermediárias/aplicativo_v152_caracterizacao_turmas_e_visao_agregada_rede.html` | Solicitação direta / `planos_de_implementacao/plano_caracterizacao_turmas_e_visao_agregada_rede.md` | Caracterização quantitativa por turma com suporte a necessidades especiais (AEE) e visão agregada multinível (UE / Polo / Rede): registro de total de alunos e público AEE no nível da turma (`appState.classes`), validação pedagógica estrita (`inclusiveStudents <= totalStudents`), agregação reativa e automática em `appState.units`, seletores multinível no card da UE e painel analítico de turmas, e asserções estritas no Módulo 9 (`catalogo_dados`) da auditoria 🏫📊🛡️ |
@@ -182,6 +183,26 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.56] - Redesign Hallmark do Painel e Indicadores (Sobriedade Visual & Acessibilidade Mobile)
+- **Data / Horário:** 29/10/2026 16:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.56_painel_indicadores_sobrio_mobile.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_painel_indicadores_sobrio_mobile.md`.
+- **Foco Central:** Redesign visual sóbrio institucional e modernização ergonômica mobile no Painel de Indicadores e Quadro de Controle:
+  1. **Sobriedade Cromática & Descluttering:** Erradicação de bordas berrantes e rainbow-slop nos 4 cards de KPI superiores, régua dimensional, escala de materiais e semáforo, consumindo tokens dedicados (`--ind-ground`, `--ind-surface`, `--ind-border`, `--sem-green-*`, `--sem-amber-*`, `--sem-red-*`, `--sem-blue-*`).
+  2. **Rótulos Duplos Responsivos nas Sub-abas:** Eliminação da regra que ocultava cegamente o texto no mobile; inserção de rótulos concisos para telas pequenas (`.tab-text-full` e `.tab-text-mobile`), mantendo o usuário orientado em smartphones.
+  3. **Touch Targets de 44px e Prevenção de Auto-Zoom:** Aplicação de altura mínima de 44px nos botões, chips e pílulas semafóricas, com ajuste de tamanho de fonte para evitar zoom automático no Safari iOS.
+  4. **Erradicação Total de Emojis e `transition: all`:** Substituição de emojis residuais (`📄`, `🏛️`, `💡`, `🔍`) por pictogramas vetoriais SVG monocromáticos e remoção estrita de transições genéricas.
+  5. **Preservação Integral de Regras e Auditoria:** Todas as regras pedagógicas e asserções automatizadas mantidas e enriquecidas.
+
+#### Alterações
+- `css/01_variables.css`: Definição de tokens de design sóbrio para indicadores (`--ind-*`, `--sem-*`).
+- `css/03_components.css`: Estilização sóbria de botões, chips e pílulas semafóricas, e remoção de `transition: all`.
+- `css/04_screens.css`: Regras responsivas para sub-abas (`.tab-text-full`, `.tab-text-mobile`) e prevenção de auto-zoom em filtros mobile.
+- `index.html`: Descluttering da barra de filtros, remoção de labels em caixa alta forçada, substituição de emojis e inclusão de rótulos duplos.
+- `js/features/indicators.js`: Harmonização de cards de KPI, banner institucional com SVGs vetoriais e distribuição de materiais.
+- `js/audit/audit_engine.js`: Novas asserções de rótulos responsivos e erradicação de emojis.
+- `CHANGELOG.md` e `#modalChangelog`: Registro e atualização da Versão 1.56 (v8.2.23).
 
 ### [Versão 1.55] - Redesign Hallmark da Aba de Gestão Pedagógica (Sobriedade Visual & Acessibilidade Mobile)
 - **Data / Horário:** 29/10/2026 16:30

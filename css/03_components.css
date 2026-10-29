@@ -304,19 +304,25 @@
       background: transparent;
       padding: 6px 12px;
       border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ind-text-muted);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      min-height: 36px;
+    }
+    .semaphore-view-btn:hover {
+      color: var(--ind-text-strong);
+      background: rgba(255, 255, 255, 0.6);
     }
     .semaphore-view-btn.active {
-      background: #FFFFFF;
+      background: var(--ind-surface);
       color: var(--primary);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+      box-shadow: var(--shadow-sm);
+      font-weight: 700;
     }
     
     /* Micro-cards de Resumo Decisório */
@@ -327,45 +333,46 @@
       margin-bottom: 16px;
     }
     .sem-stat-card {
-      background: #F8FAFC;
-      border: 1px solid var(--border);
+      background: var(--ind-surface);
+      border: 1px solid var(--ind-border);
       border-radius: 10px;
       padding: 12px 14px;
-      transition: transform 0.15s ease;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
     .sem-stat-card:hover {
       transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
     }
     .sem-stat-card.alert-card {
-      background: #FFF1F2;
-      border-color: #FECDD3;
+      background: var(--sem-red-bg);
+      border-color: var(--sem-red-border);
     }
     .sem-stat-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ind-text-muted);
+      text-transform: none; /* Proibido caixa alta forçada */
+      letter-spacing: normal;
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .sem-stat-card.alert-card .sem-stat-label {
-      color: #9F1239;
+      color: var(--sem-red-ink);
     }
     .sem-stat-value {
-      font-size: 22px;
-      font-weight: 900;
-      color: var(--text-primary);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ind-text-strong);
       margin-top: 4px;
       line-height: 1.1;
     }
     .sem-stat-card.alert-card .sem-stat-value {
-      color: #E11D48;
+      color: var(--sem-red-ink);
     }
     .sem-stat-desc {
       font-size: 11px;
-      color: var(--text-secondary);
+      color: var(--ind-text-muted);
       margin-top: 4px;
       line-height: 1.3;
     }
@@ -378,30 +385,31 @@
       gap: 8px;
       margin-bottom: 16px;
       padding: 8px 12px;
-      background: #F8FAFC;
+      background: var(--ind-ground);
       border-radius: 8px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--ind-border);
     }
     .sem-filter-label {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--text-secondary);
-      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ind-text-muted);
+      text-transform: none;
       margin-right: 4px;
     }
     .sem-filter-chip {
-      background: #FFFFFF;
-      border: 1px solid var(--border);
+      background: var(--ind-surface);
+      border: 1px solid var(--ind-border);
       border-radius: 16px;
       padding: 4px 10px;
       font-size: 11px;
-      font-weight: 700;
-      color: var(--text-secondary);
+      font-weight: 600;
+      color: var(--ind-text-body);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
       display: inline-flex;
       align-items: center;
       gap: 5px;
+      min-height: 32px;
     }
     .sem-filter-chip:hover {
       border-color: var(--primary);
@@ -411,14 +419,17 @@
       background: var(--primary);
       border-color: var(--primary);
       color: #FFFFFF;
+      font-weight: 700;
     }
     .sem-filter-chip.chip-red.active {
-      background: #DC2626;
-      border-color: #DC2626;
+      background: var(--sem-red-ink);
+      border-color: var(--sem-red-ink);
+      color: #FFFFFF;
     }
     .sem-filter-chip.chip-green.active {
-      background: #16A34A;
-      border-color: #16A34A;
+      background: var(--sem-green-ink);
+      border-color: var(--sem-green-ink);
+      color: #FFFFFF;
     }
     
     /* Pílulas Semafóricas Canônicas (Verde / Cinza / Vermelho) */
@@ -427,21 +438,21 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      padding: 6px 10px;
+      padding: 8px 10px;
       border-radius: 8px;
       font-size: 11px;
       line-height: 1.2;
       width: 100%;
       box-sizing: border-box;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
       text-align: left;
       cursor: pointer;
       position: relative;
+      min-height: 48px;
     }
     .sem-status-pill:hover {
       filter: brightness(0.97);
-      transform: translateY(-1px);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      box-shadow: var(--shadow-sm);
     }
     .sem-status-pill .pill-top {
       display: flex;
@@ -464,39 +475,38 @@
     
     /* 🟢 VERDE: Observação Concluída */
     .sem-status-pill.status-completed {
-      background: #DCFCE7;
-      border: 1px solid #86EFAC;
-      color: #166534;
+      background: var(--sem-green-bg);
+      border: 1px solid var(--sem-green-border);
+      color: var(--sem-green-ink);
     }
     
     /* 🔴 VERMELHO: Bimestre Expirado sem Observação (Atraso) */
     .sem-status-pill.status-overdue {
-      background: #FEE2E2;
-      border: 1px solid #FCA5A5;
-      color: #991B1B;
+      background: var(--sem-red-bg);
+      border: 1px solid var(--sem-red-border);
+      color: var(--sem-red-ink);
       animation: semOverduePulse 3s infinite ease-in-out;
     }
     @keyframes semOverduePulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-      50% { box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(153, 27, 27, 0); }
+      50% { box-shadow: 0 0 0 4px rgba(153, 27, 27, 0.15); }
     }
     
     /* ⚪ CINZA / AZUL SUAVE: Bimestre em Andamento (No Prazo) */
     .sem-status-pill.status-in_progress {
-      background: #EFF6FF;
-      border: 1px solid #BFDBFE;
-      color: #1E40AF;
+      background: var(--sem-blue-bg);
+      border: 1px solid var(--sem-blue-border);
+      color: var(--sem-blue-ink);
     }
     
     /* ⚪ CINZA NEUTRO: Ciclo Futuro */
     .sem-status-pill.status-future {
-      background: #F8FAFC;
-      border: 1px dashed #CBD5E1;
-      color: #94A3B8;
+      background: var(--sem-future-bg);
+      border: 1px dashed var(--sem-future-border);
+      color: var(--sem-future-ink);
       cursor: default;
     }
     .sem-status-pill.status-future:hover {
-      transform: none;
       box-shadow: none;
       filter: none;
     }

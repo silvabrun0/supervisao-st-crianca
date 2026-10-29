@@ -1,0 +1,381 @@
+    /* ================= GESTÃO AUTÔNOMA DE RUBRICAS & MATRIZES PDF ================= */
+    .rubric-dim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .rubric-dim-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rubric-action-btn-group {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .rubric-sub-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0 8px 0;
+      padding: 6px 10px;
+      background: #F8FAFC;
+      border-left: 3px solid var(--primary);
+      border-radius: 4px;
+    }
+    .rubric-crit-box {
+      margin-bottom: 12px;
+      padding: 12px;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .rubric-crit-box:hover {
+      border-color: #CBD5E1;
+    }
+    .rubric-crit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .rubric-mode-locked {
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
+      border-left: 4px solid #64748B;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+    }
+    .rubric-mode-active {
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-left: 4px solid #D97706;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+    }
+    .pdf-meta-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #166534;
+      background: #DCFCE7;
+      border: 1px solid #86EFAC;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* --- V7.50: AVALIAÇÃO - BARRA DE DIMENSÕES, GESTOS, ACORDEÃO E FAB --- */
+    .dim-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 10px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      z-index: 1000;
+      box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.06);
+    }
+    @media (min-width: 860px) {
+      .dim-bottom-bar {
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 620px;
+        bottom: 12px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
+    }
+    .dim-icon-btn {
+      position: relative;
+      background: none;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .dim-icon-btn:hover {
+      background: var(--border-light);
+      color: var(--primary);
+    }
+    .dim-icon-btn.active {
+      background: rgba(30, 58, 138, 0.1);
+      color: var(--primary);
+    }
+    .dim-icon-btn.pending-alert {
+      color: #DC2626 !important;
+    }
+    .dim-icon-btn.pending-alert.active {
+      background: rgba(220, 38, 38, 0.12) !important;
+      color: #DC2626 !important;
+    }
+    .dim-pending-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #DC2626;
+      box-shadow: 0 0 0 2px var(--surface);
+    }
+    .dim-icon-btn.synthesis-btn {
+      color: var(--text-secondary);
+      border-left: 1px solid var(--border);
+      border-radius: 0 12px 12px 0;
+      margin-left: 4px;
+      padding-left: 6px;
+    }
+    .dim-icon-btn.synthesis-btn.synthesis-ready {
+      color: #059669;
+    }
+
+    /* Acordeão de Subdimensões */
+    .subdim-accordion-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+    .subdim-accordion-card.pending-highlight {
+      border-color: #FCA5A5 !important;
+      background-color: #FEF2F2 !important;
+    }
+    .subdim-accordion-header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      gap: 12px;
+      transition: background 0.15s ease;
+    }
+    .subdim-accordion-header:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+    .subdim-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+    .subdim-number-tag {
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--border-light);
+      color: var(--text-secondary);
+      padding: 3px 8px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .subdim-accordion-card.pending-highlight .subdim-number-tag {
+      background: #FEE2E2 !important;
+      color: #DC2626 !important;
+      border: 1px solid #FCA5A5;
+    }
+    .subdim-title-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+    }
+    .subdim-accordion-card.pending-highlight .subdim-title-text {
+      color: #991B1B !important;
+    }
+    .subdim-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .subdim-pending-badge {
+      background: #FEE2E2;
+      color: #DC2626;
+      border: 1px solid #FCA5A5;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .subdim-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #DC2626;
+      display: inline-block;
+    }
+    .subdim-completed-badge {
+      background: #ECFDF5;
+      color: #059669;
+      border: 1px solid #A7F3D0;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+    .subdim-chevron {
+      color: var(--text-secondary);
+      transition: transform 0.2s ease;
+    }
+    .subdim-chevron.open {
+      transform: rotate(180deg);
+    }
+    .subdim-body {
+      display: none;
+      padding: 14px 16px 16px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .subdim-body.open {
+      display: block;
+    }
+    .subdim-accordion-card.pending-highlight .subdim-body {
+      background: #FFFFFF;
+    }
+
+    /* Botão Flutuante Arrastável (FAB) e Menu */
+    .fab-draggable {
+      position: fixed;
+      right: 20px;
+      bottom: 80px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+      cursor: grab;
+      z-index: 1050;
+      touch-action: none;
+      user-select: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .fab-draggable:active {
+      cursor: grabbing;
+      transform: scale(0.96);
+    }
+    .fab-menu-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1040;
+      backdrop-filter: blur(2px);
+    }
+    .fab-menu-panel {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: var(--surface);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xl);
+      padding: 14px;
+      width: 290px;
+      max-width: calc(100vw - 32px);
+      z-index: 1045;
+      animation: fabMenuFadeIn 0.2s ease;
+    }
+    @keyframes fabMenuFadeIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .fab-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+    .fab-menu-close {
+      background: none;
+      border: none;
+      font-size: 14px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .fab-menu-item {
+      width: 100%;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      margin-bottom: 4px;
+    }
+    .fab-menu-item:hover {
+      background: var(--border-light);
+    }
+    .fab-menu-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .fab-menu-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .fab-menu-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      line-height: 1.25;
+    }
+    #screenActiveObs {
+      padding-bottom: 90px;
+    }
+

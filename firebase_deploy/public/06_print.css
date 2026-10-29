@@ -1,0 +1,125 @@
+    /* =========================================================================
+       PILAR 9: Usabilidade Mobile - Gatilho Flutuante e Bottom Sheet de Filtros
+       ========================================================================= */
+    .mobile-ind-filters-trigger {
+      display: none; /* Oculto por padrão em telas desktop */
+    }
+
+    @media (max-width: 768px) {
+      /* PILAR 9: Oculta a barra de filtros desktop no celular abaixo de 'Índices para Diagnóstico' */
+      #indicatorsFilterToolbar {
+        display: none !important;
+      }
+
+      /* Exibição contextual estrita: visível apenas quando #screenIndicators está ativo */
+      #screenIndicators.active .mobile-ind-filters-trigger {
+        display: flex;
+      }
+
+      .mobile-ind-filters-trigger {
+        position: fixed;
+        bottom: calc(var(--tabbar-height) + 16px);
+        right: 18px;
+        left: auto;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #FFFFFF;
+        border: none;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+        align-items: center;
+        justify-content: center;
+        z-index: 1050;
+        cursor: pointer;
+        padding: 0;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .mobile-ind-filters-trigger:active {
+        transform: scale(0.92);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .mobile-ind-filters-trigger svg {
+        width: 24px;
+        height: 24px;
+        stroke: #FFFFFF;
+        flex-shrink: 0;
+      }
+
+      /* Modal Bottom Sheet Móvel */
+      .mobile-bottom-sheet-backdrop {
+        align-items: flex-end !important;
+        padding: 0 !important;
+      }
+
+      .mobile-bottom-sheet-panel {
+        border-radius: 20px 20px 0 0 !important;
+        max-height: 85vh !important;
+        padding: 16px 20px 24px 20px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        animation: slideUpBottom 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-sizing: border-box;
+      }
+
+      .mobile-bottom-sheet-handle {
+        width: 44px;
+        height: 5px;
+        background: #CBD5E1;
+        border-radius: 3px;
+        margin: 0 auto 12px auto;
+      }
+
+      .mobile-bottom-sheet-panel select.form-control,
+      .mobile-bottom-sheet-panel select.form-select,
+      .mobile-bottom-sheet-panel .form-control {
+        height: 46px;
+        line-height: 44px;
+        font-size: 14px;
+        padding-left: 14px;
+        padding-right: 38px;
+        border-radius: 10px;
+      }
+
+      /* Enxugamento Mobile de Textos Longos nos Cards de Critério */
+      .crit-text-desktop {
+        display: none !important;
+      }
+      .crit-text-mobile {
+        display: inline !important;
+      }
+      .btn-crit-detail-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #EFF6FF;
+        border: 1px solid #BFDBFE;
+        color: #1D4ED8;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 9px;
+        min-height: 32px;
+        box-sizing: border-box;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-left: 6px;
+        vertical-align: middle;
+        text-decoration: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .btn-crit-detail-trigger:hover,
+      .btn-crit-detail-trigger:active {
+        background: #DBEAFE;
+        border-color: #93C5FD;
+        color: #1E40AF;
+      }
+
+    }
+
+    @keyframes slideUpBottom {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }

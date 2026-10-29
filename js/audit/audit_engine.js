@@ -2372,8 +2372,8 @@
               }
 
               const pillLabel = document.getElementById('pillIndDrilldownLabel');
-              if (!pillLabel || pillLabel.innerText !== 'Visualização por Dimensão') {
-                throw new Error(`Rótulo da sub-aba divergente: esperado 'Visualização por Dimensão', obtido '${pillLabel ? pillLabel.innerText : 'null'}'`);
+              if (!pillLabel || !pillLabel.innerText.includes('Visualização por Dimensão')) {
+                throw new Error(`Rótulo da sub-aba divergente: esperado conter 'Visualização por Dimensão', obtido '${pillLabel ? pillLabel.innerText : 'null'}'`);
               }
               logger.log("Asserção de Nomenclatura da Sub-aba: 'Visualização por Dimensão' (#pillIndDrilldownLabel)", true);
 
@@ -2819,6 +2819,24 @@
                 appState.currentUserKey = previousUserInd || 'mariana';
                 renderIndicatorsScreen();
               }
+
+              // 23. ASSERÇÃO DE RESPONSIVIDADE E SOBRIEDADE HALLMARK (SUB-ABAS & EXPORTAÇÃO PDF)
+              const kpiPillText = document.getElementById('pillIndKpisLabel');
+              const longPillText = document.getElementById('pillIndLongitudinalLabel');
+              const drillPillText = document.getElementById('pillIndDrilldownLabel');
+              const hasSubtabResponsiveLabels = kpiPillText?.querySelector('.tab-text-mobile') &&
+                                                longPillText?.querySelector('.tab-text-mobile') &&
+                                                drillPillText?.querySelector('.tab-text-mobile');
+              if (!hasSubtabResponsiveLabels) {
+                throw new Error('Falha Hallmark: Sub-abas de indicadores devem conter rótulos responsivos duplos (.tab-text-full e .tab-text-mobile)');
+              }
+              logger.log('Validação de Rótulos Responsivos Duplos nas Sub-abas de Indicadores (.tab-text-mobile)', true);
+
+              const exportPdfBtn = document.getElementById('btnExportIndicatorsView');
+              if (exportPdfBtn && exportPdfBtn.innerHTML.includes('📄')) {
+                throw new Error('Falha Hallmark: Botão #btnExportIndicatorsView não deve conter emojis soltos residuais');
+              }
+              logger.log('Erradicação confirmada de emojis residuais no botão #btnExportIndicatorsView', true);
             } catch (e) {
               logger.log('Erro de execução no módulo indicadores_decisao', false, e.message);
             }
