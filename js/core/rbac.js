@@ -591,6 +591,10 @@
         if (teamNavTab) teamNavTab.style.display = 'none';
         if (adminNavTab) adminNavTab.style.display = 'flex';
 
+        // Ocultação da aba Histórico no cabeçalho desktop e no menu drawer mobile
+        if (histNavTab) histNavTab.style.display = 'none';
+        if (mobMenuHistBtn) mobMenuHistBtn.style.display = 'none';
+
         roleFilterGroup.style.display = 'block';
         if (indicatorsTargetFilter) indicatorsTargetFilter.style.display = 'inline-block';
         if (indicatorsTargetBadge) indicatorsTargetBadge.style.display = 'none';
@@ -600,6 +604,11 @@
         if (homeScheduleBanner) homeScheduleBanner.style.display = 'none';
         if (homeDraftsHeader) homeDraftsHeader.style.display = 'none';
         if (homeDraftsContainer) homeDraftsContainer.style.display = 'none';
+
+        // Redirecionamento defensivo caso o usuário estivesse na tela de Histórico
+        if (document.getElementById('screenHistory')?.classList.contains('active')) {
+          navigateToTab('home');
+        }
       } else if (user.roleKey === 'pendente') {
         if (scopeTitle) scopeTitle.innerText = 'Acesso Pendente:';
         if (scopeDesc) scopeDesc.innerText = 'Sua conta foi criada e está aguardando liberação de acesso pela Coordenadora do Núcleo de EI.';
@@ -607,6 +616,8 @@
         if (unitsNavTab) unitsNavTab.style.display = 'none';
         if (teamNavTab) teamNavTab.style.display = 'none';
         if (adminNavTab) adminNavTab.style.display = 'none';
+        if (histNavTab) histNavTab.style.display = 'none';
+        if (mobMenuHistBtn) mobMenuHistBtn.style.display = 'none';
         roleFilterGroup.style.display = 'none';
         if (indicatorsTargetFilter) indicatorsTargetFilter.style.display = 'none';
         if (indicatorsTargetBadge) indicatorsTargetBadge.style.display = 'none';

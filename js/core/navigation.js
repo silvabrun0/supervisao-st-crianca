@@ -6,6 +6,10 @@
         showToast('Acesso ao cronograma restrito.');
         return;
       }
+      if (tabName === 'history' && (isNucleoEI(user) || user.roleKey === 'pendente')) {
+        showToast('Acesso ao histórico restrito: a Coordenadora do Núcleo de EI não realiza observações.');
+        return;
+      }
       if ((tabName === 'opManagement' || tabName === 'units' || tabName === 'rubricsAdmin' || tabName === 'admin' || tabName === 'team') && (user.roleKey === 'pendente' || user.roleKey === 'professora')) {
         showToast('Acesso restrito ao perfil docente.');
         return;

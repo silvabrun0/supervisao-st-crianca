@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.58 (v8.2.25)</span>
+          <span>Versão 1.59 (v8.2.26)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -1768,6 +1768,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.59 - REMOÇÃO DA ABA HISTÓRICO DO PERFIL DA COORDENADORA DE EI -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.59 · v8.2.26</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">29/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Remoção da Aba "Histórico" do Perfil da Coordenadora de EI (Núcleo de EI):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🧹 <strong>Higienização Visual e Otimização RBAC:</strong> Ocultação da aba desktop <code>#deskTabHist</code> e do botão mobile <code>#mobMenuHistBtn</code> ("Acessar Histórico") para o perfil da Coordenadora do Núcleo de EI (Helena Martins / <code>nucleo_ei</code>), alinhando a navegação ao fato de que esse perfil de gestão não realiza observações de campo.</li>
+          <li>🛡️ <strong>Blindagem no Roteador e Redirecionamento Defensivo:</strong> Bloqueio preventivo na função <code>navigateToTab('history')</code> com aviso contextual em toast e redirecionamento automático para a tela inicial caso o usuário troque de perfil enquanto estiver visualizando o histórico.</li>
+          <li>🔄 <strong>Preservação Integral para Coordenação Escolar e Formadoras:</strong> Coordenadoras Pedagógicas de Unidades Escolares (Mariana Ferreira) e Formadoras Regionais (Clarice Barbosa) mantêm acesso total ao histórico, rascunhos e devolutivas finalizadas.</li>
+          <li>🔬 <strong>Asserções Automatizadas no Módulo 1 (auth_rbac):</strong> Verificação estrita na suíte de testes garantindo que a aba esteja oculta para Helena, bloqueada na navegação e visível para Mariana.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.58 - CORREÇÃO DEFINITIVA E REESTRUTURAÇÃO MOBILE DOS BLOCOS DE POLOS -->

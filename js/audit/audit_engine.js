@@ -343,6 +343,38 @@
               applyUserRoleUI();
               logger.log('Alternância cíclica de perfis e reatividade canônica de #deskTabHomeLabel (Início vs Gestão Pedagógica)', true);
 
+              // 9. Validação de RBAC: Ocultação da aba Histórico para Coordenadora da EI (Helena)
+              const deskHistHelena = document.getElementById('deskTabHist');
+              const mobHistHelena = document.getElementById('mobMenuHistBtn');
+              if (deskHistHelena && deskHistHelena.style.display !== 'none') {
+                throw new Error('Aba #deskTabHist deve estar estritamente oculta (display: none) para a Coordenadora da EI');
+              }
+              if (mobHistHelena && mobHistHelena.style.display !== 'none') {
+                throw new Error('Botão #mobMenuHistBtn deve estar estritamente oculto (display: none) para a Coordenadora da EI');
+              }
+
+              // Asserção de bloqueio preventivo em navigateToTab('history') para Coordenadora da EI
+              navigateToTab('history');
+              const histScreenActive = document.getElementById('screenHistory')?.classList.contains('active');
+              if (histScreenActive) {
+                throw new Error('Coordenadora da EI não deve conseguir acessar #screenHistory via navigateToTab');
+              }
+
+              // Teste de restauração e visibilidade da aba Histórico para Coordenação Pedagógica da UE (Mariana)
+              appState.currentUserKey = 'mariana';
+              applyUserRoleUI();
+              if (deskHistHelena && deskHistHelena.style.display === 'none') {
+                throw new Error('Aba #deskTabHist deve estar visível para a Coordenação Pedagógica (Mariana)');
+              }
+              if (mobHistHelena && mobHistHelena.style.display === 'none') {
+                throw new Error('Botão #mobMenuHistBtn deve estar visível para a Coordenação Pedagógica (Mariana)');
+              }
+
+              // Restaura perfil padrão de Helena para os módulos subsequentes
+              appState.currentUserKey = 'helena';
+              applyUserRoleUI();
+              logger.log('Validação de RBAC: ocultação e bloqueio estrito da aba Histórico para Coordenadora da EI', true);
+
               // 10. Teste Automatizado de Dinamicidade SSOT de Escopo (Formadora ➔ Polo / Coordenadora ➔ UE e Turmas)
               (function testScopeDynamism() {
                 const origCurrentUser = appState.currentUserKey;
@@ -2360,8 +2392,8 @@
               const delta112 = pctUE112 - pctRede112;
 
               const deltaHtml = formatBenchmarkDelta(delta112, false);
-              const isCritical = deltaHtml.includes('benchmark-delta-critical') && deltaHtml.includes('Atenção Crítica');
-              logger.log('Cálculo determinístico do Delta e categorização de Atenção Crítica (Pilar 3)', isCritical && delta112 === -50, `Δ: ${delta112}%`);
+              const isCritical = deltaHtml.includes('benchmark-delta-critical') && deltaHtml.includes('Atenção Crítica') && !deltaHtml.includes('🔻') && !deltaHtml.includes('🟢') && !deltaHtml.includes('⚪');
+              logger.log('Cálculo determinístico do Delta, ausência de emojis e categorização de Atenção Crítica (Pilar 3)', isCritical && delta112 === -50, `Δ: ${delta112}%`);
 
               // Alternância interativa de sub-abas e validação da nova nomenclatura
               switchIndicatorsSubTab('kpis');
@@ -2533,6 +2565,15 @@
                   throw new Error('Falha Escala de Materiais: Card .materials-aggregate-card ausente na visão geral docente');
                 }
                 logger.log('Distribuição agregada dos 4 níveis da Escala de Materiais validada no DOM', true);
+
+                // 9.3.4.1 Teste de Sobriedade Visual e Ausência de Emojis residuais no DOM do Painel
+                const indScreenEl = document.getElementById('screenIndicators');
+                const indHtmlContent = indScreenEl ? indScreenEl.innerHTML : '';
+                const hasEmojiInDelta = indHtmlContent.includes('🔻') || indHtmlContent.includes('🟢') || indHtmlContent.includes('⚪');
+                if (hasEmojiInDelta) {
+                  throw new Error('Falha Hallmark: Painel de Indicadores ainda contém emojis residuais nos deltas de benchmark');
+                }
+                logger.log('Conformidade Hallmark: erradicação total de emojis residuais nos deltas e componentes do Painel', true);
 
                 // 9.3.5 Teste do Algoritmo calculateTopCriteria em modo "highest" (Pontos Fortes)
                 const mockCritCriteria = calculateTopCriteria(ueResult, redeResult, 'highest', 3);
@@ -3369,14 +3410,14 @@
               }
               logger.log('Validação da Estruturação e Alinhamento dos Blocos de Polos na Matriz de Cobertura (Versão 1.58)', true, `${coveragePoloTitles.length} blocos validados`);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.58
-              if (!btnChangelog.textContent.includes('Versão 1.58')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.59
+              if (!btnChangelog.textContent.includes('Versão 1.59')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.58')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.58');
+              if (!modalChg.innerHTML.includes('Versão 1.59')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.59');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.58 (v8.2.25)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.59 (v8.2.26)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

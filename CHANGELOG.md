@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.59** | 29/10/2026 17:35 | `intermediárias/aplicativo_v1.59_redesign_hallmark_minha_escola_sobriedade_cromatica.html` | Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_minha_escola_sobriedade_cromatica.md` | Redesign Hallmark da Aba "Minha Escola": Sobriedade Cromática, Eliminação de Cards Aninhados e Descluttering Visual: erradicação do rainbow dashboard em métricas de turmas e UE com tipografia tabular de alta densidade (`#0F172A`), contenção de camada única (`.school-single-surface`), controle segmentado institucional (`.hallmark-segmented-control`), badges calmos (`.badge-school-neutral`, `.badge-school-aee`) e botão sóbrio de exclusão (`.btn-action-delete`) 🏛️📦✨ |
 | **1.58** | 29/10/2026 17:25 | `intermediárias/aplicativo_v1.58_correcao_definitiva_polos_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_definitiva_polos_mobile.md` | Correção Definitiva e Reestruturação Mobile Hallmark da Matriz de Cobertura por Polo Regional (`#networkCoverageCard`): especificidade máxima defensiva (`!important`) anulando modelo tabular clássico herdado no WebKit/Safari iOS, eliminação do transbordo horizontal e quebra de margens, alinhamento simétrico sem colisão de textos e cache-busting de estilos (`?v=1.58`) 🛡️📱🏛️ |
 | **1.57** | 29/10/2026 17:00 | `intermediárias/aplicativo_v1.57_alinhamento_blocos_polos_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_alinhamento_centralizado_blocos_polos_mobile.md` | Alinhamento Centralizado e Reestruturação Mobile dos Blocos de Polos Regionais (`#networkCoverageCard`): cabeçalho do polo 100% centralizado, eliminação da dispersão flexbox com `.coverage-cell-value`, pilhas verticais alinhadas de UEs (`.coverage-units-stack`) e CPs (`.coverage-cps-stack`), e rodapé de ações centralizado com botões de 44px 🗺️📱🏛️ |
 | **1.56** | 29/10/2026 16:45 | `intermediárias/aplicativo_v1.56_painel_indicadores_sobrio_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_painel_indicadores_sobrio_mobile.md` | Redesign Hallmark da aba Painel e Indicadores (sobriedade visual e acessibilidade mobile): unificação dos 4 cards decisórios de KPI superiores sob tokens calmos (`--ind-ground`, `--ind-surface`, `--ind-border`), restauração dos rótulos de texto no celular com rótulos responsivos duplos (`.tab-text-full` e `.tab-text-mobile`), erradicação de `transition: all`, remoção total de emojis residuais (`📄`, `🏛️`, `💡`, `🔍`), touch targets mínimos de 44px (`--touch-target-min`) e proteção contra zoom no Safari iOS 📊📱🏛️ |
@@ -185,6 +186,24 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.59] - Remoção da Aba "Histórico" do Perfil da Coordenadora de EI (Núcleo de EI)
+- **Data / Horário:** 29/10/2026 17:35
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.59_remocao_aba_historico_coord_ei.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_remocao_aba_historico_coord_ei.md`.
+- **Foco Central:** Remoção da aba "Histórico" do perfil da Coordenadora do Núcleo de Educação Infantil (Helena Martins), alinhando a interface com as atribuições de governança e garantindo a preservação total para a Coordenação Pedagógica da Escola e Formadoras:
+  1. **Higienização Visual e Otimização RBAC:** Ocultação da aba desktop `#deskTabHist` e do botão mobile `#mobMenuHistBtn` ("Acessar Histórico") para o perfil da Coordenadora do Núcleo de EI (`nucleo_ei`), evitando poluição de interface para um perfil que não realiza observações em sala.
+  2. **Blindagem no Roteador e Redirecionamento Defensivo:** Bloqueio preventivo na função `navigateToTab('history')` com toast educativo e redirecionamento defensivo para `home` caso o usuário alternar para Helena Martins enquanto na tela de Histórico.
+  3. **Preservação Integral para Coordenação Escolar e Formadoras:** Coordenadoras de escola (Mariana Ferreira) e Formadoras (Clarice Barbosa) mantêm acesso total ao histórico, rascunhos e observações.
+  4. **Asserções Automatizadas no Módulo 1 (auth_rbac):** Verificação rigorosa na suíte in-app garantindo que a aba esteja oculta para Helena, bloqueada na navegação e visível para Mariana.
+
+#### Alterações
+- `js/core/rbac.js`: Ocultação de `#deskTabHist` e `#mobMenuHistBtn` para `isNucleoEI(user)` e `user.roleKey === 'pendente'`, com redirecionamento de `screenHistory` para `home`.
+- `js/core/navigation.js`: Guarda preventiva em `navigateToTab('history')` com aviso em toast.
+- `js/audit/audit_engine.js`: Subtestes determinísticos de RBAC no Módulo 1 e atualização da versão 1.59 (v8.2.26).
+- `index.html`: Atualização do cabeçalho institucional (`.btn-changelog`) e inclusão do card no `#modalChangelog`.
+
+---
 
 ### [Versão 1.58] - Correção Definitiva e Reestruturação Mobile Hallmark da Matriz de Cobertura por Polo Regional
 - **Data / Horário:** 29/10/2026 17:25
