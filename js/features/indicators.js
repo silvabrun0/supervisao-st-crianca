@@ -1764,20 +1764,50 @@
       const currentSubTab = appState.activeIndicatorsSubTab || 'kpis';
       appState.activeIndicatorsSubTab = currentSubTab;
 
-      // Sincroniza rótulos das sub-abas conforme contexto geral vs individual
+      // Sincroniza rótulos das sub-abas conforme contexto geral vs individual (preservando rótulos responsivos duplos)
       const pillKpisLabel = document.getElementById('pillIndKpisLabel');
       const pillDrilldownLabel = document.getElementById('pillIndDrilldownLabel');
       const pillLongitudinalLabel = document.getElementById('pillIndLongitudinalLabel');
 
       if (activeMemberFilter !== 'ALL') {
         const shortName = activeMemberFilter.split(' ')[0];
-        if (pillKpisLabel) pillKpisLabel.innerText = `Dossiê & KPIs (${shortName})`;
-        if (pillDrilldownLabel) pillDrilldownLabel.innerText = 'Raio-X Item a Item';
-        if (pillLongitudinalLabel) pillLongitudinalLabel.innerText = 'Acompanhamento Geral';
+        if (pillKpisLabel) {
+          pillKpisLabel.innerHTML = `
+            <span class="tab-text-full">Dossiê & KPIs (${shortName})</span>
+            <span class="tab-text-mobile">Dossiê</span>
+          `;
+        }
+        if (pillDrilldownLabel) {
+          pillDrilldownLabel.innerHTML = `
+            <span class="tab-text-full">Raio-X Item a Item</span>
+            <span class="tab-text-mobile">Itens</span>
+          `;
+        }
+        if (pillLongitudinalLabel) {
+          pillLongitudinalLabel.innerHTML = `
+            <span class="tab-text-full">Acompanhamento Geral</span>
+            <span class="tab-text-mobile">Quadro</span>
+          `;
+        }
       } else {
-        if (pillKpisLabel) pillKpisLabel.innerText = 'Índices Gerais & KPIs';
-        if (pillDrilldownLabel) pillDrilldownLabel.innerText = 'Visualização por Dimensão';
-        if (pillLongitudinalLabel) pillLongitudinalLabel.innerText = 'Acompanhamento Longitudinal';
+        if (pillKpisLabel) {
+          pillKpisLabel.innerHTML = `
+            <span class="tab-text-full">Visão Geral & Prioridades</span>
+            <span class="tab-text-mobile">Geral</span>
+          `;
+        }
+        if (pillDrilldownLabel) {
+          pillDrilldownLabel.innerHTML = `
+            <span class="tab-text-full">Visualização por Dimensão</span>
+            <span class="tab-text-mobile">Dimensões</span>
+          `;
+        }
+        if (pillLongitudinalLabel) {
+          pillLongitudinalLabel.innerHTML = `
+            <span class="tab-text-full">Prazos & Turmas (Quadro de Controle)</span>
+            <span class="tab-text-mobile">Quadro</span>
+          `;
+        }
       }
 
       document.querySelectorAll('.indicators-subtab-pill').forEach(btn => btn.classList.remove('active'));

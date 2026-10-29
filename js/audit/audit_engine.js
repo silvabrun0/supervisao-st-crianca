@@ -3353,14 +3353,14 @@
               }
               logger.log('Validação dos Rótulos Responsivos e Tabelas Mobile-to-Card na Gestão Pedagógica (Versão 1.55)', true);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.55
-              if (!btnChangelog.textContent.includes('Versão 1.55')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.56
+              if (!btnChangelog.textContent.includes('Versão 1.56')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.55')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.55');
+              if (!modalChg.innerHTML.includes('Versão 1.56')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.56');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.55 (v8.2.22)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.56 (v8.2.23)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }
