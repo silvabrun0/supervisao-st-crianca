@@ -80,6 +80,20 @@
       --sem-future-bg: #F8FAFC;
       --sem-future-border: #E2E8F0;
       --sem-future-ink: #94A3B8;
+
+      /* Escala de Materiais Progressiva Sóbria */
+      --mat-level-1: #64748B;
+      --mat-level-2: #475569;
+      --mat-level-3: #0066CC;
+      --mat-level-4: #0F172A;
+
+      /* Tokens para Botão e Popover de Informação Hallmark (Pilar Mobile Desclutter) */
+      --info-btn-bg: #F1F5F9;
+      --info-btn-text: #475569;
+      --info-btn-border: #CBD5E1;
+      --info-btn-hover-bg: #E2E8F0;
+      --info-btn-hover-text: var(--primary);
+      --info-btn-focus-ring: var(--primary);
     }
 
     ::selection {

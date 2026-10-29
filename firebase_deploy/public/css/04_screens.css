@@ -477,8 +477,9 @@
   
     /* Badges e Estilos do Painel Longitudinal Individual */
     .badge-trend-up {
-      background: #DCFCE7;
-      color: #166534;
+      background: var(--sem-green-bg);
+      color: var(--sem-green-ink);
+      border: 1px solid var(--sem-green-border);
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 6px;
@@ -488,8 +489,9 @@
       gap: 4px;
     }
     .badge-trend-stable {
-      background: #EFF6FF;
-      color: #1E40AF;
+      background: var(--sem-blue-bg);
+      color: var(--sem-blue-ink);
+      border: 1px solid var(--sem-blue-border);
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 6px;
@@ -499,8 +501,9 @@
       gap: 4px;
     }
     .badge-trend-alert {
-      background: #FEF3C7;
-      color: #92400E;
+      background: var(--sem-amber-bg);
+      color: var(--sem-amber-ink);
+      border: 1px solid var(--sem-amber-border);
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 6px;
@@ -510,8 +513,9 @@
       gap: 4px;
     }
     .badge-trend-down {
-      background: #FEE2E2;
-      color: #991B1B;
+      background: var(--sem-red-bg);
+      color: var(--sem-red-ink);
+      border: 1px solid var(--sem-red-border);
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 6px;
@@ -523,6 +527,7 @@
     .badge-trend-diag {
       background: #F3E8FF;
       color: #6B21A8;
+      border: 1px solid #E9D5FF;
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 6px;

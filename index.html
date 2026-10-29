@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.59 (v8.2.26)</span>
+          <span>Versão 1.60 (v8.2.27)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -169,8 +169,13 @@
       <div id="homeScheduledSection" style="display:none; margin-bottom:24px;">
         <div class="page-title-row" style="margin-bottom:12px;">
           <div>
-            <h3 style="font-size:16px; font-weight:700; color:var(--primary-dark);" id="homeScheduledHeader">🗓️ Minhas Próximas Observações Agendadas</h3>
-            <p style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Inicie diretamente as observações planejadas no cronograma longitudinal</p>
+            <h3 style="font-size:16px; font-weight:700; color:var(--primary-dark); display:flex; align-items:center;" id="homeScheduledHeader">
+              <span>🗓️ Minhas Próximas Observações Agendadas</span>
+              <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Próximas Observações Agendadas', 'Inicie diretamente as observações planejadas no cronograma longitudinal')" aria-label="Informações sobre próximas observações">
+                <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              </button>
+            </h3>
+            <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Inicie diretamente as observações planejadas no cronograma longitudinal</p>
           </div>
           <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;" onclick="navigateToTab('schedule')">Ver Cronograma Completo →</button>
         </div>
@@ -1039,12 +1044,12 @@
       </div>
 
       <!-- Barra de Filtros Integrada e Harmônica (Pilar 9: Desktop Grid com Bimestre) -->
-      <div id="indicatorsFilterToolbar" style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:14px; align-items:flex-end;">
+      <div id="indicatorsFilterToolbar" class="indicators-filter-toolbar">
+        <div class="indicators-filters-grid">
           
           <!-- Seletor 1: Público-Alvo -->
-          <div id="indicatorsTargetTypeWrapper" style="display:flex; flex-direction:column; gap:6px;">
-            <label style="font-size:12px; font-weight:700; color:var(--text-secondary);">Público-Alvo</label>
+          <div id="indicatorsTargetTypeWrapper" class="indicators-filter-field">
+            <label class="indicators-filter-label">Público-alvo</label>
             <select id="indicatorsTargetTypeFilter" class="form-select form-control" onchange="onIndicatorsTargetTypeChange()" style="font-weight:700; color:var(--primary-dark);">
               <option value="professora">Professores(as)</option>
               <option value="coordenador">Coordenadores(as)</option>
@@ -1061,18 +1066,18 @@
           </div>
 
           <!-- Seletor 2: Unidade Escolar -->
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <label style="font-size:12px; font-weight:700; color:var(--text-secondary);">Unidade Escolar</label>
+          <div class="indicators-filter-field">
+            <label class="indicators-filter-label">Unidade escolar</label>
             <select id="indicatorsUnitFilter" class="form-select form-control" onchange="onIndicatorsUnitChange()" style="font-weight:600; color:var(--text-primary);">
               <option value="ALL">Todas as Unidades do Escopo</option>
             </select>
           </div>
 
           <!-- Seletor 3: Turma / Docente -->
-          <div style="display:flex; flex-direction:column; gap:6px;">
+          <div class="indicators-filter-field">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <label id="indicatorsMemberLabel" style="font-size:12px; font-weight:700; color:var(--text-secondary);">Professora / Docente</label>
-              <a href="javascript:void(0)" id="btnIndicatorsClearMember" onclick="clearTeacherLongitudinalFilter()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none; display:none;">✕ Ver Todas</a>
+              <label id="indicatorsMemberLabel" class="indicators-filter-label">Professora / docente</label>
+              <a href="javascript:void(0)" id="btnIndicatorsClearMember" onclick="clearTeacherLongitudinalFilter()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none; display:none;">Ver todas</a>
             </div>
             <select id="indicatorsMemberFilter" class="form-select form-control" onchange="renderIndicatorsScreen()" style="font-weight:600; color:var(--primary);" title="Selecione para análise individual">
               <option value="ALL">Todas (Visão Geral)</option>
@@ -1080,8 +1085,8 @@
           </div>
 
           <!-- Seletor 4: Bimestre de Referência (Pilar 9) -->
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <label style="font-size:12px; font-weight:700; color:var(--text-secondary);">Bimestre</label>
+          <div class="indicators-filter-field">
+            <label class="indicators-filter-label">Bimestre</label>
             <select id="indicatorsBimesterFilter" class="form-select form-control" onchange="renderIndicatorsScreen()" style="font-weight:700; color:var(--text-primary);" title="Filtre as observações por bimestre escolar">
               <option value="ALL">Ano Completo (Todos)</option>
               <option value="1º Bimestre">1º Bimestre</option>
@@ -1092,8 +1097,8 @@
           </div>
 
           <!-- Ação: Exportar PDF -->
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <label style="font-size:12px; font-weight:700; color:var(--text-secondary);">Relatório</label>
+          <div class="indicators-filter-field">
+            <label class="indicators-filter-label">Relatório</label>
             <button class="btn btn-secondary indicators-filter-btn" id="btnExportIndicatorsView" onclick="exportCurrentIndicatorsView()" title="Exportar Relatório em PDF" style="width:100%; height:42px; font-size:13px; font-weight:700; justify-content:center; display:inline-flex; align-items:center; gap:8px;">
               <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -1144,7 +1149,6 @@
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <span id="mobileIndFilterDot" style="display:none; position:absolute; top:4px; right:4px; width:10px; height:10px; border-radius:50%; background:#F59E0B; border:2px solid #FFFFFF;"></span>
         <span id="mobileIndFiltersActiveBadge" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">Carregando filtros...</span>
       </button>
     </section>
@@ -1768,6 +1772,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.60 - REDESIGN HALLMARK DO PAINEL DE INDICADORES (SOBRIEDADE CROMÁTICA, RITMO E DESCLUTTERING) -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.60 · v8.2.27</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">29/10/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Redesign Hallmark do Painel e Indicadores: Sobriedade Cromática, Erradicação de Emojis e Ritmo Editorial:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🏛️ <strong>Layout Hierárquico Editorial e Assimétrico:</strong> Fim da monotonia de 4 cards clonados no topo da Visão Geral, substituídos por um Bloco Âncora de destaque para Cobertura do Bimestre ladeado por um Painel Integrado de Métricas Estruturais (Consistência, Meta do Ciclo e Dimensão Prioritária).</li>
+          <li>🎨 <strong>Sobriedade Cromática e Números Tabulares:</strong> Numerais sóbrios de alta autoridade utilizando <code>font-variant-numeric: tabular-nums</code>, status avaliativo contextual em pílulas desaturadas e eliminação do ruído multicolorido ("rainbow slop").</li>
+          <li>🧹 <strong>Erradicação Total de Emojis e Símbolos Pseudocromáticos:</strong> Limpeza completa nos deltas de benchmark (removendo 🔻, ⚪, 🟢), na área de transferência (removendo 📋, 📅, 🎯, 💡), nos badges mobile (removendo 📍) e fim de setas grudadas (➔, ↓) e caracteres soltos (✕).</li>
+          <li>📦 <strong>Aplanamento da Escala de Materiais (Sem Card-in-Card):</strong> Renderização contínua dos 4 níveis pedagógicos em prateleira única horizontal (<code>.materials-shelf-container</code>), eliminando violações do Hallmark Floor 11.</li>
+          <li>📊 <strong>Fita Contínua do Quadro de Controle:</strong> Síntese bimestral compacta e integrada (<code>.semaphore-summary-strip</code>) para turmas e docentes regentes.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.59 - REMOÇÃO DA ABA HISTÓRICO DO PERFIL DA COORDENADORA DE EI -->
@@ -4826,6 +4848,43 @@
         </button>
         <button type="button" class="btn btn-primary" onclick="applyAndCloseMobileIndicatorsFilters()" style="flex:2; height:46px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
           <span>✓ Aplicar e Fechar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL / BOTTOM SHEET: INFORMAÇÕES EXPLICATIVAS DA SEÇÃO (HALLMARK MOBILE)
+       ========================================================================= -->
+  <div id="modalPlatformInfo" class="modal-backdrop mobile-bottom-sheet-backdrop" onclick="closePlatformInfoModal(event)" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="platformInfoTitle">
+    <div class="modal-panel mobile-bottom-sheet-panel" onclick="event.stopPropagation()">
+      <div class="mobile-bottom-sheet-handle"></div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; width:100%; margin-bottom:12px; gap:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:32px; height:32px; border-radius:50%; background:#EFF6FF; border:1px solid #BFDBFE; display:flex; align-items:center; justify-content:center; color:var(--primary); flex-shrink:0;">
+            <svg class="info-pictogram" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </div>
+          <h3 id="platformInfoTitle" style="margin:0; font-size:16px; font-weight:800; color:var(--primary-dark); line-height:1.3;">
+            Informações
+          </h3>
+        </div>
+        <button type="button" class="btn-close-modal" onclick="closePlatformInfoModal()" aria-label="Fechar informações" style="background:none; border:none; font-size:22px; font-weight:700; cursor:pointer; color:var(--text-secondary); line-height:1; padding:4px;">&times;</button>
+      </div>
+
+      <div class="mobile-bottom-sheet-body" style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:16px; margin-bottom:16px; max-height:55vh; overflow-y:auto;">
+        <p id="platformInfoText" style="font-size:13px; color:var(--text-primary); line-height:1.6; margin:0; font-weight:500;">
+        </p>
+      </div>
+
+      <!-- Rodapé com botão de dispensa instantânea -->
+      <div style="display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-primary" onclick="closePlatformInfoModal()" style="width:100%; height:44px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>✓ Entendido</span>
         </button>
       </div>
     </div>

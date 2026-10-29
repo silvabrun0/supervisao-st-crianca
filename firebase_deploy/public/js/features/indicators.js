@@ -441,26 +441,26 @@
     /**
      * Formata visualmente o Delta percentual comparativo entre o Escopo e a Rede.
      */
-    function formatBenchmarkDelta(delta, isCompact) {
+    function formatBenchmarkDelta(delta, isCompact = false) {
       if (delta === null || delta === undefined) {
-        return `<span class="benchmark-delta-tag benchmark-delta-neutral">— Sem dados</span>`;
+        return `<span class="benchmark-delta-badge benchmark-delta-tag delta-neutral">—</span>`;
       }
 
-      if (delta <= -10) {
-        const text = isCompact ? `🔻 ${delta}%` : `🔻 ${delta}% · Atenção Crítica`;
-        return `<span class="benchmark-delta-tag benchmark-delta-critical">${text}</span>`;
+      if (delta <= -15) {
+        const text = isCompact ? `${delta}%` : `${delta}% · Atenção Crítica`;
+        return `<span class="benchmark-delta-badge benchmark-delta-tag benchmark-delta-critical delta-critical">${text}</span>`;
       } else if (delta < 0) {
-        const text = isCompact ? `🔻 ${delta}%` : `🔻 ${delta}% · Abaixo da Média`;
-        return `<span class="benchmark-delta-tag benchmark-delta-warning">${text}</span>`;
+        const text = isCompact ? `${delta}%` : `${delta}% · Abaixo da Média`;
+        return `<span class="benchmark-delta-badge benchmark-delta-tag benchmark-delta-warning delta-warning">${text}</span>`;
       } else if (delta === 0) {
-        const text = isCompact ? `⚪ 0%` : `⚪ 0% · Na Média`;
-        return `<span class="benchmark-delta-tag benchmark-delta-neutral">${text}</span>`;
-      } else if (delta < 10) {
-        const text = isCompact ? `🟢 +${delta}%` : `🟢 +${delta}% · Acima da Média`;
-        return `<span class="benchmark-delta-tag benchmark-delta-success">${text}</span>`;
+        const text = isCompact ? `0%` : `0% · Na Média`;
+        return `<span class="benchmark-delta-badge benchmark-delta-tag benchmark-delta-neutral delta-neutral">${text}</span>`;
+      } else if (delta < 15) {
+        const text = isCompact ? `+${delta}%` : `+${delta}% · Acima da Média`;
+        return `<span class="benchmark-delta-badge benchmark-delta-tag benchmark-delta-success delta-success">${text}</span>`;
       } else {
-        const text = isCompact ? `🟢 +${delta}%` : `🟢 +${delta}% · Destaque Positivo`;
-        return `<span class="benchmark-delta-tag benchmark-delta-highlight">${text}</span>`;
+        const text = isCompact ? `+${delta}%` : `+${delta}% · Destaque Positivo`;
+        return `<span class="benchmark-delta-badge benchmark-delta-tag benchmark-delta-highlight delta-positive">${text}</span>`;
       }
     }
 
@@ -625,10 +625,10 @@
       }
 
       const today = new Date().toLocaleDateString('pt-BR');
-      let text = `📋 DIAGNÓSTICO DE CRITÉRIOS PRIORITÁRIOS (GARGALOS) · SERTÃO CRIANÇA\n`;
-      text += `📅 Data: ${today} | Escopo: ${scopeLabelText} | Segmento: ${targetTypeName}\n`;
+      let text = `DIAGNÓSTICO DE CRITÉRIOS PRIORITÁRIOS (GARGALOS) · SERTÃO CRIANÇA\n`;
+      text += `Data: ${today} | Escopo: ${scopeLabelText} | Segmento: ${targetTypeName}\n`;
       text += `------------------------------------------------------------\n`;
-      text += `🎯 OS 3 CRITÉRIOS PRIORITÁRIOS PARA INTERVENÇÃO PEDAGÓGICA:\n\n`;
+      text += `OS 3 CRITÉRIOS PRIORITÁRIOS PARA INTERVENÇÃO PEDAGÓGICA:\n\n`;
 
       bottlenecks.forEach((b, idx) => {
         const rank = idx + 1;
@@ -639,7 +639,7 @@
         text += `   • Evidências Observadas: C: ${b.consistent} | P: ${b.partial} | NR: ${b.notDone}\n\n`;
       });
 
-      text += `💡 QUESTÕES NORTEADORAS PARA A EQUIPE:\n`;
+      text += `QUESTÕES NORTEADORAS PARA A EQUIPE:\n`;
       text += `1. Quais desafios e potências as docentes vivenciaram na rotina desses 3 critérios?\n`;
       text += `2. Que combinados e apoios pedagógicos coletivos pactuaremos para apoiar as salas neste ciclo?\n`;
       text += `------------------------------------------------------------\n`;
@@ -648,7 +648,7 @@
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {
           if (typeof showToast === 'function') {
-            showToast('Resumo diagnóstico dos gargalos copiado para a área de transferência! 📋');
+            showToast('Resumo diagnóstico dos gargalos copiado para a área de transferência.');
           } else {
             alert('Diagnóstico copiado com sucesso!');
           }
@@ -1028,7 +1028,7 @@
       let memberLabel = activeMember === 'ALL' ? 'Visão Geral' : activeMember.split(' ')[0];
       let bimLabel = activeBim === 'ALL' ? 'Ano Todo' : activeBim.replace('º Bimestre', 'º Bim');
 
-      badgeEl.innerText = `📍 ${unitLabel} · ${memberLabel} · ${bimLabel}`;
+      badgeEl.innerText = `${unitLabel} · ${memberLabel} · ${bimLabel}`;
       badgeEl.title = `Unidade: ${activeUnit} | Avaliando: ${activeMember} | Período: ${activeBim}`;
 
       const triggerBtn = document.getElementById('btnMobileIndicatorsFilters');
@@ -1735,7 +1735,7 @@
       const btnClearMember = document.getElementById('btnIndicatorsClearMember');
       if (btnClearMember) {
         btnClearMember.style.display = (activeMemberFilter !== 'ALL') ? 'inline' : 'none';
-        btnClearMember.innerText = targetType === 'coordenador' ? '✕ Ver Todos' : '✕ Ver Todas';
+        btnClearMember.innerText = targetType === 'coordenador' ? 'Ver todos' : 'Ver todas';
       }
 
       // Atualiza o botão de exportação do cabeçalho
@@ -2553,10 +2553,10 @@
           kpiCoverageSubtitle = 'Nenhuma coordenação vinculada';
           kpiCoverageBorderColor = 'var(--text-secondary)';
         } else if (pendingEntitiesCurrentBim === 0) {
-          kpiCoverageSubtitle = '✓ 100% das coordenadoras atendidas';
+          kpiCoverageSubtitle = '100% das coordenadoras atendidas';
           kpiCoverageBorderColor = 'var(--green)';
         } else {
-          kpiCoverageSubtitle = `⚠ ${pendingEntitiesCurrentBim} coord. pendente(s)`;
+          kpiCoverageSubtitle = `${pendingEntitiesCurrentBim} coord. pendente(s)`;
           kpiCoverageBorderColor = coverageCurrentBimPct >= 50 ? 'var(--yellow)' : 'var(--red)';
         }
 
@@ -2603,7 +2603,7 @@
           }
 
           if (lowestDimPct >= 80) {
-            lowestDimSubtitle = '✓ Todas as dimensões consistentes';
+            lowestDimSubtitle = 'Todas as dimensões consistentes';
           } else {
             lowestDimSubtitle = lowestDimDelta !== null 
               ? `${lowestDimDelta > 0 ? '+' : ''}${lowestDimDelta}% vs. Rede Municipal`
@@ -2771,8 +2771,8 @@
               <span style="font-size:12px; font-weight:800; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">
                 Desempenho por Dimensão da Matriz
               </span>
-              <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer;" onclick="switchIndicatorsSubTab('drilldown')">
-                Ver Detalhes Item a Item ➔
+              <button type="button" class="btn-link" style="font-size:12px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer;" onclick="switchIndicatorsSubTab('drilldown')">
+                Ver detalhes da matriz
               </button>
             </div>
             <div class="dimensions-summary-grid">
@@ -2867,115 +2867,98 @@
               <span style="font-size:11px; color:var(--text-secondary); margin-left:6px;">(${cls.school || activeUnitFilter})</span>
             </div>
             <button type="button" class="btn btn-primary" style="font-size:11px; padding:3px 8px;" onclick="quickScheduleForClass('${cls.name.replace(/'/g, "\\'")}', '${(cls.school || activeUnitFilter).replace(/'/g, "\\'")}', '${currentBimester}')">
-              Agendar ➔
+              Agendar
             </button>
           </div>
         `).join('');
       }
 
-      // 1. Linha de KPIs Superiores Decisórios (Grid de 4 Colunas do Pilar 7)
+      // 1. Linha de KPIs Superiores Decisórios (Layout Hierárquico Editorial - Hallmark)
       let html = `
         <div id="indicatorsSectionKPIs" style="display:${currentSubTab === 'kpis' ? 'block' : 'none'};">
           ${executiveUETableHtml}
-          <div class="kpi-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:16px; margin-bottom:20px;">
-            
-            <!-- CARD 1: QUALIDADE FORMATIVA (ÍNDICE DE CONSISTÊNCIA) -->
-            <div class="card" style="margin:0; background:var(--ind-surface); border:1px solid var(--ind-border); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow-sm);">
+          
+          <div class="kpi-editorial-row">
+            <!-- BLOCO ÂNCORA: COBERTURA NO BIMESTRE CORRENTE -->
+            <div class="kpi-anchor-card">
               <div>
-                <div style="font-size:12px; font-weight:600; color:var(--ind-text-muted);">Índice de Consistência</div>
-                <div style="font-size:28px; font-weight:800; color:${overallColor}; margin:4px 0;">${overallDisplay}</div>
-              </div>
-              <div style="font-size:12px; color:var(--ind-text-muted); line-height:1.3;">${overallLabel}</div>
-            </div>
-
-            <!-- CARD 2: COBERTURA NO BIMESTRE CORRENTE (DESTAQUE MÁXIMO DO PILAR 7) -->
-            <div class="card" style="margin:0; background:var(--ind-surface); border:1px solid var(--ind-border); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow-sm);">
-              <div>
-                <div style="font-size:12px; font-weight:600; color:var(--ind-text-muted);">${kpiCoverageTitle}</div>
-                <div style="font-size:28px; font-weight:800; color:var(--ind-text-strong); margin:4px 0;">
-                  ${evaluatedEntitiesCurrentBim} <span style="font-size:15px; color:var(--ind-text-muted); font-weight:600;">de ${totalEntitiesCount}</span>
-                  <span style="font-size:16px; font-weight:800; color:${coverageCurrentBimPct >= 80 ? 'var(--sem-green-ink)' : (coverageCurrentBimPct >= 50 ? 'var(--sem-amber-ink)' : 'var(--sem-red-ink)')}; margin-left:6px;">(${coverageCurrentBimPct}%)</span>
+                <div class="kpi-anchor-eyebrow">
+                  <span>${kpiCoverageTitle}</span>
+                  <span class="status-pill-subtle ${coverageCurrentBimPct >= 80 ? 'pill-green' : (coverageCurrentBimPct >= 50 ? 'pill-amber' : 'pill-red')}">
+                    ${coverageCurrentBimPct}% concluído
+                  </span>
                 </div>
+                <div class="kpi-anchor-num-row">
+                  <span class="kpi-anchor-value">${evaluatedEntitiesCurrentBim}</span>
+                  <span style="font-size:16px; font-weight:600; color:var(--ind-text-muted);">de ${totalEntitiesCount} turmas</span>
+                </div>
+                <div class="kpi-anchor-sub">${kpiCoverageSubtitle}</div>
               </div>
-              <div style="font-size:12px; font-weight:600; color:${pendingEntitiesCurrentBim === 0 && totalEntitiesCount > 0 ? 'var(--sem-green-ink)' : 'var(--ind-text-muted)'}; line-height:1.3;">
-                ${kpiCoverageSubtitle}
-              </div>
-              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed var(--ind-border); display:flex; justify-content:space-between; align-items:center;">
-                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Abrir o Quadro de Controle Bimestral de Turmas">
+              
+              <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--ind-border-subtle); display:flex; justify-content:space-between; align-items:center;">
+                <button type="button" class="btn-link" style="font-size:12px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Abrir o Quadro de Controle Bimestral de Turmas">
                   <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                  <span>Quadro de Controle ↓</span>
+                  <span>Ver quadro de controle</span>
                 </button>
                 ${pendingEntitiesCurrentBim > 0 && targetType === 'professora' ? `
-                  <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--sem-amber-ink); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="togglePendingClassesDrawer()" title="Exibir ou ocultar turmas pendentes no bimestre">
+                  <button type="button" class="btn-link" style="font-size:12px; font-weight:700; color:var(--sem-amber-ink); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="togglePendingClassesDrawer()" title="Exibir ou ocultar turmas pendentes no bimestre">
                     <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
                       <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
                     </svg>
-                    <span>Ver Pendentes</span>
+                    <span>Ver turmas pendentes</span>
                   </button>
                 ` : ''}
               </div>
+              
               <div id="pendingClassesDrawer" class="pending-classes-drawer" style="display:none;">
-                <div style="font-weight:800; color:var(--sem-amber-ink); margin-bottom:4px;">Turmas Pendentes neste Bimestre:</div>
+                <div style="font-weight:700; color:var(--sem-amber-ink); margin-bottom:6px;">Turmas pendentes neste bimestre:</div>
                 <div class="pending-classes-list">
                   ${pendingListItemsHtml || '<div style="color:var(--ind-text-muted);">Nenhuma turma pendente</div>'}
                 </div>
               </div>
             </div>
 
-            <!-- CARD 3: META DO CICLO ANUAL (AVANÇO LONGITUDINAL DAS 4 OBSERVAÇÕES) -->
-            <div class="card" style="margin:0; background:var(--ind-surface); border:1px solid var(--ind-border); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow-sm);">
-              <div>
-                <div style="font-size:12px; font-weight:600; color:var(--ind-text-muted);">${kpiCycleTitle}</div>
-                <div style="font-size:28px; font-weight:800; color:var(--ind-text-strong); margin:4px 0;">
-                  ${completedAnnualObs} <span style="font-size:15px; color:var(--ind-text-muted); font-weight:600;">de ${totalAnnualTargetObs}</span>
-                  <span style="font-size:16px; font-weight:800; color:var(--primary); margin-left:6px;">(${annualCycleProgressPct}%)</span>
+            <!-- PAINEL DE MÉTRICAS INTEGRADAS (FIM DOS 3 CARDS SEPARADOS) -->
+            <div class="kpi-secondary-panel">
+              
+              <!-- MÉTRICA 1: ÍNDICE DE CONSISTÊNCIA -->
+              <div class="kpi-metric-block">
+                <div>
+                  <div class="kpi-metric-label">Índice de Consistência</div>
+                  <div class="kpi-metric-value">${overallDisplay}</div>
                 </div>
+                <div class="kpi-metric-desc">${overallLabel}</div>
               </div>
-              <div style="font-size:12px; color:var(--ind-text-muted); line-height:1.3;">${kpiCycleSubtitle}</div>
-              <div style="margin-top:8px; padding-top:6px; border-top:1px dashed var(--ind-border);">
-                <button type="button" class="btn-link" style="font-size:11px; font-weight:700; color:var(--primary); background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="scrollToBimesterSemaphore()" title="Visualizar avanço do ciclo longitudinal das 4 observações anuais">
-                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="20" x2="18" y2="10"></line>
-                    <line x1="12" y1="20" x2="12" y2="4"></line>
-                    <line x1="6" y1="20" x2="6" y2="14"></line>
-                  </svg>
-                  <span>Ver Quadro de Controle ↓</span>
-                </button>
-              </div>
-            </div>
 
-            <!-- CARD 4: DIMENSÃO PRIORITÁRIA DE INTERVENÇÃO (GARGALO DA UE / POLO) -->
-            <div class="card" style="margin:0; background:var(--ind-surface); border:1px solid var(--ind-border); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow-sm);">
-              <div>
-                <div style="font-size:12px; font-weight:600; color:var(--ind-text-muted);">Dimensão Prioritária</div>
-                <div style="font-size:15px; font-weight:800; color:var(--ind-text-strong); margin:6px 0 2px 0; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${lowestDimTitle}">
-                  ${lowestDimTitle}
+              <!-- MÉTRICA 2: META DO CICLO ANUAL -->
+              <div class="kpi-metric-block">
+                <div>
+                  <div class="kpi-metric-label">${kpiCycleTitle}</div>
+                  <div class="kpi-metric-value">${completedAnnualObs} <span style="font-size:15px; font-weight:600; color:var(--ind-text-muted);">/ ${totalAnnualTargetObs}</span></div>
                 </div>
-                <div style="font-size:18px; font-weight:800; color:${lowestDimColor}; margin-bottom:4px;">
-                  ${lowestDimPct !== null ? lowestDimPct + '%' : '—'}
-                </div>
+                <div class="kpi-metric-desc">${kpiCycleSubtitle}</div>
               </div>
-              <div style="font-size:12px; color:${lowestDimDelta !== null && lowestDimDelta < 0 ? 'var(--sem-red-ink)' : 'var(--ind-text-muted)'}; font-weight:600; line-height:1.3;">
-                ${lowestDimSubtitle}
-              </div>
-              <div style="margin-top:8px;">
-                <a href="javascript:void(0)" onclick="scrollToBottlenecksBlock()" style="font-size:11px; font-weight:700; color:var(--primary); text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Rolar para os 3 critérios prioritários de intervenção">
-                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="8 12 12 16 16 12"></polyline>
-                    <line x1="12" y1="8" x2="12" y2="16"></line>
-                  </svg>
-                  <span>Ver os 3 Critérios Críticos ↓</span>
-                </a>
-              </div>
-            </div>
 
+              <!-- MÉTRICA 3: DIMENSÃO PRIORITÁRIA -->
+              <div class="kpi-metric-block">
+                <div>
+                  <div class="kpi-metric-label">Dimensão Prioritária</div>
+                  <div class="kpi-metric-value" style="font-size:20px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${lowestDimTitle}">
+                    ${lowestDimTitle}
+                  </div>
+                </div>
+                <div class="kpi-metric-desc">
+                  <span style="font-weight:700;">${lowestDimPct !== null ? lowestDimPct + '%' : '—'}</span> · ${lowestDimSubtitle}
+                </div>
+              </div>
+
+            </div>
           </div>
 
           <!-- Régua Horizontal das Grandes Dimensões da Matriz Pedagógica -->
@@ -3428,9 +3411,9 @@
 
       if (viewMode === 'classes') {
         html += `
-            <!-- 4 Micro-cards de Resumo Decisório -->
-            <div class="semaphore-stats-grid">
-              <div class="sem-stat-card ${semOverdueClassesCount > 0 ? 'alert-card' : ''}">
+            <!-- Fita Contínua de Resumo Decisório -->
+            <div class="semaphore-summary-strip semaphore-stats-grid">
+              <div class="sem-summary-item sem-stat-card ${semOverdueClassesCount > 0 ? 'alert-card' : ''}">
                 <div class="sem-stat-label">
                   ${semOverdueClassesCount > 0 ? `
                     <svg class="sem-stat-icon" style="color:var(--red);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -3679,9 +3662,9 @@
         // PILAR 10: VISÃO DERIVADA POR DOCENTES REGENTES (SEMÁFORO CANÔNICO)
         // =======================================================================
         html += `
-          <!-- 4 Micro-cards de Resumo Decisório para Docentes -->
-          <div class="semaphore-stats-grid">
-            <div class="sem-stat-card ${semOverdueTeachersCount > 0 ? 'alert-card' : ''}">
+          <!-- Fita Contínua de Resumo Decisório para Docentes -->
+          <div class="semaphore-summary-strip semaphore-stats-grid">
+            <div class="sem-summary-item sem-stat-card ${semOverdueTeachersCount > 0 ? 'alert-card' : ''}">
               <div class="sem-stat-label">
                 ${semOverdueTeachersCount > 0 ? `
                   <svg class="sem-stat-icon" style="color:var(--red);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
