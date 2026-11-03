@@ -3021,7 +3021,7 @@
                   throw new Error(`Falha Governança Territorial: Esperado confronto de Polo Regional 2 (Sul) vs. Rede para Helena. Obtido: "${benchInfoBarHelena?.innerText}"`);
                 }
 
-                // Cenário 3: Retorno para Indicadores Docentes
+                // Cenário 3: Retorno para Indicadores Docentes e Teste da Arquitetura Dual (Polo vs. Rede e UE vs. Polo)
                 if (indTargetSelect) {
                   indTargetSelect.value = 'professora';
                   onIndicatorsTargetTypeChange();
@@ -3036,7 +3036,38 @@
                   throw new Error('Falha Governança Territorial: Esperado agrupamento por <optgroup> de polos para Helena ao visualizar docentes');
                 }
 
-                logger.log('Governança Territorial: Núcleo de EI com alternância de Polos vs. Rede e restauração de UEs', true);
+                // 24.1 Asserção Dual: Helena selecionando Polo vs. Rede
+                deskUnitSelectEl.value = 'POLO:Polo Regional 2 (Sul)';
+                renderIndicatorsScreen();
+                const benchInfoBarPoloRede = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoBarPoloRede || !benchInfoBarPoloRede.innerText.includes('Referencial da Rede Municipal') || !benchInfoBarPoloRede.innerText.includes('Polo Regional 2 (Sul)')) {
+                  throw new Error(`Falha Arquitetura Dual: Esperado banner de Polo Regional 2 (Sul) vs. Rede Municipal. Obtido: "${benchInfoBarPoloRede?.innerText}"`);
+                }
+
+                // 24.2 Asserção Dual: Helena selecionando Unidade vs. Respectivo Polo
+                deskUnitSelectEl.value = 'CEI Vovó Zezé';
+                renderIndicatorsScreen();
+                const benchInfoBarUEPolo = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoBarUEPolo || !benchInfoBarUEPolo.innerText.includes('Referencial do Polo Regional') || !benchInfoBarUEPolo.innerText.includes('CEI Vovó Zezé') || !benchInfoBarUEPolo.innerText.includes('Polo Regional 2 (Sul)')) {
+                  throw new Error(`Falha Arquitetura Dual: Esperado banner de UE CEI Vovó Zezé vs. seu Polo Regional 2 (Sul). Obtido: "${benchInfoBarUEPolo?.innerText}"`);
+                }
+
+                // 24.3 Asserção Dual: Formadora Clarice em ALL (Meu Polo vs. Rede) e em UE do Polo (UE vs. Meu Polo)
+                appState.currentUserKey = 'clarice';
+                renderIndicatorsScreen();
+                const benchInfoClariceALL = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoClariceALL || !benchInfoClariceALL.innerText.includes('Referencial da Rede Municipal') || !benchInfoClariceALL.innerText.includes('Polo Regional 1 (Norte)')) {
+                  throw new Error(`Falha Arquitetura Dual: Esperado Clarice ALL focar Polo 1 vs. Rede. Obtido: "${benchInfoClariceALL?.innerText}"`);
+                }
+
+                deskUnitSelectEl.value = 'CEI Professora Maria de Lourdes';
+                renderIndicatorsScreen();
+                const benchInfoClariceUE = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoClariceUE || !benchInfoClariceUE.innerText.includes('Referencial do Polo Regional') || !benchInfoClariceUE.innerText.includes('CEI Professora Maria de Lourdes') || !benchInfoClariceUE.innerText.includes('Polo Regional 1 (Norte)')) {
+                  throw new Error(`Falha Arquitetura Dual: Esperado Clarice UE comparar CEI Maria de Lourdes vs. Polo 1. Obtido: "${benchInfoClariceUE?.innerText}"`);
+                }
+
+                logger.log('Governança Territorial e Arquitetura Dual (Polo vs. Rede e UE vs. Polo) validadas com 100% de precisão', true);
               } finally {
                 appState.currentUserKey = previousUserIndTerritorial || 'mariana';
                 const indTargetSelect = document.getElementById('indicatorsTargetTypeFilter');

@@ -1,7 +1,30 @@
     // --- 12. DRILL-DOWN DASHBOARD & INDICATORS ---
     
     /**
-     * Ação Rápida: Focar filtro de Unidade Escolar a partir da Tabela Executiva
+     * Retorna o nome do Polo Regional de uma Unidade Escolar
+     */
+    function getPoloForSchool(schoolName) {
+      if (!schoolName) return null;
+      const clean = schoolName.trim().toLowerCase();
+      const unit = (appState.units || []).find(u => (u.name || '').trim().toLowerCase() === clean);
+      return unit ? unit.polo : null;
+    }
+
+    /**
+     * Retorna todas as Unidades Escolares pertencentes a um Polo Regional
+     */
+    function getUnitsForPolo(poloName) {
+      if (!poloName) return [];
+      const pNorm = poloName.trim().toLowerCase();
+      return (appState.units || []).filter(u => {
+        if (!u.polo) return false;
+        const up = u.polo.trim().toLowerCase();
+        return up === pNorm || up.includes(pNorm) || pNorm.includes(up);
+      }).map(u => u.name);
+    }
+
+    /**
+     * Ação Rápida: Focar filtro de Unidade Escolar ou Polo a partir da Tabela Executiva
      */
     function focusUnitFilter(uName) {
       const unitSelect = document.getElementById('indicatorsUnitFilter');
@@ -127,7 +150,7 @@
      * @param {String} mode 'lowest' (menor consistência), 'delta' (maior desvio vs rede), 'highest' (pontos fortes)
      * @param {Number} count Quantidade de registros a retornar (padrão: 3)
      */
-    function calculateTopCriteria(scopeHierarchy, redeHierarchy, mode, count) {
+    function calculateTopCriteria(scopeHierarchy, benchmarkHierarchy, mode, count) {
       const allCriteria = [];
       if (!scopeHierarchy || !scopeHierarchy.dims) return [];
 
@@ -141,18 +164,18 @@
               const pts = crit.consistent * 1.0 + crit.partial * 0.5;
               const score = Math.round((pts / crit.validTotal) * 100);
 
-              let redeScore = null;
-              if (redeHierarchy && redeHierarchy.dims && redeHierarchy.dims[dIdx]) {
-                const rDim = redeHierarchy.dims[dIdx];
+              let benchScore = null;
+              if (benchmarkHierarchy && benchmarkHierarchy.dims && benchmarkHierarchy.dims[dIdx]) {
+                const rDim = benchmarkHierarchy.dims[dIdx];
                 if (rDim.subSections && rDim.subSections[sIdx] && rDim.subSections[sIdx].criteria && rDim.subSections[sIdx].criteria[cIdx]) {
                   const rCrit = rDim.subSections[sIdx].criteria[cIdx];
                   if (rCrit.validTotal > 0) {
-                    redeScore = Math.round(((rCrit.consistent * 1.0 + rCrit.partial * 0.5) / rCrit.validTotal) * 100);
+                    benchScore = Math.round(((rCrit.consistent * 1.0 + rCrit.partial * 0.5) / rCrit.validTotal) * 100);
                   }
                 }
               }
 
-              const delta = (redeScore !== null) ? (score - redeScore) : 0;
+              const delta = (benchScore !== null) ? (score - benchScore) : 0;
 
               allCriteria.push({
                 critId: crit.id,
@@ -163,7 +186,8 @@
                 subId: sub.id,
                 subTitle: `${sub.id} ${subTitle}`,
                 score: score,
-                redeScore: redeScore,
+                redeScore: benchScore,
+                benchScore: benchScore,
                 delta: delta,
                 consistent: crit.consistent,
                 partial: crit.partial,
@@ -183,7 +207,7 @@
         // Ordena pelos maiores scores (decrescente)
         allCriteria.sort((a, b) => b.score - a.score || b.validTotal - a.validTotal);
       } else if (mode === 'delta') {
-        // Ordena pela maior defasagem negativa em relação à rede
+        // Ordena pela maior defasagem negativa em relação ao benchmark
         allCriteria.sort((a, b) => a.delta - b.delta || a.score - b.score);
       } else {
         // mode === 'lowest' (padrão)
@@ -617,7 +641,7 @@
     /**
      * Gera e copia para o clipboard o resumo diagnóstico dos critérios prioritários (gargalos).
      */
-    function copyMeetingAgendaToClipboard(scopeLabelText, targetType) {
+    function copyMeetingAgendaToClipboard(scopeLabelText, targetType, benchmarkLabel = 'Rede Patos') {
       const targetTypeName = targetType === 'coordenador' ? 'Coordenação Pedagógica' : 'Prática Docente Infantil';
       const bottlenecks = appState._lastComputedBottlenecks || [];
 
@@ -629,6 +653,7 @@
       const today = new Date().toLocaleDateString('pt-BR');
       let text = `DIAGNÓSTICO DE CRITÉRIOS PRIORITÁRIOS (GARGALOS) · SERTÃO CRIANÇA\n`;
       text += `Data: ${today} | Escopo: ${scopeLabelText} | Segmento: ${targetTypeName}\n`;
+      text += `Referencial Comparativo: ${benchmarkLabel}\n`;
       text += `------------------------------------------------------------\n`;
       text += `OS 3 CRITÉRIOS PRIORITÁRIOS PARA INTERVENÇÃO PEDAGÓGICA:\n\n`;
 
@@ -637,10 +662,11 @@
 
       bottlenecks.forEach((b, idx) => {
         const rank = idx + 1;
-        const deltaText = b.delta !== null ? `${b.delta > 0 ? '+' : ''}${b.delta}% vs. Rede Patos` : 'Sem referencial municipal';
+        const benchVal = b.benchScore !== undefined ? b.benchScore : b.redeScore;
+        const deltaText = b.delta !== null ? `${b.delta > 0 ? '+' : ''}${b.delta}% vs. ${benchmarkLabel}` : 'Sem referencial comparativo';
         text += `${rank}. [${b.critId}] ${b.critText}\n`;
         text += `   • Localização: ${b.dimTitle} · ${b.subTitle}\n`;
-        text += `   • ${scopeScoreLabel}: ${b.score}% (Rede Municipal: ${b.redeScore !== null ? b.redeScore + '%' : '—'} · Δ: ${deltaText})\n`;
+        text += `   • ${scopeScoreLabel}: ${b.score}% (${benchmarkLabel}: ${benchVal !== null ? benchVal + '%' : '—'} · Δ: ${deltaText})\n`;
         text += `   • Evidências Observadas: C: ${b.consistent} | P: ${b.partial} | NR: ${b.notDone}\n\n`;
       });
 
@@ -671,7 +697,7 @@
     /**
      * Renderiza o HTML completo do Bloco do Pilar 8
      */
-    function renderBottlenecksPrioritySection(scopeHierarchy, redeHierarchy, scopeLabelText, targetType) {
+    function renderBottlenecksPrioritySection(scopeHierarchy, redeHierarchy, scopeLabelText, targetType, benchmarkLabelText = 'Rede Patos') {
       const sortMode = appState.bottlenecksSortMode || 'absolute';
       const criteriaMode = sortMode === 'highest' ? 'highest' : (sortMode === 'delta' ? 'delta' : 'lowest');
       const bottlenecks = calculateTopCriteria(scopeHierarchy, redeHierarchy, criteriaMode, 3);
@@ -753,7 +779,7 @@
                     <div style="font-size:20px; font-weight:800; color:${scoreColor};">${b.score}%</div>
                   </div>
                   <div>
-                    <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Rede Patos</div>
+                    <div style="font-size:10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">${benchmarkLabelText}</div>
                     <div style="font-size:20px; font-weight:800; color:var(--primary);">${b.redeScore !== null ? b.redeScore + '%' : '—'}</div>
                   </div>
                   <div>
@@ -1640,20 +1666,18 @@
 
         if (targetType === 'coordenador') {
           // =========================================================================
-          // CASO COORDENADORAS: ESCOPO TERRITORIAL POR POLO REGIONAL
+          // PÚBLICO COORDENADORAS: ESCOPO POR POLO REGIONAL
           // =========================================================================
           if (user.roleKey === 'formador') {
-            // Formadora: somente o seu Polo atribuído vs. Rede Municipal
             const formadorPolo = user.school || 'Polo Regional';
-            unitSelect.innerHTML = `<option value="${formadorPolo}">Meu Polo: ${formadorPolo}</option>`;
+            unitSelect.innerHTML = `<option value="${formadorPolo}">Meu Polo: ${formadorPolo} [vs. Rede]</option>`;
             unitSelect.value = formadorPolo;
             unitSelect.disabled = true;
           } else if (isNucleoEI(user)) {
-            // Núcleo de EI: qualquer Polo Regional vs. Rede ou Todos os Polos (Rede Consolidada)
             const allPolos = (appState.polos || []).map(p => p.name).sort();
             let poloOptionsHtml = `<option value="ALL">Todos os Polos (Rede Consolidada)</option>`;
             allPolos.forEach(pName => {
-              poloOptionsHtml += `<option value="${pName}">Polo: ${pName}</option>`;
+              poloOptionsHtml += `<option value="${pName}">${pName} [vs. Rede]</option>`;
             });
             unitSelect.innerHTML = poloOptionsHtml;
             unitSelect.disabled = false;
@@ -1665,33 +1689,25 @@
           }
         } else {
           // =========================================================================
-          // CASO PROFESSORAS: ESCOPO TRADICIONAL POR UNIDADE ESCOLAR (PRESERVADO 100%)
+          // PÚBLICO PROFESSORAS: ARQUITETURA DUAL (POLO VS. REDE E UE VS. POLO)
           // =========================================================================
+          let unitOptionsHtml = '';
+
           if (isNucleoEI(user)) {
             availableUnits = (appState.units || []).map(u => u.name);
-          } else if (user.roleKey === 'formador') {
-            const userPolo = (user.school || '').trim().toLowerCase();
-            const poloUnits = (appState.units || []).filter(u => {
-              if (!u.polo) return false;
-              const up = u.polo.trim().toLowerCase();
-              return up === userPolo || up.includes(userPolo) || userPolo.includes(up);
-            }).map(u => u.name);
-            const supervisedCoords = (appState.teamMembers || []).filter(m => 
-              m.roleKey === 'coordenador' && (m.supervisor === user.name || (m.school && poloUnits.includes(m.school)))
-            );
-            const formadorUnits = Array.from(new Set([...poloUnits, ...supervisedCoords.map(c => c.school)])).filter(Boolean);
-            availableUnits = formadorUnits.length > 0 ? formadorUnits : (appState.units || []).map(u => u.name);
-          } else if (user.roleKey === 'coordenador') {
-            availableUnits = user.school ? [user.school] : [];
-          }
+            const allPolos = (appState.polos || []).map(p => p.name).sort();
 
-          let unitOptionsHtml = '';
-          if (user.roleKey !== 'coordenador') {
-            unitOptionsHtml += `<option value="ALL">Todas as Unidades do Escopo (${availableUnits.length})</option>`;
-          }
+            // Opção 1: Rede Consolidada
+            unitOptionsHtml += `<option value="ALL">Rede Consolidada (Média Geral de Patos/PB)</option>`;
 
-          // Agrupamento semântico por Polo para o Núcleo de Educação Infantil
-          if (isNucleoEI(user)) {
+            // Grupo 1: Comparação de Qualquer Polo vs. Rede
+            unitOptionsHtml += `<optgroup label="── POLOS REGIONAIS (Polo vs. Rede) ──">`;
+            allPolos.forEach(pName => {
+              unitOptionsHtml += `<option value="POLO:${pName}">Polo: ${pName} [vs. Rede]</option>`;
+            });
+            unitOptionsHtml += `</optgroup>`;
+
+            // Grupos 2..N: Comparação de Unidade vs. Respectivo Polo
             const unitsByPolo = {};
             (appState.units || []).forEach(u => {
               const pName = u.polo || 'Sem Polo Definido';
@@ -1699,44 +1715,107 @@
               unitsByPolo[pName].push(u.name);
             });
 
-            const sortedPolos = Object.keys(unitsByPolo).sort();
-            sortedPolos.forEach(pName => {
-              unitOptionsHtml += `<optgroup label="Polo: ${pName}">`;
-              unitsByPolo[pName].sort().forEach(uName => {
-                unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
-              });
-              unitOptionsHtml += `</optgroup>`;
+            allPolos.forEach(pName => {
+              const uList = unitsByPolo[pName] || [];
+              if (uList.length > 0) {
+                unitOptionsHtml += `<optgroup label="── ${pName.toUpperCase()} (UE vs. Polo) ──">`;
+                uList.sort().forEach(uName => {
+                  unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
+                });
+                unitOptionsHtml += `</optgroup>`;
+              }
             });
-          } else {
-            availableUnits.forEach(uName => {
+
+            unitSelect.innerHTML = unitOptionsHtml;
+            unitSelect.disabled = false;
+            
+            // Preserva seleção válida
+            const validOptions = ['ALL', ...allPolos.map(p => `POLO:${p}`), ...availableUnits];
+            if (validOptions.includes(currentSelectedUnit)) {
+              unitSelect.value = currentSelectedUnit;
+            } else {
+              unitSelect.value = 'ALL';
+            }
+          } else if (user.roleKey === 'formador') {
+            const formadorPolo = user.school || 'Polo Regional 1 (Norte)';
+            const poloUnits = getUnitsForPolo(formadorPolo);
+            const supervisedCoords = (appState.teamMembers || []).filter(m => 
+              m.roleKey === 'coordenador' && (m.supervisor === user.name || (m.school && poloUnits.includes(m.school)))
+            );
+            availableUnits = Array.from(new Set([...poloUnits, ...supervisedCoords.map(c => c.school)])).filter(Boolean);
+            if (availableUnits.length === 0) availableUnits = (appState.units || []).map(u => u.name);
+
+            // Opção 1: Seu Polo vs. Rede
+            unitOptionsHtml += `<option value="ALL">Meu Polo: ${formadorPolo} [vs. Rede Municipal]</option>`;
+
+            // Grupo: Unidades do Polo (UE vs. Respectivo Polo)
+            unitOptionsHtml += `<optgroup label="── UNIDADES DO MEU POLO (UE vs. ${formadorPolo}) ──">`;
+            availableUnits.sort().forEach(uName => {
               unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
             });
-          }
+            unitOptionsHtml += `</optgroup>`;
 
-          unitSelect.innerHTML = unitOptionsHtml;
-          if (user.roleKey === 'coordenador') {
-            unitSelect.value = user.school || '';
-            unitSelect.disabled = true;
-          } else {
+            unitSelect.innerHTML = unitOptionsHtml;
             unitSelect.disabled = false;
             if (availableUnits.includes(currentSelectedUnit) || currentSelectedUnit === 'ALL') {
               unitSelect.value = currentSelectedUnit;
             } else {
               unitSelect.value = 'ALL';
             }
+          } else if (user.roleKey === 'coordenador') {
+            const schoolName = user.school || '';
+            const schoolPolo = getPoloForSchool(schoolName) || 'Polo Regional';
+            availableUnits = schoolName ? [schoolName] : [];
+            unitSelect.innerHTML = `<option value="${schoolName}">Minha UE: ${schoolName} [vs. ${schoolPolo}]</option>`;
+            unitSelect.value = schoolName;
+            unitSelect.disabled = true;
           }
         }
       }
 
-      const activeUnitFilter = (unitSelect && unitSelect.value) ? unitSelect.value : 'ALL';
+      const rawUnitFilter = (unitSelect && unitSelect.value) ? unitSelect.value : 'ALL';
+
+      // Resolução dos tipos de foco territorial
+      let isPoloFocus = false;
+      let focusedPoloName = null;
+      let focusedUnitName = null;
+      let isRedeConsolidated = false;
+
+      if (targetType === 'coordenador') {
+        if (user.roleKey === 'formador') {
+          isPoloFocus = true;
+          focusedPoloName = user.school || 'Polo Regional';
+        } else {
+          if (rawUnitFilter === 'ALL') {
+            isRedeConsolidated = true;
+          } else {
+            isPoloFocus = true;
+            focusedPoloName = rawUnitFilter;
+          }
+        }
+      } else {
+        if (rawUnitFilter.startsWith('POLO:')) {
+          isPoloFocus = true;
+          focusedPoloName = rawUnitFilter.replace('POLO:', '').trim();
+        } else if (rawUnitFilter === 'ALL') {
+          if (user.roleKey === 'formador') {
+            isPoloFocus = true;
+            focusedPoloName = user.school || 'Polo Regional 1 (Norte)';
+          } else {
+            isRedeConsolidated = true;
+          }
+        } else {
+          focusedUnitName = rawUnitFilter;
+          focusedPoloName = getPoloForSchool(focusedUnitName) || (user.roleKey === 'formador' ? user.school : 'Polo Regional');
+        }
+      }
 
       // PILAR 9: Resolução do Filtro de Bimestre de Referência
       const bimesterSelect = document.getElementById('indicatorsBimesterFilter');
       const activeBimesterFilter = (bimesterSelect && bimesterSelect.value) ? bimesterSelect.value : 'ALL';
 
-      // 2. Resolução dos avaliandos e observações com respeito estrito ao escopo territorial e bimestre
-      let scopedAvaliandos = getScopedAvaliandos(targetType);
-      let scopedObs = getScopedObservations().filter(o => {
+      // 2. Base Geral de Observações Concluídas da Rede (com filtro de bimestre)
+      let redeObs = (appState.observations || []).filter(o => {
         if (o.status !== 'finalized' && o.status !== 'concluida') return false;
         if (targetType === 'coordenador') {
           return o.evaluatedType === 'coordenador';
@@ -1744,49 +1823,93 @@
           return o.evaluatedType === 'professora' || o.evaluatedType === 'turma';
         }
       });
+      if (activeBimesterFilter !== 'ALL') {
+        redeObs = redeObs.filter(o => o.bimester === activeBimesterFilter);
+      }
+
+      // 3. Resolução das UEs e Observações em Foco (scopedObs e scopedAvaliandos)
+      let targetSchoolsInFocus = [];
+      if (isRedeConsolidated) {
+        targetSchoolsInFocus = (appState.units || []).map(u => u.name);
+      } else if (isPoloFocus && focusedPoloName) {
+        targetSchoolsInFocus = getUnitsForPolo(focusedPoloName);
+      } else if (focusedUnitName) {
+        targetSchoolsInFocus = [focusedUnitName];
+      }
+
+      let scopedAvaliandos = getScopedAvaliandos(targetType);
+      let scopedObs = redeObs.filter(o => o.schoolName && targetSchoolsInFocus.includes(o.schoolName));
 
       if (targetType === 'coordenador') {
-        const targetPolo = (user.roleKey === 'formador') ? (user.school || '') : activeUnitFilter;
-        if (targetPolo && targetPolo !== 'ALL') {
-          const poloUnits = (appState.units || []).filter(u => {
-            if (!u.polo) return false;
-            const up = u.polo.trim().toLowerCase();
-            const tp = targetPolo.trim().toLowerCase();
-            return up === tp || up.includes(tp) || tp.includes(up);
-          }).map(u => u.name);
-
+        if (focusedPoloName) {
           scopedAvaliandos = scopedAvaliandos.filter(m => {
-            if (m.school && poloUnits.includes(m.school)) return true;
+            if (m.school && targetSchoolsInFocus.includes(m.school)) return true;
             if (m.supervisor === user.name) return true;
-            return false;
-          });
-
-          const allowedCoordNames = scopedAvaliandos.map(c => (c.name || '').trim().toLowerCase());
-          scopedObs = scopedObs.filter(o => {
-            if (o.schoolName && poloUnits.includes(o.schoolName)) return true;
-            if (o.teacherName && allowedCoordNames.includes(o.teacherName.trim().toLowerCase())) return true;
             return false;
           });
         }
       } else {
-        if (activeUnitFilter !== 'ALL') {
-          scopedAvaliandos = scopedAvaliandos.filter(m => m.school === activeUnitFilter);
-          scopedObs = scopedObs.filter(o => o.schoolName === activeUnitFilter);
+        if (focusedUnitName) {
+          scopedAvaliandos = scopedAvaliandos.filter(m => m.school === focusedUnitName);
+        } else if (isPoloFocus) {
+          scopedAvaliandos = scopedAvaliandos.filter(m => m.school && targetSchoolsInFocus.includes(m.school));
         }
       }
 
-      // Filtragem por Bimestre no escopo da UE/Polo
-      if (activeBimesterFilter !== 'ALL') {
-        scopedObs = scopedObs.filter(o => o.bimester === activeBimesterFilter);
+      // 4. Determinação do Benchmark Comparador (benchmarkObs) e Rótulos Canônicos
+      let benchmarkObs = [];
+      let scopeLabelText = '';
+      let benchmarkLabelText = '';
+      let benchmarkBadgeHtml = '';
+
+      if (isRedeConsolidated) {
+        // PANORAMA GERAL DA REDE
+        scopeLabelText = 'Rede Consolidada';
+        benchmarkLabelText = 'Rede Municipal';
+        benchmarkObs = redeObs;
+        benchmarkBadgeHtml = `
+          <div class="benchmark-info-bar" style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-secondary);">
+            <svg class="btn-icon-sm" style="color:var(--primary); flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span><strong>Panorama Geral da Rede Municipal:</strong> Exibindo média consolidada de Patos/PB. Selecione um polo ou unidade escolar acima para ativar a análise comparativa com deltas formativos.</span>
+          </div>
+        `;
+      } else if (isPoloFocus) {
+        // POLO VS. REDE
+        scopeLabelText = (user.roleKey === 'formador') ? `Meu Polo (${focusedPoloName})` : focusedPoloName;
+        benchmarkLabelText = 'Rede Municipal';
+        benchmarkObs = redeObs;
+        benchmarkBadgeHtml = `
+          <div class="benchmark-info-bar" style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; gap:8px; font-size:12px; color:#1E40AF;">
+            <svg class="btn-icon-sm" style="color:#2563EB; flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            <span><strong>Referencial da Rede Municipal:</strong> Comparando <strong>${focusedPoloName}</strong> com a Média Geral da Rede Municipal de Patos/PB.</span>
+          </div>
+        `;
+      } else {
+        // UNIDADE VS. RESPECTIVO POLO
+        scopeLabelText = focusedUnitName;
+        benchmarkLabelText = focusedPoloName || 'Polo Regional';
+        const poloUnits = getUnitsForPolo(focusedPoloName);
+        const poloObservations = redeObs.filter(o => o.schoolName && poloUnits.includes(o.schoolName));
+        benchmarkObs = poloObservations.length > 0 ? poloObservations : redeObs;
+        benchmarkBadgeHtml = `
+          <div class="benchmark-info-bar" style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; gap:8px; font-size:12px; color:#166534;">
+            <svg class="btn-icon-sm" style="color:#16A34A; flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span><strong>Referencial do Polo Regional:</strong> Comparando a unidade <strong>${focusedUnitName}</strong> com o seu <strong>${focusedPoloName || 'Polo Regional'}</strong>.</span>
+          </div>
+        `;
       }
+
+      // 5. Computação Hierárquica Dupla: Escopo em Foco vs. Benchmark Ativo
+      const scopeHierarchy = calculateHierarchyStats(scopedObs, activeSections);
+      const benchmarkHierarchy = calculateHierarchyStats(benchmarkObs, activeSections);
 
       // 3. Popula ou sincroniza opções do Seletor de Avaliando Específico
       if (memberSelect) {
         const currentSelectedMember = memberSelect.value || 'ALL';
         const memberRoleName = targetType === 'coordenador' ? 'Coordenadores(as)' : 'Professoras';
         const generalScopeLabel = targetType === 'coordenador' 
-          ? (activeUnitFilter !== 'ALL' ? `Todas do Polo (${activeUnitFilter})` : 'Todas da Rede (Visão Geral)')
-          : 'Todas (Visão Geral)';
+          ? (focusedPoloName ? `Todas do Polo (${focusedPoloName})` : 'Todas da Rede (Visão Geral)')
+          : (focusedUnitName ? `Todas da UE (${focusedUnitName})` : (isPoloFocus ? `Todas do Polo (${focusedPoloName})` : 'Todas da Rede (Visão Geral)'));
         let memberOptionsHtml = `<option value="ALL">${memberRoleName}: ${generalScopeLabel}</option>`;
         
         if (targetType === 'coordenador') {
@@ -1795,7 +1918,7 @@
             memberOptionsHtml += `<option value="${m.name}">${m.name}${schInfo}</option>`;
           });
         } else {
-          // Lógica anterior preservada para docentes (agrupamento por escola se ALL)
+          // Lógica para docentes (agrupamento por escola se visão ampliada de polo/rede)
           const bySchool = {};
           scopedAvaliandos.forEach(m => {
             const sch = m.school || 'Unidade Geral';
@@ -1804,7 +1927,7 @@
           });
 
           const schoolList = Object.keys(bySchool).sort();
-          if (schoolList.length > 1 && activeUnitFilter === 'ALL') {
+          if (schoolList.length > 1 && !focusedUnitName) {
             schoolList.forEach(sch => {
               memberOptionsHtml += `<optgroup label="${sch}">`;
               bySchool[sch].sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
@@ -2541,10 +2664,7 @@
         redeObs = redeObs.filter(o => o.bimester === activeBimesterFilter);
       }
 
-      // 2. Computação Hierárquica Dupla: Escopo Selecionado vs. Rede Municipal de Patos
-      const scopeHierarchy = calculateHierarchyStats(scopedObs, activeSections);
-      const redeHierarchy = calculateHierarchyStats(redeObs, activeSections);
-
+      // 2. Computação Hierárquica Dupla: Escopo Selecionado vs. Benchmark Ativo
       const totalValidResp = scopeHierarchy.totalValid;
       const totalPts = scopeHierarchy.totalPts;
       const totalNA = scopeHierarchy.totalNA;
@@ -2582,7 +2702,7 @@
       let kpiCycleSubtitle = '';
 
       let scopedClasses = [];
-      let indSchools = (activeUnitFilter !== 'ALL') ? [activeUnitFilter] : ((appState.units || []).map(u => u.name));
+      let indSchools = targetSchoolsInFocus;
       indSchools.forEach(uName => {
         scopedClasses = scopedClasses.concat(getClassesForSchool(uName));
       });
@@ -2703,18 +2823,18 @@
             .trim();
           lowestDimTitle = `${candidateIdx + 1}. ${cleanDimTitle}`;
 
-          // Delta em relação à média da Rede Municipal de Patos
-          const redeCandidate = redeHierarchy.dims[candidateIdx];
-          if (redeCandidate && redeCandidate.validTotal > 0) {
-            const redeScore = Math.round(((redeCandidate.consistent * 1.0 + redeCandidate.partial * 0.5) / redeCandidate.validTotal) * 100);
-            lowestDimDelta = lowestDimPct - redeScore;
+          // Delta em relação ao benchmark ativo (Rede ou Respectivo Polo)
+          const benchCandidate = (benchmarkHierarchy.dims && benchmarkHierarchy.dims[candidateIdx]) ? benchmarkHierarchy.dims[candidateIdx] : null;
+          if (benchCandidate && benchCandidate.validTotal > 0) {
+            const benchScore = Math.round(((benchCandidate.consistent * 1.0 + benchCandidate.partial * 0.5) / benchCandidate.validTotal) * 100);
+            lowestDimDelta = lowestDimPct - benchScore;
           }
 
           if (lowestDimPct >= 80) {
             lowestDimSubtitle = 'Todas as dimensões consistentes';
           } else {
             lowestDimSubtitle = lowestDimDelta !== null 
-              ? `${lowestDimDelta > 0 ? '+' : ''}${lowestDimDelta}% vs. Rede Municipal`
+              ? `${lowestDimDelta > 0 ? '+' : ''}${lowestDimDelta}% vs. ${benchmarkLabelText}`
               : 'Pauta prioritária para formação';
           }
         }
@@ -2966,10 +3086,10 @@
           const dScore = d.validTotal > 0 ? Math.round((dPts / d.validTotal) * 100) : null;
           const dColor = dScore === null ? 'var(--text-secondary)' : (dScore >= 80 ? 'var(--green)' : dScore >= 60 ? 'var(--yellow)' : 'var(--red)');
 
-          const redeD = (redeHierarchy.dims && redeHierarchy.dims[idx]) ? redeHierarchy.dims[idx] : null;
-          const redePts = redeD ? (redeD.consistent * 1.0 + redeD.partial * 0.5) : 0;
-          const redeScore = (redeD && redeD.validTotal > 0) ? Math.round((redePts / redeD.validTotal) * 100) : null;
-          const delta = (dScore !== null && redeScore !== null) ? (dScore - redeScore) : null;
+          const benchD = (benchmarkHierarchy.dims && benchmarkHierarchy.dims[idx]) ? benchmarkHierarchy.dims[idx] : null;
+          const benchPts = benchD ? (benchD.consistent * 1.0 + benchD.partial * 0.5) : 0;
+          const benchScore = (benchD && benchD.validTotal > 0) ? Math.round((benchPts / benchD.validTotal) * 100) : null;
+          const delta = (dScore !== null && benchScore !== null) ? (dScore - benchScore) : null;
 
           const cleanTitle = (d.title || '').replace(/^Dimens[aã]o\s*\d*\s*[:\.\-]?\s*/i, '').trim();
 
@@ -3198,7 +3318,7 @@
           ${materialsDistributionHtml}
 
           <!-- PILAR 8: BLOCO DE DIAGNÓSTICO DE PRIORIDADES FORMATIVAS: FOCO NOS MENORES ÍNDICES (GARGALOS) -->
-          ${renderBottlenecksPrioritySection(scopeHierarchy, redeHierarchy, scopeLabelText, targetType)}
+          ${renderBottlenecksPrioritySection(scopeHierarchy, benchmarkHierarchy, scopeLabelText, targetType, benchmarkLabelText)}
 
         </div>
       `;
@@ -3226,38 +3346,8 @@
             </div>
           </div>
 
-          <!-- Banner Informativo de Contexto do Referencial da Rede Municipal -->
-          <div class="benchmark-info-bar">
-            ${(scopeLabelText === 'Rede Consolidada' || (activeUnitFilter === 'ALL' && targetType !== 'coordenador' && !user.schoolKey && user.roleKey !== 'coordenador')) ? `
-              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; width:100%;">
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary); flex-shrink:0;">
-                    <path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z"></path>
-                  </svg>
-                  <span>
-                    <strong>Panorama Geral da Rede Municipal:</strong> Exibindo a média consolidada de Patos/PB (${redeObs.length} observação(ões) na base).
-                  </span>
-                </div>
-                <span style="font-size:11px; background:var(--sem-green-bg); color:var(--sem-green-ink); border:1px solid var(--sem-green-border); padding:3px 8px; border-radius:4px; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
-                  <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px; height:12px;">
-                    <line x1="9" y1="18" x2="15" y2="18"></line>
-                    <line x1="10" y1="22" x2="14" y2="22"></line>
-                    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
-                  </svg>
-                  <span>${targetType === 'coordenador' ? 'Selecione um Polo no filtro para comparar com a Rede' : 'Selecione uma Escola no filtro para comparar com a Rede'}</span>
-                </span>
-              </div>
-            ` : `
-              <div style="display:flex; align-items:center; gap:8px;">
-                <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary); flex-shrink:0;">
-                  <path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z"></path>
-                </svg>
-                <span>
-                  <strong>Referencial da Rede Municipal:</strong> Comparando <strong>${scopeLabelText}</strong> com a <strong>Média Geral da Rede Municipal (${redeObs.length} observação(ões) na base)</strong>.
-                </span>
-              </div>
-            `}
-          </div>
+          <!-- Banner Informativo de Contexto do Benchmark Ativo -->
+          ${benchmarkBadgeHtml}
 
                     <!-- Controles Rápidos: Busca Instantânea, Filtro de Consistência e Expansão Global -->
           <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
@@ -3300,18 +3390,18 @@
         `;
       } else {
         scopeHierarchy.dims.forEach((dim, sIdx) => {
-          const redeDim = redeHierarchy.dims[sIdx] || { validTotal: 0, consistent: 0, partial: 0 };
+          const benchDim = (benchmarkHierarchy.dims && benchmarkHierarchy.dims[sIdx]) ? benchmarkHierarchy.dims[sIdx] : { validTotal: 0, consistent: 0, partial: 0 };
 
           // Nível 1: Dimensão
           const dimPts = dim.consistent * 1.0 + dim.partial * 0.5;
           const dimPct = dim.validTotal > 0 ? Math.round((dimPts / dim.validTotal) * 100) : null;
           const dimCol = dimPct === null ? 'var(--text-secondary)' : (dimPct >= 80 ? 'var(--green)' : dimPct >= 60 ? 'var(--yellow)' : 'var(--red)');
 
-          const redeDimPts = redeDim.consistent * 1.0 + redeDim.partial * 0.5;
-          const redeDimPct = redeDim.validTotal > 0 ? Math.round((redeDimPts / redeDim.validTotal) * 100) : null;
-          const redeDimCol = 'var(--primary)';
+          const benchDimPts = benchDim.consistent * 1.0 + benchDim.partial * 0.5;
+          const benchDimPct = benchDim.validTotal > 0 ? Math.round((benchDimPts / benchDim.validTotal) * 100) : null;
+          const benchDimCol = 'var(--primary)';
 
-          const dimDelta = (dimPct !== null && redeDimPct !== null) ? (dimPct - redeDimPct) : null;
+          const dimDelta = (dimPct !== null && benchDimPct !== null) ? (dimPct - benchDimPct) : null;
           const isDimOpen = Boolean(appState.expandedDrilldowns[`dim_${sIdx}`]);
 
           html += `
@@ -3324,7 +3414,7 @@
                       ${sIdx + 1}. ${(dim.title || '').replace(/^Dimens[aã]o\s*\d*\s*[:\.\-]?\s*/i, '').trim()}
                     </div>
                     <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
-                      ${dim.validTotal} resp. na UE · Consistência: <strong style="color:${dimCol}">${dimPct !== null ? dimPct + '%' : '—'}</strong>
+                      ${dim.validTotal} resp. no escopo · Consistência: <strong style="color:${dimCol}">${dimPct !== null ? dimPct + '%' : '—'}</strong>
                       ${dimDelta !== null ? `· Variação: ${dimDelta > 0 ? '+' : ''}${dimDelta}%` : ''}
                     </div>
                   </div>
@@ -3332,7 +3422,7 @@
 
                 <!-- RÉGUA DUPLA: GRANDE DIMENSÃO -->
                 <div class="benchmark-ruler-row">
-                  <div class="benchmark-item-box" title="Consistência na Unidade Escolar">
+                  <div class="benchmark-item-box" title="Consistência no Escopo Ativo">
                     <span style="color:var(--text-secondary);">${scopeLabelText}:</span>
                     <div class="benchmark-bar-track">
                       <div class="benchmark-bar-fill" style="width:${dimPct || 0}%; background:${dimCol};"></div>
@@ -3342,12 +3432,12 @@
 
                   <span style="color:var(--border); font-size:12px;">|</span>
 
-                  <div class="benchmark-item-box" title="Consistência Média de toda a Rede Municipal de Patos">
-                    <span style="color:var(--text-secondary);">Rede:</span>
+                  <div class="benchmark-item-box" title="Consistência do Benchmark (${benchmarkLabelText})">
+                    <span style="color:var(--text-secondary);">${benchmarkLabelText}:</span>
                     <div class="benchmark-bar-track">
-                      <div class="benchmark-bar-fill" style="width:${redeDimPct || 0}%; background:${redeDimCol};"></div>
+                      <div class="benchmark-bar-fill" style="width:${benchDimPct || 0}%; background:${benchDimCol};"></div>
                     </div>
-                    <span style="color:${redeDimCol}; min-width:32px; text-align:right;">${redeDimPct !== null ? redeDimPct + '%' : '—'}</span>
+                    <span style="color:${benchDimCol}; min-width:32px; text-align:right;">${benchDimPct !== null ? benchDimPct + '%' : '—'}</span>
                   </div>
 
                   <div style="min-width:85px; text-align:right;">
@@ -3360,7 +3450,7 @@
           `;
 
           dim.subSections.forEach((sub, subIdx) => {
-            const redeSub = (redeDim.subSections && redeDim.subSections[subIdx]) ? redeDim.subSections[subIdx] : { criteria: [] };
+            const benchSub = (benchDim.subSections && benchDim.subSections[subIdx]) ? benchDim.subSections[subIdx] : { criteria: [] };
             const subKey = `sub_${sIdx}_${subIdx}`;
             const isSubOpen = Boolean(appState.expandedDrilldowns[subKey]);
 
@@ -3370,11 +3460,11 @@
             const subPct = subValid > 0 ? Math.round((subPts / subValid) * 100) : null;
             const subCol = subPct === null ? 'var(--text-secondary)' : (subPct >= 80 ? 'var(--green)' : subPct >= 60 ? 'var(--yellow)' : 'var(--red)');
 
-            const redeSubPts = redeSub.criteria.reduce((acc, c) => acc + (c.consistent * 1.0 + c.partial * 0.5), 0);
-            const redeSubValid = redeSub.criteria.reduce((acc, c) => acc + c.validTotal, 0);
-            const redeSubPct = redeSubValid > 0 ? Math.round((redeSubPts / redeSubValid) * 100) : null;
+            const benchSubPts = benchSub.criteria.reduce((acc, c) => acc + (c.consistent * 1.0 + c.partial * 0.5), 0);
+            const benchSubValid = benchSub.criteria.reduce((acc, c) => acc + c.validTotal, 0);
+            const benchSubPct = benchSubValid > 0 ? Math.round((benchSubPts / benchSubValid) * 100) : null;
 
-            const subDelta = (subPct !== null && redeSubPct !== null) ? (subPct - redeSubPct) : null;
+            const subDelta = (subPct !== null && benchSubPct !== null) ? (subPct - benchSubPct) : null;
 
             html += `
               <div class="drilldown-subgroup">
@@ -3387,7 +3477,7 @@
                         ${sub.id} ${(sub.title || '').replace(/^Subdimens[aã]o\s*[\d\.]*\s*[:\.\-]?\s*/i, '').trim()}
                       </div>
                       <div style="font-size:11px; color:var(--text-secondary);">
-                        ${sub.criteria.length} variáveis · ${subValid} respostas válidas na UE
+                        ${sub.criteria.length} variáveis · ${subValid} respostas válidas no escopo
                       </div>
                     </div>
                   </div>
@@ -3395,15 +3485,15 @@
                   <!-- RÉGUA COMPARATIVA DA SUBDIMENSÃO -->
                   <div class="benchmark-ruler-row" style="font-size:11px;">
                     <div class="benchmark-item-box">
-                      <span style="color:var(--text-secondary);">UE:</span>
+                      <span style="color:var(--text-secondary);">${scopeLabelText}:</span>
                       <span style="color:${subCol}; font-weight:800;">${subPct !== null ? subPct + '%' : '—'}</span>
                     </div>
 
                     <span style="color:var(--border);">|</span>
 
                     <div class="benchmark-item-box">
-                      <span style="color:var(--text-secondary);">Rede:</span>
-                      <span style="color:var(--primary); font-weight:800;">${redeSubPct !== null ? redeSubPct + '%' : '—'}</span>
+                      <span style="color:var(--text-secondary);">${benchmarkLabelText}:</span>
+                      <span style="color:var(--primary); font-weight:800;">${benchSubPct !== null ? benchSubPct + '%' : '—'}</span>
                     </div>
 
                     <div style="min-width:65px; text-align:right;">
@@ -3417,16 +3507,16 @@
             `;
 
             sub.criteria.forEach((crit, cIdx) => {
-              const redeCrit = (redeSub.criteria && redeSub.criteria[cIdx]) ? redeSub.criteria[cIdx] : { validTotal: 0, consistent: 0, partial: 0 };
+              const benchCrit = (benchSub.criteria && benchSub.criteria[cIdx]) ? benchSub.criteria[cIdx] : { validTotal: 0, consistent: 0, partial: 0 };
 
               const critPts = crit.consistent * 1.0 + crit.partial * 0.5;
               const critPct = crit.validTotal > 0 ? Math.round((critPts / crit.validTotal) * 100) : null;
               const critCol = critPct === null ? 'var(--text-secondary)' : (critPct >= 80 ? 'var(--green)' : critPct >= 60 ? 'var(--yellow)' : 'var(--red)');
 
-              const redeCritPts = redeCrit.consistent * 1.0 + redeCrit.partial * 0.5;
-              const redeCritPct = redeCrit.validTotal > 0 ? Math.round((redeCritPts / redeCrit.validTotal) * 100) : null;
+              const benchCritPts = benchCrit.consistent * 1.0 + benchCrit.partial * 0.5;
+              const benchCritPct = benchCrit.validTotal > 0 ? Math.round((benchCritPts / benchCrit.validTotal) * 100) : null;
 
-              const critDelta = (critPct !== null && redeCritPct !== null) ? (critPct - redeCritPct) : null;
+              const critDelta = (critPct !== null && benchCritPct !== null) ? (critPct - benchCritPct) : null;
               const critDomId = `drilldownCrit_${crit.id.replace(/\./g, '_')}`;
 
               html += `
@@ -3441,13 +3531,13 @@
                   <div class="benchmark-item-card">
                     <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
                       <div style="font-size:11px;">
-                        <span style="color:var(--text-secondary);">Minha UE:</span>
+                        <span style="color:var(--text-secondary);">${scopeLabelText}:</span>
                         <strong style="color:${critCol}; margin-left:3px; font-size:12px;">${critPct !== null ? critPct + '%' : '—'}</strong>
                       </div>
                       <span style="color:var(--border);">•</span>
                       <div style="font-size:11px;">
-                        <span style="color:var(--text-secondary);">Rede Patos:</span>
-                        <strong style="color:var(--primary); margin-left:3px; font-size:12px;">${redeCritPct !== null ? redeCritPct + '%' : '—'}</strong>
+                        <span style="color:var(--text-secondary);">${benchmarkLabelText}:</span>
+                        <strong style="color:var(--primary); margin-left:3px; font-size:12px;">${benchCritPct !== null ? benchCritPct + '%' : '—'}</strong>
                       </div>
                       <span style="color:var(--border);">•</span>
                       <div>
@@ -3455,7 +3545,7 @@
                       </div>
                     </div>
 
-                    <!-- Distribuição de Respostas na UE -->
+                    <!-- Distribuição de Respostas no Escopo -->
                     <div style="display:flex; gap:5px; font-size:10px; flex-wrap:wrap;">
                       <span style="background:#DCFCE7; color:#166534; padding:2px 5px; border-radius:4px;">C: ${crit.consistent}</span>
                       <span style="background:#FEF3C7; color:#92400E; padding:2px 5px; border-radius:4px;">P: ${crit.partial}</span>
