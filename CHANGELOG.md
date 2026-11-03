@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.67** | 03/11/2026 15:05 | `intermediárias/aplicativo_v1.67_resolucao_visualizacao_mobile_relatorios_ssot.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_visualizacao_mobile_relatorios_ssot.md` | Resolução da Visualização Mobile da Aba de Relatórios SSOT (Padrão Hallmark): erradicação do esmagamento horizontal de 5 cards com grid responsivo modular (`repeat(auto-fit, minmax(280px, 1fr))` desktop e `1fr` coluna única mobile), empilhamento full-width dos botões de backup, touch targets de 44px e higienização semântica de classes CSS 📱🏛️🛡️ |
 | **1.66** | 03/11/2026 15:00 | `intermediárias/aplicativo_v1.66_harmonizacao_trava_visualizacao_hallmark.html` | Solicitação direta / `planos_de_implementacao/plano_harmonizacao_trava_visualizacao_hallmark.md` | Harmonização da Trava de Visualização Desktop (Hallmark Standard vs. Asserção de Auditoria): alinhamento do Item 16 no Módulo 12 (`navegacao_layout`) de `audit_engine.js` para reconhecer `overflow-x: clip` conjuntamente a `overflow-x: hidden`, preservando a regra de contenção canônica do Hallmark Floor 4 🛡️💻✨ |
 | **1.63** | 03/11/2026 14:45 | `intermediárias/aplicativo_v1.63_redesign_hallmark_integral_antivibecode.html` | Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_integral_antivibecode.md` | Redesign Hallmark Integral da Plataforma: Erradicação do Visual Vibecode, Sobriedade Institucional, Tokens Universais, Eliminação de `transition: all`, All-Caps forçado e Emojis 🏛️🎨✨ |
 | **1.62** | 03/11/2026 13:50 | `intermediárias/aplicativo_v1.62_correcao_rotulo_aba_gestao_cp_formador.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_rotulo_aba_gestao_cp_formador.md` e `planos_de_implementacao/plano_comparacao_polo_vs_rede_indicadores_coordenacao.md` | Correção e Restauração das Abas "Minha Escola" e "Meu Polo" (CP e Formador) e Comparação Territorial Polo vs. Rede nos Indicadores de Coordenação: fixação da 1ª aba como "Início", restauração da 2ª aba ("Minha Escola" e "Meu Polo"), reconfiguração reativa do Seletor 2 (Unidade Escolar ↔ Polo Regional) para Coordenadores(as), trava institucional da Formadora Clarice no Polo 1 vs. Rede Patos, visualização consolidada com Tabela Executiva de Polos para Helena (Núcleo EI), Seletor 3 com coordenadoras do polo e erradicação de "UE vs. Rede" 🏫🗺️📊🏛️ |
@@ -191,6 +192,19 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.67] - Resolução da Visualização Mobile da Aba de Relatórios SSOT (Hallmark Standard)
+- **Data / Horário:** 03/11/2026 15:05
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.67_resolucao_visualizacao_mobile_relatorios_ssot.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_resolucao_visualizacao_mobile_relatorios_ssot.md`
+- **Foco Central:** Resolução da visualização mobile no smartphone para a sub-aba "Extrações & Relatórios SSOT" (`#pedagViewExports`) e harmonização com o Hallmark Design Standard:
+  1. **Erradicação do Esmagamento Horizontal:** Substituição de `repeat(auto-fit, minmax(0, 1fr))` por `repeat(auto-fit, minmax(280px, 1fr))` no desktop e coluna única (`1fr !important`) no celular (≤ 768px), impedindo que os 5 cartões se espremam na mesma linha em viewports móveis.
+  2. **Harmonização do Card de Backup Completo:** Reestruturação do container com classes semânticas (`.export-backup-card`, `.export-backup-container`, `.export-backup-actions`), empilhamento vertical e botões full-width no celular com touch target ergonômico de 44px (`--touch-target-min`).
+  3. **Igualdade Simétrica de Ações CSV e JSON:** Padronização dos botões de exportação (`.export-card-actions`, `.export-card-btn`) com larguras iguais (`flex: 1 1 0`), e font-size de 14px no `<select>` de rubricas para prevenir zoom indevido no Safari iOS.
+  4. **Limpeza Semântica de Código e Eliminação de Estilos Inline:** Remoção de dezenas de `style="..."` inline soltos em `index.html`, migração integral para `css/04_screens.css` sob tokens do sistema.
+  5. **Preservação Integral de Funcionalidades e Auditoria:** Manutenção estrita de contratos de ID, rotinas de download e upload, governança RBAC e conformidade com o motor de testes.
+
+---
 
 ### [Versão 1.63] - Redesign Hallmark Integral da Plataforma (Antivibecode e Sobriedade Institucional)
 - **Data / Horário:** 03/11/2026 14:45

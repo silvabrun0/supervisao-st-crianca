@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.66 (v8.2.33)</span>
+          <span>Versão 1.67 (v8.2.34)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -473,39 +473,39 @@
 
       <!-- SUB-VIEW 4: EXTRAÇÕES & RELATÓRIOS SSOT -->
       <div id="pedagViewExports" class="pedag-subview" style="display:none;">
-        <div style="margin-bottom:16px;">
-          <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center;">
+        <div class="export-view-header">
+          <h3 class="export-view-title">
             <span>Central de Extrações e Base Unificada (SSOT)</span>
             <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Central de Extrações SSOT', 'Acesso gerencial exclusivo para exportação de dados brutos consolidados da rede e backup da base.')" aria-label="Informações sobre extrações">
               <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             </button>
           </h3>
-          <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary);">
+          <p class="platform-info-text export-view-subtitle">
             Acesso gerencial exclusivo para exportação de dados brutos consolidados da rede e backup da base.
           </p>
         </div>
 
-        <div class="card" style="background:var(--gestao-surface); border:1px solid var(--gestao-border); margin-bottom:18px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-            <div>
-              <div style="font-size:15px; font-weight:800; color:var(--text-primary); display:flex; align-items:center;">
+        <div class="card export-backup-card">
+          <div class="export-backup-container">
+            <div class="export-backup-info">
+              <div class="export-backup-title">
                 <span>Backup & Restauração Completa da Base (JSON)</span>
                 <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Backup & Restauração', 'Exporta ou sobrescreve integralmente todas as entidades do sistema: Servidores, UEs, Polos, Rubricas, Registros e Avaliações.')" aria-label="Informações sobre backup">
                   <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                 </button>
               </div>
-              <div class="platform-info-text" style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+              <div class="platform-info-text export-backup-desc">
                 Exporta ou sobrescreve integralmente todas as entidades do sistema: Servidores, UEs, Polos, Rubricas, Registros e Avaliações.
               </div>
             </div>
-            <div style="display:flex; gap:8px;">
-              <button class="btn btn-secondary" onclick="exportFullBaseJSON()">
+            <div class="export-backup-actions">
+              <button class="btn btn-secondary export-backup-btn" onclick="exportFullBaseJSON()">
                 <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                Exportar Base Completa (.JSON)
+                <span>Exportar Base Completa (.JSON)</span>
               </button>
-              <button class="btn btn-secondary" style="color:var(--red);" onclick="triggerImportFullBase()">
+              <button class="btn btn-secondary export-backup-btn export-backup-btn-danger" onclick="triggerImportFullBase()">
                 <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Importar / Sobrescrever (.JSON)
+                <span>Importar / Sobrescrever (.JSON)</span>
               </button>
               <input type="file" id="importFullBaseFileInput" accept=".json" style="display:none;" onchange="importFullBaseJSON(event)" />
             </div>
@@ -515,8 +515,8 @@
         <div class="export-card-grid">
           <!-- Card Servidores -->
           <div class="export-card">
-            <div>
-              <div class="export-card-title" style="display:flex; align-items:center;">
+            <div class="export-card-content">
+              <div class="export-card-title">
                 <span>Servidores & Membros da Rede</span>
                 <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Servidores & Membros', 'Lista completa de profissionais: docentes, coordenadoras pedagógicas, formadoras e lotações.')" aria-label="Informações sobre servidores">
                   <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -524,16 +524,16 @@
               </div>
               <div class="export-card-desc platform-info-text">Lista completa de profissionais: docentes, coordenadoras pedagógicas, formadoras e lotações.</div>
             </div>
-            <div style="display:flex; gap:8px;">
-              <button class="btn btn-secondary" style="flex:1;" onclick="exportTeamMembersCSV()">CSV</button>
-              <button class="btn btn-secondary" style="flex:1;" onclick="exportTeamMembersJSON()">JSON</button>
+            <div class="export-card-actions">
+              <button class="btn btn-secondary export-card-btn" onclick="exportTeamMembersCSV()">CSV</button>
+              <button class="btn btn-secondary export-card-btn" onclick="exportTeamMembersJSON()">JSON</button>
             </div>
           </div>
 
           <!-- Card UEs e Polos -->
           <div class="export-card">
-            <div>
-              <div class="export-card-title" style="display:flex; align-items:center;">
+            <div class="export-card-content">
+              <div class="export-card-title">
                 <span>Unidades Escolares & Polos</span>
                 <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Unidades Escolares & Polos', 'Relação cadastral de escolas infantis, polos territoriais vinculados e endereços.')" aria-label="Informações sobre unidades escolares">
                   <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -541,16 +541,16 @@
               </div>
               <div class="export-card-desc platform-info-text">Relação cadastral de escolas infantis, polos territoriais vinculados e endereços.</div>
             </div>
-            <div style="display:flex; gap:8px;">
-              <button class="btn btn-secondary" style="flex:1;" onclick="exportUnitsCSV()">CSV</button>
-              <button class="btn btn-secondary" style="flex:1;" onclick="exportUnitsJSON()">JSON</button>
+            <div class="export-card-actions">
+              <button class="btn btn-secondary export-card-btn" onclick="exportUnitsCSV()">CSV</button>
+              <button class="btn btn-secondary export-card-btn" onclick="exportUnitsJSON()">JSON</button>
             </div>
           </div>
 
           <!-- Card Rubricas -->
           <div class="export-card">
-            <div>
-              <div class="export-card-title" style="display:flex; align-items:center;">
+            <div class="export-card-content">
+              <div class="export-card-title">
                 <span>Matriz de Rubricas & Critérios</span>
                 <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Matriz de Rubricas & Critérios', 'Estrutura completa das 5 dimensões diagnósticas, subdimensões e descritores pedagógicos.')" aria-label="Informações sobre rubricas">
                   <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -558,22 +558,22 @@
               </div>
               <div class="export-card-desc platform-info-text">Estrutura completa das 5 dimensões diagnósticas, subdimensões e descritores pedagógicos.</div>
             </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <select id="rubricMatrixSelectExports" class="form-select" style="width: 100%; display: block;" onchange="syncRubricMatrixSelect(this.value)">
+            <div class="export-card-controls">
+              <select id="rubricMatrixSelectExports" class="form-select export-card-select" onchange="syncRubricMatrixSelect(this.value)">
                 <option value="teacher">Matriz de Professores</option>
                 <option value="coordinator">Matriz de Coordenadores</option>
               </select>
-              <div style="display:flex; gap:8px;">
-                <button class="btn btn-secondary" style="flex:1;" onclick="exportRubricsCSV()">CSV</button>
-                <button class="btn btn-secondary" style="flex:1;" onclick="exportRubricsJSON()">JSON</button>
+              <div class="export-card-actions">
+                <button class="btn btn-secondary export-card-btn" onclick="exportRubricsCSV()">CSV</button>
+                <button class="btn btn-secondary export-card-btn" onclick="exportRubricsJSON()">JSON</button>
               </div>
             </div>
           </div>
 
           <!-- Card Registros Formativos -->
           <div class="export-card">
-            <div>
-              <div class="export-card-title" style="display:flex; align-items:center;">
+            <div class="export-card-content">
+              <div class="export-card-title">
                 <span>Registros Formativos & Ocorrências</span>
                 <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Registros Formativos & Ocorrências', 'Todas as anotações qualitativas de campo registradas pela supervisão pedagógica.')" aria-label="Informações sobre registros formativos">
                   <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -581,16 +581,16 @@
               </div>
               <div class="export-card-desc platform-info-text">Todas as anotações qualitativas de campo registradas pela supervisão pedagógica.</div>
             </div>
-            <div style="display:flex; gap:8px;">
-              <button class="btn btn-secondary" style="flex:1;" onclick="exportAllNotesCSV()">CSV</button>
-              <button class="btn btn-secondary" onclick="exportAllNotesJSON()">JSON</button>
+            <div class="export-card-actions">
+              <button class="btn btn-secondary export-card-btn" onclick="exportAllNotesCSV()">CSV</button>
+              <button class="btn btn-secondary export-card-btn" onclick="exportAllNotesJSON()">JSON</button>
             </div>
           </div>
 
           <!-- Card Observações Pedagógicas -->
           <div class="export-card">
-            <div>
-              <div class="export-card-title" style="display:flex; align-items:center;">
+            <div class="export-card-content">
+              <div class="export-card-title">
                 <span>Observações Realizadas</span>
                 <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Observações Realizadas', 'Base de acompanhamentos pedagógicos, sínteses, níveis de materiais e metadados.')" aria-label="Informações sobre observações realizadas">
                   <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -598,9 +598,9 @@
               </div>
               <div class="export-card-desc platform-info-text">Base de acompanhamentos pedagógicos, sínteses, níveis de materiais e metadados.</div>
             </div>
-            <div style="display:flex; gap:8px;">
-              <button class="btn btn-secondary" style="flex:1;" onclick="exportAllObservationsCSV()">CSV</button>
-              <button class="btn btn-secondary" onclick="exportAllObservationsJSON()">JSON</button>
+            <div class="export-card-actions">
+              <button class="btn btn-secondary export-card-btn" onclick="exportAllObservationsCSV()">CSV</button>
+              <button class="btn btn-secondary export-card-btn" onclick="exportAllObservationsJSON()">JSON</button>
             </div>
           </div>
         </div>
@@ -1812,6 +1812,22 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.67 - RESOLUÇÃO DA VISUALIZAÇÃO MOBILE DA ABA DE RELATÓRIOS SSOT -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.67 · v8.2.34</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">03/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Resolução da Visualização Mobile da Aba de Relatórios SSOT (Hallmark Standard):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📱 <strong>Coluna Única e Erradicação do Esmagamento:</strong> Reconfiguração do grid de extrações para coluna única (<code>1fr</code>) no celular e mínimo de <code>280px</code> no desktop, eliminando o colapso dos 5 cartões na mesma linha.</li>
+          <li>🏛️ <strong>Ergonomia Mobile e Tokens Hallmark:</strong> Adoção de classes semânticas, cards de backup verticalizados com botões full-width, alvos de toque de 44px e proteção contra auto-zoom no Safari iOS.</li>
+          <li>🛡️ <strong>Preservação Integral de Funcionalidades e SSOT:</strong> Manutenção rigorosa de IDs, contratos determinísticos e rotinas de backup e exportação em CSV e JSON.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.66 - HARMONIZAÇÃO DA TRAVA DE VISUALIZAÇÃO (HALLMARK STANDARD) -->
