@@ -2111,6 +2111,7 @@
           name: 'Cronograma de Observações, Destaque da Próxima Observação e Baixa Automática',
           run: function(logger) {
             try {
+              selectUserAccount('mariana');
               appState.currentUserKey = 'mariana';
 
               // Simulação Interativa de Criação de Agendamento via Modal (#modalAddSchedule)
@@ -2118,7 +2119,7 @@
               UI.select(document.getElementById('scheduleSchool'), 'CEI Professora Maria de Lourdes');
               UI.select(document.getElementById('scheduleTarget'), 'Infantil I - Turma A');
               UI.select(document.getElementById('scheduleBimester'), '3º Bimestre');
-              UI.type(document.getElementById('scheduleDate'), getTodayDateString());
+              UI.type(document.getElementById('scheduleDate'), '2026-10-24');
               UI.type(document.getElementById('scheduleTime'), '09:00');
               saveNewSchedule();
               closeAddScheduleModal();
@@ -2138,9 +2139,9 @@
                 bimester: '3º Bimestre',
                 evaluatedBy: 'Mariana Ferreira',
                 status: 'draft',
-                date: getTodayDateString(),
-                startDate: getTodayDateString(),
-                endDate: getTodayDateString(),
+                date: '2026-10-24',
+                startDate: '2026-10-24',
+                endDate: '2026-10-24',
                 startTime: '08:00',
                 endTime: '09:40',
                 synthesisMaterialDimension: 3,
@@ -2501,9 +2502,11 @@
               if (infoBar.innerText.includes('Benchmark')) {
                 throw new Error("Termo residual 'Benchmark' ainda presente no banner informativo da Visualização por Dimensão");
               }
-              const hasValidBannerText = infoBar.innerText.includes('Referencial da Rede Municipal') || infoBar.innerText.includes('Panorama Geral da Rede Municipal');
+              const hasValidBannerText = infoBar.innerText.includes('Referencial da Rede Municipal') || 
+                                         infoBar.innerText.includes('Panorama Geral da Rede Municipal') || 
+                                         infoBar.innerText.includes('Referencial do Polo Regional');
               if (!hasValidBannerText) {
-                throw new Error("Rótulo pedagógico válido ('Referencial da Rede Municipal' ou 'Panorama Geral da Rede Municipal') não encontrado no banner");
+                throw new Error("Rótulo pedagógico válido ('Referencial da Rede Municipal', 'Panorama Geral da Rede Municipal' ou 'Referencial do Polo Regional') não encontrado no banner");
               }
               logger.log("Higienização e Renderização Contextual do Banner de Referencial/Panorama no DOM (Pilar 3)", true);
 
@@ -3021,7 +3024,7 @@
                   throw new Error(`Falha Governança Territorial: Esperado confronto de Polo Regional 2 (Sul) vs. Rede para Helena. Obtido: "${benchInfoBarHelena?.innerText}"`);
                 }
 
-                // Cenário 3: Retorno para Indicadores Docentes
+                // Cenário 3: Retorno para Indicadores Docentes e Teste da Arquitetura Dual (Polo vs. Rede e UE vs. Polo)
                 if (indTargetSelect) {
                   indTargetSelect.value = 'professora';
                   onIndicatorsTargetTypeChange();
@@ -3036,7 +3039,38 @@
                   throw new Error('Falha Governança Territorial: Esperado agrupamento por <optgroup> de polos para Helena ao visualizar docentes');
                 }
 
-                logger.log('Governança Territorial: Núcleo de EI com alternância de Polos vs. Rede e restauração de UEs', true);
+                // 24.1 Asserção Dual: Helena selecionando Polo vs. Rede
+                deskUnitSelectEl.value = 'POLO:Polo Regional 2 (Sul)';
+                renderIndicatorsScreen();
+                const benchInfoBarPoloRede = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoBarPoloRede || !benchInfoBarPoloRede.innerText.includes('Referencial da Rede Municipal') || !benchInfoBarPoloRede.innerText.includes('Polo Regional 2 (Sul)')) {
+                  throw new Error(`Falha Arquitetura Dual: Esperado banner de Polo Regional 2 (Sul) vs. Rede Municipal. Obtido: "${benchInfoBarPoloRede?.innerText}"`);
+                }
+
+                // 24.2 Asserção Dual: Helena selecionando Unidade vs. Respectivo Polo
+                deskUnitSelectEl.value = 'CEI Vovó Zezé';
+                renderIndicatorsScreen();
+                const benchInfoBarUEPolo = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoBarUEPolo || !benchInfoBarUEPolo.innerText.includes('Referencial do Polo Regional') || !benchInfoBarUEPolo.innerText.includes('CEI Vovó Zezé') || !benchInfoBarUEPolo.innerText.includes('Polo Regional 2 (Sul)')) {
+                  throw new Error(`Falha Arquitetura Dual: Esperado banner de UE CEI Vovó Zezé vs. seu Polo Regional 2 (Sul). Obtido: "${benchInfoBarUEPolo?.innerText}"`);
+                }
+
+                // 24.3 Asserção Dual: Formadora Clarice em ALL (Meu Polo vs. Rede) e em UE do Polo (UE vs. Meu Polo)
+                appState.currentUserKey = 'clarice';
+                renderIndicatorsScreen();
+                const benchInfoClariceALL = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoClariceALL || !benchInfoClariceALL.innerText.includes('Referencial da Rede Municipal') || !benchInfoClariceALL.innerText.includes('Polo Regional 1 (Norte)')) {
+                  throw new Error(`Falha Arquitetura Dual: Esperado Clarice ALL focar Polo 1 vs. Rede. Obtido: "${benchInfoClariceALL?.innerText}"`);
+                }
+
+                deskUnitSelectEl.value = 'CEI Professora Maria de Lourdes';
+                renderIndicatorsScreen();
+                const benchInfoClariceUE = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoClariceUE || !benchInfoClariceUE.innerText.includes('Referencial do Polo Regional') || !benchInfoClariceUE.innerText.includes('CEI Professora Maria de Lourdes') || !benchInfoClariceUE.innerText.includes('Polo Regional 1 (Norte)')) {
+                  throw new Error(`Falha Arquitetura Dual: Esperado Clarice UE comparar CEI Maria de Lourdes vs. Polo 1. Obtido: "${benchInfoClariceUE?.innerText}"`);
+                }
+
+                logger.log('Governança Territorial e Arquitetura Dual (Polo vs. Rede e UE vs. Polo) validadas com 100% de precisão', true);
               } finally {
                 appState.currentUserKey = previousUserIndTerritorial || 'mariana';
                 const indTargetSelect = document.getElementById('indicatorsTargetTypeFilter');
@@ -3458,13 +3492,14 @@
               logger.log('Conformidade do botão Alterar Ano Letivo em #modalProfile e modal de seleção (Versão 1.40)', true);
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // 16. BLINDAGEM E TRAVA DE VISUALIZAÇÃO DESKTOP (ELIMINAÇÃO DE SCROLL LATERAL E ZOOM INDESEJADO)
+              // 16. BLINDAGEM E TRAVA DE VISUALIZAÇÃO DESKTOP (ELIMINAÇÃO DE SCROLL LATERAL E ZOOM INDESEJADO - HALLMARK STANDARD)
               const docEl = document.documentElement;
               const htmlStyle = window.getComputedStyle(docEl);
               const bodyStyle = window.getComputedStyle(document.body);
 
-              if (htmlStyle.overflowX !== 'hidden' && bodyStyle.overflowX !== 'hidden') {
-                throw new Error(`Trava de visualização violada: html e body devem conter overflow-x: hidden (html: ${htmlStyle.overflowX}, body: ${bodyStyle.overflowX})`);
+              const isContained = (val) => val === 'clip' || val === 'hidden';
+              if (!isContained(htmlStyle.overflowX) && !isContained(bodyStyle.overflowX)) {
+                throw new Error(`Trava de visualização violada: html e body devem conter overflow-x: clip ou hidden (html: ${htmlStyle.overflowX}, body: ${bodyStyle.overflowX})`);
               }
 
               if (window.innerWidth >= 860 && docEl.scrollWidth > window.innerWidth + 2) {
@@ -3563,6 +3598,9 @@
               logger.log('Validação dos Rótulos Responsivos e Tabelas Mobile-to-Card na Gestão Pedagógica (Versão 1.55)', true);
 
               // 22. VALIDAÇÃO DO ALINHAMENTO E COMPONENTES DOS BLOCOS DE POLOS NA MATRIZ DE COBERTURA (VERSÃO 1.58)
+              selectUserAccount('helena');
+              if (typeof renderUnitsScreen === 'function') renderUnitsScreen();
+
               const coveragePoloTitles = document.querySelectorAll('#networkCoverageTableBody .coverage-polo-title');
               const coverageUnitsStacks = document.querySelectorAll('#networkCoverageTableBody .coverage-units-stack');
               const coverageActionsGroups = document.querySelectorAll('#networkCoverageTableBody .coverage-actions-group');
@@ -3617,7 +3655,7 @@
               logger.log('Subsistema de Informação Mobile Hallmark (modal, botões e classes de desclutter)', true);
 
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.62
-              if (!btnChangelog.textContent.includes('Versão 1.62')) {
+              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68') && !btnChangelog.textContent.includes('Versão 1.69') && !btnChangelog.textContent.includes('Versão 1.70')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
               if (!modalChg.innerHTML.includes('Versão 1.62')) {

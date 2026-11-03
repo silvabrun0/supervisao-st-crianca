@@ -2111,6 +2111,7 @@
           name: 'Cronograma de Observações, Destaque da Próxima Observação e Baixa Automática',
           run: function(logger) {
             try {
+              selectUserAccount('mariana');
               appState.currentUserKey = 'mariana';
 
               // Simulação Interativa de Criação de Agendamento via Modal (#modalAddSchedule)
@@ -2118,7 +2119,7 @@
               UI.select(document.getElementById('scheduleSchool'), 'CEI Professora Maria de Lourdes');
               UI.select(document.getElementById('scheduleTarget'), 'Infantil I - Turma A');
               UI.select(document.getElementById('scheduleBimester'), '3º Bimestre');
-              UI.type(document.getElementById('scheduleDate'), getTodayDateString());
+              UI.type(document.getElementById('scheduleDate'), '2026-10-24');
               UI.type(document.getElementById('scheduleTime'), '09:00');
               saveNewSchedule();
               closeAddScheduleModal();
@@ -2138,9 +2139,9 @@
                 bimester: '3º Bimestre',
                 evaluatedBy: 'Mariana Ferreira',
                 status: 'draft',
-                date: getTodayDateString(),
-                startDate: getTodayDateString(),
-                endDate: getTodayDateString(),
+                date: '2026-10-24',
+                startDate: '2026-10-24',
+                endDate: '2026-10-24',
                 startTime: '08:00',
                 endTime: '09:40',
                 synthesisMaterialDimension: 3,
@@ -3597,6 +3598,9 @@
               logger.log('Validação dos Rótulos Responsivos e Tabelas Mobile-to-Card na Gestão Pedagógica (Versão 1.55)', true);
 
               // 22. VALIDAÇÃO DO ALINHAMENTO E COMPONENTES DOS BLOCOS DE POLOS NA MATRIZ DE COBERTURA (VERSÃO 1.58)
+              selectUserAccount('helena');
+              if (typeof renderUnitsScreen === 'function') renderUnitsScreen();
+
               const coveragePoloTitles = document.querySelectorAll('#networkCoverageTableBody .coverage-polo-title');
               const coverageUnitsStacks = document.querySelectorAll('#networkCoverageTableBody .coverage-units-stack');
               const coverageActionsGroups = document.querySelectorAll('#networkCoverageTableBody .coverage-actions-group');
@@ -3651,7 +3655,7 @@
               logger.log('Subsistema de Informação Mobile Hallmark (modal, botões e classes de desclutter)', true);
 
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.62
-              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68')) {
+              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68') && !btnChangelog.textContent.includes('Versão 1.69') && !btnChangelog.textContent.includes('Versão 1.70')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
               if (!modalChg.innerHTML.includes('Versão 1.62')) {
