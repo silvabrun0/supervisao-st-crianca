@@ -3491,6 +3491,44 @@
               }
               logger.log('Validação da Estruturação e Alinhamento dos Blocos de Polos na Matriz de Cobertura (Versão 1.58)', true, `${coveragePoloTitles.length} blocos validados`);
 
+              // 23. VALIDAÇÃO DO SUBSISTEMA DE INFORMAÇÃO MOBILE (HALLMARK DESCLUTTER)
+              const modalInfo = document.getElementById('modalPlatformInfo');
+              if (!modalInfo) {
+                throw new Error('Falha Estrutural: #modalPlatformInfo não foi encontrado no DOM');
+              }
+              const infoTitleEl = document.getElementById('platformInfoTitle');
+              const infoTextEl = document.getElementById('platformInfoText');
+              if (!infoTitleEl || !infoTextEl) {
+                throw new Error('Falha Estrutural: nós internos #platformInfoTitle ou #platformInfoText ausentes');
+              }
+
+              // Teste de acionamento via função global
+              openPlatformInfoModal('Teste Unitário Hallmark', 'Texto explicativo para validação');
+              if (!modalInfo.classList.contains('active') || modalInfo.style.display !== 'flex') {
+                throw new Error('Falha Funcional: openPlatformInfoModal() não exibiu #modalPlatformInfo');
+              }
+              if (infoTitleEl.innerText !== 'Teste Unitário Hallmark' || infoTextEl.innerText !== 'Texto explicativo para validação') {
+                throw new Error('Falha de Conteúdo: os dados informativos não foram populados corretamente no modal');
+              }
+
+              // Teste de fechamento
+              closePlatformInfoModal();
+              if (modalInfo.classList.contains('active') || modalInfo.style.display === 'flex') {
+                throw new Error('Falha Funcional: closePlatformInfoModal() não ocultou #modalPlatformInfo');
+              }
+
+              // Validação da presença de botões .btn-platform-info e classes .platform-info-text
+              const infoButtons = document.querySelectorAll('.btn-platform-info');
+              if (infoButtons.length < 5) {
+                throw new Error(`Conformidade Hallmark Violada: esperava-se ampla cobertura de botões de informação, encontrados apenas ${infoButtons.length}`);
+              }
+              const infoTexts = document.querySelectorAll('.platform-info-text');
+              if (infoTexts.length < 5) {
+                throw new Error(`Conformidade Hallmark Violada: esperava-se ampla cobertura de classes .platform-info-text, encontradas apenas ${infoTexts.length}`);
+              }
+
+              logger.log('Subsistema de Informação Mobile Hallmark (modal, botões e classes de desclutter)', true);
+
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.62
               if (!btnChangelog.textContent.includes('Versão 1.62')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);

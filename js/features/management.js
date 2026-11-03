@@ -235,9 +235,14 @@
                 <div>
                   <div style="display:flex; align-items:center; gap:8px;">
                     <svg class="btn-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7l9-4 9 4v14M9 21V9h6v12"/></svg>
-                    <h3 style="font-size:18px; font-weight:800; color:var(--primary-dark); margin:0;">${myUnit.name}</h3>
+                    <h3 style="font-size:18px; font-weight:800; color:var(--primary-dark); margin:0; display:flex; align-items:center;">
+                      <span>${myUnit.name}</span>
+                      <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Caracterização da Unidade Escolar', 'Caracterização calculada a partir do somatório canônico de turmas da unidade escolar.')" aria-label="Informações sobre caracterização da escola">
+                        <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                      </button>
+                    </h3>
                   </div>
-                  <p style="font-size:12px; color:var(--text-secondary); margin:4px 0 0 0;">Caracterização calculada a partir do somatório canônico de turmas da unidade escolar.</p>
+                  <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary); margin:4px 0 0 0;">Caracterização calculada a partir do somatório canônico de turmas da unidade escolar.</p>
                 </div>
                 
                 <!-- Seletor de Modo de Visualização da Coordenadora -->

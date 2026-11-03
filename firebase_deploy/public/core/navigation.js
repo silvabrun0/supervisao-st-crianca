@@ -6,6 +6,10 @@
         showToast('Acesso ao cronograma restrito.');
         return;
       }
+      if (tabName === 'history' && (isNucleoEI(user) || user.roleKey === 'pendente')) {
+        showToast('Acesso ao histórico restrito: a Coordenadora do Núcleo de EI não realiza observações.');
+        return;
+      }
       if ((tabName === 'opManagement' || tabName === 'units' || tabName === 'rubricsAdmin' || tabName === 'admin' || tabName === 'team') && (user.roleKey === 'pendente' || user.roleKey === 'professora')) {
         showToast('Acesso restrito ao perfil docente.');
         return;
@@ -963,4 +967,49 @@
         }
       }
     }
+
+/**
+ * Abre o Bottom Sheet / Modal Universal de Informações da Seção (Hallmark Mobile)
+ * @param {string} title Título da seção ou recurso
+ * @param {string} text Texto explicativo associado
+ */
+function openPlatformInfoModal(title, text) {
+  const modal = document.getElementById('modalPlatformInfo');
+  const titleEl = document.getElementById('platformInfoTitle');
+  const textEl = document.getElementById('platformInfoText');
+  if (titleEl) titleEl.innerText = title;
+  if (textEl) textEl.innerText = text;
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+/**
+ * Fecha o Modal Universal de Informações da Seção
+ * @param {Event} [e] Evento opcional de clique
+ */
+function closePlatformInfoModal(e) {
+  if (e && e.target && e.target !== e.currentTarget && !e.target.classList.contains('btn-close-modal')) {
+    return;
+  }
+  const modal = document.getElementById('modalPlatformInfo');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+// Fechamento via tecla ESC para acessibilidade
+document.addEventListener('keydown', function(evt) {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    const modal = document.getElementById('modalPlatformInfo');
+    if (modal && modal.classList.contains('active')) {
+      closePlatformInfoModal();
+    }
+  }
+});
+
 
