@@ -2501,9 +2501,11 @@
               if (infoBar.innerText.includes('Benchmark')) {
                 throw new Error("Termo residual 'Benchmark' ainda presente no banner informativo da Visualização por Dimensão");
               }
-              const hasValidBannerText = infoBar.innerText.includes('Referencial da Rede Municipal') || infoBar.innerText.includes('Panorama Geral da Rede Municipal');
+              const hasValidBannerText = infoBar.innerText.includes('Referencial da Rede Municipal') || 
+                                         infoBar.innerText.includes('Panorama Geral da Rede Municipal') || 
+                                         infoBar.innerText.includes('Referencial do Polo Regional');
               if (!hasValidBannerText) {
-                throw new Error("Rótulo pedagógico válido ('Referencial da Rede Municipal' ou 'Panorama Geral da Rede Municipal') não encontrado no banner");
+                throw new Error("Rótulo pedagógico válido ('Referencial da Rede Municipal', 'Panorama Geral da Rede Municipal' ou 'Referencial do Polo Regional') não encontrado no banner");
               }
               logger.log("Higienização e Renderização Contextual do Banner de Referencial/Panorama no DOM (Pilar 3)", true);
 
