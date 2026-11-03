@@ -1899,6 +1899,10 @@
         `;
       }
 
+      const activeSections = targetType === 'coordenador' 
+        ? (appState.activeSectionsCoordinator || DEFAULT_SECTIONS_COORDINATOR)
+        : (appState.activeSectionsTeacher || DEFAULT_SECTIONS_TEACHER);
+
       // 5. Computação Hierárquica Dupla: Escopo em Foco vs. Benchmark Ativo
       const scopeHierarchy = calculateHierarchyStats(scopedObs, activeSections);
       const benchmarkHierarchy = calculateHierarchyStats(benchmarkObs, activeSections);
@@ -1982,10 +1986,6 @@
         btnExportHeader.className = 'btn btn-secondary indicators-filter-btn';
         btnExportHeader.title = activeMemberFilter !== 'ALL' ? 'Exportar Ficha Individual em PDF' : 'Exportar Relatório Geral em PDF';
       }
-
-      const activeSections = targetType === 'coordenador' 
-        ? (appState.activeSectionsCoordinator || DEFAULT_SECTIONS_COORDINATOR)
-        : (appState.activeSectionsTeacher || DEFAULT_SECTIONS_TEACHER);
 
       const bimesters = ['1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre'];
 
