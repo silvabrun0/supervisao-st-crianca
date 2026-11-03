@@ -3458,13 +3458,14 @@
               logger.log('Conformidade do botão Alterar Ano Letivo em #modalProfile e modal de seleção (Versão 1.40)', true);
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // 16. BLINDAGEM E TRAVA DE VISUALIZAÇÃO DESKTOP (ELIMINAÇÃO DE SCROLL LATERAL E ZOOM INDESEJADO)
+              // 16. BLINDAGEM E TRAVA DE VISUALIZAÇÃO DESKTOP (ELIMINAÇÃO DE SCROLL LATERAL E ZOOM INDESEJADO - HALLMARK STANDARD)
               const docEl = document.documentElement;
               const htmlStyle = window.getComputedStyle(docEl);
               const bodyStyle = window.getComputedStyle(document.body);
 
-              if (htmlStyle.overflowX !== 'hidden' && bodyStyle.overflowX !== 'hidden') {
-                throw new Error(`Trava de visualização violada: html e body devem conter overflow-x: hidden (html: ${htmlStyle.overflowX}, body: ${bodyStyle.overflowX})`);
+              const isContained = (val) => val === 'clip' || val === 'hidden';
+              if (!isContained(htmlStyle.overflowX) && !isContained(bodyStyle.overflowX)) {
+                throw new Error(`Trava de visualização violada: html e body devem conter overflow-x: clip ou hidden (html: ${htmlStyle.overflowX}, body: ${bodyStyle.overflowX})`);
               }
 
               if (window.innerWidth >= 860 && docEl.scrollWidth > window.innerWidth + 2) {

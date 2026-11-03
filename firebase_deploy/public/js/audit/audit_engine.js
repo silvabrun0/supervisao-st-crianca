@@ -734,6 +734,67 @@
                 renderUnitsScreen();
                 const polo1Units = (appState.units || []).filter(u => u.polo === 'Polo Regional 1 (Norte)');
                 logger.log('Isolamento de governança e escopo territorial por papel (Pilar 14)', true, `Coordenadora (UE) & Formadora (${polo1Units.length} UEs Polo 1)`);
+
+                // Teste de Bloqueio Rigoroso da Tela de Gestão da Base SSOT para Coordenador e Formador (v1.63)
+                // 1. Simulação com Coordenadora (Mariana)
+                selectUserAccount('mariana');
+                appState.currentPedagSubTab = 'exports'; // Simula resíduo de admin no estado
+                navigateToTab('opManagement');
+
+                const exportTabCoord = document.getElementById('pedagTabExports');
+                const exportViewCoord = document.getElementById('pedagViewExports');
+                if (exportTabCoord && exportTabCoord.style.display !== 'none') {
+                  throw new Error('Aba #pedagTabExports está visível para a Coordenadora');
+                }
+                if (exportViewCoord && exportViewCoord.style.display !== 'none') {
+                  throw new Error('Tela de gestão da base SSOT (#pedagViewExports) foi indevidamente exibida para a Coordenadora');
+                }
+                if (appState.currentPedagSubTab === 'exports') {
+                  throw new Error('currentPedagSubTab não foi purgado de "exports" na visão da Coordenadora');
+                }
+
+                // Tentativa de invasão via switchPedagSubTab direto
+                switchPedagSubTab('exports');
+                if (exportViewCoord && exportViewCoord.style.display !== 'none') {
+                  throw new Error('switchPedagSubTab("exports") permitiu abertura da tela SSOT para a Coordenadora');
+                }
+                logger.log('Bloqueio rigoroso da tela de gestão da base SSOT para Coordenadora Pedagógica', true);
+
+                // 2. Simulação com Formadora (Clarice)
+                selectUserAccount('clarice');
+                appState.currentPedagSubTab = 'exports';
+                navigateToTab('opManagement');
+
+                const exportTabForm = document.getElementById('pedagTabExports');
+                const exportViewForm = document.getElementById('pedagViewExports');
+                if (exportTabForm && exportTabForm.style.display !== 'none') {
+                  throw new Error('Aba #pedagTabExports está visível para a Formadora');
+                }
+                if (exportViewForm && exportViewForm.style.display !== 'none') {
+                  throw new Error('Tela de gestão da base SSOT (#pedagViewExports) foi indevidamente exibida para a Formadora');
+                }
+                if (appState.currentPedagSubTab === 'exports') {
+                  throw new Error('currentPedagSubTab não foi purgado de "exports" na visão da Formadora');
+                }
+
+                switchPedagSubTab('exports');
+                if (exportViewForm && exportViewForm.style.display !== 'none') {
+                  throw new Error('switchPedagSubTab("exports") permitiu abertura da tela SSOT para a Formadora');
+                }
+                logger.log('Bloqueio rigoroso da tela de gestão da base SSOT para Formadora Pedagógica', true);
+
+                // 3. Validação de Preservação para Núcleo de EI (Helena)
+                selectUserAccount('helena');
+                const exportTabHelena = document.getElementById('pedagTabExports');
+                if (!exportTabHelena || exportTabHelena.style.display === 'none') {
+                  throw new Error('Aba #pedagTabExports deve estar visível para o Núcleo de EI');
+                }
+                switchPedagSubTab('exports');
+                const exportViewHelena = document.getElementById('pedagViewExports');
+                if (!exportViewHelena || exportViewHelena.style.display !== 'block') {
+                  throw new Error('Núcleo de EI não conseguiu acessar a tela de extrações e base SSOT');
+                }
+                logger.log('Preservação integral da tela de gestão da base SSOT para o Núcleo de EI', true);
               } finally {
                 if (previousUserKey) selectUserAccount(previousUserKey);
               }
@@ -2238,6 +2299,32 @@
                 throw new Error('Badge inline .badge-next-inline não foi localizado na tabela ou cards da Agenda');
               }
               logger.log('Identificação inline (.badge-next-inline) presente na linha da próxima observação', true);
+
+              // 5. Validação da Barreira contra Agendamentos Duplicados (#modalAddSchedule)
+              const countBeforeDup = (appState.schedules || []).length;
+              openAddScheduleModal();
+              UI.select(document.getElementById('scheduleSchool'), 'CEI Professora Maria de Lourdes');
+              UI.select(document.getElementById('scheduleTarget'), 'Infantil I - Turma A');
+              UI.select(document.getElementById('scheduleBimester'), '3º Bimestre'); // Já criado anteriormente!
+              UI.type(document.getElementById('scheduleDate'), getTodayDateString());
+              checkScheduleDuplicationUI();
+
+              const dupHint = document.getElementById('scheduleDuplicateWarningHint');
+              if (!dupHint || dupHint.style.display === 'none') {
+                throw new Error('Banner preventivo de duplicidade #scheduleDuplicateWarningHint não foi exibido para agendamento repetido');
+              }
+              const saveBtnModal = document.getElementById('btnSaveScheduleModal');
+              if (!saveBtnModal || !saveBtnModal.disabled) {
+                throw new Error('Botão de salvar #btnSaveScheduleModal não foi desabilitado perante duplicidade');
+              }
+
+              // Tentativa de forçar saveNewSchedule() diretamente
+              saveNewSchedule();
+              if ((appState.schedules || []).length !== countBeforeDup) {
+                throw new Error('Sistema permitiu a inserção de agendamento duplicado no mesmo bimestre');
+              }
+              closeAddScheduleModal();
+              logger.log('Bloqueio preventivo e rejeição mandatória de agendamento duplicado (#modalAddSchedule)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo agenda_cronograma', false, e.message);
             }
@@ -3371,13 +3458,14 @@
               logger.log('Conformidade do botão Alterar Ano Letivo em #modalProfile e modal de seleção (Versão 1.40)', true);
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 
-              // 16. BLINDAGEM E TRAVA DE VISUALIZAÇÃO DESKTOP (ELIMINAÇÃO DE SCROLL LATERAL E ZOOM INDESEJADO)
+              // 16. BLINDAGEM E TRAVA DE VISUALIZAÇÃO DESKTOP (ELIMINAÇÃO DE SCROLL LATERAL E ZOOM INDESEJADO - HALLMARK STANDARD)
               const docEl = document.documentElement;
               const htmlStyle = window.getComputedStyle(docEl);
               const bodyStyle = window.getComputedStyle(document.body);
 
-              if (htmlStyle.overflowX !== 'hidden' && bodyStyle.overflowX !== 'hidden') {
-                throw new Error(`Trava de visualização violada: html e body devem conter overflow-x: hidden (html: ${htmlStyle.overflowX}, body: ${bodyStyle.overflowX})`);
+              const isContained = (val) => val === 'clip' || val === 'hidden';
+              if (!isContained(htmlStyle.overflowX) && !isContained(bodyStyle.overflowX)) {
+                throw new Error(`Trava de visualização violada: html e body devem conter overflow-x: clip ou hidden (html: ${htmlStyle.overflowX}, body: ${bodyStyle.overflowX})`);
               }
 
               if (window.innerWidth >= 860 && docEl.scrollWidth > window.innerWidth + 2) {
