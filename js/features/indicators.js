@@ -2646,23 +2646,8 @@
       }
 
       // =========================================================================
-      // CASO A: VISÃO GERAL PANORÂMICA (PILAR 3: BENCHMARK UE VS. REDE)
+      // CASO A: VISÃO GERAL PANORÂMICA (PILAR 3: BENCHMARK DUAL)
       // =========================================================================
-
-      // 1. Resolução das Observações Consolidadas de toda a Rede Municipal de Patos
-      let redeObs = (appState.observations || []).filter(o => {
-        if (o.status !== 'finalized' && o.status !== 'concluida') return false;
-        if (targetType === 'coordenador') {
-          return o.evaluatedType === 'coordenador';
-        } else {
-          return o.evaluatedType === 'professora' || o.evaluatedType === 'turma';
-        }
-      });
-
-      // PILAR 9: Aplica a mesma filtragem de bimestre na média da Rede para benchmark matematicamente fidedigno
-      if (activeBimesterFilter !== 'ALL') {
-        redeObs = redeObs.filter(o => o.bimester === activeBimesterFilter);
-      }
 
       // 2. Computação Hierárquica Dupla: Escopo Selecionado vs. Benchmark Ativo
       const totalValidResp = scopeHierarchy.totalValid;
@@ -2840,28 +2825,9 @@
         }
       }
 
-      // Definição do escopo ativo de visualização e rótulo de benchmark
-      let scopeLabelText = 'Minha UE';
-      if (targetType === 'coordenador') {
-        if (user.roleKey === 'formador') {
-          scopeLabelText = user.school || 'Meu Polo';
-        } else {
-          // isNucleoEI
-          scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Rede Consolidada';
-        }
-      } else {
-        if (user.roleKey === 'coordenador') {
-          scopeLabelText = 'Minha UE';
-        } else if (user.roleKey === 'formador') {
-          scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Meu Polo';
-        } else {
-          scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Rede Consolidada';
-        }
-      }
-
       // Renderiza Tabela Executiva de UEs quando escopo consolidado para Núcleo ou Formadora
       let executiveUETableHtml = '';
-      if (activeUnitFilter === 'ALL' && (isNucleoEI(user) || user.roleKey === 'formador')) {
+      if ((rawUnitFilter === 'ALL' || isRedeConsolidated) && (isNucleoEI(user) || user.roleKey === 'formador')) {
         const currentBim = getCurrentSchoolBimester();
         const currentBimNum = parseInt((currentBim.match(/([1-4])/) || [null, '1'])[1], 10);
 

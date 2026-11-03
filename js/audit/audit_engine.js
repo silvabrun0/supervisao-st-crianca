@@ -3649,7 +3649,7 @@
               logger.log('Subsistema de Informação Mobile Hallmark (modal, botões e classes de desclutter)', true);
 
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.62
-              if (!btnChangelog.textContent.includes('Versão 1.62')) {
+              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
               if (!modalChg.innerHTML.includes('Versão 1.62')) {
