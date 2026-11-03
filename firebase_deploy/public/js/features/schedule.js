@@ -178,7 +178,7 @@
             <div class="next-visit-hero-card">
               <div class="next-visit-hero-header">
                 <div class="next-visit-title-badge">
-                  PRÓXIMA OBSERVAÇÃO
+                  Próxima observação
                 </div>
                 <div>${timingBadge}</div>
               </div>
@@ -654,6 +654,7 @@
       const btnDeleteModal = document.getElementById('btnDeleteScheduleModal');
       if (btnDeleteModal) btnDeleteModal.style.display = 'none';
       document.getElementById('modalAddSchedule').classList.add('active');
+      checkScheduleDuplicationUI();
     }
 
     function openEditScheduleModal(scheduleId) {
@@ -710,9 +711,11 @@
       if (btnDeleteModal) btnDeleteModal.style.display = 'inline-block';
 
       document.getElementById('modalAddSchedule').classList.add('active');
+      checkScheduleDuplicationUI();
     }
 
     function closeAddScheduleModal() {
+      editingScheduleId = null;
       document.getElementById('modalAddSchedule').classList.remove('active');
     }
 
@@ -814,7 +817,262 @@
       }
     }
 
+    // --- MOTOR DE DETECÇÃO DE DUPLICIDADE EM AGENDAMENTOS (SSOT) ---
+    let isSavingSchedule = false;
+
+    function findDuplicateSchedule(params, ignoreScheduleId = null) {
+      if (!appState.schedules || !Array.isArray(appState.schedules)) return null;
+      const user = getCurrentUser();
+      const { schoolName, targetType, targetName, className, bimester, plannedDate, plannedTime } = params;
+
+      const cleanSchool = (schoolName || '').trim().toLowerCase();
+      const cleanTarget = (targetName || '').trim().toLowerCase();
+      const cleanClass = (className || '').trim().toLowerCase();
+      const cleanBim = (bimester || '').trim();
+      const cleanDate = (plannedDate || '').trim();
+      const cleanTime = (plannedTime || '').trim();
+
+      // 1. Duplicidade de Bimestre no Ciclo Longitudinal (Mesma Escola + Mesmo Alvo + Mesmo Bimestre)
+      const bimDuplicate = appState.schedules.find(s => {
+        if (ignoreScheduleId && s.id === ignoreScheduleId) return false;
+        if (s.archived) return false;
+        if ((s.schoolName || '').trim().toLowerCase() !== cleanSchool) return false;
+        if ((s.bimester || '').trim() !== cleanBim) return false;
+
+        if (targetType === 'turma') {
+          const sClass = (s.className || s.targetName || '').trim().toLowerCase();
+          return sClass === cleanClass || sClass === cleanTarget;
+        } else {
+          const sTarget = (s.targetName || '').trim().toLowerCase();
+          return sTarget === cleanTarget;
+        }
+      });
+
+      if (bimDuplicate) {
+        const formattedDate = typeof formatDateBR === 'function' ? formatDateBR(bimDuplicate.plannedDate) : bimDuplicate.plannedDate;
+        const targetLabel = targetType === 'turma' ? `a turma ${className || targetName}` : `a coordenadora ${targetName}`;
+        const statusLabel = bimDuplicate.status === 'realizado' ? 'já realizada' : (bimDuplicate.status === 'atrasado' ? 'em atraso' : 'planejada');
+        return {
+          isDuplicate: true,
+          type: 'bimester',
+          existingSchedule: bimDuplicate,
+          message: `Já existe uma observação (${statusLabel}) para ${targetLabel} no ${bimester} (agendada para ${formattedDate} às ${bimDuplicate.plannedTime || '08:00'}).`
+        };
+      }
+
+      // 2. Duplicidade de Data no Alvo (Mesma Turma ou Mesma Coordenadora na mesma data)
+      if (cleanDate) {
+        const dateDuplicate = appState.schedules.find(s => {
+          if (ignoreScheduleId && s.id === ignoreScheduleId) return false;
+          if (s.archived) return false;
+          if ((s.schoolName || '').trim().toLowerCase() !== cleanSchool) return false;
+          if ((s.plannedDate || s.date || '').trim() !== cleanDate) return false;
+
+          if (targetType === 'turma') {
+            const sClass = (s.className || s.targetName || '').trim().toLowerCase();
+            return sClass === cleanClass || sClass === cleanTarget;
+          } else {
+            const sTarget = (s.targetName || '').trim().toLowerCase();
+            return sTarget === cleanTarget;
+          }
+        });
+
+        if (dateDuplicate) {
+          const formattedDate = typeof formatDateBR === 'function' ? formatDateBR(cleanDate) : cleanDate;
+          const targetLabel = targetType === 'turma' ? `a turma ${className || targetName}` : `a coordenadora ${targetName}`;
+          return {
+            isDuplicate: true,
+            type: 'date',
+            existingSchedule: dateDuplicate,
+            message: `Já existe uma visita marcada para ${targetLabel} na data ${formattedDate} (${dateDuplicate.bimester} às ${dateDuplicate.plannedTime || '08:00'}).`
+          };
+        }
+      }
+
+      // 3. Conflito de Horário do Supervisor (Mesmo observador no mesmo dia e horário)
+      if (cleanDate && cleanTime && user && user.name) {
+        const supervisorConflict = appState.schedules.find(s => {
+          if (ignoreScheduleId && s.id === ignoreScheduleId) return false;
+          if (s.archived) return false;
+          if (s.supervisor && s.supervisor.trim().toLowerCase() !== user.name.trim().toLowerCase()) return false;
+          return (s.plannedDate || s.date || '').trim() === cleanDate && (s.plannedTime || '').trim() === cleanTime;
+        });
+
+        if (supervisorConflict) {
+          const formattedDate = typeof formatDateBR === 'function' ? formatDateBR(cleanDate) : cleanDate;
+          return {
+            isDuplicate: true,
+            type: 'supervisor_time',
+            existingSchedule: supervisorConflict,
+            message: `Você já possui um agendamento neste mesmo dia e horário (${formattedDate} às ${cleanTime}) para ${supervisorConflict.className || supervisorConflict.targetName} na unidade ${supervisorConflict.schoolName}.`
+          };
+        }
+      }
+
+      // 4. Verificação de Observação Concluída / Em Andamento Existente para o Alvo no Bimestre
+      if (appState.observations && Array.isArray(appState.observations)) {
+        const bimNumMatch = cleanBim.match(/([1-4])/);
+        const bimNum = bimNumMatch ? bimNumMatch[1] : '';
+
+        // Localiza agendamento sendo editado e sua observação correspondente para isenção relacional
+        const currentEditingSched = ignoreScheduleId ? (appState.schedules || []).find(s => s.id === ignoreScheduleId) : null;
+        const linkedObsToEditing = currentEditingSched && typeof findObservationForSchedule === 'function'
+          ? findObservationForSchedule(currentEditingSched)
+          : null;
+
+        const obsDuplicate = appState.observations.find(o => {
+          if (o.status === 'archived') return false;
+
+          // Se estamos em modo de edição, ignora a observação que já pertence ao agendamento sendo editado
+          if (ignoreScheduleId) {
+            if (o.scheduleId === ignoreScheduleId) return false;
+            if (currentEditingSched && (currentEditingSched.observationId === o.id || (linkedObsToEditing && linkedObsToEditing.id === o.id))) return false;
+          }
+
+          if (cleanSchool && o.schoolName && (o.schoolName || '').trim().toLowerCase() !== cleanSchool) return false;
+          const oBimNumMatch = (o.bimester || '').match(/([1-4])/);
+          if (!oBimNumMatch || (bimNum && oBimNumMatch[1] !== bimNum)) return false;
+
+          if (targetType === 'turma') {
+            const oClass = (o.className || '').trim().toLowerCase();
+            return oClass === cleanClass || oClass === cleanTarget;
+          } else {
+            const oTarget = (o.teacherName || '').trim().toLowerCase();
+            return oTarget === cleanTarget;
+          }
+        });
+
+        if (obsDuplicate) {
+          const targetLabel = targetType === 'turma' ? `a turma ${className || targetName}` : `a coordenadora ${targetName}`;
+          const obsStatus = (obsDuplicate.status === 'finalized' || obsDuplicate.status === 'concluida') ? 'concluída' : 'em rascunho';
+          return {
+            isDuplicate: true,
+            type: 'observation',
+            existingObservation: obsDuplicate,
+            message: `Já existe uma observação (${obsStatus}) registrada para ${targetLabel} no ${bimester}. Não é necessário criar um novo agendamento.`
+          };
+        }
+      }
+
+      return null;
+    }
+
+    function checkScheduleDuplicationUI() {
+      const hintEl = document.getElementById('scheduleDuplicateWarningHint');
+      const saveBtn = document.getElementById('btnSaveScheduleModal');
+      if (!hintEl) return;
+
+      const schoolSelect = document.getElementById('scheduleSchool');
+      const targetSelect = document.getElementById('scheduleTarget');
+      const bimesterSelect = document.getElementById('scheduleBimester');
+      const dateInput = document.getElementById('scheduleDate');
+      const timeInput = document.getElementById('scheduleTime');
+
+      if (!schoolSelect || !targetSelect || !bimesterSelect) return;
+
+      const schoolName = schoolSelect.value;
+      const targetVal = targetSelect.value;
+      const bimester = bimesterSelect.value;
+      const plannedDate = dateInput ? dateInput.value : '';
+      const plannedTime = timeInput ? timeInput.value : '';
+
+      if (!targetVal) {
+        hintEl.style.display = 'none';
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.style.opacity = '1';
+          saveBtn.style.cursor = 'pointer';
+        }
+        return;
+      }
+
+      const user = getCurrentUser();
+      const targetType = user.roleKey === 'coordenador' ? 'turma' : 'coordenador';
+      const className = targetType === 'turma' ? targetVal : 'Coordenação Pedagógica';
+      const targetName = targetVal;
+
+      const dup = findDuplicateSchedule({
+        schoolName,
+        targetType,
+        targetName,
+        className,
+        bimester,
+        plannedDate,
+        plannedTime
+      }, editingScheduleId);
+
+      if (dup && dup.isDuplicate) {
+        hintEl.style.display = 'flex';
+        hintEl.style.alignItems = 'flex-start';
+        hintEl.style.gap = '8px';
+        hintEl.style.background = '#FEF2F2';
+        hintEl.style.border = '1px solid #FCA5A5';
+        hintEl.style.borderRadius = '8px';
+        hintEl.style.padding = '10px 12px';
+        hintEl.style.color = '#991B1B';
+        hintEl.style.fontSize = '12px';
+        hintEl.style.fontWeight = '500';
+        hintEl.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" style="flex-shrink:0; margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div>
+            <strong style="font-weight:700; color:#991B1B; display:block; margin-bottom:2px;">Agendamento Duplicado Detectado</strong>
+            <span>${dup.message}</span>
+          </div>
+        `;
+        if (saveBtn) {
+          saveBtn.disabled = true;
+          saveBtn.style.opacity = '0.5';
+          saveBtn.style.cursor = 'not-allowed';
+          saveBtn.title = dup.message;
+        }
+      } else {
+        hintEl.style.display = 'none';
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.style.opacity = '1';
+          saveBtn.style.cursor = 'pointer';
+          saveBtn.title = '';
+        }
+      }
+    }
+
+    function sanitizeDuplicateSchedules() {
+      if (!appState.schedules || !Array.isArray(appState.schedules)) return;
+      const seenKeys = new Map();
+      const sanitized = [];
+
+      appState.schedules.forEach(s => {
+        if (s.archived) {
+          sanitized.push(s);
+          return;
+        }
+        const targetKey = `${(s.schoolName || '').trim().toLowerCase()}::${(s.className || s.targetName || '').trim().toLowerCase()}::${(s.bimester || '').trim().toLowerCase()}`;
+        if (!seenKeys.has(targetKey)) {
+          seenKeys.set(targetKey, s);
+          sanitized.push(s);
+        } else {
+          // Duplicata encontrada: preserva a que possuir observação vinculada
+          const existing = seenKeys.get(targetKey);
+          const sObs = typeof findObservationForSchedule === 'function' ? findObservationForSchedule(s) : null;
+          const existingObs = typeof findObservationForSchedule === 'function' ? findObservationForSchedule(existing) : null;
+          
+          if (sObs && !existingObs) {
+            const idx = sanitized.indexOf(existing);
+            if (idx !== -1) sanitized[idx] = s;
+            seenKeys.set(targetKey, s);
+          }
+        }
+      });
+
+      if (sanitized.length !== appState.schedules.length) {
+        appState.schedules = sanitized;
+        saveState();
+      }
+    }
+
     function saveNewSchedule() {
+      if (isSavingSchedule) return;
+
       const user = getCurrentUser();
       const schoolName = document.getElementById('scheduleSchool').value;
       const targetVal = document.getElementById('scheduleTarget').value;
@@ -846,61 +1104,94 @@
         className = 'Coordenação Pedagógica';
         targetName = targetVal;
       }
-      
-      if (editingScheduleId) {
-        const schedIndex = appState.schedules.findIndex(s => s.id === editingScheduleId);
-        if (schedIndex !== -1) {
-          const schedToUpdate = appState.schedules[schedIndex];
-          schedToUpdate.schoolName = schoolName;
-          schedToUpdate.targetType = targetType;
-          schedToUpdate.targetName = targetName;
-          schedToUpdate.className = className;
-          schedToUpdate.classId = classId;
-          schedToUpdate.teachers = teachersList;
-          schedToUpdate.bimester = bimester;
-          schedToUpdate.plannedDate = plannedDate;
-          schedToUpdate.date = plannedDate;
-          schedToUpdate.plannedTime = plannedTime;
 
-          // Sincronização relacional bidirecional com observação vinculada (se houver)
-          const linkedObs = findObservationForSchedule(schedToUpdate);
-          if (linkedObs) {
-            linkedObs.date = plannedDate;
-            linkedObs.startDate = plannedDate;
-            linkedObs.endDate = plannedDate;
-            if (plannedTime) linkedObs.startTime = plannedTime;
+      // --- BARREIRA DE PROTEÇÃO CONTRA AGENDAMENTOS DUPLICADOS ---
+      const dup = findDuplicateSchedule({
+        schoolName,
+        targetType,
+        targetName,
+        className,
+        bimester,
+        plannedDate,
+        plannedTime
+      }, editingScheduleId);
 
-            // Turmas de Tempo Integral: sincronizar sub-etapas matutina e vespertina
-            if (linkedObs.isIntegral) {
-              if (linkedObs.morningObs) linkedObs.morningObs.date = plannedDate;
-              if (linkedObs.afternoonObs) linkedObs.afternoonObs.date = plannedDate;
-            }
-          }
-        }
-        showToast('Observação atualizada com sucesso!');
-      } else {
-        const newSched = {
-          id: 'sch-' + Date.now(),
-          schoolName: schoolName,
-          targetType: targetType,
-          targetName: targetName,
-          className: className,
-          classId: classId,
-          teachers: teachersList,
-          bimester: bimester,
-          plannedDate: plannedDate,
-          plannedTime: plannedTime,
-          supervisor: user.name,
-          status: 'planejado'
-        };
-        appState.schedules.unshift(newSched);
-        showToast('Observação planejada adicionada ao cronograma!');
+      if (dup && dup.isDuplicate) {
+        showToast(dup.message, 'warning');
+        checkScheduleDuplicationUI();
+        return;
       }
 
-      saveState();
-      closeAddScheduleModal();
-      renderScheduleScreen();
-      if (typeof renderHomeScreen === 'function') renderHomeScreen();
+      isSavingSchedule = true;
+      const saveBtn = document.getElementById('btnSaveScheduleModal');
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.style.opacity = '0.7';
+      }
+
+      try {
+        if (editingScheduleId) {
+          const schedIndex = appState.schedules.findIndex(s => s.id === editingScheduleId);
+          if (schedIndex !== -1) {
+            const schedToUpdate = appState.schedules[schedIndex];
+            schedToUpdate.schoolName = schoolName;
+            schedToUpdate.targetType = targetType;
+            schedToUpdate.targetName = targetName;
+            schedToUpdate.className = className;
+            schedToUpdate.classId = classId;
+            schedToUpdate.teachers = teachersList;
+            schedToUpdate.bimester = bimester;
+            schedToUpdate.plannedDate = plannedDate;
+            schedToUpdate.date = plannedDate;
+            schedToUpdate.plannedTime = plannedTime;
+
+            // Sincronização relacional bidirecional com observação vinculada (se houver)
+            const linkedObs = findObservationForSchedule(schedToUpdate);
+            if (linkedObs) {
+              linkedObs.date = plannedDate;
+              linkedObs.startDate = plannedDate;
+              linkedObs.endDate = plannedDate;
+              if (plannedTime) linkedObs.startTime = plannedTime;
+
+              // Turmas de Tempo Integral: sincronizar sub-etapas matutina e vespertina
+              if (linkedObs.isIntegral) {
+                if (linkedObs.morningObs) linkedObs.morningObs.date = plannedDate;
+                if (linkedObs.afternoonObs) linkedObs.afternoonObs.date = plannedDate;
+              }
+            }
+          }
+          showToast('Observação atualizada com sucesso!');
+          editingScheduleId = null;
+        } else {
+          const newSched = {
+            id: 'sch-' + Date.now(),
+            schoolName: schoolName,
+            targetType: targetType,
+            targetName: targetName,
+            className: className,
+            classId: classId,
+            teachers: teachersList,
+            bimester: bimester,
+            plannedDate: plannedDate,
+            plannedTime: plannedTime,
+            supervisor: user.name,
+            status: 'planejado'
+          };
+          appState.schedules.unshift(newSched);
+          showToast('Observação planejada adicionada ao cronograma!');
+        }
+
+        saveState();
+        closeAddScheduleModal();
+        renderScheduleScreen();
+        if (typeof renderHomeScreen === 'function') renderHomeScreen();
+      } finally {
+        isSavingSchedule = false;
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.style.opacity = '1';
+        }
+      }
     }
 
     function openSetupScreenFromSchedule(scheduleId) {

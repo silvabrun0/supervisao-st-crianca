@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.68 (v8.2.35)</span>
+          <span>Versão 1.69 (v8.2.36)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -1812,6 +1812,22 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.69 - CORREÇÃO DA EDIÇÃO DE AGENDAMENTOS REALIZADOS NO CRONOGRAMA E ISENÇÃO RELACIONAL DE DUPLICIDADE -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.69 · v8.2.36</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">03/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Correção da Edição de Agendamentos Realizados no Cronograma e Isenção Relacional de Duplicidade:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📅 <strong>Isenção Relacional na Regra 4 de Duplicidade:</strong> Ajuste em <code>findDuplicateSchedule</code> para desconsiderar a própria observação vinculada ao agendamento sendo editado (<code>ignoreScheduleId</code>), eliminando falso positivo de duplicidade ao salvar alterações de data/horário em visitas realizadas.</li>
+          <li>🔄 <strong>Sincronização Bidirecional e Reset de Estado:</strong> Atualização imediata de <code>plannedDate</code>, <code>date</code> e <code>plannedTime</code> no agendamento e na observação vinculada no histórico, com higienização estrita de <code>editingScheduleId</code> ao fechar o modal ou salvar.</li>
+          <li>🛡️ <strong>Validação Modular Integral:</strong> 100% de conformidade restabelecida no módulo <code>agenda_cronograma</code> da auditoria de plataforma (14/14 testes aprovados).</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.68 - ARQUITETURA DUAL DE BENCHMARK PEDAGÓGICO: POLO VS. REDE E UNIDADE VS. RESPECTIVO POLO -->

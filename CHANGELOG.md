@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.69** | 03/11/2026 16:15 | `intermediárias/aplicativo_v1.69_resolucao_edicao_agendamento_cronograma.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_edicao_agendamento_cronograma.md` | Resolução da Edição de Agendamento Realizado no Cronograma e Isenção Relacional de Duplicidade: ajuste na Regra 4 de `findDuplicateSchedule` para desconsiderar a própria observação vinculada ao agendamento sendo editado (`ignoreScheduleId`), viabilizando a alteração in-place de data e horário com sincronização bidirecional no histórico e higienização de ciclo de vida (`editingScheduleId = null`) 📅🔄🛡️ |
 | **1.68** | 03/11/2026 15:20 | `intermediárias/aplicativo_v1.68_comparacao_polo_vs_rede_e_unidade_vs_polo.html` | Solicitação direta / `planos_de_implementacao/plano_comparacao_polo_vs_rede_e_unidade_vs_polo.md` | Arquitetura Dual de Benchmark Pedagógico (Polo vs. Rede e Unidade vs. Respectivo Polo): comparativo macro territorial de Polos Regionais contra a Média da Rede Municipal de Patos/PB, comparativo micro institucional de Unidades Escolares contra o respectivo Polo de pertencimento, dinamização de réguas e cards do Pilar 8, Quadro de Controle Bimestral escopado e asserções estritas no Módulo 10 🗺️🏫📊🛡️ |
 | **1.67** | 03/11/2026 15:05 | `intermediárias/aplicativo_v1.67_resolucao_visualizacao_mobile_relatorios_ssot.html` | Solicitação direta / `planos_de_implementacao/plano_resolucao_visualizacao_mobile_relatorios_ssot.md` | Resolução da Visualização Mobile da Aba de Relatórios SSOT (Padrão Hallmark): erradicação do esmagamento horizontal de 5 cards com grid responsivo modular (`repeat(auto-fit, minmax(280px, 1fr))` desktop e `1fr` coluna única mobile), empilhamento full-width dos botões de backup, touch targets de 44px e higienização semântica de classes CSS 📱🏛️🛡️ |
 | **1.66** | 03/11/2026 15:00 | `intermediárias/aplicativo_v1.66_harmonizacao_trava_visualizacao_hallmark.html` | Solicitação direta / `planos_de_implementacao/plano_harmonizacao_trava_visualizacao_hallmark.md` | Harmonização da Trava de Visualização Desktop (Hallmark Standard vs. Asserção de Auditoria): alinhamento do Item 16 no Módulo 12 (`navegacao_layout`) de `audit_engine.js` para reconhecer `overflow-x: clip` conjuntamente a `overflow-x: hidden`, preservando a regra de contenção canônica do Hallmark Floor 4 🛡️💻✨ |
@@ -193,6 +194,18 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.69] - Correção da Edição de Agendamentos Realizados no Cronograma e Isenção Relacional de Duplicidade
+- **Data / Horário:** 03/11/2026 16:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.69_resolucao_edicao_agendamento_cronograma.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_resolucao_edicao_agendamento_cronograma.md`
+- **Foco Central:** Resolução definitiva da atualização de agendamento em edição no cronograma longitudinal (`agenda_cronograma`):
+  1. **Isenção Relacional na Regra 4 de Duplicidade:** Refinamento da verificação de observações concorrentes em `findDuplicateSchedule(params, ignoreScheduleId)` em `js/features/schedule.js`. Quando em modo de edição (`ignoreScheduleId` informado), o algoritmo desconsidera a própria observação já vinculada ao agendamento sendo alterado (`o.scheduleId === ignoreScheduleId` ou `linkedObsToEditing.id === o.id`). Isso impede o falso positivo de bloqueio em visitas que já possuíam baixa automática/observação vinculada.
+  2. **Atualização In-Place e Sincronização Bidirecional:** Garantia de que a edição de data (`plannedDate`, `date`) e horário (`plannedTime`) seja persistida com sucesso em `schedToUpdate` e propagada de forma atômica para a observação vinculada no histórico (`linkedObs.date`, `linkedObs.startDate`, `linkedObs.endDate`, `linkedObs.startTime`, sub-etapas integrais).
+  3. **Higienização do Ciclo de Vida do Modal:** Reset estrito de `editingScheduleId = null;` ao fechar o modal (`closeAddScheduleModal`) e imediatamente após concluir a gravação em `saveNewSchedule()`.
+  4. **Conformidade Modular da Auditoria:** Restauração de 100% de aprovação (14/14 testes PASS) no módulo `agenda_cronograma` da suíte headless e erradicação do erro de Safari reportado no diagnóstico.
+
+---
 
 ### [Versão 1.67] - Resolução da Visualização Mobile da Aba de Relatórios SSOT (Hallmark Standard)
 - **Data / Horário:** 03/11/2026 15:05

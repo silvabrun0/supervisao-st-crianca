@@ -715,6 +715,7 @@
     }
 
     function closeAddScheduleModal() {
+      editingScheduleId = null;
       document.getElementById('modalAddSchedule').classList.remove('active');
     }
 
@@ -913,8 +914,21 @@
         const bimNumMatch = cleanBim.match(/([1-4])/);
         const bimNum = bimNumMatch ? bimNumMatch[1] : '';
 
+        // Localiza agendamento sendo editado e sua observação correspondente para isenção relacional
+        const currentEditingSched = ignoreScheduleId ? (appState.schedules || []).find(s => s.id === ignoreScheduleId) : null;
+        const linkedObsToEditing = currentEditingSched && typeof findObservationForSchedule === 'function'
+          ? findObservationForSchedule(currentEditingSched)
+          : null;
+
         const obsDuplicate = appState.observations.find(o => {
           if (o.status === 'archived') return false;
+
+          // Se estamos em modo de edição, ignora a observação que já pertence ao agendamento sendo editado
+          if (ignoreScheduleId) {
+            if (o.scheduleId === ignoreScheduleId) return false;
+            if (currentEditingSched && (currentEditingSched.observationId === o.id || (linkedObsToEditing && linkedObsToEditing.id === o.id))) return false;
+          }
+
           if (cleanSchool && o.schoolName && (o.schoolName || '').trim().toLowerCase() !== cleanSchool) return false;
           const oBimNumMatch = (o.bimester || '').match(/([1-4])/);
           if (!oBimNumMatch || (bimNum && oBimNumMatch[1] !== bimNum)) return false;
@@ -1147,6 +1161,7 @@
             }
           }
           showToast('Observação atualizada com sucesso!');
+          editingScheduleId = null;
         } else {
           const newSched = {
             id: 'sch-' + Date.now(),
