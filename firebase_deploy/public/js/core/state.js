@@ -234,6 +234,11 @@
               syncUnitCharacterizationFromClasses();
             }
 
+            // Saneamento transparente contra agendamentos duplicados pré-existentes
+            if (typeof sanitizeDuplicateSchedules === 'function') {
+              sanitizeDuplicateSchedules();
+            }
+
             if (sanitized) saveState();
           }
         } catch (e) {

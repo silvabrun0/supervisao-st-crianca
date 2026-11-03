@@ -1,4 +1,5 @@
     :root {
+      /* Base Legacy Compatibility */
       --primary: #0066CC;
       --primary-dark: #004C99;
       --primary-light: #EBF5FF;
@@ -18,12 +19,85 @@
       --purple-bg: #EDE9FE;
       --na-color: #64748B;
       --na-bg: #F1F5F9;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
-      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+      --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+      --shadow-md: 0 4px 6px -1px rgba(15,23,42,0.07), 0 2px 4px -1px rgba(15,23,42,0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(15,23,42,0.08), 0 4px 6px -2px rgba(15,23,42,0.04);
       --radius: 12px;
       --header-height: 64px;
       --tabbar-height: 62px;
+
+      /* =========================================================================
+         HALLMARK DESIGN TOKENS — SERTÃO CRIANÇA (INSTITUCIONAL & ANTIVIBECODE)
+         ========================================================================= */
+      /* 1. Superfícies & Fundos (Paper Layer) */
+      --bg-ground: #F8FAFC;             /* Fundo geral da página (slate 50) */
+      --bg-surface: #FFFFFF;            /* Cartões e painéis primários */
+      --bg-surface-subtle: #F1F5F9;     /* Bandas neutras e cabeçalhos de tabela (slate 100) */
+      --bg-surface-hover: #EDF2F7;      /* Hover sutil de linhas e itens de menu */
+      
+      /* 2. Tintas & Tipografia de Alta Densidade (Ink Layer) */
+      --ink-primary: #0F172A;           /* Texto principal de títulos e números (slate 900) */
+      --ink-body: #334155;              /* Corpo de texto e descrições (slate 700) */
+      --ink-muted: #64748B;             /* Rótulos, metadados e legendas (slate 500) */
+      --ink-subtle: #94A3B8;            /* Placeholders e elementos inativos (slate 400) */
+
+      /* 3. Hairlines & Divisores Estruturais (Rule Layer) */
+      --border-rule: #E2E8F0;           /* Bordas de cartões e inputs (slate 200) */
+      --border-subtle: #F1F5F9;         /* Divisores internos entre itens de lista */
+      --border-focus: #0066CC;          /* Anel de foco acessível instantâneo */
+
+      /* 4. Acento Institucional SerTão Criança (< 5% Footprint) */
+      --brand-primary: #0066CC;         /* Azul institucional sóbrio */
+      --brand-primary-hover: #004C99;   /* Hover do botão primário */
+      --brand-primary-ink: #FFFFFF;     /* Texto do botão primário */
+      --brand-accent-tint: #EFF6FF;     /* Fundo de seleção ativa suave (blue 50) */
+      --brand-accent-ink: #1D4ED8;      /* Texto de item ativo selecionado */
+
+      /* 5. Semáforo Pedagógico Calmo (Quiet Badges & Rating Scale) */
+      --sem-green-bg: #F0FDF4;          /* Consistente / Concluído (Fundo) */
+      --sem-green-rule: #DCFCE7;        /* Consistente / Concluído (Borda) */
+      --sem-green-border: #DCFCE7;
+      --sem-green-ink: #166534;         /* Consistente / Concluído (Texto) */
+
+      --sem-amber-bg: #FEF9C3;          /* Parcial / Em Atenção (Fundo) */
+      --sem-amber-rule: #FEF08A;        /* Parcial / Em Atenção (Borda) */
+      --sem-amber-border: #FEF08A;
+      --sem-amber-ink: #854D0E;         /* Parcial / Em Atenção (Texto) */
+
+      --sem-red-bg: #FEF2F2;            /* Não Realizado / Em Atraso (Fundo) */
+      --sem-red-rule: #FEE2E2;          /* Não Realizado / Em Atraso (Borda) */
+      --sem-red-border: #FEE2E2;
+      --sem-red-ink: #991B1B;           /* Não Realizado / Em Atraso (Texto) */
+
+      --sem-blue-bg: #F0F7FF;
+      --sem-blue-border: #BFDBFE;
+      --sem-blue-ink: #004C99;
+
+      --sem-neutral-bg: #F8FAFC;        /* Não Se Aplica (NA) / Futuro (Fundo) */
+      --sem-neutral-rule: #E2E8F0;      /* Não Se Aplica (NA) / Futuro (Borda) */
+      --sem-neutral-ink: #475569;       /* Não Se Aplica (NA) / Futuro (Texto) */
+      --sem-future-bg: #F8FAFC;
+      --sem-future-border: #E2E8F0;
+      --sem-future-ink: #94A3B8;
+
+      /* 6. Escala Modular de Raios Concêntricos (Concentric Radii System) */
+      --radius-sm: 6px;                 /* Micro-badges, tags e inputs menores */
+      --radius-md: 8px;                 /* Botões, inputs, cards internos e dropdowns */
+      --radius-lg: 12px;                /* Cartões primários, painéis e modais */
+      --radius-full: 9999px;            /* Badges circulares calmos exclusivos */
+
+      /* 7. Elevação Sutil & Sombras de Oclusão Ambiente Neutras (Zero Glow) */
+      --shadow-flat: none;
+      --shadow-hairline: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-panel: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-modal: 0 12px 28px -4px rgba(15, 23, 42, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+
+      /* 8. Ergonomia e Acessibilidade (Touch Targets & Timings) */
+      --touch-target: 44px;
+      --touch-target-min: 44px;
+      --dur-fast: 0.12s;
+      --dur-base: 0.18s;
+      --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
 
       /* Hallmark UI Tokens — Gestão Pedagógica & Governança */
       --gestao-surface: var(--surface);
@@ -47,7 +121,6 @@
       
       /* Botões e Foco Acessível Instantâneo */
       --btn-focus-ring: #0066CC;
-      --touch-target-min: 44px;
 
       /* Hallmark UI Tokens — Painel e Indicadores (Sobriedade Institucional) */
       --ind-ground: #F8FAFC;
@@ -59,27 +132,6 @@
       --ind-text-strong: #0F172A;
       --ind-text-body: #334155;
       --ind-text-muted: #64748B;
-
-      /* Semáforo Institucional Contido (Desaturado e Elegante) */
-      --sem-green-bg: #F0FDF4;
-      --sem-green-border: #DCFCE7;
-      --sem-green-ink: #166534;
-
-      --sem-amber-bg: #FEF9C3;
-      --sem-amber-border: #FEF08A;
-      --sem-amber-ink: #854D0E;
-
-      --sem-red-bg: #FEF2F2;
-      --sem-red-border: #FEE2E2;
-      --sem-red-ink: #991B1B;
-
-      --sem-blue-bg: #F0F7FF;
-      --sem-blue-border: #BFDBFE;
-      --sem-blue-ink: #004C99;
-
-      --sem-future-bg: #F8FAFC;
-      --sem-future-border: #E2E8F0;
-      --sem-future-ink: #94A3B8;
 
       /* Escala de Materiais Progressiva Sóbria */
       --mat-level-1: #64748B;
@@ -119,27 +171,36 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* Hallmark Floor 4: overflow-x: clip no html e body (proibido hidden e 100vw) */
     html {
       width: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
+      overflow-x: clip;
       overscroll-behavior-x: none;
       touch-action: pan-y;
       -webkit-text-size-adjust: 100%;
     }
 
     body {
-      background: var(--bg);
-      color: var(--text-primary);
+      background: var(--bg-ground);
+      color: var(--ink-primary);
       min-height: 100vh;
       width: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
+      overflow-x: clip;
       overscroll-behavior-x: none;
       touch-action: pan-y;
       display: flex;
       flex-direction: column;
       position: relative;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Hallmark Floor 6: Foco Acessível Instantâneo Universal */
+    :focus-visible {
+      outline: 2px solid var(--border-focus) !important;
+      outline-offset: 2px !important;
+      transition: none !important;
     }
 
     /* Prevenção de arraste acidental de elementos gráficos no desktop */
@@ -197,29 +258,29 @@
     .brand-logo {
       width: 38px;
       height: 38px;
-      border-radius: 9px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: var(--radius-md);
+      background: var(--brand-primary);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      font-size: 17px;
-      box-shadow: 0 2px 5px rgba(0,102,204,0.3);
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: var(--shadow-hairline);
     }
     .brand-text {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      border-left: 1px solid var(--border);
+      border-left: 1px solid var(--border-rule);
       padding-left: 10px;
     }
     .brand-text span {
       font-size: 11px;
-      color: var(--text-secondary);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
+      color: var(--ink-muted);
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: normal;
     }
 
     /* Desktop Navigation Tabs */

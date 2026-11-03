@@ -246,6 +246,18 @@
       renderIndicatorsScreen();
     }
 
+    function onIndicatorsBenchmarkChange() {
+      const benchSelect = document.getElementById('indicatorsBenchmarkFilter');
+      if (benchSelect) {
+        appState.indicatorsBenchmark = benchSelect.value;
+      }
+      const mobBench = document.getElementById('mobileIndBenchmarkFilter');
+      if (mobBench && benchSelect) {
+        mobBench.value = benchSelect.value;
+      }
+      renderIndicatorsScreen();
+    }
+
     function selectTeacherForLongitudinalAnalysis(teacherName) {
       const memberSelect = document.getElementById('indicatorsMemberFilter');
       if (memberSelect) {
@@ -951,6 +963,15 @@
         mobBim.value = deskBim.value || 'ALL';
       }
 
+      // 5. Sincroniza Referencial Comparativo no Mobile
+      const deskBench = document.getElementById('indicatorsBenchmarkFilter');
+      const mobBench = document.getElementById('mobileIndBenchmarkFilter');
+      if (mobBench && deskBench) {
+        mobBench.innerHTML = deskBench.innerHTML;
+        mobBench.value = deskBench.value;
+        mobBench.disabled = deskBench.disabled;
+      }
+
       modal.classList.add('active');
     }
 
@@ -1008,6 +1029,14 @@
         }
       } else if (field === 'bimester' && deskBim && mobBim) {
         deskBim.value = mobBim.value;
+      } else if (field === 'benchmark') {
+        const deskBench = document.getElementById('indicatorsBenchmarkFilter');
+        const mobBench = document.getElementById('mobileIndBenchmarkFilter');
+        if (deskBench && mobBench) {
+          deskBench.value = mobBench.value;
+          appState.indicatorsBenchmark = mobBench.value;
+          onIndicatorsBenchmarkChange();
+        }
       }
     }
 
@@ -1764,16 +1793,77 @@
             }
           } else if (user.roleKey === 'coordenador') {
             const schoolName = user.school || '';
-            const schoolPolo = getPoloForSchool(schoolName) || 'Polo Regional';
             availableUnits = schoolName ? [schoolName] : [];
-            unitSelect.innerHTML = `<option value="${schoolName}">Minha UE: ${schoolName} [vs. ${schoolPolo}]</option>`;
+            unitSelect.innerHTML = `<option value="${schoolName}">Minha UE: ${schoolName} [vs. Rede Municipal]</option>`;
             unitSelect.value = schoolName;
             unitSelect.disabled = true;
           }
         }
       }
 
+      const benchSelect = document.getElementById('indicatorsBenchmarkFilter');
       const rawUnitFilter = (unitSelect && unitSelect.value) ? unitSelect.value : 'ALL';
+
+      // Determinação do estado de foco e opções permitidas de Referencial Comparativo
+      const isFocusedOnUnit = Boolean(rawUnitFilter && rawUnitFilter !== 'ALL' && !rawUnitFilter.startsWith('POLO:'));
+      let activeBenchmarkChoice = appState.indicatorsBenchmark || 'polo';
+
+      if (benchSelect) {
+        if (user.roleKey === 'coordenador') {
+          // 1. COORDENADOR: SÓ PODERÁ COMPARAR COM A REDE
+          benchSelect.innerHTML = `<option value="rede">Rede Municipal (Patos/PB)</option>`;
+          benchSelect.value = 'rede';
+          benchSelect.disabled = true;
+          activeBenchmarkChoice = 'rede';
+          appState.indicatorsBenchmark = 'rede';
+        } else if (user.roleKey === 'formador') {
+          const formadorPolo = user.school || 'Meu Polo Regional';
+          if (!isFocusedOnUnit) {
+            // Formador em Polo vs. Rede
+            benchSelect.innerHTML = `<option value="rede">Rede Municipal (Patos/PB)</option>`;
+            benchSelect.value = 'rede';
+            benchSelect.disabled = true;
+            activeBenchmarkChoice = 'rede';
+          } else {
+            // Formador com Unidade em foco: unidade vs seu polo OU unidade vs rede
+            benchSelect.innerHTML = `
+              <option value="polo">Meu Polo (${formadorPolo})</option>
+              <option value="rede">Rede Municipal (Patos/PB)</option>
+            `;
+            benchSelect.disabled = false;
+            if (appState.indicatorsBenchmark === 'rede') {
+              benchSelect.value = 'rede';
+              activeBenchmarkChoice = 'rede';
+            } else {
+              benchSelect.value = 'polo';
+              activeBenchmarkChoice = 'polo';
+            }
+          }
+        } else if (isNucleoEI(user)) {
+          // 3. COORDENADOR NO NÚCLEO: TUDO ABERTO
+          if (!isFocusedOnUnit) {
+            // Visão geral de Rede ou Polo
+            benchSelect.innerHTML = `<option value="rede">Rede Municipal (Patos/PB)</option>`;
+            benchSelect.value = 'rede';
+            benchSelect.disabled = true;
+            activeBenchmarkChoice = 'rede';
+          } else {
+            const uPolo = getPoloForSchool(rawUnitFilter) || 'Polo Regional';
+            benchSelect.innerHTML = `
+              <option value="polo">Polo Regional (${uPolo})</option>
+              <option value="rede">Rede Municipal (Patos/PB)</option>
+            `;
+            benchSelect.disabled = false;
+            if (appState.indicatorsBenchmark === 'rede') {
+              benchSelect.value = 'rede';
+              activeBenchmarkChoice = 'rede';
+            } else {
+              benchSelect.value = 'polo';
+              activeBenchmarkChoice = 'polo';
+            }
+          }
+        }
+      }
 
       // Resolução dos tipos de foco territorial
       let isPoloFocus = false;
@@ -1885,18 +1975,32 @@
           </div>
         `;
       } else {
-        // UNIDADE VS. RESPECTIVO POLO
+        // UNIDADE EM FOCO (focusedUnitName)
         scopeLabelText = focusedUnitName;
-        benchmarkLabelText = focusedPoloName || 'Polo Regional';
-        const poloUnits = getUnitsForPolo(focusedPoloName);
-        const poloObservations = redeObs.filter(o => o.schoolName && poloUnits.includes(o.schoolName));
-        benchmarkObs = poloObservations.length > 0 ? poloObservations : redeObs;
-        benchmarkBadgeHtml = `
-          <div class="benchmark-info-bar" style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; gap:8px; font-size:12px; color:#166534;">
-            <svg class="btn-icon-sm" style="color:#16A34A; flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            <span><strong>Referencial do Polo Regional:</strong> Comparando a unidade <strong>${focusedUnitName}</strong> com o seu <strong>${focusedPoloName || 'Polo Regional'}</strong>.</span>
-          </div>
-        `;
+        
+        if (activeBenchmarkChoice === 'rede' || user.roleKey === 'coordenador') {
+          // COMPARAÇÃO COM A REDE MUNICIPAL (Obrigatória para Coordenador, Opção para Formador e Núcleo)
+          benchmarkLabelText = 'Rede Municipal';
+          benchmarkObs = redeObs;
+          benchmarkBadgeHtml = `
+            <div class="benchmark-info-bar" style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; gap:8px; font-size:12px; color:#1E40AF;">
+              <svg class="btn-icon-sm" style="color:#2563EB; flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+              <span><strong>Referencial da Rede Municipal:</strong> Comparando a unidade <strong>${focusedUnitName}</strong> com a Média Geral da Rede Municipal de Patos/PB.</span>
+            </div>
+          `;
+        } else {
+          // COMPARAÇÃO COM O RESPECTIVO POLO REGIONAL
+          benchmarkLabelText = focusedPoloName || 'Polo Regional';
+          const poloUnits = getUnitsForPolo(focusedPoloName);
+          const poloObservations = redeObs.filter(o => o.schoolName && poloUnits.includes(o.schoolName));
+          benchmarkObs = poloObservations.length > 0 ? poloObservations : redeObs;
+          benchmarkBadgeHtml = `
+            <div class="benchmark-info-bar" style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; gap:8px; font-size:12px; color:#166534;">
+              <svg class="btn-icon-sm" style="color:#16A34A; flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span><strong>Referencial do Polo Regional:</strong> Comparando a unidade <strong>${focusedUnitName}</strong> com o seu <strong>${focusedPoloName || 'Polo Regional'}</strong>.</span>
+            </div>
+          `;
+        }
       }
 
       const activeSections = targetType === 'coordenador' 

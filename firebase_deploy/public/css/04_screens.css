@@ -25,15 +25,17 @@
       border-collapse: collapse;
       font-size: 12px;
     }
-    .ue-executive-table th {
-      background: #F8FAFC;
-      color: var(--text-secondary);
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: 11px;
-      letter-spacing: 0.4px;
-      padding: 10px 12px;
-      border-bottom: 2px solid var(--border);
+    .ue-executive-table th,
+    .data-table th,
+    .semaphore-table th {
+      background: var(--bg-surface-subtle);
+      color: var(--ink-muted);
+      font-weight: 600;
+      text-transform: none !important;
+      letter-spacing: normal !important;
+      font-size: 12px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-rule);
       text-align: left;
     }
     .ue-executive-table td {
@@ -203,7 +205,7 @@
       padding: 14px 18px;
       margin-bottom: 10px;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: border-color var(--dur-fast) var(--ease-standard), background-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
       background: var(--surface);
     }
     .level-box:hover { border-color: var(--primary); }
@@ -273,12 +275,12 @@
     .form-group { margin-bottom: 14px; }
     .form-label {
       display: block;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: none !important;
+      letter-spacing: normal !important;
+      color: var(--ink-body);
       margin-bottom: 6px;
-      letter-spacing: 0.3px;
     }
     .form-control, .form-select, .form-input {
       display: block;
@@ -626,7 +628,7 @@
       font-weight: 600;
       cursor: pointer;
       user-select: none;
-      transition: all 0.15s ease;
+      transition: background-color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
     }
     .teacher-chip-select.selected {
       background: #EFF6FF;
@@ -642,7 +644,7 @@
       border: 1px solid #CBD5E1;
       background: #FFFFFF;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: background-color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
     }
     .dim-pill-btn.active-cons {
       background: #DCFCE7;
@@ -673,7 +675,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s ease;
+      transition: background-color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
       white-space: nowrap;
     }
     .op-subtab-btn:hover {
@@ -820,21 +822,105 @@
         gap: 10px !important;
       }
     }
+    /* =========================================================================
+       CENTRAL DE EXTRAÇÕES E RELATÓRIOS SSOT (BASE DESIGN & DESKTOP)
+       ========================================================================= */
+    .export-view-header {
+      margin-bottom: 16px;
+    }
+    .export-view-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 4px 0;
+    }
+    .export-view-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    /* Card Hero: Backup & Restauração Completa da Base */
+    .export-backup-card {
+      background: var(--gestao-surface);
+      border: 1px solid var(--gestao-border);
+      margin-bottom: 18px;
+      border-radius: var(--radius-lg);
+    }
+    .export-backup-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .export-backup-info {
+      flex: 1 1 280px;
+    }
+    .export-backup-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .export-backup-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+    .export-backup-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .export-backup-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      min-height: 38px;
+      white-space: nowrap;
+    }
+    .export-backup-btn-danger {
+      color: var(--sem-red-ink);
+      border-color: var(--sem-red-border);
+    }
+    .export-backup-btn-danger:hover {
+      background: var(--sem-red-bg);
+    }
+
+    /* Grid de Cards de Exportação Modular */
     .export-card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 16px;
       margin-top: 14px;
     }
     .export-card {
-      background: #F8FAFC;
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: var(--gestao-surface);
+      border: 1px solid var(--gestao-border);
+      border-radius: var(--radius-lg);
       padding: 16px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .export-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
     .export-card-title {
       font-size: 14px;
@@ -843,11 +929,36 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      margin: 0;
     }
     .export-card-desc {
       font-size: 12px;
       color: var(--text-secondary);
-      line-height: 1.5;
+      line-height: 1.45;
+    }
+    .export-card-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .export-card-select {
+      width: 100%;
+      display: block;
+      font-size: 13px;
+      min-height: 36px;
+    }
+    .export-card-actions {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    .export-card-btn {
+      flex: 1 1 0;
+      justify-content: center;
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+      min-height: 36px;
     }
 
     /* ================= VISUALIZAÇÃO RESPONSIVA DO CRONOGRAMA / AGENDA ================= */
@@ -912,13 +1023,13 @@
     }
     /* ================= DESTAQUE DA PRÓXIMA OBSERVAÇÃO (HERO CARD & BADGES) ================= */
     .next-visit-hero-card {
-      background: linear-gradient(135deg, #FFFFFF 0%, #F0F7FF 100%);
-      border: 1px solid #BFDBFE;
-      border-left: 6px solid #2563EB;
-      border-radius: 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-rule);
+      border-left: 4px solid var(--brand-primary);
+      border-radius: var(--radius-lg);
       padding: 18px 20px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+      box-shadow: var(--shadow-hairline);
       position: relative;
     }
     .next-visit-hero-header {
@@ -934,13 +1045,13 @@
       align-items: center;
       gap: 6px;
       font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      color: #1D4ED8;
-      background: #DBEAFE;
-      padding: 4px 10px;
-      border-radius: 20px;
-      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: normal;
+      color: var(--brand-accent-ink);
+      background: var(--brand-accent-tint);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      text-transform: none;
     }
     .next-visit-timing-badge {
       font-size: 11px;
@@ -1101,7 +1212,7 @@
       border-radius: 7px;
       cursor: pointer;
       border: none;
-      transition: all 0.15s ease;
+      transition: background-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
     }
     .history-toggle-btn.active-tab {
       background: var(--primary);
@@ -2044,6 +2155,43 @@
       .stat-grid-hallmark {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 10px !important;
+      }
+
+      /* =====================================================================
+         6. Sub-aba Extrações & Relatórios SSOT no Celular (Hallmark Standard)
+         ===================================================================== */
+      #pedagViewExports .export-backup-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+      #pedagViewExports .export-backup-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+      #pedagViewExports .export-backup-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: var(--touch-target-min);
+        font-size: 13px;
+      }
+      #pedagViewExports .export-card-grid {
+        grid-template-columns: 1fr !important; /* Coluna única no celular: erradica o esmagamento */
+        gap: 12px;
+        margin-top: 12px;
+      }
+      #pedagViewExports .export-card {
+        padding: 14px;
+        gap: 12px;
+      }
+      #pedagViewExports .export-card-select {
+        min-height: var(--touch-target-min);
+        font-size: 14px !important; /* Previne auto-zoom indesejado no Safari iOS */
+      }
+      #pedagViewExports .export-card-btn {
+        min-height: var(--touch-target-min);
+        font-size: 13px;
       }
     }
 
