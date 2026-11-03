@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.60 (v8.2.27)</span>
+          <span>Versão 1.62 (v8.2.29)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -169,8 +169,13 @@
       <div id="homeScheduledSection" style="display:none; margin-bottom:24px;">
         <div class="page-title-row" style="margin-bottom:12px;">
           <div>
-            <h3 style="font-size:16px; font-weight:700; color:var(--primary-dark);" id="homeScheduledHeader">🗓️ Minhas Próximas Observações Agendadas</h3>
-            <p style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Inicie diretamente as observações planejadas no cronograma longitudinal</p>
+            <h3 style="font-size:16px; font-weight:700; color:var(--primary-dark); display:flex; align-items:center;" id="homeScheduledHeader">
+              <span>🗓️ Minhas Próximas Observações Agendadas</span>
+              <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Próximas Observações Agendadas', 'Inicie diretamente as observações planejadas no cronograma longitudinal')" aria-label="Informações sobre próximas observações">
+                <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              </button>
+            </h3>
+            <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Inicie diretamente as observações planejadas no cronograma longitudinal</p>
           </div>
           <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;" onclick="navigateToTab('schedule')">Ver Cronograma Completo →</button>
         </div>
@@ -469,8 +474,13 @@
       <!-- SUB-VIEW 4: EXTRAÇÕES & RELATÓRIOS SSOT -->
       <div id="pedagViewExports" class="pedag-subview" style="display:none;">
         <div style="margin-bottom:16px;">
-          <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark);">Central de Extrações e Base Unificada (SSOT)</h3>
-          <p style="font-size:12px; color:var(--text-secondary);">
+          <h3 style="font-size:16px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center;">
+            <span>Central de Extrações e Base Unificada (SSOT)</span>
+            <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Central de Extrações SSOT', 'Acesso gerencial exclusivo para exportação de dados brutos consolidados da rede e backup da base.')" aria-label="Informações sobre extrações">
+              <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            </button>
+          </h3>
+          <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary);">
             Acesso gerencial exclusivo para exportação de dados brutos consolidados da rede e backup da base.
           </p>
         </div>
@@ -478,8 +488,13 @@
         <div class="card" style="background:var(--gestao-surface); border:1px solid var(--gestao-border); margin-bottom:18px;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
-              <div style="font-size:15px; font-weight:800; color:var(--text-primary);">Backup & Restauração Completa da Base (JSON)</div>
-              <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+              <div style="font-size:15px; font-weight:800; color:var(--text-primary); display:flex; align-items:center;">
+                <span>Backup & Restauração Completa da Base (JSON)</span>
+                <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Backup & Restauração', 'Exporta ou sobrescreve integralmente todas as entidades do sistema: Servidores, UEs, Polos, Rubricas, Registros e Avaliações.')" aria-label="Informações sobre backup">
+                  <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
+              </div>
+              <div class="platform-info-text" style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
                 Exporta ou sobrescreve integralmente todas as entidades do sistema: Servidores, UEs, Polos, Rubricas, Registros e Avaliações.
               </div>
             </div>
@@ -501,8 +516,13 @@
           <!-- Card Servidores -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">Servidores & Membros da Rede</div>
-              <div class="export-card-desc">Lista completa de profissionais: docentes, coordenadoras pedagógicas, formadoras e lotações.</div>
+              <div class="export-card-title" style="display:flex; align-items:center;">
+                <span>Servidores & Membros da Rede</span>
+                <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Servidores & Membros', 'Lista completa de profissionais: docentes, coordenadoras pedagógicas, formadoras e lotações.')" aria-label="Informações sobre servidores">
+                  <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
+              </div>
+              <div class="export-card-desc platform-info-text">Lista completa de profissionais: docentes, coordenadoras pedagógicas, formadoras e lotações.</div>
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn btn-secondary" style="flex:1;" onclick="exportTeamMembersCSV()">CSV</button>
@@ -513,8 +533,13 @@
           <!-- Card UEs e Polos -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">Unidades Escolares & Polos</div>
-              <div class="export-card-desc">Relação cadastral de escolas infantis, polos territoriais vinculados e endereços.</div>
+              <div class="export-card-title" style="display:flex; align-items:center;">
+                <span>Unidades Escolares & Polos</span>
+                <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Unidades Escolares & Polos', 'Relação cadastral de escolas infantis, polos territoriais vinculados e endereços.')" aria-label="Informações sobre unidades escolares">
+                  <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
+              </div>
+              <div class="export-card-desc platform-info-text">Relação cadastral de escolas infantis, polos territoriais vinculados e endereços.</div>
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn btn-secondary" style="flex:1;" onclick="exportUnitsCSV()">CSV</button>
@@ -525,8 +550,13 @@
           <!-- Card Rubricas -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">Matriz de Rubricas & Critérios</div>
-              <div class="export-card-desc">Estrutura completa das 5 dimensões diagnósticas, subdimensões e descritores pedagógicos.</div>
+              <div class="export-card-title" style="display:flex; align-items:center;">
+                <span>Matriz de Rubricas & Critérios</span>
+                <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Matriz de Rubricas & Critérios', 'Estrutura completa das 5 dimensões diagnósticas, subdimensões e descritores pedagógicos.')" aria-label="Informações sobre rubricas">
+                  <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
+              </div>
+              <div class="export-card-desc platform-info-text">Estrutura completa das 5 dimensões diagnósticas, subdimensões e descritores pedagógicos.</div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
               <select id="rubricMatrixSelectExports" class="form-select" style="width: 100%; display: block;" onchange="syncRubricMatrixSelect(this.value)">
@@ -543,8 +573,13 @@
           <!-- Card Registros Formativos -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">Registros Formativos & Ocorrências</div>
-              <div class="export-card-desc">Todas as anotações qualitativas de campo registradas pela supervisão pedagógica.</div>
+              <div class="export-card-title" style="display:flex; align-items:center;">
+                <span>Registros Formativos & Ocorrências</span>
+                <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Registros Formativos & Ocorrências', 'Todas as anotações qualitativas de campo registradas pela supervisão pedagógica.')" aria-label="Informações sobre registros formativos">
+                  <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
+              </div>
+              <div class="export-card-desc platform-info-text">Todas as anotações qualitativas de campo registradas pela supervisão pedagógica.</div>
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn btn-secondary" style="flex:1;" onclick="exportAllNotesCSV()">CSV</button>
@@ -555,8 +590,13 @@
           <!-- Card Observações Pedagógicas -->
           <div class="export-card">
             <div>
-              <div class="export-card-title">Observações Realizadas</div>
-              <div class="export-card-desc">Base de acompanhamentos pedagógicos, sínteses, níveis de materiais e metadados.</div>
+              <div class="export-card-title" style="display:flex; align-items:center;">
+                <span>Observações Realizadas</span>
+                <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Observações Realizadas', 'Base de acompanhamentos pedagógicos, sínteses, níveis de materiais e metadados.')" aria-label="Informações sobre observações realizadas">
+                  <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
+              </div>
+              <div class="export-card-desc platform-info-text">Base de acompanhamentos pedagógicos, sínteses, níveis de materiais e metadados.</div>
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn btn-secondary" style="flex:1;" onclick="exportAllObservationsCSV()">CSV</button>
@@ -1060,9 +1100,9 @@
             </span>
           </div>
 
-          <!-- Seletor 2: Unidade Escolar -->
+          <!-- Seletor 2: Unidade Escolar / Polo Regional -->
           <div class="indicators-filter-field">
-            <label class="indicators-filter-label">Unidade escolar</label>
+            <label id="indicatorsUnitLabel" class="indicators-filter-label">Unidade escolar</label>
             <select id="indicatorsUnitFilter" class="form-select form-control" onchange="onIndicatorsUnitChange()" style="font-weight:600; color:var(--text-primary);">
               <option value="ALL">Todas as Unidades do Escopo</option>
             </select>
@@ -1480,8 +1520,13 @@
     <section id="screenRubricsAdmin" class="app-screen">
       <div class="page-title-row">
         <div>
-          <div class="page-title">Matriz de Rubricas & Dimensões Avaliativas</div>
-          <div class="page-subtitle">Governança pedagógica, descritores oficiais e instrumentos autônomos do município de Patos</div>
+          <div class="page-title" style="display:flex; align-items:center;">
+            <span>Matriz de Rubricas & Dimensões Avaliativas</span>
+            <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Matriz de Rubricas & Dimensões Avaliativas', 'Governança pedagógica, descritores oficiais e instrumentos autônomos do município de Patos')" aria-label="Informações sobre rubricas e dimensões">
+              <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            </button>
+          </div>
+          <div class="page-subtitle platform-info-text">Governança pedagógica, descritores oficiais e instrumentos autônomos do município de Patos</div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
           <select id="rubricMatrixSelect" class="form-select" style="width: auto; display: inline-block; margin-right: 8px; font-weight:700;" onchange="syncRubricMatrixSelect(this.value)">
@@ -1767,6 +1812,41 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.62 - CORREÇÃO E RESTAURAÇÃO DA ABA MINHA ESCOLA / MEU POLO PARA CP E FORMADOR -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.62 · v8.2.29</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">03/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Correção e Restauração das Abas "Minha Escola" e "Meu Polo" na Visão de CP e Formador:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🏛️ <strong>Restauração da Semântica Canônica no Desktop:</strong> Eliminação de resquícios de "Gestão Pedagógica" para os perfis de Coordenação Pedagógica (Mariana Ferreira) e Formadora Pedagógica (Clarice Barbosa). A 1ª aba (#deskTabHome) fixa-se como "Início" e a gestão operacional territorial assume com clareza a 2ª aba (#deskTabOpManagement) rotulada como "Minha Escola" (CP) e "Meu Polo" (Formador).</li>
+          <li>🛡️ <strong>Blindagem Preventiva contra Retenção de Estado:</strong> Adição do reset defensivo imediato de <code>#deskTabOpManagement</code> e <code>#deskTabOpManagementLabel</code> no topo de <code>applyUserRoleUI()</code> em <code>js/core/rbac.js</code>, garantindo higienização em transições rápidas entre Helena, Mariana e Clarice.</li>
+          <li>🗺️ <strong>Harmonização das Sub-abas Operacionais:</strong> Atualização da primeira sub-aba de gestão regional da formadora para "Meu Polo (Escolas)", fortalecendo o pertencimento territorial e a consistência contextual.</li>
+          <li>🔬 <strong>Expansão da Suíte de Auditoria (Módulo 1):</strong> Teste cíclico rigoroso no Item 8 de <code>js/audit/audit_engine.js</code> validando simultaneamente o comportamento de <code>#deskTabHomeLabel</code> e <code>#deskTabOpManagementLabel</code> em cada chaveamento de perfil.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.61 - BOTÕES DE INFORMAÇÃO E DESCLUTTERING MOBILE (PADRÃO HALLMARK) -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.61 · v8.2.28</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">03/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Botões de Informação Progressiva e Descluttering Mobile (Padrão Hallmark):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📱 <strong>Descluttering e Preservação de Área Vertical Útil:</strong> Ocultação de parágrafos explicativos prolixos em telas de smartphone (≤ 768px) via classe utilitária <code>.platform-info-text</code>, trazendo tabelas, filtros e botões de ação para a área nobre de visualização (above the fold).</li>
+          <li>ℹ️ <strong>Botão de Informação Vetorial Progressivo:</strong> Introdução do botão circular <code>.btn-platform-info</code> com pictograma SVG monocromático puro, alvo de toque ergonômico expandido de 44x44px (WCAG AAA) e suporte integral a <code>:focus-visible</code>.</li>
+          <li>📑 <strong>Modal e Bottom Sheet Universal:</strong> Acionamento sob demanda do componente <code>#modalPlatformInfo</code> que apresenta com elegância o título e a descrição integral de cada seção com botão "Entendido" e fechamento via backdrop ou tecla ESC.</li>
+          <li>🏛️ <strong>Conformidade Estrita com o Hallmark Floor:</strong> Erradicação de emojis como iconografia, proibição de <code>transition: all</code>, suporte a <code>prefers-reduced-motion: reduce</code> e respeito ao teto cognitivo de palavras por tela no mobile.</li>
+          <li>🔬 <strong>Auditoria Automatizada no Módulo 12 (navegacao_layout):</strong> Validação determinística ponta a ponta do modal, de suas funções controladoras e da presença de botões e classes de descluttering na plataforma.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.60 - REDESIGN HALLMARK DO PAINEL DE INDICADORES (SOBRIEDADE CROMÁTICA, RITMO E DESCLUTTERING) -->
@@ -4806,9 +4886,9 @@
           </select>
         </div>
 
-        <!-- Unidade Escolar -->
+        <!-- Unidade Escolar / Polo Regional (Mobile) -->
         <div class="form-group" style="margin-bottom:0;">
-          <label class="form-label" style="font-size:12px; font-weight:700; color:var(--text-secondary);">Unidade Escolar</label>
+          <label id="mobileIndUnitLabel" class="form-label" style="font-size:12px; font-weight:700; color:var(--text-secondary);">Unidade Escolar</label>
           <select id="mobileIndUnitFilter" class="form-select form-control" onchange="syncMobileToDesktopFilters('unit')" style="width:100%; height:44px; font-weight:600; font-size:13px;">
           </select>
         </div>

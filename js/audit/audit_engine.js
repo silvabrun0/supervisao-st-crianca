@@ -2878,6 +2878,87 @@
                 throw new Error('Falha Hallmark: Botão #btnExportIndicatorsView não deve conter emojis soltos residuais');
               }
               logger.log('Erradicação confirmada de emojis residuais no botão #btnExportIndicatorsView', true);
+
+              // 24. VALIDAÇÃO DA GOVERNANÇA TERRITORIAL DE INDICADORES DE COORDENAÇÃO (POLO VS. REDE)
+              const previousUserIndTerritorial = appState.currentUserKey || 'mariana';
+              try {
+                // Cenário 1: Clarice (Formadora Regional)
+                appState.currentUserKey = 'clarice';
+                renderIndicatorsScreen();
+
+                const indTargetSelect = document.getElementById('indicatorsTargetTypeFilter');
+                if (indTargetSelect) {
+                  indTargetSelect.value = 'coordenador';
+                  onIndicatorsTargetTypeChange();
+                }
+
+                const deskUnitLabelEl = document.getElementById('indicatorsUnitLabel');
+                if (!deskUnitLabelEl || deskUnitLabelEl.innerText.trim() !== 'Polo Regional') {
+                  throw new Error(`Falha Governança Territorial: Rótulo esperado "Polo Regional", obtido "${deskUnitLabelEl?.innerText}"`);
+                }
+
+                const deskUnitSelectEl = document.getElementById('indicatorsUnitFilter');
+                if (!deskUnitSelectEl || deskUnitSelectEl.value !== 'Polo Regional 1 (Norte)' || !deskUnitSelectEl.disabled) {
+                  throw new Error(`Falha Governança Territorial: Seletor de Polo de Clarice deve estar travado em "Polo Regional 1 (Norte)". Valor="${deskUnitSelectEl?.value}", disabled=${deskUnitSelectEl?.disabled}`);
+                }
+
+                const benchInfoBar = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoBar || !benchInfoBar.innerText.includes('Comparando Polo Regional 1 (Norte) com a Média Geral da Rede Municipal')) {
+                  throw new Error(`Falha Governança Territorial: Banner de benchmark deve confrontar Polo Regional 1 (Norte) vs. Rede. Texto obtido: "${benchInfoBar?.innerText}"`);
+                }
+
+                if (benchInfoBar.innerText.includes('UE vs. Rede') || benchInfoBar.innerText.includes('entre a sua Unidade Escolar')) {
+                  throw new Error('Falha Governança Territorial: Banner não deve conter redação de "UE vs. Rede" para coordenadores');
+                }
+
+                logger.log('Governança Territorial: Formadora Clarice fixa em seu Polo Regional 1 vs. Rede Municipal', true);
+
+                // Cenário 2: Helena Martins (Coordenadora do Núcleo de Educação Infantil)
+                appState.currentUserKey = 'helena';
+                renderIndicatorsScreen();
+
+                if (indTargetSelect) {
+                  indTargetSelect.value = 'coordenador';
+                  onIndicatorsTargetTypeChange();
+                }
+
+                if (deskUnitSelectEl.disabled) {
+                  throw new Error('Falha Governança Territorial: Seletor de Polo de Helena (Núcleo) deve estar habilitado para seleção');
+                }
+
+                deskUnitSelectEl.value = 'Polo Regional 2 (Sul)';
+                renderIndicatorsScreen();
+
+                const benchInfoBarHelena = document.querySelector('.benchmark-info-bar');
+                if (!benchInfoBarHelena || !benchInfoBarHelena.innerText.includes('Comparando Polo Regional 2 (Sul) com a Média Geral da Rede Municipal')) {
+                  throw new Error(`Falha Governança Territorial: Esperado confronto de Polo Regional 2 (Sul) vs. Rede para Helena. Obtido: "${benchInfoBarHelena?.innerText}"`);
+                }
+
+                // Cenário 3: Retorno para Indicadores Docentes
+                if (indTargetSelect) {
+                  indTargetSelect.value = 'professora';
+                  onIndicatorsTargetTypeChange();
+                }
+
+                if (!deskUnitLabelEl || deskUnitLabelEl.innerText.trim() !== 'Unidade Escolar') {
+                  throw new Error(`Falha Governança Territorial: Rótulo esperado "Unidade Escolar" após retorno para professores. Obtido: "${deskUnitLabelEl?.innerText}"`);
+                }
+
+                const optgroups = deskUnitSelectEl.querySelectorAll('optgroup');
+                if (optgroups.length === 0) {
+                  throw new Error('Falha Governança Territorial: Esperado agrupamento por <optgroup> de polos para Helena ao visualizar docentes');
+                }
+
+                logger.log('Governança Territorial: Núcleo de EI com alternância de Polos vs. Rede e restauração de UEs', true);
+              } finally {
+                appState.currentUserKey = previousUserIndTerritorial || 'mariana';
+                const indTargetSelect = document.getElementById('indicatorsTargetTypeFilter');
+                if (indTargetSelect) {
+                  indTargetSelect.value = 'professora';
+                  onIndicatorsTargetTypeChange();
+                }
+                renderIndicatorsScreen();
+              }
             } catch (e) {
               logger.log('Erro de execução no módulo indicadores_decisao', false, e.message);
             }
@@ -3410,14 +3491,14 @@
               }
               logger.log('Validação da Estruturação e Alinhamento dos Blocos de Polos na Matriz de Cobertura (Versão 1.58)', true, `${coveragePoloTitles.length} blocos validados`);
 
-              // Validação do rótulo atualizado do botão de changelog e card da versão 1.60
-              if (!btnChangelog.textContent.includes('Versão 1.60')) {
+              // Validação do rótulo atualizado do botão de changelog e card da versão 1.62
+              if (!btnChangelog.textContent.includes('Versão 1.62')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
-              if (!modalChg.innerHTML.includes('Versão 1.60')) {
-                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.60');
+              if (!modalChg.innerHTML.includes('Versão 1.62')) {
+                throw new Error('#modalChangelog não contém o card descritivo da Versão 1.62');
               }
-              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.60 (v8.2.27)', true);
+              logger.log('Asserção de Integridade do Cabeçalho e Registro da Versão 1.62 (v8.2.29)', true);
             } catch (e) {
               logger.log('Erro de execução no módulo navegacao_layout', false, e.message);
             }

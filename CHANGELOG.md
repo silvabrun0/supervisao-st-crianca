@@ -11,6 +11,8 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.62** | 03/11/2026 13:50 | `intermediárias/aplicativo_v1.62_correcao_rotulo_aba_gestao_cp_formador.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_rotulo_aba_gestao_cp_formador.md` | Correção e Restauração das Abas "Minha Escola" e "Meu Polo" na Visão de CP e Formador: eliminação de resquícios de "Gestão Pedagógica" para CP (Mariana) e Formadora (Clarice), fixação da 1ª aba como "Início", restauração da 2ª aba operacional ("Minha Escola" e "Meu Polo"), reset defensivo no topo de `applyUserRoleUI()`, harmonização de sub-abas e auditoria no Módulo 1 🏫🗺️🏛️ |
+| **1.61** | 03/11/2026 13:40 | `intermediárias/aplicativo_v1.61_botoes_informacao_mobile_hallmark.html` | Solicitação direta / `planos_de_implementacao/plano_botoes_informacao_mobile_hallmark.md` | Botões de Informação Progressiva e Descluttering Mobile (Padrão Hallmark): recolhimento de textos explicativos prolixos no celular (≤ 768px) via `.platform-info-text`, introdução de botões circulares `.btn-platform-info` com pictograma vetorial SVG puro e alvo de toque ergonômico de 44x44px (WCAG AAA), bottom sheet universal sob demanda `#modalPlatformInfo`, erradicação de emojis e asserções estritas no Módulo 12 📱ℹ️🏛️ |
 | **1.60** | 29/10/2026 17:45 | `intermediárias/aplicativo_v1.60_redesign_hallmark_painel_indicadores_sobriedade_ritmo.html` | Solicitação direta / `planos_de_implementacao/plano_verificacao_hallmark_painel_sobriedade_desclutter.md` | Redesign Hallmark da aba Painel & Indicadores (sobriedade cromática, erradicação de emojis e ritmo editorial): quebra da monotonia dos 4 cards clonados com layout assimétrico editorial (bloco âncora de cobertura + painel integrado secundário), numerais tabulares sóbrios, pílulas de contexto calmas, erradicação total de emojis residuais nos deltas (🔻, ⚪, 🟢), no clipboard e nos badges mobile, aplanamento da escala de materiais em prateleira única sem cards aninhados e fita contínua do quadro de controle bimestral 📊🏛️✨ |
 | **1.59** | 29/10/2026 17:35 | `intermediárias/aplicativo_v1.59_redesign_hallmark_minha_escola_sobriedade_cromatica.html` | Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_minha_escola_sobriedade_cromatica.md` | Redesign Hallmark da Aba "Minha Escola": Sobriedade Cromática, Eliminação de Cards Aninhados e Descluttering Visual: erradicação do rainbow dashboard em métricas de turmas e UE com tipografia tabular de alta densidade (`#0F172A`), contenção de camada única (`.school-single-surface`), controle segmentado institucional (`.hallmark-segmented-control`), badges calmos (`.badge-school-neutral`, `.badge-school-aee`) e botão sóbrio de exclusão (`.btn-action-delete`) 🏛️📦✨ |
 | **1.58** | 29/10/2026 17:25 | `intermediárias/aplicativo_v1.58_correcao_definitiva_polos_mobile.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_definitiva_polos_mobile.md` | Correção Definitiva e Reestruturação Mobile Hallmark da Matriz de Cobertura por Polo Regional (`#networkCoverageCard`): especificidade máxima defensiva (`!important`) anulando modelo tabular clássico herdado no WebKit/Safari iOS, eliminação do transbordo horizontal e quebra de margens, alinhamento simétrico sem colisão de textos e cache-busting de estilos (`?v=1.58`) 🛡️📱🏛️ |
@@ -187,6 +189,51 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.62] - Correção e Restauração das Abas "Minha Escola" e "Meu Polo" na Visão de CP e Formador
+- **Data / Horário:** 03/11/2026 13:50
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.62_correcao_rotulo_aba_gestao_cp_formador.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_correcao_rotulo_aba_gestao_cp_formador.md`.
+- **Foco Central:** Correção arquitetural e reativa da barra de navegação desktop e sub-abas na visão da Coordenação Pedagógica escolar (Mariana Ferreira) e Formadora Pedagógica regional (Clarice Barbosa):
+  1. **Restauração da Semântica Canônica no Desktop:** Eliminação de resquícios de "Gestão Pedagógica" para os perfis de Coordenação Pedagógica (`coordenador`) e Formadora (`formador`). A 1ª aba (`#deskTabHome`) é fixada categoricamente como "Início" e a gestão operacional assume a 2ª aba (`#deskTabOpManagement`) com os rótulos contextualizados "Minha Escola" (CP) e "Meu Polo" (Formador).
+  2. **Blindagem Preventiva contra Retenção de Estado:** Inclusão do reset defensivo imediato de `#deskTabOpManagement` e `#deskTabOpManagementLabel` no topo de `applyUserRoleUI()` em `js/core/rbac.js`, prevenindo vazamento de estado da sessão de governança da Coordenadora de EI (Helena Martins).
+  3. **Harmonização Territorial de Sub-abas:** Atualização da 1ª sub-aba de gestão regional da formadora (`#pedagTabUnitsLabel`) para "Meu Polo (Escolas)", harmonizando o pertencimento de território sob a SSOT única.
+  4. **Expansão e Rigor da Suíte de Testes (Módulo 1):** Expansão do Item 8 em `js/audit/audit_engine.js` com testes de alternância cíclica de perfis, validando simultaneamente `deskTabHomeLabel` e `deskTabOpManagementLabel` para Helena, Mariana e Clarice.
+
+#### Alterações
+- `js/core/rbac.js`: Adição do reset de `#deskTabOpManagement` no topo de `applyUserRoleUI()` e ajuste semântico da sub-aba de polo para "Meu Polo (Escolas)".
+- `js/audit/audit_engine.js`: Atualização das asserções de alternância cíclica no Módulo 1 (`auth_rbac`) e checagem do cabeçalho institucional para a Versão 1.62.
+- `index.html`: Atualização do cabeçalho institucional (`.btn-changelog`) para `Versão 1.62 (v8.2.29)` e inclusão do card no `#modalChangelog`.
+- `CHANGELOG.md`: Registro detalhado e sumário executivo da Versão 1.62.
+
+---
+
+### [Versão 1.61] - Botões de Informação Progressiva e Descluttering Mobile (Padrão Hallmark)
+- **Data / Horário:** 03/11/2026 13:40
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.61_botoes_informacao_mobile_hallmark.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_botoes_informacao_mobile_hallmark.md`.
+- **Foco Central:** Otimização ergonômica e descluttering visual em telas de smartphones (viewport ≤ 768px), substituindo parágrafos e legendas estáticas prolixas por botões de informação vetoriais que revelam o conteúdo integral sob demanda:
+  1. **Descluttering e Economia de Área Vertical Útil:** Ocultação de textos descritivos repetitivos no mobile via classe universal `.platform-info-text`, liberando entre 40px e 90px por seção e posicionando componentes decisórios (tabelas, gráficos, filtros e botões) acima da dobra.
+  2. **Botão de Informação Vetorial Progressivo:** Inclusão de botões circulares `.btn-platform-info` dotados de pictograma SVG monocromático puro, sem emojis, com alvo de toque ergonômico expandido de 44x44px (`::after`) atendendo aos critérios WCAG AAA.
+  3. **Modal / Bottom Sheet Universal (`#modalPlatformInfo`):** Painel deslizante com título da seção, texto explicativo completo e botão de fechamento rápido "✓ Entendido", além de suporte a toque no backdrop e tecla ESC.
+  4. **Conformidade Estrita com o Hallmark Floor:** Uso exclusivo de tokens semânticos (`--info-btn-*`), foco instantâneo com `:focus-visible`, erradicação de `transition: all`, fallbacks para `prefers-reduced-motion: reduce` e cumprimento do teto cognitivo de palavras por tela.
+  5. **Auditoria Automatizada no Módulo 12 (navegacao_layout):** Teste ponta a ponta validando o modal `#modalPlatformInfo`, as funções globais `openPlatformInfoModal` e `closePlatformInfoModal`, e a presença contínua de botões e classes de descluttering na aplicação.
+
+#### Inclusões
+- Componente universal `#modalPlatformInfo` em `index.html`.
+- Tokens semânticos `--info-btn-*` em `css/01_variables.css`.
+- Classes `.platform-info-text` e `.btn-platform-info` em `css/03_components.css`.
+- Funções controladoras `openPlatformInfoModal()` e `closePlatformInfoModal()` em `js/core/navigation.js`.
+- Teste determinístico do subsistema de informação mobile no Módulo 12 (`navegacao_layout`) em `js/audit/audit_engine.js`.
+
+#### Alterações
+- `index.html`: Inclusão dos botões `.btn-platform-info` e classes `.platform-info-text` nos cabeçalhos das telas Setup, Síntese, Histórico, Ocorrências, Matrizes de Referência, Admin de Rubricas, Polos/UEs, Matriz de Cobertura, Servidores e Central de Extrações/Backup (Cards SSOT).
+- `js/features/indicators.js`: Adição de botões de informação e classes `.platform-info-text` nos cabeçalhos da Tabela Executiva de UEs, Distribuição de Materiais, Raio-X Longitudinal e Visualização por Dimensão.
+- `js/features/management.js`: Adição do botão de informação e classe `.platform-info-text` no card de Caracterização da Unidade Escolar.
+- `index.html`: Atualização do cabeçalho institucional (`.btn-changelog`) para `Versão 1.61 (v8.2.28)` e inclusão do card no `#modalChangelog`.
+- `js/audit/audit_engine.js`: Atualização da asserção do cabeçalho institucional para `Versão 1.61`.
+
+---
 
 ### [Versão 1.59] - Remoção da Aba "Histórico" do Perfil da Coordenadora de EI (Núcleo de EI)
 - **Data / Horário:** 29/10/2026 17:35

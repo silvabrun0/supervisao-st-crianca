@@ -209,6 +209,8 @@
         const user = getCurrentUser();
         if (user) targetSelect.dataset.userSelectedRole = user.email;
       }
+      const unitSelect = document.getElementById('indicatorsUnitFilter');
+      if (unitSelect) unitSelect.value = 'ALL';
       const memberSelect = document.getElementById('indicatorsMemberFilter');
       if (memberSelect) memberSelect.value = 'ALL';
       renderIndicatorsScreen();
@@ -630,18 +632,26 @@
       text += `------------------------------------------------------------\n`;
       text += `OS 3 CRITÉRIOS PRIORITÁRIOS PARA INTERVENÇÃO PEDAGÓGICA:\n\n`;
 
+      const isCoord = targetType === 'coordenador';
+      const scopeScoreLabel = isCoord ? (scopeLabelText === 'Rede Consolidada' ? 'Consistência na Rede' : `Consistência (${scopeLabelText})`) : 'Consistência na UE';
+
       bottlenecks.forEach((b, idx) => {
         const rank = idx + 1;
         const deltaText = b.delta !== null ? `${b.delta > 0 ? '+' : ''}${b.delta}% vs. Rede Patos` : 'Sem referencial municipal';
         text += `${rank}. [${b.critId}] ${b.critText}\n`;
         text += `   • Localização: ${b.dimTitle} · ${b.subTitle}\n`;
-        text += `   • Consistência na UE: ${b.score}% (Rede Municipal: ${b.redeScore !== null ? b.redeScore + '%' : '—'} · Δ: ${deltaText})\n`;
+        text += `   • ${scopeScoreLabel}: ${b.score}% (Rede Municipal: ${b.redeScore !== null ? b.redeScore + '%' : '—'} · Δ: ${deltaText})\n`;
         text += `   • Evidências Observadas: C: ${b.consistent} | P: ${b.partial} | NR: ${b.notDone}\n\n`;
       });
 
       text += `QUESTÕES NORTEADORAS PARA A EQUIPE:\n`;
-      text += `1. Quais desafios e potências as docentes vivenciaram na rotina desses 3 critérios?\n`;
-      text += `2. Que combinados e apoios pedagógicos coletivos pactuaremos para apoiar as salas neste ciclo?\n`;
+      if (isCoord) {
+        text += `1. Quais desafios e potências as coordenadoras pedagógicas vivenciaram na rotina desses 3 critérios?\n`;
+        text += `2. Que combinados e apoios formativos pactuaremos para apoiar a coordenação pedagógica neste ciclo?\n`;
+      } else {
+        text += `1. Quais desafios e potências as docentes vivenciaram na rotina desses 3 critérios?\n`;
+        text += `2. Que combinados e apoios pedagógicos coletivos pactuaremos para apoiar as salas neste ciclo?\n`;
+      }
       text += `------------------------------------------------------------\n`;
       text += `Sistema de Supervisão SerTão Criança · Patos/PB`;
 
@@ -884,11 +894,16 @@
         if (mobTarget && deskTarget) mobTarget.value = deskTarget.value || 'professora';
       }
 
-      // 2. Clona opções e sincroniza valor de Unidade Escolar
+      // 2. Clona opções e sincroniza valor de Unidade Escolar / Polo Regional
       if (mobUnit && deskUnit) {
         mobUnit.innerHTML = deskUnit.innerHTML;
         mobUnit.value = deskUnit.value;
         mobUnit.disabled = deskUnit.disabled;
+      }
+      const mobUnitLabel = document.getElementById('mobileIndUnitLabel');
+      const deskUnitLabel = document.getElementById('indicatorsUnitLabel');
+      if (mobUnitLabel && deskUnitLabel) {
+        mobUnitLabel.innerText = deskUnitLabel.innerText;
       }
 
       // 3. Clona opções e sincroniza valor de Docente/Turma
@@ -934,10 +949,23 @@
       if (field === 'targetType' && deskTarget && mobTarget) {
         deskTarget.value = mobTarget.value;
         onIndicatorsTargetTypeChange();
-        // Repopula o seletor móvel de membros
+        // Repopula os seletores móveis espelhados após mudança de público-alvo
+        if (deskUnit && mobUnit) {
+          mobUnit.innerHTML = deskUnit.innerHTML;
+          mobUnit.value = deskUnit.value;
+          mobUnit.disabled = deskUnit.disabled;
+        }
+        const mobUnitLabel = document.getElementById('mobileIndUnitLabel');
+        const deskUnitLabel = document.getElementById('indicatorsUnitLabel');
+        if (mobUnitLabel && deskUnitLabel) {
+          mobUnitLabel.innerText = deskUnitLabel.innerText;
+        }
         if (deskMember && mobMember) {
           mobMember.innerHTML = deskMember.innerHTML;
           mobMember.value = deskMember.value;
+        }
+        if (mobMemberLabel && deskMember) {
+          mobMemberLabel.innerText = mobTarget.value === 'coordenador' ? 'Coordenador(a)' : 'Professora / Docente';
         }
       } else if (field === 'unit' && deskUnit && mobUnit) {
         deskUnit.value = mobUnit.value;
@@ -1024,12 +1052,17 @@
       const activeMember = (memberSelect && memberSelect.value) ? memberSelect.value : 'ALL';
       const activeBim = (bimesterSelect && bimesterSelect.value) ? bimesterSelect.value : 'ALL';
 
-      let unitLabel = activeUnit === 'ALL' ? 'Todas UEs' : activeUnit.replace(/^(CEI|EMEI|CMEI)\s+/i, '');
+      const targetTypeSelect = document.getElementById('indicatorsTargetTypeFilter');
+      const targetType = targetTypeSelect ? targetTypeSelect.value : 'professora';
+
+      let unitLabel = activeUnit === 'ALL' 
+        ? (targetType === 'coordenador' ? 'Todos Polos' : 'Todas UEs') 
+        : activeUnit.replace(/^(CEI|EMEI|CMEI)\s+/i, '');
       let memberLabel = activeMember === 'ALL' ? 'Visão Geral' : activeMember.split(' ')[0];
       let bimLabel = activeBim === 'ALL' ? 'Ano Todo' : activeBim.replace('º Bimestre', 'º Bim');
 
       badgeEl.innerText = `${unitLabel} · ${memberLabel} · ${bimLabel}`;
-      badgeEl.title = `Unidade: ${activeUnit} | Avaliando: ${activeMember} | Período: ${activeBim}`;
+      badgeEl.title = `${targetType === 'coordenador' ? 'Polo' : 'Unidade'}: ${activeUnit} | Avaliando: ${activeMember} | Período: ${activeBim}`;
 
       const triggerBtn = document.getElementById('btnMobileIndicatorsFilters');
       if (triggerBtn) {
@@ -1593,67 +1626,104 @@
         }
       }
 
-      // 1. Popula ou sincroniza opções do Seletor de Unidades Escolares
+      // Atualiza rótulo do Seletor 2 conforme Público-Alvo (Polo Regional vs. Unidade Escolar)
+      const unitLabelDesk = document.getElementById('indicatorsUnitLabel');
+      const unitLabelMob = document.getElementById('mobileIndUnitLabel');
+      const unitLabelText = targetType === 'coordenador' ? 'Polo Regional' : 'Unidade Escolar';
+      if (unitLabelDesk) unitLabelDesk.innerText = unitLabelText;
+      if (unitLabelMob) unitLabelMob.innerText = unitLabelText;
+
+      // 1. Popula ou sincroniza opções do Seletor de Unidades Escolares / Polos Regionais
+      let availableUnits = [];
       if (unitSelect) {
         const currentSelectedUnit = unitSelect.value || 'ALL';
-        let availableUnits = [];
 
-        if (isNucleoEI(user)) {
-          availableUnits = (appState.units || []).map(u => u.name);
-        } else if (user.roleKey === 'formador') {
-          const userPolo = (user.school || '').trim().toLowerCase();
-          const poloUnits = (appState.units || []).filter(u => {
-            if (!u.polo) return false;
-            const up = u.polo.trim().toLowerCase();
-            return up === userPolo || up.includes(userPolo) || userPolo.includes(up);
-          }).map(u => u.name);
-          const supervisedCoords = (appState.teamMembers || []).filter(m => 
-            m.roleKey === 'coordenador' && (m.supervisor === user.name || (m.school && poloUnits.includes(m.school)))
-          );
-          const formadorUnits = Array.from(new Set([...poloUnits, ...supervisedCoords.map(c => c.school)])).filter(Boolean);
-          availableUnits = formadorUnits.length > 0 ? formadorUnits : (appState.units || []).map(u => u.name);
-        } else if (user.roleKey === 'coordenador') {
-          availableUnits = user.school ? [user.school] : [];
-        }
+        if (targetType === 'coordenador') {
+          // =========================================================================
+          // CASO COORDENADORAS: ESCOPO TERRITORIAL POR POLO REGIONAL
+          // =========================================================================
+          if (user.roleKey === 'formador') {
+            // Formadora: somente o seu Polo atribuído vs. Rede Municipal
+            const formadorPolo = user.school || 'Polo Regional';
+            unitSelect.innerHTML = `<option value="${formadorPolo}">Meu Polo: ${formadorPolo}</option>`;
+            unitSelect.value = formadorPolo;
+            unitSelect.disabled = true;
+          } else if (isNucleoEI(user)) {
+            // Núcleo de EI: qualquer Polo Regional vs. Rede ou Todos os Polos (Rede Consolidada)
+            const allPolos = (appState.polos || []).map(p => p.name).sort();
+            let poloOptionsHtml = `<option value="ALL">Todos os Polos (Rede Consolidada)</option>`;
+            allPolos.forEach(pName => {
+              poloOptionsHtml += `<option value="${pName}">Polo: ${pName}</option>`;
+            });
+            unitSelect.innerHTML = poloOptionsHtml;
+            unitSelect.disabled = false;
+            if (allPolos.includes(currentSelectedUnit) || currentSelectedUnit === 'ALL') {
+              unitSelect.value = currentSelectedUnit;
+            } else {
+              unitSelect.value = 'ALL';
+            }
+          }
+        } else {
+          // =========================================================================
+          // CASO PROFESSORAS: ESCOPO TRADICIONAL POR UNIDADE ESCOLAR (PRESERVADO 100%)
+          // =========================================================================
+          if (isNucleoEI(user)) {
+            availableUnits = (appState.units || []).map(u => u.name);
+          } else if (user.roleKey === 'formador') {
+            const userPolo = (user.school || '').trim().toLowerCase();
+            const poloUnits = (appState.units || []).filter(u => {
+              if (!u.polo) return false;
+              const up = u.polo.trim().toLowerCase();
+              return up === userPolo || up.includes(userPolo) || userPolo.includes(up);
+            }).map(u => u.name);
+            const supervisedCoords = (appState.teamMembers || []).filter(m => 
+              m.roleKey === 'coordenador' && (m.supervisor === user.name || (m.school && poloUnits.includes(m.school)))
+            );
+            const formadorUnits = Array.from(new Set([...poloUnits, ...supervisedCoords.map(c => c.school)])).filter(Boolean);
+            availableUnits = formadorUnits.length > 0 ? formadorUnits : (appState.units || []).map(u => u.name);
+          } else if (user.roleKey === 'coordenador') {
+            availableUnits = user.school ? [user.school] : [];
+          }
 
-        let unitOptionsHtml = '';
-        if (user.roleKey !== 'coordenador') {
-          unitOptionsHtml += `<option value="ALL">Todas as Unidades do Escopo (${availableUnits.length})</option>`;
-        }
+          let unitOptionsHtml = '';
+          if (user.roleKey !== 'coordenador') {
+            unitOptionsHtml += `<option value="ALL">Todas as Unidades do Escopo (${availableUnits.length})</option>`;
+          }
 
-        // Agrupamento semântico por Polo para o Núcleo de Educação Infantil
-        if (isNucleoEI(user)) {
-          const unitsByPolo = {};
-          (appState.units || []).forEach(u => {
-            const pName = u.polo || 'Sem Polo Definido';
-            if (!unitsByPolo[pName]) unitsByPolo[pName] = [];
-            unitsByPolo[pName].push(u.name);
-          });
+          // Agrupamento semântico por Polo para o Núcleo de Educação Infantil
+          if (isNucleoEI(user)) {
+            const unitsByPolo = {};
+            (appState.units || []).forEach(u => {
+              const pName = u.polo || 'Sem Polo Definido';
+              if (!unitsByPolo[pName]) unitsByPolo[pName] = [];
+              unitsByPolo[pName].push(u.name);
+            });
 
-          const sortedPolos = Object.keys(unitsByPolo).sort();
-          sortedPolos.forEach(pName => {
-            unitOptionsHtml += `<optgroup label="Polo: ${pName}">`;
-            unitsByPolo[pName].sort().forEach(uName => {
+            const sortedPolos = Object.keys(unitsByPolo).sort();
+            sortedPolos.forEach(pName => {
+              unitOptionsHtml += `<optgroup label="Polo: ${pName}">`;
+              unitsByPolo[pName].sort().forEach(uName => {
+                unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
+              });
+              unitOptionsHtml += `</optgroup>`;
+            });
+          } else {
+            availableUnits.forEach(uName => {
               unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
             });
-            unitOptionsHtml += `</optgroup>`;
-          });
-        } else {
-          availableUnits.forEach(uName => {
-            unitOptionsHtml += `<option value="${uName}">${uName}</option>`;
-          });
-        }
+          }
 
-        unitSelect.innerHTML = unitOptionsHtml;
-        if (user.roleKey === 'coordenador') {
-          unitSelect.value = user.school || '';
-          unitSelect.disabled = true;
-        } else {
-          unitSelect.disabled = false;
-          if (availableUnits.includes(currentSelectedUnit) || currentSelectedUnit === 'ALL') {
-            unitSelect.value = currentSelectedUnit;
+          unitSelect.innerHTML = unitOptionsHtml;
+          if (user.roleKey === 'coordenador') {
+            unitSelect.value = user.school || '';
+            unitSelect.disabled = true;
           } else {
-            unitSelect.value = 'ALL';
+            unitSelect.disabled = false;
+            if (availableUnits.includes(currentSelectedUnit) || currentSelectedUnit === 'ALL') {
+              unitSelect.value = currentSelectedUnit;
+            } else {
+              unitSelect.value = 'ALL';
+            }
           }
         }
       }
@@ -1664,7 +1734,7 @@
       const bimesterSelect = document.getElementById('indicatorsBimesterFilter');
       const activeBimesterFilter = (bimesterSelect && bimesterSelect.value) ? bimesterSelect.value : 'ALL';
 
-      // 2. Resolução dos avaliandos e observações com respeito estrito à unidade e ao bimestre selecionados
+      // 2. Resolução dos avaliandos e observações com respeito estrito ao escopo territorial e bimestre
       let scopedAvaliandos = getScopedAvaliandos(targetType);
       let scopedObs = getScopedObservations().filter(o => {
         if (o.status !== 'finalized' && o.status !== 'concluida') return false;
@@ -1675,9 +1745,34 @@
         }
       });
 
-      if (activeUnitFilter !== 'ALL') {
-        scopedAvaliandos = scopedAvaliandos.filter(m => m.school === activeUnitFilter);
-        scopedObs = scopedObs.filter(o => o.schoolName === activeUnitFilter);
+      if (targetType === 'coordenador') {
+        const targetPolo = (user.roleKey === 'formador') ? (user.school || '') : activeUnitFilter;
+        if (targetPolo && targetPolo !== 'ALL') {
+          const poloUnits = (appState.units || []).filter(u => {
+            if (!u.polo) return false;
+            const up = u.polo.trim().toLowerCase();
+            const tp = targetPolo.trim().toLowerCase();
+            return up === tp || up.includes(tp) || tp.includes(up);
+          }).map(u => u.name);
+
+          scopedAvaliandos = scopedAvaliandos.filter(m => {
+            if (m.school && poloUnits.includes(m.school)) return true;
+            if (m.supervisor === user.name) return true;
+            return false;
+          });
+
+          const allowedCoordNames = scopedAvaliandos.map(c => (c.name || '').trim().toLowerCase());
+          scopedObs = scopedObs.filter(o => {
+            if (o.schoolName && poloUnits.includes(o.schoolName)) return true;
+            if (o.teacherName && allowedCoordNames.includes(o.teacherName.trim().toLowerCase())) return true;
+            return false;
+          });
+        }
+      } else {
+        if (activeUnitFilter !== 'ALL') {
+          scopedAvaliandos = scopedAvaliandos.filter(m => m.school === activeUnitFilter);
+          scopedObs = scopedObs.filter(o => o.schoolName === activeUnitFilter);
+        }
       }
 
       // Filtragem por Bimestre no escopo da UE/Polo
@@ -1689,31 +1784,41 @@
       if (memberSelect) {
         const currentSelectedMember = memberSelect.value || 'ALL';
         const memberRoleName = targetType === 'coordenador' ? 'Coordenadores(as)' : 'Professoras';
-        let memberOptionsHtml = `<option value="ALL">${memberRoleName}: Todas (Visão Geral)</option>`;
+        const generalScopeLabel = targetType === 'coordenador' 
+          ? (activeUnitFilter !== 'ALL' ? `Todas do Polo (${activeUnitFilter})` : 'Todas da Rede (Visão Geral)')
+          : 'Todas (Visão Geral)';
+        let memberOptionsHtml = `<option value="ALL">${memberRoleName}: ${generalScopeLabel}</option>`;
         
-        // Agrupa por unidade escolar se o escopo abranger mais de uma unidade e 'ALL' estiver ativo
-        const bySchool = {};
-        scopedAvaliandos.forEach(m => {
-          const sch = m.school || 'Unidade Geral';
-          if (!bySchool[sch]) bySchool[sch] = [];
-          bySchool[sch].push(m);
-        });
-
-        const schoolList = Object.keys(bySchool).sort();
-        if (schoolList.length > 1 && activeUnitFilter === 'ALL') {
-          schoolList.forEach(sch => {
-            memberOptionsHtml += `<optgroup label="${sch}">`;
-            bySchool[sch].sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
-              const roleInfo = m.classAssigned ? ` (${m.classAssigned})` : '';
-              memberOptionsHtml += `<option value="${m.name}">${m.name}${roleInfo}</option>`;
-            });
-            memberOptionsHtml += `</optgroup>`;
+        if (targetType === 'coordenador') {
+          scopedAvaliandos.sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
+            const schInfo = m.school ? ` · ${m.school}` : '';
+            memberOptionsHtml += `<option value="${m.name}">${m.name}${schInfo}</option>`;
           });
         } else {
-          scopedAvaliandos.sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
-            const roleInfo = m.classAssigned ? ` · ${m.classAssigned}` : '';
-            memberOptionsHtml += `<option value="${m.name}">${m.name}${roleInfo}</option>`;
+          // Lógica anterior preservada para docentes (agrupamento por escola se ALL)
+          const bySchool = {};
+          scopedAvaliandos.forEach(m => {
+            const sch = m.school || 'Unidade Geral';
+            if (!bySchool[sch]) bySchool[sch] = [];
+            bySchool[sch].push(m);
           });
+
+          const schoolList = Object.keys(bySchool).sort();
+          if (schoolList.length > 1 && activeUnitFilter === 'ALL') {
+            schoolList.forEach(sch => {
+              memberOptionsHtml += `<optgroup label="${sch}">`;
+              bySchool[sch].sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
+                const roleInfo = m.classAssigned ? ` (${m.classAssigned})` : '';
+                memberOptionsHtml += `<option value="${m.name}">${m.name}${roleInfo}</option>`;
+              });
+              memberOptionsHtml += `</optgroup>`;
+            });
+          } else {
+            scopedAvaliandos.sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
+              const roleInfo = m.classAssigned ? ` · ${m.classAssigned}` : '';
+              memberOptionsHtml += `<option value="${m.name}">${m.name}${roleInfo}</option>`;
+            });
+          }
         }
         memberSelect.innerHTML = memberOptionsHtml;
 
@@ -2078,10 +2183,13 @@
           <!-- Matriz Longitudinal Analítica Item a Item -->
           <div class="page-title-row" style="margin-top:4px; margin-bottom:14px;">
             <div>
-              <h3 style="font-size:17px; font-weight:800; color:var(--primary-dark); margin:0;">
-                Raio-X Longitudinal Item a Item · Matriz Pedagógica
+              <h3 style="font-size:17px; font-weight:800; color:var(--primary-dark); margin:0; display:flex; align-items:center;">
+                <span>Raio-X Longitudinal Item a Item · Matriz Pedagógica</span>
+                <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Raio-X Longitudinal', 'Comparativo cronológico de cada critério avaliado entre o 1º, 2º, 3º e 4º Bimestres')" aria-label="Informações sobre raio-x longitudinal">
+                  <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
               </h3>
-              <p style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
+              <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
                 Comparativo cronológico de cada critério avaliado entre o 1º, 2º, 3º e 4º Bimestres
               </p>
             </div>
@@ -2614,120 +2722,239 @@
 
       // Definição do escopo ativo de visualização e rótulo de benchmark
       let scopeLabelText = 'Minha UE';
-      if (user.roleKey === 'coordenador') {
-        scopeLabelText = 'Minha UE';
-      } else if (user.roleKey === 'formador') {
-        scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Meu Polo';
+      if (targetType === 'coordenador') {
+        if (user.roleKey === 'formador') {
+          scopeLabelText = user.school || 'Meu Polo';
+        } else {
+          // isNucleoEI
+          scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Rede Consolidada';
+        }
       } else {
-        scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Rede Consolidada';
+        if (user.roleKey === 'coordenador') {
+          scopeLabelText = 'Minha UE';
+        } else if (user.roleKey === 'formador') {
+          scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Meu Polo';
+        } else {
+          scopeLabelText = (activeUnitFilter !== 'ALL') ? activeUnitFilter : 'Rede Consolidada';
+        }
       }
 
       // Renderiza Tabela Executiva de UEs quando escopo consolidado para Núcleo ou Formadora
       let executiveUETableHtml = '';
       if (activeUnitFilter === 'ALL' && (isNucleoEI(user) || user.roleKey === 'formador')) {
-        const uesList = (user.roleKey === 'formador')
-          ? availableUnits
-          : (appState.units || []).map(u => u.name);
-
         const currentBim = getCurrentSchoolBimester();
         const currentBimNum = parseInt((currentBim.match(/([1-4])/) || [null, '1'])[1], 10);
 
-        let rowsHtml = '';
-        uesList.forEach(uName => {
-          const uClasses = getClassesForSchool(uName);
-          const uObs = (appState.observations || []).filter(o => 
-            (o.status === 'finalized' || o.status === 'concluida') && o.schoolName === uName
-          );
+        if (targetType === 'coordenador') {
+          // =========================================================================
+          // TABELA EXECUTIVA INSTITUCIONAL DE POLOS REGIONAIS (COORDENADORAS)
+          // =========================================================================
+          const polosList = (appState.polos || []).map(p => p.name).sort();
+          let rowsHtml = '';
+          polosList.forEach(pName => {
+            const poloUnits = (appState.units || []).filter(u => {
+              if (!u.polo) return false;
+              const up = u.polo.trim().toLowerCase();
+              const tp = pName.trim().toLowerCase();
+              return up === tp || up.includes(tp) || tp.includes(up);
+            }).map(u => u.name);
 
-          // Turmas avaliadas no bimestre corrente
-          const evalCurrentBim = uClasses.filter(cls => {
-            const cleanClassName = (cls.name || '').trim().toLowerCase();
-            return uObs.some(o => {
-              if (!o.className || o.className.trim().toLowerCase() !== cleanClassName) return false;
-              const bMatch = (o.bimester || '').match(/([1-4])/);
-              return bMatch && parseInt(bMatch[1], 10) === currentBimNum;
-            });
-          }).length;
+            const poloCoords = (appState.teamMembers || []).filter(m => 
+              m.roleKey === 'coordenador' && m.school && poloUnits.includes(m.school)
+            );
 
-          const covPct = uClasses.length > 0 ? Math.round((evalCurrentBim / uClasses.length) * 100) : 0;
-          const covColor = covPct >= 80 ? 'var(--green)' : (covPct >= 50 ? 'var(--yellow)' : 'var(--red)');
+            const poloObs = (appState.observations || []).filter(o => 
+              (o.status === 'finalized' || o.status === 'concluida') &&
+              o.evaluatedType === 'coordenador' &&
+              o.schoolName && poloUnits.includes(o.schoolName)
+            );
 
-          // Consistência da UE
-          const uHierarchy = calculateHierarchyStats(uObs, activeSections);
-          const uScore = uHierarchy.totalValid > 0 ? Math.round((uHierarchy.totalPts / uHierarchy.totalValid) * 100) : null;
-          const uScoreColor = uScore === null ? 'var(--text-secondary)' : (uScore >= 80 ? 'var(--green)' : uScore >= 60 ? 'var(--yellow)' : 'var(--red)');
+            const evalCurrentBim = poloCoords.filter(c => {
+              return poloObs.some(o => {
+                if (o.teacherName !== c.name) return false;
+                const bMatch = (o.bimester || '').match(/([1-4])/);
+                return bMatch && parseInt(bMatch[1], 10) === currentBimNum;
+              });
+            }).length;
 
-          const uObj = (appState.units || []).find(u => u.name === uName);
-          const uPolo = uObj?.polo || '—';
+            const covPct = poloCoords.length > 0 ? Math.round((evalCurrentBim / poloCoords.length) * 100) : 0;
+            const covColor = covPct >= 80 ? 'var(--green)' : (covPct >= 50 ? 'var(--yellow)' : 'var(--red)');
 
-          rowsHtml += `
-            <tr>
-              <td>
-                <strong style="color:var(--primary-dark); font-size:13px;">${uName}</strong>
-                <div style="font-size:11px; color:var(--text-secondary);">Polo: ${uPolo}</div>
-              </td>
-              <td>${uClasses.length} turmas</td>
-              <td>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <strong style="color:${covColor}; font-size:13px;">${evalCurrentBim} de ${uClasses.length} (${covPct}%)</strong>
-                  <div style="width:50px; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden;">
-                    <div style="width:${covPct}%; height:100%; background:${covColor};"></div>
+            const pHierarchy = calculateHierarchyStats(poloObs, activeSections);
+            const pScore = pHierarchy.totalValid > 0 ? Math.round((pHierarchy.totalPts / pHierarchy.totalValid) * 100) : null;
+            const pScoreColor = pScore === null ? 'var(--text-secondary)' : (pScore >= 80 ? 'var(--green)' : pScore >= 60 ? 'var(--yellow)' : 'var(--red)');
+
+            rowsHtml += `
+              <tr>
+                <td>
+                  <strong style="color:var(--primary-dark); font-size:13px;">${pName}</strong>
+                  <div style="font-size:11px; color:var(--text-secondary);">${poloUnits.length} unidade(s) vinculada(s)</div>
+                </td>
+                <td>${poloCoords.length} coordenadora(s)</td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <strong style="color:${covColor}; font-size:13px;">${evalCurrentBim} de ${poloCoords.length} (${covPct}%)</strong>
+                    <div style="width:50px; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden;">
+                      <div style="width:${covPct}%; height:100%; background:${covColor};"></div>
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td>
-                <strong style="color:${uScoreColor}; font-size:13px;">${uScore !== null ? uScore + '%' : '—'}</strong>
-                <span style="font-size:11px; color:var(--text-secondary);">(${uObs.length} obs.)</span>
-              </td>
-              <td style="text-align:right;">
-                <button type="button" class="btn btn-secondary" style="font-size:11px; padding:4px 8px; font-weight:700;" onclick="focusUnitFilter('${uName.replace(/'/g, "\\'")}')">
-                  Focar UE ➔
-                </button>
-              </td>
-            </tr>
-          `;
-        });
+                </td>
+                <td>
+                  <strong style="color:${pScoreColor}; font-size:13px;">${pScore !== null ? pScore + '%' : '—'}</strong>
+                  <span style="font-size:11px; color:var(--text-secondary);">(${poloObs.length} obs.)</span>
+                </td>
+                <td style="text-align:right;">
+                  <button type="button" class="btn btn-secondary" style="font-size:11px; padding:4px 8px; font-weight:700;" onclick="focusUnitFilter('${pName.replace(/'/g, "\\'")}')">
+                    Focar Polo ➔
+                  </button>
+                </td>
+              </tr>
+            `;
+          });
 
-        executiveUETableHtml = `
-          <div class="ue-executive-table-wrap">
-            <div class="ue-executive-table-header">
-              <div>
-                <div style="display:flex; align-items:center; gap:6px;">
-                  <svg class="btn-icon-sm" style="color:var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 21h18"></path>
-                    <path d="M5 21V7l8-4v18"></path>
-                    <path d="M19 21V11l-6-4"></path>
-                    <line x1="9" y1="9" x2="9" y2="9.01"></line>
-                    <line x1="9" y1="13" x2="9" y2="13.01"></line>
-                    <line x1="9" y1="17" x2="9" y2="17.01"></line>
-                  </svg>
-                  <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark); margin:0;">
-                    Cobertura e Consistência por Unidade Escolar · ${currentBim}
-                  </h4>
+          executiveUETableHtml = `
+            <div class="ue-executive-table-wrap">
+              <div class="ue-executive-table-header">
+                <div>
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <svg class="btn-icon-sm" style="color:var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                      <line x1="8" y1="2" x2="8" y2="18"></line>
+                      <line x1="16" y1="6" x2="16" y2="22"></line>
+                    </svg>
+                    <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark); margin:0;">
+                      Cobertura e Consistência por Polo Regional · ${currentBim}
+                    </h4>
+                  </div>
+                  <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;">
+                    Acompanhamento territorial consolidado das coordenadoras pedagógicas por polo
+                  </p>
                 </div>
-                <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;">
-                  Acompanhamento consolidado para priorização de suporte e visitas de campo
-                </p>
+              </div>
+              <div style="overflow-x:auto;">
+                <table class="ue-executive-table">
+                  <thead>
+                    <tr>
+                      <th>Polo Regional</th>
+                      <th>Coordenadoras</th>
+                      <th>Cobertura no Bimestre</th>
+                      <th>Consistência Geral</th>
+                      <th style="text-align:right;">Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rowsHtml}
+                  </tbody>
+                </table>
               </div>
             </div>
-            <div style="overflow-x:auto;">
-              <table class="ue-executive-table">
-                <thead>
-                  <tr>
-                    <th>Unidade Escolar</th>
-                    <th>Turmas</th>
-                    <th>Cobertura no Bimestre</th>
-                    <th>Consistência Geral</th>
-                    <th style="text-align:right;">Ação</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${rowsHtml}
-                </tbody>
-              </table>
+          `;
+        } else {
+          // Lógica anterior preservada para docentes
+          const uesList = (user.roleKey === 'formador')
+            ? availableUnits
+            : (appState.units || []).map(u => u.name);
+
+          let rowsHtml = '';
+          uesList.forEach(uName => {
+            const uClasses = getClassesForSchool(uName);
+            const uObs = (appState.observations || []).filter(o => 
+              (o.status === 'finalized' || o.status === 'concluida') && o.schoolName === uName
+            );
+
+            // Turmas avaliadas no bimestre corrente
+            const evalCurrentBim = uClasses.filter(cls => {
+              const cleanClassName = (cls.name || '').trim().toLowerCase();
+              return uObs.some(o => {
+                if (!o.className || o.className.trim().toLowerCase() !== cleanClassName) return false;
+                const bMatch = (o.bimester || '').match(/([1-4])/);
+                return bMatch && parseInt(bMatch[1], 10) === currentBimNum;
+              });
+            }).length;
+
+            const covPct = uClasses.length > 0 ? Math.round((evalCurrentBim / uClasses.length) * 100) : 0;
+            const covColor = covPct >= 80 ? 'var(--green)' : (covPct >= 50 ? 'var(--yellow)' : 'var(--red)');
+
+            // Consistência da UE
+            const uHierarchy = calculateHierarchyStats(uObs, activeSections);
+            const uScore = uHierarchy.totalValid > 0 ? Math.round((uHierarchy.totalPts / uHierarchy.totalValid) * 100) : null;
+            const uScoreColor = uScore === null ? 'var(--text-secondary)' : (uScore >= 80 ? 'var(--green)' : uScore >= 60 ? 'var(--yellow)' : 'var(--red)');
+
+            const uObj = (appState.units || []).find(u => u.name === uName);
+            const uPolo = uObj?.polo || '—';
+
+            rowsHtml += `
+              <tr>
+                <td>
+                  <strong style="color:var(--primary-dark); font-size:13px;">${uName}</strong>
+                  <div style="font-size:11px; color:var(--text-secondary);">Polo: ${uPolo}</div>
+                </td>
+                <td>${uClasses.length} turmas</td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <strong style="color:${covColor}; font-size:13px;">${evalCurrentBim} de ${uClasses.length} (${covPct}%)</strong>
+                    <div style="width:50px; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden;">
+                      <div style="width:${covPct}%; height:100%; background:${covColor};"></div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <strong style="color:${uScoreColor}; font-size:13px;">${uScore !== null ? uScore + '%' : '—'}</strong>
+                  <span style="font-size:11px; color:var(--text-secondary);">(${uObs.length} obs.)</span>
+                </td>
+                <td style="text-align:right;">
+                  <button type="button" class="btn btn-secondary" style="font-size:11px; padding:4px 8px; font-weight:700;" onclick="focusUnitFilter('${uName.replace(/'/g, "\\'")}')">
+                    Focar UE ➔
+                  </button>
+                </td>
+              </tr>
+            `;
+          });
+
+          executiveUETableHtml = `
+            <div class="ue-executive-table-wrap">
+              <div class="ue-executive-table-header">
+                <div>
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <svg class="btn-icon-sm" style="color:var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 21h18"></path>
+                      <path d="M5 21V7l8-4v18"></path>
+                      <path d="M19 21V11l-6-4"></path>
+                      <line x1="9" y1="9" x2="9" y2="9.01"></line>
+                      <line x1="9" y1="13" x2="9" y2="13.01"></line>
+                      <line x1="9" y1="17" x2="9" y2="17.01"></line>
+                    </svg>
+                    <h4 style="font-size:15px; font-weight:800; color:var(--primary-dark); margin:0; display:flex; align-items:center;">
+                      <span>Cobertura e Consistência por Unidade Escolar · ${currentBim}</span>
+                      <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Cobertura e Consistência por Unidade Escolar', 'Acompanhamento consolidado para priorização de suporte e visitas de campo')" aria-label="Informações sobre cobertura e consistência">
+                        <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                      </button>
+                    </h4>
+                  </div>
+                  <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;">
+                    Acompanhamento consolidado para priorização de suporte e visitas de campo
+                  </p>
+                </div>
+              </div>
+              <div style="overflow-x:auto;">
+                <table class="ue-executive-table">
+                  <thead>
+                    <tr>
+                      <th>Unidade Escolar</th>
+                      <th>Turmas</th>
+                      <th>Cobertura no Bimestre</th>
+                      <th>Consistência Geral</th>
+                      <th style="text-align:right;">Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rowsHtml}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        `;
+          `;
+        }
       }
 
       // Montagem do Painel Síntese das Dimensões
@@ -2831,11 +3058,14 @@
                     <polyline points="2 17 12 22 22 17"></polyline>
                     <polyline points="2 12 12 17 22 12"></polyline>
                   </svg>
-                  <h4 style="font-size:14px; font-weight:800; color:var(--primary-dark); margin:0;">
-                    Distribuição do Uso de Materiais (Síntese Pedagógica)
+                  <h4 style="font-size:14px; font-weight:800; color:var(--primary-dark); margin:0; display:flex; align-items:center;">
+                    <span>Distribuição do Uso de Materiais (Síntese Pedagógica)</span>
+                    <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Distribuição do Uso de Materiais', 'Proporção de observações registradas em cada nível de materiais na Educação Infantil (${matTotal} registros com escala)')" aria-label="Informações sobre uso de materiais">
+                      <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    </button>
                   </h4>
                 </div>
-                <p style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;">
+                <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary); margin:2px 0 0 0;">
                   Proporção de observações registradas em cada nível de materiais na Educação Infantil (${matTotal} registros com escala)
                 </p>
               </div>
@@ -2978,18 +3208,27 @@
         <div id="indicatorsSectionDrilldown" style="display:${currentSubTab === 'drilldown' ? 'block' : 'none'};">
           <div class="page-title-row" style="margin-top:4px; margin-bottom:12px;">
             <div>
-              <h3 style="font-size:17px; font-weight:800; color:var(--primary-dark);">
-                Visualização por Dimensão dos Indicadores Pedagógicos (${targetType === 'coordenador' ? 'Coordenação' : 'Docência'})
+              <h3 style="font-size:17px; font-weight:800; color:var(--primary-dark); display:flex; align-items:center;">
+                <span>Visualização por Dimensão dos Indicadores Pedagógicos (${targetType === 'coordenador' ? 'Coordenação' : 'Docência'})</span>
+                <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Visualização por Dimensão', 'Referencial comparativo item a item entre a sua Unidade Escolar e a Média da Rede Municipal de Patos')" aria-label="Informações sobre visualização por dimensão">
+                  <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
               </h3>
-              <p style="font-size:12px; color:var(--text-secondary);">
-                Referencial comparativo item a item entre a sua Unidade Escolar e a Média da Rede Municipal de Patos
+              <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary);">
+                ${targetType === 'coordenador'
+                  ? (scopeLabelText === 'Rede Consolidada' 
+                      ? 'Referencial consolidado dos indicadores de coordenação pedagógica na Rede Municipal de Patos'
+                      : `Referencial comparativo item a item entre o ${scopeLabelText} e a Média da Rede Municipal de Patos`)
+                  : (scopeLabelText === 'Rede Consolidada'
+                      ? 'Referencial consolidado dos indicadores docentes na Rede Municipal de Patos'
+                      : `Referencial comparativo item a item entre a sua Unidade Escolar (${scopeLabelText}) e a Média da Rede Municipal de Patos`)}
               </p>
             </div>
           </div>
 
           <!-- Banner Informativo de Contexto do Referencial da Rede Municipal -->
           <div class="benchmark-info-bar">
-            ${(scopeLabelText === 'Rede Consolidada' || (activeUnitFilter === 'ALL' && !user.schoolKey && user.roleKey !== 'coordenador')) ? `
+            ${(scopeLabelText === 'Rede Consolidada' || (activeUnitFilter === 'ALL' && targetType !== 'coordenador' && !user.schoolKey && user.roleKey !== 'coordenador')) ? `
               <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; width:100%;">
                 <div style="display:flex; align-items:center; gap:8px;">
                   <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary); flex-shrink:0;">
@@ -3005,7 +3244,7 @@
                     <line x1="10" y1="22" x2="14" y2="22"></line>
                     <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
                   </svg>
-                  <span>Selecione uma Escola no filtro para comparar com a Rede</span>
+                  <span>${targetType === 'coordenador' ? 'Selecione um Polo no filtro para comparar com a Rede' : 'Selecione uma Escola no filtro para comparar com a Rede'}</span>
                 </span>
               </div>
             ` : `
