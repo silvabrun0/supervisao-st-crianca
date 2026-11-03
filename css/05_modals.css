@@ -112,13 +112,14 @@
       border: none;
       width: 44px;
       height: 44px;
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text-secondary);
+      color: var(--ink-muted);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: background-color var(--dur-fast) var(--ease-standard), 
+                  color var(--dur-fast) var(--ease-standard);
     }
     .dim-icon-btn:hover {
       background: var(--border-light);
@@ -158,13 +159,14 @@
 
     /* Acordeão de Subdimensões */
     .subdim-accordion-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-rule);
+      border-radius: var(--radius-lg);
       margin-bottom: 14px;
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.2s ease;
+      box-shadow: var(--shadow-hairline);
+      transition: border-color var(--dur-fast) var(--ease-standard), 
+                  box-shadow var(--dur-fast) var(--ease-standard);
     }
     .subdim-accordion-card.pending-highlight {
       border-color: #FCA5A5 !important;

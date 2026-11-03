@@ -8,6 +8,10 @@
       if (isNucleoEI(user) && tabName === 'classes') {
         tabName = 'units';
       }
+      // Blindagem RBAC: Coordenadores e Formadores NÃO podem acessar a tela de gestão da base SSOT / Extrações
+      if (!isNucleoEI(user) && tabName === 'exports') {
+        tabName = (user.roleKey === 'coordenador') ? 'classes' : 'units';
+      }
       appState.currentPedagSubTab = tabName;
       document.querySelectorAll('.pedag-subtab-btn').forEach(btn => btn.classList.remove('active'));
       const activeBtn = document.getElementById('pedagTab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
@@ -35,7 +39,7 @@
       const activeFinalized = finalized.filter(f => !f.archived);
 
       const draftsHeader = document.getElementById('homeDraftsHeader');
-      if (draftsHeader) draftsHeader.innerText = `📝 Meus Rascunhos em Andamento (${drafts.length})`;
+      if (draftsHeader) draftsHeader.innerText = `Meus rascunhos em andamento (${drafts.length})`;
       const finCount = document.getElementById('homeFinalizedCount');
       if (finCount) finCount.innerText = `${activeFinalized.length} Observações Ativas`;
       const notesCount = document.getElementById('homeNotesCountText');

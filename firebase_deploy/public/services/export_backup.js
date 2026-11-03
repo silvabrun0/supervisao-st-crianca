@@ -96,6 +96,11 @@
     }
 
     function exportFullBaseJSON() {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Acesso exclusivo à Coordenadora do Núcleo de EI.');
+        return;
+      }
       const exportState = JSON.parse(JSON.stringify(appState));
       
       if (exportState.teamMembers) {
@@ -140,11 +145,22 @@
     }
 
     function triggerImportFullBase() {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Acesso exclusivo à Coordenadora do Núcleo de EI.');
+        return;
+      }
       const input = document.getElementById('importFullBaseFileInput');
       if (input) input.click();
     }
 
     function importFullBaseJSON(event) {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Acesso exclusivo à Coordenadora do Núcleo de EI.');
+        if (event && event.target) event.target.value = '';
+        return;
+      }
       const file = event.target.files && event.target.files[0];
       if (!file) return;
 

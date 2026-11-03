@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.62 (v8.2.29)</span>
+          <span>Versão 1.64 (v8.2.31)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -152,14 +152,14 @@
         </div>
         <button class="btn hero-btn" id="btnNewObsHero" onclick="handleNewObsButtonClick()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          <span id="btnNewObsText">NOVA OBSERVAÇÃO</span>
+          <span id="btnNewObsText">Nova observação</span>
         </button>
       </div>
 
       <!-- Seção de Rascunhos em Andamento (Full-Width) -->
       <div id="homeDraftsSection" style="margin-bottom:24px;">
         <div class="page-title-row" style="margin-bottom:12px;">
-          <h3 style="font-size:16px; font-weight:700;" id="homeDraftsHeader">📝 Meus Rascunhos em Andamento (0)</h3>
+          <h3 style="font-size:16px; font-weight:700;" id="homeDraftsHeader">Meus rascunhos em andamento (0)</h3>
           <span style="font-size:11px; color:var(--text-secondary); font-weight:600;">Exclusivo do autor</span>
         </div>
         <div id="homeDraftsContainer" style="display:flex; flex-direction:column; gap:10px;"></div>
@@ -170,14 +170,14 @@
         <div class="page-title-row" style="margin-bottom:12px;">
           <div>
             <h3 style="font-size:16px; font-weight:700; color:var(--primary-dark); display:flex; align-items:center;" id="homeScheduledHeader">
-              <span>🗓️ Minhas Próximas Observações Agendadas</span>
+              <span>Minhas próximas observações agendadas</span>
               <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Próximas Observações Agendadas', 'Inicie diretamente as observações planejadas no cronograma longitudinal')" aria-label="Informações sobre próximas observações">
                 <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
               </button>
             </h3>
             <p class="platform-info-text" style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Inicie diretamente as observações planejadas no cronograma longitudinal</p>
           </div>
-          <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;" onclick="navigateToTab('schedule')">Ver Cronograma Completo →</button>
+          <button class="btn btn-secondary" style="font-size:11px; padding:5px 10px;" onclick="navigateToTab('schedule')">Ver cronograma completo</button>
         </div>
         <div id="homeScheduledCardsList" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px;"></div>
       </div>
@@ -697,7 +697,7 @@
               <option value="">-- Observação Avulsa (Não vinculada ao cronograma) --</option>
             </select>
             <div style="font-size:11px; color:#15803D; margin-top:5px; line-height:1.4;">
-              💡 Selecionar uma observação preenche automaticamente a escola, o profissional, a turma, o bimestre e o horário previsto.
+              Selecionar uma observação preenche automaticamente a escola, o profissional, a turma, o bimestre e o horário previsto.
             </div>
           </div>
 
@@ -722,7 +722,7 @@
           <div id="groupSetupTeachersCard" style="display:none; background:#F0F7FF; border:1px solid #BFDBFE; border-left:5px solid #2563EB; border-radius:10px; padding:14px; margin-bottom:18px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
               <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:#1D4ED8; letter-spacing:0.5px;">
-                👩‍🏫 Equipe de Regência Titular da Turma
+                Equipe de regência titular da turma
               </span>
               <span id="setupClassShiftBadge" style="font-size:10px; font-weight:700; background:#DBEAFE; color:#1E40AF; padding:2px 8px; border-radius:12px;">
                 Parcial Matutino
@@ -736,7 +736,7 @@
           <!-- Aviso Contextual de Turma em Tempo Integral (Pilar 4: Duas Etapas) -->
           <div id="setupIntegralNotice" style="display:none; background:#FAF5FF; border:1px solid #E9D5FF; border-left:5px solid #7C3AED; border-radius:10px; padding:12px 14px; margin-bottom:18px; font-size:12px; color:#581C87; line-height:1.5;">
             <div style="font-weight:800; display:flex; align-items:center; gap:6px; margin-bottom:4px;">
-              <span>🌟</span> <span>Turma em Tempo Integral (Formulário Único em 2 Etapas: Manhã + Tarde)</span>
+              <span>Turma em tempo integral (Formulário Único em 2 Etapas: Manhã + Tarde)</span>
             </div>
             Esta observação será iniciada na <strong>Etapa 1 (Turno Matutino)</strong>. Ao encerrar o período matutino, você salvará o formulário como rascunho com os horários da manhã para retomá-lo à tarde e finalizar o acompanhamento integrado da equipe de 4 docentes regentes.
           </div>
@@ -788,7 +788,7 @@
           </div>
 
           <button id="btnStartObservation" class="btn btn-primary btn-full" onclick="startNewObservation()" style="margin-top:10px;">
-            INICIAR INSTRUMENTO DE OBSERVAÇÃO →
+            Iniciar instrumento de observação
           </button>
         </div>
       </div>
@@ -843,7 +843,7 @@
           </div>
           <div style="display:flex; gap:10px;">
             <button class="btn btn-secondary" onclick="backToCriteria()">← Voltar aos Critérios</button>
-            <button class="btn btn-secondary" onclick="exportSynthesisToPdf()">🖨️ Exportar em PDF</button>
+            <button class="btn btn-secondary" onclick="exportSynthesisToPdf()"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Exportar em PDF</button>
           </div>
         </div>
 
@@ -853,7 +853,7 @@
           <div style="flex:1;">
             <div style="font-size:14px; font-weight:800; color:#991B1B;">Atenção: Questionário Incompleto!</div>
             <div style="font-size:12px; color:#B91C1C; margin-top:3px;" id="synthesisPendencyCountText">Existem itens sem resposta. É vedado o envio parcial de questionários.</div>
-            <button class="btn btn-danger" style="margin-top:8px; font-size:11px; padding:6px 12px;" onclick="goToFirstPending()">Ir para o Primeiro Item Pendente →</button>
+            <button class="btn btn-danger" style="margin-top:8px; font-size:11px; padding:6px 12px;" onclick="goToFirstPending()">Ir para o primeiro item pendente</button>
           </div>
         </div>
 
@@ -1812,6 +1812,61 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.64 - BLOQUEIO RIGOROSO DA TELA DE GESTÃO DA BASE SSOT PARA COORDENADOR E FORMADOR -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.64 · v8.2.31</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">03/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Bloqueio Rigoroso e Isolamento da Tela de Gestão da Base SSOT para Coordenação Pedagógica e Formadores:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🔒 <strong>Blindagem RBAC em <code>switchPedagSubTab()</code>:</strong> Trava inviolável que redireciona qualquer tentativa de acesso não autorizado à sub-aba <code>exports</code> para <code>classes</code> (Coordenador) ou <code>units</code> (Formador).</li>
+          <li>🛡️ <strong>Higienização e Reset de Navegação:</strong> Sanitização ativa de <code>appState.currentPedagSubTab</code> e reset forçado de <code>#pedagViewExports</code> (<code>display: none</code>) em <code>applyUserRoleUI()</code> e no dispatcher de <code>navigateToTab('opManagement')</code>, impedindo resíduos de sessões administrativas de expor o contêiner SSOT.</li>
+          <li>💾 <strong>Proteção no Nível de Serviço:</strong> Verificação mandatória <code>isNucleoEI(getCurrentUser())</code> em <code>exportFullBaseJSON()</code>, <code>triggerImportFullBase()</code> e <code>importFullBaseJSON()</code>.</li>
+          <li>🧹 <strong>Higienização Terminológica Institucional:</strong> Supressão do jargão técnico "sob SSOT única" nos subtítulos operacionais de Coordenador e Formador em prol de redação institucional límpida.</li>
+          <li>🔬 <strong>Auditoria Expandida (Módulo 14):</strong> Cobertura automatizada no motor de testes comprovando o bloqueio de contêineres e autocurando contaminações cruzadas de estado.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.63 - REDESIGN HALLMARK INTEGRAL DA PLATAFORMA (ANTIVIBECODE) -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.63 · v8.2.27</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">03/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Redesign Hallmark Integral da Plataforma: Erradicação do Visual Vibecode e Sobriedade Institucional:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🏛️ <strong>Tokens Universais e Sobriedade Institucional:</strong> Implementação do Design System Hallmark v2.0 com tokens semânticos completos em <code>:root</code> (camadas Paper, Ink, Rule e Brand &lt; 5%), eliminando cores hexadecimais avulsas.</li>
+          <li>🛡️ <strong>Erradicação Total de <code>transition: all</code>:</strong> Eliminação de 100% das ocorrências de transição irrestrita na plataforma, prevenindo janks e repaints custosos com transições restritas a propriedades permitidas.</li>
+          <li>📐 <strong>Concentric Radii e Single-Layer Containment:</strong> Padronização dos raios de borda (6px, 8px, 12px) e erradicação do aninhamento excessivo de cartões dentro de cartões.</li>
+          <li>✍️ <strong>Tipografia Editorial e Extinção de All-Caps Forçado:</strong> Rótulos de formulário (<code>.form-label</code>) e cabeçalhos de tabela convertidos para sentence case sem tracking artificial, garantindo alta legibilidade e autoridade técnica.</li>
+          <li>🧹 <strong>Higienização Semiótica e Expulso de Emojis/Setas Coladas:</strong> Remoção de emojis utilizados como iconografia no DOM estático e dinâmico, substituição por pictogramas vetoriais SVG monocromáticos e remoção de setas coladas ao texto.</li>
+          <li>♿ <strong>Acessibilidade Instantânea:</strong> Suporte universal a <code>:focus-visible</code> com anel nítido de 2px e <code>prefers-reduced-motion: reduce</code> em todos os componentes interativos.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.63 - BLOQUEIO DE AGENDAMENTOS DUPLICADOS NO CRONOGRAMA -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.63 · v8.2.30</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">03/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Bloqueio Rigoroso de Agendamentos Duplicados no Cronograma Longitudinal e Feedback Preventivo em Tempo Real:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🔒 <strong>Barreira de Integridade Longitudinal:</strong> Bloqueio mandatória de múltiplos agendamentos para o mesmo alvo (Turma ou Coordenadora) no mesmo bimestre, na mesma data e bloqueio de conflitos de horário para o supervisor.</li>
+          <li>🛡️ <strong>Feedback Visual Preventivo em Tempo Real:</strong> Implementação do banner contextual <code>#scheduleDuplicateWarningHint</code> com padrão Hallmark (SVG puro, sem emojis, contraste WCAG AAA) e desabilitação automática do botão <code>#btnSaveScheduleModal</code>.</li>
+          <li>⚡ <strong>Proteção contra Múltiplos Cliques ("Double-Click"):</strong> Trava de reentrância <code>isSavingSchedule</code> impedindo geração inadvertida de registros paralelos.</li>
+          <li>🧹 <strong>Saneamento Retroativo Transparente:</strong> Rotina <code>sanitizeDuplicateSchedules()</code> acionada na inicialização do estado em <code>loadState()</code> para higienizar duplicidades históricas.</li>
+          <li>🔬 <strong>Validação e Auditoria Automatizada:</strong> Inclusão de testes rigorosos no Módulo 8 (<code>agenda_cronograma</code>) de <code>audit_engine.js</code>.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.62 - CORREÇÃO E RESTAURAÇÃO DA ABA MINHA ESCOLA / MEU POLO PARA CP E FORMADOR -->
@@ -5142,14 +5197,14 @@
 
       <div class="form-group">
         <label class="form-label">Unidade Escolar</label>
-        <select id="scheduleSchool" class="form-select" onchange="onScheduleSchoolChange()">
+        <select id="scheduleSchool" class="form-select" onchange="onScheduleSchoolChange(); checkScheduleDuplicationUI();">
           <!-- Populated -->
         </select>
       </div>
 
       <div class="form-group">
         <label id="scheduleTargetLabel" class="form-label">Turma a ser Observada</label>
-        <select id="scheduleTarget" class="form-select" onchange="onScheduleTargetChange()">
+        <select id="scheduleTarget" class="form-select" onchange="onScheduleTargetChange(); checkScheduleDuplicationUI();">
           <!-- Populated dinamicamente com Turmas (Coordenadora) ou Coordenadoras (Formadora) -->
         </select>
       </div>
@@ -5167,7 +5222,7 @@
 
       <div class="form-group">
         <label class="form-label">Bimestre de Acompanhamento</label>
-        <select id="scheduleBimester" class="form-select">
+        <select id="scheduleBimester" class="form-select" onchange="checkScheduleDuplicationUI();">
           <option value="1º Bimestre" selected>1º Bimestre</option>
           <option value="2º Bimestre">2º Bimestre</option>
           <option value="3º Bimestre">3º Bimestre</option>
@@ -5178,12 +5233,16 @@
       <div class="grid-2col" style="gap:12px;">
         <div class="form-group">
           <label class="form-label">Data Prevista</label>
-          <input type="date" id="scheduleDate" class="form-input">
+          <input type="date" id="scheduleDate" class="form-input" onchange="checkScheduleDuplicationUI();" oninput="checkScheduleDuplicationUI();">
         </div>
         <div class="form-group">
           <label class="form-label">Horário Planejado</label>
-          <input type="time" id="scheduleTime" class="form-input" value="08:00">
+          <input type="time" id="scheduleTime" class="form-input" value="08:00" onchange="checkScheduleDuplicationUI();" oninput="checkScheduleDuplicationUI();">
         </div>
+      </div>
+
+      <!-- BANNER DE AVISO CONTEXTUAL E BLOQUEIO DE DUPLICIDADE (HALLMARK STANDARD) -->
+      <div id="scheduleDuplicateWarningHint" style="display:none; margin-top:8px; margin-bottom:14px; padding:10px 14px; border-radius:8px; font-size:12px; line-height:1.45;">
       </div>
 
       <div style="display:flex; gap:10px; justify-content:flex-end; align-items:center; margin-top:14px;">
@@ -5192,7 +5251,7 @@
           Excluir Agendamento
         </button>
         <button type="button" class="btn btn-secondary" onclick="closeAddScheduleModal()">Cancelar</button>
-        <button type="button" class="btn btn-primary" onclick="saveNewSchedule()">Salvar no Cronograma</button>
+        <button type="button" id="btnSaveScheduleModal" class="btn btn-primary" onclick="saveNewSchedule()">Salvar no Cronograma</button>
       </div>
     </div>
   </div>

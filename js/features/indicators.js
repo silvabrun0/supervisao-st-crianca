@@ -127,7 +127,7 @@
      * @param {String} mode 'lowest' (menor consistência), 'delta' (maior desvio vs rede), 'highest' (pontos fortes)
      * @param {Number} count Quantidade de registros a retornar (padrão: 3)
      */
-    function calculateTopCriteria(scopeHierarchy, redeHierarchy, mode, count) {
+    function calculateTopCriteria(scopeHierarchy, benchmarkHierarchy, mode, count) {
       const allCriteria = [];
       if (!scopeHierarchy || !scopeHierarchy.dims) return [];
 
@@ -141,18 +141,18 @@
               const pts = crit.consistent * 1.0 + crit.partial * 0.5;
               const score = Math.round((pts / crit.validTotal) * 100);
 
-              let redeScore = null;
-              if (redeHierarchy && redeHierarchy.dims && redeHierarchy.dims[dIdx]) {
-                const rDim = redeHierarchy.dims[dIdx];
+              let benchScore = null;
+              if (benchmarkHierarchy && benchmarkHierarchy.dims && benchmarkHierarchy.dims[dIdx]) {
+                const rDim = benchmarkHierarchy.dims[dIdx];
                 if (rDim.subSections && rDim.subSections[sIdx] && rDim.subSections[sIdx].criteria && rDim.subSections[sIdx].criteria[cIdx]) {
                   const rCrit = rDim.subSections[sIdx].criteria[cIdx];
                   if (rCrit.validTotal > 0) {
-                    redeScore = Math.round(((rCrit.consistent * 1.0 + rCrit.partial * 0.5) / rCrit.validTotal) * 100);
+                    benchScore = Math.round(((rCrit.consistent * 1.0 + rCrit.partial * 0.5) / rCrit.validTotal) * 100);
                   }
                 }
               }
 
-              const delta = (redeScore !== null) ? (score - redeScore) : 0;
+              const delta = (benchScore !== null) ? (score - benchScore) : 0;
 
               allCriteria.push({
                 critId: crit.id,
@@ -163,7 +163,8 @@
                 subId: sub.id,
                 subTitle: `${sub.id} ${subTitle}`,
                 score: score,
-                redeScore: redeScore,
+                redeScore: benchScore,
+                benchScore: benchScore,
                 delta: delta,
                 consistent: crit.consistent,
                 partial: crit.partial,
@@ -183,7 +184,7 @@
         // Ordena pelos maiores scores (decrescente)
         allCriteria.sort((a, b) => b.score - a.score || b.validTotal - a.validTotal);
       } else if (mode === 'delta') {
-        // Ordena pela maior defasagem negativa em relação à rede
+        // Ordena pela maior defasagem negativa em relação ao benchmark
         allCriteria.sort((a, b) => a.delta - b.delta || a.score - b.score);
       } else {
         // mode === 'lowest' (padrão)
@@ -617,7 +618,7 @@
     /**
      * Gera e copia para o clipboard o resumo diagnóstico dos critérios prioritários (gargalos).
      */
-    function copyMeetingAgendaToClipboard(scopeLabelText, targetType) {
+    function copyMeetingAgendaToClipboard(scopeLabelText, targetType, benchmarkLabel = 'Rede Patos') {
       const targetTypeName = targetType === 'coordenador' ? 'Coordenação Pedagógica' : 'Prática Docente Infantil';
       const bottlenecks = appState._lastComputedBottlenecks || [];
 
@@ -629,6 +630,7 @@
       const today = new Date().toLocaleDateString('pt-BR');
       let text = `DIAGNÓSTICO DE CRITÉRIOS PRIORITÁRIOS (GARGALOS) · SERTÃO CRIANÇA\n`;
       text += `Data: ${today} | Escopo: ${scopeLabelText} | Segmento: ${targetTypeName}\n`;
+      text += `Referencial Comparativo: ${benchmarkLabel}\n`;
       text += `------------------------------------------------------------\n`;
       text += `OS 3 CRITÉRIOS PRIORITÁRIOS PARA INTERVENÇÃO PEDAGÓGICA:\n\n`;
 
@@ -637,10 +639,11 @@
 
       bottlenecks.forEach((b, idx) => {
         const rank = idx + 1;
-        const deltaText = b.delta !== null ? `${b.delta > 0 ? '+' : ''}${b.delta}% vs. Rede Patos` : 'Sem referencial municipal';
+        const benchVal = b.benchScore !== undefined ? b.benchScore : b.redeScore;
+        const deltaText = b.delta !== null ? `${b.delta > 0 ? '+' : ''}${b.delta}% vs. ${benchmarkLabel}` : 'Sem referencial comparativo';
         text += `${rank}. [${b.critId}] ${b.critText}\n`;
         text += `   • Localização: ${b.dimTitle} · ${b.subTitle}\n`;
-        text += `   • ${scopeScoreLabel}: ${b.score}% (Rede Municipal: ${b.redeScore !== null ? b.redeScore + '%' : '—'} · Δ: ${deltaText})\n`;
+        text += `   • ${scopeScoreLabel}: ${b.score}% (${benchmarkLabel}: ${benchVal !== null ? benchVal + '%' : '—'} · Δ: ${deltaText})\n`;
         text += `   • Evidências Observadas: C: ${b.consistent} | P: ${b.partial} | NR: ${b.notDone}\n\n`;
       });
 

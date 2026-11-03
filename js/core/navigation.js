@@ -54,7 +54,15 @@
           
           let initialSubTab = 'units';
           if (user.roleKey === 'coordenador') {
-            initialSubTab = appState.currentPedagSubTab || 'classes';
+            // Se o estado anterior for 'exports' ou inválido, redireciona estritamente para 'classes'
+            initialSubTab = (appState.currentPedagSubTab && appState.currentPedagSubTab !== 'exports') 
+              ? appState.currentPedagSubTab 
+              : 'classes';
+          } else if (user.roleKey === 'formador') {
+            // Se o estado anterior for 'exports', redireciona estritamente para 'units'
+            initialSubTab = (appState.currentPedagSubTab && appState.currentPedagSubTab !== 'exports') 
+              ? appState.currentPedagSubTab 
+              : 'units';
           } else {
             initialSubTab = appState.currentPedagSubTab || 'units';
           }
@@ -218,11 +226,11 @@
       pendingSchedules.forEach(s => {
         let badgeHtml = '';
         if (s.plannedDate === todayStr) {
-          badgeHtml = `<span style="font-size:11px; font-weight:700; background:#DCFCE7; color:#166534; padding:2px 8px; border-radius:12px;">● Prevista para Hoje</span>`;
+          badgeHtml = `<span style="font-size:11px; font-weight:600; background:var(--sem-green-bg); color:var(--sem-green-ink); border:1px solid var(--sem-green-rule); padding:2px 8px; border-radius:var(--radius-full);">Prevista para hoje</span>`;
         } else if (s.plannedDate < todayStr) {
-          badgeHtml = `<span style="font-size:11px; font-weight:700; background:#FEE2E2; color:#991B1B; padding:2px 8px; border-radius:12px;">⚠ Em Atraso (${formatDateBR(s.plannedDate)})</span>`;
+          badgeHtml = `<span style="font-size:11px; font-weight:600; background:var(--sem-red-bg); color:var(--sem-red-ink); border:1px solid var(--sem-red-rule); padding:2px 8px; border-radius:var(--radius-full);">Em atraso (${formatDateBR(s.plannedDate)})</span>`;
         } else {
-          badgeHtml = `<span style="font-size:11px; font-weight:700; background:#EFF6FF; color:#1E40AF; padding:2px 8px; border-radius:12px;">🗓️ Prevista (${formatDateBR(s.plannedDate)})</span>`;
+          badgeHtml = `<span style="font-size:11px; font-weight:600; background:var(--sem-neutral-bg); color:var(--sem-neutral-ink); border:1px solid var(--sem-neutral-rule); padding:2px 8px; border-radius:var(--radius-full);">Prevista (${formatDateBR(s.plannedDate)})</span>`;
         }
 
         const card = document.createElement('div');

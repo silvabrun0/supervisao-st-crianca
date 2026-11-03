@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.63** | 03/11/2026 14:45 | `intermediárias/aplicativo_v1.63_redesign_hallmark_integral_antivibecode.html` | Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_integral_antivibecode.md` | Redesign Hallmark Integral da Plataforma: Erradicação do Visual Vibecode, Sobriedade Institucional, Tokens Universais, Eliminação de `transition: all`, All-Caps forçado e Emojis 🏛️🎨✨ |
 | **1.62** | 03/11/2026 13:50 | `intermediárias/aplicativo_v1.62_correcao_rotulo_aba_gestao_cp_formador.html` | Solicitação direta / `planos_de_implementacao/plano_correcao_rotulo_aba_gestao_cp_formador.md` e `planos_de_implementacao/plano_comparacao_polo_vs_rede_indicadores_coordenacao.md` | Correção e Restauração das Abas "Minha Escola" e "Meu Polo" (CP e Formador) e Comparação Territorial Polo vs. Rede nos Indicadores de Coordenação: fixação da 1ª aba como "Início", restauração da 2ª aba ("Minha Escola" e "Meu Polo"), reconfiguração reativa do Seletor 2 (Unidade Escolar ↔ Polo Regional) para Coordenadores(as), trava institucional da Formadora Clarice no Polo 1 vs. Rede Patos, visualização consolidada com Tabela Executiva de Polos para Helena (Núcleo EI), Seletor 3 com coordenadoras do polo e erradicação de "UE vs. Rede" 🏫🗺️📊🏛️ |
 | **1.61** | 03/11/2026 13:40 | `intermediárias/aplicativo_v1.61_botoes_informacao_mobile_hallmark.html` | Solicitação direta / `planos_de_implementacao/plano_botoes_informacao_mobile_hallmark.md` | Botões de Informação Progressiva e Descluttering Mobile (Padrão Hallmark): recolhimento de textos explicativos prolixos no celular (≤ 768px) via `.platform-info-text`, introdução de botões circulares `.btn-platform-info` com pictograma vetorial SVG puro e alvo de toque ergonômico de 44x44px (WCAG AAA), bottom sheet universal sob demanda `#modalPlatformInfo`, erradicação de emojis e asserções estritas no Módulo 12 📱ℹ️🏛️ |
 | **1.60** | 29/10/2026 17:45 | `intermediárias/aplicativo_v1.60_redesign_hallmark_painel_indicadores_sobriedade_ritmo.html` | Solicitação direta / `planos_de_implementacao/plano_verificacao_hallmark_painel_sobriedade_desclutter.md` | Redesign Hallmark da aba Painel & Indicadores (sobriedade cromática, erradicação de emojis e ritmo editorial): quebra da monotonia dos 4 cards clonados com layout assimétrico editorial (bloco âncora de cobertura + painel integrado secundário), numerais tabulares sóbrios, pílulas de contexto calmas, erradicação total de emojis residuais nos deltas (🔻, ⚪, 🟢), no clipboard e nos badges mobile, aplanamento da escala de materiais em prateleira única sem cards aninhados e fita contínua do quadro de controle bimestral 📊🏛️✨ |
@@ -189,6 +190,22 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.63] - Redesign Hallmark Integral da Plataforma (Antivibecode e Sobriedade Institucional)
+- **Data / Horário:** 03/11/2026 14:45
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.63_redesign_hallmark_integral_antivibecode.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_redesign_hallmark_integral_antivibecode.md`
+- **Foco Central:** Redesign Hallmark Integral da Plataforma: erradicação do visual vibecode, sobriedade institucional, tokens universais, eliminação de 100% de `transition: all`, fim de all-caps em rótulos e tabelas, extinção de emojis como iconografia e acessibilidade universal com `:focus-visible`.
+- **Detalhamento das Modificações:**
+  - 🏛️ **Design System Hallmark v2.0 & Tokens Semânticos:** Implementação integral da escala de tokens em `:root` (`--bg-ground`, `--bg-surface`, `--ink-primary`, `--ink-body`, `--border-rule`, `--brand-primary`), mantendo o footprint da cor de acento estritamente abaixo de 5%.
+  - 🛡️ **Erradicação Total de `transition: all`:** Substituição de 100% das ocorrências de transições irrestritas em `02_layout.css`, `04_screens.css` e `05_modals.css` por transições focadas e sem jank.
+  - 📐 **Geometria Concêntrica e Single-Layer Containment:** Aplanamento de cartões aninhados dentro de cartões e unificação da escala de raios de borda (`--radius-sm: 6px`, `--radius-md: 8px`, `--radius-lg: 12px`, `--radius-full: 9999px`).
+  - ✍️ **Tipografia Editorial & Extinção de All-Caps:** Conversão de `.form-label` e cabeçalhos de tabela para sentence case, eliminando tracking artificial e excesso de peso visual.
+  - 🧹 **Higienização Semiótica:** Substituição de emojis como iconografia por pictogramas vetoriais SVG monocromáticos e remoção de setas coladas ao texto.
+  - ♿ **Acessibilidade Universal:** Cobertura plena de `:focus-visible` instantâneo e `prefers-reduced-motion: reduce`.
+  - 🔬 **Conformidade da Suíte de Testes:** 100% de integridade sintática via JSC e preservação de todos os contratos determinísticos da auditoria modular.
+
+---
 
 ### [Versão 1.62] - Correção e Restauração das Abas "Minha Escola" e "Meu Polo" na Visão de CP e Formador
 - **Data / Horário:** 03/11/2026 13:50
