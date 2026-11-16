@@ -415,8 +415,10 @@
 
             // Mapeia critérios com nota parcial atribuídos a esta docente
             const assignedPartialItems = [];
+            const assignedConsistentItems = [];
             const responses = obs.responses || {};
             const attributions = obs.partialAttributions || {};
+            const consistentAttrs = obs.consistentAttributions || {};
             const sections = getActiveSections(obs);
 
             Object.keys(responses).forEach(critId => {
@@ -431,6 +433,19 @@
                     id: critId,
                     text: critObj ? critObj.text : `Critério ${critId}`,
                     justification: attr.justification || 'Sem justificativa registrada.'
+                  });
+                }
+              } else if (responses[critId] === 'consistent') {
+                const cAttr = consistentAttrs[critId];
+                if (cAttr && Array.isArray(cAttr.teachers) && cAttr.teachers.includes(tName) && cAttr.note && cAttr.note.trim()) {
+                  let critObj = null;
+                  sections.forEach(s => s.subSections.forEach(sub => sub.criteria.forEach(c => {
+                    if (c.id === critId) critObj = c;
+                  })));
+                  assignedConsistentItems.push({
+                    id: critId,
+                    text: critObj ? critObj.text : `Critério ${critId}`,
+                    note: cAttr.note.trim()
                   });
                 }
               }
@@ -553,6 +568,28 @@
             }
 
             cardHtml += `
+              </div>
+
+              <!-- PILAR 16: RASTREABILIDADE DE APONTAMENTOS INDIVIDUAIS EM PRÁTICAS CONSISTENTES -->
+              <div style="margin-bottom:16px;">
+                <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  <span>Apontamentos individuais em práticas consistentes (${assignedConsistentItems.length}):</span>
+                </div>
+                ${assignedConsistentItems.length === 0 ? `
+                  <div style="font-size:11px; color:var(--text-secondary); background:var(--surface-subtle); border:1px solid var(--border); border-radius:6px; padding:8px 12px;">
+                    Nenhuma anotação individual de regência atribuída a esta docente nos critérios consistentes.
+                  </div>
+                ` : `
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    ${assignedConsistentItems.map(item => `
+                      <div style="background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--primary); border-radius:6px; padding:8px 12px; font-size:11px;">
+                        <div style="font-weight:700; color:var(--text-primary); margin-bottom:2px;">Item ${item.id} — ${item.text}</div>
+                        <div style="color:var(--text-secondary); line-height:1.4;">${item.note}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                `}
               </div>
 
               <!-- Parecer Formativo e Combinados Individuais -->
@@ -1492,10 +1529,12 @@
       const synth = (obs.teacherSynthesis && obs.teacherSynthesis[teacherName]) || { dimensions: {}, feedback: '' };
       const dims = synth.dimensions || {};
 
-      // Coleta critérios parciais atribuídos
+      // Coleta critérios parciais e consistentes com apontamento individual atribuídos (Pilar 16)
       const assignedPartialItems = [];
+      const assignedConsistentItems = [];
       const responses = obs.responses || {};
       const attributions = obs.partialAttributions || {};
+      const consistentAttrs = obs.consistentAttributions || {};
       const sections = getActiveSections(obs);
 
       Object.keys(responses).forEach(critId => {
@@ -1510,6 +1549,19 @@
               id: critId,
               text: critObj ? critObj.text : `Critério ${critId}`,
               justification: attr.justification || 'Sem justificativa registrada.'
+            });
+          }
+        } else if (responses[critId] === 'consistent') {
+          const cAttr = consistentAttrs[critId];
+          if (cAttr && Array.isArray(cAttr.teachers) && cAttr.teachers.includes(teacherName) && cAttr.note && cAttr.note.trim()) {
+            let critObj = null;
+            sections.forEach(s => s.subSections.forEach(sub => sub.criteria.forEach(c => {
+              if (c.id === critId) critObj = c;
+            })));
+            assignedConsistentItems.push({
+              id: critId,
+              text: critObj ? critObj.text : `Critério ${critId}`,
+              note: cAttr.note.trim()
             });
           }
         }
@@ -1640,6 +1692,38 @@
         html += `
             </tbody>
           </table>
+        `;
+      }
+
+      if (assignedConsistentItems.length > 0) {
+        html += `
+          <div style="margin-top:16px;">
+            <div style="font-size:10pt; font-weight:700; color:#1E40AF; margin-bottom:6px;">
+              Apontamentos Nominais da Regência Compartilhada em Práticas Consistentes (Pilar 16):
+            </div>
+            <table style="width:100%; border-collapse:collapse; font-size:9.5pt;">
+              <thead>
+                <tr style="background:#EFF6FF; color:#1E40AF;">
+                  <th style="border:1px solid #BFDBFE; padding:6px 8px; text-align:left; width:15%;">Item</th>
+                  <th style="border:1px solid #BFDBFE; padding:6px 8px; text-align:left; width:45%;">Critério da Matriz</th>
+                  <th style="border:1px solid #BFDBFE; padding:6px 8px; text-align:left; width:40%;">Observação Pedagógica / Evidência Formativa</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+        assignedConsistentItems.forEach(item => {
+          html += `
+            <tr>
+              <td style="border:1px solid #CBD5E1; padding:6px 8px; font-weight:700;">Item ${item.id}</td>
+              <td style="border:1px solid #CBD5E1; padding:6px 8px;">${item.text}</td>
+              <td style="border:1px solid #CBD5E1; padding:6px 8px; font-style:italic;">"${item.note}"</td>
+            </tr>
+          `;
+        });
+        html += `
+              </tbody>
+            </table>
+          </div>
         `;
       }
 

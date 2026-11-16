@@ -800,6 +800,98 @@
             </button>
           </div>
 
+                    ${(resp === 'consistent' && obsInstance.evaluatedType === 'turma') ? `
+            <div style="margin-top:8px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+                <span class="badge-good-practice" style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                  <span>Prática consistente na turma</span>
+                </span>
+                ${!appState.isReadOnly ? `
+                  <button type="button" 
+                          class="btn-consistent-attribution-toggle ${((obsInstance.consistentAttributions && obsInstance.consistentAttributions[crit.id] && obsInstance.consistentAttributions[crit.id].note) ? 'has-data' : '')}"
+                          onclick="toggleCriterionConsistentBox('${crit.id}')"
+                          title="Registrar apontamento nominal de docente em regência dupla sem alterar a pontuação da turma">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    <span>${(obsInstance.consistentAttributions && obsInstance.consistentAttributions[crit.id] && obsInstance.consistentAttributions[crit.id].note) ? 'Editar apontamento nominal' : 'Observação individual por docente (opcional)'}</span>
+                  </button>
+                ` : ''}
+              </div>
+
+              ${((appState.openConsistentBoxes && appState.openConsistentBoxes[crit.id]) || (obsInstance.consistentAttributions && obsInstance.consistentAttributions[crit.id] && (obsInstance.consistentAttributions[crit.id].note || (obsInstance.consistentAttributions[crit.id].teachers && obsInstance.consistentAttributions[crit.id].teachers.length > 0)))) ? `
+                <!-- PILAR 16: CAIXA DESCRITIVA OPCIONAL EM PRÁTICAS CONSISTENTES -->
+                <div id="consistent-attribution-box-${crit.id}" class="consistent-attribution-box">
+                  <div class="consistent-attribution-header">
+                    <div class="consistent-attribution-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                      <span>Apontamento nominal da regência compartilhada (Pilar 16)</span>
+                    </div>
+                    <span style="font-size:10px; font-weight:700; color:var(--text-secondary); background:var(--surface); border:1px solid var(--border); border-radius:4px; padding:1px 6px;">
+                      Opcional · Mantém nota consistente na turma
+                    </span>
+                  </div>
+                  <p class="consistent-attribution-desc">
+                    Utilize para registrar discrepâncias de atuação entre os professores regentes ou destacar uma condução exemplar, documentando o subsídio formativo sem rebaixar a avaliação da turma.
+                  </p>
+
+                  <div style="margin-bottom:10px;">
+                    <label style="font-size:11px; font-weight:700; color:var(--text-primary); display:block; margin-bottom:6px;">
+                      Docente(s) alvo deste apontamento formativo:
+                    </label>
+                    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                      ${(() => {
+                        let teachers = (obsInstance.teachers && obsInstance.teachers.length > 0)
+                          ? obsInstance.teachers
+                          : (obsInstance.teacherName ? [obsInstance.teacherName] : []);
+
+                        if (obsInstance.isIntegral) {
+                          if (obsInstance.integralStage === 'matutino') {
+                            teachers = (obsInstance.teachersMorning && obsInstance.teachersMorning.length > 0)
+                              ? obsInstance.teachersMorning
+                              : teachers.slice(0, 2);
+                          } else {
+                            teachers = (obsInstance.teachers && obsInstance.teachers.length > 0)
+                              ? obsInstance.teachers
+                              : teachers;
+                          }
+                        }
+
+                        const currentConsistent = (obsInstance.consistentAttributions && obsInstance.consistentAttributions[crit.id]) || { teachers: [], note: '' };
+                        const selectedTeachers = currentConsistent.teachers || [];
+
+                        return teachers.map(tName => {
+                          const isChecked = selectedTeachers.includes(tName);
+                          return `
+                            <label class="teacher-chip-select-consistent ${isChecked ? 'selected' : ''}">
+                              <input type="checkbox" 
+                                     value="${tName}" 
+                                     ${isChecked ? 'checked' : ''} 
+                                     ${appState.isReadOnly ? 'disabled' : ''}
+                                     onchange="setCriterionConsistentTeacher('${crit.id}', '${tName}', this.checked)"
+                                     style="cursor:pointer;">
+                              <span>${tName}</span>
+                            </label>
+                          `;
+                        }).join('');
+                      })()}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style="font-size:11px; font-weight:700; color:var(--text-primary); display:block; margin-bottom:4px;">
+                      Anotação qualitativa sobre a mediação do(a) docente:
+                    </label>
+                    <textarea class="form-textarea" 
+                              style="min-height:56px; font-size:12px; background:var(--surface);"
+                              placeholder="${appState.isReadOnly ? 'Sem anotações registradas.' : 'Descreva a atuação específica (ex: professora responsável conduziu com autonomia; segunda docente esteve passiva na rotina)...'}"
+                              oninput="setCriterionConsistentNote('${crit.id}', this.value)"
+                              ${appState.isReadOnly ? 'disabled' : ''}>${((obsInstance.consistentAttributions && obsInstance.consistentAttributions[crit.id] && obsInstance.consistentAttributions[crit.id].note) || '')}</textarea>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          ` : ''}
+
           ${(resp === 'partial' && obsInstance.evaluatedType === 'turma') ? `
             <!-- PILAR 5: ATRIBUIÇÃO MANDATÓRIA (ITEM PARCIAL) -->
             <div id="partial-attribution-box-${crit.id}" class="partial-attribution-box">
@@ -1047,6 +1139,16 @@
         delete appState.currentObs.partialAttributions[critId];
       }
 
+      // PILAR 16: Limpeza defensiva quando a nota for alterada para status incompatível com apontamento consistente
+      if (val !== 'consistent') {
+        if (appState.currentObs.consistentAttributions) {
+          delete appState.currentObs.consistentAttributions[critId];
+        }
+        if (appState.openConsistentBoxes) {
+          delete appState.openConsistentBoxes[critId];
+        }
+      }
+
       saveState();
       renderActiveObservation(true);
     }
@@ -1089,6 +1191,43 @@
       saveState();
       // Atualiza o banner de validação e contador de pendências sem perder foco
       updateActiveObsHeaderValidationUI();
+    }
+
+
+    // PILAR 16: Alternância da visibilidade da caixa de apontamento consistente
+    function toggleCriterionConsistentBox(critId) {
+      if (!appState.openConsistentBoxes) appState.openConsistentBoxes = {};
+      appState.openConsistentBoxes[critId] = !appState.openConsistentBoxes[critId];
+      renderActiveObservation(true);
+    }
+
+    // PILAR 16: Seleção reativa de docente(s) para apontamento consistente
+    function setCriterionConsistentTeacher(critId, teacherName, isChecked) {
+      if (appState.isReadOnly || !appState.currentObs) return;
+      if (!appState.currentObs.consistentAttributions) appState.currentObs.consistentAttributions = {};
+      if (!appState.currentObs.consistentAttributions[critId]) {
+        appState.currentObs.consistentAttributions[critId] = { teachers: [], note: '' };
+      }
+
+      let teachers = appState.currentObs.consistentAttributions[critId].teachers || [];
+      if (isChecked) {
+        if (!teachers.includes(teacherName)) teachers.push(teacherName);
+      } else {
+        teachers = teachers.filter(t => t !== teacherName);
+      }
+      appState.currentObs.consistentAttributions[critId].teachers = teachers;
+      saveState();
+    }
+
+    // PILAR 16: Anotação descritiva reativa em prática consistente
+    function setCriterionConsistentNote(critId, text) {
+      if (appState.isReadOnly || !appState.currentObs) return;
+      if (!appState.currentObs.consistentAttributions) appState.currentObs.consistentAttributions = {};
+      if (!appState.currentObs.consistentAttributions[critId]) {
+        appState.currentObs.consistentAttributions[critId] = { teachers: [], note: '' };
+      }
+      appState.currentObs.consistentAttributions[critId].note = text;
+      saveState();
     }
 
     // PILAR 5: Manipulação Reativa da Justificativa Descritiva em Itens Parciais

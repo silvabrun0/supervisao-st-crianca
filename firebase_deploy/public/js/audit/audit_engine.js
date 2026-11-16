@@ -1487,6 +1487,45 @@
               }
               closeCriterionDetailModal();
               logger.log('Enxugamento mobile determinístico com subtítulo e abertura oficial', true, 'Critério 1.2.1');
+
+              // --- PILAR 16: VALIDAÇÃO DE APONTAMENTO OPCIONAL EM REGÊNCIA DUPLA ---
+              if (appState.currentObs) {
+                const testCrit = '1.1.1';
+                setResponse(testCrit, 'consistent');
+                
+                // 1. Verifica que getObservationPendencies NÃO inclui pendência impeditiva para consistente
+                const pendenciesBefore = getObservationPendencies(appState.currentObs);
+                const hasPendencyBefore = pendenciesBefore.some(p => p.criterionId === testCrit);
+                if (hasPendencyBefore) throw new Error('Critério consistente gerou pendência indevida antes de anotação');
+
+                // 2. Registra apontamento nominal e textual opcional
+                const teacherTarget = (appState.currentObs.teachers && appState.currentObs.teachers[0]) || 'Juliana Roberta Rocha';
+                setCriterionConsistentTeacher(testCrit, teacherTarget, true);
+                setCriterionConsistentNote(testCrit, 'Professora atuou com suporte complementar e intervenção mediadora');
+
+                // Valida integridade em appState.currentObs.consistentAttributions
+                const savedAttr = appState.currentObs.consistentAttributions && appState.currentObs.consistentAttributions[testCrit];
+                if (!savedAttr || !savedAttr.teachers.includes(teacherTarget) || !savedAttr.note.includes('suporte complementar')) {
+                  throw new Error('Falha na persistência de consistentAttributions para o critério ' + testCrit);
+                }
+
+                // 3. Valida que a observação continua sem pendências (não-bloqueante)
+                const pendenciesAfter = getObservationPendencies(appState.currentObs);
+                const hasPendencyAfter = pendenciesAfter.some(p => p.criterionId === testCrit);
+                if (hasPendencyAfter) throw new Error('Critério consistente com apontamento gerou pendência impeditiva indevida');
+                logger.log('Pilar 16: Apontamento nominal opcional em prática consistente validado com sucesso', true);
+
+                // 4. Teste de Limpeza Segura ao Mudar de Status (de consistente para not_done)
+                setResponse(testCrit, 'not_done');
+                if (appState.currentObs.consistentAttributions && appState.currentObs.consistentAttributions[testCrit]) {
+                  throw new Error('consistentAttributions não foi limpo ao mudar status para not_done');
+                }
+                // Restaura status consistente para fluxo subsequente
+                setResponse(testCrit, 'consistent');
+                setCriterionConsistentTeacher(testCrit, teacherTarget, true);
+                setCriterionConsistentNote(testCrit, 'Observação formativa restaurada para testes de síntese');
+                logger.log('Pilar 16: Limpeza segura de apontamento consistente ao alterar pontuação validada', true);
+              }
             } catch (e) {
               logger.log('Erro de execução no módulo rubricas_observacao', false, e.message);
             }
@@ -1909,6 +1948,45 @@
                 throw new Error('Falha ao finalizar observação após preencher blocos nominais de docentes');
               }
               logger.log('Avaliação das 5 Dimensões e Parecer Individual com Validação na Finalização', true);
+
+              // PILAR 16: Teste de Rastreabilidade no Card Nominal de Síntese de Práticas Consistentes
+              try {
+                const p16Obs = {
+                  id: 'obs-p16-test-' + Date.now(),
+                  evaluatedType: 'turma',
+                  unitOfAnalysis: 'turma',
+                  className: 'Infantil I - Turma A',
+                  schoolName: 'CEI Professora Maria de Lourdes',
+                  bimester: '2º Bimestre',
+                  teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha'],
+                  teacherName: 'Ana Carolina Silva, Juliana Roberta Rocha',
+                  evaluatedBy: 'Mariana Ferreira',
+                  startDate: testDate,
+                  date: testDate,
+                  startTime: '08:00',
+                  endTime: '10:00',
+                  status: 'draft',
+                  responses: { '1.1.1': 'consistent' },
+                  consistentAttributions: {
+                    '1.1.1': {
+                      teachers: ['Juliana Roberta Rocha'],
+                      note: 'Professora Juliana mediou com sensibilidade a interação no cantinho de leitura.'
+                    }
+                  },
+                  partialAttributions: {},
+                  teacherSynthesis: {}
+                };
+                appState.currentObs = p16Obs;
+                appState.isReadOnly = false;
+                renderSynthesisScreen();
+                const cardJulianaP16 = document.getElementById('teacher-synthesis-card-1');
+                if (!cardJulianaP16 || !cardJulianaP16.textContent.includes('Apontamentos individuais em práticas consistentes') || !cardJulianaP16.textContent.includes('mediou com sensibilidade')) {
+                  throw new Error('Card da professora Juliana não exibiu o apontamento consistente do Pilar 16');
+                }
+                logger.log('Pilar 16: Rastreabilidade no Card Nominal de Síntese da Docente validada com sucesso', true);
+              } catch (p16SynthErr) {
+                logger.log('Pilar 16: Erro na validação de síntese de prática consistente', false, p16SynthErr.message);
+              }
 
               appState.currentObs = null;
             } catch (e) {

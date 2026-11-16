@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.69 (v8.2.36)</span>
+          <span>Versão 1.72 (v8.2.38)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -1821,6 +1821,39 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.72 - PILAR 16: RESOLUÇÃO DO PARADOXO DA REGÊNCIA DUPLA (OBSERVAÇÃO DOCENTE INDIVIDUALIZADA EM PRÁTICAS CONSISTENTES) -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.72 · v8.2.38</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">16/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Pilar 16 · Resolução do Paradoxo da Regência Dupla (Observação Docente Individualizada em Práticas Consistentes):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>👥 <strong>Preservação da Unidade Turma com Apontamento Nominal Opcional:</strong> Em turmas de regência compartilhada, práticas ricas conduzidas com protagonismo por uma docente mantêm legitimamente a avaliação 'Consistente' para a turma, oferecendo gatilho discreto sem atrito para registrar a assimetria ou conduta passiva da segunda docente para feedback formativo.</li>
+          <li>🏛️ <strong>Padrão Hallmark UI & Acessibilidade:</strong> Caixa expansível em camada única com tokens corporativos CSS, chips de seleção de professores regentes (compatível com turno integral) e ícones vetoriais SVG monocromáticos (eliminação de emojis decorativos).</li>
+          <li>📊 <strong>Rastreabilidade na Síntese e Devolutiva em PDF:</strong> Consolidação automática dos apontamentos individuais consistentes no card de síntese de cada docente e na Ficha Individual de Devolutiva Pedagógica (tabela suplementar para diálogo formativo em tutoria).</li>
+          <li>🛡️ <strong>Natureza Estritamente Opcional e Limpeza Defensiva:</strong> Validação não-bloqueante na finalização (zero pendências impeditivas) e higienização automática de dados órfãos ao alterar a pontuação para status diferente.</li>
+        </ul>
+      </div>
+
+      <!-- VERSÃO 1.71 - FILTRO DE REFERENCIAL COMPARATIVO NOS KPIS DE RESULTADO -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.71 · v8.2.37</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">03/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Filtro e Aba de Referencial Comparativo Parametrizado nos KPIs de Resultado:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🏛️ <strong>Matriz de Permissões de Comparação:</strong> Coordenadora compara exclusivamente sua UE com a Rede Municipal (travado); Formadora compara Polo vs. Rede (travado em visão geral) ou alterna livremente entre 'Meu Polo' e 'Rede Municipal' ao selecionar unidade escolar; Núcleo de Educação Infantil com governança aberta integral.</li>
+          <li>📱 <strong>Sincronização Desktop e Mobile:</strong> Novo seletor <code>#indicatorsBenchmarkFilter</code> na toolbar desktop e espelhamento em tempo real no modal/bottom sheet deslizante móvel <code>#modalIndicatorsFiltersMobile</code>.</li>
+          <li>📊 <strong>Recálculo Dinâmico dos Deltas Formativos:</strong> Recálculo reativo dos deltas percentuais nos 4 cards de KPIs, régua da Visualização por Dimensão e Bloco de Gargalos contra o benchmark selecionado.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.69 - CORREÇÃO DA EDIÇÃO DE AGENDAMENTOS REALIZADOS NO CRONOGRAMA E ISENÇÃO RELACIONAL DE DUPLICIDADE -->

@@ -587,6 +587,104 @@
     }
 
     /* PILAR 5: Estilos de Atribuição Mandatória, Boas Práticas e Blocos Nominais */
+
+/* ==========================================================================
+   PILAR 16: REGÊNCIA DUPLA - OBSERVAÇÃO INDIVIDUAL EM PRÁTICAS CONSISTENTES
+   Padrão Hallmark: Tokens corporativos, sem all-caps, sem transition: all
+   ========================================================================== */
+
+.btn-consistent-attribution-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px dashed var(--primary);
+  color: var(--primary);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  min-height: 36px;
+}
+
+.btn-consistent-attribution-toggle:hover {
+  background: var(--surface-subtle);
+  border-color: var(--primary-dark);
+  color: var(--primary-dark);
+}
+
+.btn-consistent-attribution-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.btn-consistent-attribution-toggle.has-data {
+  background: #F0FDF4;
+  border: 1px solid #86EFAC;
+  color: #166534;
+}
+
+.consistent-attribution-box {
+  background: #F8FAFC;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-top: 10px;
+}
+
+.consistent-attribution-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.consistent-attribution-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.consistent-attribution-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.teacher-chip-select-consistent {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.teacher-chip-select-consistent:hover {
+  border-color: var(--primary);
+}
+
+.teacher-chip-select-consistent.selected {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+  color: #1E40AF;
+  font-weight: 600;
+}
+
     .partial-attribution-box {
       margin-top: 10px;
       padding: 12px 14px;
