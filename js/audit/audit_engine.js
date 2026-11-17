@@ -3866,8 +3866,21 @@
 
               logger.log('Subsistema de Informação Mobile Hallmark (modal, botões e classes de desclutter)', true);
 
+              // Validação de Harmonização Hallmark do Hero Banner (.hero-banner)
+              const heroBannerEl = document.querySelector('.hero-banner');
+              const heroBtnEl = document.getElementById('btnNewObsHero');
+              if (heroBannerEl && heroBtnEl) {
+                const bannerStyle = window.getComputedStyle(heroBannerEl);
+                // Garante que o fundo não é mais o preto escuro herdado (#0F172A / rgb(15, 23, 42))
+                const bg = bannerStyle.backgroundColor;
+                if (bg === 'rgb(15, 23, 42)' || bg === '#0F172A') {
+                  throw new Error('Regressão detectada: .hero-banner ainda apresenta fundo preto escuro (#0F172A)');
+                }
+                logger.log('Conformidade Hallmark: .hero-banner com superfície clara integrada e botão institucional', true);
+              }
+
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.62
-              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68') && !btnChangelog.textContent.includes('Versão 1.69') && !btnChangelog.textContent.includes('Versão 1.70') && !btnChangelog.textContent.includes('Versão 1.72') && !btnChangelog.textContent.includes('Versão 1.73') && !btnChangelog.textContent.includes('Versão 1.74')) {
+              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68') && !btnChangelog.textContent.includes('Versão 1.69') && !btnChangelog.textContent.includes('Versão 1.70') && !btnChangelog.textContent.includes('Versão 1.72') && !btnChangelog.textContent.includes('Versão 1.73') && !btnChangelog.textContent.includes('Versão 1.74') && !btnChangelog.textContent.includes('Versão 1.75')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
               if (!modalChg.innerHTML.includes('Versão 1.62')) {

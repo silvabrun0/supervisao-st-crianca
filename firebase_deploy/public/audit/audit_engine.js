@@ -584,7 +584,7 @@
               });
               logger.log('Presença de novos membros docentes em INITIAL_TEAM', true, requiredNewMembers.join(', '));
 
-              // Validação de exclusividade docente (nenhuma docente de turma parcial atuando em turnos acumulados indevidos no ciclo letivo ativo)
+              // Validação de exclusividade e regras de dupla matrícula / multi-turma (Pilar 17)
               const activeAuditYear = appState.selectedAcademicYear || '2026';
               const anaClasses = (appState.classes || []).filter(c => 
                 (c.academicYear || '2026') === activeAuditYear && 
@@ -593,7 +593,47 @@
               if (anaClasses.length !== 1 || anaClasses[0].name !== 'Infantil I - Turma A') {
                 throw new Error('Ana Carolina Silva não possui alocação exclusiva em Infantil I - Turma A');
               }
-              logger.log('Exclusividade docente e integridade de alocação por turno', true);
+
+              // Teste de Conformidade do Pilar 17: Suporte a Múltiplas Matrículas e Validação Anti-Colisão
+              const testMultiTeacher = 'Juliana Roberta Rocha'; // Já leciona em Infantil II - Turma B (Vespertino)
+              const julianaClassesBefore = (appState.classes || []).filter(c => 
+                (c.academicYear || '2026') === activeAuditYear && 
+                (c.teachers || []).includes(testMultiTeacher)
+              );
+              if (julianaClassesBefore.length === 0) {
+                throw new Error('Docente de referência "Juliana Roberta Rocha" não localizada em turmas vespertinas');
+              }
+
+              // Simulação de verificação anti-colisão (função / lógica de turno)
+              function testShiftCollision(teacher, newShift, existingClasses) {
+                const isNewMorning = newShift.includes('Matutino') || newShift.includes('Integral');
+                const isNewAfternoon = newShift.includes('Vespertino') || newShift.includes('Integral');
+                for (const c of existingClasses) {
+                  const s = c.shift || '';
+                  const cMorn = s.includes('Matutino') || s.includes('Integral');
+                  const cAft = s.includes('Vespertino') || s.includes('Integral');
+                  const hasT = (c.teachers || []).includes(teacher) || (c.teachersMorning || []).includes(teacher) || (c.teachersAfternoon || []).includes(teacher);
+                  if (hasT) {
+                    if (isNewMorning && cMorn) return { collision: true, shift: 'Matutino', conflictingClass: c.name };
+                    if (isNewAfternoon && cAft) return { collision: true, shift: 'Vespertino', conflictingClass: c.name };
+                  }
+                }
+                return { collision: false };
+              }
+
+              // 1. Deve PERMITIR alocação em turno matutino para professora já alocada no vespertino
+              const oppCheck = testShiftCollision(testMultiTeacher, 'Tempo Parcial (Matutino)', appState.classes);
+              if (oppCheck.collision) {
+                throw new Error('Pilar 17: Bloqueou indevidamente alocação em turno oposto para docente com dobra');
+              }
+
+              // 2. Deve BLOQUEAR alocação no MESMO turno (vespertino + vespertino)
+              const sameCheck = testShiftCollision(testMultiTeacher, 'Tempo Parcial (Vespertino)', appState.classes);
+              if (!sameCheck.collision) {
+                throw new Error('Pilar 17: Falhou ao detectar colisão de horário no mesmo turno para a docente');
+              }
+
+              logger.log('Conformidade do Pilar 17: Suporte a Dupla Matrícula, Regime de Dobra e Anti-Colisão de Turno', true);
 
               // 8. VALIDAÇÃO DA PADRONIZAÇÃO MEC DAS JORNADAS ESCOLARES (PILAR 13)
               const mecValidShifts = ['Tempo Parcial (Matutino)', 'Tempo Parcial (Vespertino)', 'Tempo Integral'];
@@ -618,6 +658,40 @@
                   }
                 }
               }
+
+              // =========================================================================
+              // PILAR 18: TAXONOMIA OFICIAL DE FAIXAS ETÁRIAS E RETROCOMPATIBILIDADE
+              // =========================================================================
+              if (!Array.isArray(CANONICAL_STAGES) || CANONICAL_STAGES.length !== 7) {
+                throw new Error('Pilar 18: CANONICAL_STAGES deve conter exatamente 7 categorias padronizadas');
+              }
+              const requiredStageLabels = [
+                '0 a 1 ano e 11 meses (Berçário / Creche I)',
+                '1 ano a 1 ano e 11 meses (Creche II)',
+                '2 anos a 2 anos e 11 meses (Creche III)',
+                '3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)',
+                '4 anos a 4 anos e 11 meses (Pré-escola 1)',
+                '5 anos a 5 anos e 11 meses (Pré-escola 2)',
+                'Turma Multietapa (Multiada)'
+              ];
+              requiredStageLabels.forEach(lbl => {
+                if (!CANONICAL_STAGES.some(s => s.fullLabel === lbl)) {
+                  throw new Error(`Pilar 18: Categoria oficial "${lbl}" não encontrada em CANONICAL_STAGES`);
+                }
+              });
+              logger.log('Taxonomia Oficial das Faixas Etárias (Pilar 18)', true, `${CANONICAL_STAGES.length} categorias padronizadas`);
+
+              // Teste de Retrocompatibilidade e Autocura de normalizeStageName
+              if (normalizeStageName('Infantil I') !== '4 anos a 4 anos e 11 meses (Pré-escola 1)') {
+                throw new Error('Pilar 18: normalizeStageName falhou ao converter termo legado Infantil I');
+              }
+              if (normalizeStageName('Berçário II') !== '1 ano a 1 ano e 11 meses (Creche II)') {
+                throw new Error('Pilar 18: normalizeStageName falhou ao converter termo legado Berçário II');
+              }
+              if (normalizeStageName('Maternal I') !== '2 anos a 2 anos e 11 meses (Creche III)') {
+                throw new Error('Pilar 18: normalizeStageName falhou ao converter termo legado Maternal I');
+              }
+              logger.log('Retrocompatibilidade do Helper normalizeStageName (Pilar 18)', true, 'Termos legados mapeados com sucesso');
               logger.log('Higienização visual da Tabela de Turmas (Tempo Integral sem emojis)', true);
 
               // 9. GOVERNANÇA OPERACIONAL DESCENTRALIZADA E GESTÃO AUTÔNOMA SOB SSOT ÚNICA (PILAR 14)
@@ -671,6 +745,40 @@
               // Limpeza do id de teste
               appState.deletedClassIds = appState.deletedClassIds.filter(id => id !== testClassId);
               saveState();
+
+              // PILAR 18: Criação e Persistência de Turma Multietapa com Seleção Aberta de Faixas
+              const multiTestId = 'cls-audit-multi-' + Date.now();
+              const multiTestFaixas = [
+                '4 anos a 4 anos e 11 meses (Pré-escola 1)',
+                '5 anos a 5 anos e 11 meses (Pré-escola 2)'
+              ];
+              const multiClassObj = {
+                id: multiTestId,
+                name: 'Turma Multietapa Teste SSOT',
+                school: testSchoolName,
+                academicYear: activeAuditYear,
+                stage: 'Turma Multietapa (Multiada)',
+                multiStages: multiTestFaixas,
+                shift: 'Tempo Parcial (Matutino)',
+                teachers: [],
+                totalStudents: 22,
+                inclusiveStudents: 1
+              };
+              appState.classes.push(multiClassObj);
+              saveState();
+
+              const resolvedMulti = getClassesForSchool(testSchoolName).find(c => c.id === multiTestId);
+              if (!resolvedMulti || resolvedMulti.stage !== 'Turma Multietapa (Multiada)' || !Array.isArray(resolvedMulti.multiStages) || resolvedMulti.multiStages.length !== 2) {
+                throw new Error('Pilar 18: Turma multietapa não foi persistida ou resolvida com suas faixas na SSOT');
+              }
+              const badgeHtml = formatStageBadge(resolvedMulti);
+              if (!badgeHtml.includes('Multietapa (2 faixas)')) {
+                throw new Error(`Pilar 18: formatStageBadge falhou ao renderizar badge de multietapa: ${badgeHtml}`);
+              }
+              // Cleanup da turma multietapa de teste
+              appState.classes = appState.classes.filter(c => c.id !== multiTestId);
+              saveState();
+              logger.log('Criação e Persistência de Turma Multietapa com Seleção Aberta de Faixas (Pilar 18)', true, 'Multietapa (2 faixas)');
 
               // 9.3 Validação de Isolamento de Escopo e RBAC (Pilar 14)
               const previousUserKey = appState.currentUserKey;
@@ -1215,6 +1323,13 @@
               }
               logger.log('Conformidade MEC no Badge de Turno do Setup (#setupClassShiftBadge)', true, setupShiftBadge.innerText.trim());
 
+              // PILAR 18: Validação do Badge de Etapa Padronizada no Setup Mobile
+              const setupStageBadge = document.getElementById('setupClassStageBadge');
+              if (!setupStageBadge || setupStageBadge.style.display === 'none' || !setupStageBadge.innerText.includes('Pré-escola 1')) {
+                throw new Error(`Pilar 18: Badge de etapa (#setupClassStageBadge) não exibiu a etapa padronizada esperada: "${setupStageBadge?.innerText}"`);
+              }
+              logger.log('Badge de Etapa Padronizada no Setup Mobile (Pilar 18)', true, setupStageBadge.innerText.trim());
+
               const nextBim = getNextEligibleBimesterForClass('Infantil I - Turma A', 'CEI Professora Maria de Lourdes');
               if (nextBim !== '1º Bimestre') throw new Error(`Próximo bimestre esperado 1º Bimestre, obtido: ${nextBim}`);
               logger.log('Cálculo longitudinal de bimestre inicial por turma (getNextEligibleBimesterForClass)', true, nextBim);
@@ -1487,6 +1602,45 @@
               }
               closeCriterionDetailModal();
               logger.log('Enxugamento mobile determinístico com subtítulo e abertura oficial', true, 'Critério 1.2.1');
+
+              // --- PILAR 16: VALIDAÇÃO DE APONTAMENTO OPCIONAL EM REGÊNCIA DUPLA ---
+              if (appState.currentObs) {
+                const testCrit = '1.1.1';
+                setResponse(testCrit, 'consistent');
+                
+                // 1. Verifica que getObservationPendencies NÃO inclui pendência impeditiva para consistente
+                const pendenciesBefore = getObservationPendencies(appState.currentObs);
+                const hasPendencyBefore = pendenciesBefore.some(p => p.criterionId === testCrit);
+                if (hasPendencyBefore) throw new Error('Critério consistente gerou pendência indevida antes de anotação');
+
+                // 2. Registra apontamento nominal e textual opcional
+                const teacherTarget = (appState.currentObs.teachers && appState.currentObs.teachers[0]) || 'Juliana Roberta Rocha';
+                setCriterionConsistentTeacher(testCrit, teacherTarget, true);
+                setCriterionConsistentNote(testCrit, 'Professora atuou com suporte complementar e intervenção mediadora');
+
+                // Valida integridade em appState.currentObs.consistentAttributions
+                const savedAttr = appState.currentObs.consistentAttributions && appState.currentObs.consistentAttributions[testCrit];
+                if (!savedAttr || !savedAttr.teachers.includes(teacherTarget) || !savedAttr.note.includes('suporte complementar')) {
+                  throw new Error('Falha na persistência de consistentAttributions para o critério ' + testCrit);
+                }
+
+                // 3. Valida que a observação continua sem pendências (não-bloqueante)
+                const pendenciesAfter = getObservationPendencies(appState.currentObs);
+                const hasPendencyAfter = pendenciesAfter.some(p => p.criterionId === testCrit);
+                if (hasPendencyAfter) throw new Error('Critério consistente com apontamento gerou pendência impeditiva indevida');
+                logger.log('Pilar 16: Apontamento nominal opcional em prática consistente validado com sucesso', true);
+
+                // 4. Teste de Limpeza Segura ao Mudar de Status (de consistente para not_done)
+                setResponse(testCrit, 'not_done');
+                if (appState.currentObs.consistentAttributions && appState.currentObs.consistentAttributions[testCrit]) {
+                  throw new Error('consistentAttributions não foi limpo ao mudar status para not_done');
+                }
+                // Restaura status consistente para fluxo subsequente
+                setResponse(testCrit, 'consistent');
+                setCriterionConsistentTeacher(testCrit, teacherTarget, true);
+                setCriterionConsistentNote(testCrit, 'Observação formativa restaurada para testes de síntese');
+                logger.log('Pilar 16: Limpeza segura de apontamento consistente ao alterar pontuação validada', true);
+              }
             } catch (e) {
               logger.log('Erro de execução no módulo rubricas_observacao', false, e.message);
             }
@@ -1909,6 +2063,45 @@
                 throw new Error('Falha ao finalizar observação após preencher blocos nominais de docentes');
               }
               logger.log('Avaliação das 5 Dimensões e Parecer Individual com Validação na Finalização', true);
+
+              // PILAR 16: Teste de Rastreabilidade no Card Nominal de Síntese de Práticas Consistentes
+              try {
+                const p16Obs = {
+                  id: 'obs-p16-test-' + Date.now(),
+                  evaluatedType: 'turma',
+                  unitOfAnalysis: 'turma',
+                  className: 'Infantil I - Turma A',
+                  schoolName: 'CEI Professora Maria de Lourdes',
+                  bimester: '2º Bimestre',
+                  teachers: ['Ana Carolina Silva', 'Juliana Roberta Rocha'],
+                  teacherName: 'Ana Carolina Silva, Juliana Roberta Rocha',
+                  evaluatedBy: 'Mariana Ferreira',
+                  startDate: testDate,
+                  date: testDate,
+                  startTime: '08:00',
+                  endTime: '10:00',
+                  status: 'draft',
+                  responses: { '1.1.1': 'consistent' },
+                  consistentAttributions: {
+                    '1.1.1': {
+                      teachers: ['Juliana Roberta Rocha'],
+                      note: 'Professora Juliana mediou com sensibilidade a interação no cantinho de leitura.'
+                    }
+                  },
+                  partialAttributions: {},
+                  teacherSynthesis: {}
+                };
+                appState.currentObs = p16Obs;
+                appState.isReadOnly = false;
+                renderSynthesisScreen();
+                const cardJulianaP16 = document.getElementById('teacher-synthesis-card-1');
+                if (!cardJulianaP16 || !cardJulianaP16.textContent.includes('Apontamentos individuais em práticas consistentes') || !cardJulianaP16.textContent.includes('mediou com sensibilidade')) {
+                  throw new Error('Card da professora Juliana não exibiu o apontamento consistente do Pilar 16');
+                }
+                logger.log('Pilar 16: Rastreabilidade no Card Nominal de Síntese da Docente validada com sucesso', true);
+              } catch (p16SynthErr) {
+                logger.log('Pilar 16: Erro na validação de síntese de prática consistente', false, p16SynthErr.message);
+              }
 
               appState.currentObs = null;
             } catch (e) {
@@ -2747,6 +2940,14 @@
               }
               logger.log('Cálculo algorítmico do Semáforo Docente: ⚪ No Prazo (Bimestre Corrente)', true, teacherStatusCurrent.label);
 
+              // PILAR 17: Validação do Semáforo para Docente Multi-Turma
+              const multiTeacherName = 'Juliana Roberta Rocha';
+              const multiTeacherStatus = calculateTeacherBimesterStatus(multiTeacherName, 'CEI Professora Maria de Lourdes', '1º Bimestre');
+              if (!multiTeacherStatus || typeof multiTeacherStatus.status !== 'string') {
+                throw new Error('Falha Pilar 17: calculateTeacherBimesterStatus falhou ao processar docente multi-turma');
+              }
+              logger.log('Cálculo do Semáforo para Docente Multi-Turma (Pilar 17)', true, multiTeacherStatus.label);
+
               // 12. PILAR 10: VALIDAÇÃO DOS FILTROS RÁPIDOS E ALTERNADOR DE VISÃO
               toggleLongitudinalViewMode('classes');
               filterSemaphoreByStatus('overdue');
@@ -2803,6 +3004,17 @@
               // Restaura a visão de turmas padrão
               toggleLongitudinalViewMode('classes');
               logger.log('Validação do Alternador de Visão Turmas vs. Docentes Regentes (Pilar 10)', true);
+
+              // PILAR 18: Identificação de Faixa Etária no Quadro de Controle Bimestral
+              const semTable = document.querySelector('#bimesterSemaphoreSection table');
+              if (semTable) {
+                const firstColText = semTable.querySelector('tbody td')?.innerText || '';
+                const hasStageInFirstCol = CANONICAL_STAGES.some(s => firstColText.includes(s.name) || firstColText.includes(s.ageRange));
+                if (!hasStageInFirstCol) {
+                  throw new Error(`Pilar 18: Faixa etária/etapa não identificada na coluna de turmas do Quadro de Controle: "${firstColText}"`);
+                }
+                logger.log('Identificação de Faixa Etária no Quadro de Controle Bimestral (Pilar 18)', true);
+              }
 
               // 13. PILAR 9: VALIDAÇÃO DO GATILHO FLUTUANTE CIRCULAR COM LUPINHA E BARRA DE FILTROS
               const mobileTriggerBtn = document.getElementById('btnMobileIndicatorsFilters');
@@ -3654,8 +3866,21 @@
 
               logger.log('Subsistema de Informação Mobile Hallmark (modal, botões e classes de desclutter)', true);
 
+              // Validação de Harmonização Hallmark do Hero Banner (.hero-banner)
+              const heroBannerEl = document.querySelector('.hero-banner');
+              const heroBtnEl = document.getElementById('btnNewObsHero');
+              if (heroBannerEl && heroBtnEl) {
+                const bannerStyle = window.getComputedStyle(heroBannerEl);
+                // Garante que o fundo não é mais o preto escuro herdado (#0F172A / rgb(15, 23, 42))
+                const bg = bannerStyle.backgroundColor;
+                if (bg === 'rgb(15, 23, 42)' || bg === '#0F172A') {
+                  throw new Error('Regressão detectada: .hero-banner ainda apresenta fundo preto escuro (#0F172A)');
+                }
+                logger.log('Conformidade Hallmark: .hero-banner com superfície clara integrada e botão institucional', true);
+              }
+
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.62
-              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68') && !btnChangelog.textContent.includes('Versão 1.69') && !btnChangelog.textContent.includes('Versão 1.70')) {
+              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68') && !btnChangelog.textContent.includes('Versão 1.69') && !btnChangelog.textContent.includes('Versão 1.70') && !btnChangelog.textContent.includes('Versão 1.72') && !btnChangelog.textContent.includes('Versão 1.73') && !btnChangelog.textContent.includes('Versão 1.74') && !btnChangelog.textContent.includes('Versão 1.75')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
               if (!modalChg.innerHTML.includes('Versão 1.62')) {

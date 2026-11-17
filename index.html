@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- CSS Modular Desacoplado -->
   <link rel="stylesheet" href="css/01_variables.css?v=1.58">
-  <link rel="stylesheet" href="css/02_layout.css?v=1.58">
+  <link rel="stylesheet" href="css/02_layout.css?v=1.75">
   <link rel="stylesheet" href="css/03_components.css?v=1.58">
   <link rel="stylesheet" href="css/04_screens.css?v=1.58">
   <link rel="stylesheet" href="css/05_modals.css?v=1.58">
@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.74 (v8.2.40)</span>
+          <span>Versão 1.75 (v8.2.41)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -1826,6 +1826,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.75 - HARMONIZAÇÃO HALLMARK DO HERO BANNER DE INÍCIO DE OBSERVAÇÃO -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.75 · v8.2.41</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">17/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Harmonização Hallmark e Redesign Institucional do Hero Banner da Tela Inicial:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🎨 <strong>Erradicação do Quadro Preto Escuro:</strong> Substituição do fundo preto residual (<code>#0F172A</code>) pelo padrão institucional limpo de superfície (<code>--bg-surface</code> / <code>#FFFFFF</code>), eliminando a dissonância cromática.</li>
+          <li>🏛️ <strong>Acento Institucional SerTão Criança:</strong> Inclusão de borda de acento lateral esquerda (<code>border-left: 4px solid var(--brand-primary)</code>) e hairline perimétrica (<code>--border-rule</code>), unificando a linguagem visual com o Hero Card do Cronograma Longitudinal.</li>
+          <li>🔘 <strong>CTA Primário Radiante:</strong> O botão "Nova observação" (<code>#btnNewObsHero</code>) passa a utilizar a cor de ação primária institucional (<code>--brand-primary</code> / <code>#0066CC</code>) com texto e ícone brancos (<code>--brand-primary-ink</code>), criando foco e direcionamento natural.</li>
+          <li>♿ <strong>Acessibilidade e Tokens Hallmark:</strong> 100% dos valores vinculados aos tokens do <code>:root</code>, anel de foco instantâneo <code>:focus-visible</code>, alvo ergonômico de 44px no mobile e conformidade com <code>prefers-reduced-motion</code>.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.74 - PILAR 18: PADRONIZAÇÃO RIGOROSA DAS FAIXAS ETÁRIAS DA EDUCAÇÃO INFANTIL E TURMAS MULTIETAPA -->

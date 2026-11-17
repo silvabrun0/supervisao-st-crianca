@@ -658,6 +658,40 @@
                   }
                 }
               }
+
+              // =========================================================================
+              // PILAR 18: TAXONOMIA OFICIAL DE FAIXAS ETÁRIAS E RETROCOMPATIBILIDADE
+              // =========================================================================
+              if (!Array.isArray(CANONICAL_STAGES) || CANONICAL_STAGES.length !== 7) {
+                throw new Error('Pilar 18: CANONICAL_STAGES deve conter exatamente 7 categorias padronizadas');
+              }
+              const requiredStageLabels = [
+                '0 a 1 ano e 11 meses (Berçário / Creche I)',
+                '1 ano a 1 ano e 11 meses (Creche II)',
+                '2 anos a 2 anos e 11 meses (Creche III)',
+                '3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)',
+                '4 anos a 4 anos e 11 meses (Pré-escola 1)',
+                '5 anos a 5 anos e 11 meses (Pré-escola 2)',
+                'Turma Multietapa (Multiada)'
+              ];
+              requiredStageLabels.forEach(lbl => {
+                if (!CANONICAL_STAGES.some(s => s.fullLabel === lbl)) {
+                  throw new Error(`Pilar 18: Categoria oficial "${lbl}" não encontrada em CANONICAL_STAGES`);
+                }
+              });
+              logger.log('Taxonomia Oficial das Faixas Etárias (Pilar 18)', true, `${CANONICAL_STAGES.length} categorias padronizadas`);
+
+              // Teste de Retrocompatibilidade e Autocura de normalizeStageName
+              if (normalizeStageName('Infantil I') !== '4 anos a 4 anos e 11 meses (Pré-escola 1)') {
+                throw new Error('Pilar 18: normalizeStageName falhou ao converter termo legado Infantil I');
+              }
+              if (normalizeStageName('Berçário II') !== '1 ano a 1 ano e 11 meses (Creche II)') {
+                throw new Error('Pilar 18: normalizeStageName falhou ao converter termo legado Berçário II');
+              }
+              if (normalizeStageName('Maternal I') !== '2 anos a 2 anos e 11 meses (Creche III)') {
+                throw new Error('Pilar 18: normalizeStageName falhou ao converter termo legado Maternal I');
+              }
+              logger.log('Retrocompatibilidade do Helper normalizeStageName (Pilar 18)', true, 'Termos legados mapeados com sucesso');
               logger.log('Higienização visual da Tabela de Turmas (Tempo Integral sem emojis)', true);
 
               // 9. GOVERNANÇA OPERACIONAL DESCENTRALIZADA E GESTÃO AUTÔNOMA SOB SSOT ÚNICA (PILAR 14)
@@ -711,6 +745,40 @@
               // Limpeza do id de teste
               appState.deletedClassIds = appState.deletedClassIds.filter(id => id !== testClassId);
               saveState();
+
+              // PILAR 18: Criação e Persistência de Turma Multietapa com Seleção Aberta de Faixas
+              const multiTestId = 'cls-audit-multi-' + Date.now();
+              const multiTestFaixas = [
+                '4 anos a 4 anos e 11 meses (Pré-escola 1)',
+                '5 anos a 5 anos e 11 meses (Pré-escola 2)'
+              ];
+              const multiClassObj = {
+                id: multiTestId,
+                name: 'Turma Multietapa Teste SSOT',
+                school: testSchoolName,
+                academicYear: activeAuditYear,
+                stage: 'Turma Multietapa (Multiada)',
+                multiStages: multiTestFaixas,
+                shift: 'Tempo Parcial (Matutino)',
+                teachers: [],
+                totalStudents: 22,
+                inclusiveStudents: 1
+              };
+              appState.classes.push(multiClassObj);
+              saveState();
+
+              const resolvedMulti = getClassesForSchool(testSchoolName).find(c => c.id === multiTestId);
+              if (!resolvedMulti || resolvedMulti.stage !== 'Turma Multietapa (Multiada)' || !Array.isArray(resolvedMulti.multiStages) || resolvedMulti.multiStages.length !== 2) {
+                throw new Error('Pilar 18: Turma multietapa não foi persistida ou resolvida com suas faixas na SSOT');
+              }
+              const badgeHtml = formatStageBadge(resolvedMulti);
+              if (!badgeHtml.includes('Multietapa (2 faixas)')) {
+                throw new Error(`Pilar 18: formatStageBadge falhou ao renderizar badge de multietapa: ${badgeHtml}`);
+              }
+              // Cleanup da turma multietapa de teste
+              appState.classes = appState.classes.filter(c => c.id !== multiTestId);
+              saveState();
+              logger.log('Criação e Persistência de Turma Multietapa com Seleção Aberta de Faixas (Pilar 18)', true, 'Multietapa (2 faixas)');
 
               // 9.3 Validação de Isolamento de Escopo e RBAC (Pilar 14)
               const previousUserKey = appState.currentUserKey;
@@ -1254,6 +1322,13 @@
                 throw new Error('Badge de turno em #screenSetup não utilizou nomenclatura oficial MEC (Tempo Parcial Matutino)');
               }
               logger.log('Conformidade MEC no Badge de Turno do Setup (#setupClassShiftBadge)', true, setupShiftBadge.innerText.trim());
+
+              // PILAR 18: Validação do Badge de Etapa Padronizada no Setup Mobile
+              const setupStageBadge = document.getElementById('setupClassStageBadge');
+              if (!setupStageBadge || setupStageBadge.style.display === 'none' || !setupStageBadge.innerText.includes('Pré-escola 1')) {
+                throw new Error(`Pilar 18: Badge de etapa (#setupClassStageBadge) não exibiu a etapa padronizada esperada: "${setupStageBadge?.innerText}"`);
+              }
+              logger.log('Badge de Etapa Padronizada no Setup Mobile (Pilar 18)', true, setupStageBadge.innerText.trim());
 
               const nextBim = getNextEligibleBimesterForClass('Infantil I - Turma A', 'CEI Professora Maria de Lourdes');
               if (nextBim !== '1º Bimestre') throw new Error(`Próximo bimestre esperado 1º Bimestre, obtido: ${nextBim}`);
@@ -2930,6 +3005,17 @@
               toggleLongitudinalViewMode('classes');
               logger.log('Validação do Alternador de Visão Turmas vs. Docentes Regentes (Pilar 10)', true);
 
+              // PILAR 18: Identificação de Faixa Etária no Quadro de Controle Bimestral
+              const semTable = document.querySelector('#bimesterSemaphoreSection table');
+              if (semTable) {
+                const firstColText = semTable.querySelector('tbody td')?.innerText || '';
+                const hasStageInFirstCol = CANONICAL_STAGES.some(s => firstColText.includes(s.name) || firstColText.includes(s.ageRange));
+                if (!hasStageInFirstCol) {
+                  throw new Error(`Pilar 18: Faixa etária/etapa não identificada na coluna de turmas do Quadro de Controle: "${firstColText}"`);
+                }
+                logger.log('Identificação de Faixa Etária no Quadro de Controle Bimestral (Pilar 18)', true);
+              }
+
               // 13. PILAR 9: VALIDAÇÃO DO GATILHO FLUTUANTE CIRCULAR COM LUPINHA E BARRA DE FILTROS
               const mobileTriggerBtn = document.getElementById('btnMobileIndicatorsFilters');
               const mobileActiveBadge = document.getElementById('mobileIndFiltersActiveBadge');
@@ -3780,8 +3866,21 @@
 
               logger.log('Subsistema de Informação Mobile Hallmark (modal, botões e classes de desclutter)', true);
 
+              // Validação de Harmonização Hallmark do Hero Banner (.hero-banner)
+              const heroBannerEl = document.querySelector('.hero-banner');
+              const heroBtnEl = document.getElementById('btnNewObsHero');
+              if (heroBannerEl && heroBtnEl) {
+                const bannerStyle = window.getComputedStyle(heroBannerEl);
+                // Garante que o fundo não é mais o preto escuro herdado (#0F172A / rgb(15, 23, 42))
+                const bg = bannerStyle.backgroundColor;
+                if (bg === 'rgb(15, 23, 42)' || bg === '#0F172A') {
+                  throw new Error('Regressão detectada: .hero-banner ainda apresenta fundo preto escuro (#0F172A)');
+                }
+                logger.log('Conformidade Hallmark: .hero-banner com superfície clara integrada e botão institucional', true);
+              }
+
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.62
-              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68') && !btnChangelog.textContent.includes('Versão 1.69') && !btnChangelog.textContent.includes('Versão 1.70') && !btnChangelog.textContent.includes('Versão 1.72') && !btnChangelog.textContent.includes('Versão 1.73')) {
+              if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68') && !btnChangelog.textContent.includes('Versão 1.69') && !btnChangelog.textContent.includes('Versão 1.70') && !btnChangelog.textContent.includes('Versão 1.72') && !btnChangelog.textContent.includes('Versão 1.73') && !btnChangelog.textContent.includes('Versão 1.74') && !btnChangelog.textContent.includes('Versão 1.75')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);
               }
               if (!modalChg.innerHTML.includes('Versão 1.62')) {

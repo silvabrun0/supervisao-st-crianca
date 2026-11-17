@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.75** | 17/11/2026 17:15 | `intermediárias/aplicativo_v1.75_harmonizacao_hallmark_hero_banner_inicio_observacao.html` | Solicitação direta / `planos_de_implementacao/plano_harmonizacao_hallmark_hero_banner_inicio_observacao.md` | Harmonização Hallmark e Redesign Institucional do Hero Banner da Tela Inicial: erradicação do quadro preto residual (`#0F172A`) em favor de superfície limpa (`--bg-surface` / `#FFFFFF`), borda de acento lateral esquerda (`border-left: 4px solid var(--brand-primary)`), CTA radiante 'Nova observação' em azul institucional (`--brand-primary` / `#0066CC`), anel instantâneo `:focus-visible`, touch targets de 44px e conformidade WCAG AAA / Hallmark UI Standard 🎨🏛️🔘✨ |
 | **1.74** | 17/11/2026 17:05 | `intermediárias/aplicativo_v1.74_pilar_18_padronizacao_faixas_etarias_infantil.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_18_padronizacao_faixas_etarias_educacao_infantil.md` | Pilar 18 · Padronização Rigorosa das Faixas Etárias da Educação Infantil Regular e Turmas Multietapa: taxonomia oficial da rede de Patos/PB em meses (0 a 1a11m até 5a a 5a11m), seleção aberta de faixas para turmas multietapa (#modalClassEditor), helper inteligente de retrocompatibilidade e autocura (`normalizeStageName`), exibição no setup mobile (`#setupClassStageBadge`), cabeçalho da observação ativa e Quadro de Controle Bimestral 👶🗂️🏛️🛡️ |
 | **1.73** | 17/11/2026 16:15 | `intermediárias/aplicativo_v1.73_pilar_17_docentes_multiturma_dupla_matricula.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_17_docentes_multiturma_dupla_matricula.md` | Pilar 17 · Suporte a Docentes Multi-Turma (Desbloqueio de Dupla Matrícula, Regime de Dobra e Contratos Duplos): validação inteligente anti-colisão em turnos opostos (Matutino vs. Vespertino), bloqueio estrito apenas no mesmo turno, badge sóbrio 'Dobra de Turno' e listagem de turmas na tabela de equipe, agregação completa de observações multiturma no dossiê longitudinal e Semáforo de docentes regentes, e atualização do cabeçalho da ficha de impressão individual em PDF 👩‍🏫👥🏛️🛡️ |
 | **1.72** | 16/11/2026 17:15 | `intermediárias/aplicativo_v1.72_pilar_16_paradoxo_regencia_dupla.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_16_paradoxo_regencia_dupla.md` | Resolução do Paradoxo da Regência Dupla (Pilar 16): observação individualizada e apontamento nominal por docente em práticas consistentes de turmas compartilhadas, preservação da unidade e nota da turma, rastreabilidade no card de síntese docente e devolutiva individual em PDF, sem atrito impeditivo e com conformidade estrita ao Hallmark UI Standard 👥📝🏛️🛡️ |
@@ -199,6 +200,19 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.75] - Harmonização Hallmark e Redesign Institucional do Hero Banner da Tela Inicial
+- **Data / Horário:** 17/11/2026 17:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.75_harmonizacao_hallmark_hero_banner_inicio_observacao.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_harmonizacao_hallmark_hero_banner_inicio_observacao.md`
+- **Foco Central:** Harmonização Hallmark e Redesign Institucional do Hero Banner (`.hero-banner`) na tela inicial:
+  1. **Erradicação do Fundo Preto Residual:** Substituição do fundo escuro rígido (`#0F172A`) por superfície institucional limpa (`--bg-surface` / `#FFFFFF`), eliminando a dissonância cromática e o efeito "dark mode acidental".
+  2. **Acento Institucional SerTão Criança:** Inclusão de borda de acento lateral esquerda (`border-left: 4px solid var(--brand-primary)`) e hairline perimétrica (`--border-rule`), unificando a linguagem visual com o Hero Card do Cronograma Longitudinal.
+  3. **CTA Primário Radiante:** O botão "Nova observação" (`#btnNewObsHero`) assume a estilização de destaque primário (`--brand-primary` / `#0066CC`) com texto e ícone brancos (`--brand-primary-ink`), hover escuro (`--brand-primary-hover`), transições refinadas de propriedades não-layout e supressão de movimento com `prefers-reduced-motion`.
+  4. **Acessibilidade e Tokens Hallmark:** 100% dos valores vinculados aos tokens do `:root`, anel de foco instantâneo `:focus-visible` (`--border-focus`), alvo ergonômico de 44px no mobile (`--touch-target-min`) e contraste superior a 15.8:1 no título e 4.6:1 no subtítulo.
+  5. **Conformidade Modular da Auditoria:** Adição de asserções estritas no Módulo 12 (`navegacao_layout`) de `js/audit/audit_engine.js` prevenindo regressão para o fundo escuro `#0F172A` e validando o botão institucional.
+
+---
 
 ### [Versão 1.74] - Pilar 18: Padronização Rigorosa das Faixas Etárias da Educação Infantil Regular e Turmas Multietapa
 - **Data / Horário:** 17/11/2026 17:05
