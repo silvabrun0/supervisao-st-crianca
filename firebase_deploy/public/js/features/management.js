@@ -1862,18 +1862,59 @@
         document.querySelectorAll('input[name="classTeacherSingle"]:checked').forEach(cb => finalTeachers.push(cb.value));
       }
 
-      if (finalShift !== 'Tempo Integral') {
-        const currentYear = appState.selectedAcademicYear || '2026';
-        const otherClasses = (appState.classes || []).filter(c => 
-          c.id !== id && 
-          (c.academicYear || '2026') === currentYear &&
-          c.school === school &&
-          c.shift !== 'Tempo Integral'
-        );
-        for (const tName of finalTeachers) {
-          const conflictingCls = otherClasses.find(c => (c.teachers || []).includes(tName));
-          if (conflictingCls) {
-            showToast(`A docente "${tName}" já possui alocação na turma "${conflictingCls.name}". Não é permitida alocação dupla em turmas de tempo parcial.`);
+      // =========================================================================
+      // PILAR 17: VALIDAÇÃO INTELIGENTE ANTI-COLISÃO DE TURNOS DOCENTES
+      // Permite múltiplas matrículas, dobra e contratos duplos em turnos opostos.
+      // Bloqueia unicamente a colisão no MESMO turno (ex: Matutino + Matutino).
+      // =========================================================================
+      const currentYear = appState.selectedAcademicYear || '2026';
+      const otherClasses = (appState.classes || []).filter(c => 
+        c.id !== id && 
+        (c.academicYear || '2026') === currentYear
+      );
+
+      // Helper para identificar o turno normalizado de uma turma
+      function getClassShifts(clsObj) {
+        const s = (clsObj.shift || '').toLowerCase();
+        if (s.includes('integral')) {
+          return { isIntegral: true, morning: true, afternoon: true };
+        }
+        if (s.includes('vespertino') || s.includes('tarde')) {
+          return { isIntegral: false, morning: false, afternoon: true };
+        }
+        return { isIntegral: false, morning: true, afternoon: false };
+      }
+
+      const targetShifts = getClassShifts({ shift: finalShift });
+
+      // Validação para cada docente selecionado na turma em edição
+      for (const tName of finalTeachers) {
+        // Se a turma sendo salva possui turno matutino, verifica se a docente já leciona na manhã
+        const isSelectedInMorning = targetShifts.isIntegral 
+          ? (Array.isArray(finalMorning) && finalMorning.includes(tName))
+          : targetShifts.morning;
+
+        const isSelectedInAfternoon = targetShifts.isIntegral 
+          ? (Array.isArray(finalAfternoon) && finalAfternoon.includes(tName))
+          : targetShifts.afternoon;
+
+        for (const oc of otherClasses) {
+          const ocShifts = getClassShifts(oc);
+          const inOcMorning = ocShifts.isIntegral 
+            ? (Array.isArray(oc.teachersMorning) && oc.teachersMorning.includes(tName))
+            : (ocShifts.morning && Array.isArray(oc.teachers) && oc.teachers.includes(tName));
+
+          const inOcAfternoon = ocShifts.isIntegral 
+            ? (Array.isArray(oc.teachersAfternoon) && oc.teachersAfternoon.includes(tName))
+            : (ocShifts.afternoon && Array.isArray(oc.teachers) && oc.teachers.includes(tName));
+
+          if (isSelectedInMorning && inOcMorning) {
+            showToast(`Colisão de horário: A docente "${tName}" já está alocada no turno Matutino na turma "${oc.name}" (${oc.school}). Não é permitida alocação simultânea no mesmo turno.`);
+            return;
+          }
+
+          if (isSelectedInAfternoon && inOcAfternoon) {
+            showToast(`Colisão de horário: A docente "${tName}" já está alocada no turno Vespertino na turma "${oc.name}" (${oc.school}). Não é permitida alocação simultânea no mesmo turno.`);
             return;
           }
         }
@@ -2092,10 +2133,51 @@
         const emailSubtitle = (m.roleKey === 'professora')
           ? ''
           : `<br><span style="font-size:11px; color:var(--text-secondary);">${memberEmail ? memberEmail : 'Sem e-mail vinculado'}</span>`;
+
+        // PILAR 17: Resolução de turmas atribuídas e regime de dobra do docente
+        let classesDisplay = '';
+        if (m.roleKey === 'professora') {
+          const activeYear = appState.selectedAcademicYear || '2026';
+          const assignedClasses = (appState.classes || []).filter(c => 
+            (c.academicYear || '2026') === activeYear &&
+            (
+              (Array.isArray(c.teachers) && c.teachers.includes(m.name)) ||
+              (Array.isArray(c.teachersMorning) && c.teachersMorning.includes(m.name)) ||
+              (Array.isArray(c.teachersAfternoon) && c.teachersAfternoon.includes(m.name))
+            )
+          );
+
+          if (assignedClasses.length > 1) {
+            const classLabels = assignedClasses.map(c => {
+              const shiftShort = (c.shift || '').toLowerCase().includes('vespertino') ? 'Tarde' : 'Manhã';
+              return `${c.name} (${shiftShort})`;
+            }).join(' · ');
+            classesDisplay = `
+              <div style="margin-top:3px; font-size:11px; color:var(--text-secondary); line-height:1.3;">
+                <span class="badge-hallmark-accent" style="margin-right:4px;">Dobra de Turno</span>
+                <span>${classLabels}</span>
+              </div>
+            `;
+          } else if (assignedClasses.length === 1) {
+            const c = assignedClasses[0];
+            const shiftShort = (c.shift || '').toLowerCase().includes('vespertino') ? 'Tarde' : 'Manhã';
+            classesDisplay = `
+              <div style="margin-top:2px; font-size:11px; color:var(--text-secondary);">
+                <span>${c.name} (${shiftShort})</span>
+              </div>
+            `;
+          } else {
+            classesDisplay = `
+              <div style="margin-top:2px; font-size:11px; color:var(--text-secondary); font-style:italic;">
+                Sem turma vinculada
+              </div>
+            `;
+          }
+        }
         
         tr.innerHTML = `
           <td data-label="Nome do Servidor">
-            <strong>${m.name}</strong>${emailSubtitle}
+            <strong>${m.name}</strong>${emailSubtitle}${classesDisplay}
           </td>
           <td data-label="Cargo / Função"><span style="font-size:12px; font-weight:700; color:var(--primary);">${m.roleTitle}</span></td>
           <td data-label="Unidade de Lotação">${m.school || 'Rede Municipal'}</td>

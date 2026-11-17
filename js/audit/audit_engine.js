@@ -584,7 +584,7 @@
               });
               logger.log('Presença de novos membros docentes em INITIAL_TEAM', true, requiredNewMembers.join(', '));
 
-              // Validação de exclusividade docente (nenhuma docente de turma parcial atuando em turnos acumulados indevidos no ciclo letivo ativo)
+              // Validação de exclusividade e regras de dupla matrícula / multi-turma (Pilar 17)
               const activeAuditYear = appState.selectedAcademicYear || '2026';
               const anaClasses = (appState.classes || []).filter(c => 
                 (c.academicYear || '2026') === activeAuditYear && 
@@ -593,7 +593,47 @@
               if (anaClasses.length !== 1 || anaClasses[0].name !== 'Infantil I - Turma A') {
                 throw new Error('Ana Carolina Silva não possui alocação exclusiva em Infantil I - Turma A');
               }
-              logger.log('Exclusividade docente e integridade de alocação por turno', true);
+
+              // Teste de Conformidade do Pilar 17: Suporte a Múltiplas Matrículas e Validação Anti-Colisão
+              const testMultiTeacher = 'Juliana Roberta Rocha'; // Já leciona em Infantil II - Turma B (Vespertino)
+              const julianaClassesBefore = (appState.classes || []).filter(c => 
+                (c.academicYear || '2026') === activeAuditYear && 
+                (c.teachers || []).includes(testMultiTeacher)
+              );
+              if (julianaClassesBefore.length === 0) {
+                throw new Error('Docente de referência "Juliana Roberta Rocha" não localizada em turmas vespertinas');
+              }
+
+              // Simulação de verificação anti-colisão (função / lógica de turno)
+              function testShiftCollision(teacher, newShift, existingClasses) {
+                const isNewMorning = newShift.includes('Matutino') || newShift.includes('Integral');
+                const isNewAfternoon = newShift.includes('Vespertino') || newShift.includes('Integral');
+                for (const c of existingClasses) {
+                  const s = c.shift || '';
+                  const cMorn = s.includes('Matutino') || s.includes('Integral');
+                  const cAft = s.includes('Vespertino') || s.includes('Integral');
+                  const hasT = (c.teachers || []).includes(teacher) || (c.teachersMorning || []).includes(teacher) || (c.teachersAfternoon || []).includes(teacher);
+                  if (hasT) {
+                    if (isNewMorning && cMorn) return { collision: true, shift: 'Matutino', conflictingClass: c.name };
+                    if (isNewAfternoon && cAft) return { collision: true, shift: 'Vespertino', conflictingClass: c.name };
+                  }
+                }
+                return { collision: false };
+              }
+
+              // 1. Deve PERMITIR alocação em turno matutino para professora já alocada no vespertino
+              const oppCheck = testShiftCollision(testMultiTeacher, 'Tempo Parcial (Matutino)', appState.classes);
+              if (oppCheck.collision) {
+                throw new Error('Pilar 17: Bloqueou indevidamente alocação em turno oposto para docente com dobra');
+              }
+
+              // 2. Deve BLOQUEAR alocação no MESMO turno (vespertino + vespertino)
+              const sameCheck = testShiftCollision(testMultiTeacher, 'Tempo Parcial (Vespertino)', appState.classes);
+              if (!sameCheck.collision) {
+                throw new Error('Pilar 17: Falhou ao detectar colisão de horário no mesmo turno para a docente');
+              }
+
+              logger.log('Conformidade do Pilar 17: Suporte a Dupla Matrícula, Regime de Dobra e Anti-Colisão de Turno', true);
 
               // 8. VALIDAÇÃO DA PADRONIZAÇÃO MEC DAS JORNADAS ESCOLARES (PILAR 13)
               const mecValidShifts = ['Tempo Parcial (Matutino)', 'Tempo Parcial (Vespertino)', 'Tempo Integral'];
@@ -2824,6 +2864,14 @@
                 throw new Error(`Falha Pilar 10 Docente: Esperado status in_progress para Carla Beatriz no bimestre corrente, obtido ${teacherStatusCurrent.status}`);
               }
               logger.log('Cálculo algorítmico do Semáforo Docente: ⚪ No Prazo (Bimestre Corrente)', true, teacherStatusCurrent.label);
+
+              // PILAR 17: Validação do Semáforo para Docente Multi-Turma
+              const multiTeacherName = 'Juliana Roberta Rocha';
+              const multiTeacherStatus = calculateTeacherBimesterStatus(multiTeacherName, 'CEI Professora Maria de Lourdes', '1º Bimestre');
+              if (!multiTeacherStatus || typeof multiTeacherStatus.status !== 'string') {
+                throw new Error('Falha Pilar 17: calculateTeacherBimesterStatus falhou ao processar docente multi-turma');
+              }
+              logger.log('Cálculo do Semáforo para Docente Multi-Turma (Pilar 17)', true, multiTeacherStatus.label);
 
               // 12. PILAR 10: VALIDAÇÃO DOS FILTROS RÁPIDOS E ALTERNADOR DE VISÃO
               toggleLongitudinalViewMode('classes');

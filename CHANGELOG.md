@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.73** | 17/11/2026 16:15 | `intermediárias/aplicativo_v1.73_pilar_17_docentes_multiturma_dupla_matricula.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_17_docentes_multiturma_dupla_matricula.md` | Pilar 17 · Suporte a Docentes Multi-Turma (Desbloqueio de Dupla Matrícula, Regime de Dobra e Contratos Duplos): validação inteligente anti-colisão em turnos opostos (Matutino vs. Vespertino), bloqueio estrito apenas no mesmo turno, badge sóbrio 'Dobra de Turno' e listagem de turmas na tabela de equipe, agregação completa de observações multiturma no dossiê longitudinal e Semáforo de docentes regentes, e atualização do cabeçalho da ficha de impressão individual em PDF 👩‍🏫👥🏛️🛡️ |
 | **1.72** | 16/11/2026 17:15 | `intermediárias/aplicativo_v1.72_pilar_16_paradoxo_regencia_dupla.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_16_paradoxo_regencia_dupla.md` | Resolução do Paradoxo da Regência Dupla (Pilar 16): observação individualizada e apontamento nominal por docente em práticas consistentes de turmas compartilhadas, preservação da unidade e nota da turma, rastreabilidade no card de síntese docente e devolutiva individual em PDF, sem atrito impeditivo e com conformidade estrita ao Hallmark UI Standard 👥📝🏛️🛡️ |
 | **1.71** | 03/11/2026 17:25 | `intermediárias/aplicativo_v1.71_filtro_referencial_comparativo_kpis.html` | Solicitação direta / `planos_de_implementacao/plano_filtro_referencial_comparativo_kpis.md` | Filtro e Aba de Referencial Comparativo Parametrizado nos KPIs de Resultado: governança por perfil (Coordenadora travada na Rede Municipal, Formadora com alternância livre entre 'Meu Polo' e 'Rede Municipal' para unidades e Polo vs. Rede na visão geral, Núcleo de EI com governança aberta), sincronização desktop e mobile no modal deslizante `#modalIndicatorsFiltersMobile` e recálculo reativo dos deltas formativos nos 4 cards de KPIs, Visualização por Dimensão e Bloco de Gargalos 📊🗺️📱🏛️ |
 | **1.70** | 03/11/2026 17:15 | `intermediárias/aplicativo_v1.70_destaque_cor_botao_informacao_mobile_hallmark.html` | Solicitação direta / `planos_de_implementacao/plano_destaque_cor_botao_informacao_mobile_hallmark.md` | Destaque Visual e Harmonização Cromática do Botão de Informação Mobile (Padrão Hallmark): transição dos tokens neutros camuflados para a paleta institucional azul SerTão Criança (`#EFF6FF` / `#BFDBFE` / `#0066CC`), contraste acessível 5.2:1 (WCAG AAA), micro-elevação sutil, feedback tátil `:active`, preservação de touch target de 44px e zero `transition: all` ℹ️📱🎨🏛️ |
@@ -197,6 +198,20 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.73] - Pilar 17: Suporte a Docentes Multi-Turma (Desbloqueio de Dupla Matrícula, Regime de Dobra e Contratos Duplos)
+- **Data / Horário:** 17/11/2026 16:15
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.73_pilar_17_docentes_multiturma_dupla_matricula.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_pilar_17_docentes_multiturma_dupla_matricula.md`
+- **Foco Central:** Suporte nativo ao regime real do magistério municipal de Patos/PB (duas matrículas de concurso público, dobra de turno e contratos temporários duplos):
+  1. **Algoritmo Inteligente Anti-Colisão:** Substituição da trava cega de turno único por validação temporal real em `saveClassEditor()`. Docentes podem reger turmas em turnos opostos (ex: Matutino + Vespertino), sendo bloqueada apenas a colisão física no mesmo turno.
+  2. **Identificação na Gestão de Equipe:** Exibição clara das turmas ativas vinculadas a cada docente na tabela de equipe e destaque com o badge institucional `.badge-hallmark-accent` ("Dobra de Turno").
+  3. **Agregação Completa no Dossiê Individual:** Agregação de todas as observações onde a docente atuou (titular, regente compartilhada ou dobra) na aba de Indicadores, com mapeamento multi-turma e badge de dobra no cabeçalho do dossiê.
+  4. **Semáforo Bimestral de Docentes Regentes:** Exibição dinâmica de todas as turmas vinculadas ao docente no Quadro de Controle Bimestral (Desktop e Mobile) com insígnia sóbria e integração com o agendamento rápido de observações.
+  5. **Ficha de Impressão PDF Consolidada:** Listagem de todas as turmas e turnos de atuação no cabeçalho institucional oficial da ficha individual.
+  6. **Conformidade com a Auditoria:** Atualização e inclusão de testes determinísticos no Módulo 2 (`catalogo_dados`) e Módulo 10 (`indicadores_decisao`) da suíte modular headless.
+
+---
 
 ### [Versão 1.69] - Correção da Edição de Agendamentos Realizados no Cronograma e Isenção Relacional de Duplicidade
 - **Data / Horário:** 03/11/2026 16:15

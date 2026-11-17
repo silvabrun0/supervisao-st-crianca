@@ -1426,7 +1426,10 @@
       const teacherClassNames = (appState.classes || []).filter(c => {
         if ((c.academicYear || '2026') !== activeYear) return false;
         if (cleanSchool && c.school && c.school.trim().toLowerCase() !== cleanSchool) return false;
-        return Array.isArray(c.teachers) && c.teachers.some(t => (t || '').trim().toLowerCase() === cleanTeacher);
+        const inReg = Array.isArray(c.teachers) && c.teachers.some(t => (t || '').trim().toLowerCase() === cleanTeacher);
+        const inMorn = Array.isArray(c.teachersMorning) && c.teachersMorning.some(t => (t || '').trim().toLowerCase() === cleanTeacher);
+        const inAft = Array.isArray(c.teachersAfternoon) && c.teachersAfternoon.some(t => (t || '').trim().toLowerCase() === cleanTeacher);
+        return inReg || inMorn || inAft;
       }).map(c => (c.name || '').trim().toLowerCase());
 
       if (assignedClassClean && !teacherClassNames.includes(assignedClassClean)) {
@@ -1447,6 +1450,8 @@
         // Correspondência nominal direta
         if (o.teacherName && o.teacherName.trim().toLowerCase().includes(cleanTeacher)) return true;
         if (Array.isArray(o.teachers) && o.teachers.some(t => (t || '').trim().toLowerCase() === cleanTeacher)) return true;
+        if (Array.isArray(o.teachersMorning) && o.teachersMorning.some(t => (t || '').trim().toLowerCase() === cleanTeacher)) return true;
+        if (Array.isArray(o.teachersAfternoon) && o.teachersAfternoon.some(t => (t || '').trim().toLowerCase() === cleanTeacher)) return true;
         if (o.teacherSynthesis && Object.keys(o.teacherSynthesis).some(k => (k || '').trim().toLowerCase() === cleanTeacher)) return true;
 
         // Correspondência através da turma vinculada ao docente
@@ -2156,12 +2161,44 @@
         const selectedMember = scopedAvaliandos.find(m => m.name === activeMemberFilter) || 
                                (appState.teamMembers || []).find(m => m.name === activeMemberFilter);
         
-        const memberObs = scopedObs.filter(o => o.teacherName === activeMemberFilter);
+        // PILAR 17: Captura observações onde a docente atuou, seja titular, regente compartilhada ou dobrada
+        const memberObs = scopedObs.filter(o => 
+          o.teacherName === activeMemberFilter ||
+          (Array.isArray(o.teachers) && o.teachers.includes(activeMemberFilter)) ||
+          (Array.isArray(o.teachersMorning) && o.teachersMorning.includes(activeMemberFilter)) ||
+          (Array.isArray(o.teachersAfternoon) && o.teachersAfternoon.includes(activeMemberFilter)) ||
+          (o.teacherSynthesis && Object.prototype.hasOwnProperty.call(o.teacherSynthesis, activeMemberFilter))
+        );
         memberObs.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
+        // PILAR 17: Mapeamento de todas as turmas ativas da docente
+        const activeYear = appState.selectedAcademicYear || '2026';
+        const teacherClasses = (appState.classes || []).filter(c => 
+          (c.academicYear || '2026') === activeYear &&
+          (
+            (Array.isArray(c.teachers) && c.teachers.includes(activeMemberFilter)) ||
+            (Array.isArray(c.teachersMorning) && c.teachersMorning.includes(activeMemberFilter)) ||
+            (Array.isArray(c.teachersAfternoon) && c.teachersAfternoon.includes(activeMemberFilter))
+          )
+        );
+
+        let memberClassDisplay = 'Educação Infantil';
+        if (teacherClasses.length > 1) {
+          memberClassDisplay = teacherClasses.map(c => {
+            const shiftShort = (c.shift || '').toLowerCase().includes('vespertino') ? 'Tarde' : 'Manhã';
+            return `${c.name} (${shiftShort})`;
+          }).join(' · ');
+        } else if (teacherClasses.length === 1) {
+          const c = teacherClasses[0];
+          const shiftShort = (c.shift || '').toLowerCase().includes('vespertino') ? 'Tarde' : 'Manhã';
+          memberClassDisplay = `${c.name} (${shiftShort})`;
+        } else {
+          memberClassDisplay = selectedMember?.classAssigned || (memberObs[0]?.className) || 'Educação Infantil';
+        }
 
         const memberSchool = selectedMember?.school || (memberObs[0]?.schoolName) || 'Não informada';
         const memberRole = selectedMember?.roleTitle || (targetType === 'coordenador' ? 'Coordenação Pedagógica' : 'Professor(a) de Educação Infantil');
-        const memberClass = selectedMember?.classAssigned || (memberObs[0]?.className) || 'Educação Infantil';
+        const memberClass = memberClassDisplay;
         const memberSupervisor = selectedMember?.supervisor || (memberObs[0]?.evaluatedBy) || user.name;
 
         // Cálculos bimestrais do profissional
@@ -2287,7 +2324,7 @@
             </h2>
             <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
               <strong>Unidade:</strong> ${memberSchool} &nbsp;|&nbsp; 
-              <strong>Turma/Atuação:</strong> ${memberClass} &nbsp;|&nbsp; 
+              <strong>Turmas / Regência:</strong> ${memberClassDisplay} ${teacherClasses.length > 1 ? '<span class="badge-hallmark-accent" style="margin-left:4px;">Dobra de Turno</span>' : ''} &nbsp;|&nbsp; 
               <strong>Supervisor(a):</strong> ${memberSupervisor}
             </div>
           </div>
@@ -4226,20 +4263,45 @@
               </div>
             `;
 
+            // PILAR 17: Localização dinâmica de todas as turmas da docente
+            const activeYear = appState.selectedAcademicYear || '2026';
+            const memberClasses = (appState.classes || []).filter(c => 
+              (c.academicYear || '2026') === activeYear &&
+              (
+                (Array.isArray(c.teachers) && c.teachers.includes(member.name)) ||
+                (Array.isArray(c.teachersMorning) && c.teachersMorning.includes(member.name)) ||
+                (Array.isArray(c.teachersAfternoon) && c.teachersAfternoon.includes(member.name))
+              )
+            );
+
+            let classesSummaryHtml = member.classAssigned || 'Turma Regente';
+            if (memberClasses.length > 1) {
+              const formattedList = memberClasses.map(c => {
+                const shiftShort = (c.shift || '').toLowerCase().includes('vespertino') ? 'Tarde' : 'Manhã';
+                return `${c.name} (${shiftShort})`;
+              }).join(' · ');
+              classesSummaryHtml = `<span style="font-weight:700; color:var(--primary);">${formattedList}</span> <span class="badge-hallmark-accent" style="font-size:10px; padding:1px 5px;">Dobra</span>`;
+            } else if (memberClasses.length === 1) {
+              const c = memberClasses[0];
+              const shiftShort = (c.shift || '').toLowerCase().includes('vespertino') ? 'Tarde' : 'Manhã';
+              classesSummaryHtml = `<span style="font-weight:700; color:var(--primary);">${c.name} (${shiftShort})</span>`;
+            }
+            const targetPrimaryClass = memberClasses[0] ? memberClasses[0].name : targetClass;
+
             // Linha da Tabela Desktop
             teacherTableRows += `
               <tr>
                 <td>
                   <strong style="color:var(--text-primary); font-size:13px;">${member.name}</strong>
                   <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
-                    <span style="font-weight:700; color:var(--primary);">${targetClass}</span> · ${memberSchool}
+                    ${classesSummaryHtml} · ${memberSchool}
                   </div>
                 </td>
                 ${bimesterCellsHtml}
                 <td>${cycleProgressHtml}</td>
                 <td style="text-align:center; white-space:nowrap;">
                   <div style="display:flex; gap:6px; justify-content:center;">
-                    <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px; display:inline-flex; align-items:center; gap:4px;" onclick="quickScheduleForClass('${targetClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')" title="Agendar observação para a turma desta docente">
+                    <button type="button" class="btn btn-secondary btn-action-sem" style="font-size:11px; padding:5px 9px; display:inline-flex; align-items:center; gap:4px;" onclick="quickScheduleForClass('${targetPrimaryClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')" title="Agendar observação para a turma desta docente">
                       <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -4266,7 +4328,7 @@
                 <div class="sem-mobile-card-header">
                   <div>
                     <div class="sem-mobile-class-name">${member.name}</div>
-                    <div class="sem-mobile-class-sub"><span style="font-weight:700; color:var(--primary);">${targetClass}</span> · ${memberSchool}</div>
+                    <div class="sem-mobile-class-sub">${classesSummaryHtml} · ${memberSchool}</div>
                   </div>
                   <div>${cycleProgressHtml}</div>
                 </div>
@@ -4276,7 +4338,7 @@
                 </div>
 
                 <div style="display:flex; gap:8px; margin-top:8px;">
-                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center; display:inline-flex; align-items:center; gap:4px;" onclick="quickScheduleForClass('${targetClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')">
+                  <button type="button" class="btn btn-secondary btn-full btn-action-sem" style="font-size:11px; padding:7px 10px; justify-content:center; display:inline-flex; align-items:center; gap:4px;" onclick="quickScheduleForClass('${targetPrimaryClass.replace(/'/g, "\\'")}', '${memberSchool.replace(/'/g, "\\'")}', '${nextBim}')">
                     <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                       <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -4370,7 +4432,27 @@
 
       const memberSchool = member.school || (memberObs[0]?.schoolName) || 'Não informada';
       const memberRole = member.roleTitle || (targetType === 'coordenador' ? 'Coordenação Pedagógica' : 'Professor(a) de Educação Infantil');
-      const memberClass = member.classAssigned || (memberObs[0]?.className) || 'Educação Infantil';
+
+      // PILAR 17: Mapeamento de todas as turmas para cabeçalho da Ficha Individual
+      const activeYear = (appState && appState.selectedAcademicYear) || '2026';
+      const teacherClasses = (appState.classes || []).filter(c => 
+        (c.academicYear || '2026') === activeYear &&
+        (
+          (Array.isArray(c.teachers) && c.teachers.includes(teacherName)) ||
+          (Array.isArray(c.teachersMorning) && c.teachersMorning.includes(teacherName)) ||
+          (Array.isArray(c.teachersAfternoon) && c.teachersAfternoon.includes(teacherName))
+        )
+      );
+
+      let memberClass = 'Educação Infantil';
+      if (teacherClasses.length > 1) {
+        memberClass = teacherClasses.map(c => `${c.name} (${c.shift || 'Parcial'})`).join(' | ');
+      } else if (teacherClasses.length === 1) {
+        memberClass = `${teacherClasses[0].name} (${teacherClasses[0].shift || 'Parcial'})`;
+      } else {
+        memberClass = member.classAssigned || (memberObs[0]?.className) || 'Educação Infantil';
+      }
+
       const memberSupervisor = member.supervisor || (memberObs[0]?.evaluatedBy) || user.name;
 
       const activeSections = targetType === 'coordenador' 
