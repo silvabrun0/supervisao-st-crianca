@@ -167,8 +167,8 @@
             ? (nextTeachersArr.length > 0 ? `👩‍🏫 Regência: ${nextTeachersArr.join(', ')}` : '<span style="color:#DC2626; font-style:italic;">⚠️ Sem regente atribuída</span>')
             : (nextVisit.className || 'Coordenação Pedagógica');
 
-          const canStartVisit = (user.roleKey === 'coordenador' && isTargetTeacher && nextVisit.schoolName === user.school) ||
-                                (user.roleKey === 'formador' && !isTargetTeacher);
+          const canStartVisit = !isHistoricalAcademicYear() && (((user.roleKey === 'coordenador' && isTargetTeacher && nextVisit.schoolName === user.school) ||
+                                (user.roleKey === 'formador' && !isTargetTeacher)));
 
           const canEditSchedule = (user.roleKey === 'coordenador' && isTargetTeacher && nextVisit.schoolName === user.school) ||
                                   (user.roleKey === 'formador' && !isTargetTeacher) ||
@@ -284,8 +284,8 @@
         const targetMember = (appState.teamMembers || []).find(m => m.name === s.targetName || resolveCanonicalUserName(m.name) === resolveCanonicalUserName(s.targetName));
         const isTargetTeacher = targetMember ? (targetMember.roleKey === 'professora') : true;
 
-        const canStartVisit = (user.roleKey === 'coordenador' && isTargetTeacher && s.schoolName === user.school) ||
-                              (user.roleKey === 'formador' && !isTargetTeacher);
+        const canStartVisit = !isHistoricalAcademicYear() && (((user.roleKey === 'coordenador' && isTargetTeacher && s.schoolName === user.school) ||
+                              (user.roleKey === 'formador' && !isTargetTeacher)));
 
         const canEditSchedule = (user.roleKey === 'coordenador' && isTargetTeacher && s.schoolName === user.school) ||
                                 (user.roleKey === 'formador' && !isTargetTeacher) ||
@@ -400,6 +400,17 @@
                 <button class="btn btn-primary" style="padding:8px 14px; font-size:12px; font-weight:700; flex:1.4;" onclick="openSetupScreenFromSchedule('${s.id}')">
                   Iniciar Observação →
                 </button>
+              </div>
+            `;
+          } else if (isHistoricalAcademicYear()) {
+            actionHtml = `
+              <div style="display:flex; gap:6px; justify-content:center; align-items:center; flex-wrap:wrap;">
+                <span class="badge-status-neutral" style="font-size:11px; padding:4px 8px; border-radius:var(--radius-sm); color:var(--text-secondary); background:var(--background-secondary);">Ano Concluído (Consulta)</span>
+              </div>
+            `;
+            cardActionHtml = `
+              <div style="display:flex; gap:8px; width:100%; align-items:center; flex-wrap:wrap;">
+                <span class="badge-status-neutral" style="font-size:11px; padding:6px 12px; border-radius:var(--radius-sm); color:var(--text-secondary); background:var(--background-secondary); text-align:center; width:100%;">Ano Concluído (Consulta)</span>
               </div>
             `;
           } else {
@@ -523,6 +534,22 @@
           cardsContainer.appendChild(card);
         }
       });
+
+      // Hallmark Standard: Atualização do botão + Agendar Nova Observação no Cronograma quando em ano histórico
+      const addSchedBtn = document.querySelector('.btn-add-schedule');
+      if (addSchedBtn) {
+        if (isHistoricalAcademicYear()) {
+          addSchedBtn.setAttribute('title', 'Neste ano letivo não é possível agendar novas observações. Alterne para o ano vigente.');
+          addSchedBtn.setAttribute('aria-disabled', 'true');
+          addSchedBtn.style.opacity = '0.65';
+          addSchedBtn.style.cursor = 'not-allowed';
+        } else {
+          addSchedBtn.removeAttribute('title');
+          addSchedBtn.removeAttribute('aria-disabled');
+          addSchedBtn.style.opacity = '1';
+          addSchedBtn.style.cursor = 'pointer';
+        }
+      }
     }
 
     function confirmDeleteSchedule(scheduleId) {
@@ -616,6 +643,10 @@
     }
 
     function openAddScheduleModal() {
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível agendar novas observações. Alterne para o ano vigente.');
+        return;
+      }
       editingScheduleId = null;
       document.getElementById('scheduleModalTitle').innerText = 'Planejar Observação no Cronograma';
       const user = getCurrentUser();
@@ -1195,6 +1226,10 @@
     }
 
     function openSetupScreenFromSchedule(scheduleId) {
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível realizar observações.');
+        return;
+      }
       const sched = appState.schedules.find(s => s.id === scheduleId);
       if (sched) openSetupScreen(sched);
     }

@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.76 (v8.2.42)</span>
+          <span>Versão 1.77 (v8.2.43)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -94,13 +94,13 @@
     </div>
   </header>
 
-  <!-- Banner Informativo de Ano Letivo Anterior (Modo Consulta Histórica) -->
+  <!-- Banner Informativo de Ano Letivo Anterior (Modo Consulta Histórica - Hallmark Standard) -->
   <div id="historicalYearWarningBanner" style="display:none; background:#FFFBEB; border-bottom:1px solid #FDE68A; padding:8px 20px; font-size:12px; font-weight:600; color:#92400E; justify-content:space-between; align-items:center;">
     <div style="display:flex; align-items:center; gap:8px;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span><strong>Atenção:</strong> Você está visualizando o histórico do <strong>Ano Letivo <span id="historicalYearBannerLabel">2025</span></strong>. Novos lançamentos devem ser efetuados preferencialmente no ano letivo vigente.</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span><strong>Atenção:</strong> Você está visualizando o histórico do <strong>Ano Letivo <span id="historicalYearBannerLabel">2025</span></strong> (Modo Consulta). <strong>Neste ano não é possível realizar observações ou novos lançamentos.</strong></span>
     </div>
-    <button class="btn btn-secondary" style="padding:2px 8px; font-size:11px; font-weight:700; background:#FFFFFF; border:1px solid #D97706; color:#92400E;" onclick="returnToCurrentAcademicYear()">
+    <button class="btn btn-secondary" style="padding:3px 10px; font-size:11px; font-weight:700; background:#FFFFFF; border:1px solid #D97706; color:#92400E; border-radius:var(--radius-sm);" onclick="returnToCurrentAcademicYear()">
       Voltar ao Ano Vigente
     </button>
   </div>
@@ -1859,6 +1859,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.77 - BLOQUEIO RIGOROSO DE OBSERVAÇÕES E AGENDAMENTOS EM ANOS HISTÓRICOS -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.77 · v8.2.43</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">17/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Bloqueio Rigoroso de Novas Observações e Agendamentos em Anos Históricos e Alinhamento Hallmark:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>🛡️ <strong>Funções Canônicas SSOT de Controle Temporal:</strong> Introdução de <code>getLatestAcademicYear()</code>, <code>isCurrentAcademicYear()</code> e <code>isHistoricalAcademicYear()</code> centralizando a governança temporal no estado.</li>
+          <li>🚫 <strong>Blindagem Integral contra Novos Lançamentos em Anos Concluídos:</strong> Interceptação e bloqueio mecânico no botão Hero (<code>#btnNewObsHero</code>), na navegação para setup (<code>openSetupScreen</code>), no disparo do instrumento (<code>startNewObservation</code>) e no modal de planejamento (<code>openAddScheduleModal</code>) com toast explicativo imediato.</li>
+          <li>📋 <strong>Acompanhamento Somente Leitura no Histórico:</strong> Proteção de integridade em <code>resumeObservation()</code> garantindo que instrumentos de ciclos letivos anteriores abram invariavelmente em modo consulta não editável.</li>
+          <li>🎨 <strong>Alinhamento Visual Hallmark:</strong> Banner de consulta histórica reestruturado com SVG monocromático sóbrio, substituição de botões de início por badges neutros no Cronograma e Tela Inicial, estados acessíveis (<code>aria-disabled</code>, tooltips explicativos) e zero emojis residuais.</li>
+          <li>🧪 <strong>Validação em Auditoria Modular:</strong> Bateria de testes determinísticos de bloqueio e liberação de governança temporal incorporada à suíte de testes.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.76 - PILAR 19: ARQUITETURA DE CARGA EM MASSA VIA PLANILHA GERAL SSOT E EDIÇÕES PONTUAIS DESCENTRALIZADAS -->

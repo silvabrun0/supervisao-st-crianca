@@ -3769,10 +3769,40 @@
                 throw new Error('Banner de aviso de ano histórico não foi exibido após selecionar 2025');
               }
 
-              // Restaura ano vigente via função returnToCurrentAcademicYear
+              // TESTE: Blindagem de Integridade Temporal em Anos Históricos (Versão 1.77)
+              if (!isHistoricalAcademicYear()) {
+                throw new Error('isHistoricalAcademicYear() não retornou true para o ano histórico 2025');
+              }
+
+              // 2. Testa bloqueio no botão de nova observação
+              handleNewObsButtonClick();
+              const screenAfterClick = document.querySelector('.app-screen.active')?.id;
+              if (screenAfterClick === 'screenSetup') {
+                throw new Error('handleNewObsButtonClick() permitiu indevidamente a abertura de #screenSetup no ano histórico 2025');
+              }
+
+              // 3. Testa bloqueio mecânico em startNewObservation()
+              const initialObsCount = (appState.observations || []).length;
+              startNewObservation();
+              if ((appState.observations || []).length !== initialObsCount) {
+                throw new Error('startNewObservation() criou indevidamente uma observação enquanto em ano histórico 2025');
+              }
+
+              // 4. Testa bloqueio no agendamento de novas visitas
+              openAddScheduleModal();
+              const modalSchedule = document.getElementById('modalAddSchedule');
+              if (modalSchedule && modalSchedule.classList.contains('active')) {
+                closeAddScheduleModal();
+                throw new Error('openAddScheduleModal() abriu indevidamente o modal de agendamento no ano histórico 2025');
+              }
+
+              // 5. Restaura ano vigente via função returnToCurrentAcademicYear
               returnToCurrentAcademicYear();
               if (appState.selectedAcademicYear !== '2026') {
                 throw new Error('returnToCurrentAcademicYear() não restaurou o ano vigente 2026');
+              }
+              if (isHistoricalAcademicYear()) {
+                throw new Error('isHistoricalAcademicYear() ainda retornou true após returnToCurrentAcademicYear()');
               }
               if (bannerHist.style.display !== 'none') {
                 throw new Error('Banner histórico permaneceu visível após retornar ao ano vigente');
@@ -3780,6 +3810,7 @@
 
               closeSelectAcademicYearModal();
               closeProfileModal();
+              logger.log('Blindagem de integridade temporal: Bloqueio estrito de novas observações e agendamentos em anos históricos validado com 100% de sucesso (Versão 1.77)', true);
               logger.log('Conformidade do botão Alterar Ano Letivo em #modalProfile e modal de seleção (Versão 1.40)', true);
               logger.log('Reatividade total e despacho funcional de cliques em botões centrais do sistema', true);
 

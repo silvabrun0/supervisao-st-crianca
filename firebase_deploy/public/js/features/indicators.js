@@ -4012,10 +4012,12 @@
             `;
 
             // Linha da Tabela Desktop
+            const stageLabelHtml = cls.stage ? `<div style="font-size:11px; color:var(--text-secondary); margin-top:1px;">${normalizeStageName(cls.stage)}</div>` : '';
             tableRows += `
               <tr>
                 <td>
                   <strong style="color:var(--text-primary); font-size:13px;">${cls.name}</strong>
+                  ${stageLabelHtml}
                   <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
                     <span style="font-weight:700; color:var(--primary);">${shiftStr}</span> · ${teachersStr}
                   </div>
@@ -4042,6 +4044,7 @@
                 <div class="sem-mobile-card-header">
                   <div>
                     <div class="sem-mobile-class-name">${cls.name}</div>
+                    ${stageLabelHtml}
                     <div class="sem-mobile-class-sub"><span style="font-weight:700; color:var(--primary);">${shiftStr}</span> · ${teachersStr}</div>
                   </div>
                   <div>${cycleProgressHtml}</div>

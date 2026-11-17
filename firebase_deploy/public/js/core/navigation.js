@@ -185,6 +185,12 @@
         return;
       }
 
+      // TRAVA DE ANO HISTÓRICO: Impede abertura de nova observação em anos anteriores
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível realizar observações. Alterne para o ano letivo vigente.');
+        return;
+      }
+
       // 1. Verifica observações pendentes de atribuição direta do usuário ativo
       const pendingSchedules = getActionablePendingSchedules();
 
@@ -198,6 +204,10 @@
     }
 
     function openSelectScheduledObsModal() {
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível realizar observações. Alterne para o ano letivo vigente.');
+        return;
+      }
       const modal = document.getElementById('modalSelectScheduledObs');
       const listContainer = document.getElementById('selectScheduledObsList');
       if (!modal || !listContainer) {
@@ -280,6 +290,13 @@
 
     function openSetupScreen(prefilledSchedule = null) {
       const user = getCurrentUser();
+
+      // TRAVA DE ANO HISTÓRICO: Defesa em profundidade contra abertura direta do setup
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível realizar observações.');
+        navigateToTab('home');
+        return;
+      }
 
       // BLINDAGEM CANÔNICA DE CARGO
       if (prefilledSchedule) {
@@ -622,12 +639,23 @@
       const targetClass = schoolClasses.find(c => c.name === className);
 
       const shiftBadge = document.getElementById('setupClassShiftBadge');
+      const stageBadge = document.getElementById('setupClassStageBadge');
       const teachersListEl = document.getElementById('setupClassTeachersList');
       const isIntegral = isClassIntegral(targetClass?.shift || targetClass?.name || '');
       const integralNotice = document.getElementById('setupIntegralNotice');
       const startBtn = document.getElementById('btnStartObservation');
 
       if (targetClass) {
+        if (stageBadge) {
+          const normStage = normalizeStageName(targetClass.stage);
+          if (normStage === 'Turma Multietapa (Multiada)') {
+            const mCount = Array.isArray(targetClass.multiStages) && targetClass.multiStages.length > 0 ? ` (${targetClass.multiStages.length} faixas)` : '';
+            stageBadge.innerText = `Multietapa${mCount}`;
+          } else {
+            stageBadge.innerText = normStage;
+          }
+          stageBadge.style.display = 'inline-flex';
+        }
         if (shiftBadge) {
           if (isIntegral) {
             shiftBadge.innerText = '🌟 Tempo Integral (2 Turnos: Manhã + Tarde)';

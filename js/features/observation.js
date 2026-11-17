@@ -5,6 +5,12 @@
         showToast('A Coordenadora do Núcleo de EI não aplica avaliações diretas.');
         return;
       }
+
+      // TRAVA ESTRITA DE ANO HISTÓRICO: Bloqueia disparo mecânico
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível realizar observações.');
+        return;
+      }
       const schoolSelect = document.getElementById('setupSchool');
       const schoolName = schoolSelect.value;
       const bimester = document.getElementById('setupBimester').value;
@@ -167,6 +173,7 @@
       const newObs = {
         id: 'obs-' + Date.now(),
         scheduleId: appState.currentSetupScheduleId || null,
+        academicYear: appState.selectedAcademicYear || getLatestAcademicYear(), // <-- SSOT VINCULADA
         evaluatedType: user.roleKey === 'coordenador' ? 'turma' : 'coordenador',
         unitOfAnalysis: user.roleKey === 'coordenador' ? 'turma' : 'coordenador',
         classId: targetClassObj?.id || null,
@@ -256,8 +263,8 @@
         return;
       }
 
-      // If user is technician or supervisor viewing finalized, always read-only
-      if (obs.status === 'finalized' || isNucleoEI(user)) {
+      // Proteção de integridade histórica: Observações de anos anteriores sempre abrem em somente leitura
+      if (obs.status === 'finalized' || isNucleoEI(user) || isHistoricalAcademicYear(obs.academicYear)) {
         isReadOnly = true;
       }
 

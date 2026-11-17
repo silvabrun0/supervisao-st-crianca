@@ -5,6 +5,12 @@
         showToast('A Coordenadora do Núcleo de EI não aplica avaliações diretas.');
         return;
       }
+
+      // TRAVA ESTRITA DE ANO HISTÓRICO: Bloqueia disparo mecânico
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível realizar observações.');
+        return;
+      }
       const schoolSelect = document.getElementById('setupSchool');
       const schoolName = schoolSelect.value;
       const bimester = document.getElementById('setupBimester').value;
@@ -167,11 +173,14 @@
       const newObs = {
         id: 'obs-' + Date.now(),
         scheduleId: appState.currentSetupScheduleId || null,
+        academicYear: appState.selectedAcademicYear || getLatestAcademicYear(), // <-- SSOT VINCULADA
         evaluatedType: user.roleKey === 'coordenador' ? 'turma' : 'coordenador',
         unitOfAnalysis: user.roleKey === 'coordenador' ? 'turma' : 'coordenador',
         classId: targetClassObj?.id || null,
         className: className,
         classShift: targetClassObj?.shift || (isIntegral ? 'Integral' : 'Parcial Matutino'),
+        classStage: targetClassObj?.stage ? normalizeStageName(targetClassObj.stage) : null,
+        classMultiStages: Array.isArray(targetClassObj?.multiStages) ? [...targetClassObj.multiStages] : [],
         isIntegral: isIntegral,
         integralStage: isIntegral ? 'matutino' : 'concluido',
         teachersMorning: isIntegral ? finalMorningTeachers : null,
@@ -254,8 +263,8 @@
         return;
       }
 
-      // If user is technician or supervisor viewing finalized, always read-only
-      if (obs.status === 'finalized' || isNucleoEI(user)) {
+      // Proteção de integridade histórica: Observações de anos anteriores sempre abrem em somente leitura
+      if (obs.status === 'finalized' || isNucleoEI(user) || isHistoricalAcademicYear(obs.academicYear)) {
         isReadOnly = true;
       }
 
@@ -576,7 +585,8 @@
       if (obs.evaluatedType === 'turma') {
         document.getElementById('activeObsTeacher').innerText = `Turma: ${obs.className} (${obs.bimester || 'Acompanhamento'})`;
         const teachersDisplay = obs.teachers && obs.teachers.length > 0 ? obs.teachers.join(', ') : obs.teacherName;
-        document.getElementById('activeObsMeta').innerText = `Docentes Regentes: ${teachersDisplay} · Escola: ${obs.schoolName} · Supervisor(a): ${obs.evaluatedBy} · Data: ${dateDisplay} · Início: ${obs.startTime || '08:00'}`;
+        const stageDisplay = obs.classStage ? ` · ${obs.classStage}` : '';
+        document.getElementById('activeObsMeta').innerText = `Docentes Regentes: ${teachersDisplay} · Escola: ${obs.schoolName}${stageDisplay} · Supervisor(a): ${obs.evaluatedBy} · Data: ${dateDisplay} · Início: ${obs.startTime || '08:00'}`;
       } else {
         document.getElementById('activeObsTeacher').innerText = `${obs.teacherName} (${obs.bimester || 'Acompanhamento'})`;
         document.getElementById('activeObsMeta').innerText = `Agrupamento: ${obs.className} · Escola: ${obs.schoolName} · Supervisor(a): ${obs.evaluatedBy} · Data: ${dateDisplay} · Início: ${obs.startTime || '08:00'}`;

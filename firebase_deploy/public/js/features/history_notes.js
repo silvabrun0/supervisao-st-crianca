@@ -72,12 +72,13 @@
           const pendingSchedules = getActionablePendingSchedules();
 
           if (pendingSchedules.length === 0) {
+            const addBtnHtml = isHistoricalAcademicYear()
+              ? `<span class="badge-status-neutral" style="font-size:11px; padding:4px 8px; border-radius:var(--radius-sm); color:var(--text-secondary); background:var(--background-secondary);">Ano Concluído (Consulta)</span>`
+              : `<button class="btn btn-secondary" style="font-size:11px; padding:6px 12px;" onclick="openAddScheduleModal()">+ Agendar Nova Observação</button>`;
             scheduledCardsList.innerHTML = `
               <div class="card" style="padding:16px; margin-bottom:0; color:var(--text-secondary); font-size:13px; grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-left:4px solid var(--border);">
                 <span>Você não possui nenhuma observação agendada pendente no momento.</span>
-                <button class="btn btn-secondary" style="font-size:11px; padding:6px 12px;" onclick="openAddScheduleModal()">
-                  + Agendar Nova Observação
-                </button>
+                ${addBtnHtml}
               </div>
             `;
           } else {
@@ -89,11 +90,11 @@
             pendingSchedules.slice(0, 4).forEach(s => {
               let badgeHtml = '';
               if (s.plannedDate === todayStr) {
-                badgeHtml = `<span style="font-size:10px; font-weight:700; background:#DCFCE7; color:#166534; padding:2px 6px; border-radius:10px;">● Hoje</span>`;
+                badgeHtml = `<span class="badge-status-today">Hoje</span>`;
               } else if (s.plannedDate < todayStr) {
-                badgeHtml = `<span style="font-size:10px; font-weight:700; background:#FEE2E2; color:#991B1B; padding:2px 6px; border-radius:10px;">⚠ Em Atraso</span>`;
+                badgeHtml = `<span class="badge-status-overdue"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Em atraso</span>`;
               } else {
-                badgeHtml = `<span style="font-size:10px; font-weight:700; background:#EFF6FF; color:#1E40AF; padding:2px 6px; border-radius:10px;">🗓️ Prevista</span>`;
+                badgeHtml = `<span class="badge-status-planned"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Prevista</span>`;
               }
 
               const card = document.createElement('div');
@@ -110,9 +111,9 @@
                     <span style="font-weight:700; color:var(--primary);">${s.bimester}</span> · ${s.className || 'Coordenação'} · ${formatDateBR(s.plannedDate)} às ${s.plannedTime || '08:00'}
                   </div>
                 </div>
-                <button class="btn btn-primary" style="padding:6px 12px; font-size:11px; font-weight:700; width:100%;" onclick="openSetupScreenFromSchedule('${s.id}')">
-                  Iniciar Observação →
-                </button>
+                ${isHistoricalAcademicYear()
+                  ? `<div style="text-align:center; padding:6px 12px; font-size:11px; font-weight:600; color:var(--text-secondary); background:var(--background-secondary); border-radius:var(--radius-sm); border:1px solid var(--border);">Ano Concluído (Consulta)</div>`
+                  : `<button class="btn btn-primary" style="padding:6px 12px; font-size:11px; font-weight:700; width:100%;" onclick="openSetupScreenFromSchedule('${s.id}')">Iniciar Observação →</button>`}
               `;
               scheduledCardsList.appendChild(card);
             });
@@ -129,23 +130,36 @@
         drafts.slice(0, 3).forEach(d => {
           const item = document.createElement('div');
           item.className = 'draft-card';
-          let title = d.evaluatedType === 'turma' ? `📚 Turma: ${d.className}` : (d.evaluatedType === 'coordenador' ? `📋 Coordenadora: ${d.teacherName}` : d.teacherName);
+
+          let typeIcon = '';
+          let titleText = '';
+          if (d.evaluatedType === 'turma') {
+            typeIcon = `<svg class="btn-icon-sm" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
+            titleText = `Turma: ${d.className}`;
+          } else if (d.evaluatedType === 'coordenador') {
+            typeIcon = `<svg class="btn-icon-sm" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>`;
+            titleText = `Coordenadora: ${d.teacherName}`;
+          } else {
+            typeIcon = `<svg class="btn-icon-sm" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2"/></svg>`;
+            titleText = d.teacherName;
+          }
+
           let stageBadge = '';
           let actionBtnText = 'Continuar';
           let actionBtnStyle = 'padding:8px 14px;';
 
           if (d.isIntegral) {
             if (d.integralStage === 'vespertino') {
-              stageBadge = `<span style="font-size:10px; font-weight:700; background:#FFFBEB; color:#B45309; border:1px solid #FDE68A; padding:2px 8px; border-radius:10px; margin-left:6px;">🌤️ Aguardando Tarde (Etapa 2/2)</span>`;
-              actionBtnText = 'Retomar à Tarde →';
+              stageBadge = `<span class="badge-stage-vespertino"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Aguardando tarde · Etapa 2/2</span>`;
+              actionBtnText = 'Retomar à tarde →';
               actionBtnStyle = 'padding:8px 14px; background:#7C3AED; border-color:#6D28D9; font-weight:700;';
             } else {
-              stageBadge = `<span style="font-size:10px; font-weight:700; background:#FAF5FF; color:#7C3AED; border:1px solid #E9D5FF; padding:2px 8px; border-radius:10px; margin-left:6px;">☀️ Etapa 1: Manhã</span>`;
+              stageBadge = `<span class="badge-stage-matutino"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>Etapa 1 · Matutino</span>`;
             }
           }
 
           let meta = d.evaluatedType === 'turma'
-            ? `👩‍🏫 Regência: ${d.teachers && d.teachers.length > 0 ? d.teachers.join(', ') : d.teacherName} · ${d.bimester || 'Bimestre'} · ${formatObservationDateRange(d) || d.date}`
+            ? `Regência: ${d.teachers && d.teachers.length > 0 ? d.teachers.join(', ') : d.teacherName} · ${d.bimester || 'Bimestre'} · ${formatObservationDateRange(d) || d.date}`
             : `Turma: ${d.className} · ${d.bimester || 'Bimestre'} · ${formatObservationDateRange(d) || d.date}`;
 
           if (d.isIntegral && d.morningObs && d.morningObs.completed) {
@@ -154,19 +168,38 @@
 
           item.innerHTML = `
             <div>
-              <div class="draft-teacher" style="display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
-                <span>${title}</span>
+              <div class="draft-teacher" style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+                <span class="draft-type-tag">
+                  <span class="draft-type-icon">${typeIcon}</span>
+                  <span>${titleText}</span>
+                </span>
                 ${stageBadge}
               </div>
-              <div class="draft-meta">${meta}</div>
+              <div class="draft-meta draft-meta-line">${meta}</div>
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn btn-secondary" style="color:var(--red); padding:8px 12px;" onclick="confirmDeleteObservation('${d.id}')">Excluir</button>
-              <button class="btn btn-primary" style="${actionBtnStyle}" onclick="resumeObservation('${d.id}', false)">${actionBtnText}</button>
+              <button class="btn btn-primary" style="${actionBtnStyle}" onclick="resumeObservation('${d.id}', ${isHistoricalAcademicYear(d.academicYear) ? 'true' : 'false'})">${isHistoricalAcademicYear(d.academicYear) ? 'Visualizar' : actionBtnText}</button>
             </div>
           `;
           container.appendChild(item);
         });
+      }
+
+      // Hallmark Standard: Atualização do botão Hero #btnNewObsHero quando em ano histórico
+      const heroBtn = document.getElementById('btnNewObsHero');
+      if (heroBtn) {
+        if (isHistoricalAcademicYear()) {
+          heroBtn.setAttribute('title', 'Neste ano letivo não é possível realizar observações. Alterne para o ano vigente.');
+          heroBtn.setAttribute('aria-disabled', 'true');
+          heroBtn.style.opacity = '0.65';
+          heroBtn.style.cursor = 'not-allowed';
+        } else {
+          heroBtn.removeAttribute('title');
+          heroBtn.removeAttribute('aria-disabled');
+          heroBtn.style.opacity = '1';
+          heroBtn.style.cursor = 'pointer';
+        }
       }
     }
 
@@ -204,7 +237,7 @@
           html += `<option value="${cName}">${cName}</option>`;
         });
       } else {
-        ['Berçário I', 'Berçário II', 'Maternal I', 'Maternal II', 'Infantil I', 'Infantil II'].forEach(etapa => {
+        CANONICAL_STAGES.map(s => s.name).forEach(etapa => {
           html += `<option value="${etapa}">${etapa}</option>`;
         });
       }
@@ -366,9 +399,29 @@
         } else {
           // Draft: ONLY the creator can edit!
           const isCreator = item.evaluatedBy === user.name;
-          const cardTitle = item.evaluatedType === 'turma' ? `📚 Turma: ${item.className}` : (item.evaluatedType === 'coordenador' ? `📋 Coordenadora: ${item.teacherName}` : item.teacherName);
+
+          let typeIcon = '';
+          let titleText = '';
+          if (item.evaluatedType === 'turma') {
+            typeIcon = `<svg class="btn-icon-sm" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
+            titleText = `Turma: ${item.className}`;
+          } else if (item.evaluatedType === 'coordenador') {
+            typeIcon = `<svg class="btn-icon-sm" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>`;
+            titleText = `Coordenadora: ${item.teacherName}`;
+          } else {
+            typeIcon = `<svg class="btn-icon-sm" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2"/></svg>`;
+            titleText = item.teacherName;
+          }
+
+          const cardTitleHtml = `
+            <span class="draft-type-tag">
+              <span class="draft-type-icon">${typeIcon}</span>
+              <span>${titleText}</span>
+            </span>
+          `;
+
           const cardMeta = item.evaluatedType === 'turma'
-            ? `👩‍🏫 Regência: ${item.teachers && item.teachers.length > 0 ? item.teachers.join(', ') : item.teacherName} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}`
+            ? `Regência: ${item.teachers && item.teachers.length > 0 ? item.teachers.join(', ') : item.teacherName} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}`
             : `Turma: ${item.className} · ${item.bimester || 'Bimestre'} · ${formatObservationDateRange(item) || item.date}`;
 
           let draftBadgeHtml = '<span class="status-badge draft">Rascunho Editável</span>';
@@ -377,19 +430,19 @@
 
           if (item.isIntegral) {
             if (item.integralStage === 'vespertino') {
-              draftBadgeHtml = '<span class="status-badge" style="background:#FFFBEB; color:#B45309; border:1px solid #FDE68A; font-size:11px;">🌤️ Aguardando Turno Vespertino (Etapa 2/2)</span>';
-              resumeBtnText = 'Retomar no Turno da Tarde →';
+              draftBadgeHtml = '<span class="badge-stage-vespertino"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Aguardando tarde · Etapa 2/2</span>';
+              resumeBtnText = 'Retomar à tarde →';
               resumeBtnStyle = 'padding:6px 14px; font-size:12px; background:#7C3AED; border-color:#6D28D9; font-weight:700;';
             } else {
-              draftBadgeHtml = '<span class="status-badge" style="background:#FAF5FF; color:#7C3AED; border:1px solid #E9D5FF; font-size:11px;">☀️ Tempo Integral · Etapa 1 (Manhã)</span>';
+              draftBadgeHtml = '<span class="badge-stage-matutino"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>Etapa 1 · Matutino</span>';
             }
           }
 
           card.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
               <div>
-                <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${cardTitle}</div>
-                <div style="font-size:12px; color:var(--text-secondary);">${cardMeta}</div>
+                <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${cardTitleHtml}</div>
+                <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">${cardMeta}</div>
               </div>
               ${draftBadgeHtml}
             </div>

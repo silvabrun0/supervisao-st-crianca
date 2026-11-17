@@ -410,11 +410,27 @@
         const banner = document.getElementById('historicalYearWarningBanner');
         const bannerLabel = document.getElementById('historicalYearBannerLabel');
         if (banner) {
-          if (appState.selectedAcademicYear !== latestYear) {
+          if (isHistoricalAcademicYear()) {
             banner.style.display = 'flex';
             if (bannerLabel) bannerLabel.innerText = appState.selectedAcademicYear;
           } else {
             banner.style.display = 'none';
+          }
+        }
+
+        // Hallmark Standard: Atualização do botão Hero #btnNewObsHero quando em ano histórico
+        const heroBtn = document.getElementById('btnNewObsHero');
+        if (heroBtn) {
+          if (isHistoricalAcademicYear()) {
+            heroBtn.setAttribute('title', 'Neste ano letivo não é possível realizar observações. Alterne para o ano vigente.');
+            heroBtn.setAttribute('aria-disabled', 'true');
+            heroBtn.style.opacity = '0.65';
+            heroBtn.style.cursor = 'not-allowed';
+          } else {
+            heroBtn.removeAttribute('title');
+            heroBtn.removeAttribute('aria-disabled');
+            heroBtn.style.opacity = '1';
+            heroBtn.style.cursor = 'pointer';
           }
         }
       } catch (errSel) {
@@ -446,14 +462,7 @@
     }
 
     function returnToCurrentAcademicYear() {
-      const currentRealYear = new Date().getFullYear();
-      const validYears = (appState.academicYears || ['2026'])
-        .map(y => parseInt(y, 10))
-        .filter(y => !isNaN(y) && y <= currentRealYear)
-        .sort((a, b) => b - a);
-
-      const targetYear = (validYears[0] || 2026).toString();
-      onGlobalAcademicYearChange(targetYear);
+      onGlobalAcademicYearChange(getLatestAcademicYear());
     }
 
     // Modal Bimester Periods (SSOT) Controls

@@ -185,6 +185,12 @@
         return;
       }
 
+      // TRAVA DE ANO HISTÓRICO: Impede abertura de nova observação em anos anteriores
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível realizar observações. Alterne para o ano letivo vigente.');
+        return;
+      }
+
       // 1. Verifica observações pendentes de atribuição direta do usuário ativo
       const pendingSchedules = getActionablePendingSchedules();
 
@@ -198,6 +204,10 @@
     }
 
     function openSelectScheduledObsModal() {
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível realizar observações. Alterne para o ano letivo vigente.');
+        return;
+      }
       const modal = document.getElementById('modalSelectScheduledObs');
       const listContainer = document.getElementById('selectScheduledObsList');
       if (!modal || !listContainer) {
@@ -280,6 +290,13 @@
 
     function openSetupScreen(prefilledSchedule = null) {
       const user = getCurrentUser();
+
+      // TRAVA DE ANO HISTÓRICO: Defesa em profundidade contra abertura direta do setup
+      if (isHistoricalAcademicYear()) {
+        showToast('Ação bloqueada: Neste ano letivo não é possível realizar observações.');
+        navigateToTab('home');
+        return;
+      }
 
       // BLINDAGEM CANÔNICA DE CARGO
       if (prefilledSchedule) {

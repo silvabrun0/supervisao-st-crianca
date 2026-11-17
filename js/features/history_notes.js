@@ -72,12 +72,13 @@
           const pendingSchedules = getActionablePendingSchedules();
 
           if (pendingSchedules.length === 0) {
+            const addBtnHtml = isHistoricalAcademicYear()
+              ? `<span class="badge-status-neutral" style="font-size:11px; padding:4px 8px; border-radius:var(--radius-sm); color:var(--text-secondary); background:var(--background-secondary);">Ano Concluído (Consulta)</span>`
+              : `<button class="btn btn-secondary" style="font-size:11px; padding:6px 12px;" onclick="openAddScheduleModal()">+ Agendar Nova Observação</button>`;
             scheduledCardsList.innerHTML = `
               <div class="card" style="padding:16px; margin-bottom:0; color:var(--text-secondary); font-size:13px; grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-left:4px solid var(--border);">
                 <span>Você não possui nenhuma observação agendada pendente no momento.</span>
-                <button class="btn btn-secondary" style="font-size:11px; padding:6px 12px;" onclick="openAddScheduleModal()">
-                  + Agendar Nova Observação
-                </button>
+                ${addBtnHtml}
               </div>
             `;
           } else {
@@ -110,9 +111,9 @@
                     <span style="font-weight:700; color:var(--primary);">${s.bimester}</span> · ${s.className || 'Coordenação'} · ${formatDateBR(s.plannedDate)} às ${s.plannedTime || '08:00'}
                   </div>
                 </div>
-                <button class="btn btn-primary" style="padding:6px 12px; font-size:11px; font-weight:700; width:100%;" onclick="openSetupScreenFromSchedule('${s.id}')">
-                  Iniciar Observação →
-                </button>
+                ${isHistoricalAcademicYear()
+                  ? `<div style="text-align:center; padding:6px 12px; font-size:11px; font-weight:600; color:var(--text-secondary); background:var(--background-secondary); border-radius:var(--radius-sm); border:1px solid var(--border);">Ano Concluído (Consulta)</div>`
+                  : `<button class="btn btn-primary" style="padding:6px 12px; font-size:11px; font-weight:700; width:100%;" onclick="openSetupScreenFromSchedule('${s.id}')">Iniciar Observação →</button>`}
               `;
               scheduledCardsList.appendChild(card);
             });
@@ -178,11 +179,27 @@
             </div>
             <div style="display:flex; gap:8px;">
               <button class="btn btn-secondary" style="color:var(--red); padding:8px 12px;" onclick="confirmDeleteObservation('${d.id}')">Excluir</button>
-              <button class="btn btn-primary" style="${actionBtnStyle}" onclick="resumeObservation('${d.id}', false)">${actionBtnText}</button>
+              <button class="btn btn-primary" style="${actionBtnStyle}" onclick="resumeObservation('${d.id}', ${isHistoricalAcademicYear(d.academicYear) ? 'true' : 'false'})">${isHistoricalAcademicYear(d.academicYear) ? 'Visualizar' : actionBtnText}</button>
             </div>
           `;
           container.appendChild(item);
         });
+      }
+
+      // Hallmark Standard: Atualização do botão Hero #btnNewObsHero quando em ano histórico
+      const heroBtn = document.getElementById('btnNewObsHero');
+      if (heroBtn) {
+        if (isHistoricalAcademicYear()) {
+          heroBtn.setAttribute('title', 'Neste ano letivo não é possível realizar observações. Alterne para o ano vigente.');
+          heroBtn.setAttribute('aria-disabled', 'true');
+          heroBtn.style.opacity = '0.65';
+          heroBtn.style.cursor = 'not-allowed';
+        } else {
+          heroBtn.removeAttribute('title');
+          heroBtn.removeAttribute('aria-disabled');
+          heroBtn.style.opacity = '1';
+          heroBtn.style.cursor = 'pointer';
+        }
       }
     }
 

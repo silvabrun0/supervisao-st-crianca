@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.77** | 17/11/2026 18:00 | `intermediárias/aplicativo_v1.77_bloqueio_observacao_ano_historico.html` | Solicitação direta / `planos_de_implementacao/plano_bloqueio_observacao_ano_historico.md` | Bloqueio Rigoroso de Novas Observações e Agendamentos em Anos Históricos e Alinhamento Hallmark: funções canônicas SSOT de controle temporal (`getLatestAcademicYear`, `isCurrentAcademicYear`, `isHistoricalAcademicYear`), bloqueio estrito com toast no botão hero (`#btnNewObsHero`), setup (`openSetupScreen`), disparo (`startNewObservation`) e planejamento (`openAddScheduleModal`), abertura de observações anteriores sempre em modo somente leitura (`resumeObservation`), banner informativo sóbrio e badges neutros no Cronograma e Home 🛡️🚫🎨✨ |
 | **1.76** | 17/11/2026 17:40 | `intermediárias/aplicativo_v1.76_pilar_19_carga_massa_planilha_ssot.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_19_carga_massa_planilha_ssot.md` | Pilar 19 · Arquitetura de Carga em Massa via Planilha Geral SSOT & Edições Pontuais Descentralizadas: planilha modelo oficial unificada da rede de 18 colunas (Polos, UEs, Formadoras, Coordenadoras, Turmas, Faixas Etárias MEC, Jornadas, Turnos e Docentes Titulares), parser inteligente com detecção de delimitador e UTF-8 com BOM, exportação da rede completa em CSV, blindagem de importação na Coordenadora e agregação em tempo real da caracterização escolar 📊🏛️🛡️✨ |
 | **1.75** | 17/11/2026 17:15 | `intermediárias/aplicativo_v1.75_remocao_emojis_aba_inicial_rascunhos_hallmark.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_aba_inicial_rascunhos_hallmark.md` | Erradicação Completa de Emojis na Aba Inicial (Home), Higienização de Rascunhos em Andamento e Harmonização Hallmark para Coordenadora e Formadora: substituição de emojis em rascunhos (Home e Histórico) e agendamentos por pictogramas vetoriais SVG monocromáticos e badges sóbrios (.badge-status-today, .badge-status-overdue, .badge-status-planned, .badge-stage-vespertino, .badge-stage-matutino), tipografia em sentence case para ações do Hero Banner ('Nova observação' / 'Avaliar coordenação'), erradicação do quadro preto residual (`#0F172A`) em favor de superfície limpa (`--bg-surface` / `#FFFFFF`), borda de acento lateral esquerda (`border-left: 4px solid var(--brand-primary)`), anel instantâneo `:focus-visible`, touch targets de 44px e conformidade WCAG AAA / Hallmark UI Standard 🎨🏛️🔘✨ |
 | **1.74** | 17/11/2026 17:05 | `intermediárias/aplicativo_v1.74_pilar_18_padronizacao_faixas_etarias_infantil.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_18_padronizacao_faixas_etarias_educacao_infantil.md` | Pilar 18 · Padronização Rigorosa das Faixas Etárias da Educação Infantil Regular e Turmas Multietapa: taxonomia oficial da rede de Patos/PB em meses (0 a 1a11m até 5a a 5a11m), seleção aberta de faixas para turmas multietapa (#modalClassEditor), helper inteligente de retrocompatibilidade e autocura (`normalizeStageName`), exibição no setup mobile (`#setupClassStageBadge`), cabeçalho da observação ativa e Quadro de Controle Bimestral 👶🗂️🏛️🛡️ |
@@ -201,6 +202,19 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.77] - Bloqueio Rigoroso de Novas Observações e Agendamentos em Anos Históricos e Alinhamento Hallmark
+- **Data / Horário:** 17/11/2026 18:00
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.77_bloqueio_observacao_ano_historico.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_bloqueio_observacao_ano_historico.md`
+- **Foco Central:** Bloqueio Rigoroso de Novas Observações e Agendamentos em Anos Históricos e Alinhamento Hallmark:
+  1. **Funções Canônicas SSOT de Controle Temporal:** Introdução de `getLatestAcademicYear()`, `isCurrentAcademicYear()` e `isHistoricalAcademicYear()` centralizando a governança temporal no estado (`appState`).
+  2. **Blindagem Integral contra Novos Lançamentos em Anos Concluídos:** Interceptação e bloqueio mecânico no botão Hero (`#btnNewObsHero`), na navegação para setup (`openSetupScreen`), no disparo do instrumento (`startNewObservation`) e no modal de planejamento (`openAddScheduleModal`) com toast explicativo imediato.
+  3. **Acompanhamento Somente Leitura no Histórico:** Proteção de integridade em `resumeObservation()` garantindo que instrumentos de ciclos letivos anteriores abram invariavelmente em modo consulta não editável (`isReadOnly = true`).
+  4. **Alinhamento Visual Hallmark:** Banner de consulta histórica `#historicalYearWarningBanner` reestruturado com SVG monocromático sóbrio, substituição de botões de início por badges neutros no Cronograma e Tela Inicial, estados acessíveis (`aria-disabled`, tooltips explicativos) e zero emojis residuais.
+  5. **Validação em Auditoria Modular:** Bateria de testes determinísticos de bloqueio e liberação de governança temporal incorporada no Módulo 12 (`navegacao_layout`) da suíte de auditoria.
+
+---
 
 ### [Versão 1.76] - Pilar 19: Arquitetura de Carga em Massa via Planilha Geral SSOT e Edições Pontuais Descentralizadas
 - **Data / Horário:** 17/11/2026 17:40

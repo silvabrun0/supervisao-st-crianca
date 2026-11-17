@@ -23,6 +23,27 @@
       expandedDrilldowns: {}
     };
 
+    // --- UTILITÁRIOS DE CONTROLE TEMPORAL E ANOS LETIVOS (SSOT) ---
+    function getLatestAcademicYear() {
+      const defaultYears = (typeof DEFAULT_ACADEMIC_YEARS !== 'undefined' && Array.isArray(DEFAULT_ACADEMIC_YEARS)) 
+        ? DEFAULT_ACADEMIC_YEARS 
+        : ['2026', '2025'];
+      const years = (appState && Array.isArray(appState.academicYears) && appState.academicYears.length > 0)
+        ? appState.academicYears
+        : defaultYears;
+      const sorted = [...years].sort((a, b) => b.localeCompare(a));
+      return sorted[0] || '2026';
+    }
+
+    function isCurrentAcademicYear(year = null) {
+      const target = year || (appState && appState.selectedAcademicYear) || getLatestAcademicYear();
+      return target === getLatestAcademicYear();
+    }
+
+    function isHistoricalAcademicYear(year = null) {
+      return !isCurrentAcademicYear(year);
+    }
+
     function loadState() {
       const saved = localStorage.getItem('SERTAO_CRIANCA_APP_STATE_V6') || localStorage.getItem('SERTAO_CRIANCA_APP_STATE_V4');
       if (saved) {

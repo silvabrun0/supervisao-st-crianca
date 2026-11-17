@@ -509,7 +509,7 @@
             tr.innerHTML = `
               <td>
                 <strong style="color:var(--primary-dark); font-size:13px;">${cls.name}</strong><br>
-                <span class="badge-hallmark-neutral">${cls.stage || 'Educação Infantil'}</span>
+                ${formatStageBadge(cls)}
               </td>
               <td>
                 <strong style="color:var(--badge-accent-ink);">${clsTot} alunos</strong>
@@ -1596,7 +1596,7 @@
         tr.innerHTML = `
           <td data-label="Turma / Etapa">
             <strong style="color:var(--primary-dark); font-size:13px;">${cls.name}</strong><br>
-            <span class="badge-hallmark-neutral">${cls.stage || 'Educação Infantil'}</span>
+            ${formatStageBadge(cls)}
           </td>
           <td data-label="Unidade Escolar" style="font-size:12px;">${cls.school}</td>
           <td data-label="Alunos (Total)" style="font-size:13px; font-weight:700; color:var(--badge-accent-ink);">${totStudents} alunos</td>
@@ -1613,6 +1613,15 @@
       });
     }
 
+    function onClassStageChange() {
+      const stageSelect = document.getElementById('classEditorStage');
+      const multiGroup = document.getElementById('groupClassMultiStageDetails');
+      if (!stageSelect || !multiGroup) return;
+
+      const isMulti = stageSelect.value === 'Turma Multietapa (Multiada)';
+      multiGroup.style.display = isMulti ? 'block' : 'none';
+    }
+
     function openAddClassModal() {
       const user = getCurrentUser();
       if (isNucleoEI(user)) {
@@ -1622,7 +1631,12 @@
       document.getElementById('modalClassEditorTitle').innerText = 'Cadastrar Nova Turma';
       document.getElementById('editClassId').value = '';
       document.getElementById('classEditorName').value = '';
-      document.getElementById('classEditorStage').value = 'Infantil I';
+      document.getElementById('classEditorStage').value = '4 anos a 4 anos e 11 meses (Pré-escola 1)';
+      
+      // Limpa checkboxes de multietapa
+      document.querySelectorAll('input[name="classMultiStage"]').forEach(cb => cb.checked = false);
+      onClassStageChange();
+
       document.getElementById('classEditorShiftType').value = 'parcial';
       document.getElementById('classEditorShiftPeriod').value = 'Tempo Parcial (Matutino)';
       const totInput = document.getElementById('classEditorTotalStudents');
@@ -1687,7 +1701,18 @@
       document.getElementById('modalClassEditorTitle').innerText = `Editar Turma: ${cls.name}`;
       document.getElementById('editClassId').value = cls.id;
       document.getElementById('classEditorName').value = cls.name;
-      document.getElementById('classEditorStage').value = cls.stage || 'Infantil I';
+      
+      // Normalização e atribuição da etapa canônica
+      const normalizedStage = normalizeStageName(cls.stage);
+      document.getElementById('classEditorStage').value = normalizedStage;
+
+      // Preenchimento de checkboxes multietapa
+      const isMulti = normalizedStage === 'Turma Multietapa (Multiada)';
+      const multiStages = Array.isArray(cls.multiStages) ? cls.multiStages : [];
+      document.querySelectorAll('input[name="classMultiStage"]').forEach(cb => {
+        cb.checked = isMulti && multiStages.includes(cb.value);
+      });
+      onClassStageChange();
       
       const isIntegral = (cls.shift || '').toLowerCase().includes('integral');
       document.getElementById('classEditorShiftType').value = isIntegral ? 'integral' : 'parcial';
@@ -1825,6 +1850,19 @@
       const school = document.getElementById('classEditorSchool').value;
       const name = document.getElementById('classEditorName').value.trim();
       const stage = document.getElementById('classEditorStage').value;
+      const isMultiStage = stage === 'Turma Multietapa (Multiada)';
+      let finalMultiStages = [];
+
+      if (isMultiStage) {
+        document.querySelectorAll('input[name="classMultiStage"]:checked').forEach(cb => {
+          finalMultiStages.push(cb.value);
+        });
+        if (finalMultiStages.length === 0) {
+          showToast('Atenção: Para turmas multietapa, selecione ao menos uma faixa etária atendida.');
+          return;
+        }
+      }
+
       const shiftType = document.getElementById('classEditorShiftType').value;
       const shiftPeriod = document.getElementById('classEditorShiftPeriod').value;
       const totalStudents = parseInt(document.getElementById('classEditorTotalStudents')?.value, 10);
@@ -1933,6 +1971,7 @@
           name,
           school,
           stage,
+          multiStages: finalMultiStages,
           shift: finalShift,
           teachers: finalTeachers,
           teachersMorning: finalMorning,
@@ -1974,7 +2013,9 @@
           id: newId,
           name,
           school,
+          academicYear: appState.selectedAcademicYear || '2026',
           stage,
+          multiStages: finalMultiStages,
           shift: finalShift,
           teachers: finalTeachers,
           teachersMorning: finalMorning,
