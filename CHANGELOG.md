@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.76** | 17/11/2026 17:40 | `intermediárias/aplicativo_v1.76_pilar_19_carga_massa_planilha_ssot.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_19_carga_massa_planilha_ssot.md` | Pilar 19 · Arquitetura de Carga em Massa via Planilha Geral SSOT & Edições Pontuais Descentralizadas: planilha modelo oficial unificada da rede de 18 colunas (Polos, UEs, Formadoras, Coordenadoras, Turmas, Faixas Etárias MEC, Jornadas, Turnos e Docentes Titulares), parser inteligente com detecção de delimitador e UTF-8 com BOM, exportação da rede completa em CSV, blindagem de importação na Coordenadora e agregação em tempo real da caracterização escolar 📊🏛️🛡️✨ |
 | **1.75** | 17/11/2026 17:15 | `intermediárias/aplicativo_v1.75_remocao_emojis_aba_inicial_rascunhos_hallmark.html` | Solicitação direta / `planos_de_implementacao/plano_remocao_emojis_aba_inicial_rascunhos_hallmark.md` | Erradicação Completa de Emojis na Aba Inicial (Home), Higienização de Rascunhos em Andamento e Harmonização Hallmark para Coordenadora e Formadora: substituição de emojis em rascunhos (Home e Histórico) e agendamentos por pictogramas vetoriais SVG monocromáticos e badges sóbrios (.badge-status-today, .badge-status-overdue, .badge-status-planned, .badge-stage-vespertino, .badge-stage-matutino), tipografia em sentence case para ações do Hero Banner ('Nova observação' / 'Avaliar coordenação'), erradicação do quadro preto residual (`#0F172A`) em favor de superfície limpa (`--bg-surface` / `#FFFFFF`), borda de acento lateral esquerda (`border-left: 4px solid var(--brand-primary)`), anel instantâneo `:focus-visible`, touch targets de 44px e conformidade WCAG AAA / Hallmark UI Standard 🎨🏛️🔘✨ |
 | **1.74** | 17/11/2026 17:05 | `intermediárias/aplicativo_v1.74_pilar_18_padronizacao_faixas_etarias_infantil.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_18_padronizacao_faixas_etarias_educacao_infantil.md` | Pilar 18 · Padronização Rigorosa das Faixas Etárias da Educação Infantil Regular e Turmas Multietapa: taxonomia oficial da rede de Patos/PB em meses (0 a 1a11m até 5a a 5a11m), seleção aberta de faixas para turmas multietapa (#modalClassEditor), helper inteligente de retrocompatibilidade e autocura (`normalizeStageName`), exibição no setup mobile (`#setupClassStageBadge`), cabeçalho da observação ativa e Quadro de Controle Bimestral 👶🗂️🏛️🛡️ |
 | **1.73** | 17/11/2026 16:15 | `intermediárias/aplicativo_v1.73_pilar_17_docentes_multiturma_dupla_matricula.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_17_docentes_multiturma_dupla_matricula.md` | Pilar 17 · Suporte a Docentes Multi-Turma (Desbloqueio de Dupla Matrícula, Regime de Dobra e Contratos Duplos): validação inteligente anti-colisão em turnos opostos (Matutino vs. Vespertino), bloqueio estrito apenas no mesmo turno, badge sóbrio 'Dobra de Turno' e listagem de turmas na tabela de equipe, agregação completa de observações multiturma no dossiê longitudinal e Semáforo de docentes regentes, e atualização do cabeçalho da ficha de impressão individual em PDF 👩‍🏫👥🏛️🛡️ |
@@ -200,6 +201,19 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.76] - Pilar 19: Arquitetura de Carga em Massa via Planilha Geral SSOT e Edições Pontuais Descentralizadas
+- **Data / Horário:** 17/11/2026 17:40
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.76_pilar_19_carga_massa_planilha_ssot.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_pilar_19_carga_massa_planilha_ssot.md`
+- **Foco Central:** Pilar 19 · Arquitetura de Carga em Massa via Planilha Geral SSOT & Edições Pontuais Descentralizadas:
+  1. **Planilha Modelo Geral da Rede SSOT (18 Colunas):** Padronização unificada da malha relacional (Polos, Unidades Escolares, Endereços, Formadoras, Coordenadoras, Turmas, Faixas Etárias MEC, Jornadas, Turnos, Alunos, AEE e Docentes Regentes Titulares) em .CSV com BOM UTF-8 e delimitador resiliente.
+  2. **Parser Inteligente com Resolução Relacional:** Carga atômica com autocura sem duplicidade de entidades, normalização de faixas (Pilar 18), sincronização de acessos em `customUsers` e suporte à dupla regência (Pilar 16) e dobras (Pilar 17).
+  3. **Exportação Geral da Rede em CSV:** Geração instantânea da planilha geral consolidada de toda a malha escolar ativa no sistema pelo Núcleo de Educação Infantil.
+  4. **Governança RBAC Estrita & Descentralização:** Botões de importação em massa restritos com exclusividade ao Núcleo de EI; Coordenadoras da UE mantêm autonomia direta e simplificada na interface visual (`+ Nova Turma`, `Editar Turma`, `+ Novo Professor`).
+  5. **Agregação em Tempo Real da Caracterização da Escola:** Total de alunos, turmas e público AEE recalculados e sincronizados dinamicamente a partir das salas ativas.
+
+---
 
 ### [Versão 1.75] - Harmonização Hallmark e Redesign Institucional do Hero Banner da Tela Inicial
 - **Data / Horário:** 17/11/2026 17:15

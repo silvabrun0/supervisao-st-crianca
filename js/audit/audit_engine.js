@@ -434,7 +434,28 @@
                 marianaMember.school = origSchool;
                 syncUserToAuthDb(marianaMember);
                 
+                // PILAR 19: Blindagem RBAC da Planilha Geral SSOT e Bloqueio de Importação Descentralizada
+                selectUserAccount('mariana');
+                applyUserRoleUI();
+                const cardSSOTCoord = document.getElementById('cardGeneralNetworkSSOT');
+                const btnImportTeamCoord = document.getElementById('btnImportTeamCsv');
+                if (cardSSOTCoord && cardSSOTCoord.style.display !== 'none') {
+                  throw new Error('Card da Planilha Geral SSOT (#cardGeneralNetworkSSOT) está visível para Coordenadora');
+                }
+                if (btnImportTeamCoord && btnImportTeamCoord.style.display !== 'none') {
+                  throw new Error('Botão de importação de servidores em CSV está visível para Coordenadora');
+                }
+
+                selectUserAccount('helena');
+                applyUserRoleUI();
+                const cardSSOTHelena = document.getElementById('cardGeneralNetworkSSOT');
+                if (!cardSSOTHelena || cardSSOTHelena.style.display === 'none') {
+                  throw new Error('Card da Planilha Geral SSOT (#cardGeneralNetworkSSOT) deve estar visível para o Núcleo de EI');
+                }
+                logger.log('Blindagem RBAC da Planilha Geral SSOT e Bloqueio de Importação Descentralizada (Pilar 19)', true);
+
                 appState.currentUserKey = origCurrentUser;
+                applyUserRoleUI();
               })();
             } catch (e) {
               logger.log('Erro de execução no módulo auth_rbac', false, e.message);
@@ -903,6 +924,55 @@
                   throw new Error('Núcleo de EI não conseguiu acessar a tela de extrações e base SSOT');
                 }
                 logger.log('Preservação integral da tela de gestão da base SSOT para o Núcleo de EI', true);
+
+                // PILAR 19: Funções Canônicas e Parse da Planilha Geral SSOT
+                if (typeof downloadGeneralNetworkTemplateCSV !== 'function' ||
+                    typeof exportGeneralNetworkCSV !== 'function' ||
+                    typeof handleGeneralNetworkCsvUpload !== 'function' ||
+                    typeof parseAndApplyGeneralNetworkCSV !== 'function') {
+                  throw new Error('Funções canônicas do Pilar 19 não estão declaradas no escopo global');
+                }
+
+                // Simulação Programática de Parse e Carga em Massa
+                const syntheticCsv = [
+                  "Polo_Regional;Unidade_Escolar;Endereco_Unidade;Formadora_Responsavel;Email_Formadora;Coordenadora_Pedagogica;Email_Coordenadora;Nome_Turma;Etapa_Faixa_Etaria;Faixas_Multietapa;Jornada_Escolar;Turno;Total_Alunos;Alunos_AEE_Inclusao;Docente_1_Nome;Docente_1_Email;Docente_2_Nome;Docente_2_Email",
+                  '"Polo Regional 3 (Oeste)";"EMEI Teste Carga SSOT";"Rua dos Testes, 100";"Clarice Barbosa";"clarice@patos.pb.gov.br";"Coordenadora Teste SSOT";"coord.teste@patos.pb.gov.br";"Infantil I - Turma Carga";"4 anos a 4 anos e 11 meses (Pré-escola 1)";"";"Tempo Parcial";"Matutino";"23";"2";"Docente Teste SSOT";"docente.teste@patos.pb.gov.br";"";""'
+                ].join('\r\n');
+
+                const parseResult = parseAndApplyGeneralNetworkCSV(syntheticCsv);
+                if (!parseResult || parseResult.unitsCount < 1) {
+                  throw new Error('parseAndApplyGeneralNetworkCSV não retornou resultado válido');
+                }
+
+                const createdUe = (appState.units || []).find(u => u.name === 'EMEI Teste Carga SSOT');
+                if (!createdUe || createdUe.polo !== 'Polo Regional 3 (Oeste)') {
+                  throw new Error('Unidade escolar criada via carga da planilha geral não encontrada ou com polo incorreto');
+                }
+
+                const createdCls = (appState.classes || []).find(c => c.school === 'EMEI Teste Carga SSOT' && c.name === 'Infantil I - Turma Carga');
+                if (!createdCls || createdCls.totalStudents !== 23 || createdCls.inclusiveStudents !== 2) {
+                  throw new Error('Turma criada via carga da planilha geral não possui atributos corretos');
+                }
+
+                const createdDoc = (appState.teamMembers || []).find(m => m.name === 'Docente Teste SSOT' && m.school === 'EMEI Teste Carga SSOT');
+                if (!createdDoc) {
+                  throw new Error('Docente titular criado via carga da planilha geral não encontrado');
+                }
+
+                if (typeof syncUnitCharacterizationFromClasses === 'function') {
+                  syncUnitCharacterizationFromClasses();
+                }
+                const agg = typeof getSchoolClassesAggregates === 'function' ? getSchoolClassesAggregates('EMEI Teste Carga SSOT') : null;
+                if (!agg || agg.totalStudents !== 23 || agg.inclusiveStudents !== 2 || agg.totalClasses !== 1) {
+                  throw new Error('Agregação em tempo real da caracterização da escola diverge dos totais da turma');
+                }
+                logger.log('Validação das Funções e Carga Programática da Planilha Geral SSOT (Pilar 19)', true, `${parseResult.unitsCount} UE, ${parseResult.classesCount} turma`);
+
+                // Higienização dos registros sintéticos de teste
+                appState.units = (appState.units || []).filter(u => u.name !== 'EMEI Teste Carga SSOT');
+                appState.classes = (appState.classes || []).filter(c => c.school !== 'EMEI Teste Carga SSOT');
+                appState.teamMembers = (appState.teamMembers || []).filter(m => m.school !== 'EMEI Teste Carga SSOT');
+                appState.polos = (appState.polos || []).filter(p => p.name !== 'Polo Regional 3 (Oeste)');
               } finally {
                 if (previousUserKey) selectUserAccount(previousUserKey);
               }
@@ -3390,6 +3460,15 @@
                 }
               });
               logger.log('Pictogramas vetoriais de Exportação (seta para cima) e Importação da Base Completa JSON (seta para baixo)', true, `${exportFullBtns.length} de exportação e ${importFullBtns.length} de importação validados`);
+
+              // PILAR 19: Validação do DOM do Card Nobre da Planilha Geral SSOT
+              const cardSSOTDom = document.getElementById('cardGeneralNetworkSSOT');
+              if (!cardSSOTDom) throw new Error('#cardGeneralNetworkSSOT não encontrado no DOM');
+              const inpCsvSSOT = document.getElementById('generalNetworkCsvFileInput');
+              if (!inpCsvSSOT) throw new Error('#generalNetworkCsvFileInput não encontrado no DOM');
+              const btnsSSOT = cardSSOTDom.querySelectorAll('.export-backup-btn');
+              if (btnsSSOT.length < 3) throw new Error('Card da Planilha Geral SSOT deve conter 3 botões operacionais');
+              logger.log('Estrutura e botões operacionais do Card Nobre da Planilha Geral SSOT (Pilar 19)', true, `${btnsSSOT.length} botões validados`);
             } catch (e) {
               logger.log('Erro de execução no módulo backup_exportacao', false, e.message);
             }

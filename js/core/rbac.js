@@ -783,16 +783,46 @@
       const btnNewTeacher = document.getElementById('btnNewTeacher');
       const btnNewUser = document.getElementById('btnNewUser');
 
+      // Governança RBAC da Planilha Geral SSOT e Bloqueio de Importação Descentralizada
+      const cardSSOT = document.getElementById('cardGeneralNetworkSSOT');
+      const btnDownloadTeamCsv = document.getElementById('btnDownloadTeamCsv');
+      const btnImportTeamCsv = document.getElementById('btnImportTeamCsv');
+      const btnDownloadUnitsCsv = document.getElementById('btnDownloadUnitsCsv');
+      const btnImportUnitsCsv = document.getElementById('btnImportUnitsCsv');
+
       if (user.roleKey === 'coordenador') {
         if (btnNewTeacher) btnNewTeacher.style.display = 'inline-flex';
         if (btnNewUser) btnNewUser.style.display = 'none'; // Coordenadora gerencia unicamente o corpo docente da escola
+        if (cardSSOT) cardSSOT.style.display = 'none';
+        if (btnDownloadTeamCsv) btnDownloadTeamCsv.style.display = 'none';
+        if (btnImportTeamCsv) btnImportTeamCsv.style.display = 'none';
+        if (btnDownloadUnitsCsv) btnDownloadUnitsCsv.style.display = 'none';
+        if (btnImportUnitsCsv) btnImportUnitsCsv.style.display = 'none';
       } else if (user.roleKey === 'formador') {
         if (btnNewTeacher) btnNewTeacher.style.display = 'inline-flex';
         if (btnNewUser) btnNewUser.style.display = 'inline-flex';
-      } else {
+        if (cardSSOT) cardSSOT.style.display = 'none';
+        if (btnDownloadTeamCsv) btnDownloadTeamCsv.style.display = 'none';
+        if (btnImportTeamCsv) btnImportTeamCsv.style.display = 'none';
+        if (btnDownloadUnitsCsv) btnDownloadUnitsCsv.style.display = 'none';
+        if (btnImportUnitsCsv) btnImportUnitsCsv.style.display = 'none';
+      } else if (isNucleoEI(user)) {
         // Helena / Núcleo de EI / Administrador
         if (btnNewTeacher) btnNewTeacher.style.display = 'inline-flex';
         if (btnNewUser) btnNewUser.style.display = 'inline-flex';
+        if (cardSSOT) cardSSOT.style.display = 'block';
+        if (btnDownloadTeamCsv) btnDownloadTeamCsv.style.display = 'inline-flex';
+        if (btnImportTeamCsv) btnImportTeamCsv.style.display = 'inline-flex';
+        if (btnDownloadUnitsCsv) btnDownloadUnitsCsv.style.display = 'inline-flex';
+        if (btnImportUnitsCsv) btnImportUnitsCsv.style.display = 'inline-flex';
+      } else {
+        if (btnNewTeacher) btnNewTeacher.style.display = 'none';
+        if (btnNewUser) btnNewUser.style.display = 'none';
+        if (cardSSOT) cardSSOT.style.display = 'none';
+        if (btnDownloadTeamCsv) btnDownloadTeamCsv.style.display = 'none';
+        if (btnImportTeamCsv) btnImportTeamCsv.style.display = 'none';
+        if (btnDownloadUnitsCsv) btnDownloadUnitsCsv.style.display = 'none';
+        if (btnImportUnitsCsv) btnImportUnitsCsv.style.display = 'none';
       }
 
       // Renderiza Seletor Global de Ano Letivo com proteção defensiva

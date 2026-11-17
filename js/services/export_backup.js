@@ -837,3 +837,559 @@
     }
 
     // =========================================================================
+    // PILAR 19: ARQUITETURA DE CARGA EM MASSA VIA PLANILHA GERAL SSOT
+    // =========================================================================
+
+    // Cabeçalho Oficial Canônico da Planilha Geral Unificada (18 Colunas)
+    const GENERAL_NETWORK_CSV_HEADERS = [
+      "Polo_Regional",
+      "Unidade_Escolar",
+      "Endereco_Unidade",
+      "Formadora_Responsavel",
+      "Email_Formadora",
+      "Coordenadora_Pedagogica",
+      "Email_Coordenadora",
+      "Nome_Turma",
+      "Etapa_Faixa_Etaria",
+      "Faixas_Multietapa",
+      "Jornada_Escolar",
+      "Turno",
+      "Total_Alunos",
+      "Alunos_AEE_Inclusao",
+      "Docente_1_Nome",
+      "Docente_1_Email",
+      "Docente_2_Nome",
+      "Docente_2_Email"
+    ];
+
+    // Download do Modelo Padronizado da Rede (.CSV compatível com Excel e UTF-8 com BOM)
+    function downloadGeneralNetworkTemplateCSV() {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Acesso restrito ao Núcleo de Educação Infantil.');
+        return;
+      }
+
+      const sampleRows = [
+        [
+          "Polo Regional 1 (Norte)",
+          "CEI Professora Maria de Lourdes",
+          "Bairro Alto das Flores, Rua das Acácias, 120",
+          "Clarice Barbosa",
+          "clarice.barbosa@patos.pb.gov.br",
+          "Mariana Ferreira",
+          "mariana.ferreira@patos.pb.gov.br",
+          "Infantil I - Turma A",
+          "4 anos a 4 anos e 11 meses (Pré-escola 1)",
+          "",
+          "Tempo Parcial",
+          "Matutino",
+          "22",
+          "1",
+          "Ana Carolina Silva",
+          "ana.silva@patos.pb.gov.br",
+          "",
+          ""
+        ],
+        [
+          "Polo Regional 1 (Norte)",
+          "CEI Professora Maria de Lourdes",
+          "Bairro Alto das Flores, Rua das Acácias, 120",
+          "Clarice Barbosa",
+          "clarice.barbosa@patos.pb.gov.br",
+          "Mariana Ferreira",
+          "mariana.ferreira@patos.pb.gov.br",
+          "Berçário II - Turma Única",
+          "1 ano a 1 ano e 11 meses (Creche II)",
+          "",
+          "Tempo Parcial",
+          "Matutino",
+          "18",
+          "0",
+          "Carla Beatriz Mendes",
+          "carla.mendes@patos.pb.gov.br",
+          "",
+          ""
+        ],
+        [
+          "Polo Regional 1 (Norte)",
+          "CEI Professora Maria de Lourdes",
+          "Bairro Alto das Flores, Rua das Acácias, 120",
+          "Clarice Barbosa",
+          "clarice.barbosa@patos.pb.gov.br",
+          "Mariana Ferreira",
+          "mariana.ferreira@patos.pb.gov.br",
+          "Maternal II - Turma Integral",
+          "3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)",
+          "",
+          "Tempo Integral",
+          "Manhã + Tarde",
+          "25",
+          "2",
+          "Mariana Santos",
+          "mariana.santos@patos.pb.gov.br",
+          "Roberta Dias",
+          "roberta.dias@patos.pb.gov.br"
+        ],
+        [
+          "Polo Regional 1 (Norte)",
+          "EMEI Pequeno Príncipe",
+          "Vila Esperança, Rua Projetada B",
+          "Clarice Barbosa",
+          "clarice.barbosa@patos.pb.gov.br",
+          "Sônia Regina Alcantara",
+          "sonia.alcantara@patos.pb.gov.br",
+          "Maternal I - Turma A",
+          "2 anos a 2 anos e 11 meses (Creche III)",
+          "",
+          "Tempo Parcial",
+          "Matutino",
+          "20",
+          "1",
+          "Fernanda Lima",
+          "fernanda.lima@patos.pb.gov.br",
+          "",
+          ""
+        ],
+        [
+          "Polo Regional 2 (Sul)",
+          "CEI Vovó Zezé",
+          "Jardim do Sertão, Travessa das Flores, 45",
+          "Clarice Barbosa",
+          "clarice.barbosa@patos.pb.gov.br",
+          "Helena Martins",
+          "helena.martins@patos.pb.gov.br",
+          "Turma Multietapa - Campo",
+          "Turma Multietapa (Multiada)",
+          "3 anos a 3 anos e 11 meses | 4 anos a 4 anos e 11 meses",
+          "Tempo Parcial",
+          "Matutino",
+          "16",
+          "2",
+          "Luciana Ramos",
+          "luciana.ramos@patos.pb.gov.br",
+          "",
+          ""
+        ]
+      ];
+
+      // Geração de CSV com delimitação por ponto e vírgula e aspas seguras para Excel brasileiro
+      const csvLines = [
+        GENERAL_NETWORK_CSV_HEADERS.join(';'),
+        ...sampleRows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(';'))
+      ];
+
+      const csvContent = "\uFEFF" + csvLines.join('\r\n');
+      downloadFile(csvContent, 'modelo_geral_rede_sertao_crianca.csv', 'text/csv;charset=utf-8;');
+      showToast('Planilha modelo geral da rede (SSOT) baixada com sucesso!');
+    }
+
+    // Exportação da Malha Atual Completa em Planilha Geral Tabular (.CSV)
+    function exportGeneralNetworkCSV() {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Acesso restrito ao Núcleo de Educação Infantil.');
+        return;
+      }
+
+      const rows = [];
+      const units = appState.units || [];
+      const allClasses = appState.classes || [];
+      const members = appState.teamMembers || [];
+
+      // Itera por todas as unidades para garantir cobertura completa mesmo se houver UE sem turmas cadastradas
+      units.forEach(u => {
+        const uClasses = allClasses.filter(c => c.school === u.name && !((appState.deletedClassIds || []).includes(c.id)));
+        const poloName = u.polo || 'Polo Regional 1 (Norte)';
+        
+        // Formadora do Polo
+        const formadora = members.find(m => m.roleKey === 'formador' && (m.school === poloName || m.school === u.name));
+        const formadoraName = formadora ? formadora.name : '';
+        const formadoraEmail = formadora ? (formadora.email || '') : '';
+
+        // Coordenadora da UE
+        const coord = members.find(m => m.roleKey === 'coordenador' && m.school === u.name);
+        const coordName = coord ? coord.name : '';
+        const coordEmail = coord ? (coord.email || '') : '';
+
+        if (uClasses.length === 0) {
+          // Linha sentinela da UE sem turma ainda
+          rows.push([
+            poloName,
+            u.name,
+            u.address || '',
+            formadoraName,
+            formadoraEmail,
+            coordName,
+            coordEmail,
+            "", "", "", "Tempo Parcial", "Matutino", "0", "0", "", "", "", ""
+          ]);
+        } else {
+          uClasses.forEach(c => {
+            const isIntegral = (c.shift || '').toLowerCase().includes('integral');
+            const jornada = isIntegral ? 'Tempo Integral' : 'Tempo Parcial';
+            const turno = c.shift || (isIntegral ? 'Manhã + Tarde' : 'Matutino');
+            const totAlunos = typeof c.totalStudents === 'number' ? c.totalStudents : 20;
+            const aeeAlunos = typeof c.inclusiveStudents === 'number' ? c.inclusiveStudents : 0;
+            
+            // Docentes
+            const teachers = Array.isArray(c.teachers) ? c.teachers : [];
+            const doc1Name = teachers[0] || '';
+            const doc2Name = teachers[1] || '';
+            const doc1 = members.find(m => m.name === doc1Name && m.school === u.name);
+            const doc2 = members.find(m => m.name === doc2Name && m.school === u.name);
+            const doc1Email = doc1 ? (doc1.email || '') : '';
+            const doc2Email = doc2 ? (doc2.email || '') : '';
+
+            const multiStagesStr = Array.isArray(c.multiStages) ? c.multiStages.join(' | ') : '';
+
+            rows.push([
+              poloName,
+              u.name,
+              u.address || '',
+              formadoraName,
+              formadoraEmail,
+              coordName,
+              coordEmail,
+              c.name,
+              c.stage || 'Infantil I',
+              multiStagesStr,
+              jornada,
+              turno,
+              String(totAlunos),
+              String(aeeAlunos),
+              doc1Name,
+              doc1Email,
+              doc2Name,
+              doc2Email
+            ]);
+          });
+        }
+      });
+
+      const csvLines = [
+        GENERAL_NETWORK_CSV_HEADERS.join(';'),
+        ...rows.map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(';'))
+      ];
+
+      const csvContent = "\uFEFF" + csvLines.join('\r\n');
+      downloadFile(csvContent, 'sertao_crianca_rede_unificada_completa.csv', 'text/csv;charset=utf-8;');
+      showToast('Rede municipal completa exportada com sucesso (CSV)!');
+    }
+
+    // Disparador de Seleção do Arquivo de Carga Geral
+    function triggerGeneralNetworkImport() {
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Acesso restrito ao Núcleo de Educação Infantil.');
+        return;
+      }
+      const inp = document.getElementById('generalNetworkCsvFileInput');
+      if (inp) inp.click();
+    }
+
+    // Processamento e Parser da Planilha Geral Unificada (Carga SSOT)
+    function handleGeneralNetworkCsvUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const user = getCurrentUser();
+      if (!isNucleoEI(user)) {
+        showToast('Apenas a Coordenação do Núcleo de EI pode efetuar carga da planilha geral.');
+        e.target.value = '';
+        return;
+      }
+
+      if (!confirm(`ATENÇÃO - CARGA EM MASSA DA REDE (SSOT):\n\nA importação do arquivo "${file.name}" consolidará Polos, Unidades Escolares, Coordenadoras, Formadoras, Turmas e Docentes da rede.\n\nRegistros existentes serão enriquecidos e novas entidades serão cadastradas atomicamente. Deseja prosseguir com a carga?`)) {
+        e.target.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const text = evt.target.result;
+          const stats = parseAndApplyGeneralNetworkCSV(text);
+          saveState();
+
+          // Sincroniza e re-renderiza todas as telas afetadas
+          if (typeof syncUnitCharacterizationFromClasses === 'function') {
+            syncUnitCharacterizationFromClasses();
+          }
+          if (typeof renderUnitsScreen === 'function') renderUnitsScreen();
+          if (typeof renderClassesScreen === 'function') renderClassesScreen();
+          if (typeof renderTeamScreen === 'function') renderTeamScreen();
+          if (typeof renderIndicatorsScreen === 'function') renderIndicatorsScreen();
+          if (typeof renderHomeScreen === 'function') renderHomeScreen();
+
+          showToast(`Carga concluída com sucesso! ${stats.unitsCount} UEs, ${stats.classesCount} turmas e ${stats.teachersCount} docentes processados.`);
+        } catch (err) {
+          console.error('Falha na importação da Planilha Geral SSOT:', err);
+          alert('Erro ao processar a planilha geral: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    // Motor de Parser e Resolução Relacional da Planilha Geral
+    function parseAndApplyGeneralNetworkCSV(csvText) {
+      if (!csvText || !csvText.trim()) {
+        throw new Error('O arquivo CSV selecionado está vazio.');
+      }
+
+      const rawLines = csvText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      if (rawLines.length < 2) {
+        throw new Error('A planilha deve conter o cabeçalho e pelo menos uma linha de dados.');
+      }
+
+      const firstLine = rawLines[0];
+      const delimiter = (firstLine.indexOf(';') !== -1 && firstLine.split(';').length >= firstLine.split(',').length) ? ';' : ',';
+      
+      const headerCols = (typeof parseCsvLineCustom === 'function' ? parseCsvLineCustom(firstLine, delimiter) : firstLine.split(delimiter)).map(h => 
+        h.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '')
+      );
+
+      // Índices dinâmicos por similaridade léxica
+      const findIdx = (candidates) => headerCols.findIndex(h => candidates.some(c => h.includes(c)));
+      
+      const idxPolo = findIdx(['poloregional', 'polo', 'regiao']);
+      const idxUE = findIdx(['unidadeescolar', 'unidade', 'escola', 'ue']);
+      const idxEnd = findIdx(['enderecounidade', 'endereco', 'bairro']);
+      const idxForm = findIdx(['formadoraresponsavel', 'formadora', 'supervisora']);
+      const idxFormEmail = findIdx(['emailformadora']);
+      const idxCoord = findIdx(['coordenadorapedagogica', 'coordenadora', 'coordenador', 'cp']);
+      const idxCoordEmail = findIdx(['emailcoordenadora']);
+      const idxTurma = findIdx(['nometurma', 'turma', 'sala']);
+      const idxEtapa = findIdx(['etapafaixaetaria', 'etapa', 'faixaetaria', 'faixa']);
+      const idxMulti = findIdx(['faixasmultietapa', 'multietapa']);
+      const idxJornada = findIdx(['jornadaescolar', 'jornada']);
+      const idxTurno = findIdx(['turno']);
+      const idxTotAlunos = findIdx(['totalalunos', 'totalmatriculados', 'alunos']);
+      const idxAeeAlunos = findIdx(['alunosaeeinclusao', 'alunosaee', 'aee', 'inclusao', 'necessidadesespeciais']);
+      const idxDoc1Nome = findIdx(['docente1nome', 'docente1', 'professora1', 'professor1', 'docente']);
+      const idxDoc1Email = findIdx(['docente1email']);
+      const idxDoc2Nome = findIdx(['docente2nome', 'docente2', 'professora2', 'professor2']);
+      const idxDoc2Email = findIdx(['docente2email']);
+
+      if (idxUE === -1) {
+        throw new Error('Coluna de Unidade Escolar obrigatória não identificada no cabeçalho.');
+      }
+
+      // Inicialização defensiva das coleções de estado
+      if (!Array.isArray(appState.units)) appState.units = [];
+      if (!Array.isArray(appState.classes)) appState.classes = [];
+      if (!Array.isArray(appState.teamMembers)) appState.teamMembers = [];
+      if (!Array.isArray(appState.polos)) appState.polos = [];
+      if (!appState.customUsers) appState.customUsers = {};
+
+      let unitsCount = 0;
+      let classesCount = 0;
+      let teachersCount = 0;
+      const seenUnits = new Set();
+      const seenClasses = new Set();
+
+      for (let i = 1; i < rawLines.length; i++) {
+        const parts = typeof parseCsvLineCustom === 'function' ? parseCsvLineCustom(rawLines[i], delimiter) : rawLines[i].split(delimiter);
+        if (parts.length === 0 || !parts[idxUE]) continue;
+
+        const ueName = (parts[idxUE] || '').trim();
+        if (!ueName) continue;
+
+        const poloName = (idxPolo !== -1 && parts[idxPolo]) ? parts[idxPolo].trim() : 'Polo Regional 1 (Norte)';
+        const address = (idxEnd !== -1 && parts[idxEnd]) ? parts[idxEnd].trim() : '';
+        const formadoraName = (idxForm !== -1 && parts[idxForm]) ? parts[idxForm].trim() : '';
+        const formadoraEmail = (idxFormEmail !== -1 && parts[idxFormEmail]) ? parts[idxFormEmail].trim() : '';
+        const coordName = (idxCoord !== -1 && parts[idxCoord]) ? parts[idxCoord].trim() : '';
+        const coordEmail = (idxCoordEmail !== -1 && parts[idxCoordEmail]) ? parts[idxCoordEmail].trim() : '';
+
+        // 1. Polo Regional
+        let poloObj = appState.polos.find(p => p.name.toLowerCase() === poloName.toLowerCase());
+        if (!poloObj && poloName) {
+          poloObj = {
+            id: 'polo-auto-' + Date.now() + '-' + i,
+            name: poloName,
+            region: poloName
+          };
+          appState.polos.push(poloObj);
+        }
+
+        // 2. Unidade Escolar (UE)
+        let ueObj = appState.units.find(u => u.name.toLowerCase() === ueName.toLowerCase());
+        if (!ueObj) {
+          ueObj = {
+            id: 'ue-auto-' + Date.now() + '-' + i,
+            name: ueName,
+            polo: poloName,
+            address: address || 'Endereço não informado',
+            totalStudents: 0,
+            inclusiveStudents: 0,
+            totalClasses: 0
+          };
+          appState.units.push(ueObj);
+          unitsCount++;
+        } else {
+          if (poloName) ueObj.polo = poloName;
+          if (address) ueObj.address = address;
+        }
+        seenUnits.add(ueName);
+
+        // 3. Formadora Pedagógica
+        if (formadoraName) {
+          let formMember = appState.teamMembers.find(m => m.name.toLowerCase() === formadoraName.toLowerCase() && m.roleKey === 'formador');
+          if (!formMember) {
+            formMember = {
+              id: 'usr-form-' + Date.now() + '-' + i,
+              name: formadoraName,
+              roleKey: 'formador',
+              roleTitle: 'Formadora Pedagógica',
+              school: poloName,
+              supervisor: 'Helena Martins',
+              email: formadoraEmail || `${formadoraName.toLowerCase().replace(/\s+/g, '.')}@patos.pb.gov.br`
+            };
+            appState.teamMembers.push(formMember);
+          } else {
+            if (formadoraEmail) formMember.email = formadoraEmail;
+            formMember.school = poloName;
+          }
+          if (typeof syncUserToAuthDb === 'function') syncUserToAuthDb(formMember);
+        }
+
+        // 4. Coordenadora Pedagógica
+        if (coordName) {
+          let coordMember = appState.teamMembers.find(m => m.name.toLowerCase() === coordName.toLowerCase() && m.roleKey === 'coordenador');
+          if (!coordMember) {
+            coordMember = {
+              id: 'usr-coord-' + Date.now() + '-' + i,
+              name: coordName,
+              roleKey: 'coordenador',
+              roleTitle: 'Coordenadora Pedagógica',
+              school: ueName,
+              supervisor: formadoraName || 'Clarice Barbosa',
+              email: coordEmail || `${coordName.toLowerCase().replace(/\s+/g, '.')}@patos.pb.gov.br`
+            };
+            appState.teamMembers.push(coordMember);
+          } else {
+            coordMember.school = ueName;
+            if (formadoraName) coordMember.supervisor = formadoraName;
+            if (coordEmail) coordMember.email = coordEmail;
+          }
+          if (typeof syncUserToAuthDb === 'function') syncUserToAuthDb(coordMember);
+        }
+
+        // 5. Turma e Docentes Regentes
+        const className = (idxTurma !== -1 && parts[idxTurma]) ? parts[idxTurma].trim() : '';
+        if (className) {
+          const rawStage = (idxEtapa !== -1 && parts[idxEtapa]) ? parts[idxEtapa].trim() : 'Infantil I';
+          const normalizedStage = typeof normalizeStageName === 'function' ? normalizeStageName(rawStage) : rawStage;
+          
+          const rawMulti = (idxMulti !== -1 && parts[idxMulti]) ? parts[idxMulti].trim() : '';
+          const multiStages = rawMulti ? rawMulti.split(/[|,;]/).map(s => s.trim()).filter(Boolean) : [];
+
+          const rawJornada = (idxJornada !== -1 && parts[idxJornada]) ? parts[idxJornada].trim() : '';
+          const rawTurno = (idxTurno !== -1 && parts[idxTurno]) ? parts[idxTurno].trim() : '';
+          const isIntegral = rawJornada.toLowerCase().includes('integral') || rawTurno.toLowerCase().includes('integral') || rawTurno.toLowerCase().includes('manh');
+          
+          let shift = 'Tempo Parcial (Matutino)';
+          if (isIntegral) {
+            shift = 'Tempo Integral (Manhã + Tarde)';
+          } else if (rawTurno.toLowerCase().includes('vesp')) {
+            shift = 'Tempo Parcial (Vespertino)';
+          }
+
+          const totAlunos = parseInt(idxTotAlunos !== -1 ? parts[idxTotAlunos] : '20', 10) || 20;
+          const aeeAlunos = parseInt(idxAeeAlunos !== -1 ? parts[idxAeeAlunos] : '0', 10) || 0;
+
+          const doc1Name = (idxDoc1Nome !== -1 && parts[idxDoc1Nome]) ? parts[idxDoc1Nome].trim() : '';
+          const doc1Email = (idxDoc1Email !== -1 && parts[idxDoc1Email]) ? parts[idxDoc1Email].trim() : '';
+          const doc2Name = (idxDoc2Nome !== -1 && parts[idxDoc2Nome]) ? parts[idxDoc2Nome].trim() : '';
+          const doc2Email = (idxDoc2Email !== -1 && parts[idxDoc2Email]) ? parts[idxDoc2Email].trim() : '';
+
+          const teachers = [doc1Name, doc2Name].filter(Boolean);
+
+          // Cadastro / Atualização de Docente 1
+          if (doc1Name) {
+            let t1 = appState.teamMembers.find(m => m.name.toLowerCase() === doc1Name.toLowerCase() && m.roleKey === 'professora' && m.school === ueName);
+            if (!t1) {
+              t1 = {
+                id: 'usr-prof-' + Date.now() + '-' + i + '-1',
+                name: doc1Name,
+                roleKey: 'professora',
+                roleTitle: 'Professora',
+                school: ueName,
+                supervisor: coordName || 'Mariana Ferreira',
+                classAssigned: className,
+                email: doc1Email || `${doc1Name.toLowerCase().replace(/\s+/g, '.')}@patos.pb.gov.br`
+              };
+              appState.teamMembers.push(t1);
+              teachersCount++;
+            } else {
+              t1.classAssigned = className;
+              if (doc1Email) t1.email = doc1Email;
+            }
+          }
+
+          // Cadastro / Atualização de Docente 2
+          if (doc2Name) {
+            let t2 = appState.teamMembers.find(m => m.name.toLowerCase() === doc2Name.toLowerCase() && m.roleKey === 'professora' && m.school === ueName);
+            if (!t2) {
+              t2 = {
+                id: 'usr-prof-' + Date.now() + '-' + i + '-2',
+                name: doc2Name,
+                roleKey: 'professora',
+                roleTitle: 'Professora',
+                school: ueName,
+                supervisor: coordName || 'Mariana Ferreira',
+                classAssigned: className,
+                email: doc2Email || `${doc2Name.toLowerCase().replace(/\s+/g, '.')}@patos.pb.gov.br`
+              };
+              appState.teamMembers.push(t2);
+              teachersCount++;
+            } else {
+              t2.classAssigned = className;
+              if (doc2Email) t2.email = doc2Email;
+            }
+          }
+
+          // Localiza ou Cria a Turma
+          let clsObj = appState.classes.find(c => c.school.toLowerCase() === ueName.toLowerCase() && c.name.toLowerCase() === className.toLowerCase());
+          if (!clsObj) {
+            clsObj = {
+              id: 'cls-auto-' + Date.now() + '-' + i,
+              name: className,
+              school: ueName,
+              stage: normalizedStage,
+              multiStages: multiStages,
+              shift: shift,
+              totalStudents: totAlunos,
+              inclusiveStudents: aeeAlunos,
+              teachers: teachers,
+              teachersMorning: isIntegral ? (doc1Name ? [doc1Name] : []) : teachers,
+              teachersAfternoon: isIntegral ? (doc2Name ? [doc2Name] : [doc1Name]) : []
+            };
+            appState.classes.push(clsObj);
+            classesCount++;
+          } else {
+            clsObj.stage = normalizedStage;
+            if (multiStages.length > 0) clsObj.multiStages = multiStages;
+            clsObj.shift = shift;
+            clsObj.totalStudents = totAlunos;
+            clsObj.inclusiveStudents = aeeAlunos;
+            clsObj.teachers = teachers;
+            if (isIntegral) {
+              clsObj.teachersMorning = doc1Name ? [doc1Name] : [];
+              clsObj.teachersAfternoon = doc2Name ? [doc2Name] : [doc1Name];
+            }
+          }
+          seenClasses.add(`${ueName}|${className}`);
+        }
+      }
+
+      return {
+        unitsCount: seenUnits.size,
+        classesCount: seenClasses.size,
+        teachersCount
+      };
+    }
+
+    // =========================================================================

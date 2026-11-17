@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.75 (v8.2.41)</span>
+          <span>Versão 1.76 (v8.2.42)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -262,11 +262,11 @@
                 <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 Exportar UEs (JSON)
               </button>
-              <button class="btn btn-secondary" onclick="downloadUnitsCsvTemplate()">
+              <button class="btn btn-secondary" id="btnDownloadUnitsCsv" onclick="downloadUnitsCsvTemplate()">
                 <svg class="btn-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg>
                 Baixar Modelo (CSV)
               </button>
-              <button class="btn btn-secondary" onclick="triggerUnitsCsvImport()">
+              <button class="btn btn-secondary" id="btnImportUnitsCsv" onclick="triggerUnitsCsvImport()">
                 <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Importar CSV
               </button>
@@ -413,11 +413,11 @@
               <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               Exportar Servidores (JSON)
             </button>
-            <button class="btn btn-secondary" onclick="downloadTeamCsvTemplate()">
+            <button class="btn btn-secondary" id="btnDownloadTeamCsv" onclick="downloadTeamCsvTemplate()">
               <svg class="btn-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg>
               Baixar Modelo (CSV)
             </button>
-            <button class="btn btn-secondary" onclick="triggerTeamCsvImport()">
+            <button class="btn btn-secondary" id="btnImportTeamCsv" onclick="triggerTeamCsvImport()">
               <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Importar CSV
             </button>
@@ -484,6 +484,38 @@
           <p class="platform-info-text export-view-subtitle">
             Acesso gerencial exclusivo para exportação de dados brutos consolidados da rede e backup da base.
           </p>
+        </div>
+
+        <!-- CARD NOBRE PILAR 19: CARGA GERAL DA REDE & PLANILHA UNIFICADA SSOT -->
+        <div class="card export-backup-card" id="cardGeneralNetworkSSOT" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
+          <div class="export-backup-container">
+            <div class="export-backup-info">
+              <div class="export-backup-title">
+                <span>Planilha Geral Unificada da Rede Municipal (SSOT)</span>
+                <button type="button" class="btn-platform-info" onclick="openPlatformInfoModal('Planilha Geral SSOT', 'Carga inicial centralizada de toda a malha escolar pelo Núcleo de Educação Infantil: Polos, Unidades Escolares, Coordenadoras, Formadoras, Turmas e Docentes Titulares.')" aria-label="Informações sobre Planilha Geral SSOT">
+                  <svg class="info-pictogram" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
+              </div>
+              <div class="platform-info-text export-backup-desc">
+                Carga em massa centralizada para abertura do ano letivo. Consolida a malha relacional completa em planilha única (.CSV / Excel), eliminando inconsistências e duplicações.
+              </div>
+            </div>
+            <div class="export-backup-actions">
+              <button class="btn btn-secondary export-backup-btn" onclick="downloadGeneralNetworkTemplateCSV()" title="Baixar modelo padronizado com cabeçalho oficial e exemplos da rede">
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg>
+                <span>Baixar Modelo Geral (.CSV)</span>
+              </button>
+              <button class="btn btn-secondary export-backup-btn" onclick="exportGeneralNetworkCSV()" title="Exportar a malha escolar completa atualmente cadastrada no sistema">
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="12" x2="12" y2="15"/></svg>
+                <span>Exportar Rede Atual (.CSV)</span>
+              </button>
+              <button class="btn btn-primary export-backup-btn" onclick="triggerGeneralNetworkImport()" title="Importar e consolidar a planilha geral unificada no sistema">
+                <svg class="btn-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Importar Planilha Geral</span>
+              </button>
+              <input type="file" id="generalNetworkCsvFileInput" accept=".csv,text/csv" style="display:none;" onchange="handleGeneralNetworkCsvUpload(event)" />
+            </div>
+          </div>
         </div>
 
         <div class="card export-backup-card">
@@ -1827,6 +1859,24 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.76 - PILAR 19: ARQUITETURA DE CARGA EM MASSA VIA PLANILHA GERAL SSOT E EDIÇÕES PONTUAIS DESCENTRALIZADAS -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.76 · v8.2.42</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">17/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Pilar 19 · Arquitetura de Carga em Massa via Planilha Geral SSOT e Edições Pontuais Descentralizadas:
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>📊 <strong>Planilha Modelo Geral da Rede SSOT (18 Colunas):</strong> Padronização unificada da malha relacional (Polos, Unidades Escolares, Endereços, Formadoras, Coordenadoras, Turmas, Faixas Etárias MEC, Jornadas, Turnos, Alunos, AEE e Docentes Regentes Titulares) em .CSV com BOM UTF-8 e delimitador resiliente.</li>
+          <li>🏛️ <strong>Parser Inteligente com Resolução Relacional:</strong> Carga atômica com autocura sem duplicidade de entidades, normalização de faixas (Pilar 18), sincronização de acessos em <code>customUsers</code> e suporte à dupla regência (Pilar 16) e dobras (Pilar 17).</li>
+          <li>📤 <strong>Exportação Geral da Rede em CSV:</strong> Geração instantânea da planilha geral consolidada de toda a malha escolar ativa no sistema pelo Núcleo de Educação Infantil.</li>
+          <li>🛡️ <strong>Governança RBAC Estrita & Descentralização:</strong> Botões de importação em massa restritos com exclusividade ao Núcleo de EI; Coordenadoras da UE mantêm autonomia direta e simplificada na interface visual (<code>+ Nova Turma</code>, <code>Editar Turma</code>, <code>+ Novo Professor</code>).</li>
+          <li>⚡ <strong>Agregação em Tempo Real da Caracterização da Escola:</strong> Total de alunos, turmas e público AEE recalculados e sincronizados dinamicamente a partir das salas ativas.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.75 - HARMONIZAÇÃO HALLMARK DO HERO BANNER, TELA INICIAL E RASCUNHOS -->
