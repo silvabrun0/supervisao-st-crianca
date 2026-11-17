@@ -622,12 +622,23 @@
       const targetClass = schoolClasses.find(c => c.name === className);
 
       const shiftBadge = document.getElementById('setupClassShiftBadge');
+      const stageBadge = document.getElementById('setupClassStageBadge');
       const teachersListEl = document.getElementById('setupClassTeachersList');
       const isIntegral = isClassIntegral(targetClass?.shift || targetClass?.name || '');
       const integralNotice = document.getElementById('setupIntegralNotice');
       const startBtn = document.getElementById('btnStartObservation');
 
       if (targetClass) {
+        if (stageBadge) {
+          const normStage = normalizeStageName(targetClass.stage);
+          if (normStage === 'Turma Multietapa (Multiada)') {
+            const mCount = Array.isArray(targetClass.multiStages) && targetClass.multiStages.length > 0 ? ` (${targetClass.multiStages.length} faixas)` : '';
+            stageBadge.innerText = `Multietapa${mCount}`;
+          } else {
+            stageBadge.innerText = normStage;
+          }
+          stageBadge.style.display = 'inline-flex';
+        }
         if (shiftBadge) {
           if (isIntegral) {
             shiftBadge.innerText = '🌟 Tempo Integral (2 Turnos: Manhã + Tarde)';

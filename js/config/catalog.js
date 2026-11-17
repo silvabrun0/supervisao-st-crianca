@@ -20,13 +20,133 @@
       }
     }
 
+    // --- 1.1b TAXONOMIA CANÔNICA DE FAIXAS ETÁRIAS DA EDUCAÇÃO INFANTIL (PILAR 18) ---
+    const CANONICAL_STAGES = [
+      {
+        id: 'creche_1',
+        name: 'Berçário / Creche I',
+        ageRange: '0 a 1 ano e 11 meses',
+        fullLabel: '0 a 1 ano e 11 meses (Berçário / Creche I)',
+        legacyAliases: ['berçário i', 'berçário 1', 'berçário', '0 a 1 ano', '0 a 1']
+      },
+      {
+        id: 'creche_2',
+        name: 'Creche II',
+        ageRange: '1 ano a 1 ano e 11 meses',
+        fullLabel: '1 ano a 1 ano e 11 meses (Creche II)',
+        legacyAliases: ['berçário ii', 'berçário 2', 'creche ii', 'creche 2', '1 a 2 anos', '1 a 2']
+      },
+      {
+        id: 'creche_3',
+        name: 'Creche III',
+        ageRange: '2 anos a 2 anos e 11 meses',
+        fullLabel: '2 anos a 2 anos e 11 meses (Creche III)',
+        legacyAliases: ['maternal i', 'maternal 1', 'creche iii', 'creche 3', '2 a 3 anos', '2 a 3']
+      },
+      {
+        id: 'creche_4',
+        name: 'Creche IV / Pré-escola Inicial',
+        ageRange: '3 anos a 3 anos e 11 meses',
+        fullLabel: '3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)',
+        legacyAliases: ['maternal ii', 'maternal 2', 'creche iv', 'creche 4', '3 a 4 anos', '3 a 4']
+      },
+      {
+        id: 'pre_1',
+        name: 'Pré-escola 1',
+        ageRange: '4 anos a 4 anos e 11 meses',
+        fullLabel: '4 anos a 4 anos e 11 meses (Pré-escola 1)',
+        legacyAliases: ['infantil i', 'infantil 1', 'pré-escola 1', 'pre-escola 1', 'pré 1', 'pre 1', '4 a 5 anos', '4 a 5']
+      },
+      {
+        id: 'pre_2',
+        name: 'Pré-escola 2',
+        ageRange: '5 anos a 5 anos e 11 meses',
+        fullLabel: '5 anos a 5 anos e 11 meses (Pré-escola 2)',
+        legacyAliases: ['infantil ii', 'infantil 2', 'pré-escola 2', 'pre-escola 2', 'pré 2', 'pre 2', '5 a 6 anos', '5 a 6']
+      },
+      {
+        id: 'multietapa',
+        name: 'Turma Multietapa (Multiada)',
+        ageRange: 'Multietapa (Faixas Múltiplas)',
+        fullLabel: 'Turma Multietapa (Multiada)',
+        isMultiStage: true,
+        legacyAliases: ['multietapa', 'multiada', 'multisseriada', 'turma mista']
+      }
+    ];
+
+    /**
+     * Normaliza termos legados ou parciais para a etiqueta canônica oficial de Patos/PB
+     * @param {string} stageStr - Nome ou alias da etapa
+     * @returns {string} Rótulo canônico oficial completo
+     */
+    function normalizeStageName(stageStr) {
+      if (!stageStr || typeof stageStr !== 'string') {
+        return '4 anos a 4 anos e 11 meses (Pré-escola 1)';
+      }
+      const raw = stageStr.trim();
+      const lower = raw.toLowerCase();
+
+      // Casamento exato com fullLabel ou name
+      const exactMatch = CANONICAL_STAGES.find(s => s.fullLabel.toLowerCase() === lower || s.name.toLowerCase() === lower);
+      if (exactMatch) return exactMatch.fullLabel;
+
+      // Casamento com legacyAliases
+      for (const st of CANONICAL_STAGES) {
+        if (st.legacyAliases && st.legacyAliases.some(alias => lower.includes(alias))) {
+          return st.fullLabel;
+        }
+      }
+
+      // Regras de inferência por faixa etária numérica
+      if (lower.includes('0 a 1') || lower.includes('berçário i') || lower === 'berçário') {
+        return '0 a 1 ano e 11 meses (Berçário / Creche I)';
+      }
+      if (lower.includes('1 ano a 1') || lower.includes('1 a 2') || lower.includes('berçário ii')) {
+        return '1 ano a 1 ano e 11 meses (Creche II)';
+      }
+      if (lower.includes('2 anos a 2') || lower.includes('2 a 3') || lower.includes('maternal i')) {
+        return '2 anos a 2 anos e 11 meses (Creche III)';
+      }
+      if (lower.includes('3 anos a 3') || lower.includes('3 a 4') || lower.includes('maternal ii')) {
+        return '3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)';
+      }
+      if (lower.includes('4 anos a 4') || lower.includes('4 a 5') || lower.includes('infantil i')) {
+        return '4 anos a 4 anos e 11 meses (Pré-escola 1)';
+      }
+      if (lower.includes('5 anos a 5') || lower.includes('5 a 6') || lower.includes('infantil ii')) {
+        return '5 anos a 5 anos e 11 meses (Pré-escola 2)';
+      }
+      if (lower.includes('multi')) {
+        return 'Turma Multietapa (Multiada)';
+      }
+
+      return raw;
+    }
+
+    /**
+     * Retorna o badge HTML Hallmark da etapa padronizada com suporte a multietapa
+     * @param {Object|string} classOrStage - Objeto turma ou string de etapa
+     * @returns {string} HTML com o badge sóbrio formatado
+     */
+    function formatStageBadge(classOrStage) {
+      const stageStr = typeof classOrStage === 'string' ? classOrStage : (classOrStage?.stage || '');
+      const multiStages = (typeof classOrStage === 'object' && Array.isArray(classOrStage?.multiStages)) ? classOrStage.multiStages : [];
+      const normalized = normalizeStageName(stageStr);
+
+      if (normalized === 'Turma Multietapa (Multiada)') {
+        const subText = multiStages.length > 0 ? ` (${multiStages.length} faixas)` : '';
+        return `<span class="badge-hallmark-neutral" title="Turma Multietapa: ${multiStages.join(', ') || 'Faixas integradas'}">Multietapa${subText}</span>`;
+      }
+      return `<span class="badge-hallmark-neutral">${normalized}</span>`;
+    }
+
     // --- 1.2 CATÁLOGO CANÔNICO DE TURMAS DA REDE MUNICIPAL (PILAR 1, PILAR 4 & PILAR 13) ---
     const INITIAL_CLASSES = [
       {
         id: 'cls-pml-01',
         name: 'Infantil I - Turma A',
         school: 'CEI Professora Maria de Lourdes',
-        stage: 'Infantil I',
+        stage: '4 anos a 4 anos e 11 meses (Pré-escola 1)',
         shift: 'Tempo Parcial (Matutino)',
         teachers: ['Ana Carolina Silva'],
         totalStudents: 25,
@@ -36,7 +156,7 @@
         id: 'cls-pml-02',
         name: 'Berçário II - Turma Única',
         school: 'CEI Professora Maria de Lourdes',
-        stage: 'Berçário II',
+        stage: '1 ano a 1 ano e 11 meses (Creche II)',
         shift: 'Tempo Parcial (Matutino)',
         teachers: ['Carla Beatriz Mendes'],
         totalStudents: 15,
@@ -46,7 +166,7 @@
         id: 'cls-pml-03',
         name: 'Infantil II - Turma B',
         school: 'CEI Professora Maria de Lourdes',
-        stage: 'Infantil II',
+        stage: '5 anos a 5 anos e 11 meses (Pré-escola 2)',
         shift: 'Tempo Parcial (Vespertino)',
         teachers: ['Juliana Roberta Rocha'],
         totalStudents: 24,
@@ -56,7 +176,7 @@
         id: 'cls-pml-04',
         name: 'Maternal II - Turma Integral',
         school: 'CEI Professora Maria de Lourdes',
-        stage: 'Maternal II',
+        stage: '3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)',
         shift: 'Tempo Integral',
         teachersMorning: ['Mariana Santos', 'Roberta Dias'],
         teachersAfternoon: ['Patricia Souza', 'Camila Vasconcelos'],
@@ -68,7 +188,7 @@
         id: 'cls-pp-01',
         name: 'Maternal I - Turma A',
         school: 'EMEI Pequeno Príncipe',
-        stage: 'Maternal I',
+        stage: '2 anos a 2 anos e 11 meses (Creche III)',
         shift: 'Tempo Parcial (Matutino)',
         teachers: ['Fernanda Lima'],
         totalStudents: 22,
@@ -78,7 +198,7 @@
         id: 'cls-pp-02',
         name: 'Infantil I - Turma B',
         school: 'EMEI Pequeno Príncipe',
-        stage: 'Infantil I',
+        stage: '4 anos a 4 anos e 11 meses (Pré-escola 1)',
         shift: 'Tempo Parcial (Vespertino)',
         teachers: ['Luciana Ramos'],
         totalStudents: 26,
@@ -88,7 +208,7 @@
         id: 'cls-vz-01',
         name: 'Maternal II - Turma Única',
         school: 'CEI Vovó Zezé',
-        stage: 'Maternal II',
+        stage: '3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)',
         shift: 'Tempo Integral',
         teachersMorning: [],
         teachersAfternoon: [],

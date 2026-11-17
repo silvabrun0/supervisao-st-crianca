@@ -11,6 +11,7 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 
 | Versão | Data / Horário | Arquivo de Referência | Origem / Insumos Principais | Foco Central |
 | :---: | :---: | :--- | :--- | :--- |
+| **1.74** | 17/11/2026 17:05 | `intermediárias/aplicativo_v1.74_pilar_18_padronizacao_faixas_etarias_infantil.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_18_padronizacao_faixas_etarias_educacao_infantil.md` | Pilar 18 · Padronização Rigorosa das Faixas Etárias da Educação Infantil Regular e Turmas Multietapa: taxonomia oficial da rede de Patos/PB em meses (0 a 1a11m até 5a a 5a11m), seleção aberta de faixas para turmas multietapa (#modalClassEditor), helper inteligente de retrocompatibilidade e autocura (`normalizeStageName`), exibição no setup mobile (`#setupClassStageBadge`), cabeçalho da observação ativa e Quadro de Controle Bimestral 👶🗂️🏛️🛡️ |
 | **1.73** | 17/11/2026 16:15 | `intermediárias/aplicativo_v1.73_pilar_17_docentes_multiturma_dupla_matricula.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_17_docentes_multiturma_dupla_matricula.md` | Pilar 17 · Suporte a Docentes Multi-Turma (Desbloqueio de Dupla Matrícula, Regime de Dobra e Contratos Duplos): validação inteligente anti-colisão em turnos opostos (Matutino vs. Vespertino), bloqueio estrito apenas no mesmo turno, badge sóbrio 'Dobra de Turno' e listagem de turmas na tabela de equipe, agregação completa de observações multiturma no dossiê longitudinal e Semáforo de docentes regentes, e atualização do cabeçalho da ficha de impressão individual em PDF 👩‍🏫👥🏛️🛡️ |
 | **1.72** | 16/11/2026 17:15 | `intermediárias/aplicativo_v1.72_pilar_16_paradoxo_regencia_dupla.html` | Solicitação direta / `planos_de_implementacao/plano_pilar_16_paradoxo_regencia_dupla.md` | Resolução do Paradoxo da Regência Dupla (Pilar 16): observação individualizada e apontamento nominal por docente em práticas consistentes de turmas compartilhadas, preservação da unidade e nota da turma, rastreabilidade no card de síntese docente e devolutiva individual em PDF, sem atrito impeditivo e com conformidade estrita ao Hallmark UI Standard 👥📝🏛️🛡️ |
 | **1.71** | 03/11/2026 17:25 | `intermediárias/aplicativo_v1.71_filtro_referencial_comparativo_kpis.html` | Solicitação direta / `planos_de_implementacao/plano_filtro_referencial_comparativo_kpis.md` | Filtro e Aba de Referencial Comparativo Parametrizado nos KPIs de Resultado: governança por perfil (Coordenadora travada na Rede Municipal, Formadora com alternância livre entre 'Meu Polo' e 'Rede Municipal' para unidades e Polo vs. Rede na visão geral, Núcleo de EI com governança aberta), sincronização desktop e mobile no modal deslizante `#modalIndicatorsFiltersMobile` e recálculo reativo dos deltas formativos nos 4 cards de KPIs, Visualização por Dimensão e Bloco de Gargalos 📊🗺️📱🏛️ |
@@ -198,6 +199,20 @@ Todas as versões do projeto estão enumeradas de forma sequencial na convençã
 ---
 
 ## Detalhamento Integral das Versões
+
+### [Versão 1.74] - Pilar 18: Padronização Rigorosa das Faixas Etárias da Educação Infantil Regular e Turmas Multietapa
+- **Data / Horário:** 17/11/2026 17:05
+- **Arquivo de Referência:** `intermediárias/aplicativo_v1.74_pilar_18_padronizacao_faixas_etarias_infantil.html`
+- **Origem / Insumos Principais:** Solicitação direta / `planos_de_implementacao/plano_pilar_18_padronizacao_faixas_etarias_educacao_infantil.md`
+- **Foco Central:** Padronização canônica e oficial das faixas etárias da Educação Infantil e suporte nativo a turmas multietapa na rede municipal de Patos/PB:
+  1. **Taxonomia Oficial em Meses:** Implementação estrita das 6 faixas oficiais da rede com corte etário canônico em meses (0 a 1a11m Berçário/Creche I, 1a a 1a11m Creche II, 2a a 2a11m Creche III, 3a a 3a11m Creche IV/Pré-escola Inicial, 4a a 4a11m Pré-escola 1 e 5a a 5a11m Pré-escola 2) e categoria canônica `Turma Multietapa (Multiada)`.
+  2. **Seleção Aberta de Faixas em Multietapa:** Abertura condicional e reativa de bloco com checkboxes ergonômicos (alvo de toque de 44px) no modal de turmas (`#modalClassEditor`) para assinalar com precisão as faixas atendidas conjuntamente na sala física, com validação impeditiva.
+  3. **Retrocompatibilidade e Autocura SSOT:** Criação do helper universal `normalizeStageName` capaz de reconhecer valores e aliases legados (`Infantil I`, `Berçário II`, `Maternal I`, etc.) mapeando-os de forma transparente para a nomenclatura oficial sem corromper a base histórica nem quebrar testes.
+  4. **Visibilidade Contextual no Setup e Observação:** Adição do badge padronizado `#setupClassStageBadge` no setup mobile ao lado do turno e exibição da etapa oficial no cabeçalho do instrumento ativo `#activeObsMeta`.
+  5. **Quadro de Controle Bimestral:** Identificação clara da etapa/faixa etária logo abaixo do nome da turma na tabela desktop e nos cards móveis do Quadro de Controle.
+  6. **Conformidade Modular da Auditoria:** Inclusão de asserções nos Módulos 2, 3, 9 e 10 cobrindo a taxonomia, multietapa, retrocompatibilidade e presença nos fluxos centrais.
+
+---
 
 ### [Versão 1.73] - Pilar 17: Suporte a Docentes Multi-Turma (Desbloqueio de Dupla Matrícula, Regime de Dobra e Contratos Duplos)
 - **Data / Horário:** 17/11/2026 16:15

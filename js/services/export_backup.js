@@ -730,11 +730,14 @@
             name: prevC.name,
             school: prevC.school,
             academicYear: yearVal,
-            stage: prevC.stage,
+            stage: normalizeStageName(prevC.stage),
+            multiStages: Array.isArray(prevC.multiStages) ? [...prevC.multiStages] : [],
             shift: prevC.shift,
             teachers: [...(prevC.teachers || [])],
             teachersMorning: [...(prevC.teachersMorning || [])],
-            teachersAfternoon: [...(prevC.teachersAfternoon || [])]
+            teachersAfternoon: [...(prevC.teachersAfternoon || [])],
+            totalStudents: prevC.totalStudents,
+            inclusiveStudents: prevC.inclusiveStudents
           };
           appState.classes.push(clonedClass);
         });

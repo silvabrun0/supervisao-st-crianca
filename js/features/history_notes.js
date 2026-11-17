@@ -204,7 +204,7 @@
           html += `<option value="${cName}">${cName}</option>`;
         });
       } else {
-        ['Berçário I', 'Berçário II', 'Maternal I', 'Maternal II', 'Infantil I', 'Infantil II'].forEach(etapa => {
+        CANONICAL_STAGES.map(s => s.name).forEach(etapa => {
           html += `<option value="${etapa}">${etapa}</option>`;
         });
       }

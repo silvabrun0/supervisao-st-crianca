@@ -81,7 +81,7 @@
 
         <button class="btn-changelog" onclick="openChangelogModal()" title="Histórico Integral de Modificações e Diretrizes">
           <svg class="btn-icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Versão 1.73 (v8.2.39)</span>
+          <span>Versão 1.74 (v8.2.40)</span>
         </button>
 
         <!-- Qualitative Notes Counter Button (Oculto conforme solicitação) -->
@@ -720,13 +720,18 @@
 
           <!-- Card Dinâmico com a Equipe de Docentes Regentes Titulares da Turma (Pilar 1) -->
           <div id="groupSetupTeachersCard" style="display:none; background:#F0F7FF; border:1px solid #BFDBFE; border-left:5px solid #2563EB; border-radius:10px; padding:14px; margin-bottom:18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap; gap:6px;">
               <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:#1D4ED8; letter-spacing:0.5px;">
                 Equipe de regência titular da turma
               </span>
-              <span id="setupClassShiftBadge" style="font-size:10px; font-weight:700; background:#DBEAFE; color:#1E40AF; padding:2px 8px; border-radius:12px;">
-                Parcial Matutino
-              </span>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span id="setupClassStageBadge" class="badge-hallmark-neutral" style="font-size:10px; display:none;">
+                  <!-- Etapa padronizada -->
+                </span>
+                <span id="setupClassShiftBadge" style="font-size:10px; font-weight:700; background:#DBEAFE; color:#1E40AF; padding:2px 8px; border-radius:12px;">
+                  Parcial Matutino
+                </span>
+              </div>
             </div>
             <div id="setupClassTeachersList" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
               <!-- Badges dinâmicos das docentes -->
@@ -1821,6 +1826,23 @@
           <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Consolidação cronológica e técnica integral (Convenção unificada 0.1 a 0.15)</div>
         </div>
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
+      </div>
+
+      <!-- VERSÃO 1.74 - PILAR 18: PADRONIZAÇÃO RIGOROSA DAS FAIXAS ETÁRIAS DA EDUCAÇÃO INFANTIL E TURMAS MULTIETAPA -->
+      <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.74 · v8.2.40</span>
+          <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">17/11/2026</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+          Pilar 18 · Padronização Rigorosa das Faixas Etárias da Educação Infantil Regular e Turmas Multietapa (MEC / Patos-PB):
+        </div>
+        <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
+          <li>👶 <strong>Taxonomia Canônica Oficial de Patos/PB:</strong> Implementação rigorosa das 6 faixas oficiais da rede com corte em meses (0 a 1a11m, 1a a 1a11m, 2a a 2a11m, 3a a 3a11m, 4a a 4a11m, 5a a 5a11m) e suporte a Turmas Multietapa.</li>
+          <li>🗂️ <strong>Seleção Aberta de Faixas em Multietapa:</strong> Abertura condicional e reativa de checkboxes ergonômicos no modal de turmas (#modalClassEditor) para marcar faixas compartilhadas em turmas multiadas, com validação impeditiva.</li>
+          <li>🛡️ <strong>Retrocompatibilidade e Autocura SSOT:</strong> Helper inteligente <code>normalizeStageName</code> garantindo resolução transparente de turmas e dados legados sem corrupção na base histórica.</li>
+          <li>👁️ <strong>Visibilidade no Setup, Observação e Quadro de Controle:</strong> Exibição do badge institucional <code>#setupClassStageBadge</code> no setup mobile, identificação no cabeçalho <code>#activeObsMeta</code> e rótulo no Quadro de Controle Bimestral.</li>
+        </ul>
       </div>
 
       <!-- VERSÃO 1.73 - PILAR 17: SUPORTE A DOCENTES MULTI-TURMA (DESBLOQUEIO DE DUPLA MATRÍCULA, REGIME DE DOBRA E CONTRATOS DUPLOS) -->
@@ -5627,15 +5649,52 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Etapa da Educação Infantil</label>
-        <select id="classEditorStage" class="form-select">
-          <option value="Berçário I">Berçário I (0 a 1 ano)</option>
-          <option value="Berçário II">Berçário II (1 a 2 anos)</option>
-          <option value="Maternal I">Maternal I (2 a 3 anos)</option>
-          <option value="Maternal II">Maternal II (3 a 4 anos)</option>
-          <option value="Infantil I">Infantil I (4 a 5 anos)</option>
-          <option value="Infantil II">Infantil II (5 a 6 anos)</option>
+        <label class="form-label" for="classEditorStage">Etapa e Faixa Etária Oficial (MEC / Patos-PB)</label>
+        <select id="classEditorStage" class="form-select" onchange="onClassStageChange()">
+          <option value="0 a 1 ano e 11 meses (Berçário / Creche I)">0 a 1 ano e 11 meses (Berçário / Creche I)</option>
+          <option value="1 ano a 1 ano e 11 meses (Creche II)">1 ano a 1 ano e 11 meses (Creche II)</option>
+          <option value="2 anos a 2 anos e 11 meses (Creche III)">2 anos a 2 anos e 11 meses (Creche III)</option>
+          <option value="3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)">3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)</option>
+          <option value="4 anos a 4 anos e 11 meses (Pré-escola 1)" selected>4 anos a 4 anos e 11 meses (Pré-escola 1)</option>
+          <option value="5 anos a 5 anos e 11 meses (Pré-escola 2)">5 anos a 5 anos e 11 meses (Pré-escola 2)</option>
+          <option value="Turma Multietapa (Multiada)">Turma Multietapa (Multiada)</option>
         </select>
+      </div>
+
+      <!-- PILAR 18: SELEÇÃO ABERTA DE FAIXAS ABRANGIDAS EM TURMA MULTIETAPA -->
+      <div class="form-group" id="groupClassMultiStageDetails" style="display:none; background:#F8FAFC; border:1px solid var(--border-subtle); border-radius:8px; padding:12px; margin-top:-4px; margin-bottom:14px;">
+        <label class="form-label" style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
+          Faixas Etárias Atendidas nesta Turma Multietapa:
+        </label>
+        <p style="font-size:11px; color:var(--text-secondary); margin-top:0; margin-bottom:8px;">
+          Selecione todas as faixas que compartilham a mesma regência e espaço nesta sala:
+        </p>
+        <div style="display:grid; grid-template-columns:1fr; gap:6px;" id="classEditorMultiStageCheckboxes">
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; min-height:44px; padding:4px 0;">
+            <input type="checkbox" name="classMultiStage" value="0 a 1 ano e 11 meses (Berçário / Creche I)">
+            <span>0 a 1 ano e 11 meses (Berçário / Creche I)</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; min-height:44px; padding:4px 0;">
+            <input type="checkbox" name="classMultiStage" value="1 ano a 1 ano e 11 meses (Creche II)">
+            <span>1 ano a 1 ano e 11 meses (Creche II)</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; min-height:44px; padding:4px 0;">
+            <input type="checkbox" name="classMultiStage" value="2 anos a 2 anos e 11 meses (Creche III)">
+            <span>2 anos a 2 anos e 11 meses (Creche III)</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; min-height:44px; padding:4px 0;">
+            <input type="checkbox" name="classMultiStage" value="3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)">
+            <span>3 anos a 3 anos e 11 meses (Creche IV / Pré-escola Inicial)</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; min-height:44px; padding:4px 0;">
+            <input type="checkbox" name="classMultiStage" value="4 anos a 4 anos e 11 meses (Pré-escola 1)">
+            <span>4 anos a 4 anos e 11 meses (Pré-escola 1)</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; min-height:44px; padding:4px 0;">
+            <input type="checkbox" name="classMultiStage" value="5 anos a 5 anos e 11 meses (Pré-escola 2)">
+            <span>5 anos a 5 anos e 11 meses (Pré-escola 2)</span>
+          </label>
+        </div>
       </div>
 
       <div class="form-group">
