@@ -3879,6 +3879,43 @@
                 logger.log('Conformidade Hallmark: .hero-banner com superfície clara integrada e botão institucional', true);
               }
 
+              // =========================================================================
+              // 23. VALIDAÇÃO DA ERRADICAÇÃO DE EMOJIS NA ABA INICIAL E RASCUNHOS (VERSÃO 1.75)
+              // =========================================================================
+              selectUserAccount('mariana');
+              navigateToTab('home');
+
+              const homeDraftsContainer = document.getElementById('homeDraftsContainer');
+              const homeScheduledCardsList = document.getElementById('homeScheduledCardsList');
+              const heroBtnText = document.getElementById('btnNewObsText');
+
+              // Regex de emojis e glifos brutos proibidos na Home
+              const bannedHomeEmojis = /[📚📋👩‍🏫☀️🌤️🗓️⚠️●]/;
+
+              if (homeDraftsContainer && homeDraftsContainer.children.length > 0) {
+                if (bannedHomeEmojis.test(homeDraftsContainer.innerHTML)) {
+                  throw new Error('A seção #homeDraftsContainer ainda contém emojis residuais na visualização de rascunhos');
+                }
+              }
+
+              if (homeScheduledCardsList && homeScheduledCardsList.children.length > 0) {
+                if (bannedHomeEmojis.test(homeScheduledCardsList.innerHTML)) {
+                  throw new Error('A seção #homeScheduledCardsList ainda contém emojis ou marcadores brutos');
+                }
+              }
+
+              if (heroBtnText && heroBtnText.innerText !== 'Nova observação') {
+                throw new Error(`Texto do botão Hero para Coordenadora deve estar em sentence case ('Nova observação'), obtido: '${heroBtnText.innerText}'`);
+              }
+
+              // Teste para Perfil Formadora
+              selectUserAccount('clarice');
+              if (heroBtnText && heroBtnText.innerText !== 'Avaliar coordenação') {
+                throw new Error(`Texto do botão Hero para Formadora deve estar em sentence case ('Avaliar coordenação'), obtido: '${heroBtnText.innerText}'`);
+              }
+
+              logger.log('Erradicação completa de emojis na aba inicial (Rascunhos e Agendamentos) e conformidade Hallmark (Versão 1.75)', true);
+
               // Validação do rótulo atualizado do botão de changelog e card da versão 1.62
               if (!btnChangelog.textContent.includes('Versão 1.62') && !btnChangelog.textContent.includes('Versão 1.68') && !btnChangelog.textContent.includes('Versão 1.69') && !btnChangelog.textContent.includes('Versão 1.70') && !btnChangelog.textContent.includes('Versão 1.72') && !btnChangelog.textContent.includes('Versão 1.73') && !btnChangelog.textContent.includes('Versão 1.74') && !btnChangelog.textContent.includes('Versão 1.75')) {
                 throw new Error(`Botão de versão desatualizado: "${btnChangelog.textContent.trim()}"`);

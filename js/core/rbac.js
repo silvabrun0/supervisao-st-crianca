@@ -562,7 +562,7 @@
         }
         if (deskTabHomeLabel) deskTabHomeLabel.innerText = "Início";
         heroBtn.style.display = 'inline-flex';
-        heroBtnText.innerText = 'NOVA OBSERVAÇÃO';
+        heroBtnText.innerText = 'Nova observação';
       } else if (user.roleKey === 'formador') {
         if (scopeTitle) scopeTitle.innerText = 'Formadora Pedagógica:';
         if (scopeDesc) scopeDesc.innerText = `Acompanhamento formativo e supervisão pedagógica do seu polo.`;
@@ -582,7 +582,7 @@
         if (indicatorsTargetBadge) indicatorsTargetBadge.style.display = 'none';
         if (deskTabHomeLabel) deskTabHomeLabel.innerText = "Início";
         heroBtn.style.display = 'inline-flex';
-        heroBtnText.innerText = 'AVALIAR COORDENAÇÃO';
+        heroBtnText.innerText = 'Avaliar coordenação';
       } else if (isNucleoEI(user)) {
         if (scopeTitle) scopeTitle.innerText = 'Coordenadora do Núcleo de EI:';
         if (scopeDesc) scopeDesc.innerText = `Governança global da rede municipal SerTão Criança. Acesso onisciente a todas as 32 UEs, consolidados municipais, gestão de polos, atribuição de formadores e rubricas.`;

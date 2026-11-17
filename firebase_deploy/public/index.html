@@ -97,7 +97,8 @@
   <!-- Banner Informativo de Ano Letivo Anterior (Modo Consulta Histórica) -->
   <div id="historicalYearWarningBanner" style="display:none; background:#FFFBEB; border-bottom:1px solid #FDE68A; padding:8px 20px; font-size:12px; font-weight:600; color:#92400E; justify-content:space-between; align-items:center;">
     <div style="display:flex; align-items:center; gap:8px;">
-      <span>⚠️ <strong>Atenção:</strong> Você está visualizando o histórico do <strong>Ano Letivo <span id="historicalYearBannerLabel">2025</span></strong>. Novos lançamentos devem ser efetuados preferencialmente no ano letivo vigente.</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span><strong>Atenção:</strong> Você está visualizando o histórico do <strong>Ano Letivo <span id="historicalYearBannerLabel">2025</span></strong>. Novos lançamentos devem ser efetuados preferencialmente no ano letivo vigente.</span>
     </div>
     <button class="btn btn-secondary" style="padding:2px 8px; font-size:11px; font-weight:700; background:#FFFFFF; border:1px solid #D97706; color:#92400E;" onclick="returnToCurrentAcademicYear()">
       Voltar ao Ano Vigente
@@ -1828,19 +1829,20 @@
         <button class="btn btn-secondary" style="padding:6px 10px;" onclick="closeChangelogModal()">✕</button>
       </div>
 
-      <!-- VERSÃO 1.75 - HARMONIZAÇÃO HALLMARK DO HERO BANNER DE INÍCIO DE OBSERVAÇÃO -->
+      <!-- VERSÃO 1.75 - HARMONIZAÇÃO HALLMARK DO HERO BANNER, TELA INICIAL E RASCUNHOS -->
       <div style="margin-bottom:20px; border-left:3px solid var(--primary); padding-left:14px;">
         <div style="display:flex; align-items:center; gap:8px;">
           <span style="font-size:14px; font-weight:800; color:var(--primary-dark);">Versão 1.75 · v8.2.41</span>
           <span style="font-size:11px; background:#EFF6FF; color:var(--primary); padding:2px 8px; border-radius:12px; font-weight:700;">17/11/2026</span>
         </div>
         <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
-          Harmonização Hallmark e Redesign Institucional do Hero Banner da Tela Inicial:
+          Harmonização Hallmark, Erradicação de Emojis na Aba Inicial (Home) e Higienização de Rascunhos em Andamento:
         </div>
         <ul style="font-size:12px; color:var(--text-primary); margin-top:8px; line-height:1.6; padding-left:16px;">
           <li>🎨 <strong>Erradicação do Quadro Preto Escuro:</strong> Substituição do fundo preto residual (<code>#0F172A</code>) pelo padrão institucional limpo de superfície (<code>--bg-surface</code> / <code>#FFFFFF</code>), eliminando a dissonância cromática.</li>
           <li>🏛️ <strong>Acento Institucional SerTão Criança:</strong> Inclusão de borda de acento lateral esquerda (<code>border-left: 4px solid var(--brand-primary)</code>) e hairline perimétrica (<code>--border-rule</code>), unificando a linguagem visual com o Hero Card do Cronograma Longitudinal.</li>
-          <li>🔘 <strong>CTA Primário Radiante:</strong> O botão "Nova observação" (<code>#btnNewObsHero</code>) passa a utilizar a cor de ação primária institucional (<code>--brand-primary</code> / <code>#0066CC</code>) com texto e ícone brancos (<code>--brand-primary-ink</code>), criando foco e direcionamento natural.</li>
+          <li>🔘 <strong>CTA Primário Radiante em Sentence Case:</strong> O botão primário passa a exibir "Nova observação" para Coordenadora e "Avaliar coordenação" para Formadora com estilo radiante em azul institucional.</li>
+          <li>🧹 <strong>Zero Emojis em Rascunhos e Agendamentos:</strong> Erradicação de emojis residuais em cards de rascunhos (Home e Histórico) e agendamentos, substituídos por pictogramas vetoriais SVG monocromáticos e badges sóbrios (.badge-status-today, .badge-status-overdue, .badge-status-planned, .badge-stage-vespertino, .badge-stage-matutino).</li>
           <li>♿ <strong>Acessibilidade e Tokens Hallmark:</strong> 100% dos valores vinculados aos tokens do <code>:root</code>, anel de foco instantâneo <code>:focus-visible</code>, alvo ergonômico de 44px no mobile e conformidade com <code>prefers-reduced-motion</code>.</li>
         </ul>
       </div>
